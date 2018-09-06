@@ -1,5 +1,5 @@
 <?php
-namespace app\boffins_vendor\access;
+namespace boffins_vendor\access;
 
 use Yii;
 use yii\console\Controller;
