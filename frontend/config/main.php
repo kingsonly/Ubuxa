@@ -63,7 +63,7 @@ return [
                     ],
                 ],
             ],
-        ]
+        ],
 	
    
         /*
@@ -90,7 +90,6 @@ return [
 		'rules' => [
 			[
 				'allow' => true,
-				//'controllers' =>['apis'],
 				'actions' => ['login'],
 				'roles' => ['?'],
 			],
@@ -99,7 +98,6 @@ return [
 				'controllers' =>['apis'],
 				//'actions' => ['login'],
 				'roles' => ['?'],
-				  
 			],
 			[
 				'allow' => true,

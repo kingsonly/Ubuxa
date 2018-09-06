@@ -1,5 +1,5 @@
 <?php
-namespace app\boffins_vendor\components\controllers;
+namespace boffins_vendor\components\controllers;
 
 use yii\base\Widget;
 use yii\helpers\Html;
