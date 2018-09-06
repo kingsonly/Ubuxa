@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2017 Tycol Main (By Epsolun Ltd)
  */
 
-namespace app\boffins_vendor\classes;
+namespace boffins_vendor\classes;
 
 use Yii;
 use yii\base\Behavior;

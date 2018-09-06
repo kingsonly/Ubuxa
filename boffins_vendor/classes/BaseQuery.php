@@ -1,6 +1,6 @@
 <?php 
 
-namespace app\boffins_vendor\classes;
+namespace boffins_vendor\classes;
 
 use Yii;
 use yii\db\ActiveQuery;

@@ -1,12 +1,12 @@
 <?php
-namespace app\boffins_vendor\access;
+namespace boffins_vendor\access;
 
 use Yii;
 use yii\console\Controller;
-use app\models\UserDb;
-use app\models\Role;
-use app\models\AccessPermission;
-use app\models\ControllerBaseRoute;
+use frontend\models\UserDb;
+use frontend\models\Role;
+use frontend\models\AccessPermission;
+use frontend\models\ControllerBaseRoute;
 
 
 class RuntimeController extends Controller

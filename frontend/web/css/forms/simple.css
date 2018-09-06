@@ -1,0 +1,64 @@
+/*.form-control, f {
+    clear: both;
+    display: block;
+    width: 300px;
+}
+
+.form_input {
+	display: block;
+	width: 300px;
+}
+
+label {
+	display: block;
+}
+
+.hasDatepicker {
+	width: 300px;
+}
+*/
+.activelist{
+		font-weight: bolder;
+		 box-shadow: inset 0px 0px 4px #ccc;
+		
+	 }
+.folderTable:hover,
+.correspondenceurltr:hover,
+.invoiceurltr:hover,
+.paymenturltr:hover,
+.rpourltr:hover,
+.projecturltr:hover,
+.orderurltr:hover{
+	font-weight: bolder !important;
+	box-shadow: inset 0px 0px 4px #ccc !important;
+}
+
+.correspondenceurltr.activelist td:last-child,
+.invoiceurltr.activelist td:last-child,
+.paymenturltr.activelist td:last-child,
+.rpourltr.activelist td:last-child,
+.folderTable.activelist td:last-child,
+.projecturltr.activelist td:last-child,
+.orderurltr.activelist td:last-child{
+	width: 0; 
+	height: 0; 
+	border-top: 3px solid transparent;
+	border-bottom: 3px solid transparent; 
+
+	border-right:3px solid  #DD4B39; 
+}
+
+.loadergif{
+	width: 50px; 
+   height: 50px;
+   overflow: auto;
+   margin: auto;
+   position: absolute;
+   top: 0; left: 0; bottom: 0; right: 0;
+	
+}
+
+.fixed { height:400px; overflow:hidden; background:orange; }
+
+.scrollit { height:400px; overflow-y:scroll; background:lightgray; }
+
