@@ -20,7 +20,7 @@ class UserComponent extends User
 	 */
 	public $deviceCookieConfig = ['name' => 'ds', 'httpOnly' => true]; // httpOnly ensures this cookie cannot be stolen via javascrpt. Set to false if you absolutely need it. s
 	/* 
-	 * Device through which user is authenticated. When instantiated, it will be of class \app\models\Device 
+	 * Device through which user is authenticated. When instantiated, it will be of class \frontend\models\Device 
 	 */
 	private $_device = false;
 	/*
@@ -123,7 +123,7 @@ class UserComponent extends User
 	public function getDevice() 
 	{
 		if ( !$this->_device ) {
-			$this->_device = \app\models\Device::getDevice( $this->getAuthKeyFromCookie() );
+			$this->_device = \frontend\models\Device::getDevice( $this->getAuthKeyFromCookie() );
 		}
 		return $this->_device;
 	}
@@ -135,7 +135,7 @@ class UserComponent extends User
      */
 	public function sendDeviceCookies($device)
     {
-		if ( ! $device instanceof \app\models\Device ) {
+		if ( ! $device instanceof \frontend\models\Device ) {
 			trigger_error("device parameter is not of type Device. " . __METHOD__, E_USER_NOTICE);
 			return;
 		}
@@ -201,7 +201,7 @@ class UserComponent extends User
 		}
 		
 		if ( empty($allPermissions) ) { //this should only run once. 
-			$allPermissions = \app\models\AccessPermission::find()->all();
+			$allPermissions = \frontend\models\AccessPermission::find()->all();
 			usort($allPermissions, array($this, "_permissionSort"));
 		}
 		
@@ -216,7 +216,7 @@ class UserComponent extends User
 	
 	private function _permissionSort($a, $b) 
 	{
-		if ( !( $a instanceof \app\models\AccessPermission ) || !( $b instanceof \app\models\AccessPermission ) ) {
+		if ( !( $a instanceof \frontend\models\AccessPermission ) || !( $b instanceof \frontend\models\AccessPermission ) ) {
 			trigger_error('Can only compare agains items of AccessPermission! (' . __METHOD__ . ')', E_USER_NOTICE); 
 		}
 		
@@ -234,7 +234,7 @@ class UserComponent extends User
 	public function beforeLogin($identity, $cookieBased, $duration) 
 	{
 		parent::beforeLogin($identity, $cookieBased, $duration);
-		$runtimeController = new \app\boffins_vendor\access\RuntimeController('runtime', Yii::$app); 
+		$runtimeController = new \boffins_vendor\access\RuntimeController('runtime', Yii::$app); 
 		$runtimeController->runAction('init');
 		return true;
 	}

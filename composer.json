@@ -13,13 +13,27 @@
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "stable",
-    "require": {
+    "require": { 
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0.6",
+        "yiisoft/yii2": "~2.0.5",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "guzzlehttp/guzzle": "^6.3"
-    },
+		"kartik-v/yii2-money": "*",
+		"bower-asset/jquery-ui" : "1.11.*@stable",
+		"yiisoft/yii2-jui": "^2.0",
+		
+        "kartik-v/yii2-widget-datepicker": "@dev",
+		"kartik-v/dependent-dropdown": "^1.4.7",
+	    "kartik-v/yii2-widgets": "dev-master",
+        "piwik/device-detector": "^3.8",
+        "thadafinser/user-agent-parser": "^2.0",
+		"yii2mod/yii2-settings": "*",
+		"2amigos/yii2-ckeditor-widget" : "~2.1",
+		"kartik-v/yii2-widget-fileinput": "@dev",
+		"mongosoft/yii2-upload-behavior": "*"
+
+    }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
@@ -29,14 +43,30 @@
     },
     "config": {
         "process-timeout": 1800,
-        "fxp-asset": {
-            "enabled": false
+        "fxp-asset":{
+            "installer-paths": {
+                "npm-asset-library": "vendor/npm",
+                "bower-asset-library": "vendor/bower"
+            }
         }
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+    "scripts": {
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "yii": "0755"
+                }
+            ],
+            "generateCookieValidationKey": [
+                "config/web.php"
+            ]
         }
-    ]
+    }
 }

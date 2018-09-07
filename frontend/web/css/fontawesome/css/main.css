@@ -1,0 +1,84 @@
+.btn{
+	background:#aeaeae !important;
+	color:#D9534F !important;
+	border:none !important;
+	font-weight: bold !important;
+	font-family: candara !important;
+	
+}
+.btn:hover{
+	background: #D3D3D3 !important;
+	
+}
+
+.inner {
+	color:#fff !important;
+}
+
+.product-description:hover {
+  
+  text-overflow:initial !important;
+  cursor: pointer;
+  white-space: pre-line !important;
+  font-family: candara !important;
+ 
+}
+#nav{
+	border:0px;
+	-webkit-box-shadow:none;
+	box-shadow: none;
+}
+#nav1{
+	border:0px;
+	-webkit-box-shadow:none;
+	box-shadow: none;
+}
+.head{
+	color:#444;
+	text-decoration: none !important;
+}
+.active{
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+.navbar-brand{
+	height:100px;
+	width:100px;
+	
+	
+}
+.common{
+	float: right !important;
+	min-height: 15px;
+	/*position: absolute;*/
+	top: 45px !important;
+	
+	
+}
+#commonn{
+	min-height: 100px;
+	width: 100%;
+	margin-top: 5px !important;
+	
+}
+.fa-pencil{
+	cursor: pointer;
+	
+}
+.fa-trash{
+	cursor: pointer;
+}
+.dataTable  {
+    	table-layout: fixed !important;
+    	width: 100% !important;
+	
+
+    }
+.dataTable td{
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	cursor: pointer !important;
+	overflow: hidden !important;
+}

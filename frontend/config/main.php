@@ -10,6 +10,7 @@ return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+	'language'=>'en-US',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
@@ -48,21 +49,21 @@ return [
 			'class' => 'yii\rbac\PhpManager',
         ],     
 		'settingscomponent' => [
-        	'class' => 'frontend\settings\components\Settingsdate',
+        	'class' => 'frontend\settings\components\SettingsComponent',
     	],
 		'i18n' => [
-        'translations' => [
-            'app*' => [
-                'class' => 'yii\i18n\PhpMessageSource',
-                //'basePath' => '@app/messages',
-                //'sourceLanguage' => 'en-US',
-                'fileMap' => [
-                    'app' => 'app.php',
-                    'app/error' => 'error.php',
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@frontend/messages', // if advanced application, set @frontend/messages
+                    'sourceLanguage' => 'en',
+					'forceTranslation'=> true,
+                    'fileMap' => [
+                    //'main' => 'main.php',
+                    ],
                 ],
             ],
         ],
-    ],
 	
    
         /*
@@ -89,15 +90,14 @@ return [
 		'rules' => [
 			[
 				'allow' => true,
-				//'controllers' =>['project'],
 				'actions' => ['login'],
 				'roles' => ['?'],
 			],
 			[
 				'allow' => true,
-				'controllers' =>['api/project'],
-				
-				  
+				'controllers' =>['apis'],
+				//'actions' => ['login'],
+				'roles' => ['?'],
 			],
 			[
 				'allow' => true,
