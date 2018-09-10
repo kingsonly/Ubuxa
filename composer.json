@@ -18,7 +18,7 @@
         "yiisoft/yii2": "~2.0.5",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
 		"kartik-v/yii2-money": "*",
 		"bower-asset/jquery-ui" : "1.11.*@stable",
 		"yiisoft/yii2-jui": "^2.0",
@@ -31,7 +31,8 @@
 		"yii2mod/yii2-settings": "*",
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
 		"kartik-v/yii2-widget-fileinput": "@dev",
-		"mongosoft/yii2-upload-behavior": "*"
+		"mongosoft/yii2-upload-behavior": "*",
+        "facebook/webdriver": "^1.0.1"
 
     }, 
     "require-dev": {
@@ -39,7 +40,8 @@
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
         "codeception/codeception": "^2.2.3",
-        "codeception/verify": "~0.3.1"
+        "codeception/verify": "~0.3.1",
+        "facebook/webdriver": "^1.0.1"
     },
     "config": {
         "process-timeout": 1800,
