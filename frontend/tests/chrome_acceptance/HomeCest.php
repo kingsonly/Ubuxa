@@ -8,13 +8,13 @@ class HomeCest
 {
     public function checkHome(AcceptanceTester $I)
     {
-        $I->amOnPage(Url::toRoute('/site/index'));
-        $I->see('TycolMain');
 
-        /*$I->seeLink('About');
-        $I->click('About');
-        $I->wait(2); // wait for page to be opened
+        $I->wantTo('Test login page');
+		$I->amOnPage(Url::toRoute('/folder/index'));
+		$I->fillField('#UserLogin_username', 'test');
+		$I->fillField('#UserLogin_password', 'test');
 
-        $I->see('This is the About page.');*/
+		$I->click("#login-button");
+
     }
 }
