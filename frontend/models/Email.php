@@ -30,6 +30,7 @@ class Email extends \yii\db\ActiveRecord
         return [
 			[['address'], 'required'],
             [['address'], 'email'],
+            [['cid'], 'safe'],
         ];
     }
 

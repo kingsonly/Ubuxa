@@ -33,6 +33,7 @@ class Role extends \yii\db\ActiveRecord
             [['id', 'access_level'], 'integer'],
             [['name'], 'string', 'max' => 25],
             [['name'], 'unique'],
+            [['role'], 'safe'],
         ];
     }
 

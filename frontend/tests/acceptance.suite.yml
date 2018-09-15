@@ -3,7 +3,7 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://localhost/ubuxabeta/frontend/web
+            url: http://127.0.0.1/ubuxabeta/frontend/web
             browser: firefox
         - Yii2:
             part: init
