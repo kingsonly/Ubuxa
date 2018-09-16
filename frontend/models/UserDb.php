@@ -82,9 +82,9 @@ class UserDb extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username','password'], 'required'],
+            [['username','password', 'cid'], 'required'],
 
-            [['basic_role','image','cid'], 'safe'],
+            [['basic_role','image'], 'safe'],
 
             //[['username', 'password'], 'string', 'max' => 255],
             //['username', 'validateUsername'],
@@ -102,7 +102,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
             'basic_role' => 'Standard Role',
             'password' => 'Password',
             'salt' => 'Salt',
-            'cid' => 'Cid'
+            'cid' => 'Cid',
         ];
     }
 

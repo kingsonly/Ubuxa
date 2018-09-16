@@ -123,6 +123,7 @@ class SignupForm extends Model
                 'state_id' => 'State',
                 'country_id' => 'Country',
                 'dob' => 'Date of Birth',
+                'cid' => 'Cid',
             ];
     }
 
@@ -136,7 +137,7 @@ class SignupForm extends Model
             // username and password are both required
             [['first_name', 'surname', 'dob', 'username', 'password', 'basic_role', 'address' ], 'required'],
             // attributes must be a string value
-            [['first_name', 'surname', 'username', 'password', 'cid'], 'string'],
+            [['first_name', 'surname', 'username', 'password'], 'string'],
             //attributes should be loaded onto model - safe            
             [['telephone_number', 'address_line', 'state_id', 'country_id', 'code', 'cid'], 'safe'],
             // password is validated by validatePassword()

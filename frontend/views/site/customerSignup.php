@@ -29,14 +29,7 @@ display: none;
 
         <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($customerForm, 'billing_date')->widget(DatePicker::classname(), [
-                            'options' => ['placeholder' => 'Select billing date ...','id' => 'datepicker'],
-                             'pluginOptions' => [
-                                 'format' => 'dd/mm/yyyy',
-                                 'todayHighlight' => true
-                                    ],
-                                ]) 
-        ?>
+        <?= $form->field($customerForm, 'billing_date')->textInput(['maxlength' => true]) ?>
     </div>
         <section class="indexFormTitle" > Customer details </section>
         <?= $form->field($customerForm, 'account_number')->textInput(['maxlength' => true, 'minlenght'=>6]) ?>
@@ -56,43 +49,5 @@ display: none;
 </div>
 
 
-<?php
-$js = <<<JS
 
-$('#customerForm').on('beforeSubmit', function (e) {
-    $('#userbuttonText').hide();
-    $('#userloader').show();
-    var \$form = $(this);
-    $.post(\$form.attr('action'),\$form.serialize())
-    .always(function(result){
-    
-    $(document).find('#userloader').hide();
-   if(result == 'sent'){
-       
-       $(document).find('#userloader1').html(result).show();
-       
-    
-    }else{
-    $(document).find('#userloader1').html(result).show();
-    
-    }
-    }).fail(function(){
-    console.log('Server Error');
-    });
-    
-    setTimeout(function(){ 
-    $(document).find('#userloader').hide();
-    $(document).find('#userloader1').hide();
-    $(document).find('#userbuttonText').show();
-    }, 5000);
-    return false;
-    
-    
-    
-});
-
-JS;
- 
-$this->registerJs($js);
-?>
 

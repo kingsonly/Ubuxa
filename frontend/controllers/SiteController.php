@@ -154,32 +154,33 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email)
+  public function actionSignup($cid, $email)
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
        $customer = \frontend\models\Customer::find()->where([
        	'master_email' => $email,
+       	'cid' => $cid,
+       	'status' => 0,
 		])->one();
-		
-		if (!Yii::$app->user->can('view:User')) {
-			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
-		}
 		
 		if(!empty($customer)){
 	        if ($user->load(Yii::$app->request->post())) {
 	        	$user->address = $email;
-	        	$user->cid = 1234;
+	        	$user->cid = $cid;
 				if($user->save()){
-
+					$customer->status = 1;
+					$customer->save();
 					return $this->redirect(['index']);
-				}
+				} 
 			} else {
 	            return $this->render('createUser', [
 					'userForm' => $user,
 					'action' => ['createUser'],
 				]);
 			}
+		} else {
+			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 		}
     }
 
@@ -204,7 +205,7 @@ class SiteController extends BoffinsBaseController {
 				if($sendEmail){
 					Yii::$app->getSession()->setFlash('success','Check Your email!');
 				} else{
-					Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
 				}
 			}
 		} else {
