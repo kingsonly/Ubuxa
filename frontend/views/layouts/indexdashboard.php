@@ -147,10 +147,11 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
         
       </h1>
       <ol class="breadcrumb" style="padding-right: 23px">
-        <li><a href="#"><i class="fa fa-dashboard"></i><?= \yii\helpers\Html::a( 'Home', ['site/index']);?> </a></li>
-        <li class="active"> <?= \yii\helpers\Html::a( 'Back', Yii::$app->request->referrer);?></li>
-		  <li id="refresh">Refresh</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i><?= \yii\helpers\Html::a( 'Dashboard', ['site/index']);?> </a></li>
+        
       </ol>
+		
+		
     </section>
 
       <!-- Main content -->

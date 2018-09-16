@@ -38,9 +38,10 @@ class FolderController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Folder::find(),
         ]);
-
+		
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+           'model' => $this->findModel(42),
         ]);
     }
 

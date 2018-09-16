@@ -83,7 +83,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username','password'], 'required'],
-            [['basic_role'], 'safe'],
+            [['basic_role','image'], 'safe'],
             //[['username', 'password'], 'string', 'max' => 255],
             //['username', 'validateUsername'],
         ];

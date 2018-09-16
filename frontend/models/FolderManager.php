@@ -19,6 +19,7 @@ class FolderManager extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+	public $privateFoldr;
     public static function tableName()
     {
         return 'tm_folder_manager';
@@ -34,8 +35,7 @@ class FolderManager extends \yii\db\ActiveRecord
             [['folder_id', 'user_id'], 'integer'],
             [['role'], 'string'],
             [['folder_id', 'user_id'], 'unique', 'targetAttribute' => ['folder_id', 'user_id']],
-            [['folder_id'], 'exist', 'skipOnError' => true, 'targetClass' => Folder::className(), 'targetAttribute' => ['folder_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            
         ];
     }
 
@@ -48,6 +48,7 @@ class FolderManager extends \yii\db\ActiveRecord
             'folder_id' => 'Folder ID',
             'user_id' => 'User ID',
             'role' => 'Role',
+			
         ];
     }
 

@@ -12,11 +12,13 @@ use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
+use boffins_vendor\behaviors\FolderBehavior;
 use boffins_vendor\behaviors\ComponentsBehavior;
 use yii\db\ActiveQuery;
 use boffins_vendor\classes\StandardQuery;
 use models\FolderComponent;
 use models\UserDb;
+use frontend\models\Folder;
 //use app\models\ComponentManager;
 use boffins_vendor\classes\StandardFolderQuery;
 
@@ -104,22 +106,10 @@ class FolderARModel extends ActiveRecord
 	 */
 	public function init() 
 	{
-		 $this->on(DeleteUpdateBehavior::EVENT_BEFORE_SOFT_DELETE, [$this, 'beforeSoftDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_AFTER_SOFT_DELETE, [$this, 'afterSoftDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_BEFORE_UNDO_DELETE, [$this, 'beforeUndoDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_AFTER_UNDO_DELETE, [$this, 'afterUndoDelete']);
-		 $this->on(ComponentsBehavior::EVENT_BEFORE_CREATE_COMPONENT, [$this, 'beforeCreateComponent']);
-		 $this->on(ComponentsBehavior::EVENT_AFTER_CREATE_COMPONENT, [$this, 'afterCreateComponent']);
-		 $this->on(ComponentsBehavior::EVENT_BEGIN_LINKING, [$this, 'beginLinking']);
+		 
 	}
 	
-	public function rules()
-    {
-        return [
-            [['upload_file'], 'file', 'skipOnEmpty' => false, 'extensions' => $this->mergeAllExtentionsAssStrin(), 'maxFiles' => 4],
-        ];
-    }
-	
+
 	/* 
 	 * Final function returns a merged array of the base behaviors and the custom behaviors created by user
 	 * Function cannot be overridden by child classes. Use 'myBehaviors' to assign new behaviors
@@ -136,6 +126,35 @@ class FolderARModel extends ActiveRecord
 	 * @params $base - expexts a base behavior 
 	 * @param $customBehaviors - optional should be the custom behaviors set by the user.
 	 */
+	
+	
+	public function containsFolderTree($tree=[], $parent) 
+	{
+		if ( $parent == 0 ) {
+			return $tree;
+		}else{
+			
+			$getParentDetails = Folder::find()->select(['parent_id','id','title'])->where(['id'=> $parent])->one();
+			if(!empty($getParentDetails)){
+				array_push($tree,$getParentDetails);
+			} else{
+				return $tree;
+			}
+			
+		}
+		//return $getParentDetails['parent_id'];
+		return $getParentDetails->parent_id > 0 ? $this->containsFolderTree($tree,$getParentDetails->parent_id):$tree;
+		
+	}
+	
+	 public function behaviors() 
+	{
+		return [
+            
+            'folderBehaviour' => FolderBehavior::className(),
+        ];	
+	}
+	
 	private function _mergeBehaviours($base, $customBehaviors = array()) 
 	{
 		$mergedBehaviors = array();

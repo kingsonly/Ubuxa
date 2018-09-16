@@ -27,10 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'description',
             'last_updated',
+            
             //'deleted',
             //'cid',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+<?
+	var_dump($model->folderUsers);
+	?>
+	
 </div>

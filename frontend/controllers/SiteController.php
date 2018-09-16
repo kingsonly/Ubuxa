@@ -12,6 +12,7 @@ use yii\widgets\ActiveForm;
 use yii\db\Expression;
 use yii\helpers\Json;
 use frontend\models\LoginForm;
+use frontend\models\Folder;
 
 //models
 
@@ -60,9 +61,12 @@ class SiteController extends BoffinsBaseController {
 
     public function actionIndex() 
 	{
-		$this->layout = 'indexdashboard';
-
-        return $this->render('index',[]);
+		$this->layout = 'new_index_dashboard_layout';
+		$folder = new Folder();
+		$dashboardFolders = $folder->getDashboardItems(5);
+        return $this->render('index',[
+			'folders' => $dashboardFolders,
+		]);
        
     }
 
