@@ -196,7 +196,7 @@ class SiteController extends BoffinsBaseController {
 				if($sendEmail){
 					Yii::$app->getSession()->setFlash('success','Check Your email!');
 				} else{
-					Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
 				}
 			}
 		} else {
