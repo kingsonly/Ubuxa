@@ -30,6 +30,7 @@ class Folder extends FolderARModel
     /**
      * {@inheritdoc}
      */
+	public $privateFolder;
     public static function tableName()
     {
         return 'tm_folder';
@@ -42,8 +43,8 @@ class Folder extends FolderARModel
     {
         return [
             [['parent_id', 'deleted', 'cid'], 'integer'],
-            [['title', 'last_updated', 'deleted'], 'required'],
-            [['last_updated'], 'safe'],
+            [['title'], 'required'],
+            [['last_updated','privateFolder'], 'safe'],
             [['title'], 'string', 'max' => 40],
             [['description'], 'string', 'max' => 255],
         ];
@@ -62,6 +63,7 @@ class Folder extends FolderARModel
             'last_updated' => 'Last Updated',
             'deleted' => 'Deleted',
             'cid' => 'Cid',
+			'privateFolder' => 'Private',
         ];
     }
 
@@ -120,4 +122,42 @@ class Folder extends FolderARModel
     {
         return $this->hasMany(Remark::className(), ['folder_id' => 'id']);
     }
+	
+	public function getSubFolders()
+    {
+        return $this->hasMany($this::className(), ['parent_id' => 'id']);
+    }
+	
+	public function getTree()
+    {
+		 
+        return array_reverse($this->containsFolderTree([],$this->parent_id));
+    }
+	
+	public  function getDashboardItems($limit = 100) 
+	{
+		return $this->find()
+				
+				->limit($limit)
+				->all();
+	}
+	
+	 public function getFolderUsers(){
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManager')->asArray();
+        }
+
+    public function getFolderManager()
+    {
+		if(isset($_GET['id'])){
+			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+		}
+        return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
+    }
+	
+	public function getIsEmpty() 
+	{
+		return empty( $this->components ) ? true: false;
+	}
+	
+	
 }

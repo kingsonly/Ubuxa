@@ -203,10 +203,16 @@ define("USERID", Yii::$app->user->identity->person_id);
           <?php endif; ?>
         
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i><?= \yii\helpers\Html::a( 'Home', ['site/index']);?> </a></li>
-        <li class="active"> <?= \yii\helpers\Html::a( 'Back', Yii::$app->request->referrer);?></li>
-      </ol>
+      
+		<?= 
+   Breadcrumbs::widget([
+      'homeLink' => [ 
+                      'label' => Yii::t('yii', 'Dashboard'),
+                      'url' => Url::to(['site/index']),
+                 ],
+      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+   ]) 
+?>
     </section>
 
     <!-- Main content -->

@@ -90,7 +90,7 @@ return [
 		'rules' => [
 			[
 				'allow' => true,
-				'actions' => ['login'],
+				'actions' => ['login','customersignup','signup'],
 				'roles' => ['?'],
 			],
 			[

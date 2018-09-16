@@ -1,54 +1,190 @@
 <?php
+
+use yii\widgets\Pjax;
+use yii\helpers\Html;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
+use yii\bootstrap\Alert;
+
+$this->title = Yii::t('dashboard', 'dashboard_title');
+
+
 use boffins_vendor\components\controllers\MenuWidget;
+
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
 ?>
 
 <div class="site-index">
+<style>
+	#flash {
+		display: none;
+	}
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+	#dashboard-content {
+		display: grid;
+		grid-gap: 50px 10px;
+		grid-template-columns: 40% 20% 40%;
+		grid-template-areas: 	'folders folders folders'
+								'flash flash flash'
+								'remarks tasks tasks';
+	}
+	
+	.grid-item {
+		
+	}
+	
+	.grid-item.folder {
+		grid-area: folders;
+	}
+	
+	.grid-item.flash {
+		grid-area: flash;
+	}
+	
+	.grid-item.remark-box {
+		grid-area: remarks;
+	}
+	
+	.grid-item.task-box {
+		grid-area: tasks;
+	}
+	
+	@media screen and (min-width: 280px) and (max-width: 599px) {
+			#dashboard-content {
+				grid-gap: 0px 20px;
+				grid-template-columns: 100%;
+				grid-template-areas: 	'folders'
+										'flash'
+										'tasks'
+										'remarks';
+			}
+	}
+</style>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
 
-    <div class="body-content">
+<section id="dashboard-content">
+	<div class="grid-item folder">
+		<?=$this->render('/folder/latest', ['folders' =>$folders]);?>
+	</div>
+		
+	
+</section>
+  <? $this->beginBlock('sidebar')?>    
+	<div class="tab-2">
+				    <label for="tab2-2">Two</label>
+				    <input id="tab2-2" name="tabs-two" type="radio">
+			    	<div>
+			    	<ul class="list_load">
+				    	<li class="list_item"><a href="#">List Item 01</a></li>
+						<li class="list_item"><a href="#">List Item 02</a></li>
+						<li class="list_item"><a href="#">List Item 03</a></li>
+						<li class="list_item"><a href="#">List Item 04</a></li>
+						<li class="list_item"><a href="#">List Item 05</a></li>
+						<li class="list_item"><a href="#">List Item 06</a></li>
+						<li class="list_item"><a href="#">List Item 07</a></li>
+						<li class="list_item"><a href="#">List Item 08</a></li>
+					</ul>
+			    </div>
+			</div>
+	
+	<div class="tab-3">
+				    <label for="tab2-3">Two</label>
+				    <input id="tab2-3" name="tabs-two" type="radio">
+			    	<div>
+			    	<ul class="list_load">
+				    	<li class="list_item"><a href="#">List Item 01</a></li>
+						<li class="list_item"><a href="#">List Item 02</a></li>
+						<li class="list_item"><a href="#">List Item 03</a></li>
+						<li class="list_item"><a href="#">List Item 04</a></li>
+						<li class="list_item"><a href="#">List Item 05</a></li>
+						<li class="list_item"><a href="#">List Item 06</a></li>
+						<li class="list_item"><a href="#">List Item 07</a></li>
+						<li class="list_item"><a href="#">List Item 08</a></li>
+					</ul>
+			    </div>
+			</div>
+  <? $this->endBlock();?>    
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+<?php 
+$indexJs = <<<JS
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
+}); })
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+	$('.test3').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    $('.test1').each(function(){
+	$(this).click(function(){
+		$('#task2'+$(this).data('number')).slideToggle();
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    
+    $('.test').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
+	
+
+	$('.client').on('click', function() {
+					$(document).find('#sliderwizz1').show();
+					$(document).find('#sliderwizz').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz3').hide();
+	})
+	
+	$('.supplier').on('click', function() {
+					$(document).find('#sliderwizz2').show();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('.contact').on('click', function() {
+					$(document).find('#sliderwizz3').show();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('#activeuser').on('click', function() {
+					$(document).find('#sliderwizz').show();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+	})
+JS;
+ 
+$this->registerJs($indexJs);
+?>
+
+
+
+
 
     </div>
 </div>

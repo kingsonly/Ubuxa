@@ -15,7 +15,6 @@ use yii\web\Session;
 use yii\helpers\VarDumper;
 
 //models
-use frontend\models\LoginForm;
 use frontend\models\SignupForm;
 use frontend\models\Email;
 use frontend\models\Address;
@@ -25,7 +24,10 @@ use frontend\models\EmailEntity;
 use frontend\models\AddressEntity;
 use frontend\models\TelephoneEntity;
 use frontend\models\UserForm;
+use frontend\models\LoginForm;
+use frontend\models\Folder;
 use frontend\models\CustomerSignupForm;
+//Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
 
@@ -42,6 +44,7 @@ class SiteController extends BoffinsBaseController {
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+					
                 ],
             ],
             'verbs' => [
@@ -70,9 +73,12 @@ class SiteController extends BoffinsBaseController {
 
     public function actionIndex() 
 	{
-		$this->layout = 'indexdashboard';
-
-        return $this->render('index',[]);
+		$this->layout = 'new_index_dashboard_layout';
+		$folder = new Folder();
+		$dashboardFolders = $folder->getDashboardItems(5);
+        return $this->render('index',[
+			'folders' => $dashboardFolders,
+		]);
        
     }
 
@@ -150,6 +156,7 @@ class SiteController extends BoffinsBaseController {
 
   public function actionSignup($email)
     {
+		$this->layout = 'loginlayout';
        $user = new SignupForm;
        $customer = \frontend\models\Customer::find()->where([
        	'master_email' => $email,
@@ -178,6 +185,7 @@ class SiteController extends BoffinsBaseController {
 
     public function actionCustomersignup()
     {
+		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
 		
 		
