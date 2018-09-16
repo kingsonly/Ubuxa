@@ -180,14 +180,7 @@ body{
 
                 <?= $form->field($userForm, 'surname')->textInput(['maxlength' => true])->input('surname', ['placeholder' => "Enter Your Surname"])->label(false) ?>
 
-                <?= $form->field($userForm, 'dob')->widget(DatePicker::classname(), [
-                                    'options' => ['placeholder' => 'Select Date Of Birth ...','id' => 'datepicker'],
-                                     'pluginOptions' => [
-                                         'format' => 'dd/mm/yyyy',
-                                         'todayHighlight' => true
-                                            ],
-                                        
-                                        ]) 
+                <?= $form->field($userForm, 'dob')->textInput(['maxlength' => true])->input('dob', ['placeholder' => "Enter Your Dob"])->label(false)
                 ?>
             </div>
             <?= Html::button('Contact Details <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>

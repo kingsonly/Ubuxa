@@ -25,6 +25,7 @@ select:focus {
   flex-wrap: wrap;
   margin: 0;
   overflow: hidden;
+  width: 400px;
    }
   .tabs [class^="tab"] label,
   .tabs [class*=" tab"] label {
@@ -70,7 +71,7 @@ select:focus {
       -o-transition: all 0.3s ease-in-out;
       transition: all 0.3s ease-in-out; }
   .tabs .tab-2 {
-    width: 8%; }
+    width: 25%; }
     .tabs .tab-2 [type="radio"] + div {
       width: 200%;
       margin-left: 200%; }
@@ -117,7 +118,8 @@ a,
 		z-index: 1000;
 	}
 	.side_menu .container {
-		padding: 0 1em;
+		padding-left: 0px;
+		width: 300px;
 	}
 
 /* HAMBURGER STYLES ----- */

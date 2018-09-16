@@ -28,9 +28,8 @@ class Email extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-			[['address'], 'required'],
+			[['address', 'cid'], 'required'],
             [['address'], 'email'],
-            [['cid'], 'safe'],
         ];
     }
 

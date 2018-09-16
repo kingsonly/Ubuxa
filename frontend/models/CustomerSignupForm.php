@@ -49,7 +49,9 @@ class CustomerSignupForm extends Model
             [['billing_date'], 'safe'],
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
+            [['master_email'], 'email'],
             ['master_email', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['master_doman', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This name has already been taken.'],
             [['cid'], 'unique'],
         ];
     }
@@ -62,34 +64,30 @@ class CustomerSignupForm extends Model
         return [
             'id' => 'ID',
             'cid' => 'Cid',
-            'master_email' => 'Master Email',
-            'master_doman' => 'Master Doman',
+            'master_email' => 'Email',
+            'master_doman' => 'Domain',
             'plan_id' => 'Select Plan',
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
         ];
     }
+
     
     public function signup()
     {   
         
+            $customer = new Customer();
 
-        $customer = new Customer();
+            $customer->master_email = $this->master_email;
+            $customer->master_doman = $this->master_doman;
+            $customer->account_number = $this->account_number;
+            $customer->plan_id = $this->plan_id;
+            $customer->billing_date = $this->billing_date;
+            $customer->status = 0;
+            $customer->cid = $this->plan_id.rand(10, 10000);
 
-        $customer->master_email = $this->master_email;
-        $customer->master_doman = $this->master_doman;
-        $customer->account_number = $this->account_number;
-        $customer->plan_id = $this->plan_id;
-        $customer->billing_date = $this->billing_date;
-        $customer->cid = $this->master_doman.rand(1, 4000);
-        
-
-        return $customer->save() ? $customer : null;
+            return $customer->save() ? $customer : null;
                 
     }
 
-    public static function find($email)
-    {
-        return static::findOne(['email' => $email]);
-    }
 }

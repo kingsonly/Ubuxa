@@ -89,7 +89,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 			    </div>
 			</div>
 	
-	<div class="tab-3">
+	<div class="tab-2">
 				    <label for="tab2-3">Two</label>
 				    <input id="tab2-3" name="tabs-two" type="radio">
 			    	<div>
