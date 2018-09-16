@@ -44,6 +44,7 @@ class SiteController extends BoffinsBaseController {
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+					
                 ],
             ],
             'verbs' => [
@@ -155,6 +156,7 @@ class SiteController extends BoffinsBaseController {
 
   public function actionSignup($email)
     {
+		$this->layout = 'loginlayout';
        $user = new SignupForm;
        $customer = \frontend\models\Customer::find()->where([
        	'master_email' => $email,
@@ -183,6 +185,7 @@ class SiteController extends BoffinsBaseController {
 
     public function actionCustomersignup()
     {
+		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
 		
 		

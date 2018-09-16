@@ -71,7 +71,41 @@ use boffins_vendor\components\controllers\MenuWidget;
 		
 	
 </section>
-      
+  <? $this->beginBlock('sidebar')?>    
+	<div class="tab-2">
+				    <label for="tab2-2">Two</label>
+				    <input id="tab2-2" name="tabs-two" type="radio">
+			    	<div>
+			    	<ul class="list_load">
+				    	<li class="list_item"><a href="#">List Item 01</a></li>
+						<li class="list_item"><a href="#">List Item 02</a></li>
+						<li class="list_item"><a href="#">List Item 03</a></li>
+						<li class="list_item"><a href="#">List Item 04</a></li>
+						<li class="list_item"><a href="#">List Item 05</a></li>
+						<li class="list_item"><a href="#">List Item 06</a></li>
+						<li class="list_item"><a href="#">List Item 07</a></li>
+						<li class="list_item"><a href="#">List Item 08</a></li>
+					</ul>
+			    </div>
+			</div>
+	
+	<div class="tab-3">
+				    <label for="tab2-3">Two</label>
+				    <input id="tab2-3" name="tabs-two" type="radio">
+			    	<div>
+			    	<ul class="list_load">
+				    	<li class="list_item"><a href="#">List Item 01</a></li>
+						<li class="list_item"><a href="#">List Item 02</a></li>
+						<li class="list_item"><a href="#">List Item 03</a></li>
+						<li class="list_item"><a href="#">List Item 04</a></li>
+						<li class="list_item"><a href="#">List Item 05</a></li>
+						<li class="list_item"><a href="#">List Item 06</a></li>
+						<li class="list_item"><a href="#">List Item 07</a></li>
+						<li class="list_item"><a href="#">List Item 08</a></li>
+					</ul>
+			    </div>
+			</div>
+  <? $this->endBlock();?>    
 
 <?php 
 $indexJs = <<<JS
