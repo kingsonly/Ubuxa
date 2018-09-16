@@ -24,10 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
  height: 50px;
  background-repeat: no-repeat;
  background-size: cover;
- display: block;
+ display: inline-block;
+border:solid 1px #ccc;
  border-radius: 25px;
  -webkit-border-radius: 100px;
  -moz-border-radius: 100px;
+background-color: #fff;
+transition: margin-top 0.1s ease-out 0s;
+}
+#folderusers .img-circular:not(:first-of-type) {
+      margin-left: -10px;
 }
 	</style>
     <h1><?= Html::encode($this->title) ?></h1>
@@ -62,11 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 
 </div>
+<div id="folderusers">
 <?php foreach($model->folderUsers as $users){ 
 	$image = !empty($users["image"])?$users["image"]:'default.png';
 	?>
-	<div class="img-circular" style="background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')" aria-label="achumie kingsley"></div>
+	<span class="img-circular" style="background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')" aria-label="achumie kingsley"></span>
 	<? }; ?>
+	</div>
 
 <?
  Editable::begin([

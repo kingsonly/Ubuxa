@@ -30,6 +30,7 @@ class Entity extends \yii\db\ActiveRecord
         return [
             [['entity_type'], 'required'],
             [['entity_type'], 'string'],
+            [['cid'], 'safe']
         ];
     }
 

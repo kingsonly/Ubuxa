@@ -1,4 +1,5 @@
 <?php
+
 use yii\widgets\Pjax;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
@@ -7,10 +8,14 @@ use yii\bootstrap\Alert;
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
+
+use boffins_vendor\components\controllers\MenuWidget;
+
 /* @var $this yii\web\View */
 
 ?>
 
+<div class="site-index">
 <style>
 	#flash {
 		display: none;
@@ -146,3 +151,7 @@ $this->registerJs($indexJs);
 
 
 
+
+    </div>
+</div>
+<?= MenuWidget::widget(); ?>

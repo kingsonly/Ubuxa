@@ -11,12 +11,23 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\db\Expression;
 use yii\helpers\Json;
-use frontend\models\LoginForm;
-use frontend\models\Folder;
+use yii\web\Session;
+use yii\helpers\VarDumper;
 
 //models
-
+use frontend\models\SignupForm;
+use frontend\models\Email;
+use frontend\models\Address;
+use frontend\models\Telephone;
+use frontend\models\Entity;
+use frontend\models\EmailEntity;
+use frontend\models\AddressEntity;
+use frontend\models\TelephoneEntity;
 use frontend\models\UserForm;
+use frontend\models\LoginForm;
+use frontend\models\Folder;
+use frontend\models\CustomerSignupForm;
+//Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
 
@@ -142,7 +153,63 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  
-	
-	  
+  public function actionSignup($email)
+    {
+       $user = new SignupForm;
+       $customer = \frontend\models\Customer::find()->where([
+       	'master_email' => $email,
+		])->one();
+		
+		if (!Yii::$app->user->can('view:User')) {
+			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		}
+		
+		if(!empty($customer)){
+	        if ($user->load(Yii::$app->request->post())) {
+	        	$user->address = $email;
+	        	$user->cid = 1234;
+				if($user->save()){
+
+					return $this->redirect(['index']);
+				}
+			} else {
+	            return $this->render('createUser', [
+					'userForm' => $user,
+					'action' => ['createUser'],
+				]);
+			}
+		}
+    }
+
+    public function actionCustomersignup()
+    {
+       $customer = new CustomerSignupForm;
+		
+		
+        //yii\helpers\VarDumper::dump(Yii::$app->request->post());
+        if ($customer->load(Yii::$app->request->post())) {
+        	if($customer->signup()){
+        		$sendEmail = \Yii::$app->mailer->compose()
+        		->setTo($customer->master_email)
+				->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+				->setSubject('Signup Confirmation')
+				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+				Yii::$app->urlManager->createAbsoluteUrl(
+				['site/signup','email'=>$customer->master_email,'cid'=>$customer->cid]
+				))
+				)->send();
+				if($sendEmail){
+					Yii::$app->getSession()->setFlash('success','Check Your email!');
+				} else{
+					Yii::$app->getSession()->setFlash('warning','Failed, contact Admin!');
+				}
+			}
+		} else {
+            return $this->render('createCustomer', [
+				'customerForm' => $customer,
+				'action' => ['createCustomer'],
+			]);
+		}
+    }
+
 }
