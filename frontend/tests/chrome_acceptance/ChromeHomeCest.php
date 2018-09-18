@@ -4,7 +4,7 @@ namespace frontend\tests\acceptance;
 use frontend\tests\AcceptanceTester;
 use yii\helpers\Url;
 
-class HomeCest
+class ChromeHomeCest
 {
     public function checkHome(AcceptanceTester $I)
     {

@@ -36,7 +36,7 @@ return [
 		'migrate' => [
 			'class' => 'yii\console\controllers\MigrateController',
 			'migrationNamespaces' => ['console\migrations'],
-			'migrationTable' => 'migration',
+			'migrationTable' => '{{%migration}}',
 			'migrationPath' => null,
 		],
 		// Migrations for testing only 
