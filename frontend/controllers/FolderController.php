@@ -131,6 +131,14 @@ class FolderController extends Controller
 
         return $this->redirect(['index']);
     }
+	
+	public function actionCheckIfFolderNameExist($folderName){
+		$folder = new Folder();
+		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ]);
+		if($checkIfItExist){
+			return 1;
+		}
+	}
 
     /**
      * Finds the Folder model based on its primary key value.
