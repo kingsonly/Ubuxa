@@ -4,20 +4,18 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 use frontend\models\Folder;
-use kartik\editable\Editable;
+use boffins_vendor\components\controllers\ViewWithXeditableWidget;
+use boffins_vendor\components\controllers\FolderUsersWidget;
+use boffins_vendor\components\controllers\FolderCreateWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Folders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$users = $model->folderUsers;
 ?>
 <div class="folder-view">
-<?= $this->render('_form', [
-        'model' => $model,
-    ]) ;
-	
-	?>
 	<style>
 	.img-circular{
  width: 50px;
@@ -48,53 +46,27 @@ transition: margin-top 0.1s ease-out 0s;
             ],
         ]) ?>
     </p>
+<?= FolderUsersWidget::widget(['attributues'=>$users]);?>
+<?= FolderCreateWidget::widget();?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'id',
-            //'parent_id',
-            'title',
-            'description',
-            'last_updated',
-            'deleted',
-            'cid',
-        ],
-    ]) ;
-	
 
- 
- 
-	?>
 
+
+
+
+  <? $this->beginBlock('sidebar')?>    
+	<div class="tab-2">
+				    <label for="tab2-2">Folder Info</label>
+				    <input id="tab2-2" name="tabs-two" type="radio">
+			    	<div>
+			    	<ul class="list_load">
+				    	<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+	['modelAttribute'=>'title'],
+	['modelAttribute'=>'description']
+]]); ?>
+					</ul>
+			    </div>
+			</div>
+
+  <? $this->endBlock();?> 
 </div>
-<div id="folderusers">
-<?php foreach($model->folderUsers as $users){ 
-	$image = !empty($users["image"])?$users["image"]:'default.png';
-	?>
-	<span class="img-circular" style="background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')" aria-label="achumie kingsley"></span>
-	<? }; ?>
-	</div>
-
-<?
- Editable::begin([
-    'model'=>$model, 
-    'attribute' => 'title',
-    'size' => 'md',
-	 'asPopover' => false,
-    
-    'editableValueOptions'=>['class'=>'well well-sm']
-]);
-Editable::end();
-
-$editable = Editable::begin([
-    'model'=>$model,
-    'attribute'=>'title',
-    'asPopover' => false,
-    'size'=>'md',
-    'displayValue' => '15th Main, OK, 10322',
-    'options'=>['placeholder'=>'Enter location...']
-]);
-
-Editable::end();
-?>

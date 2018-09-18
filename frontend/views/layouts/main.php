@@ -1,14 +1,16 @@
-
 <?php
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\widgets\Breadcrumbs;
 use yii\helpers\Url;
-Yii::$app->settingscomponent->buffinsUsersAsset()
+use yii\widgets\Breadcrumbs;
+use app\assets\IndexDashboardAsset;
+use app\assets\NewIndexDashboardAsset;
+use boffins_vendor\components\controllers\MenuWidget;
 
+Yii::$app->settingscomponent->buffinsUsersAsset()
 ?>
 <?php $this->beginPage() ?>
 <? Yii::$app->language  = Yii::$app->settingscomponent->buffinsUsersLanguage();?>
@@ -18,23 +20,26 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title>
+
+    <?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-	
 </head>
-<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '../web/images/logo1.png']); ?>
-<body class="skin-red sidebar-mini">
+<body class="skin-red hold-transition layout-top-nav">
 <?php $this->beginBody() ?>
 <?php
-    if(isset(Yii::$app->user->identity->person_id)){
-define("USERID", Yii::$app->user->identity->person_id);
-//echo GREETING;
+    if(isset(Yii::$app->user->identity->person_id)) {
+		define("USERID", Yii::$app->user->identity->person_id);
     }
 ?>
-	
     <style>
+	
+	/****
+	 * What is the meaning of this???
+	 * WHY IS THERE INLINE CSS IN A LAYOUT??? WHAT HAPPENED TO ADDING IT TO A STYLESHEET???
+	 */ 
     .fa{color:#dd4b39 !important;}
-        .iconimage{
+        .iconimage {
             background: url('../web/images/logo1.jpg') no-repeat ;
             background-size: 100% 100%;
         }
@@ -44,157 +49,96 @@ define("USERID", Yii::$app->user->identity->person_id);
         h1{
             font-size:40px;
         }
+		.logo{
+			 height: 50px !important;
+    		width: 100% !important;
+			background: #DD4B39 !important;
+			height: 45px !important;
+    		position: relative;
+    		top: -13px !important;
+		}
+		#refresh{
+      cursor: pointer;
+    }
     </style>
     
+<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '../web/images/logo1.png']); ?>
+
 <div class="wrapper">
-    <header class="main-header">
-    <!-- Logo -->
-    
-		
-		<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'logo']) ?>
-		
-    <!-- Header Navbar: style can be found in header.less -->
+
+  <header class="main-header">
     <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
+      <div class="container">
+        <div class="navbar-header">
           
-       
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
-				<?= Html::img('@web/images/male.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
-			
-              <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-               
-				  <?= Html::img('@web/images/logo1.jpg', ['alt' => 'logo', 'class' => 'img-circle' ]); ?>
+			 
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
 
-                <p>
-                  <?= Yii::$app->user->identity->username ?>
-                  
-                </p>
-              </li>
-              
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+
+        <!-- Main link menu start -->
+        
+        <!-- /.navbar-collapse -->
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            
+            <!-- Tasks Menu -->
+            
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu">
+              <!-- Menu Toggle Button -->
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-right: 30px;">
+                <!-- The user image in the navbar-->
+               
+				  <?= Html::img('@web/images/male.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
+                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- The user image in the menu -->
+                <li class="user-header">
                  
-                    <?= Html::a('Logout', Url::to(['/site/logout']), ['data-method' => 'POST','class' => 'btn btn-default btn-flat']) ?>
-					
+				  <?= Html::img('@web/images/male.png', ['alt' => 'logo', 'class' => 'img-circle' ]); ?>
+
+                  <p><?= Yii::$app->user->identity->username ?></p>
+                </li>
+                <!-- Menu Body -->
+                
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  </div>
+                  <div class="pull-right"> 
+					  <?= Html::a('Logout', Url::to(['/site/logout']), ['data-method' => 'POST','class' => 'btn btn-default btn-flat']) ?>
+					  
                     
                 </div>
-              </li>
-            </ul>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
-        </ul>
+                </li>
+              </ul>
+            </li>
+			  
+			 
+          </ul>
+        </div>
+        <!-- /.navbar-custom-menu -->
       </div>
+      <!-- /.container-fluid -->
     </nav>
   </header>
-    <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-        <li class="header">MAIN NAVIGATION</li>
-        <!--<li class="active treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>
-        </li>-->
-          
-        
-		<li>
-			<?= Html::a(Html::tag('i', '', ['class' => 'fa fa-th','title' => 'Dashboard']). Html::tag('span', 'Dashboard', ['class' => '','title' => 'Open folder']), ['site/index'], ['class' => '']) ?>
-		</li>
-		
-		
-		  
-          
-          <?php if (isset($this->blocks['createFolder'])): ?>
-            <?= $this->blocks['createFolder'] ?>
-          <?php endif; ?>
-          <?php if (isset($this->blocks['folderSidebar'])): ?>
-            <?= $this->blocks['folderSidebar'] ?>
-          <?php endif; ?>
-          
-          <!--
-          <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-folder"></i> <span>Folders</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green"></small>
-            </span>
-          </a>
-        </li>
-          
-       <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-tasks"></i> <span>Project</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green"></small>
-            </span>
-          </a>
-        </li>
-          
-          
-          <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-shopping-cart"></i> <span>Order</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green"></small>
-            </span>
-          </a>
-        </li>
-          
-          <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-credit-card"></i> <span>Invoice</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-          
-       
-       -->
-        
-        
-        
-        
-       
-    </section>
-    <!-- /.sidebar -->
-  </aside> 
- 
-  <!-- Left side column. contains the logo and sidebar -->
-
-    <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+	
+	
+  <!-- Full Width Column -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Content Header (Page header) -->
+	
     <section class="content-header">
-      <h1 style="font-size:40px">
+      <h1 style="font-size:40px;margin-left: 20px">
        <?php if (isset($this->blocks['folderview'])): ?>
             <?= $this->blocks['folderview'] ?>
           <?php endif; ?>
@@ -203,8 +147,7 @@ define("USERID", Yii::$app->user->identity->person_id);
           <?php endif; ?>
         
       </h1>
-      
-		<?= 
+      <?= 
    Breadcrumbs::widget([
       'homeLink' => [ 
                       'label' => Yii::t('yii', 'Dashboard'),
@@ -213,23 +156,30 @@ define("USERID", Yii::$app->user->identity->person_id);
       'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
    ]) 
 ?>
+		
+		
     </section>
 
-    <!-- Main content -->
-    <section class="content">
+      <!-- Main content -->
+     <section class="content">
         <?= $content ?>
     </section>
+      <!-- /.content -->
     </div>
+    <!-- /.container -->
+  </div>
+  <!-- /.content-wrapper -->
+  
 </div>
 
-
+<?= MenuWidget::widget(); ?>
     
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 1.2.0
+      <b>Version</b> 1.2
     </div>
     <!--<strong>Copyright &copy; Tycol 2017<a href="#"> Boffins Systems</a>.</strong>--> All rights reserved.
-  </footer>
+</footer>
 
 <?php $this->endBody() ?>
 </body>

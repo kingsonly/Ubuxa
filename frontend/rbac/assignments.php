@@ -4,7 +4,7 @@ return [
         'admin',
     ],
     33 => [
-        'administrator',
+        'admin',
     ],
     35 => [
         'admin',

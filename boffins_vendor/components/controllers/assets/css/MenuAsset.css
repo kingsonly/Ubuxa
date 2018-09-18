@@ -1,13 +1,4 @@
-body {
-  background: #191828;
-  color: #efedef;
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: 0.01em;
-  line-height: 1.6em;
-  margin: 0;
-  padding: 100px; }
+
 
 button:focus,
 input:focus,
@@ -25,7 +16,6 @@ select:focus {
   flex-wrap: wrap;
   margin: 0;
   overflow: hidden;
-  width: 400px;
    }
   .tabs [class^="tab"] label,
   .tabs [class*=" tab"] label {
@@ -71,7 +61,7 @@ select:focus {
       -o-transition: all 0.3s ease-in-out;
       transition: all 0.3s ease-in-out; }
   .tabs .tab-2 {
-    width: 25%; }
+    width: 8%; }
     .tabs .tab-2 [type="radio"] + div {
       width: 200%;
       margin-left: 200%; }
@@ -118,8 +108,7 @@ a,
 		z-index: 1000;
 	}
 	.side_menu .container {
-		padding-left: 0px;
-		width: 300px;
+		padding: 0 1em;
 	}
 
 /* HAMBURGER STYLES ----- */
