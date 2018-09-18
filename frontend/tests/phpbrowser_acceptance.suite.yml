@@ -1,0 +1,11 @@
+suite_namespace: frontend\tests\acceptance
+actor: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://localhost/ubuxabeta/frontend/web/
+            browser: firefox
+        - Yii2:
+            part: init
+            entryScript: index.php
+            cleanup: false
