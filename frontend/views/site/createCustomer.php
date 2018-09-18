@@ -6,7 +6,6 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $userForm app\models\UserDb */
 
-$this->title = 'Create your Account';
 $this->params['breadcrumbs'][] = ['label' => 'customer', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

@@ -164,13 +164,60 @@ a,
 	.burger_box a.menu-icon {
 		position: absolute;
 	    background-color: rgb(7, 71, 166);
-	    height: 70px;
+	    height: 50px;
 	    padding: 0;
 	    margin: 0;
-	    bottom: 20px;
+	    bottom: 40px;
 	    border-radius: 100%;
-	    width: 70px;
+	    width: 50px;
 	    box-shadow: 0 3px 6px     rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	}
+	@media screen and (max-width: 400px) {
+    .burger_box a.menu-icon {
+	    position: absolute;
+	    background-color: rgb(7, 71, 166);
+	    padding: 0;
+	    margin: 0;
+	    bottom: 40px;
+	    border-radius: 100%;
+	    box-shadow: 0 3px 6px     rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	    height: 50px;
+	    width: 50px;
+	    left: 300px;
+    	}
+		.side_menu {
+	    background-color: rgb(7, 71, 166);
+	    height: 100vh;
+	    left: -300px;
+	    position: fixed;
+	    top: 0;
+	    width: 200px;
+	    z-index: 1000;
+		}
+	ul.tabs {
+	    height: 80px;
+	    list-style: none;
+	    overflow: hidden;
+	    padding: 0;
+		}
+	ul.tabs li {
+	    float: left;
+	    width: 65px;
+		}
+		#content {
+	    width: 200px;
+	    height: 350px;
+	    margin-left: 0px;
+	    -webkit-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+	    -moz-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+	    box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+	    -webkit-border-bottom-right-radius: 8px;
+	    -webkit-border-bottom-left-radius: 8px;
+	    -moz-border-radius-bottomright: 8px;
+	    -moz-border-radius-bottomleft: 8px;
+	    border-bottom-right-radius: 8px;
+	    border-bottom-left-radius: 8px;
+		}
 	}
 	.burger_box a.menu-icon:hover,
 	.burger_box a.menu-icon.opened {
@@ -185,8 +232,8 @@ a,
     	position: absolute;
     	text-align: left;
     	width: 25px;
-    	top: 33%;
-    	left: 33%;
+    	top: 25%;
+    	left: 25%;
 	}
 	.burger_box .menu-icon_line {
 		background: #fff;

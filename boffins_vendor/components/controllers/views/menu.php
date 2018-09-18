@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
-
 <div class="side_menu">
 	<div class="burger_box">
 		<div class="menu-icon-container">
