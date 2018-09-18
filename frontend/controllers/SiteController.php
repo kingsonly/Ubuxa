@@ -27,6 +27,8 @@ use frontend\models\UserForm;
 use frontend\models\LoginForm;
 use frontend\models\Folder;
 use frontend\models\CustomerSignupForm;
+use frontend\models\Customer;
+use frontend\models\InviteUsersForm;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -158,8 +160,7 @@ class SiteController extends BoffinsBaseController {
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
-       $customer = \frontend\models\Customer::find()->where([
-       	'master_email' => $email,
+       $customer = Customer::find()->where([
        	'cid' => $cid,
        	'status' => 0,
 		])->one();
@@ -199,7 +200,7 @@ class SiteController extends BoffinsBaseController {
 				->setSubject('Signup Confirmation')
 				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
 				Yii::$app->urlManager->createAbsoluteUrl(
-				['site/signup','email'=>$customer->master_email,'cid'=>$customer->cid]
+				['site/signup','cid'=>$customer->cid]
 				))
 				)->send();
 				if($sendEmail){
@@ -214,6 +215,30 @@ class SiteController extends BoffinsBaseController {
 				'action' => ['createCustomer'],
 			]);
 		}
+    }
+
+    public function actionInviteusers()
+    {	
+    	$model = new InviteUsersForm;
+    	if ($model->load(Yii::$app->request->post()))
+	    	{	
+	    		$email = $model->email;
+	    		if(!empty($email)){
+	    			foreach ($email as $email) {
+	    				if($model->sendEmail($email)){
+	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
+	    				} else {
+	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+	    				}
+	    			}
+	    		} else {
+	    			echo "Email cannot be empty";
+	    		} 
+	    }else{
+	    		return $this->render('inviteusers', [
+				'model' => $model,
+			]);
+	    }
     }
 
 }

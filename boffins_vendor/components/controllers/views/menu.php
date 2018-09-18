@@ -17,12 +17,17 @@ use yii\helpers\Url;
 	</div>
 	<div class="container">
 		<h2 class="menu_title">UBUXA</h2>
-		<div class="tabs">
-		  <div class="tab-2">
-		    <label for="tab2-1">One</label>
-		    <input id="tab2-1" name="tabs-two" type="radio" checked="checked">
-				<div>
-			    	<ul class="list_load">
+			<div class="wrap">
+  
+  <ul class="tabs group">
+    <li><a class="active" href="#/one"> One</a></li>
+    <li><a href="#/two">Two</a></li>
+    <li><a href="#/three">Three</a></li>
+  </ul>
+  
+  <div id="content">
+    <div id="one">
+    	<ul class="list_load">
 			    	<?php
 			    		foreach($componentMenu as $k => $v){
 			    			$url = $v.'/index';
@@ -31,13 +36,12 @@ use yii\helpers\Url;
 								['class' => [(Yii::$app->controller->id == $v) ? 'active' : 'false', 'list_item']]);
 			    		}
 			    	?>
-			    	</ul>
-			    	</div>
-			    </div>
-			<?php if (isset($this->blocks['sidebar'])): ?>
+		</ul>
+    </div>
+<?php if (isset($this->blocks['sidebar'])): ?>
             <?= $this->blocks['sidebar'] ?>
           <?php endif; ?>
-			    
-		</div>
-	</div>
+  </div>
+  
+</div>
 </div>

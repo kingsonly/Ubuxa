@@ -49,5 +49,43 @@ display: none;
 </div>
 
 
+<?php
+$js = <<<JS
 
+$('#customerForm').on('beforeSubmit', function (e) {
+    $('#userbuttonText').hide();
+    $('#userloader').show();
+    var \$form = $(this);
+    $.post(\$form.attr('action'),\$form.serialize())
+    .always(function(result){
+    
+    $(document).find('#userloader').hide();
+   if(result == 'sent'){
+       
+       $(document).find('#userloader1').html(result).show();
+       
+    
+    }else{
+    $(document).find('#userloader1').html(result).show();
+    
+    }
+    }).fail(function(){
+    console.log('Server Error');
+    });
+    
+    setTimeout(function(){ 
+    $(document).find('#userloader').hide();
+    $(document).find('#userloader1').hide();
+    $(document).find('#userbuttonText').show();
+    }, 5000);
+    return false;
+    
+    
+    
+});
+
+JS;
+ 
+$this->registerJs($js);
+?>
 
