@@ -25,7 +25,6 @@ return [
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
             'useFileTransport' => true,
-            'useFileTransport' => false,
 			'transport' => $transport,
         ],
 		'global' => [
@@ -37,7 +36,7 @@ return [
 		'migrate' => [
 			'class' => 'yii\console\controllers\MigrateController',
 			'migrationNamespaces' => ['console\migrations'],
-			'migrationTable' => 'migration',
+			'migrationTable' => '{{%migration}}',
 			'migrationPath' => null,
 		],
 		// Migrations for testing only 

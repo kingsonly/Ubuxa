@@ -27,9 +27,9 @@ class DefaultController extends Controller
     public function actionIndex()
     {
 		// Find all users related to the admin
-		$users = UserDb::find()->where(['customer_id' => \Yii::$app->user->identity->customer_id])->andWhere(['!=','id',\Yii::$app->user->identity->id])->all();
+		$users = UserDb::find()->where(['cid' => \Yii::$app->user->identity->cid])->andWhere(['!=','id',\Yii::$app->user->identity->id])->all();
 		$settingsModel = new UserSetting();
-		$settings = $settingsModel->find()->where(['id'=>\Yii::$app->user->identity->customer_id])->one();
+		$settings = $settingsModel->find()->where(['id'=>\Yii::$app->user->identity->cid])->one();
 		$models =  new UploadForm();
 		if($settings->load(\Yii::$app->request->post())){
 			$settings->save(false);
@@ -88,7 +88,7 @@ class DefaultController extends Controller
 	public function actionSetlogo()
 	{
 		$uploadFormModel = new UploadForm();
-		$model =  Settings::find()->where(['id' => \Yii::$app->user->identity->id])->one();
+		$model =  Settings::find()->where(['id' => \Yii::$app->user->identity->cid])->one();
 
 		if (\Yii::$app->request->isPost) {
 			$uploadFormModel->imageFile = UploadedFile::getInstance($uploadFormModel, 'imageFile');

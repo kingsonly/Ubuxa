@@ -1,0 +1,80 @@
+<?php
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
+
+namespace app\assets;
+use yii\web\AssetBundle;
+
+/**
+ * @author Qiang Xue <qiang.xue@gmail.com>
+ * @since 2.0
+ */
+class StandardFormsAsset extends AssetBundle
+{
+    public $basePath = '@webroot';
+    public $baseUrl = '@web';
+    public $css = [
+		//FOR ADMINLTE TEMPLATE
+        'css/bootstrap.min.css',
+        //'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css',
+        //'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css',
+        //'css/AdminLTE.min.css',
+		'css/AdminLTE.css',
+        'css/_all-skins.min.css',
+        'css/blue.css',
+        'css/morris.css',
+        'css/jquery-jvectormap-1.2.2.css',
+        
+        'css/datatables/dataTables.bootstrap.css',
+        'css/bootstrap3-wysihtml5.min.css',
+		
+		//BOFFINS INCLUDED css
+		'css/forms/simple.css',
+        'css/fontawesome/css/font-awesome.css',
+		
+        //'css/fontawesome/css/font-awesome.min.css',
+        'css/hover.css',
+    ];
+    public $js = [
+		//'js/bootstrap.min.js',
+		'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',
+		'js/jquery.sticky-kit.min.js',
+        //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
+        'js/morris.min.js',
+        
+        //'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
+        'js/app.min.js',
+        'js/datatables/jquery.dataTables.min.js',
+        'js/datatables/dataTables.bootstrap.min.js',
+        'js/Chart.min.js',
+        //BOFFINS INCLUDED JS
+		'js/jquery.event.drag.min.js',
+		'js/jquery.mousewheel.min.js',
+		'js/jquery.newstape.js',
+		'assets/82fd07a/jquery-ui.js',
+		'js/dashboard.js',
+		
+		'js/jquery.flip.min.js',
+		'js/script.js',
+		///'js/dragables.js'
+		
+		
+		
+		
+		
+    ];
+    public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+    ];
+}
+
+
+
+
+    
+    
+    

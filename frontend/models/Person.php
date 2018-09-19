@@ -32,8 +32,8 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
 		
-            [['first_name', 'surname'], 'required'],
-			[['dob','person_id'], 'safe'],
+            [['first_name', 'surname','cid'], 'required'],
+			[['dob','person_id', 'cid'], 'safe'],
             [['first_name', 'surname'], 'string', 'max' => 255],
         ];
     }

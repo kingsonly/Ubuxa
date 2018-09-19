@@ -1,53 +1,196 @@
 <?php
 
+use yii\widgets\Pjax;
+use yii\helpers\Html;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
+use yii\bootstrap\Alert;
+
+$this->title = Yii::t('dashboard', 'dashboard_title');
+
+
+use boffins_vendor\components\controllers\MenuWidget;
+
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
 ?>
-<div class="site-index">
+<style>
+	#flash {
+		display: none;
+	}
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+	#dashboard-content {
+		display: grid;
+		grid-gap: 50px 10px;
+		grid-template-columns: 40% 20% 40%;
+		grid-template-areas: 	'folders folders folders'
+								'flash flash flash'
+								'remarks tasks tasks';
+	}
+	
+	.grid-item {
+		
+	}
+	
+	.grid-item.folder {
+		grid-area: folders;
+	}
+	
+	.grid-item.flash {
+		grid-area: flash;
+	}
+	
+	.grid-item.remark-box {
+		grid-area: remarks;
+	}
+	
+	.grid-item.task-box {
+		grid-area: tasks;
+	}
+	
+	@media screen and (min-width: 280px) and (max-width: 599px) {
+			#dashboard-content {
+				grid-gap: 0px 20px;
+				grid-template-columns: 100%;
+				grid-template-areas: 	'folders'
+										'flash'
+										'tasks'
+										'remarks';
+			}
+	}
+    .content-header{
+        display:none;
+    }
+</style>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
 
-    <div class="body-content">
 
+<section>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <section style="border:1px solid #000; min-height:400px">
+                <section id="dashboard-content">
+                    <div class="grid-item folder">
+                        <?=$this->render('/folder/latest', ['folders' =>$folders]);?>
+                    </div>
+                </section>
+    
+                <div class="container">
+                    <div class="row"></div>
+                    <div class="row"></div>
+                </div>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
+            </section>
         </div>
+        <div class="row">
+            <section style="border:1px solid #000; min-height:400px">
 
+                <div class="container">
+                    <div class="row"></div>
+                    <div class="row"></div>
+                </div>
+
+            </section>
+        </div>
     </div>
-</div>
+</section>
+  <? $this->beginBlock('sidebar')?>
+  	<div id="two">
+    	<ul class="list_load">
+    		<li class="list_item"><a href="#">List Item 01</a></li>
+			<li class="list_item"><a href="#">List Item 02</a></li>
+			<li class="list_item"><a href="#">List Item 03</a></li>
+    	</ul>
+    </div>
+    <div id="three">
+    	<ul class="list_load">
+			<li class="list_item"><a href="#">List Item 01</a></li>
+			<li class="list_item"><a href="#">List Item 02</a></li>
+			<li class="list_item"><a href="#">List Item 03</a></li>
+			<li class="list_item"><a href="#">List Item 04</a></li>
+		</ul>
+    </div>
+  <? $this->endBlock();?>
+
+<?php 
+$indexJs = <<<JS
+
+$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
+}); })
+
+	$('.test3').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    $('.test1').each(function(){
+	$(this).click(function(){
+		$('#task2'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    
+    $('.test').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+
+	
+
+	$('.client').on('click', function() {
+					$(document).find('#sliderwizz1').show();
+					$(document).find('#sliderwizz').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz3').hide();
+	})
+	
+	$('.supplier').on('click', function() {
+					$(document).find('#sliderwizz2').show();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('.contact').on('click', function() {
+					$(document).find('#sliderwizz3').show();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('#activeuser').on('click', function() {
+					$(document).find('#sliderwizz').show();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+	})
+JS;
+ 
+$this->registerJs($indexJs);
+?>
+
+
+
+
+
+
+<?= MenuWidget::widget(); ?>

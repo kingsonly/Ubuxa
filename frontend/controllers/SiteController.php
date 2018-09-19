@@ -11,11 +11,25 @@ use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\db\Expression;
 use yii\helpers\Json;
-use frontend\models\LoginForm;
+use yii\web\Session;
+use yii\helpers\VarDumper;
 
 //models
-
+use frontend\models\SignupForm;
+use frontend\models\Email;
+use frontend\models\Address;
+use frontend\models\Telephone;
+use frontend\models\Entity;
+use frontend\models\EmailEntity;
+use frontend\models\AddressEntity;
+use frontend\models\TelephoneEntity;
 use frontend\models\UserForm;
+use frontend\models\LoginForm;
+use frontend\models\Folder;
+use frontend\models\CustomerSignupForm;
+use frontend\models\Customer;
+use frontend\models\InviteUsersForm;
+//Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
 
@@ -32,6 +46,7 @@ class SiteController extends BoffinsBaseController {
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+					
                 ],
             ],
             'verbs' => [
@@ -60,9 +75,12 @@ class SiteController extends BoffinsBaseController {
 
     public function actionIndex() 
 	{
-		$this->layout = 'indexdashboard';
-
-        return $this->render('index',[]);
+		$this->layout = 'new_index_dashboard_layout';
+		$folder = new Folder();
+		$dashboardFolders = $folder->getDashboardItems(5);
+        return $this->render('index',[
+			'folders' => $dashboardFolders,
+		]);
        
     }
 
@@ -138,7 +156,89 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  
-	
-	  
+  public function actionSignup($cid, $email)
+    {
+		$this->layout = 'loginlayout';
+       $user = new SignupForm;
+       $customer = Customer::find()->where([
+       	'cid' => $cid,
+       	'status' => 0,
+		])->one();
+		
+		if(!empty($customer)){
+	        if ($user->load(Yii::$app->request->post())) {
+	        	$user->address = $email;
+	        	$user->cid = $cid;
+				if($user->save()){
+					$customer->status = 1;
+					$customer->save();
+					return $this->redirect(['index']);
+				} 
+			} else {
+	            return $this->render('createUser', [
+					'userForm' => $user,
+					'action' => ['createUser'],
+				]);
+			}
+		} else {
+			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		}
+    }
+
+    public function actionCustomersignup()
+    {
+		$this->layout = 'loginlayout';
+       $customer = new CustomerSignupForm;
+		
+		
+        //yii\helpers\VarDumper::dump(Yii::$app->request->post());
+        if ($customer->load(Yii::$app->request->post())) {
+        	if($customer->signup()){
+        		$sendEmail = \Yii::$app->mailer->compose()
+        		->setTo($customer->master_email)
+				->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+				->setSubject('Signup Confirmation')
+				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+				Yii::$app->urlManager->createAbsoluteUrl(
+				['site/signup','cid'=>$customer->cid]
+				))
+				)->send();
+				if($sendEmail){
+					Yii::$app->getSession()->setFlash('success','Check Your email!');
+				} else{
+					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+				}
+			}
+		} else {
+            return $this->render('createCustomer', [
+				'customerForm' => $customer,
+				'action' => ['createCustomer'],
+			]);
+		}
+    }
+
+    public function actionInviteusers()
+    {	
+    	$model = new InviteUsersForm;
+    	if ($model->load(Yii::$app->request->post()))
+	    	{	
+	    		$email = $model->email;
+	    		if(!empty($email)){
+	    			foreach ($email as $email) {
+	    				if($model->sendEmail($email)){
+	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
+	    				} else {
+	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+	    				}
+	    			}
+	    		} else {
+	    			echo "Email cannot be empty";
+	    		} 
+	    }else{
+	    		return $this->render('inviteusers', [
+				'model' => $model,
+			]);
+	    }
+    }
+
 }
