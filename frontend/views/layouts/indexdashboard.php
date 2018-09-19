@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
+use boffins_vendor\components\controllers\MenuWidget;
 
 Yii::$app->settingscomponent->buffinsUsersAsset()
 ?>
@@ -166,7 +167,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
   
 </div>
 
-
+<?= MenuWidget::widget(); ?>
     
 <footer class="main-footer">
     <div class="pull-right hidden-xs">

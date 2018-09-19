@@ -9,7 +9,7 @@ use yii\bootstrap\Alert;
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
-use boffins_vendor\components\controllers\MenuWidget;
+
 
 /* @var $this yii\web\View */
 
@@ -170,4 +170,5 @@ $this->registerJs($indexJs);
 
     </div>
 </div>
-<?= MenuWidget::widget(); ?>
+
+

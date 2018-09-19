@@ -26,7 +26,7 @@ class IndexDashboardAsset extends AssetBundle
         'css/daterangepicker.css',
         'css/datatables/dataTables.bootstrap.css',
         'css/bootstrap3-wysihtml5.min.css',
-		//BOFFINS INCLUDED JS
+		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
         'css/fontawesome/css/font-awesome.css',
         'css/fontawesome/css/main.css',
         'css/fontawesome/css/font-awesome.min.css',
@@ -43,7 +43,7 @@ class IndexDashboardAsset extends AssetBundle
         
         //'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
         'js/app.js',
-        
+        '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
         'js/Chart.min.js',
         'js/dashboard.js',
 		  
