@@ -7,6 +7,7 @@ use frontend\models\Folder;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\FolderCreateWidget;
+use boffins_vendor\components\controllers\SubFolderWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 
@@ -48,7 +49,7 @@ transition: margin-top 0.1s ease-out 0s;
     </p>
 <?= FolderUsersWidget::widget(['attributues'=>$users]);?>
 <?= FolderCreateWidget::widget();?>
-
+<?= SubFolderWidget::widget(['model' => $model->subFolders]);?>
 
 
 

@@ -134,7 +134,7 @@ class FolderController extends Controller
 	
 	public function actionCheckIfFolderNameExist($folderName){
 		$folder = new Folder();
-		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ]);
+		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ])->exists();
 		if($checkIfItExist){
 			return 1;
 		}

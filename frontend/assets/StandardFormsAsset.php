@@ -37,6 +37,8 @@ class StandardFormsAsset extends AssetBundle
 		
         //'css/fontawesome/css/font-awesome.min.css',
         'css/hover.css',
+		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
+		
     ];
     public $js = [
 		//'js/bootstrap.min.js',
@@ -59,6 +61,7 @@ class StandardFormsAsset extends AssetBundle
 		
 		'js/jquery.flip.min.js',
 		'js/script.js',
+		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
 		///'js/dragables.js'
 		
 		
