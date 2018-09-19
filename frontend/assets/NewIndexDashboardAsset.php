@@ -31,6 +31,7 @@ class NewIndexDashboardAsset extends AssetBundle
 		'css/common.css',
 		'css/dashboard.css',
 		'css/themes/color.css',
+		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
     ];
     public $js = [
         
@@ -48,6 +49,7 @@ class NewIndexDashboardAsset extends AssetBundle
         'js/Chart.min.js',
         'js/dashboard.js',
         'js/common.js',
+		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
 		
 		  
         

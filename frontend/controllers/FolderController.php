@@ -53,8 +53,29 @@ class FolderController extends Controller
      */
     public function actionView($id)
     {
+		$model = $this->findModel($id);
+		if (isset($_POST['hasEditable'])) {
+        // use Yii's response format to encode output as JSON
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        // read your posted model attributes
+        if ($model->load(Yii::$app->request->post())) {
+            // read or convert your posted information
+            
+            $model->save(false);
+            // return JSON encoded output in the below format
+            return ['output'=>'$value', 'message'=>'sent'];
+            
+            // alternatively you can return a validation error
+            // return ['output'=>'', 'message'=>'Validation error'];
+        }
+        // else if nothing to do always return an empty JSON encoded output
+        else {
+            return ['output'=>'', 'message'=>''];
+        }
+    }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -66,9 +87,10 @@ class FolderController extends Controller
     public function actionCreate()
     {
         $model = new Folder();
-
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return ['output'=>$model->id, 'message'=>'sent'];;
         }
 
         return $this->render('create', [
@@ -109,6 +131,14 @@ class FolderController extends Controller
 
         return $this->redirect(['index']);
     }
+	
+	public function actionCheckIfFolderNameExist($folderName){
+		$folder = new Folder();
+		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ])->exists();
+		if($checkIfItExist){
+			return 1;
+		}
+	}
 
     /**
      * Finds the Folder model based on its primary key value.
