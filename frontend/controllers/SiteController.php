@@ -156,7 +156,7 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($cid, $email)
+  public function actionSignup($email,$cid)
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -193,14 +193,16 @@ class SiteController extends BoffinsBaseController {
 		
         //yii\helpers\VarDumper::dump(Yii::$app->request->post());
         if ($customer->load(Yii::$app->request->post())) {
-        	if($customer->signup()){
+        	$email = $customer->master_email;
+        	$customerModel = new Customer();
+        	if($customer->signup($customerModel)){
         		$sendEmail = \Yii::$app->mailer->compose()
         		->setTo($customer->master_email)
 				->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
 				->setSubject('Signup Confirmation')
 				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
 				Yii::$app->urlManager->createAbsoluteUrl(
-				['site/signup','cid'=>$customer->cid]
+				['site/signup','email' => $email,'cid'=>$customerModel->cid]
 				))
 				)->send();
 				if($sendEmail){
@@ -217,14 +219,17 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
+
     public function actionInviteusers()
     {	
     	$model = new InviteUsersForm;
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
-	    		$email = $model->email;
-	    		if(!empty($email)){
-	    			foreach ($email as $email) {
+	    		$emails = $model->email;
+	    		//var_dump($emails);
+	    		if(!empty($emails)){
+	    			foreach ($emails as $email) {
+	    				echo $email;
 	    				if($model->sendEmail($email)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
 	    				} else {

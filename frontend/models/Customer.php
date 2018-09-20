@@ -73,20 +73,22 @@ class Customer extends \yii\db\ActiveRecord
 
     public function sendEmail($email)
     {
+        
         $sendEmail = \Yii::$app->mailer->compose()
                 ->setTo($email)
                 ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
                 ->setSubject('Signup Confirmation')
                 ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
                 Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/signup','cid'=>$this->cid]
+                ['site/signup','cid'=>$this->cid, 'email' => $email]
                 ))
                 )->send();
-        if($sendEmail){
+           if($sendEmail){
                     Yii::$app->getSession()->setFlash('success','Check Your email!');
-        } else{
-                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-        }
+                } else{
+                            Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+            }
+        
     }
 
 

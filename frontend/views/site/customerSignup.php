@@ -51,15 +51,16 @@ body {
 }
 
 .frame-short {
-  height: 400px;
+    height: 400px;
   margin-top: 50px;
   box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
   width: 40%;
 }
     
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
 .frame {
-  height: 575px;
+  height: 760px;
+  margin-top: 30px;
   width: 100%;
   background: #37474f;
   background-size: cover;
@@ -71,6 +72,14 @@ body {
   overflow: hidden;
   transition: all .5s ease;
 }
+
+.frame-short {
+  height: 400px;
+    margin-top: 100px;
+    box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
 }
 
 .nav {
@@ -160,8 +169,8 @@ li {
   font-size: 16px;
   font-weight: 300;
   margin-top: 100%;
-  padding-left: 37px;
-  padding-right: 37px;
+  padding-left: 27px;
+  padding-right: 27px;
 }
 
 #check path {
@@ -365,7 +374,7 @@ a.btn-signup:hover {
         <div ng-app ng-init="checked = false">
            
             <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $customerForm->attributes(),'enableAjaxValidation' => false, 'options' => [
-                'class' => 'form-signup']
+                'class' => 'form-signup', 'id' => 'customerForm']
             ]); ?>
 
               <div class="form-group">
@@ -379,7 +388,7 @@ a.btn-signup:hover {
                 <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling'] ]) ?>
             </div>
 
-                    <?= Html::submitButton($customerForm->isNewRecord ? '<span ng-click="checked = !checked" class="btn-signup">Next</span> <img id="userloader" src="images/45.gif" " /> <span id="userloader1"><span>' : 'Update', ['class' => $customerForm->isNewRecord ? 'btn btn-danger' : 'btn btn-danger','id'=>'usersubmit_id']) ?>
+                    <?= Html::submitButton('Signup',['class' => 'btn-signup']) ?>
 
             <?php ActiveForm::end(); ?>
             <div class="success">
@@ -396,32 +405,30 @@ a.btn-signup:hover {
 <?php
 $js = <<<JS
 
+function inTest() {
+  $(".nav").toggleClass("nav-up");
+  $(".form-signup-left").toggleClass("form-signup-down");
+  $(".success").toggleClass("success-left"); 
+  $(".frame").toggleClass("frame-short");
+}
+
 $('#customerForm').on('beforeSubmit', function (e) {
-    $('#userbuttonText').hide();
-    $('#userloader').show();
-    var \$form = $(this);
-    $.post(\$form.attr('action'),\$form.serialize())
-    .always(function(result){
-    
-    $(document).find('#userloader').hide();
-   if(result == 'sent'){
-       
-       $(document).find('#userloader1').html(result).show();
-       
-    
-    }else{
-    $(document).find('#userloader1').html(result).show();
-    
-    }
-    }).fail(function(){
-    console.log('Server Error');
+    e.preventDefault();
+    var form = $(this);
+    var formData = form.serialize();
+
+    $.ajax({
+        url: form.attr("action"),
+        type: form.attr("method"),
+        data: formData,
+        success: function (data) {
+            inTest();
+        },
+        error: function () {
+            alert("Something went wrong");
+        }
     });
-    
-    setTimeout(function(){ 
-    $(document).find('#userloader').hide();
-    $(document).find('#userloader1').hide();
-    $(document).find('#userbuttonText').show();
-    }, 5000);
+
     return false;
     
     
@@ -431,17 +438,9 @@ $('#customerForm').on('beforeSubmit', function (e) {
 $(document).ready(function () {
     $(".form-signup").toggleClass("form-signup-left");
     $(".frame").toggleClass("frame-long");
-
 });
 
-$(function() {
-  $(".btn-signup").click(function() {
-  $(".nav").toggleClass("nav-up");
-  $(".form-signup-left").toggleClass("form-signup-down");
-  $(".success").toggleClass("success-left"); 
-  $(".frame").toggleClass("frame-short");
-  });
-});
+
 
 JS;
  
