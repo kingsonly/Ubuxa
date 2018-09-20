@@ -142,16 +142,26 @@ class Folder extends FolderARModel
 				->all();
 	}
 	
-	 public function getFolderUsers(){
+	 public function getFolderUsersInheritance(){
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManagerInheritance');
+        }
+	public function getFolderUsers(){
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManager')->asArray();
         }
 
-    public function getFolderManager()
+    public function getFolderManagerInheritance()
     {
-		if(isset($_GET['id'])){
-			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+		if($this->parent_id > 0){
+			return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
 		}
-        return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
+        
+    }
+	public function getFolderManager()
+    {
+		
+			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+		
+        
     }
 	
 	public function getIsEmpty() 
