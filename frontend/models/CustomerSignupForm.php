@@ -73,11 +73,8 @@ class CustomerSignupForm extends Model
     }
 
     
-    public function signup()
+    public function signup($customer)
     {   
-        
-            $customer = new Customer();
-
             $customer->master_email = $this->master_email;
             $customer->master_doman = $this->master_doman;
             $customer->account_number = $this->account_number;
@@ -85,8 +82,10 @@ class CustomerSignupForm extends Model
             $customer->billing_date = $this->billing_date;
             $customer->status = 0;
             $customer->cid = $this->plan_id.rand(10, 10000);
+            $cid = $customer->cid;
+            
 
-            return $customer->save() ? $customer : null;
+            return $customer->save();
                 
     }
 

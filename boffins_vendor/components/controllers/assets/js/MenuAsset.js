@@ -1,7 +1,7 @@
-$(document).on('click','.js-menu_toggle.closed',function(e){
-	e.preventDefault(); 
+function closeMenu(data){
+   // e.preventDefault(); 
 	$('.list_load, .list_item').stop();
-	$(this).removeClass('closed').addClass('opened');
+	data.removeClass('closed').addClass('opened');
 
 	$('.side_menu').css({ 'left':'0px' });
 
@@ -17,12 +17,11 @@ $(document).on('click','.js-menu_toggle.closed',function(e){
 			});
 		},100*i);
 	});
-});
+}
 
-$(document).on('click','.js-menu_toggle.opened',function(e){
-	e.preventDefault(); 
-	$('.list_load, .list_item').stop();
-	$(this).removeClass('opened').addClass('closed');
+function openMenu(data){
+    $('.list_load, .list_item').stop();
+	data.removeClass('opened').addClass('closed');
 
 	$('.side_menu').css({ 'left':'-300px' });
 
@@ -32,6 +31,19 @@ $(document).on('click','.js-menu_toggle.opened',function(e){
 		'margin-left':'-20px'
 	});
 	$('.list_load').slideUp(300);
+}
+
+$(document).on('click','.js-menu_toggle.closed',function(e){
+    var thisClass = $('.js-menu_toggle.closed');
+	closeMenu(thisClass);
+});
+
+
+
+$(document).on('click','.js-menu_toggle.opened',function(){
+	var thisClass = $('.js-menu_toggle.opened');
+    openMenu(thisClass);
+	
 });
 
 $(document).ready(function () {
@@ -48,3 +60,28 @@ $(document).ready(function () {
 	});
 
 });
+
+$(document).on('click',function (e) {
+  side_menu = $('.side_menu');
+  if (!side_menu.is(e.target) 
+      && side_menu.has(e.target).length === 0){
+    if($('.js-menu_toggle.opened')[0]){
+        $('.js-menu_toggle.opened').trigger('click');
+    } else {
+        //do nothing
+    }
+	
+  }
+});
+
+//var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
+var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
+var isiDevice = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());
+var isAndroid = /android/i.test(navigator.userAgent.toLowerCase());
+var isWindowsPhone = /windows phone/i.test(navigator.userAgent.toLowerCase());
+var isBlackBerry = /blackberry/i.test(navigator.userAgent.toLowerCase());
+
+if (isiPod || isiDevice || isAndroid || isWindowsPhone || isBlackBerry)
+{
+//console.log('mobile');
+}

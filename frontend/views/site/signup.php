@@ -9,10 +9,13 @@ use frontend\models\Role;
 use frontend\models\Country;
 
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 <style>
 #userloader,#userloader1{
 display: none;
@@ -70,6 +73,11 @@ body{
   border-radius: 5px;  
 }
 
+.form-control{
+  height:50px;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+}
+
 #form-id .custom-button:hover{
   box-shadow:0 0 0 2px #fff, 0 0 0 4px #3B5998;
 }
@@ -85,55 +93,7 @@ body{
   font-weight:normal;
   color:#666;
 }
-/*Progressbar*/
-.progress {
-  margin-bottom: 30px;
-  overflow: hidden;
-  /*CSS counters to number the steps*/
-  counter-reset: step;
-}
-.progress li {
-  list-style-type: none;
-  color: white;
-  text-transform: uppercase;
-  font-size: 9px;
-  width: 33.33%;
-  float: left;
-  position: relative;
-}
-.progress li:before {
-  content: counter(step);
-  counter-increment: step;
-  width: 20px;
-  line-height: 20px;
-  display: block;
-  font-size: 10px;
-  color: #333;
-  background: white;
-  border-radius: 3px;
-  margin: 0 auto 5px auto;
-}
-/*progressbar connectors*/
-.progress li:after {
-  content: '';
-  width: 100%;
-  height: 2px;
-  background: #fff;
-  position: absolute;
-  left: -50%;
-  top: 9px;
-  z-index:-1; /*put it behind the numbers*/
-}
-.progress li:first-child:after {
-    /*connector not needed before the first step*/
-  content: none; 
-}
-/*marking active/completed steps green*/
-/*The number of the step and the connector before it = green*/
-.progress li.active:before,  .progress li.active:after{
-  background: #3B5998;
-  color: white;
-}
+
 .input {
   border-radius: 5px;
     padding: 10px;
@@ -173,15 +133,21 @@ body{
         <fieldset>
             <div class='heading'>
                 <h2 class='title'>Personal Details</h2>
-                <p class='under_title'>Let's get to know you!</p>
             </div>
             <div class="input">
                 <?= $form->field($userForm, 'first_name')->textInput()->input('first_name', ['placeholder' => "Enter Your First Name"])->label(false); ?>
 
                 <?= $form->field($userForm, 'surname')->textInput(['maxlength' => true])->input('surname', ['placeholder' => "Enter Your Surname"])->label(false) ?>
 
-                <?= $form->field($userForm, 'dob')->textInput(['maxlength' => true])->input('dob', ['placeholder' => "Enter Your Dob"])->label(false)
-                ?>
+                <?= DatePicker::widget([
+                'name' => 'dob', 
+                'value' => date('d-M-Y', strtotime('+2 days')),
+                'options' => ['placeholder' => 'Select issue date ...'],
+                'pluginOptions' => [
+                  'format' => 'dd-M-yyyy',
+                  'todayHighlight' => true
+                ]
+              ]); ?>
             </div>
             <?= Html::button('Contact Details <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
         </fieldset>
@@ -200,12 +166,12 @@ body{
 
         <fieldset>
             <div class='heading'>
-                <h2 class='title'>Where are you?</h2>
+                <h2 class='title'>Address</h2>
             </div>
             <div class="input">
                 <?= $form->field($userForm, 'address_line')->textInput(['maxlength' => true])->input('address_line', ['placeholder' => "Address"])->label(false) ?>
 
-                <?= $form->field($userForm, 'country_id')->dropDownList(ArrayHelper::map(Country::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Country'), 'options' => ['class' => 'form_input'] ]) ?>
+                <?= $form->field($userForm, 'country_id')->dropDownList(ArrayHelper::map(Country::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Country'), 'options' => ['class' => 'form_input'] ])->label(false) ?>
 
                 <?= $form->field($userForm, 'state_id')->textInput(['maxlength' => true])->input('state_id', ['placeholder' => "Choose state"])->label(false) ?>
 
@@ -221,7 +187,7 @@ body{
             </div>
             <div class="input">
                 <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'minlenght'=>8])->input('first_name', ['placeholder' => "Enter your username"])->label(false) ?>
-                <?= $form->field($userForm, 'password')->passwordInput()->input('first_name', ['placeholder' => "Enter Your password"])->label(false) ?>
+                <?= $form->field($userForm, 'password')->passwordInput()->input('password', ['placeholder' => "Enter Your password"])->label(false) ?>
             </div>
             <?= Html::button('<i class="fa fa-arrow-left"></i>', ['class' => 'prev-button']) ?>
                 <?= Html::button('Proceed to Role <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
