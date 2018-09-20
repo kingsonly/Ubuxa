@@ -9,13 +9,11 @@ use yii\bootstrap\Alert;
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
-
+use boffins_vendor\components\controllers\MenuWidget;
 
 /* @var $this yii\web\View */
 
 ?>
-
-<div class="site-index">
 <style>
 	#flash {
 		display: none;
@@ -60,16 +58,42 @@ $this->title = Yii::t('dashboard', 'dashboard_title');
 										'remarks';
 			}
 	}
+    .content-header{
+        display:none;
+    }
 </style>
 
 
 
-<section id="dashboard-content">
-	<div class="grid-item folder">
-		<?=$this->render('/folder/latest', ['folders' =>$folders]);?>
-	</div>
-		
-	
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <section style="border:1px solid #000; min-height:400px">
+                <section id="dashboard-content">
+                    <div class="grid-item folder">
+                        <?=$this->render('/folder/latest', ['folders' =>$folders]);?>
+                    </div>
+                </section>
+    
+                <div class="container">
+                    <div class="row"></div>
+                    <div class="row"></div>
+                </div>
+
+            </section>
+        </div>
+        <div class="row">
+            <section style="border:1px solid #000; min-height:400px">
+
+                <div class="container">
+                    <div class="row"></div>
+                    <div class="row"></div>
+                </div>
+
+            </section>
+        </div>
+    </div>
 </section>
   <? $this->beginBlock('sidebar')?>
   	<div id="two">
@@ -168,7 +192,5 @@ $this->registerJs($indexJs);
 
 
 
-    </div>
-</div>
 
-
+<?= MenuWidget::widget(); ?>
