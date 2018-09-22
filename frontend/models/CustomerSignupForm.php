@@ -89,4 +89,19 @@ class CustomerSignupForm extends Model
                 
     }
 
+    public function sendEmail($email)
+    { 
+        $sendEmail = \Yii::$app->mailer->compose()
+                ->setTo($email)
+                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+                ->setSubject('Signup Confirmation')
+                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+                Yii::$app->urlManager->createAbsoluteUrl(
+                ['site/signup','cid'=>$this->cid, 'email' => $email, 'role' => 1]
+                ))
+                )->send();
+                   
+        return $sendEmail;
+    }
+
 }

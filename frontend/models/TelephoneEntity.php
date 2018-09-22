@@ -26,7 +26,7 @@ class TelephoneEntity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['telephone_id', 'entity_id'], 'required'],
+            [['telephone_id', 'entity_id'], 'safe'],
             [['telephone_id', 'entity_id'], 'integer'],
         ];
     }

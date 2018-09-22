@@ -26,8 +26,8 @@ class Telephone extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['telephone_number','cid'], 'required'],
-         
+            [['cid'], 'required'],
+            [['telephone_number'], 'safe'],
             [['telephone_number'], 'string'],
         ];
     }

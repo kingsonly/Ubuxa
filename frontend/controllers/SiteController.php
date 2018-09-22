@@ -156,7 +156,7 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email,$cid)
+  public function actionSignup($email,$cid,$role)
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -169,6 +169,7 @@ class SiteController extends BoffinsBaseController {
 	        if ($user->load(Yii::$app->request->post())) {
 	        	$user->address = $email;
 	        	$user->cid = $cid;
+	        	$user->basic_role = $role;
 				if($user->save()){
 					$customer->status = 1;
 					$customer->save();
@@ -185,33 +186,25 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
-    public function actionCustomersignup()
+    public function actionCustomersignup($plan_id)
     {
 		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
 		
-		
         //yii\helpers\VarDumper::dump(Yii::$app->request->post());
         if ($customer->load(Yii::$app->request->post())) {
         	$email = $customer->master_email;
+        	$date = strtotime("+7 day");
+        	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
         	if($customer->signup($customerModel)){
-        		$sendEmail = \Yii::$app->mailer->compose()
-        		->setTo($customer->master_email)
-				->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-				->setSubject('Signup Confirmation')
-				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-				Yii::$app->urlManager->createAbsoluteUrl(
-				['site/signup','email' => $email,'cid'=>$customerModel->cid]
-				))
-				)->send();
-				if($sendEmail){
-					Yii::$app->getSession()->setFlash('success','Check Your email!');
-				} else{
-					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-				}
-			}
-		} else {
+        		if($customer->sendEmail($email)){
+        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
+                } else{
+                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+            	}
+        	}
+		}else {
             return $this->render('createCustomer', [
 				'customerForm' => $customer,
 				'action' => ['createCustomer'],
@@ -228,14 +221,11 @@ class SiteController extends BoffinsBaseController {
 	    		$emails = $model->email;
 	    		//var_dump($emails);
 	    		if(!empty($emails)){
-	    			foreach ($emails as $email) {
-	    				echo $email;
-	    				if($model->sendEmail($email)){
+	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
 	    				}
-	    			}
 	    		} else {
 	    			echo "Email cannot be empty";
 	    		} 
