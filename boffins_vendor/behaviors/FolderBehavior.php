@@ -101,19 +101,19 @@ class FolderBehavior extends Behavior
 			}
 		
 		}
-
-		if($this->linkUserToFolder($userId,$folderId,$role)->save()){
-			
-			foreach($this->getAdminUsers() as $v){
-				$this->linkUserToFolder($v->id,$folderId,'user')->save();
-			}
-		};
-		
 		if($this->owner->parent_id > 0){
-			foreach($this->owner->folderUsers as $v){
+
+			foreach($this->owner->folderUsersInheritance as $v){
 				$this->linkUserToFolder($v->id,$folderId,'user')->save();
 				
 			}
+		}else{
+			if($this->linkUserToFolder($userId,$folderId,$role)->save()){
+
+				foreach($this->getAdminUsers() as $v){
+					$this->linkUserToFolder($v->id,$folderId,'user')->save();
+				}
+			};
 		}
 	}
 	
