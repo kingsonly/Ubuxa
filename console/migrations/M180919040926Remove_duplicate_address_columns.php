@@ -23,9 +23,9 @@ class M180919040926Remove_duplicate_address_columns extends Migration
      */
     public function safeDown()
     {
-        echo "M180919040926Remove_duplicate_address_columns cannot be reverted.\n";
-
-        return false;
+        echo "M180919040926Remove_duplicate_address_columns should not be reverted. Reverting for development only.\n";
+		$this->addColumn('{{%address}}', 'state', $this->string(255) );
+		$this->addColumn('{{%address}}', 'country', $this->string(255) );
     }
 
     /*
