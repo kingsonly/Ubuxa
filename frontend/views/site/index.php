@@ -47,6 +47,34 @@ use boffins_vendor\components\controllers\MenuWidget;
 	.grid-item.task-box {
 		grid-area: tasks;
 	}
+
+	.bg-info {
+    	background-color: #fff;
+    	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+    	padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.header {
+    	border-bottom: 1px solid #ccc;
+    	padding-top: 7px;
+    	padding-bottom: 7px;
+    	font-weight: bold
+	}
+
+	.box-content {
+		height: 300px;
+	}
+
+	.box-content-task {
+		height: 250px;
+		border-bottom: 1px solid #ccc;
+	}
+
+	.box-input {
+		padding-top: 7px;
+    	padding-bottom: 7px;
+	}
 	
 	@media screen and (min-width: 280px) and (max-width: 599px) {
 			#dashboard-content {
@@ -86,11 +114,24 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
             <section style="border:1px solid #000; min-height:400px">
 
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
-
+                	<div class="row">
+					   <div class="col-md-5">
+            				<div class="bg-info">
+	            				<div class="header">TASKS</div>
+	            				<div class="box-content-task">Hello World!</div>
+	            				<div class="box-input">
+	            					Input task
+	            				</div>
+            				</div>
+            				
+        				</div>
+        				<div class="col-md-7">
+            				<div class="bg-info">
+            					<div class="header">REMARKS</div>
+	            				<div class="box-content">Hello World!</div>
+            				</div>
+        				</div>
+					</div>
             </section>
         </div>
     </div>
