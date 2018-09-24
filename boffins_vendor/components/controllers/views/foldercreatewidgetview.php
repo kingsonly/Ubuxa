@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 /* @var $form yii\widgets\ActiveForm */
@@ -13,7 +15,79 @@ use yii\widgets\ActiveForm;
 	#loadingdiv{
 		display: none;
 	}
+	#form-contnent{
+		display: flex;
+		
+	}
+	
+	#form-contnent span{
+		flex:1;
+		
+	}
+	select {
+  font-family: 'FontAwesome', 'sans-serif';
+}
+	#title-span{
+		margin-left: -5px;
+		 flex:1;
+	}
+	
+	#folder-title{
+		height: 33px;
+		border:0px;
+		width: 100%;
+		 
+	}
+	.select2-selection{
+		background: #fff !important;
+		border: 0px !important;
+		border-radius:0px !important;
+		-webkit-box-shadow: inset 0 1px 1px rgba(255,255,255);
+		box-shadow: inset 0 1px 1px rgba(255,255,255);
+	}
+	
+	.select2-container--krajee .select2-selection{
+		background: #fff !important;
+		border: 0px !important;
+		border-radius:0px !important;
+		-webkit-box-shadow: inset 0 1px 1px rgba(255,255,255)!important;
+		box-shadow: inset 0 1px 1px rgba(255,255,255) !important;
+	}
+	
+	#select2-folder-privatefolder-container{
+		padding-top: 6px !important;
+	}
+	
+	.fa-unlock-alt{
+		font-size: 20px;
+	}
+	#form-content{
+		display: flex;
+		flex-direction: row;
+		padding-right: 4px;
+		height: 40px;
+	}
+	#folderform{
+		background: #fff;
+		border: solid 2px green;
+		display: block;
+		border-radius: 4px;
+		padding-top: 6px;
+	}
 </style>
+<?
+$url = \Yii::$app->urlManager->baseUrl . '/images/flags/';
+$format = <<< SCRIPT
+function format(state) {
+    if (!state.id) return state.text; // optgroup
+    src = state.id;
+    return '<i class="' + src + '"></i>';
+}
+SCRIPT;
+$escape = new JsExpression("function(m) { return m; }");
+$this->registerJs($format,  yii\web\View::POS_HEAD);
+?>
+
 <div class="folder-form">
 	<?php 
 	$folderId = '';
@@ -22,16 +96,41 @@ if(isset($_GET['id'])){
 	}else{
 		$folderId = 0;
 	}
-    $form = ActiveForm::begin(['action'=>Url::to(['folder/create']),'id'=> 'folderform']); ?>
+    $form = ActiveForm::begin(['action'=>Url::to(['folder/create']),'id'=> 'folderform','fieldConfig' => ['template' => '{label}{input}']]); ?>
 <div id="loadingdiv"> loading .....</div>
     
-<?= $form->field($folderModel, 'privateFolder')->checkbox(['label'=>'test','value' => "1"]); ?>
-<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true, 'id' => 'folder-title']) ?>
-<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
-<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
-    <div class="form-group">
-        <?= Html::button('Save', ['class' => 'btn btn-success', 'id' => 'submit-folder']) ?>
-    </div>
+
+<div id="form-content">
+	<span>
+	<?
+		$privacy = ['fa fa-unlock-alt'=>'Public','fa fa-lock'=>'Private']
+	?>
+		  <?= $form->field($folderModel, 'privateFolder')->widget(Select2::classname(), [
+    'data' => $privacy,
+    'options' => [],
+	'hideSearch' => true,
+    'pluginOptions' => [
+        'templateResult' => new JsExpression('format'),
+        'templateSelection' => new JsExpression('format'),
+        'escapeMarkup' => $escape,
+        
+    ],
+])->label(false);?>
+	</span>
+	<span id="title-span">
+		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true, 'id' => 'folder-title'])->label(false); ?>
+	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
+	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
+	</span>
+	
+	
+
+    <span class="form-group">
+        <?= Html::button('Create', ['class' => 'btn btn-success', 'id' => 'submit-folder']) ?>
+    </span>
+
+</div>
+
 
     <?php ActiveForm::end(); ?>
 
