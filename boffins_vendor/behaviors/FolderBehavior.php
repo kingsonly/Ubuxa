@@ -95,7 +95,8 @@ class FolderBehavior extends Behavior
 		$userId = yii::$app->user->identity->id;
 		$role = 'author';
 		$folderManager = $this->linkUserToFolder($userId,$folderId,$role);
-		if($this->owner->privateFolder){
+		
+		if($this->owner->privateFolder === 'fa fa-lock'){
 			if($folderManager->save()){
 				return;
 			}

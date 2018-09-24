@@ -17,24 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $users = $model->folderUsers;
 ?>
 <div class="folder-view">
-	<style>
-	.img-circular{
- width: 50px;
- height: 50px;
- background-repeat: no-repeat;
- background-size: cover;
- display: inline-block;
-border:solid 1px #ccc;
- border-radius: 25px;
- -webkit-border-radius: 100px;
- -moz-border-radius: 100px;
-background-color: #fff;
-transition: margin-top 0.1s ease-out 0s;
-}
-#folderusers .img-circular:not(:first-of-type) {
-      margin-left: -10px;
-}
-	</style>
+	
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
