@@ -118,7 +118,7 @@ if(isset($_GET['id'])){
 ])->label(false);?>
 	</span>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true, 'id' => 'folder-title'])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true, 'id' => 'folder-title','placeholder'=>'Folder title'])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>

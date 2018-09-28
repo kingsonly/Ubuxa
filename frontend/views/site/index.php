@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
-
+use boffins_vendor\components\controllers\SearchFormWidget;
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -67,6 +67,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 
 <section>
+	<?= SearchFormWidget::widget();?>
     <div class="container-fluid">
         <div class="row">
             <section style="border:1px solid #000; min-height:400px">

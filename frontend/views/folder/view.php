@@ -8,6 +8,9 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\SubFolderWidget;
+use boffins_vendor\components\controllers\FolderCarouselWidget;
+use boffins_vendor\components\controllers\SearchFormWidget;
+use boffins_vendor\components\controllers\CreateButtonWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 
@@ -30,9 +33,19 @@ $users = $model->folderUsers;
             ],
         ]) ?>
     </p>
+	<?
+	$images=['<img src="http://placehold.it/300/673ab7/000000"/>','<img src="/path/to/file2"/>','<img src="/path/to/file3"/>'];
+	?>
 <?= FolderUsersWidget::widget(['attributues'=>$users]);?>
-<?= FolderCreateWidget::widget();?>
-<?= SubFolderWidget::widget(['model' => $model->subFolders]);?>
+<?= CreateButtonWidget::widget();?>
+
+	<div style="width:400px;background:#fff;">
+		<?= SearchFormWidget::widget();?>
+		<?=FolderCarouselWidget::widget(['folderModel' => $model->subFolders]);?>
+	</div>
+
+
+<? SubFolderWidget::widget(['model' => $model->subFolders]);?>
 
 
 

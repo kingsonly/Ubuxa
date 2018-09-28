@@ -34,6 +34,8 @@ class StandardFormsAsset extends AssetBundle
 		//BOFFINS INCLUDED css
 		'css/forms/simple.css',
         'css/fontawesome/css/font-awesome.css',
+        'owlcarousel/assets/owl.carousel.min.css',
+        'owlcarousel/assets/owl.theme.default.min.css',
 		
         //'css/fontawesome/css/font-awesome.min.css',
         'css/hover.css',
@@ -41,7 +43,7 @@ class StandardFormsAsset extends AssetBundle
 		
     ];
     public $js = [
-		//'js/bootstrap.min.js',
+		'js/bootstrap.min.js',
 		'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',
 		'js/jquery.sticky-kit.min.js',
         //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
@@ -62,6 +64,8 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.flip.min.js',
 		'js/script.js',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
+		'owlcarousel/owl.carousel.js',
+		
 		///'js/dragables.js'
 		
 		
