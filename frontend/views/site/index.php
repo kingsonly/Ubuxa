@@ -82,8 +82,14 @@ use boffins_vendor\components\controllers\MenuWidget;
  	 		margin: 5px 0;
  	 	}
  	 	.info-1 {
-			margin-left: 8%;
-			width: 80%;
+			margin-left: 0px;
+		}
+		.activedetls{
+			padding-left: 0px !important;
+			border-bottom: 5px solid green;
+		}
+		.box-content-active {
+			height: 87px !important;
 		}
 	}
     .content-header{
@@ -120,6 +126,7 @@ use boffins_vendor\components\controllers\MenuWidget;
             	</div>
             </section>
         </div>
+    </div>
 </section>
 
   <? $this->beginBlock('sidebar')?>
