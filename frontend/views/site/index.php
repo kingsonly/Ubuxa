@@ -5,6 +5,13 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
+use boffins_vendor\components\controllers\TaskWidget;
+use boffins_vendor\components\controllers\RemarksWidget;
+use boffins_vendor\components\controllers\ComponentWidget;
+use boffins_vendor\components\controllers\FolderDetails;
+use boffins_vendor\components\controllers\SubFolders;
+use boffins_vendor\components\controllers\ActivitiesWidget;
+use boffins_vendor\components\controllers\OnlineClients;
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
@@ -48,32 +55,12 @@ use boffins_vendor\components\controllers\MenuWidget;
 		grid-area: tasks;
 	}
 
-	.bg-info {
-    	background-color: #fff;
-    	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-    	padding-left: 15px;
-		padding-right: 15px;
+	.folderdiv{
+		height: 50px;
 	}
 
-	.header {
-    	border-bottom: 1px solid #ccc;
-    	padding-top: 7px;
-    	padding-bottom: 7px;
-    	font-weight: bold
-	}
-
-	.box-content {
-		height: 300px;
-	}
-
-	.box-content-task {
-		height: 250px;
-		border-bottom: 1px solid #ccc;
-	}
-
-	.box-input {
-		padding-top: 7px;
-    	padding-bottom: 7px;
+	.top-box {
+		padding-bottom: 50px;
 	}
 	
 	@media screen and (min-width: 280px) and (max-width: 599px) {
@@ -86,9 +73,23 @@ use boffins_vendor\components\controllers\MenuWidget;
 										'remarks';
 			}
 	}
+
+	@media (max-width:991px) {
+ 	 	.column-margin { 
+ 	 		margin: 20px 0; 
+ 	 	}
+ 	 	.act-margin {
+ 	 		margin: 5px 0;
+ 	 	}
+ 	 	.info-1 {
+			margin-left: 8%;
+			width: 80%;
+		}
+	}
     .content-header{
         display:none;
     }
+    
 </style>
 
 
@@ -97,45 +98,30 @@ use boffins_vendor\components\controllers\MenuWidget;
 <section>
     <div class="container-fluid">
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
-                <section id="dashboard-content">
-                    <div class="grid-item folder">
-                        <?=$this->render('/folder/latest', ['folders' =>$folders]);?>
-                    </div>
-                </section>
-    
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
+            <section>
+                  <div class="row top-box">
+                  	<?= ActivitiesWidget::widget() ?>
+                  	<?= OnlineClients::widget() ?>
+                  </div>  
+                    	<div class="row">
+   						 	<?= FolderDetails::widget() ?>
+   						 	<?= SubFolders::widget() ?>
+                    	</div>
 
             </section>
         </div>
+
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
-
-                	<div class="row">
-					   <div class="col-md-5">
-            				<div class="bg-info">
-	            				<div class="header">TASKS</div>
-	            				<div class="box-content-task">Hello World!</div>
-	            				<div class="box-input">
-	            					Input task
-	            				</div>
-            				</div>
-            				
-        				</div>
-        				<div class="col-md-7">
-            				<div class="bg-info">
-            					<div class="header">REMARKS</div>
-	            				<div class="box-content">Hello World!</div>
-            				</div>
-        				</div>
-					</div>
+        	<?= ComponentWidget::widget() ?>
+            <section>
+            	<div class="row">
+            		<?= TaskWidget::widget() ?>
+            		<?= RemarksWidget::widget() ?>
+            	</div>
             </section>
         </div>
-    </div>
 </section>
+
   <? $this->beginBlock('sidebar')?>
   	<div id="two">
     	<ul class="list_load">

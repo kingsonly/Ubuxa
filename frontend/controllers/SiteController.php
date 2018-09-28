@@ -198,7 +198,16 @@ class SiteController extends BoffinsBaseController {
         	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
         	if($customer->signup($customerModel)){
-        		if($customer->sendEmail($email)){
+        		$sendEmail = \Yii::$app->mailer->compose()
+                ->setTo($email)
+                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+                ->setSubject('Signup Confirmation')
+                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+                Yii::$app->urlManager->createAbsoluteUrl(
+                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+                ))
+                )->send();
+        		if($sendEmail){
         			 Yii::$app->getSession()->setFlash('success','Check Your email!');
                 } else{
                     Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');

@@ -40,7 +40,7 @@ class InviteUsersForm extends Model
     {
         $cid = Yii::$app->user->identity->cid;
         $tests = $this->email;
-        foreach ($tests as $email => $test) {
+        foreach ($tests as $test) {
            $sendTest = Yii::$app->mailer->compose()
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])

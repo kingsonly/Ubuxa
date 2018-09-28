@@ -55,7 +55,7 @@ display: none;
   height: auto;
   margin-top: 30px;
   width: 100%;
-  background: #37474f;
+  background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
   background-size: cover;
   margin-left: auto;
   margin-right: auto;
@@ -212,6 +212,24 @@ label {
   margin-left: 25%;
 }
 
+
+#customersignupform-master_doman {
+  padding-right: 50%
+}
+
+.input-box { position: relative; }
+
+
+.unit { 
+    color: #000;
+    position: absolute;
+    display: block;
+    right: 15px;
+    top: 37px;
+    z-index: 9;
+    font-size: 13px;
+    font-family: sans-serif;
+  }
 </style>
 <div class="container">
     <div class="frame">
@@ -229,7 +247,11 @@ label {
               <div class="form-group">
                 <?= $form->field($customerForm, 'master_email')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-                <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                <div class="input-box">
+
+                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling'])?> 
+                  <span class="unit">.ubuxa.com</span>
+                </div>
 
                 <?= $form->field($customerForm, 'account_number')->textInput(['maxlength' => true, 'minlenght'=>6, 'class' => 'form-styling']) ?>
                 <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling', 'id' => 'plan'] ]) ?>
