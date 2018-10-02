@@ -92,7 +92,7 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 	
 	.owl-prev {
     width: 15px;
-    height: 73px;
+    height: 57px;
     position: absolute;
     top: 0%;
     margin-left: -20px;
@@ -102,25 +102,30 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 
 .owl-next {
     width: 15px;
-    height: 73px;
+    height: 57px;
     position: absolute;
     top: 0%;
-    right: -15px;
+    right: 8px;
     display: block!IMPORTANT;
     border:0px solid black;
 }
-.owl-prev i, .owl-next i { color: #ccc;}
+.owl-prev i, .owl-next i { 
+		color: #ccc !important; 
+		font-size:20px
+	}
 	.owl-prev:hover,.owl-next:hover{
 		background-color: rgba(255, 0, 0, 0) !important ;
 	}
 	 .owl-carousel .owl-nav button.owl-prev{
-		border-right: solid #ccc 2px !important;
+		border-right: solid #ccc 1px !important;
 		padding-right: 18px !IMPORTANT;
-		 left: -20px;
+		 left: -10px;
+		 border-radius:0px !important;
 	}
 	 .owl-carousel .owl-nav button.owl-next{
-		border-left: solid #ccc 2px !important;
+		border-left: solid #ccc 1px !important;
 		padding-left: 5px !IMPORTANT;
+		 border-radius:0px !important;
 		 
 	}
 	
@@ -149,6 +154,12 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 	.create-new-folder{
 		display:none;
 	}
+	#carousles{
+		margin-top: 10px;
+	}
+	.owl-prev{
+		width:23px !important;
+	} 
 </style>
 
 
@@ -220,26 +231,6 @@ var owl = $('.owl-carousel');
     });
   });
   
-  $("#search").on("click", function() {
-    options = {
-		  "closeButton": true,
-		  "debug": false,
-		  "newestOnTop": true,
-		  "progressBar": true,
-		  "positionClass": "toast-top-right",
-		  "preventDuplicates": true,
-		  "showDuration": "300",
-		  "hideDuration": "1000",
-		  "timeOut": "5000",
-		  "extendedTimeOut": "1000",
-		  "showEasing": "swing",
-		  "hideEasing": "linear",
-		  "showMethod": "fadeIn",
-		  "hideMethod": "fadeOut",
-		  "tapToDismiss": false
-		  }
-		toastr.error("You can View all subfolder from the side bar", "Title", options);
-  });
 		
 		
 		$(".folder-text").mouseover(function() {

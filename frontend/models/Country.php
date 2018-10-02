@@ -30,7 +30,7 @@ class Country extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sortname', 'name', 'phonecode'], 'required'],
+            [['sortname', 'name', 'phonecode'], 'safe'],
             [['phonecode'], 'integer'],
             [['sortname'], 'string', 'max' => 3],
             [['name'], 'string', 'max' => 150],

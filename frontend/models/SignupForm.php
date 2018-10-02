@@ -13,7 +13,7 @@ class SignupForm extends Model
     //person model attributes
     public $first_name;
     public $surname;
-    public $dob;
+    //public $dob;
     
     //user model attributes 
     public $username;
@@ -21,16 +21,16 @@ class SignupForm extends Model
     public $basic_role;
     
     //telephone model attributes
-    public $telephone_number;
+    //public $telephone_number;
     
     //email model attributes
     public $address;
     
     //address model attributes
-    public $address_line;
+    //public $address_line;
     public $state_id;
     public $country_id;
-    public $code;
+    //public $code;
     public $cid;
 
     public $isNewRecord = false; //to mimic AR
@@ -58,15 +58,15 @@ class SignupForm extends Model
                                     
             $entity_id = empty($this->_personAR) ? $this->_getNewEntity()->id : $this->_personAR->entity_id;
 
-            $this->_telephoneAR = ( ($TE = TelephoneEntity::findOne(['entity_id' => $entity_id])) != NULL ) ? 
+           /* $this->_telephoneAR = ( ($TE = TelephoneEntity::findOne(['entity_id' => $entity_id])) != NULL ) ? 
                                     Telephone::findOne( ['id' => $TE->telephone_id] ) : 
-                                    new Telephone;
+                                    new Telephone; */
             $this->_emailAR = ( ($EE = EmailEntity::findOne(['entity_id' => $entity_id])) != NULL ) ? 
                                 Email::findOne( ['id' => $EE->email_id] ) : 
                                 new Email;
-            $this->_addressAR = ( ($AE = AddressEntity::findOne(['entity_id' => $entity_id])) != NULL ) ?
+            /* $this->_addressAR = ( ($AE = AddressEntity::findOne(['entity_id' => $entity_id])) != NULL ) ?
                                 Address::findOne( ['id' => $AE->address_id] ) : 
-                                new Address;    
+                                new Address; */   
             
             $attributes = $this->_userAR->getAttributes();
             if ( !empty($this->_personAR) ) {
@@ -75,17 +75,17 @@ class SignupForm extends Model
                 trigger_error('User created without person?? ' . __METHOD__);
             }
 
-            if ( !$this->_telephoneAR->isNewRecord ) {
+            /* if ( !$this->_telephoneAR->isNewRecord ) {
                 $attributes += $this->_telephoneAR->getAttributes();
-            } 
+            } */
 
             if ( !$this->_emailAR->isNewRecord ) {
                 $attributes += $this->_emailAR->getAttributes();
             } 
 
-            if ( !$this->_addressAR->isNewRecord ) {
+           /* if ( !$this->_addressAR->isNewRecord ) {
                 $attributes += $this->_addressAR->getAttributes();
-            } 
+            } */
             //echo '<pre>'; var_dump($attributes);
             $this->load($attributes);
         } else {
@@ -104,9 +104,9 @@ class SignupForm extends Model
         $this->isNewRecord = true;
         $this->_personAR = new Person;
         $this->_userAR = new UserDb;
-        $this->_telephoneAR = new Telephone;
+        //$this->_telephoneAR = new Telephone;
         $this->_emailAR = new Email;
-        $this->_addressAR = new Address;
+        //$this->_addressAR = new Address;
     }
     
     public function formName() 
@@ -118,11 +118,11 @@ class SignupForm extends Model
     {
         return [
                 'address' => 'Email Address',
-                'address_line' => 'Address',
-                'code' => 'Zip/Post Code',
+                //'address_line' => 'Address',
+                //'code' => 'Zip/Post Code',
                 'state_id' => 'State',
                 'country_id' => 'Country',
-                'dob' => 'Date of Birth',
+                //'dob' => 'Date of Birth',
                 'cid' => 'Cid',
             ];
     }
@@ -135,11 +135,11 @@ class SignupForm extends Model
     {
         return [
             // username and password are both required
-            [['first_name', 'surname', 'dob', 'username', 'password', 'basic_role', 'address' ], 'required'],
+            [['first_name', 'surname', 'username', 'password'], 'required'],
             // attributes must be a string value
             [['first_name', 'surname', 'username', 'password'], 'string'],
             //attributes should be loaded onto model - safe            
-            [['telephone_number', 'address_line', 'state_id', 'country_id', 'code', 'cid'], 'safe'],
+            [[/* 'telephone_number', 'address_line', */'state_id','dob','address','basic_role', 'country_id', 'code', 'cid'], 'safe'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
@@ -180,7 +180,7 @@ class SignupForm extends Model
         
         
         //process addresses
-        $this->_addressAR->setAttributes($this->getAttributes(), true);
+        /* $this->_addressAR->setAttributes($this->getAttributes(), true);
         if ( $this->_addressAR->save(false) ) {
             $addressEntity = new AddressEntity;
             $addressEntity->address_id = $this->_addressAR->id ;
@@ -190,10 +190,10 @@ class SignupForm extends Model
             $processFails = true;   //redundant 
             $transaction->rollBack();
             return false;
-        }
+        } */
         
         //process telephone 
-        $this->_telephoneAR->setAttributes($this->getAttributes(), true);
+        /* $this->_telephoneAR->setAttributes($this->getAttributes(), true);
         if ( !$processFails && $this->_telephoneAR->save(false) ) {
             $telephoneEntity = new TelephoneEntity;         
             $telephoneEntity->telephone_id = $this->_telephoneAR->id;
@@ -203,7 +203,7 @@ class SignupForm extends Model
             $processFails = true;   //redundant 
             $transaction->rollBack();
             return false;
-        }
+        } */
         
         //process emails
         $this->_emailAR->setAttributes($this->getAttributes(), true);
@@ -249,6 +249,7 @@ class SignupForm extends Model
         $processFails = $this->_personAR->save(false) ? $processFails && true : true;
         
         //process Addresses
+        /*
         $this->_addressAR->setAttributes($this->getAttributes(), true);
         if ( $this->_addressAR->isNewRecord && !$processFails ) {
             $processFails = $this->_addressAR->save(false) ? $processFails && true : true;
@@ -258,8 +259,7 @@ class SignupForm extends Model
             $processFails = !$processFails && $_addressEntity->save(false) ? false : true;
         } elseif (!$processFails) {
             $processFails = $this->_addressAR->save(false) ? $processFails && true : true;
-        }
-        
+        }         
         //process Telephone
         $this->_telephoneAR->setAttributes($this->getAttributes(), true);
         if ( $this->_telephoneAR->isNewRecord && !$processFails ) {
@@ -270,7 +270,7 @@ class SignupForm extends Model
             $processFails = $_telephoneEntity->save(false) ? $processFails && true : true;
         } elseif (!$processFails) {
             $processFails = $this->_telephoneAR->save(false) ? $processFails && true : true;
-        }
+        } */
         
         //process Email
         $this->_emailAR->setAttributes($this->getAttributes(), true);
@@ -324,9 +324,9 @@ class SignupForm extends Model
     }
     
     private function _reverseAll() {
-        $this->_telephoneAR->delete();
+        //$this->_telephoneAR->delete();
         $this->_emailAR->delete();
-        $this->_addressAR->delete();
+        //$this->_addressAR->delete();
         $this->_personAR->delete();
         $this->_entityAR->delete();
     }

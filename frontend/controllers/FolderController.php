@@ -64,7 +64,7 @@ class FolderController extends Controller
             
             $model->save(false);
             // return JSON encoded output in the below format
-            return ['output'=>'$value', 'message'=>'sent'];
+            return ['output'=>'', 'message'=>''];
             
             // alternatively you can return a validation error
             // return ['output'=>'', 'message'=>'Validation error'];

@@ -11,7 +11,7 @@ use yii\helpers\Url;
 	background-repeat: no-repeat; 
 	width: 79px;
 	background-size: contain;
-	height: 79px;
+	height: 60px;
 }
 	#button-text {
 	display: none;
@@ -27,20 +27,25 @@ use yii\helpers\Url;
 
 <?
 $Carousel = <<<Carousels
-$("#button-image").on("click", function() {
-	$('.folder-new-content').hide()
-	$('.create-new-folder').show()
-})
 
-$(document).on('click',function (e) {
-  createFolder = $('#button-image');
-  if (!createFolder.is(e.target) 
-      && createFolder.has(e.target).length === 0){
-   $('.folder-new-content').show()
-	$('.create-new-folder').hide()
-	
-  }
+
+$("#button-image").click(function(e){
+    $('.folder-new-content').hide()
+	$('.create-new-folder').show()
+     e.stopPropagation();
 });
+
+$(".create-new-folder").click(function(e){
+    e.stopPropagation();
+});
+
+$(document).click(function(){
+    $('.folder-new-content').show()
+	$('.create-new-folder').hide()
+});
+
+
+
 
 
 Carousels;

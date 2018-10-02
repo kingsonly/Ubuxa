@@ -82,11 +82,11 @@ class CustomerSignupForm extends Model
             $customer->billing_date = $this->billing_date;
             $customer->status = 0;
             $customer->cid = $this->plan_id.rand(10, 10000);
-            $cid = $customer->cid;
             
 
             return $customer->save();
                 
     }
+
 
 }

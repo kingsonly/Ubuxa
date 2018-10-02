@@ -5,7 +5,14 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
-use boffins_vendor\components\controllers\SearchFormWidget;
+use boffins_vendor\components\controllers\TaskWidget;
+use boffins_vendor\components\controllers\RemarksWidget;
+use boffins_vendor\components\controllers\ComponentWidget;
+use boffins_vendor\components\controllers\FolderDetails;
+use boffins_vendor\components\controllers\SubFolders;
+use boffins_vendor\components\controllers\ActivitiesWidget;
+use boffins_vendor\components\controllers\OnlineClients;
+
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -47,6 +54,14 @@ use boffins_vendor\components\controllers\MenuWidget;
 	.grid-item.task-box {
 		grid-area: tasks;
 	}
+
+	.folderdiv{
+		height: 50px;
+	}
+
+	.top-box {
+		padding-bottom: 50px;
+	}
 	
 	@media screen and (min-width: 280px) and (max-width: 599px) {
 			#dashboard-content {
@@ -58,44 +73,56 @@ use boffins_vendor\components\controllers\MenuWidget;
 										'remarks';
 			}
 	}
+
+	@media (max-width:991px) {
+ 	 	.column-margin { 
+ 	 		margin: 20px 0; 
+ 	 	}
+ 	 	.act-margin {
+ 	 		margin: 5px 0;
+ 	 	}
+ 	 	.info-1 {
+			margin-left: 8%;
+			width: 80%;
+		}
+	}
     .content-header{
         display:none;
     }
+    
 </style>
 
 
 
 
 <section>
-	<?= SearchFormWidget::widget();?>
+	
     <div class="container-fluid">
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
-                <section id="dashboard-content">
-                    <div class="grid-item folder">
-                        <?=$this->render('/folder/latest', ['folders' =>$folders]);?>
-                    </div>
-                </section>
-    
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
+            <section>
+                  <div class="row top-box">
+                  	<?= ActivitiesWidget::widget() ?>
+                  	<?= OnlineClients::widget() ?>
+                  </div>  
+                    	<div class="row">
+   						 	<?= FolderDetails::widget() ?>
+   						 	<?= SubFolders::widget() ?>
+                    	</div>
 
             </section>
         </div>
+
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
-
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
-
+        	<?= ComponentWidget::widget() ?>
+            <section>
+            	<div class="row">
+            		<?= TaskWidget::widget() ?>
+            		<?= RemarksWidget::widget() ?>
+            	</div>
             </section>
         </div>
-    </div>
 </section>
+
   <? $this->beginBlock('sidebar')?>
   	<div id="two">
     	<ul class="list_load">

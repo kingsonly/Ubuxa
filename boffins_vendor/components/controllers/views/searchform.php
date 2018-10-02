@@ -3,7 +3,7 @@
   margin: 10px 10px;
   display: inline-block;
   position: relative;
-  height: 30px;
+  height: 5px;
   padding: 0;
   position: relative;
 	width: 100%;
@@ -65,16 +65,49 @@ input[type="button"] {
   opacity: 0.8;
 }
 </style>
-<div id="wrap">
+<div id="wrap" class="col-sm-12 col-xs-12">
   <form action="" autocomplete="on" id="search-form">
-  <input id="search" name="search" type="text" placeholder="Search for folders"><input id="search_submit" value="Search" type="button">
+  <input id="search" name="search" type="text" placeholder="Search for folders"><input id="search_submit" class="search_submit" value="Search" type="button">
   </form>
 </div>
 
+
 <?
 $Search = <<<Search
+
+		$("#search-form").on("click",function(e){
+	$('.sub-folder').hide();
+	$('.form-widget').removeClass('col-sm-9 col-xs-9');
+	$('.form-widget').addClass('col-sm-12 col-xs-12 newclass');
+	$('.subfolder').hide();
+	$('.subheader').css('border-bottom', '0px');
+	e.stopPropagation();
+});
+
+$("#wrap").click(function(e){
+    e.stopPropagation();
+});
+
+$(document).click(function(){
+    $('.sub-folder').show();
+	$('.form-widget').addClass('col-sm-9 col-xs-9');
+	$('.form-widget').removeClass('col-sm-12 col-xs-12 newclass');
+	$('.subfolder').show();
+	$('.subheader').css('border-bottom', '1px solid #ccc');
+});
+
+
+
+
+
   $("#search").on("click", function() {
-    options = {
+  if (typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+	if(localStorage.getItem("search") === 'yes'){
+		return true;
+	}else{
+		localStorage.setItem("search", "yes");
+		options = {
 		  "closeButton": true,
 		  "debug": false,
 		  "newestOnTop": true,
@@ -92,7 +125,12 @@ $Search = <<<Search
 		  "tapToDismiss": false
 		  }
 		toastr.info("You can View all subfolder from the side bar", "Title", options);
-  });		
+	}
+} else {
+    // Sorry! No Web Storage support..
+}
+    
+  });
 Search;
  
 $this->registerJs($Search);

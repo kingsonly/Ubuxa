@@ -13,19 +13,12 @@ use kartik\date\DatePicker;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <style>
-#userloader,#userloader1{
+#loader{
 display: none;
 }
   html, body * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
 
-body {
-  background:
-    linear-gradient(
-    rgba(246,247,249,0.8),
-    rgba(246,247,249,0.8)),
-    url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/sky-clouds-cloudy-mountain.jpg) no-repeat center center fixed;
-  background-size: cover;
-}
+
 
 .container {
   width: 100%;
@@ -33,9 +26,9 @@ body {
 }
 
 .frame {
-  height: 575px;
-  width: 65%;
-  background: #37474f;
+  height: auto;
+  width: 40%;
+   background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
   background-size: cover;
   margin-left: auto;
   margin-right: auto;
@@ -47,22 +40,22 @@ body {
 }
 
 .frame-long {
-  height: 750px;
+  height: auto;
 }
 
 .frame-short {
-    height: 400px;
+    height: auto;
   margin-top: 50px;
   box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
   width: 40%;
 }
     
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 600px) {
 .frame {
-  height: 760px;
+  height: auto;
   margin-top: 30px;
   width: 100%;
-  background: #37474f;
+  background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
   background-size: cover;
   margin-left: auto;
   margin-right: auto;
@@ -74,7 +67,7 @@ body {
 }
 
 .frame-short {
-  height: 400px;
+  height: 280px;
     margin-top: 100px;
     box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
     width: 100%;
@@ -114,17 +107,9 @@ li {
   padding-bottom: 10px;
 }
 
-.signup-inactive a {
-  cursor: pointer;
-  color: rgba(255,255,255,.3);
-  text-decoration: none;
-  transition: all .25s ease;
-}
-
-
 .form-signup {
   width: 100%;
-  height: 375px;
+  height: auto;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
@@ -169,25 +154,12 @@ li {
   font-size: 16px;
   font-weight: 300;
   margin-top: 100%;
-  padding-left: 27px;
-  padding-right: 27px;
+  padding-top: 50px;
+    padding-right: 12px;
+  padding-left: 0px;
 }
 
-#check path {
-    stroke: #ffffff;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    stroke-width: .85px;
-    stroke-dasharray: 60px 300px;
-    stroke-dashoffset: -166px;
-    fill: rgba(255,255,255,.0);
-    transition: stroke-dashoffset 2s ease .5s, fill 1.5s ease 1.0s;
-}
 
-#check.checked path {
-    stroke-dashoffset: 33px;
-    fill: rgba(255,255,255,.03);
-}
 
 .form-signup input {
   color: #ffffff;
@@ -224,91 +196,6 @@ label {
     transition: background .5s ease;
  }
 
-[type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
-  position: absolute;
-  display: none;
-}
-
-[type="checkbox"]:not(:checked) + label,
-[type="checkbox"]:checked + label {
-  position: relative;
-  padding-left: 85px;
-  padding-top: 2px;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before,
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-  content: '';
-  position: absolute;
-}
-
-[type="checkbox"]:not(:checked) + label:before,
-[type="checkbox"]:checked + label:before {
-  width: 65px; 
-  height: 30px;
-  background: rgba(255,255,255,.2);
-  border-radius: 15px;
-  left: 0; 
-  top: -3px;
-  transition: all .2s ease;
-}
-
-[type="checkbox"]:not(:checked) + label:after,
-[type="checkbox"]:checked + label:after {
-  width: 10px; 
-  height: 10px;
-  background: rgba(255,255,255,.7);
-  border-radius: 50%;
-  top: 7px; 
-  left: 10px;
-  transition: all .2s ease;
-}
-
-/* on checked */
-[type="checkbox"]:checked + label:before {
-  background: #0F4FE6; 
-}
-
-[type="checkbox"]:checked + label:after {
-  background: #ffffff;
-  top: 7px; 
-  left: 45px;
-}
-
-[type="checkbox"]:checked + label .ui,
-[type="checkbox"]:not(:checked) + label .ui:before,
-[type="checkbox"]:checked + label .ui:after {
-  position: absolute;
-  left: 6px;
-  width: 65px;
-  border-radius: 15px;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 22px;
-  transition: all .2s ease;
-}
-
-[type="checkbox"]:not(:checked) + label .ui:before {
-  content: "no";
-  left: 32px;
-  color: rgba(255,255,255,.7);
-}
-
-[type="checkbox"]:checked + label .ui:after {
-  content: "yes";
-  color: #ffffff;
-}
-
-[type="checkbox"]:focus + label:before {
-  box-sizing: border-box;
-  margin-top: -1px;
-}
-
 .btn-signup {
   float: left;
   font-weight: 700;
@@ -316,7 +203,6 @@ label {
   font-size: 13px;
   text-align: center;
   color: #ffffff;
-  padding-top: 8px;
   width: 50%;
   height: 35px;
   border: none;
@@ -327,42 +213,23 @@ label {
 }
 
 
-.btn-animate {
-  float: left;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 13px;
-  text-align: center;
-  color: rgba(255,255,255, 1);
-  padding-top: 8px;
-  width: 100%;
-  height: 35px;
-  border: none;
-  border-radius: 20px;
-  margin-top: 23px;
-  background-color: rgba(16,89,255, 1);
-  left: 0px;
-  top: 0px;
-  transition: all .5s ease, top .5s ease .5s, height .5s ease .5s, background-color .5s ease .75s; 
+#customersignupform-master_doman {
+  padding-right: 50%
 }
 
-.btn-animate-grow {
-  width: 130%;
-  height: 625px;
-  position: relative;
-  left: -55px;
-  top: -420px;
-  color: rgba(255,255,255,0);
-  background-color: rgba(255,255,255,1);
-}
-
-a.btn-signup:hover {
-    cursor: pointer; 
-    background-color: #0F4FE6;
-    transition: background-color .5s; 
-}
+.input-box { position: relative; }
 
 
+.unit { 
+    color: #000;
+    position: absolute;
+    display: block;
+    right: 15px;
+    top: 37px;
+    z-index: 9;
+    font-size: 13px;
+    font-family: sans-serif;
+  }
 </style>
 <div class="container">
     <div class="frame">
@@ -380,15 +247,18 @@ a.btn-signup:hover {
               <div class="form-group">
                 <?= $form->field($customerForm, 'master_email')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-                <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                <div class="input-box">
 
-                <?= $form->field($customerForm, 'billing_date')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling'])?> 
+                  <span class="unit">.ubuxa.com</span>
+                </div>
 
                 <?= $form->field($customerForm, 'account_number')->textInput(['maxlength' => true, 'minlenght'=>6, 'class' => 'form-styling']) ?>
-                <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling'] ]) ?>
+                <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling', 'id' => 'plan'] ]) ?>
             </div>
-
-                    <?= Html::submitButton('Signup',['class' => 'btn-signup']) ?>
+                    <div>
+                    <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
+                    </div>
 
             <?php ActiveForm::end(); ?>
             <div class="success">
@@ -412,6 +282,10 @@ function inTest() {
   $(".frame").toggleClass("frame-short");
 }
 
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
 $('#customerForm').on('beforeSubmit', function (e) {
     e.preventDefault();
     var form = $(this);
@@ -426,7 +300,11 @@ $('#customerForm').on('beforeSubmit', function (e) {
         },
         error: function () {
             alert("Something went wrong");
-        }
+        },
+        beforeSend: function(){
+            $("#loader").show()
+        },
+       
     });
 
     return false;
@@ -438,6 +316,8 @@ $('#customerForm').on('beforeSubmit', function (e) {
 $(document).ready(function () {
     $(".form-signup").toggleClass("form-signup-left");
     $(".frame").toggleClass("frame-long");
+    var val = getURLParameter('plan_id');
+    $('#customersignupform-plan_id').val(val); 
 });
 
 
