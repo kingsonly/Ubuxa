@@ -1,13 +1,13 @@
 <style type="text/css">
 	.infos-first{
     	background-color: transparent;
-    	padding-left: 0px !important;
-    	padding-right: 0px !important;
+    	padding-left: 0px;
+    	padding-right: 0px;
     }
     .folderdetlss{
     	background-color: transparent;
-    	padding-left: 0px !important;
-    	padding-right: 0px !important;
+    	padding-left: 0px;
+    	padding-right: 0px;
     	background: #fff;
     	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
     }
@@ -27,22 +27,21 @@
     	border-bottom: 5px solid green;
     }
     .activedetls{
-    	padding-right: 0px !important;
-    	    padding-left: 6px;
+    	padding-right: 0px;
+        padding-left: 6px;
     }
     .info-1 {
 		background-color: #fff;
 	}
 	.box-content-active {
-		height: 54px;
-		box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+		height: 91px;
 	}
 	
 </style>
 
 <div class="col-md-6">
-                  	<div class="col-md-12 infos-first column-margin">
-                  	<div class="col-md-10 folderdetlss ">
+                  	<div class="col-sm-12 col-xs-12 infos-first column-margin">
+                  	<div class="col-sm-10 col-xs-8 folderdetlss ">
 					        <div class="active-info">
 						        <div class="act-header">New Activity</div>
 						        <div class="box-content-activities">Hello World!</div>
@@ -50,7 +49,7 @@
 					        <div class="green-border"></div>
    						 </div>
 
-   						 <div class="col-md-2 activedetls">
+   						 <div class="col-sm-2 col-xs-4 activedetls">
 					        <div class="info-1">
 						        <div class="box-content-active">Hello</div>
 					        </div>

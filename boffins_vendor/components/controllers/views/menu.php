@@ -7,7 +7,7 @@ use yii\helpers\Url;
 		<div class="menu-icon-container">
 			<a href="#" class="menu-icon js-menu_toggle closed">
 				<span class="menu-icon_box">
-					<img src="images/ubuxa-logo.png" class="ubuxalogo"/>
+					<img src="images/ubuxalogo.png" class="ubuxalogo"/>
 				</span>
 			</a>
 		</div>
