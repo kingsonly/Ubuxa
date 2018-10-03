@@ -6,7 +6,15 @@ use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 ?>
 <style>
-
+	.private{
+		background-color: red;
+	}
+	.author{
+		background-color: blue;
+	}
+	.users{
+		background-color: aquamarine;
+	}
 .folders-container {
 	display: flex;
 	flex-wrap: wrap;
@@ -25,18 +33,21 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 .folder-item.filled {
 	background-image: url('images/folder/folderfill.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 }
 
 .folder-item.empty {
 	background-image: url('images/folder/folderempty.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 }
 	
 	.folder-create{
 	background-image: url('images/folder/folderempty.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 	display: inline-block;
 	width: 69px;
@@ -138,6 +149,7 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 		padding-left: 0px;
 		padding-right: 0px;
 		text-align: left;
+		text-align: left;
 		padding-bottom: 25px;
 		color: #333;
 		overflow: hidden;	
@@ -170,13 +182,24 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
         <div class="large-12 columns">
 			
           <div class="owl-carousel owl-theme">
-              <?php foreach ($folderModel as $folder) { ?>
+              <?php foreach ($folderModel as $folder) { 
+			  	
+					$colorStatus = '';
+						if($folder->private_folder === 1){
+							$colorStatus =  'private';
+						} elseif($folder->role->role == 'author'){
+							$colorStatus = 'author';
+						}else{
+							$colorStatus = 'users';
+						}
+					
+			  ?>
 		 <div class="item">
 			<?
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
 			 <div class="folder-content col-sm-12">
-			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
+			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $colorStatus; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
 					

@@ -26,8 +26,12 @@ class FolderCarouselWidget extends Widget{
 		
 		return $this->render('foldercarouselwidgetview',[
 			'folderModel' => $this->folderModel,
+			
 		]);
 	}
+	
+	
+
 	
 }
 

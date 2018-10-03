@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use boffins_vendor\components\controllers\FolderCreateWidget;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Folder', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= FolderCreateWidget::widget(); ?>
     </p>
 
     <?= GridView::widget([

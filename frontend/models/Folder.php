@@ -42,7 +42,7 @@ class Folder extends FolderARModel
     public function rules()
     {
         return [
-            [['parent_id', 'deleted', 'cid'], 'integer'],
+            [['parent_id', 'deleted', 'cid','private_folder'], 'integer'],
             [['title'], 'required'],
             [['last_updated','privateFolder'], 'safe'],
             [['title'], 'string', 'max' => 40],
@@ -143,10 +143,10 @@ class Folder extends FolderARModel
 	}
 	
 	 public function getFolderUsersInheritance(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManagerInheritance');
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
         }
 	public function getFolderUsers(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManager')->asArray();
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManager')->asArray();
         }
 
     public function getFolderManagerInheritance()
@@ -160,6 +160,22 @@ class Folder extends FolderARModel
     {
 		
 			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+		
+        
+    }
+	
+	public function getRole()
+    {
+		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity])->select('role');
+		
+		
+        
+    }
+	
+	public function getIsPrivate()
+    {
+		
+			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id'])->asArray()->count() == 1 ? true : false;
 		
         
     }

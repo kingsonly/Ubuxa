@@ -28,12 +28,15 @@ use yii\helpers\Url;
 <?
 $Carousel = <<<Carousels
 
-
 $("#button-image").click(function(e){
-    $('.folder-new-content').hide()
-	$('.create-new-folder').show()
+    
+	$( ".folder-new-content" ).slideUp( 300 ).delay( 800 );
+	$( ".create-new-folder" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
+	
      e.stopPropagation();
 });
+
+
 
 $(".create-new-folder").click(function(e){
     e.stopPropagation();
@@ -43,8 +46,6 @@ $(document).click(function(){
     $('.folder-new-content').show()
 	$('.create-new-folder').hide()
 });
-
-
 
 
 
