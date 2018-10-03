@@ -41,7 +41,7 @@ class FolderController extends Controller
 		
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-           'model' => $this->findModel(42),
+           
         ]);
     }
 

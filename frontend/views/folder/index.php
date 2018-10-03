@@ -34,8 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?
-	var_dump($model->folderUsers);
-	?>
+
 	
 </div>

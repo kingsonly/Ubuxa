@@ -121,12 +121,13 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 		padding-right: 18px !IMPORTANT;
 		 left: -10px;
 		 border-radius:0px !important;
+		 background: #fff !important;
 	}
 	 .owl-carousel .owl-nav button.owl-next{
 		border-left: solid #ccc 1px !important;
 		padding-left: 5px !IMPORTANT;
 		 border-radius:0px !important;
-		 
+		 background: #fff !important;
 	}
 	
 	.folder-content{
