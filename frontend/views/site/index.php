@@ -111,8 +111,8 @@ use boffins_vendor\components\controllers\MenuWidget;
                   	<?= OnlineClients::widget() ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget() ?>
-   						 	<?= SubFolders::widget() ?>
+   						 	
+   						 	
                     	</div>
 
             </section>
