@@ -3,16 +3,18 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Folder;
+use frontend\models\Task;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\StatusType;
+
 
 /**
- * FolderController implements the CRUD actions for Folder model.
+ * TaskController implements the CRUD actions for Task model.
  */
-class FolderController extends Controller
+class TaskController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,67 +32,46 @@ class FolderController extends Controller
     }
 
     /**
-     * Lists all Folder models.
+     * Lists all Task models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Folder::find(),
-        ]);
-		
-        return $this->render('index', [
+        $model = new Task;
+        $dataProvider = $model->displayTask();
+        $task = StatusType::find()->where(['status_group' => 'task'])->all();
+
+        return $this->renderAjax('index', [
             'dataProvider' => $dataProvider,
-           
+            'model' => $model,
+            'task' => $task,
         ]);
     }
 
     /**
-     * Displays a single Folder model.
+     * Displays a single Task model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
-		$model = $this->findModel($id);
-		if (isset($_POST['hasEditable'])) {
-        // use Yii's response format to encode output as JSON
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        // read your posted model attributes
-        if ($model->load(Yii::$app->request->post())) {
-            // read or convert your posted information
-            
-            $model->save(false);
-            // return JSON encoded output in the below format
-            return ['output'=>'$value', 'message'=>'sent'];
-            
-            // alternatively you can return a validation error
-            // return ['output'=>'', 'message'=>'Validation error'];
-        }
-        // else if nothing to do always return an empty JSON encoded output
-        else {
-            return ['output'=>'', 'message'=>''];
-        }
-    }
         return $this->render('view', [
-            'model' => $model,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Folder model.
+     * Creates a new Task model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Folder();
-		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = new Task();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['view', 'id' => $model->id]);
-            return ['output'=>$model->id, 'message'=>'sent'];;
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -99,7 +80,7 @@ class FolderController extends Controller
     }
 
     /**
-     * Updates an existing Folder model.
+     * Updates an existing Task model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -119,7 +100,7 @@ class FolderController extends Controller
     }
 
     /**
-     * Deletes an existing Folder model.
+     * Deletes an existing Task model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,28 +112,21 @@ class FolderController extends Controller
 
         return $this->redirect(['index']);
     }
-	
-	public function actionCheckIfFolderNameExist($folderName){
-		$folder = new Folder();
-		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ])->exists();
-		if($checkIfItExist){
-			return 1;
-		}
-	}
 
     /**
-     * Finds the Folder model based on its primary key value.
+     * Finds the Task model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Folder the loaded model
+     * @return Task the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Folder::findOne($id)) !== null) {
+        if (($model = Task::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

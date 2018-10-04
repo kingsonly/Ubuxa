@@ -1,6 +1,9 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
+
+$boardUrl = Url::to(['task/index']);
 ?>
 <style type="text/css">
     .bg-info {
@@ -10,11 +13,12 @@ use yii\helpers\Url;
         padding-right: 15px;
     }
 
-    .header {
+    .task-header {
         border-bottom: 1px solid #ccc;
-        padding-top: 7px;
-        padding-bottom: 7px;
-        font-weight: bold
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-weight: bold;
+        position: relative;
     }
 
     .box-content-task {
@@ -27,11 +31,48 @@ use yii\helpers\Url;
         padding-top: 7px;
         padding-bottom: 7px;
     }
+
+    #boardButton {
+        position: absolute;
+        right: 0px;
+        top: 4px;
+    }
 </style>
 	 <div class="col-md-4">
         <div class="bg-info column-margin">
-	        <div class="header">TASKS</div>
+	        <div class="task-header">
+                <span>TASKS</span>
+                <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success']) ?>
+            </div>
 	        <div class="box-content-task">Hello World!</div>
 	        <div class="box-input">Input task</div>
         </div>
     </div>
+
+<? 
+    Modal::begin([
+        'header' =>'<h1 id="headers"></h1>',
+        'id' => 'boardModal',
+        'size' => 'modal-lg',  
+    ]);
+?>
+<div id="viewboard"></div>
+<?
+    Modal::end();
+?>
+
+<?php 
+$task = <<<JS
+
+$(function(){
+    $('#boardButton').click(function(){
+        $('#boardModal').modal('show')
+        .find('#viewboard')
+        .load($(this).attr('value'));
+        });
+    });
+JS;
+ 
+$this->registerJs($task);
+?>
+

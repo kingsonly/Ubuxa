@@ -27,7 +27,7 @@ use yii\helpers\Url;
 	}
 	.sub-second {
 		padding-right: 0px !important;
-    	padding-left: 0px;
+    	padding-left: 0px !important;
 	}
 	.subfirst {
 		background-color: transparent;

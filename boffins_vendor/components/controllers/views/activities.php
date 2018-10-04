@@ -1,15 +1,15 @@
 <style type="text/css">
 	.infos-first{
-    	background-color: transparent;
-    	padding-left: 0px;
-    	padding-right: 0px;
+    	background-color: transparent !important;
+    	padding-left: 0px !important;
+    	padding-right: 0px !important;
     }
     .folderdetlss{
-    	background-color: transparent;
-    	padding-left: 0px;
-    	padding-right: 0px;
-    	background: #fff;
-    	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+    	background-color: transparent !important;
+    	padding-left: 0px !important;
+    	padding-right: 0px !important;
+    	background: #fff !important;
+    	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1) !important;
     }
     .active-info {
     	padding-left: 15px;
@@ -27,14 +27,15 @@
     	border-bottom: 5px solid green;
     }
     .activedetls{
-    	padding-right: 0px;
-        padding-left: 6px;
+    	padding-right: 0px !important;
+        padding-left: 6px !important;
     }
     .info-1 {
 		background-color: #fff;
 	}
 	.box-content-active {
 		height: 91px;
+        box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 	}
 	
 </style>

@@ -18,16 +18,16 @@ use yii\helpers\Url;
 	}
 
 	.box-content-folder {
-		border-top: 1px solid #ccc;
-		height:120px;
+		border-top: 1px solid #ccc !important;
+		height:120px !important;
 	}
 
 	.folder-side {
 		
 	}
 	.box-folders {
-		padding-left: 0px;
-    	padding-right: 0px;
+		padding-left: 0px !important;
+    	padding-right: 0px !important;
 	}
 </style>
 

@@ -6,15 +6,15 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Folders';
+$this->title = 'Tasks';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="folder-index">
+<div class="task-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Folder', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -23,19 +23,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'parent_id',
             'title',
-            'description',
-            'last_updated',
-            
+            'details',
+            'owner',
+            'assigned_to',
+            //'status_id',
+            //'create_date',
+            //'due_date',
+            //'last_updated',
             //'deleted',
             //'cid',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?
-	
-	?>
-	
 </div>

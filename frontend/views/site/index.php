@@ -13,6 +13,7 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 
+
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -90,12 +91,15 @@ use boffins_vendor\components\controllers\MenuWidget;
 		}
 		.box-content-active {
 			height: 87px !important;
+			-webkit-box-shadow: none !important;
+	        -moz-box-shadow: none !important;
+	        box-shadow: none !important;
 		}
 	}
     .content-header{
         display:none;
     }
-    
+
 </style>
 
 
@@ -217,14 +221,11 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
+
 JS;
  
 $this->registerJs($indexJs);
 ?>
-
-
-
-
 
 
 <?= MenuWidget::widget(); ?>
