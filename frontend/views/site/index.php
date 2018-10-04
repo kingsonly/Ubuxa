@@ -106,6 +106,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 
 <section>
+	
     <div class="container-fluid">
         <div class="row">
             <section>

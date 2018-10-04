@@ -1,6 +1,10 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use boffins_vendor\components\controllers\FolderCarouselWidget;
+use boffins_vendor\components\controllers\CreateButtonWidget;
+use boffins_vendor\components\controllers\SearchFormWidget;
+use yii\widgets\Pjax;
 ?>
 
 <style type="text/css">
@@ -9,15 +13,17 @@ use yii\helpers\Url;
 	    background: #fff;
 	    padding-right: 15px;
 	    box-shadow: 4px 19px 25px -2px rgba(0,0,0,0.1);
+		height: 160px;
+		overflow: hidden;
 	}
-	.box-sub-folders {
+
+.box-sub-folders {
 		height:122px;
 	}
 
 	.box-subfolders {
 		height:122px;
 	}
-
 	.subheader {
 	    padding-top: 7px;
 	    padding-bottom: 7px;
@@ -38,19 +44,38 @@ use yii\helpers\Url;
 	.info-2 {
 		background-color: #fff;
 	}
+	.subheader{
+		margin-bottom: 10px;
+	}
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<?php Pjax::begin(['id'=>'create-folder-refresh']); ?>
 <div class="col-md-7">
 	<div class="col-sm-12 col-xs-12 subfolder-container column-margin">
-		<div class="subheader">SUB FOLDERS</div>
+		<div class="col-sm-12 col-xs-12 subheader">
+			<div class="col-sm-3 col-xs-3 sub-folder">
+				<span class="subfolder">SUB FOLDERS</span> 
+			</div>
+			
+			<div class="col-sm-9 col-xs-9 form-widget" >
+				<?= SearchFormWidget::widget();?>
+			</div>
+		</div>
 		<div class="col-xs-5 col-sm-2 sub-second">
 				<div class="info-2">
-					<div class="box-subfolders">Hello</div>
+					<div class="box-subfolders"><?= CreateButtonWidget::widget();?></div>
 				</div>
    		</div>
 		<div class="col-xs-7 col-sm-10 subfirst ">
+			
 			<div class="info-2">
-				<div class="box-sub-folders">Hello World!</div>
-			</div>
+				<div class="box-sub-folders">
+					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel]) ?></div>
+				</div>
+			
 		</div>
 	</div>
 </div>
+
+<?php Pjax::end(); ?>
+

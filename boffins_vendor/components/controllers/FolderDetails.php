@@ -12,11 +12,12 @@ class FolderDetails extends Widget
     {
         parent::init();
     }
+	public $model;
 
     public function run()
     {
          // Register AssetBundle
-        return $this->render('folderdetails');
+        return $this->render('folderdetails',['model'=>$this->model]);
     }
 }
 ?>

@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 ?>
 
 <style type="text/css">
@@ -32,11 +33,18 @@ use yii\helpers\Url;
 </style>
 
 <div class="col-md-5 folderdetls">
+
 	<div class="col-sm-12 col-xs-12 info column-margin">
 		<div class="folder-header">FOLDER DETAILS</div>
 		<div class="col-sm-7 col-xs-7 box-folders">
 			<div class="folder-side">
-				<div class="box-content-folder">Hello World!</div>
+				<div class="box-content-folder">
+					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+	['modelAttribute'=>'title'],
+	['modelAttribute'=>'description']
+]]); ?>
+				</div>
+
 			</div>
 		</div>
 		<div class="col-sm-5 col-xs-5 box-folders-count">

@@ -12,11 +12,13 @@ class SubFolders extends Widget
     {
         parent::init();
     }
-
+	public $folderModel;
     public function run()
     {
          // Register AssetBundle
-        return $this->render('subfolders');
+        return $this->render('subfolders',[
+			'folderModel' => $this->folderModel,
+		]);
     }
 }
 ?>

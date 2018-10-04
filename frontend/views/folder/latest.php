@@ -23,7 +23,7 @@ use yii\helpers\Html;
 }
 
 .folder-item.filled {
-	background-image: url('images/folder_full_resized.png');
+	background-image: url('images/folder/folder_full_resized.png');
 	background-repeat: no-repeat; 
 }
 
