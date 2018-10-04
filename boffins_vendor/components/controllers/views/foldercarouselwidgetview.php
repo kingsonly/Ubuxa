@@ -6,15 +6,15 @@ use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 ?>
 <style>
-	.private{
-		background-color: red;
-	}
-	.author{
-		background-color: blue;
-	}
-	.users{
-		background-color: aquamarine;
-	}
+.private{
+	background-color: red;
+}
+.author{
+	background-color: blue;
+}
+.users{
+	background-color: aquamarine;
+}
 .folders-container {
 	display: flex;
 	flex-wrap: wrap;
@@ -121,58 +121,58 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
     border:0px solid black;
 }
 .owl-prev i, .owl-next i { 
-		color: #ccc !important; 
-		font-size:20px
-	}
-	.owl-prev:hover,.owl-next:hover{
-		background-color: rgba(255, 0, 0, 0) !important ;
-	}
-	 .owl-carousel .owl-nav button.owl-prev{
-		border-right: solid #ccc 1px !important;
-		padding-right: 18px !IMPORTANT;
-		 left: -10px;
-		 border-radius:0px !important;
-		 background: #fff !important;
-	}
-	 .owl-carousel .owl-nav button.owl-next{
-		border-left: solid #ccc 1px !important;
-		padding-left: 5px !IMPORTANT;
-		 border-radius:0px !important;
-		 background: #fff !important;
-	}
-	
-	.folder-content{
-		padding-right: 0px;
-	}
-	
-	.folder-text{
-		padding-left: 0px;
-		padding-right: 0px;
-		text-align: left;
-		text-align: left;
-		padding-bottom: 25px;
-		color: #333;
-		overflow: hidden;	
-		width:40%;
-		white-space: nowrap;
-		
-		display: inline-block;
-	}
-	
-	.ellipsis
-{
-    text-overflow: ellipsis;
+	color: #ccc !important; 
+	font-size:20px
 }
-	
-	.create-new-folder{
-		display:none;
-	}
-	#carousles{
-		margin-top: 10px;
-	}
-	.owl-prev{
-		width:23px !important;
-	} 
+.owl-prev:hover,.owl-next:hover{
+	background-color: rgba(255, 0, 0, 0) !important ;
+}
+ .owl-carousel .owl-nav button.owl-prev{
+	border-right: solid #ccc 1px !important;
+	padding-right: 18px !IMPORTANT;
+	 left: -10px;
+	 border-radius:0px !important;
+	 background: #fff !important;
+}
+ .owl-carousel .owl-nav button.owl-next{
+	border-left: solid #ccc 1px !important;
+	padding-left: 5px !IMPORTANT;
+	 border-radius:0px !important;
+	 background: #fff !important;
+}
+
+.folder-content{
+	padding-right: 0px;
+}
+
+.folder-text{
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: left;
+	text-align: left;
+	padding-bottom: 25px;
+	color: #333;
+	overflow: hidden;	
+	width:40%;
+	white-space: nowrap;
+
+	display: inline-block;
+}
+
+.ellipsis
+{
+text-overflow: ellipsis;
+}
+
+.create-new-folder{
+	display:none;
+}
+#carousles{
+	margin-top: 10px;
+}
+.owl-prev{
+	width:23px !important;
+} 
 </style>
 
 
@@ -180,26 +180,15 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
       <div class="row folder-new-content">
 		  
         <div class="large-12 columns">
-			
+			<? if(!empty($folderModel)){?>
           <div class="owl-carousel owl-theme">
-              <?php foreach ($folderModel as $folder) { 
-			  	
-					$colorStatus = '';
-						if($folder->private_folder === 1){
-							$colorStatus =  'private';
-						} elseif($folder->role->role == 'author'){
-							$colorStatus = 'author';
-						}else{
-							$colorStatus = 'users';
-						}
-					
-			  ?>
+              <?php foreach ($folderModel as $folder) { ?>
 		 <div class="item">
 			<?
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
 			 <div class="folder-content col-sm-12">
-			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $colorStatus; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
+			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
@@ -213,8 +202,9 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
             
             
           </div>
-         
-         
+         <?}else{?>
+			<div style="width:100%; border:solid 2px #000; padding-top:20px;">yes</div>
+         <?}?>
         </div>
       </div>
 	<div class="create-new-folder">

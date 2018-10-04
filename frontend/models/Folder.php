@@ -184,6 +184,18 @@ class Folder extends FolderARModel
 	{
 		return empty( $this->components ) ? true: false;
 	}
+	public function getFolderColors() 
+	{
+		$colorStatus = '';
+						if($this->private_folder === 1){
+							$colorStatus =  'private';
+						} elseif($this->role->role == 'author'){
+							$colorStatus = 'author';
+						}else{
+							$colorStatus = 'users';
+						}
+		return $colorStatus;
+	}
 	
 	
 }

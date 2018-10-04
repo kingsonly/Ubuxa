@@ -2,6 +2,10 @@
 use kartik\editable\Editable;
 ?>
 <style>
+
+	.kv-editable-input{
+		width: 100% !important;
+	}
 	.xinput:hover{
 		background:#ccc;
 		padding: 0px !important;
@@ -24,6 +28,7 @@ use kartik\editable\Editable;
 	}
 	.kv-editable-parent.form-group{
 		width:60% !important;
+		margin-top: 3px;
 	}
 	.panel.panel-default{
 		margin-bottom: 0px;
@@ -33,8 +38,8 @@ use kartik\editable\Editable;
 	}
 	h5{
 		
-		margin-bottom: 7px;
-		margin-top: 7px;
+		margin-bottom: 5px;
+		margin-top: 5px;
 		font-size: 13px !important;
 	}
 	
