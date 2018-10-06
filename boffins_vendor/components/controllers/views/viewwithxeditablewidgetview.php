@@ -25,7 +25,15 @@ use kartik\editable\Editable;
 	.xinput{
 		background: none;
 		border:none;
+		text-align: left !important;
+		width: 100%;
+		overflow: hidden;
+		display: inline-block;
+		white-space: nowrap;
 	}
+	.ellipsis{
+text-overflow: ellipsis;
+}
 	.kv-editable-parent.form-group{
 		width:60% !important;
 		margin-top: 3px;
@@ -71,7 +79,7 @@ foreach($attributues as $v){
 			'asPopover' => false,
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter location...'],
-			'editableValueOptions'=>['class'=>'xinput']
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
 			
 		]);
 		Editable::end();
@@ -104,4 +112,31 @@ foreach($attributues as $v){
 
 	
 }
+
+
+?>
+
+<?
+$xeditableBoffins = <<<XeditableBoffins
+  
+		$(".xinput").mouseover(function() {
+    $(this).removeClass("ellipsis");
+	$(this).attr("title", $(this).text());
+    $(this).attr("data-toggle", "tooltip");
+    $(this).attr("data-placement", "bottom");
+    
+   
+    
+	
+});
+
+$(".xinput").mouseout(function() {
+    
+    $(this).addClass("ellipsis");
+    
+});
+
+XeditableBoffins;
+ 
+$this->registerJs($xeditableBoffins);
 ?>

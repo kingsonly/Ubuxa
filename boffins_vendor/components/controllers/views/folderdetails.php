@@ -39,6 +39,10 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 	.box-folders {
 		padding-left: 0px;
     	padding-right: 0px;
+		overflow: hidden;
+	}
+	#folder-description-cont{
+		width: 100%;
 	}
 </style>
 

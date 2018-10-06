@@ -4,6 +4,7 @@ use frontend\models\Folder;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
+use boffins_vendor\components\controllers\CreateButtonWidget;
 ?>
 <style>
 .private{
@@ -149,13 +150,11 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 	padding-left: 0px;
 	padding-right: 0px;
 	text-align: left;
-	text-align: left;
 	padding-bottom: 25px;
 	color: #333;
 	overflow: hidden;	
 	width:40%;
 	white-space: nowrap;
-
 	display: inline-block;
 }
 
@@ -188,6 +187,7 @@ text-overflow: ellipsis;
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
 			 <div class="folder-content col-sm-12">
+				 <a href="<?= $url;?>" data-pjax="0">
 			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
@@ -195,6 +195,7 @@ text-overflow: ellipsis;
 						<?= $folder['title']; ?>
 					
 				</div>
+				</a>
 			 </div>
 			
 			</div>
@@ -203,7 +204,7 @@ text-overflow: ellipsis;
             
           </div>
          <?}else{?>
-			<div style="width:100%; border:solid 2px #000; padding-top:20px;">yes</div>
+			<div><?= CreateButtonWidget::widget(['buttonType' => 'text']);?></div>
          <?}?>
         </div>
       </div>
