@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\StatusType;
+use yii\db\Expression;
+
 
 
 /**
@@ -41,7 +43,7 @@ class TaskController extends Controller
         $dataProvider = $model->displayTask();
         $task = StatusType::find()->where(['status_group' => 'task'])->all();
 
-        return $this->renderAjax('index', [
+        return $this->render('index', [
             'dataProvider' => $dataProvider,
             'model' => $model,
             'task' => $task,
@@ -69,12 +71,15 @@ class TaskController extends Controller
     public function actionCreate()
     {
         $model = new Task();
-
+        $model->owner = Yii::$app->user->identity->id;
+        $model->status_id = 21;
+        $model->create_date=new Expression('NOW()');
+        $model->last_updated=new Expression('NOW()');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
@@ -97,6 +102,19 @@ class TaskController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionKanban()
+    {
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['id'];
+            $model = $this->findModel($id);
+            $statusid = $data['status_id'];
+            $model->status_id = $statusid;
+            $model->save();
+        }
     }
 
     /**

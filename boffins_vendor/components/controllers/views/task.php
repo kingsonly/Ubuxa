@@ -42,7 +42,7 @@ $boardUrl = Url::to(['task/index']);
         <div class="bg-info column-margin">
 	        <div class="task-header">
                 <span>TASKS</span>
-                <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success']) ?>
+                <!-- <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success'])?> -->
             </div>
 	        <div class="box-content-task">Hello World!</div>
 	        <div class="box-input">Input task</div>

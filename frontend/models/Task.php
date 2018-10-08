@@ -43,7 +43,8 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'details', 'owner', 'assigned_to', 'status_id', 'create_date', 'due_date', 'last_updated', 'deleted'], 'required'],
+            [['title', 'details', 'owner','status_id', 'create_date'], 'required'],
+            [['last_updated', 'deleted', 'assigned_to', 'due_date'], 'safe'],
             [['owner', 'assigned_to', 'status_id', 'deleted', 'cid'], 'integer'],
             [['create_date', 'due_date', 'last_updated'], 'safe'],
             [['title'], 'string', 'max' => 50],

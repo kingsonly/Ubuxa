@@ -1,8 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use frontend\assets\AppAsset;
+
 
 
 AppAsset::register($this);
@@ -11,10 +13,9 @@ AppAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tasks';
-$this->params['breadcrumbs'][] = $this->title;
-?>
 
+?>
+<?= Html::csrfMetaTags() ?>
 <style>
     ul {
   list-style-type: none;
@@ -41,8 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
   flex: 1;
   margin: 0 10px;
   position: relative;
-  background: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  background: rgba(193, 198, 212, 0.2);
+  /* overflow: hidden; */
   border-radius: 4px;
 }
 @media (max-width: 690px) {
@@ -167,7 +168,92 @@ $this->params['breadcrumbs'][] = $this->title;
 }
 
 .modal-content {
-    background-color: #ebeef0 !important;
+    border-radius: 6px !important; 
+}
+
+/* NEW DIV */
+.wrapit {
+  position: absolute;
+  overflow: hidden;
+  top: 10%;
+  right: 10%;
+  bottom: 85px;
+  left: 10%;
+  padding: 20px 50px;
+  display: block;
+  border-radius: 4px;
+  transform: translateY(20px);
+  transition: all 0.5s;
+  visibility: hidden;
+}
+.wrapit .content {
+  opacity: 0;
+}
+.wrapit:before {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: white;
+  content: "";
+  bottom: 10px;
+  left: 50%;
+  top: 95%;
+  color: #fff;
+  border-radius: 50%;
+  -webkit-transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.wrapit.active {
+  display: block;
+  visibility: visible;
+  box-shadow: 2px 3px 16px silver;
+  transition: all 600ms;
+  transform: translateY(0px);
+  transition: all 0.5s;
+}
+.wrapit.active:before {
+  height: 2000px;
+  width: 2000px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-left: -1000px;
+  margin-top: -1000px;
+  display: block;
+  -webkit-transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.wrapit.active .content {
+  position: relative;
+  z-index: 1;
+  opacity: 1;
+  transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+a.addTaskButton {
+  padding: 11px 11px 13px 13px;
+  outline: none;
+  border-radius: 50%;
+  background: #007fed;
+  color: #fff;
+  font-size: 24px;
+  display: block;
+  position: absolute;
+  right: 10px;
+  top: 60px;
+  margin-left: -25px;
+  transition: transform 0.25s;
+}
+a.addTaskButton:hover {
+  text-decoration: none;
+  background: #2198ff;
+}
+a.addTaskButton.active {
+  transform: rotate(135deg);
+  transition: transform 0.5s;
+}
+.holdbtn {
+  position: relative;
 }
 
 </style>
@@ -176,9 +262,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
+    <!-- <p>
         <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    </p> -->
 
 </div>
 
@@ -192,7 +278,6 @@ $this->params['breadcrumbs'][] = $this->title;
         $id = 1; 
         foreach($task as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
-          <input type="hidden" value="<?= $value->id; ?>" name="parent" id="parent">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
                 <svg class="drag-header-more" data-target="options1" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
@@ -200,33 +285,61 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             <div class="drag-options" id="options<?=$id;?>"></div>
             
-            <ul class="drag-inner-list" id="<?=$id;?>">
+            <ul class="drag-inner-list" id="<?=$id;?>" data-contain="<?= $value->id; ?>">
                 <?php 
                     $id2 = 1;
+                    $count = 0;
                     foreach ($dataProvider as $key => $values) {
+
                         if($values->status_id == $value->id){
                  ?>
-                <li data-filename="<?=$values->status_id; ?>" class="drag-item" >
-                  <input type="hidden" value="" name="child" id="child">
+                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id;?>" class="drag-item test_<?= $values->id;?>">
                     <?= $values->title; ?>
                     <div class="bottom-content">
-                        <a href='#'><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                      <div class="dropdown">
+                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                      
                         <a href='#'><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
                         <a href='#'><i class="fa fa-tags icons" aria-hidden="true"></i></a>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </div>
                     </div>
                 </li>
-            <?php $id2++;}}?>
+            <?php $id2++;$count++;}}?>
             </ul>
         </li>
         <?php $id++; }?>
     </ul>
 </div>
+<div class='wrapit'>
+  <div class='content'>
+    <div id="load-data"></div>
+  </div>
+</div>
+  <a class='button glyphicon glyphicon-plus addTaskButton' href='#'></a>
 
 
 <?php 
+$saveUrl = Url::to(['task/kanban']);
+$formUrl = Url::to(['task/create']);
 $board = <<<JS
-var value;
+    $.fn.closest_descendent = function(filter) {
+    var found = $(),
+        currentSet = this; // Current place
+    while (currentSet.length) {
+        found = currentSet.filter(filter);
+        if (found.length) break;  // At least one match: break loop
+        // Get all children of the current set
+        currentSet = currentSet.children();
+    }
+    return found.first(); // Return first match of the collection
+}
+
     dragula([
     document.getElementById('1'),
     document.getElementById('2'),
@@ -241,47 +354,49 @@ var value;
     el.classList.add('is-moving');
 })
 
-.on('drop', function(el, container) {
 
+.on('drop', function(el, container) {
         var c = $(container);
         var items  = c.find('li[data-filename]');
-        var status  = c.find('li[data-statusid]');
-
-        //var value = $(input['name=parent']).val();
-        //var abc = $(this).value
-        //$(input['name=child']).val(abc);
-
-        var valuetest = document.getElementById('parent').value;
-        //alert(valuetest);
-        //var abc = this.valuetest;
-        //document.getElementById('child').value = abc;
-
+        var status  = $('#'+el.id).attr('data-filename');
+        var contain = $('#'+el.id).parent().attr('data-contain');
+        
         var result = [];
         $.each(items, function(key, item) {
           result.push($(item).data('filename'));
         });
-        _UpdateTask(el, result);
-        console.log('result', result); 
+        _UpdateTask(status, contain);
+        //console.log(contain, status);
+        var check = $('#'+el.id).closest_descendent('li[data-filename]');
+        //console.log(check);
+
 })
 .on('dragend', function(el) {
     
     // remove 'is-moving' class from element after dragging has stopped
     el.classList.remove('is-moving');
     
+
     // add the 'is-moved' class for 600ms then remove it
     window.setTimeout(function() {
         el.classList.add('is-moved');
+        
         window.setTimeout(function() {
             el.classList.remove('is-moved');
         }, 600);
     }, 100);
+   
+    //alert(el.parent().attr('class'));
 });
 
-function _UpdateTask(item, listing){
+function _UpdateTask(status, contain){
           $.ajax({
-              url: 'update.php',
+              url: '$saveUrl',
               type: 'POST', 
-              data: {},
+              data: {
+                  id: status,
+                  status_id: contain, 
+                },
               success: function(res, sec){
                    console.log('Completed');
               },
@@ -350,6 +465,16 @@ var showOptions = (function () {
 
 createOptions.create();
 showOptions.init();
+
+$('.addTaskButton').on('click', function(){
+  $('.wrapit, a').toggleClass('active');
+  $( "#load-data" ).load( "$formUrl" );
+  return false;
+  });
+
+//$(".dropdown").click(function () {
+  //$(".bottom-content").css("display","block");
+//});
 
 JS;
  
