@@ -29,16 +29,20 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 	}
 
 	.box-content-folder {
-		border-top: 1px solid #ccc !important;
-		height:120px !important;
+		border-top: 1px solid #ccc;
+		height:120px;
 	}
 
 	.folder-side {
 		
 	}
 	.box-folders {
-		padding-left: 0px !important;
-    	padding-right: 0px !important;
+		padding-left: 0px;
+    	padding-right: 0px;
+		overflow: hidden;
+	}
+	#folder-description-cont{
+		width: 100%;
 	}
 </style>
 

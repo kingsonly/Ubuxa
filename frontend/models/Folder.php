@@ -125,7 +125,10 @@ class Folder extends FolderARModel
 	
 	public function getSubFolders()
     {
-        return $this->hasMany($this::className(), ['parent_id' => 'id']);
+        return $this->hasMany($this::className(), ['parent_id' => 'id'])->orderBy([
+  'last_updated' => SORT_DESC,
+  //'item_no'=>SORT_ASC
+]);
     }
 	
 	public function getTree()

@@ -20,11 +20,13 @@ class CreateButtonWidget extends Widget{
 	{
 		parent::init();
 	}
+	public $buttonType ;
 	
 	// output the outcome of loopmenu
 	public function run(){
 		
 		return $this->render('createbuttonview',[
+			'buttonType' => $this->buttonType,
 		]);
 	}
 	

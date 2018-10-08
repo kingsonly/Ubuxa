@@ -14,14 +14,31 @@ use yii\helpers\Url;
 	height: 60px;
 }
 	#button-text {
-	display: none;
+	color: rgb(122, 134, 154);
+	width: 100%;
+	height: 48px;
+	display: table;
+	font-size: 14px;
+	font-weight: 400;
+	padding-left: 20px;
+}
+	
+	#button-text span {
+	display: table-cell;
+    vertical-align: middle;
+}
 }
 </style>
 
 
 <section id="carousles">
+	<? if($buttonType !== 'text'){?>
   <div id="button-image"></div>
-  <div id="button-text"></div>
+	<? }else{?>
+  <div id="button-text">
+	  <span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
+	</div>
+	<?}?>
     </section>
 
 
@@ -33,6 +50,12 @@ $("#button-image").click(function(e){
 	$( ".folder-new-content" ).slideUp( 300 ).delay( 800 );
 	$( ".create-new-folder" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
 	
+     e.stopPropagation();
+});
+
+$("#button-text").click(function(e){
+	$( ".folder-new-content" ).hide();
+	$( ".create-new-folder" ).delay( 100 ).fadeIn( 400 );
      e.stopPropagation();
 });
 

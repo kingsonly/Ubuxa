@@ -116,7 +116,6 @@ use boffins_vendor\components\controllers\MenuWidget;
                   </div>  
                     	<div class="row">
    						 	
-   						 	
                     	</div>
 
             </section>
