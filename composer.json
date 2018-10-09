@@ -31,7 +31,8 @@
 		"yii2mod/yii2-settings": "*",
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
 		"kartik-v/yii2-widget-fileinput": "@dev",
-		"mongosoft/yii2-upload-behavior": "*"
+		"mongosoft/yii2-upload-behavior": "*",
+        "npm-asset/dragula": "3.7.2"
 
     }, 
     "require-dev": {

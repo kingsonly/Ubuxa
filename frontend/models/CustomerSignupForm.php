@@ -88,5 +88,28 @@ class CustomerSignupForm extends Model
                 
     }
 
+    public function checkUniq($attribute, $params)
+    {
+        $uniq = self::find()->where(['master_email'=>$this->master_email])->one();
+        if (count($uniq)==1){
+            $this->addError('master_email', 'This email already exist.');
+        }
+        
+    }
+    
+    public function clientValidateAttribute($model, $attribute, $view)
+    {
+    
+    $uniq = self::find()->where(['master_email'=>$this->master_email])->one();
+    if (count($uniq)==1){
+        
+        return <<<JS
+        deferred.push(messages.push('test'));
+JS;
+    }
+    
+}
+
+
 
 }

@@ -240,7 +240,7 @@ label {
         </div>
         <div ng-app ng-init="checked = false">
            
-            <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $customerForm->attributes(),'enableAjaxValidation' => false, 'options' => [
+            <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $customerForm->attributes(),'enableAjaxValidation' => true, 'validationUrl' => ['site/ajax-validate-form'], 'options' => [
                 'class' => 'form-signup', 'id' => 'customerForm']
             ]); ?>
 

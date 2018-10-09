@@ -1,4 +1,4 @@
-.btn{
+.btnn{
 	background:#aeaeae !important;
 	color:#D9534F !important;
 	border:none !important;
@@ -6,7 +6,7 @@
 	font-family: candara !important;
 	
 }
-.btn:hover{
+.btnn:hover{
 	background: #D3D3D3 !important;
 	
 }
