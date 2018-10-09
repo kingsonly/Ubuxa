@@ -12,7 +12,9 @@ use frontend\models\Folder;
 
 <?php 
 
-
+/** this widget is responsible for dispaying the button which is used to create a new Folder,
+** This display can either be an image or a plane text
+***************************/
 
 class CreateButtonWidget extends Widget{
 	

@@ -12,7 +12,12 @@ use frontend\models\Folder;
 
 <?php 
 
-
+/**
+** FolderCarouselWidget was design with the aim to hold subfolders which are inside a root folder 
+********************************** Usage ********************************************************
+** use boffins_vendor\components\controllers\FolderCarouselWidget;
+** <?= FolderCarouselWidget::widget(['folderModel' => $folderModel]) ?>
+****************/
 
 class FolderCarouselWidget extends Widget{
 	

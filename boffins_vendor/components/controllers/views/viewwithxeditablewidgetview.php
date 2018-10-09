@@ -106,6 +106,25 @@ foreach($attributues as $v){
 			?>
 	</div>
 	<?
+		}elseif($v['xeditable'] == 'image'){
+			?>
+<div>
+<?
+			 Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'inputType' => Editable::INPUT_FILEINPUT,
+				'options'=>[
+					'options'=>['placeholder'=>'image', 'accept' => 'image/*']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+			Editable::end();
+			?>
+	</div>
+	<?
 		}
 	}
 	

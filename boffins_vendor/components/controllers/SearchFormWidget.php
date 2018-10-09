@@ -12,7 +12,9 @@ use frontend\models\Folder;
 
 <?php 
 
-
+/**
+** This widget holds an input which can be used to search for sub-folders in the folder dashboard 
+****/
 
 class SearchFormWidget extends Widget{
 	
@@ -21,7 +23,6 @@ class SearchFormWidget extends Widget{
 		parent::init();
 	}
 	
-	// output the outcome of loopmenu
 	public function run(){
 		
 		return $this->render('searchform',[

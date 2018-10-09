@@ -16,6 +16,19 @@ use boffins_vendor\components\controllers\CreateButtonWidget;
 .users{
 	background-color: aquamarine;
 }
+.private_color{
+	color: red;
+}
+.author_color{
+	color: blue;
+}
+.users_color{
+	color: aquamarine;
+}
+hr{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
 .folders-container {
 	display: flex;
 	flex-wrap: wrap;
@@ -150,7 +163,7 @@ use boffins_vendor\components\controllers\CreateButtonWidget;
 	padding-left: 0px;
 	padding-right: 0px;
 	text-align: left;
-	padding-bottom: 25px;
+	
 	color: #333;
 	overflow: hidden;	
 	width:40%;
@@ -192,9 +205,20 @@ text-overflow: ellipsis;
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
-						<?= $folder['title']; ?>
+						<?= $folder['title']; ?> <br/><hr/>
+					<?
+					$numItems = count($folder->tree);
+					$i = 0;
+					foreach($folder->tree as $path){ 
+					if(++$i === $numItems) {
+						?>
+						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> </span>
+					<?  }else{ ?>
+						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> ></span>
+					<? }; }; ?>
 					
 				</div>
+				
 				</a>
 			 </div>
 			

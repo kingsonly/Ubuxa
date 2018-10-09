@@ -55,7 +55,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 				<div class="box-content-folder">
 					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
 	['modelAttribute'=>'title'],
-	['modelAttribute'=>'description']
+	['modelAttribute'=>'description','xeditable'=>'image']
 ]]); ?>
 				</div>
 

@@ -1,25 +1,25 @@
 <style>
-	.floatright{
-		float: right;
-		margin-right: 10px;
-	}
-	.foldernote{
-		line-height: 24px;
-		text-underline-position: alphabetic;
-		margin-top: 10px;
+.floatright{
+	float: right;
+	margin-right: 10px;
+}
+.foldernote{
+	line-height: 24px;
+	text-underline-position: alphabetic;
+	margin-top: 10px;
 
-	}
-	.projecturl{
-		 cursor: pointer;
-	 }
+}
+.projecturl{
+	 cursor: pointer;
+ }
 
-	.box{
-		border: none;
-		font-family: candara;
-	}
-	#createinvoice{
-		margin: 10px 10px;
-	}
+.box{
+	border: none;
+	font-family: candara;
+}
+#createinvoice{
+	margin: 10px 10px;
+}
 </style>
 <?php
 use yii\helpers\Html;
@@ -101,29 +101,32 @@ use yii\widgets\Pjax;
 				</div>
 
 			</div>
-
 		</div>
 	</div>
 </div>
+
+
 <script>
 $("#listviewtable").DataTable({
-        "aaSorting": [],
-		"responsive": "true",
-		"pagingType": "simple",
-    });
+	"aaSorting": [],
+	"responsive": "true",
+	"pagingType": "simple",
+});
 </script>
+
 <?php Pjax::end() ?>
 
 <? 
-		Modal::begin([
-			'header' =>'<h1 id="headers"></h1>',
-			'id' => strtolower($modelClassName).'viewcreate',
-			'size' => 'modal-lg',  
-		]);
+Modal::begin([
+	'header' =>'<h1 id="headers"></h1>',
+	'id' => strtolower($modelClassName).'viewcreate',
+	'size' => 'modal-lg',  
+]);
 ?>
-		 <div id="<?= strtolower($modelClassName).'createform'?>"> </div>
+<div id="<?= strtolower($modelClassName).'createform'?>"> </div>
+
 <? 
-		Modal::end();
-	?>
+Modal::end();
+?>
 
 

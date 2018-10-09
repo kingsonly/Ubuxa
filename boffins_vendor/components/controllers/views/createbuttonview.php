@@ -6,14 +6,14 @@ use yii\helpers\Url;
 
 ?>
 <style>	
-	#button-image {
+#button-image {
 	background-image: url('images/folder/newfolder.png');
 	background-repeat: no-repeat; 
 	width: 79px;
 	background-size: contain;
 	height: 60px;
 }
-	#button-text {
+#button-text {
 	color: rgb(122, 134, 154);
 	width: 100%;
 	height: 48px;
@@ -22,24 +22,24 @@ use yii\helpers\Url;
 	font-weight: 400;
 	padding-left: 20px;
 }
-	
-	#button-text span {
+
+#button-text span {
 	display: table-cell;
-    vertical-align: middle;
+	vertical-align: middle;
 }
-}
+
 </style>
 
 
 <section id="carousles">
 	<? if($buttonType !== 'text'){?>
-  <div id="button-image"></div>
+		<div id="button-image"></div>
 	<? }else{?>
-  <div id="button-text">
-	  <span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
-	</div>
+		<div id="button-text">
+			<span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
+		</div>
 	<?}?>
-    </section>
+</section>
 
 
 <?

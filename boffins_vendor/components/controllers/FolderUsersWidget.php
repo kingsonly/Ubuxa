@@ -11,7 +11,13 @@ use yii;
 <?php 
 
 
-
+/**
+** This widget is used to display all users who has access to a perticular folder
+**
+**
+**
+**
+************/
 class FolderUsersWidget extends Widget{
 	public $attributues = [];
 
@@ -20,7 +26,7 @@ class FolderUsersWidget extends Widget{
 		parent::init();
 	}
 	
-	// output the outcome of loopmenu
+	
 	public function run(){
 		return $this->render('folderuserswidgetview',[
 			'attributues' => $this->attributues,
