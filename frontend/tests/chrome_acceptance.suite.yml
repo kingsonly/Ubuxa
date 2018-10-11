@@ -1,0 +1,10 @@
+class_name: ChromeAcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+            url: http://localhost/ubuxabeta/frontend/web
+            browser: chrome
+        - Yii2:
+            part: orm
+            entryScript: index.php
+            cleanup: false
