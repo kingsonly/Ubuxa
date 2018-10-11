@@ -12,7 +12,9 @@ use frontend\models\Folder;
 
 <?php 
 
-
+/** this widget is responsible for dispaying the button which is used to create a new Folder,
+** This display can either be an image or a plane text
+***************************/
 
 class CreateButtonWidget extends Widget{
 	
@@ -20,11 +22,13 @@ class CreateButtonWidget extends Widget{
 	{
 		parent::init();
 	}
+	public $buttonType ;
 	
 	// output the outcome of loopmenu
 	public function run(){
 		
 		return $this->render('createbuttonview',[
+			'buttonType' => $this->buttonType,
 		]);
 	}
 	

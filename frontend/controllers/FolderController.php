@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Expression;
 
 /**
  * FolderController implements the CRUD actions for Folder model.
@@ -35,9 +36,8 @@ class FolderController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Folder::find(),
-        ]);
+        $folderModel = new Folder();
+       $dataProvider = $folderModel->find()->all();
 		
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -88,9 +88,17 @@ class FolderController extends Controller
     {
         $model = new Folder();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['view', 'id' => $model->id]);
-            return ['output'=>$model->id, 'message'=>'sent'];;
+        if ($model->load(Yii::$app->request->post())) {
+			$model->last_updated =  new Expression('NOW()');
+			if($model->privateFolder === 'fa fa-lock'){
+				$model->private_folder = 1;	
+			}
+			
+			if($model->save()){
+				//return $this->redirect(['view', 'id' => $model->id]);
+            return ['output'=>$model->id, 'message'=>'sent'];
+			}
+            
         }
 
         return $this->render('create', [

@@ -2,6 +2,10 @@
 use kartik\editable\Editable;
 ?>
 <style>
+
+	.kv-editable-input{
+		width: 100% !important;
+	}
 	.xinput:hover{
 		background:#ccc;
 		padding: 0px !important;
@@ -21,9 +25,18 @@ use kartik\editable\Editable;
 	.xinput{
 		background: none;
 		border:none;
+		text-align: left !important;
+		width: 100%;
+		overflow: hidden;
+		display: inline-block;
+		white-space: nowrap;
 	}
+	.ellipsis{
+text-overflow: ellipsis;
+}
 	.kv-editable-parent.form-group{
 		width:60% !important;
+		margin-top: 3px;
 	}
 	.panel.panel-default{
 		margin-bottom: 0px;
@@ -33,8 +46,8 @@ use kartik\editable\Editable;
 	}
 	h5{
 		
-		margin-bottom: 7px;
-		margin-top: 7px;
+		margin-bottom: 5px;
+		margin-top: 5px;
 		font-size: 13px !important;
 	}
 	
@@ -66,7 +79,7 @@ foreach($attributues as $v){
 			'asPopover' => false,
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter location...'],
-			'editableValueOptions'=>['class'=>'xinput']
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
 			
 		]);
 		Editable::end();
@@ -93,10 +106,56 @@ foreach($attributues as $v){
 			?>
 	</div>
 	<?
+		}elseif($v['xeditable'] == 'image'){
+			?>
+<div>
+<?
+			 Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'inputType' => Editable::INPUT_FILEINPUT,
+				'options'=>[
+					'options'=>['placeholder'=>'image', 'accept' => 'image/*']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+			Editable::end();
+			?>
+	</div>
+	<?
 		}
 	}
 	
 
 	
 }
+
+
+?>
+
+<?
+$xeditableBoffins = <<<XeditableBoffins
+  
+		$(".xinput").mouseover(function() {
+    $(this).removeClass("ellipsis");
+	$(this).attr("title", $(this).text());
+    $(this).attr("data-toggle", "tooltip");
+    $(this).attr("data-placement", "bottom");
+    
+   
+    
+	
+});
+
+$(".xinput").mouseout(function() {
+    
+    $(this).addClass("ellipsis");
+    
+});
+
+XeditableBoffins;
+ 
+$this->registerJs($xeditableBoffins);
 ?>

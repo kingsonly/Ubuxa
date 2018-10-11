@@ -14,6 +14,7 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 
 
+
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -122,7 +123,6 @@ use boffins_vendor\components\controllers\MenuWidget;
             	</div>
             </section>
         </div>
-    </div>
 </section>
 
   <? $this->beginBlock('sidebar')?>
@@ -213,6 +213,8 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
+	
+	
 JS;
  
 $this->registerJs($indexJs);
@@ -224,3 +226,7 @@ $this->registerJs($indexJs);
 
 
 <?= MenuWidget::widget(); ?>
+	
+	
+			
+		

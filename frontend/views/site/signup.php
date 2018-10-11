@@ -8,6 +8,7 @@ use frontend\models\Plan;
 use kartik\date\DatePicker;
 
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */
 /* @var $form yii\widgets\ActiveForm */
@@ -206,7 +207,7 @@ label {
         </div>
         <div ng-app ng-init="checked = false">
            
-            <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $userForm->attributes(),'enableAjaxValidation' => false, 'options' => [
+            <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $userForm->attributes(),'enableAjaxValidation' => true, 'validationUrl' => ['site/ajax-validate-user-form'], 'options' => [
                 'class' => 'form-signup', 'id' => 'userForm']
             ]); ?>
 
@@ -217,7 +218,8 @@ label {
 
                 <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-                <?= $form->field($userForm, 'password')->passwordInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
+                <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
             </div>
                     <div>
                     <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>

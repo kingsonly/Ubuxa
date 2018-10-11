@@ -13,17 +13,12 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-        'css/spectrum.css',
-        'css/bootstrap-suggest.css',
     ];
     public $js = [
-        'js/spectrum.js',
-        'js/bootstrap-suggest.js',
-        '//unpkg.com/jscroll/dist/jquery.jscroll.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'frontend\assets\RemarkAsset',
+        '\frontend\assets\DragulaAsset',
     ];
 }

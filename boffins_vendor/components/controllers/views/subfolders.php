@@ -33,7 +33,7 @@ use yii\widgets\Pjax;
 	}
 	.sub-second {
 		padding-right: 0px !important;
-    	padding-left: 0px;
+    	padding-left: 0px !important;
 	}
 	.subfirst {
 		background-color: transparent;
@@ -61,13 +61,19 @@ use yii\widgets\Pjax;
 				<?= SearchFormWidget::widget();?>
 			</div>
 		</div>
+		<? if(!empty($folderModel)){?>
 		<div class="col-xs-5 col-sm-2 sub-second">
 				<div class="info-2">
 					<div class="box-subfolders"><?= CreateButtonWidget::widget();?></div>
 				</div>
    		</div>
-		<div class="col-xs-7 col-sm-10 subfirst ">
-			
+		<? }?>
+		<? if(!empty($folderModel)){?>
+		
+			<div class="col-xs-7 col-sm-10 subfirst ">
+		<? }else{?>
+			<div class="col-xs-12 col-sm-12 subfirst ">
+		<? }?>
 			<div class="info-2">
 				<div class="box-sub-folders">
 					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel]) ?></div>

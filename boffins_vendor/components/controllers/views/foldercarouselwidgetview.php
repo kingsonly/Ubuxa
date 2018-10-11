@@ -4,9 +4,31 @@ use frontend\models\Folder;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
+use boffins_vendor\components\controllers\CreateButtonWidget;
 ?>
 <style>
-
+.private{
+	background-color: red;
+}
+.author{
+	background-color: blue;
+}
+.users{
+	background-color: aquamarine;
+}
+.private_color{
+	color: red;
+}
+.author_color{
+	color: blue;
+}
+.users_color{
+	color: aquamarine;
+}
+hr{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
 .folders-container {
 	display: flex;
 	flex-wrap: wrap;
@@ -25,18 +47,21 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 .folder-item.filled {
 	background-image: url('images/folder/folderfill.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 }
 
 .folder-item.empty {
 	background-image: url('images/folder/folderempty.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 }
 	
 	.folder-create{
 	background-image: url('images/folder/folderempty.png');
 	background-repeat: no-repeat; 
+	background-size: cover; 
 	height: 60px;
 	display: inline-block;
 	width: 69px;
@@ -110,57 +135,56 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
     border:0px solid black;
 }
 .owl-prev i, .owl-next i { 
-		color: #ccc !important; 
-		font-size:20px
-	}
-	.owl-prev:hover,.owl-next:hover{
-		background-color: rgba(255, 0, 0, 0) !important ;
-	}
-	 .owl-carousel .owl-nav button.owl-prev{
-		border-right: solid #ccc 1px !important;
-		padding-right: 18px !IMPORTANT;
-		 left: -10px;
-		 border-radius:0px !important;
-		 background: #fff !important;
-	}
-	 .owl-carousel .owl-nav button.owl-next{
-		border-left: solid #ccc 1px !important;
-		padding-left: 5px !IMPORTANT;
-		 border-radius:0px !important;
-		 background: #fff !important;
-	}
-	
-	.folder-content{
-		padding-right: 0px;
-	}
-	
-	.folder-text{
-		padding-left: 0px;
-		padding-right: 0px;
-		text-align: left;
-		padding-bottom: 25px;
-		color: #333;
-		overflow: hidden;	
-		width:40%;
-		white-space: nowrap;
-		
-		display: inline-block;
-	}
-	
-	.ellipsis
-{
-    text-overflow: ellipsis;
+	color: #ccc !important; 
+	font-size:20px
 }
+.owl-prev:hover,.owl-next:hover{
+	background-color: rgba(255, 0, 0, 0) !important ;
+}
+ .owl-carousel .owl-nav button.owl-prev{
+	border-right: solid #ccc 1px !important;
+	padding-right: 18px !IMPORTANT;
+	 left: -10px;
+	 border-radius:0px !important;
+	 background: #fff !important;
+}
+ .owl-carousel .owl-nav button.owl-next{
+	border-left: solid #ccc 1px !important;
+	padding-left: 5px !IMPORTANT;
+	 border-radius:0px !important;
+	 background: #fff !important;
+}
+
+.folder-content{
+	padding-right: 0px;
+}
+
+.folder-text{
+	padding-left: 0px;
+	padding-right: 0px;
+	text-align: left;
 	
-	.create-new-folder{
-		display:none;
-	}
-	#carousles{
-		margin-top: 10px;
-	}
-	.owl-prev{
-		width:23px !important;
-	} 
+	color: #333;
+	overflow: hidden;	
+	width:40%;
+	white-space: nowrap;
+	display: inline-block;
+}
+
+.ellipsis
+{
+text-overflow: ellipsis;
+}
+
+.create-new-folder{
+	display:none;
+}
+#carousles{
+	margin-top: 10px;
+}
+.owl-prev{
+	width:23px !important;
+} 
 </style>
 
 
@@ -168,7 +192,7 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
       <div class="row folder-new-content">
 		  
         <div class="large-12 columns">
-			
+			<? if(!empty($folderModel)){?>
           <div class="owl-carousel owl-theme">
               <?php foreach ($folderModel as $folder) { ?>
 		 <div class="item">
@@ -176,13 +200,26 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
 			 <div class="folder-content col-sm-12">
-			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
+				 <a href="<?= $url;?>" data-pjax="0">
+			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
-						<?= $folder['title']; ?>
+						<?= $folder['title']; ?> <br/><hr/>
+					<?
+					$numItems = count($folder->tree);
+					$i = 0;
+					foreach($folder->tree as $path){ 
+					if(++$i === $numItems) {
+						?>
+						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> </span>
+					<?  }else{ ?>
+						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> ></span>
+					<? }; }; ?>
 					
 				</div>
+				
+				</a>
 			 </div>
 			
 			</div>
@@ -190,8 +227,9 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
             
             
           </div>
-         
-         
+         <?}else{?>
+			<div><?= CreateButtonWidget::widget(['buttonType' => 'text']);?></div>
+         <?}?>
         </div>
       </div>
 	<div class="create-new-folder">

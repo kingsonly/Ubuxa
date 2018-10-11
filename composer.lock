@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b84bb798c84a64b5b774bb16edecb60",
+    "content-hash": "d26ed15f760090e8b77853242b4cc1d8",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -75,15 +75,43 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
                 "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "bower-asset/jquery": ">=1.9.1,<4.0"
             },
-            "type": "bower-asset",
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "less/bootstrap.less",
+                    "dist/js/bootstrap.js"
+                ],
+                "bower-asset-ignore": [
+                    "/.*",
+                    "_config.yml",
+                    "CNAME",
+                    "composer.json",
+                    "CONTRIBUTING.md",
+                    "docs",
+                    "js/tests",
+                    "test-infra"
+                ]
+            },
             "license": [
                 "MIT"
-            ]
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "keywords": [
+                "css",
+                "framework",
+                "front-end",
+                "js",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2016-07-25T15:51:55+00:00"
         },
         {
             "name": "bower-asset/inputmask",
@@ -97,15 +125,53 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/RobinHerbots/Inputmask/zipball/5e670ad62f50c738388d4dcec78d2888505ad77b",
                 "reference": "5e670ad62f50c738388d4dcec78d2888505ad77b",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
             },
-            "type": "bower-asset",
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "./dist/inputmask/inputmask.js",
+                    "./dist/inputmask/inputmask.extensions.js",
+                    "./dist/inputmask/inputmask.date.extensions.js",
+                    "./dist/inputmask/inputmask.numeric.extensions.js",
+                    "./dist/inputmask/inputmask.phone.extensions.js",
+                    "./dist/inputmask/jquery.inputmask.js",
+                    "./dist/inputmask/global/document.js",
+                    "./dist/inputmask/global/window.js",
+                    "./dist/inputmask/phone-codes/phone.js",
+                    "./dist/inputmask/phone-codes/phone-be.js",
+                    "./dist/inputmask/phone-codes/phone-nl.js",
+                    "./dist/inputmask/phone-codes/phone-ru.js",
+                    "./dist/inputmask/phone-codes/phone-uk.js",
+                    "./dist/inputmask/dependencyLibs/inputmask.dependencyLib.jqlite.js",
+                    "./dist/inputmask/dependencyLibs/inputmask.dependencyLib.jquery.js",
+                    "./dist/inputmask/dependencyLibs/inputmask.dependencyLib.js",
+                    "./dist/inputmask/bindings/inputmask.binding.js"
+                ],
+                "bower-asset-ignore": [
+                    "**/*",
+                    "!dist/*",
+                    "!dist/inputmask/*",
+                    "!dist/min/*",
+                    "!dist/min/inputmask/*"
+                ]
+            },
             "license": [
                 "http://opensource.org/licenses/mit-license.php"
-            ]
+            ],
+            "description": "Inputmask is a javascript library which creates an input mask.  Inputmask can run against vanilla javascript, jQuery and jqlite.",
+            "keywords": [
+                "form",
+                "input",
+                "inputmask",
+                "jquery",
+                "mask",
+                "plugins"
+            ],
+            "time": "2017-11-21T11:46:23+00:00"
         },
         {
             "name": "bower-asset/jquery",
@@ -119,47 +185,25 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/77d2a51d0520d2ee44173afdf4e40a9201f5964e",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e",
-                "shasum": null
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/jquery-infinite-scroll",
-            "version": "2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/metafizzy/infinite-scroll.git",
-                "reference": "f0d9eecb55a428b2fd4027964a22b84633ba6e3e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/metafizzy/infinite-scroll/zipball/f0d9eecb55a428b2fd4027964a22b84633ba6e3e",
-                "reference": "f0d9eecb55a428b2fd4027964a22b84633ba6e3e",
                 "shasum": ""
             },
             "type": "bower-asset-library",
             "extra": {
-                "bower-asset-main": "jquery.infinitescroll.js",
+                "bower-asset-main": "dist/jquery.js",
                 "bower-asset-ignore": [
-                    "**/.*",
-                    "node_modules",
-                    "bower_components",
-                    "test",
-                    "tests"
+                    "package.json"
                 ]
             },
             "license": [
                 "MIT"
             ],
-            "description": "jQuery Infinite Scroll Plugin",
             "keywords": [
-                "infinitescroll",
-                "jquery"
+                "browser",
+                "javascript",
+                "jquery",
+                "library"
             ],
-            "time": "2014-11-23T19:33:24+00:00"
+            "time": "2017-03-20T19:02:00+00:00"
         },
         {
             "name": "bower-asset/jquery-ui",
@@ -192,16 +236,29 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:bestiejs/punycode.js.git",
+                "url": "https://github.com/bestiejs/punycode.js.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
-                "shasum": null
+                "shasum": ""
             },
-            "type": "bower-asset"
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "punycode.js",
+                "bower-asset-ignore": [
+                    "coverage",
+                    "tests",
+                    ".*",
+                    "component.json",
+                    "Gruntfile.js",
+                    "node_modules",
+                    "package.json"
+                ]
+            },
+            "time": "2014-10-22T12:02:42+00:00"
         },
         {
             "name": "bower-asset/x-editable",
@@ -243,22 +300,35 @@
             "version": "2.0.7.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:yiisoft/jquery-pjax.git",
+                "url": "https://github.com/yiisoft/jquery-pjax.git",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/aef7b953107264f00234902a3880eb50dafc48be",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "bower-asset/jquery": ">=1.8"
             },
-            "type": "bower-asset",
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "./jquery.pjax.js",
+                "bower-asset-ignore": [
+                    ".travis.yml",
+                    "Gemfile",
+                    "Gemfile.lock",
+                    "CONTRIBUTING.md",
+                    "vendor/",
+                    "script/",
+                    "test/"
+                ]
+            },
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2017-10-12T10:11:14+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -948,22 +1018,25 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v2.0.0",
+            "version": "v1.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481"
+                "reference": "1693374160c24443524ddc23508d2eb2955443f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/71bfaf2450d0b338a35d2818039e1c7637e75481",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/1693374160c24443524ddc23508d2eb2955443f4",
+                "reference": "1693374160c24443524ddc23508d2eb2955443f4",
                 "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2-bootstrap": "@dev"
             },
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.9.x-dev"
                 }
             },
             "autoload": {
@@ -992,24 +1065,24 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T07:54:35+00:00"
+            "time": "2018-09-27T18:02:35+00:00"
         },
         {
             "name": "kartik-v/yii2-money",
-            "version": "v1.2.3",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-money.git",
-                "reference": "e656608dd32cc3aaade99af7c920362e00a42dbe"
+                "reference": "e783ca66d2ec83decc2b53d571b7cda744bbd17f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-money/zipball/e656608dd32cc3aaade99af7c920362e00a42dbe",
-                "reference": "e656608dd32cc3aaade99af7c920362e00a42dbe",
+                "url": "https://api.github.com/repos/kartik-v/yii2-money/zipball/e783ca66d2ec83decc2b53d571b7cda744bbd17f",
+                "reference": "e783ca66d2ec83decc2b53d571b7cda744bbd17f",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "~1.7"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1019,12 +1092,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\money\\": "src"
+                    "kartik\\money\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -1047,25 +1120,25 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T12:17:48+00:00"
+            "time": "2017-05-23T12:14:36+00:00"
         },
         {
             "name": "kartik-v/yii2-popover-x",
-            "version": "v1.3.0",
+            "version": "v1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-popover-x.git",
-                "reference": "b1c458338a315d047b74356532563722ce9e29c6"
+                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/b1c458338a315d047b74356532563722ce9e29c6",
-                "reference": "b1c458338a315d047b74356532563722ce9e29c6",
+                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/58837d63e65caa41f0c13e671d1e2abeec17887d",
+                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/bootstrap-popover-x": "*",
-                "kartik-v/yii2-krajee-base": "*"
+                "kartik-v/bootstrap-popover-x": "~1.4",
+                "kartik-v/yii2-krajee-base": "~1.7"
             },
             "type": "yii2-extension",
             "autoload": {
@@ -1075,7 +1148,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1095,7 +1168,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2014-11-25T09:26:09+00:00"
+            "time": "2017-09-08T04:30:42+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -1313,16 +1386,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "aadeb08fe0199a62bb26940cdccafc2c169edc69"
+                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/aadeb08fe0199a62bb26940cdccafc2c169edc69",
-                "reference": "aadeb08fe0199a62bb26940cdccafc2c169edc69",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/01a5940fb1b70b39b7916a4e68768f8626024ddc",
+                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "~1.9"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1359,24 +1432,24 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T11:34:49+00:00"
+            "time": "2018-08-29T12:10:45+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
-            "version": "v1.4.8",
+            "version": "v1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8"
+                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8",
-                "reference": "6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/22d8c40665d59b76383e658de6ef2c187ed0da14",
+                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "~1.9"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1413,35 +1486,30 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T11:39:13+00:00"
+            "time": "2018-08-29T11:42:11+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
-            "version": "v1.0.5",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-depdrop.git",
-                "reference": "0598b220e62350b2f0a6372def96358e3b660f10"
+                "reference": "6918ca6f7d7be153c80f6aa9c261f9b333293e9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-depdrop/zipball/0598b220e62350b2f0a6372def96358e3b660f10",
-                "reference": "0598b220e62350b2f0a6372def96358e3b660f10",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-depdrop/zipball/6918ca6f7d7be153c80f6aa9c261f9b333293e9c",
+                "reference": "6918ca6f7d7be153c80f6aa9c261f9b333293e9c",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/dependent-dropdown": "~1.4",
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "~1.7"
             },
             "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\depdrop\\": "src"
+                    "kartik\\depdrop\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1467,7 +1535,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T11:43:32+00:00"
+            "time": "2016-01-10T17:30:48+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-fileinput",
@@ -1787,35 +1855,30 @@
         },
         {
             "name": "kartik-v/yii2-widget-spinner",
-            "version": "v1.0.1",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-spinner.git",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6"
+                "reference": "3132ba14d58e0564d17f3b846b04c42aa72bdde3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/eb10dad17a107bf14f173c99994770ca23c548a6",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/3132ba14d58e0564d17f3b846b04c42aa72bdde3",
+                "reference": "3132ba14d58e0564d17f3b846b04c42aa72bdde3",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "*"
             },
             "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\spinner\\": "src"
+                    "kartik\\spinner\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -1836,7 +1899,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T11:54:03+00:00"
+            "time": "2014-11-09T05:02:05+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-switchinput",
@@ -1890,20 +1953,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-timepicker",
-            "version": "v1.0.4",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-timepicker.git",
-                "reference": "c1dacfc3712bedf4f694d878279189e440a24b21"
+                "reference": "203aeb9123e7fa9a3c584d206793d82abe96d469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-timepicker/zipball/c1dacfc3712bedf4f694d878279189e440a24b21",
-                "reference": "c1dacfc3712bedf4f694d878279189e440a24b21",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-timepicker/zipball/203aeb9123e7fa9a3c584d206793d82abe96d469",
+                "reference": "203aeb9123e7fa9a3c584d206793d82abe96d469",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "*"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1913,12 +1976,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\time\\": "src"
+                    "kartik\\time\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -1940,7 +2003,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T11:58:19+00:00"
+            "time": "2017-01-08T06:36:24+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-touchspin",
@@ -1999,20 +2062,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-typeahead",
-            "version": "v1.0.3",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-typeahead.git",
-                "reference": "f8a00c0264e2572d9601540efc5fdf7e46dbbfe8"
+                "reference": "8fcf3c122bdd63545f462a137ac9acacba60f8d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-typeahead/zipball/f8a00c0264e2572d9601540efc5fdf7e46dbbfe8",
-                "reference": "f8a00c0264e2572d9601540efc5fdf7e46dbbfe8",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-typeahead/zipball/8fcf3c122bdd63545f462a137ac9acacba60f8d6",
+                "reference": "8fcf3c122bdd63545f462a137ac9acacba60f8d6",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
+                "kartik-v/yii2-krajee-base": "~1.8"
             },
             "type": "yii2-extension",
             "extra": {
@@ -2048,7 +2111,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T12:02:22+00:00"
+            "time": "2018-08-05T14:19:09+00:00"
         },
         {
             "name": "kartik-v/yii2-widgets",
@@ -2056,12 +2119,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widgets.git",
-                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3"
+                "reference": "24d3a3942a5943233d912b3adc06b3beae3dd076"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/e5a030d700243a90eccf96a070380bd3b76e17a3",
-                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/24d3a3942a5943233d912b3adc06b3beae3dd076",
+                "reference": "24d3a3942a5943233d912b3adc06b3beae3dd076",
                 "shasum": ""
             },
             "require": {
@@ -2086,19 +2149,14 @@
                 "kartik-v/yii2-widget-typeahead": "*"
             },
             "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\widgets\\": "src"
+                    "kartik\\widgets\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -2115,7 +2173,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T17:40:19+00:00"
+            "time": "2015-12-05T10:37:16+00:00"
         },
         {
             "name": "mongosoft/yii2-upload-behavior",
@@ -2225,156 +2283,17 @@
             "time": "2017-02-24T16:06:33+00:00"
         },
         {
-            "name": "nirvana-msu/yii2-infinite-scroll",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nirvana-msu/yii2-infinite-scroll.git",
-                "reference": "ee78b2f2abb1a2c18248867733ddc37eee68392c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nirvana-msu/yii2-infinite-scroll/zipball/ee78b2f2abb1a2c18248867733ddc37eee68392c",
-                "reference": "ee78b2f2abb1a2c18248867733ddc37eee68392c",
-                "shasum": ""
-            },
-            "require": {
-                "bower-asset/jquery-infinite-scroll": "2.*",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "nirvana\\infinitescroll\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexander Stepanov",
-                    "email": "student_vmk@mail.ru"
-                }
-            ],
-            "description": "Yii2 extension for infinite-scroll jQuery plugin",
-            "keywords": [
-                "infinite-scroll",
-                "jquery",
-                "plugin",
-                "widget",
-                "yii2"
-            ],
-            "time": "2017-07-17T20:37:34+00:00"
-        },
-        {
-            "name": "npm-asset/jscroll",
-            "version": "2.4.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jscroll/-/jscroll-2.4.1.tgz",
-                "reference": null,
-                "shasum": "b8ea7bdbe290c577b20d00e54fb5da606f610e31"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/pklauzinski/jscroll/issues"
-                },
-                "npm-asset-main": "jquery.jscroll.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/pklauzinski/jscroll.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "grunt",
-                    "test": "grunt eslint"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Philip Klauzinski",
-                    "url": "https://webtopian.com"
-                }
-            ],
-            "description": "jScroll is a jQuery plugin for infinite scrolling / auto-paging.",
-            "homepage": "https://jscroll.com",
-            "keywords": [
-                "ajax-scrolling",
-                "auto-paging",
-                "ecosystem:jquery",
-                "infinite-scroll",
-                "infinite-scrolling",
-                "jquery-plugin",
-                "jquery-scrolling",
-                "jscroll",
-                "lazy-loading",
-                "scrolling"
-            ],
-            "time": "2018-04-11T04:47:07+00:00"
-        },
-        {
-            "name": "npm-asset/trumbowyg",
-            "version": "2.11.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/trumbowyg/-/trumbowyg-2.11.1.tgz",
-                "reference": null,
-                "shasum": "908127a8c915702e43ef18fb17949bea360e105c"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/Alex-D/Trumbowyg/issues"
-                },
-                "npm-asset-main": "dist/trumbowyg.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/Alex-D/Trumbowyg.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "npm install && gulp clean && gulp build",
-                    "start": "gulp",
-                    "test": "gulp test"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alexandre Demode",
-                    "email": "contact@alex-d.fr",
-                    "url": "Alex-D"
-                }
-            ],
-            "description": "A lightweight WYSIWYG editor",
-            "homepage": "http://alex-d.github.io/Trumbowyg",
-            "time": "2018-10-03T17:51:59+00:00"
-        },
-        {
             "name": "piwik/device-detector",
-            "version": "3.11.2",
+            "version": "3.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e"
+                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c8e1760a45c4aed201af3b7deee35131bc47fe3e",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
+                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
                 "shasum": ""
             },
             "require": {
@@ -2415,7 +2334,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-10-08T20:45:21+00:00"
+            "time": "2018-08-10T18:28:32+00:00"
         },
         {
             "name": "psr/http-message",
@@ -3216,19 +3135,28 @@
             "version": "v0.11.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twitter/typeahead.js.git",
+                "url": "https://github.com/twitter/typeahead.js.git",
                 "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/588440f66559714280628a4f9799f0c4eb880a4a",
                 "reference": "588440f66559714280628a4f9799f0c4eb880a4a",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
             },
-            "type": "bower-asset"
+            "require-dev": {
+                "bower-asset/jasmine-ajax": "~1.3.1",
+                "bower-asset/jasmine-jquery": "~1.5.2",
+                "bower-asset/jquery": "~1.7"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "dist/typeahead.bundle.js"
+            },
+            "time": "2015-04-27T04:02:14+00:00"
         },
         {
             "name": "codeception/codeception",
@@ -3324,16 +3252,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "7.3.2",
+            "version": "7.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "a5633c736e0e0022bc5065b27c63f2d1aa97b69f"
+                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/a5633c736e0e0022bc5065b27c63f2d1aa97b69f",
-                "reference": "a5633c736e0e0022bc5065b27c63f2d1aa97b69f",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/1967be130082effb3c30510cf8f8397fbd9d8b84",
+                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84",
                 "shasum": ""
             },
             "require": {
@@ -3363,7 +3291,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2018-10-07T21:30:01+00:00"
+            "time": "2018-09-28T15:36:26+00:00"
         },
         {
             "name": "codeception/stub",
@@ -3594,6 +3522,54 @@
                 "fixtures"
             ],
             "time": "2018-07-12T10:23:15+00:00"
+        },
+        {
+            "name": "kop/yii2-scroll-pager",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kop/yii2-scroll-pager.git",
+                "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kop/yii2-scroll-pager/zipball/9b9727ce441fbfc487044535ab6ce0b7694d810b",
+                "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "webcreate/jquery-ias": "^2.2.1",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kop\\y2sp\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Koptiev",
+                    "email": "ivan.koptiev@codex.systems",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Infinite AJAX scrolling for Yii2 ListView widget",
+            "homepage": "http://kop.github.io/yii2-scroll-pager/",
+            "keywords": [
+                "pager",
+                "pagination",
+                "scroll",
+                "scrolling",
+                "yii",
+                "yii2"
+            ],
+            "time": "2016-07-06T19:56:33+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5510,6 +5486,46 @@
             "time": "2017-04-07T12:08:54+00:00"
         },
         {
+            "name": "webcreate/jquery-ias",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webcreate/infinite-ajax-scroll.git",
+                "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webcreate/infinite-ajax-scroll/zipball/97ba99a34e68a3fc186ceb518c9cff51370be24b",
+                "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary",
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "fieg",
+                    "email": "jeroen@webcreate.nl",
+                    "homepage": "http://webcreate.nl"
+                }
+            ],
+            "description": "Infinite Ajax Scroll: A jQuery plugin that turns your server-side pagination into an infinite scrolling one using AJAX",
+            "homepage": "https://infiniteajaxscroll.com",
+            "keywords": [
+                "ajax",
+                "ias",
+                "infinite",
+                "jquery",
+                "pagination",
+                "scroll",
+                "scrolling"
+            ],
+            "time": "2018-03-21T20:14:31+00:00"
+        },
+        {
             "name": "webmozart/assert",
             "version": "1.3.0",
             "source": {
@@ -5714,7 +5730,7 @@
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-widgets": 20,
         "kartik-v/yii2-widget-fileinput": 20,
-        "nirvana-msu/yii2-infinite-scroll": 20
+        "kop/yii2-scroll-pager": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

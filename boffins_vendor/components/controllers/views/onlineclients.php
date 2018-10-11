@@ -2,11 +2,11 @@
    .infos{
       background-color: #fff;
       padding-top: 10px;
-      box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1)
+      box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
     }
     
     .box-clients{
-      height: 80px
+      height: 80px;
     }
     .active-client{
       font-family: calibri;

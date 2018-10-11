@@ -50,7 +50,7 @@ class Customer extends \yii\db\ActiveRecord
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
             [['master_email'], 'email'],
-            ['master_email', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['master_email', 'unique', 'message' => 'This email address has already been taken.'],
             [['cid'], 'unique'],
         ];
     }

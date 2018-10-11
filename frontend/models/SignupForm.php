@@ -18,6 +18,7 @@ class SignupForm extends Model
     //user model attributes 
     public $username;
     public $password;
+    public $password_repeat;
     public $basic_role;
     
     //telephone model attributes
@@ -137,9 +138,13 @@ class SignupForm extends Model
             // username and password are both required
             [['first_name', 'surname', 'username', 'password'], 'required'],
             // attributes must be a string value
-            [['first_name', 'surname', 'username', 'password'], 'string'],
+            [['first_name', 'surname', 'username'], 'string'],
+            [['password'], 'string', 'min' => 6],
+            [['password_repeat'], 'required'],
+            [['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             //attributes should be loaded onto model - safe            
             [[/* 'telephone_number', 'address_line', */'state_id','dob','address','basic_role', 'country_id', 'code', 'cid'], 'safe'],
+            ['username', 'unique', 'targetClass' => '\frontend\models\UserDb', 'message' => 'This username has already been taken.'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
@@ -335,6 +340,28 @@ class SignupForm extends Model
     {
         return $this->_userAR->id;
     }
+
+    public function checkUniq($attribute, $params)
+    {
+        $uniq = self::find()->where(['username'=>$this->username])->one();
+        if (count($uniq)==1){
+            $this->addError('username', 'This username already exist.');
+        }
+        
+    }
+    
+    public function clientValidateAttribute($model, $attribute, $view)
+    {
+    
+    $uniq = self::find()->where(['username'=>$this->username])->one();
+    if (count($uniq)==1){
+        
+        return <<<JS
+        deferred.push(messages.push('test'));
+JS;
+    }
+    
+}
     
 }
 

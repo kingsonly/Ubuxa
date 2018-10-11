@@ -31,10 +31,8 @@
 		"yii2mod/yii2-settings": "*",
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
 		"kartik-v/yii2-widget-fileinput": "@dev",
-        "npm-asset/trumbowyg": "2.11.1",
-        "npm-asset/jscroll": "2.4.1",
-        "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
-        "mongosoft/yii2-upload-behavior": "*"
+		"mongosoft/yii2-upload-behavior": "*",
+        "npm-asset/dragula": "3.7.2"
 
     }, 
     "require-dev": {
@@ -42,7 +40,8 @@
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
         "codeception/codeception": "^2.2.3",
-        "codeception/verify": "~0.3.1"
+        "codeception/verify": "~0.3.1",
+		"kop/yii2-scroll-pager": "dev-master"
     },
     "config": {
         "process-timeout": 1800,

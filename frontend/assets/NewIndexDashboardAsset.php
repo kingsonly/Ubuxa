@@ -45,7 +45,7 @@ class NewIndexDashboardAsset extends AssetBundle
         
         //'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
         'js/app.js',
-        
+        'js/jquery.flip.min.js',
         'js/Chart.min.js',
         'js/dashboard.js',
         'js/common.js',

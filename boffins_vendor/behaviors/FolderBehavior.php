@@ -103,10 +103,11 @@ class FolderBehavior extends Behavior
 		
 		}
 		if($this->owner->parent_id > 0){
+			if($this->linkUserToFolder($userId,$folderId,$role)->save()){
+				foreach($this->owner->folderUsersInheritance as $v){
+					$this->linkUserToFolder($v->id,$folderId,'user')->save();
 
-			foreach($this->owner->folderUsersInheritance as $v){
-				$this->linkUserToFolder($v->id,$folderId,'user')->save();
-				
+				}
 			}
 		}else{
 			if($this->linkUserToFolder($userId,$folderId,$role)->save()){

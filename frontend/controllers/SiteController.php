@@ -245,4 +245,51 @@ class SiteController extends BoffinsBaseController {
 	    }
     }
 
+    public function actionAjaxValidateForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new CustomerSignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (Customer)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (Customer)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	 public function actionAjaxValidateUserForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new SignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (User)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (User)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	public function actionBoard()
+    {
+        return $this->renderAjax('board');
+    }
+
 }
