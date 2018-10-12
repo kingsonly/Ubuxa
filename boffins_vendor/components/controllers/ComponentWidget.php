@@ -21,7 +21,7 @@ use yii\helpers\Html;
 *************/
 class ComponentWidget extends Widget
 {
-
+	public $users;
     public function init()
     {
         parent::init();
@@ -30,7 +30,7 @@ class ComponentWidget extends Widget
     public function run()
     {
          
-        return $this->render('components');
+        return $this->render('components',['users'=>$this->users]);
     }
 }
 ?>

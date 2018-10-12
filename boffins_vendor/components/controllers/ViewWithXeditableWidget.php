@@ -14,6 +14,7 @@ use yii;
 
 class ViewWithXeditableWidget extends Widget{
 	public $model;
+	public $url;
 	
 	public $attributues = [];
 
@@ -27,6 +28,7 @@ class ViewWithXeditableWidget extends Widget{
 		return $this->render('viewwithxeditablewidgetview',[
 			'model' => $this->model,
 			'attributues' => $this->attributues,
+			'url' => $this->url,
 		]);
 	}
 	

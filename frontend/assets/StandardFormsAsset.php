@@ -40,6 +40,7 @@ class StandardFormsAsset extends AssetBundle
         //'css/fontawesome/css/font-awesome.min.css',
         'css/hover.css',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/css/fileinput.min.css',
 		
     ];
     public $js = [
@@ -65,6 +66,8 @@ class StandardFormsAsset extends AssetBundle
 		'js/script.js',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
 		'owlcarousel/owl.carousel.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/plugins/piexif.min.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js',
 		
 		///'js/dragables.js'
 		

@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\FolderARModel;
+use yii\web\UploadedFile;
 
 
 /**
@@ -31,6 +32,7 @@ class Folder extends FolderARModel
      * {@inheritdoc}
      */
 	public $privateFolder;
+	public $upload_file;
     public static function tableName()
     {
         return 'tm_folder';
@@ -43,8 +45,8 @@ class Folder extends FolderARModel
     {
         return [
             [['parent_id', 'deleted', 'cid','private_folder'], 'integer'],
-            [['title'], 'required'],
-            [['last_updated','privateFolder'], 'safe'],
+            [['title'], 'required'],	
+            [['last_updated','privateFolder','upload_file','folder_image'], 'safe'],
             [['title'], 'string', 'max' => 40],
             [['description'], 'string', 'max' => 255],
         ];
@@ -190,15 +192,60 @@ class Folder extends FolderARModel
 	public function getFolderColors() 
 	{
 		$colorStatus = '';
-						if($this->private_folder === 1){
-							$colorStatus =  'private';
-						} elseif($this->role->role == 'author'){
-							$colorStatus = 'author';
-						}else{
-							$colorStatus = 'users';
-						}
+		if($this->private_folder === 1){
+			$colorStatus =  'private';
+		} elseif($this->role->role == 'author'){
+			$colorStatus = 'author';
+		}else{
+			$colorStatus = 'users';
+		}
 		return $colorStatus;
 	}
+	
+	
+	
+	
+		public function uploads()
+    {
+        if ($this->validate()) {
+			$holdPath = '';
+			$file = $this->upload_file;
+			$ext = $file->extension;
+			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
+			$basePath = explode('/',\Yii::$app->basePath);
+			\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
+			$path = '/web/uploads/' . $newName;
+			$dbpath = 'uploads/' . $newName;
+			$file->saveAs($path);
+			$holdPath= $dbpath;
+			
+			if($this->save()){
+				
+				$this->folder_image = $holdPath;
+				$this->save();
+			}
+			//$this->file_location = implode(",",$holdPath);
+			
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+	
+	
+	
+	
+	 public function upload()
+    {
+        if ($this->validate()) {
+            $this->upload_file->saveAs('uploads/' . $this->upload_file->baseName . '.' . $this->upload_file->extension);
+            return true;
+        } else {
+            return false;
+        }
+    }
+	
+	
 	
 	
 }

@@ -32,7 +32,9 @@
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
 		"kartik-v/yii2-widget-fileinput": "@dev",
 		"mongosoft/yii2-upload-behavior": "*",
-        "npm-asset/dragula": "3.7.2"
+        "npm-asset/dragula": "3.7.2",
+		"kartik-v/bootstrap-fileinput": "dev-master",
+		"kartik-v/yii2-popover-x": "dev-master"
 
     }, 
     "require-dev": {
@@ -40,8 +42,7 @@
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
         "codeception/codeception": "^2.2.3",
-        "codeception/verify": "~0.3.1",
-		"kop/yii2-scroll-pager": "dev-master"
+        "codeception/verify": "~0.3.1"
     },
     "config": {
         "process-timeout": 1800,
