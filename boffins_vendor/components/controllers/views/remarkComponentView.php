@@ -28,7 +28,7 @@ AppAsset::register($this);
    padding-left: 20px;
 }
 
-button {
+.remark-btn {
    width: 30px;
    height: 30px;
    border-radius: 3px;
@@ -42,7 +42,7 @@ button {
    outline: none;
 }
 
-button:hover {
+.remark-btn:hover {
    border: 1px solid #a6a6a6;
    color: #777;
 }
@@ -166,8 +166,8 @@ body {
  * Lista de Comentarios
  =======================*/
 .comments-container {
-    margin: 60px auto 15px;
-    width: 768px;
+   /* margin: 60px auto 15px;*/
+    width: 100%;
 }
 
 .comments-container h1 {
@@ -284,7 +284,7 @@ body {
  * Caja del Comentario
  ---------------------------*/
 .comments-list .comment-box {
-    width: 680px;
+    width: 568px;
     float: right;
     position: relative;
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
@@ -312,7 +312,7 @@ body {
 }
 
 .reply-list .comment-box {
-    width: 610px;
+    width: 492px;
 }
 .comment-box .comment-head {
     background: #FCFCFC;
@@ -404,7 +404,7 @@ body {
     <div class="col-md-12" style="height: 200px;overflow:auto">
       <!-- Contenedor Principal -->
     <div class="comments-container">
-        <h1>Comentarios <a href="http://creaticode.com">creaticode.com</a></h1>
+        <h4>Recent Comments <a href="http://creaticode.com" style="display: none;">creaticode.com</a></h4>
 
         <ul id="comments-list" class="comments-list">
             <li>
@@ -510,9 +510,9 @@ body {
 
   <div class="wrapp" style="display: none">
    <div class="toolbar">
-      <button id="bold" title="Bold (Ctrl+B)"><i class="fa fa-bold"></i></button>
-      <button id="italic" title="Italic (Ctrl+I)"><i class="fa fa-italic"></i></button>
-      <button id="underline" title="Underline (Ctrl+U)"><i class="fa fa-underline"></i></button>
+      <button class="remark-btn" id="bold" title="Bold (Ctrl+B)"><i class="fa fa-bold"></i></button>
+      <button class="remark-btn" id="italic" title="Italic (Ctrl+I)"><i class="fa fa-italic"></i></button>
+      <button class="remark-btn" id="underline" title="Underline (Ctrl+U)"><i class="fa fa-underline"></i></button>
       <select name="fonts" id="fonts">
          <option value="Arial" selected>Arial</option>
          <option value="Georgia">Georgia</option>
@@ -535,13 +535,13 @@ body {
          <option value="26">26</option>
       </select>
       <input type="text" id="color" />
-      <button id="align-left" title="Left"><i class="fa fa-align-left"></i></button>
-      <button id="align-center" title="Center"><i class="fa fa-align-center"></i></button>
-      <button id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
-      <button id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
-      <button id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
+      <button  class="remark-btn" id="align-left" title="Left"><i class="fa fa-align-left"></i></button>
+      <button  class="remark-btn" id="align-center" title="Center"><i class="fa fa-align-center"></i></button>
+      <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
+      <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
+      <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
       <span class="dropdown">
-          <button class="dropdown-toggle" type="button" data-toggle="dropdown">
+          <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
             <li id="link"><a href="#"><span title="Attach link"><i class="fa fa-link"></i></span><span id="textLi">Add Link</span></a></li>
