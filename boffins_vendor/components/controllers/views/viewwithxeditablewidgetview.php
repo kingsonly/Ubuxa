@@ -140,7 +140,7 @@ foreach($attributues as $v){
     'model' => $model,
     'attribute' => 'upload_file',
     'options' => ['accept' => 'image/*'],
-				'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['folder/update-folder-image','id'=>15])]
+				'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => $url]
 	
 	]);?>
 	

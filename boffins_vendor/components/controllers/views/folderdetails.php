@@ -88,11 +88,6 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 					]]); ?>
 				</div>
 				
-				<div class="image-update">
-					<span class="close-update">Close</span>
-					
-				</div>
-				
 				</div>
         </div>
 	</div>
