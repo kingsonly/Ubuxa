@@ -32,8 +32,8 @@ class Reminder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reminder_time', 'notes', 'last_updated', 'deleted'], 'required'],
-            [['reminder_time', 'last_updated'], 'safe'],
+            [['reminder_time', 'notes', 'last_updated'], 'required'],
+            [['reminder_time', 'last_updated','deleted'], 'safe'],
             [['deleted', 'cid'], 'integer'],
             [['notes'], 'string', 'max' => 255],
         ];
@@ -60,5 +60,11 @@ class Reminder extends \yii\db\ActiveRecord
     public function getTaskReminders()
     {
         return $this->hasMany(TaskReminder::className(), ['reminder_id' => 'id']);
+    }
+
+    public function getTasks()
+    {
+        return $this->hasMany(Task::className(), ['id' => 'task_id'])
+            ->via('taskReminders');
     }
 }

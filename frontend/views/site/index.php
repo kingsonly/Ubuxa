@@ -125,7 +125,7 @@ use boffins_vendor\components\controllers\MenuWidget;
         	<?= ComponentWidget::widget() ?>
             <section>
             	<div class="row">
-            		<?= TaskWidget::widget() ?>
+            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>

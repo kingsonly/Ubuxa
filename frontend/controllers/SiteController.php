@@ -13,6 +13,7 @@ use yii\db\Expression;
 use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
 
 //models
 use frontend\models\SignupForm;
@@ -29,6 +30,9 @@ use frontend\models\Folder;
 use frontend\models\CustomerSignupForm;
 use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
+use frontend\models\Task;
+use frontend\models\StatusType;
+use frontend\models\UserDb;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -78,8 +82,12 @@ class SiteController extends BoffinsBaseController {
 		$this->layout = 'new_index_dashboard_layout';
 		$folder = new Folder();
 		$dashboardFolders = $folder->getDashboardItems(5);
+		$task = new Task();
+				
         return $this->render('index',[
 			'folders' => $dashboardFolders,
+			'task' => $task,
+			'taskModel' => $task,
 		]);
        
     }
@@ -290,6 +298,26 @@ class SiteController extends BoffinsBaseController {
 	public function actionBoard()
     {
         return $this->renderAjax('board');
+    }
+
+    public function actionTask()
+    {
+    	$task = new Task();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $checkedid =  $data['id'];
+
+            $model = Task::findOne($checkedid);
+
+            if($model->status_id != $task::TASK_COMPLETED){
+            	$model->status_id = $task::TASK_COMPLETED;
+            	$model->save();
+            } else {
+            	$model->status_id = $task::TASK_NOT_STARTED;
+            	$model->save();
+            }
+            
+        }
     }
 
 }

@@ -4,16 +4,13 @@ namespace boffins_vendor\components\controllers;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii;
-?>
+use yii; 
 
-
-<?php 
-
-
-
-class CreateTaskWidget extends Widget{
-	public $attributes = [];
+class CreateReminderWidget extends Widget{
+	
+	public $reminder;
+	public $id;
+	public $reminderUrl;
 
 	public function init()
 	{
@@ -22,8 +19,10 @@ class CreateTaskWidget extends Widget{
 	
 	// output the outcome of loopmenu
 	public function run(){
-		return $this->render('createtask',[
-			'attributues' => $this->attributes,
+		return $this->render('createreminder',[
+			'reminder' => $this->reminder,
+			'id' => $this->id,
+			'reminderUrl' => $this->reminderUrl,
 		]);
 	}
 	

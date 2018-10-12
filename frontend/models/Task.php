@@ -29,6 +29,26 @@ use Yii;
  */
 class Task extends \yii\db\ActiveRecord
 {
+    /***
+     * accessible value linked to the database id of "completed" in status_type under task group.. 
+     * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
+     */
+    const TASK_COMPLETED = 24;
+    /***
+     * accessible value linked to the database id of "cancelled" in status_type under task group.. 
+     * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
+     */
+    const TASK_CANCELLED = 23;
+    /***
+     * accessible value linked to the database id of "completed" in status_type under task group.. 
+     * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
+     */
+    const TASK_IN_PROGRESS = 22;
+    /***
+     * accessible value linked to the database id of "completed" in status_type under task group.. 
+     * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
+     */
+    const TASK_NOT_STARTED = 21;
     /**
      * {@inheritdoc}
      */
@@ -43,8 +63,8 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'details', 'owner','status_id', 'create_date'], 'required'],
-            [['last_updated', 'deleted', 'assigned_to', 'due_date'], 'safe'],
+            [[ 'owner','status_id', 'create_date'], 'required'],
+            [['title','last_updated', 'details', 'deleted', 'assigned_to', 'due_date', 'assigned_to'], 'safe'],
             [['owner', 'assigned_to', 'status_id', 'deleted', 'cid'], 'integer'],
             [['create_date', 'due_date', 'last_updated'], 'safe'],
             [['title'], 'string', 'max' => 50],
@@ -104,7 +124,17 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getAssignedTo()
     {
-        return $this->hasOne(User::className(), ['id' => 'assigned_to']);
+        return $this->hasOne(UserDb::className(), ['id' => 'assigned_to']);
+    }
+
+    public function getPerson()
+    {
+        return $this->hasOne(Person::className(), ['id' => 'person_id'])->via('assignedTo');
+    }
+
+    public function getPersonName()
+    {
+        return $this->person->first_name;
     }
 
     /**
@@ -138,7 +168,7 @@ class Task extends \yii\db\ActiveRecord
 
     public function displayTask()
     {
-        $task= $this->find()->all();
+        $task = $this->find()->all();
         return $task;
     }
 }
