@@ -5,6 +5,15 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 ?>
 
 <style type="text/css">
+	.folder_image{
+		width: 100%;
+		height: 120px;
+	}
+	
+	.folder-image-cont{
+		
+		width: 100%;
+	}
 	.info{
 		background: #fff;
 	    padding-left: 15px;
@@ -31,6 +40,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 	.box-content-folder {
 		border-top: 1px solid #ccc;
 		height:120px;
+		
 	}
 
 	.folder-side {
@@ -44,6 +54,14 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 	#folder-description-cont{
 		width: 100%;
 	}
+	.image-update{
+		display: none;
+	}
+	.close-update{
+		width: 100%;
+		display: block;
+		background: red;
+	}
 </style>
 
 <div class="col-md-5 folderdetls">
@@ -54,15 +72,39 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 			<div class="folder-side">
 				<div class="box-content-folder">
 					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-	['modelAttribute'=>'title'],
-	['modelAttribute'=>'description']
-]]); ?>
+					['modelAttribute'=>'title'],
+					['modelAttribute'=>'description']
+					]]); ?>
 				</div>
 
 			</div>
 		</div>
 		<div class="col-sm-5 col-xs-5 box-folders-count">
-            <div class="active-client-number">Test</div>
+            <div class="folder-image-cont">
+				<div class="image-holder">
+					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+					['modelAttribute'=>'folder_image','xeditable' => 'image','url' => $url],
+					
+					]]); ?>
+				</div>
+				
+				<div class="image-update">
+					<span class="close-update">Close</span>
+					
+				</div>
+				
+				</div>
         </div>
 	</div>
 </div>
+
+
+
+<?
+$updateImage = <<<updateImage
+
+
+updateImage;
+ 
+$this->registerJs($updateImage);
+?>

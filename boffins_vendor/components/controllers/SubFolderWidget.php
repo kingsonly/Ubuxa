@@ -13,7 +13,8 @@ use frontend\models\Folder;
 <?php 
 
 
-
+// this widget is presently not relevant as such  the name should be changed to folder display widget
+// this widget helps to display folder on the folder index page and on the dashboard 
 class SubFolderWidget extends Widget{
 	public $model;
 	public function init()
@@ -21,7 +22,7 @@ class SubFolderWidget extends Widget{
 		parent::init();
 	}
 	
-	// output the outcome of loopmenu
+	
 	public function run(){
 		return $this->render('subfolderwidgetview',[
 			'model' => $this->model,

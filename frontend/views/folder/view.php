@@ -15,6 +15,8 @@ use boffins_vendor\components\controllers\OnlineClients;
 
 
 
+
+
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -107,15 +109,16 @@ use boffins_vendor\components\controllers\MenuWidget;
                   	<?= OnlineClients::widget() ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model]) ?>
+   						 	<?= FolderDetails::widget(['model' => $model,'url' => Url::to(['folder/update-folder-image'])]) ?>
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders]) ?>
                     	</div>
 
             </section>
         </div>
 
+							 
         <div class="row">
-        	<?= ComponentWidget::widget() ?>
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers]) ?>
             <section>
             	<div class="row">
             		<?= TaskWidget::widget() ?>

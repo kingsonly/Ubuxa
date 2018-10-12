@@ -5,6 +5,12 @@ namespace boffins_vendor\components\controllers;
 use yii\base\Widget;
 use yii\helpers\Html;
 
+/**
+** this section holds sub-folder carosel widget and folder search form widget 
+**
+**
+**
+***********/
 class SubFolders extends Widget
 {
 
@@ -15,7 +21,7 @@ class SubFolders extends Widget
 	public $folderModel;
     public function run()
     {
-         // Register AssetBundle
+       
         return $this->render('subfolders',[
 			'folderModel' => $this->folderModel,
 		]);

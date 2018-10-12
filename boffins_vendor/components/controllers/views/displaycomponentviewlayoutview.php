@@ -18,39 +18,38 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <style>
-    .floatright{
-        float: right;
-    }
-    .foldernote{
-        line-height: 24px;
-        text-underline-position: alphabetic;
-        margin-top: 10px;
-        
-    }
-	 #loading{
-		 display:none;
-	 }
-	 
-	  #flash{
-		display: none;
-	}
-	 
-	  #componentviewcontent{
-        background: #fff;
-        margin-top: 22px;
-        min-height: 600px;
-    }
+.floatright{
+	float: right;
+}
+	
+.foldernote{
+	line-height: 24px;
+	text-underline-position: alphabetic;
+	margin-top: 10px;
+}
+	
+#loading{
+	display:none;
+}
+
+#flash{
+	display: none;
+}
+
+#componentviewcontent{
+	background: #fff;
+	margin-top: 22px;
+	min-height: 600px;
+}
 </style>
 <?php $this->beginBlock('folderview'); ?>
 
-<small>Select <?= ucfirst($controlerStrinName);?></small>
+	<small>Select <?= ucfirst($controlerStrinName);?></small>
    
 <?php $this->endBlock(); ?>
 
 <?php $this->beginBlock('folderSidebar'); ?>
 	<?= Menu::widget(); ?>
-	
-
 <?php $this->endBlock(); ?>
 
 <section class="content">
@@ -83,11 +82,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </section>
 <? 
-		Modal::begin([
-			'header' =>'<h1 id="headers"></h1>',
-			'id' => 'dashboard',
-			'size' => 'modal-md',  
-		]);
+Modal::begin([
+	'header' =>'<h1 id="headers"></h1>',
+	'id' => 'dashboard',
+	'size' => 'modal-md',  
+]);
 ?>
 <div id="formcontent"></div>
 <?
@@ -95,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php 
+
 	$urlListView = Url::to([$controlerStrinName.'/'.$controlerStrinName.'listview']);
 	$urlView = Url::to([$controlerStrinName.'/'.$controlerStrinName.'view','id'=>$id]);
 	
@@ -105,22 +105,22 @@ $("#listView").load('$urlListView');
 $("#view").load('$urlView',{var2:1});
 
 $(document).on('click','.$controlerStrinName'+'url',function(){
-var parent = $(this).parent();
+	var parent = $(this).parent();
 
-$('.$controlerStrinName'+'urltr').removeClass('activelist');
-parent.addClass('activelist');
+	$('.$controlerStrinName'+'urltr').removeClass('activelist');
+	parent.addClass('activelist');
 
-$('#view').html('<img class="loadergif" src="images/loader.gif"  />');
-var url = parent.data('url');
-$("#view").load(url,{var2:1},function(){
-$('#loader').slideUp('slow');
-$('#viewcontainer').slideDown('fast');
+	$('#view').html('<img class="loadergif" src="images/loader.gif"  />');
+	var url = parent.data('url');
+	$("#view").load(url,{var2:1},function(){
+		$('#loader').slideUp('slow');
+		$('#viewcontainer').slideDown('fast');
 
-});
+	});
 })
 $(document).on('click','#create'+'$controlerStrinName',function(){
-var formUrl = $(this).data('formurl');
-$('#$controlerStrinName'+'viewcreate').modal('show').find('#$controlerStrinName'+'createform').load(formUrl);
+	var formUrl = $(this).data('formurl');
+	$('#$controlerStrinName'+'viewcreate').modal('show').find('#$controlerStrinName'+'createform').load(formUrl);
 
 })
 

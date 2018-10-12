@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Expression;
+use yii\web\UploadedFile;
 
 /**
  * FolderController implements the CRUD actions for Folder model.
@@ -125,6 +126,28 @@ class FolderController extends Controller
             'model' => $model,
         ]);
     }
+	
+	
+	public function actionUpdateFolderImage($id)
+    {
+		
+        $model =  $this->findModel($id);
+		
+
+        if (Yii::$app->request->isPost) {
+            $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return;
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+    	
+    
+        }
+
+    
 
     /**
      * Deletes an existing Folder model.

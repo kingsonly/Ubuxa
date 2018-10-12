@@ -16,13 +16,13 @@ background-color: #fff;
 transition: margin-top 0.1s ease-out 0s;
 }
 	.user-name{
-		color: #ccc;
+		color: #666;
 		font-size: 13px;
 		margin-left: 1px;
 		display: inline-block;
 		position: absolute;
 		height: 30px;
-		padding-top: 3px;
+		padding-top: 7.3px;
 	}
 
 	#folderusers{
@@ -35,7 +35,7 @@ transition: margin-top 0.1s ease-out 0s;
 	}
 	#invitenewuser{
 		color: #666;
-		font-size: 13px;
+		
 		display: inline-block;
 		height: 30px;
 		padding-top: 4px;
@@ -58,7 +58,7 @@ transition: margin-top 0.1s ease-out 0s;
 background-color: #fff;
 		text-align: center;
 	}
-	.fa-plus{
+	.fa-plus.users{
 		width:20px;
 		height: 20px;
 		background: #ccc;
@@ -69,9 +69,9 @@ background-color: #fff;
 		color:greenyellow !important;
 	}
 	</style>
-<div id="folderusers" class="row">
-	<span id="invitenewuser">AUTHORISED USERS</span>
-	<span id="plus-button"><i class="fa fa-plus"></i></span>
+<div id="folderusers">
+	<div id="invitenewuser">AUTHORIZED USERS</div>
+	<span id="plus-button"><i class="fa fa-plus users"></i></span>
 <?php foreach($attributues as $users){ 
 	$image = !empty($users["image"])?$users["image"]:'default.png';
 	?>

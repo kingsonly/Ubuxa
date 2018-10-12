@@ -6,6 +6,8 @@ use yii\base\Widget;
 use yii\helpers\Html;
 use frontend\models\Task;
 
+
+// Task widget is a widget which represent a section on the folder  dashboard which is responsible for the holding of users task and reminder
 class TaskWidget extends Widget
 {
 	public $task;

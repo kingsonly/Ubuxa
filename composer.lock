@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d26ed15f760090e8b77853242b4cc1d8",
+    "content-hash": "9ae78555c598d31fe6e828b8b00be766",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -772,22 +772,22 @@
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
-            "version": "v4.5.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531"
+                "reference": "86010b4468a2915c9414524df528aa1b361af1b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/7fbc8473783febfd123178dd00c9f5ee1bf73531",
-                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/86010b4468a2915c9414524df528aa1b361af1b3",
+                "reference": "86010b4468a2915c9414524df528aa1b361af1b3",
                 "shasum": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.4.x-dev"
+                    "dev-master": "4.5.x-dev"
                 }
             },
             "autoload": {
@@ -821,7 +821,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-09-25T15:16:57+00:00"
+            "time": "2018-10-06T16:31:55+00:00"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -1018,25 +1018,22 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.9.9",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "1693374160c24443524ddc23508d2eb2955443f4"
+                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/1693374160c24443524ddc23508d2eb2955443f4",
-                "reference": "1693374160c24443524ddc23508d2eb2955443f4",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/71bfaf2450d0b338a35d2818039e1c7637e75481",
+                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481",
                 "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2-bootstrap": "@dev"
             },
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -1065,24 +1062,24 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-09-27T18:02:35+00:00"
+            "time": "2018-10-09T07:54:35+00:00"
         },
         {
             "name": "kartik-v/yii2-money",
-            "version": "v1.2.2",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-money.git",
-                "reference": "e783ca66d2ec83decc2b53d571b7cda744bbd17f"
+                "reference": "e656608dd32cc3aaade99af7c920362e00a42dbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-money/zipball/e783ca66d2ec83decc2b53d571b7cda744bbd17f",
-                "reference": "e783ca66d2ec83decc2b53d571b7cda744bbd17f",
+                "url": "https://api.github.com/repos/kartik-v/yii2-money/zipball/e656608dd32cc3aaade99af7c920362e00a42dbe",
+                "reference": "e656608dd32cc3aaade99af7c920362e00a42dbe",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "~1.7"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1092,12 +1089,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\money\\": ""
+                    "kartik\\money\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1120,25 +1117,25 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-05-23T12:14:36+00:00"
+            "time": "2018-10-09T12:17:48+00:00"
         },
         {
             "name": "kartik-v/yii2-popover-x",
-            "version": "v1.3.4",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-popover-x.git",
-                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d"
+                "reference": "b1c458338a315d047b74356532563722ce9e29c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/58837d63e65caa41f0c13e671d1e2abeec17887d",
-                "reference": "58837d63e65caa41f0c13e671d1e2abeec17887d",
+                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/b1c458338a315d047b74356532563722ce9e29c6",
+                "reference": "b1c458338a315d047b74356532563722ce9e29c6",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/bootstrap-popover-x": "~1.4",
-                "kartik-v/yii2-krajee-base": "~1.7"
+                "kartik-v/bootstrap-popover-x": "*",
+                "kartik-v/yii2-krajee-base": "*"
             },
             "type": "yii2-extension",
             "autoload": {
@@ -1148,7 +1145,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -1168,7 +1165,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2017-09-08T04:30:42+00:00"
+            "time": "2014-11-25T09:26:09+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -1386,16 +1383,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
-                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc"
+                "reference": "aadeb08fe0199a62bb26940cdccafc2c169edc69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/01a5940fb1b70b39b7916a4e68768f8626024ddc",
-                "reference": "01a5940fb1b70b39b7916a4e68768f8626024ddc",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/aadeb08fe0199a62bb26940cdccafc2c169edc69",
+                "reference": "aadeb08fe0199a62bb26940cdccafc2c169edc69",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "~1.9"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1432,24 +1429,24 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-29T12:10:45+00:00"
+            "time": "2018-10-09T11:34:49+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-datetimepicker",
-            "version": "v1.4.7",
+            "version": "v1.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14"
+                "reference": "6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/22d8c40665d59b76383e658de6ef2c187ed0da14",
-                "reference": "22d8c40665d59b76383e658de6ef2c187ed0da14",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8",
+                "reference": "6f89a4ed78fc95a0679c5bb99dd353e3dc86c7f8",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "~1.9"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1486,30 +1483,35 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-29T11:42:11+00:00"
+            "time": "2018-10-09T11:39:13+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-depdrop",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-depdrop.git",
-                "reference": "6918ca6f7d7be153c80f6aa9c261f9b333293e9c"
+                "reference": "0598b220e62350b2f0a6372def96358e3b660f10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-depdrop/zipball/6918ca6f7d7be153c80f6aa9c261f9b333293e9c",
-                "reference": "6918ca6f7d7be153c80f6aa9c261f9b333293e9c",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-depdrop/zipball/0598b220e62350b2f0a6372def96358e3b660f10",
+                "reference": "0598b220e62350b2f0a6372def96358e3b660f10",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/dependent-dropdown": "~1.4",
-                "kartik-v/yii2-krajee-base": "~1.7"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\depdrop\\": ""
+                    "kartik\\depdrop\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1535,7 +1537,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-01-10T17:30:48+00:00"
+            "time": "2018-10-09T11:43:32+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-fileinput",
@@ -1855,30 +1857,35 @@
         },
         {
             "name": "kartik-v/yii2-widget-spinner",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-spinner.git",
-                "reference": "3132ba14d58e0564d17f3b846b04c42aa72bdde3"
+                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/3132ba14d58e0564d17f3b846b04c42aa72bdde3",
-                "reference": "3132ba14d58e0564d17f3b846b04c42aa72bdde3",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/eb10dad17a107bf14f173c99994770ca23c548a6",
+                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "*"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\spinner\\": ""
+                    "kartik\\spinner\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -1899,7 +1906,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2014-11-09T05:02:05+00:00"
+            "time": "2018-10-09T11:54:03+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-switchinput",
@@ -1953,20 +1960,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-timepicker",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-timepicker.git",
-                "reference": "203aeb9123e7fa9a3c584d206793d82abe96d469"
+                "reference": "c1dacfc3712bedf4f694d878279189e440a24b21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-timepicker/zipball/203aeb9123e7fa9a3c584d206793d82abe96d469",
-                "reference": "203aeb9123e7fa9a3c584d206793d82abe96d469",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-timepicker/zipball/c1dacfc3712bedf4f694d878279189e440a24b21",
+                "reference": "c1dacfc3712bedf4f694d878279189e440a24b21",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "*"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1976,12 +1983,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "kartik\\time\\": ""
+                    "kartik\\time\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -2003,7 +2010,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2017-01-08T06:36:24+00:00"
+            "time": "2018-10-09T11:58:19+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-touchspin",
@@ -2062,20 +2069,20 @@
         },
         {
             "name": "kartik-v/yii2-widget-typeahead",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-typeahead.git",
-                "reference": "8fcf3c122bdd63545f462a137ac9acacba60f8d6"
+                "reference": "f8a00c0264e2572d9601540efc5fdf7e46dbbfe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-typeahead/zipball/8fcf3c122bdd63545f462a137ac9acacba60f8d6",
-                "reference": "8fcf3c122bdd63545f462a137ac9acacba60f8d6",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-typeahead/zipball/f8a00c0264e2572d9601540efc5fdf7e46dbbfe8",
+                "reference": "f8a00c0264e2572d9601540efc5fdf7e46dbbfe8",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/yii2-krajee-base": "~1.8"
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
             "type": "yii2-extension",
             "extra": {
@@ -2111,7 +2118,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-08-05T14:19:09+00:00"
+            "time": "2018-10-09T12:02:22+00:00"
         },
         {
             "name": "kartik-v/yii2-widgets",
@@ -2119,12 +2126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widgets.git",
-                "reference": "24d3a3942a5943233d912b3adc06b3beae3dd076"
+                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/24d3a3942a5943233d912b3adc06b3beae3dd076",
-                "reference": "24d3a3942a5943233d912b3adc06b3beae3dd076",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/e5a030d700243a90eccf96a070380bd3b76e17a3",
+                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3",
                 "shasum": ""
             },
             "require": {
@@ -2149,14 +2156,19 @@
                 "kartik-v/yii2-widget-typeahead": "*"
             },
             "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\widgets\\": ""
+                    "kartik\\widgets\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD 3-Clause"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -2173,7 +2185,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-12-05T10:37:16+00:00"
+            "time": "2018-10-09T17:40:19+00:00"
         },
         {
             "name": "mongosoft/yii2-upload-behavior",
@@ -2283,17 +2295,334 @@
             "time": "2017-02-24T16:06:33+00:00"
         },
         {
+            "name": "npm-asset/atoa",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/atoa/-/atoa-1.0.0.tgz",
+                "reference": null,
+                "shasum": "0cc0e91a480e738f923ebc103676471779b34a49"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/bevacqua/atoa/issues"
+                },
+                "npm-asset-main": "atoa.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/bevacqua/atoa.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "echo \"Error: no test specified\" && exit 1"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Bevacqua",
+                    "email": "nicolasbevacqua@gmail.com",
+                    "url": "http://bevacqua.io/"
+                }
+            ],
+            "description": "Creates a true array based on `arraylike`, starting at `startIndex`.",
+            "homepage": "https://github.com/bevacqua/atoa#readme",
+            "time": "2015-07-02T15:12:19+00:00"
+        },
+        {
+            "name": "npm-asset/contra",
+            "version": "1.9.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/contra/-/contra-1.9.4.tgz",
+                "reference": null,
+                "shasum": "f53bde42d7e5b5985cae4d99a8d610526de8f28d"
+            },
+            "require": {
+                "npm-asset/atoa": "1.0.0",
+                "npm-asset/ticky": "1.0.1"
+            },
+            "require-dev": {
+                "npm-asset/assert": "~1.1.0",
+                "npm-asset/browserify": "10.2.4",
+                "npm-asset/jshint": "~2.4.1",
+                "npm-asset/jshint-stylish": "~0.1.5",
+                "npm-asset/jshint-tap": "0.0.1",
+                "npm-asset/mocha": "~1.17.0",
+                "npm-asset/uglify-js": "2.4.23"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/bevacqua/contra/issues"
+                },
+                "npm-asset-main": "contra.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git://github.com/bevacqua/contra.git"
+                },
+                "npm-asset-scripts": {
+                    "build": "browserify -s contra -do dist/contra.js contra.js && uglifyjs -m -c -o dist/contra.min.js dist/contra.js",
+                    "build-shim": "browserify -do dist/contra.shim.js contra.shim.js && uglifyjs -m -c -o dist/contra.shim.min.js dist/contra.shim.js",
+                    "deploy": "npm run build && npm run build-shim && npm run test && npm run deployment",
+                    "deployment": "git add dist && npm version ${BUMP:-\"patch\"} --no-git-tag-version && git add package.json && git commit -am \"Autogenerated pre-deployment commit\" && bower version ${BUMP:-\"patch\"} && git reset HEAD~2 && git add . && git commit -am \"Release $(cat package.json | jq -r .version)\" && git push --tags && npm publish && git push",
+                    "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js test/*.js"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Bevacqua",
+                    "email": "hello@bevacqua.io",
+                    "url": "http://bevacqua.io"
+                }
+            ],
+            "description": "Asynchronous flow control with a functional taste to it",
+            "homepage": "https://github.com/bevacqua/contra",
+            "keywords": [
+                "a",
+                "async",
+                "asynchronous",
+                "control",
+                "flow",
+                "generator",
+                "promises",
+                "q"
+            ],
+            "time": "2016-05-20T17:01:34+00:00"
+        },
+        {
+            "name": "npm-asset/crossvent",
+            "version": "1.5.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/crossvent/-/crossvent-1.5.4.tgz",
+                "reference": null,
+                "shasum": "da2c4f8f40c94782517bf2beec1044148194ab92"
+            },
+            "require": {
+                "npm-asset/custom-event": "1.0.0"
+            },
+            "require-dev": {
+                "npm-asset/browserify": ">=4.1.3,<5.0.0",
+                "npm-asset/contra": ">=1.6.10,<2.0.0",
+                "npm-asset/gulp": ">=3.6.2,<4.0.0",
+                "npm-asset/gulp-bump": "~0.1.0",
+                "npm-asset/gulp-clean": "~0.2.3",
+                "npm-asset/gulp-git": "~0.2.0",
+                "npm-asset/gulp-header": ">=1.0.2,<2.0.0",
+                "npm-asset/gulp-rename": "~0.2.2",
+                "npm-asset/gulp-size": "~0.1.1",
+                "npm-asset/gulp-streamify": "0.0.5",
+                "npm-asset/gulp-uglify": "~0.1.0",
+                "npm-asset/gzip-size": ">=1.0.0,<2.0.0",
+                "npm-asset/jquery": ">=1.11.1,<2.0.0",
+                "npm-asset/pretty-bytes": ">=1.0.1,<2.0.0",
+                "npm-asset/vinyl-source-stream": ">=0.1.1,<0.2.0"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/bevacqua/crossvent/issues"
+                },
+                "npm-asset-main": "src/crossvent.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git://github.com/bevacqua/crossvent.git"
+                },
+                "npm-asset-scripts": []
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Bevacqua",
+                    "email": "hello@bevacqua.io",
+                    "url": "http://bevacqua.io"
+                }
+            ],
+            "description": "Cross-platform browser event handling",
+            "homepage": "https://github.com/bevacqua/crossvent",
+            "time": "2015-08-25T00:19:47+00:00"
+        },
+        {
+            "name": "npm-asset/custom-event",
+            "version": "1.0.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/custom-event/-/custom-event-1.0.0.tgz",
+                "reference": null,
+                "shasum": "2e4628be19dc4b214b5c02630c5971e811618062"
+            },
+            "require-dev": {
+                "npm-asset/zuul": "~1.16.3"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/webmodules/custom-event/issues"
+                },
+                "npm-asset-main": "index.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git://github.com/webmodules/custom-event.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "make test"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nathan Rajlich",
+                    "email": "nathan@tootallnate.net",
+                    "url": "http://n8.io/"
+                }
+            ],
+            "description": "Cross-browser `CustomEvent` constructor",
+            "homepage": "https://github.com/webmodules/custom-event",
+            "keywords": [
+                "browser",
+                "constructor",
+                "custom",
+                "customevent",
+                "dom",
+                "event"
+            ],
+            "time": "2015-01-07T22:33:23+00:00"
+        },
+        {
+            "name": "npm-asset/dragula",
+            "version": "3.7.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/dragula/-/dragula-3.7.2.tgz",
+                "reference": null,
+                "shasum": "4a35c9d3981ffac1a949c29ca7285058e87393ce"
+            },
+            "require": {
+                "npm-asset/contra": "1.9.4",
+                "npm-asset/crossvent": "1.5.4"
+            },
+            "require-dev": {
+                "npm-asset/bower": "1.5.2",
+                "npm-asset/browserify": "11.0.0",
+                "npm-asset/clean-css": "3.3.6",
+                "npm-asset/electron-prebuilt": "0.30.1",
+                "npm-asset/hihat": "1.2.1",
+                "npm-asset/jshint": "2.8.0",
+                "npm-asset/jshint-stylish": "2.0.1",
+                "npm-asset/nib": "1.1.0",
+                "npm-asset/phantomjs": "2.1.3",
+                "npm-asset/stylus": "0.52.0",
+                "npm-asset/tap-dev-tool": "1.3.0",
+                "npm-asset/tape": "4.0.1",
+                "npm-asset/tape-run": ">=2.1.3,<3.0.0",
+                "npm-asset/uglify-js": "2.4.24",
+                "npm-asset/watchify": "3.3.0"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/bevacqua/dragula/issues"
+                },
+                "npm-asset-main": "dragula.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/bevacqua/dragula.git"
+                },
+                "npm-asset-scripts": {
+                    "build": "npm run scripts && npm run styles",
+                    "deploy": "npm run build && npm run deployment && npm run sync",
+                    "deploy-plugins": "npm run deploy-react ; npm run deploy-angular ; cd ../dragula",
+                    "deploy-react": "cd ../react-dragula ; git pull ; npm i -S dragula@* ; git commit package.json -m 'bumped dragula version'; npm run deploy",
+                    "deploy-angular": "cd ../angular-dragula ; git pull ; npm i -S dragula@* ; git commit package.json -m 'bumped dragula version'; npm run deploy",
+                    "deployment": "git add dist && npm version ${BUMP:-\"patch\"} --no-git-tag-version && git add package.json && git commit -am \"Autogenerated pre-deployment commit\" && bower version ${BUMP:-\"patch\"} && git reset HEAD~2 && git add . && git commit -am \"Release $(cat package.json | jq -r .version)\" && git push --tags && npm publish && git push",
+                    "scripts": "jshint . && browserify -s dragula -do dist/dragula.js dragula.js && uglifyjs -m -c -o dist/dragula.min.js dist/dragula.js",
+                    "start": "watchify -dvo example/example.min.js example/example.js & watchify -dvs dragula -o dist/dragula.js dragula.js & stylus -w dragula.styl --import node_modules/nib -o dist",
+                    "styles": "stylus dragula.styl --import node_modules/nib -o dist && cleancss dist/dragula.css -o dist/dragula.min.css",
+                    "sync": "git checkout gh-pages ; git merge master ; git push ; git checkout master",
+                    "lint": "jshint . --reporter node_modules/jshint-stylish/index.js",
+                    "test": "npm run lint && browserify test/*.js | tape-run",
+                    "test-watch": "hihat test/*.js -p tap-dev-tool"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Bevacqua",
+                    "email": "nicolasbevacqua@gmail.com",
+                    "url": "http://bevacqua.io/"
+                }
+            ],
+            "description": "Drag and drop so simple it hurts",
+            "homepage": "https://github.com/bevacqua/dragula",
+            "time": "2016-09-12T12:35:26+00:00"
+        },
+        {
+            "name": "npm-asset/ticky",
+            "version": "1.0.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/ticky/-/ticky-1.0.1.tgz",
+                "reference": null,
+                "shasum": "b7cfa71e768f1c9000c497b9151b30947c50e46d"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/bevacqua/ticky/issues"
+                },
+                "npm-asset-main": "ticky.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/bevacqua/ticky.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "echo \"Error: no test specified\" && exit 1"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Bevacqua",
+                    "email": "nicolasbevacqua@gmail.com",
+                    "url": "http://bevacqua.io/"
+                }
+            ],
+            "description": "Run a callback as soon as possible",
+            "homepage": "https://github.com/bevacqua/ticky#readme",
+            "time": "2016-05-20T16:56:23+00:00"
+        },
+        {
             "name": "piwik/device-detector",
-            "version": "3.11.1",
+            "version": "3.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519"
+                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
-                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c8e1760a45c4aed201af3b7deee35131bc47fe3e",
+                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e",
                 "shasum": ""
             },
             "require": {
@@ -2334,7 +2663,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-08-10T18:28:32+00:00"
+            "time": "2018-10-08T20:45:21+00:00"
         },
         {
             "name": "psr/http-message",
@@ -3252,16 +3581,16 @@
         },
         {
             "name": "codeception/phpunit-wrapper",
-            "version": "7.3.1",
+            "version": "7.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/phpunit-wrapper.git",
-                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84"
+                "reference": "a5633c736e0e0022bc5065b27c63f2d1aa97b69f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/1967be130082effb3c30510cf8f8397fbd9d8b84",
-                "reference": "1967be130082effb3c30510cf8f8397fbd9d8b84",
+                "url": "https://api.github.com/repos/Codeception/phpunit-wrapper/zipball/a5633c736e0e0022bc5065b27c63f2d1aa97b69f",
+                "reference": "a5633c736e0e0022bc5065b27c63f2d1aa97b69f",
                 "shasum": ""
             },
             "require": {
@@ -3291,7 +3620,7 @@
                 }
             ],
             "description": "PHPUnit classes used by Codeception",
-            "time": "2018-09-28T15:36:26+00:00"
+            "time": "2018-10-07T21:30:01+00:00"
         },
         {
             "name": "codeception/stub",
@@ -3522,54 +3851,6 @@
                 "fixtures"
             ],
             "time": "2018-07-12T10:23:15+00:00"
-        },
-        {
-            "name": "kop/yii2-scroll-pager",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kop/yii2-scroll-pager.git",
-                "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kop/yii2-scroll-pager/zipball/9b9727ce441fbfc487044535ab6ce0b7694d810b",
-                "reference": "9b9727ce441fbfc487044535ab6ce0b7694d810b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "webcreate/jquery-ias": "^2.2.1",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "kop\\y2sp\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Koptiev",
-                    "email": "ivan.koptiev@codex.systems",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Infinite AJAX scrolling for Yii2 ListView widget",
-            "homepage": "http://kop.github.io/yii2-scroll-pager/",
-            "keywords": [
-                "pager",
-                "pagination",
-                "scroll",
-                "scrolling",
-                "yii",
-                "yii2"
-            ],
-            "time": "2016-07-06T19:56:33+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5486,46 +5767,6 @@
             "time": "2017-04-07T12:08:54+00:00"
         },
         {
-            "name": "webcreate/jquery-ias",
-            "version": "v2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webcreate/infinite-ajax-scroll.git",
-                "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webcreate/infinite-ajax-scroll/zipball/97ba99a34e68a3fc186ceb518c9cff51370be24b",
-                "reference": "97ba99a34e68a3fc186ceb518c9cff51370be24b",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "proprietary",
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "fieg",
-                    "email": "jeroen@webcreate.nl",
-                    "homepage": "http://webcreate.nl"
-                }
-            ],
-            "description": "Infinite Ajax Scroll: A jQuery plugin that turns your server-side pagination into an infinite scrolling one using AJAX",
-            "homepage": "https://infiniteajaxscroll.com",
-            "keywords": [
-                "ajax",
-                "ias",
-                "infinite",
-                "jquery",
-                "pagination",
-                "scroll",
-                "scrolling"
-            ],
-            "time": "2018-03-21T20:14:31+00:00"
-        },
-        {
             "name": "webmozart/assert",
             "version": "1.3.0",
             "source": {
@@ -5730,7 +5971,7 @@
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-widgets": 20,
         "kartik-v/yii2-widget-fileinput": 20,
-        "kop/yii2-scroll-pager": 20
+        "kartik-v/bootstrap-fileinput": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

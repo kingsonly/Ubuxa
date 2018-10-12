@@ -6,16 +6,16 @@ use app\components\controllers\DisplayLinkedComponents;
 /* @var $model app\models\Payment */
 ?>
 <style>
-	.edocumentfolder{
-		background: url('images/edocument.png');
-		width: 100px;
-		height: 100px;
-		background-size: contain;
-		text-align: center;
-		padding-top: 40px;
-		display: inline-block;
-		color: #fff;
-	}
+.edocumentfolder{
+	background: url('images/edocument.png');
+	width: 100px;
+	height: 100px;
+	background-size: contain;
+	text-align: center;
+	padding-top: 40px;
+	display: inline-block;
+	color: #fff;
+}
 </style>
 <? foreach($files as $key => $value){
 	$content = implode(',',$files[$key]);

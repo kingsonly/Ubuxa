@@ -1,5 +1,9 @@
 <?
 use kartik\editable\Editable;
+use kartik\widgets\FileInput;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use kartik\popover\PopoverX;
 ?>
 <style>
 
@@ -104,6 +108,49 @@ foreach($attributues as $v){
 			]);
 			Editable::end();
 			?>
+	</div>
+	<?
+		}elseif($v['xeditable'] == 'image'){
+			?>
+<div>
+	<?
+		PopoverX::begin([	
+								'placement' => PopoverX::ALIGN_LEFT,
+								 
+								'toggleButton' => ['src'=>'/ubuxabeta/frontend/web/images/company/folder_image/image_placeholder.png','tag'=>'img', 'class'=>'folder_image'],
+								'header' => '<i class="glyphicon glyphicon-lock"></i> Enter credentials',
+								'footer' => Html::button('Submit', [
+										'class' => 'btn btn-sm btn-primary', 
+										'onclick' => '$("#form-signup").trigger("submit")'
+									]) . Html::button('Reset', [
+										'class' => 'btn btn-sm btn-default', 
+										'onclick' => '$("#form-signup").trigger("reset")'
+									])
+								]);
+
+							   ?>
+					
+			
+		
+
+                
+
+
+<?= FileInput::widget([
+    'model' => $model,
+    'attribute' => 'upload_file',
+    'options' => ['accept' => 'image/*'],
+				'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['folder/update-folder-image','id'=>15])]
+	
+	]);?>
+	
+
+								
+						 <?
+							   PopoverX::end();
+						?>
+	
+
 	</div>
 	<?
 		}

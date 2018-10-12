@@ -5,9 +5,23 @@ namespace boffins_vendor\components\controllers;
 use yii\base\Widget;
 use yii\helpers\Html;
 
+/**
+** This widget is the skeletal representation of the users component section
+** 
+**
+**
+**
+**
+**
+**
+**
+**
+**
+**
+*************/
 class ComponentWidget extends Widget
 {
-
+	public $users;
     public function init()
     {
         parent::init();
@@ -15,8 +29,8 @@ class ComponentWidget extends Widget
 
     public function run()
     {
-         // Register AssetBundle
-        return $this->render('components');
+         
+        return $this->render('components',['users'=>$this->users]);
     }
 }
 ?>
