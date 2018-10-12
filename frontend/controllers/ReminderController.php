@@ -67,19 +67,21 @@ class ReminderController extends Controller
     public function actionCreate()
     {
         $model = new Reminder();
-        $userId = Yii::$app->user->identity->id;
         $presentTime = new Expression('NOW()');
 		$model->last_updated = $presentTime;
-		$taskReminder = new TaskReminder ;
+		$taskReminder = new TaskReminder();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	$taskReminder->reminder_id = $model->id ;
-			$taskReminder->task_id = $task;
-			$taskReminder->save(false);
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        if ($model->load(Yii::$app->request->post()) and $taskReminder->load(Yii::$app->request->post()) && $model->save()) {
+         
+                    $taskReminder->reminder_id = $model->id;
+                    //$taskReminder->task_id = 9;
+                    $taskReminder->save(false);
+                    
+                    //return $this->redirect(['view', 'id' => $reminder->id]);
+                }
+        
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }

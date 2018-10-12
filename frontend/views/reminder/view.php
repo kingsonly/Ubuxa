@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Task */
+/* @var $model frontend\models\Reminder */
 
-$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Reminders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="task-view">
+<div class="reminder-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -28,13 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'title',
-            'details',
-            'assigned_to',
-            'status_id',
-            'create_date',
-            'due_date',
+            'id',
+            'reminder_time',
+            'notes',
             'last_updated',
+            'deleted',
+            'cid',
         ],
     ]) ?>
 

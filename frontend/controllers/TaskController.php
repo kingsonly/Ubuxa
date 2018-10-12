@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\StatusType;
 use yii\db\Expression;
+use frontend\models\Reminder;
+use frontend\models\TaskReminder;
 
 
 
@@ -42,11 +44,13 @@ class TaskController extends Controller
         $model = new Task;
         $dataProvider = $model->displayTask();
         $task = StatusType::find()->where(['status_group' => 'task'])->all();
-
-        return $this->render('index', [
+        $reminder = new Reminder();
+            
+        return $this->renderAjax('index', [
             'dataProvider' => $dataProvider,
             'model' => $model,
             'task' => $task,
+            'reminder' => $reminder,
         ]);
     }
 
@@ -58,7 +62,7 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -75,11 +79,13 @@ class TaskController extends Controller
         $model->status_id = 21;
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('index');
+        $reminder = new Reminder();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
         }
 
         return $this->renderAjax('create', [
+            'reminder' => $reminder,
             'model' => $model,
         ]);
     }

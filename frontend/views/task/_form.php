@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
+
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Task */
@@ -9,7 +11,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="task-form">
-
+	<?php Pjax::begin(); ?>
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
@@ -25,5 +27,6 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
+    <?php Pjax::end(); ?>
 
 </div>
