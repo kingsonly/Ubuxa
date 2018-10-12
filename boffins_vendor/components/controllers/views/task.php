@@ -149,11 +149,11 @@ $boardUrl = Url::to(['task/index']);
  .embed-submit-field {
    position: relative;
 }
- .embed-submit-field input {
+ #addTask {
    width: 100%;
    padding: 9px;
 }
- .embed-submit-field button {
+ #taskButton {
     position: absolute;
     right: 3px;
     top: 3px;
@@ -166,7 +166,7 @@ $boardUrl = Url::to(['task/index']);
     width: 60px;
     transition: all 0.2s;
 }
- .embed-submit-field button:hover {
+ .embed-submit-field #taskButton:hover {
    background-color: #37c88d;
    color: #fff;
    cursor: pointer;
