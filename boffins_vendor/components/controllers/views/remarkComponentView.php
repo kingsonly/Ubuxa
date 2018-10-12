@@ -368,6 +368,13 @@ body {
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
+    font-family: calibri;
+}
+.by-author a{
+  display: inline-block;
+}
+.by-author a{
+  text-transform: capitalize;
 }
 
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
@@ -402,12 +409,12 @@ body {
 </style>
 <div class="" style="min-height: 200px">
   <div class="row">
-    <div class="col-md-12" style="height: 200px;overflow:auto">
+    <div class="col-md-12" id="flux" style="height: 200px;overflow:auto">
       <!-- Contenedor Principal -->
     <div class="comments-container">
         <h4>Recent Comments <a href="http://creaticode.com" style="display: none;">creaticode.com</a></h4>
 
-        <ul id="comments-list" class="comments-list">
+        <ul id="comments-list" class="comments-list results">
             <li>
                 <div class="comment-main-level">
                     <!-- Avatar -->
@@ -561,11 +568,44 @@ body {
 </div>
   
 <?php 
+$remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkJs = <<<JS
+
+
+
+var mypage = 1;
+mycontent(mypage);
+jQuery(
+  function($)
+  {
+    $('#flux').bind('scroll', function()
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mypage++;
+          mycontent(mypage);
+        }
+      })
+  }
+);
+
+function mycontent(mypage){
+    $('#ani_img').show();
+    $.post('$remarkUrl',
+    {page:mypage},
+    function(data){
+        if(data.trim().lenght == 0){
+            $('#loading').text('finished');
+        }
+        $('.results').append(data);
+        $('.welll').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
+        $('#ani_img').hide();
+        })
+}
 
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
-  $('.wrapp').show()
+  $('.wrapp').slideDown("slow");
   })
 
 
@@ -659,7 +699,7 @@ $('#example-1').suggest('@', {
       text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
     }
   }
-})
+});
 
 JS;
  
