@@ -398,6 +398,7 @@ body {
 
     .reply-list .comment-box {
         width: 320px;
+	}
 </style>
 <div class="" style="min-height: 200px">
   <div class="row">

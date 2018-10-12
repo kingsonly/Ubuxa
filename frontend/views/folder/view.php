@@ -12,7 +12,7 @@ use boffins_vendor\components\controllers\FolderDetails;
 use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
-
+use kartik\popover\PopoverX;
 
 
 
@@ -116,12 +116,11 @@ use boffins_vendor\components\controllers\MenuWidget;
             </section>
         </div>
 
-							 
         <div class="row">
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers]) ?>
             <section>
             	<div class="row">
-            		<?= TaskWidget::widget() ?>
+            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
