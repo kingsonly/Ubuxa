@@ -77,7 +77,7 @@ $boardUrl = Url::to(['task/index']);
    margin: auto;
    fill: none;
    stroke: #27FDC7;
-   stroke-width: 2;
+   stroke-width: 1;
    stroke-linejoin: round;
    stroke-linecap: round;
 }
