@@ -10,6 +10,8 @@ class KanbanWidget extends Widget{
 	
 	public $task;
 	public $dataProvider;
+	public $id;
+	public $reminder;
 
 	public function init()
 	{
@@ -21,6 +23,8 @@ class KanbanWidget extends Widget{
 		return $this->render('createreminder',[
 			'task' => $this->task,
 			'dataProvider' => $this->dataProvider,
+			'id' => $this->id,
+			'reminder' => $this->reminder,
 		]);
 	}
 	
