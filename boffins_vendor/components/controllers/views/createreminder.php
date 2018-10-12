@@ -26,17 +26,16 @@ $taskremnider = new TaskReminder();
     ]); ?>
 
     <?= $form->field($reminder, 'notes')->textarea(['maxlength' => true]) ?>
-    <?= $form->field($taskremnider, 'task_id')->hiddenInput(['value' => $id])->label(false) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success save-rem', 'id' => $id]) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success save-rem']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
 
-<?
+<?php
 $reminderss = <<<Reminder
 
 function _CreateReminder(task){

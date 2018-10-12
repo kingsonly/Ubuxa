@@ -7,6 +7,8 @@ use frontend\assets\AppAsset;
 use boffins_vendor\components\controllers\CreateReminderWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
+use kartik\popover\PopoverX;
+use yii\widgets\ActiveForm;
 
 AppAsset::register($this);
 
@@ -276,8 +278,11 @@ a.addTaskButton.active {
     padding-top: 10px;
     cursor: pointer;
 }
-
-
+.taskpop {
+  position: absolute;
+  right: 10px;
+  top: 60px;
+}
 </style>
 
 <div class="task-index">
@@ -314,9 +319,9 @@ a.addTaskButton.active {
 
                         if($values->status_id == $value->id){
                       $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                      $check = $values->id;
+                      $reminderUrl = Url::to(['reminder/create']);
                  ?>
-                <li data-filename="<?= $values->id;?>" id="boardButton_<?= $check ?>" class="drag-item test_<?= $values->id;?>">
+                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                   <div class="task-title">
                     <?= $values->title; ?>
@@ -327,11 +332,8 @@ a.addTaskButton.active {
                 </div>
                     <div class="bottom-content">
                       <div class="dropdown testdrop">
-                        <a class="dropdown-toggle test2" type="button" id="<?= $values->id; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <?
-                            $reminderUrl = Url::to(['reminder/create']);
-                          ?>
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       
@@ -347,12 +349,30 @@ a.addTaskButton.active {
         <?php $id++; }?>
     </ul>
 </div>
-<div class='wrapit'>
+<!-- <div class='wrapit'>
   <div class='content'>
     <div id="load-data"></div>
   </div>
 </div>
   <a class='button glyphicon glyphicon-plus addTaskButton' href='#'></a>
+-->
+<?php 
+PopoverX::begin([
+    'header' => 'Add Task',
+    'size' => PopoverX::SIZE_MEDIUM,
+    'placement' => PopoverX::ALIGN_LEFT,
+    'toggleButton' => ['label'=>'Add Task', 'class'=>'btn btn-primary taskpop'],
+]);
+
+ $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
+                    <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'id' => 'task-popover', 'placeholder' => "Write some task here"])->label(false) ?>
+                  <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                  <?php ActiveForm::end();
+
+PopoverX::end();
+
+?>
+
 
 <? 
     Modal::begin([
@@ -373,7 +393,7 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
-    $.fn.closest_descendent = function(filter) {
+$.fn.closest_descendent = function(filter) {
     var found = $(),
         currentSet = this; // Current place
     while (currentSet.length) {
@@ -520,11 +540,11 @@ var showOptions = (function () {
 createOptions.create();
 showOptions.init();
 
-$('.addTaskButton').on('click', function(){
-  $('.wrapit, a').toggleClass('active');
-  $( "#load-data" ).load( "$formUrl" );
-  return false;
-  });
+//$('.addTaskButton').on('click', function(){
+  //$('.wrapit, a').toggleClass('active');
+  //$( "#load-data" ).load( "$formUrl" );
+  //return false;
+  //});
 
 //$(".dropdown").click(function () {
   //$(".bottom-content").css("display","block");
