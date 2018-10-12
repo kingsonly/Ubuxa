@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use boffins_vendor\components\controllers\FolderUsersWidget;
 ?>
 <style type="text/css">
 	
@@ -25,6 +26,6 @@ use yii\helpers\Url;
 </style>
 
 <div class="col-sm comps">
-    <div class="auth-users">AUTHORIZED USERS</div>
+    <div class="auth-users"><?= FolderUsersWidget::widget(['attributues'=>$users])?></div>
 	<div class="components">Hello World!</div>
 </div>
