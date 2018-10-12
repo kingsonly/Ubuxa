@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 ?>
 <style type="text/css">
     .bg-info {
@@ -18,8 +19,9 @@ use yii\helpers\Url;
     }
 
     .box-content {
-        height: 300px;
+        min-height: 300px;
         padding-top: 15px;
+        padding-bottom: 15px;
     }
 
     .box-input {
@@ -29,8 +31,8 @@ use yii\helpers\Url;
 </style>
 
 <div class="col-md-8">
-    <div class="bg-info">
+    <div class="col-md-12 bg-info">
       	<div class="header">REMARKS</div>
-	    <div class="box-content">Hello World!</div>
+	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(); ?></div>
     </div>
 </div>

@@ -12,16 +12,10 @@ use yii\helpers\Url;
  
 
 <div id="flux" style="width:200px;height:150px;overflow:auto;">
-<?php 
-        foreach ($remarks as $key => $remark) {
-    ?>
     <div class="rows">
         <div class="results">
-            <div class="well"><?php  echo $remark['id']; ?></div>
         </div>
     </div>
-<?php } ?>
-
 </div>
 
 <?php 
@@ -29,6 +23,7 @@ $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 
 $jqueryscript = <<<JS
 var mypage = 1;
+ mycontent(mypage);
 jQuery(
   function($)
   {
@@ -48,7 +43,6 @@ function mycontent(mypage){
     $.post('$remarkUrl',
     {page:mypage},
     function(data){
-        alert(data.remarks);
         if(data.trim().lenght == 0){
             $('#loading').text('finished');
         }

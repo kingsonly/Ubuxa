@@ -35,7 +35,7 @@ class RemarkController extends Controller
      */
     public function actionIndex()
     {
-        $perpage = 1;
+        $perpage=4;
         if(isset($_GET['src'])){
         $searchModel = new RemarkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -43,8 +43,9 @@ class RemarkController extends Controller
         //$popsis = (($numpage-1) * $perpage);
         if(Yii::$app->request->post('page')){
             $numpage = Yii::$app->request->post('page');
-            $remarks = Remark::find()->limit($numpage)->all();
-            return $this->renderAjax('index', [
+            $popsisi = (($numpage-1) * $perpage);
+            $remarks = Remark::find()->limit($perpage)->offset($popsisi)->all();
+            return $this->renderAjax('index2', [
             //'searchModel' => $searchModel,
             //'dataProvider' => $dataProvider,
             'remarks' => $remarks,
@@ -52,7 +53,7 @@ class RemarkController extends Controller
         } else {
             $numpage = 10;
             $remarks = Remark::find()->limit($numpage)->all();
-            return $this->renderAjax('index', [
+            return $this->render('index', [
             //'searchModel' => $searchModel,
             //'dataProvider' => $dataProvider,
             'remarks' => $remarks,

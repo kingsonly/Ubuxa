@@ -41,32 +41,3 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 </div>
-<?php 
-$remarkUrl = Url::to(['remark/index','src' => 'ref1']);
-$jqueryscript = <<<JS
-
-var mypage = 1;
-mycontent(mypage);
-$(window).scroll(function(){
-    if($(window).scrollTop + $(window).height == $(document).height()){
-        mypage++;
-        mycontent(mypage);
-    }
-    });
-
-function mycontent(mypage){
-    $('#ani_img').show();
-    $.post($remarkUrl,{page:mypage},function(data){
-        if(data.trim().lenght == 0){
-            $('#loading').text('finished');
-        }
-        $(results).append(data);
-        $('.well').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
-        $('#ani_img').hide();
-        })
-}
-
-JS;
- 
-$this->registerJs($jqueryscript);
-?>
