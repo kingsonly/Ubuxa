@@ -5,7 +5,9 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
+use frontend\assets\AppAsset;
 use boffins_vendor\components\controllers\TaskWidget;
+use boffins_vendor\components\controllers\KanbanWidget;
 use boffins_vendor\components\controllers\RemarksWidget;
 use boffins_vendor\components\controllers\ComponentWidget;
 use boffins_vendor\components\controllers\FolderDetails;
@@ -13,7 +15,7 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 
-
+AppAsset::register($this);
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -99,6 +101,15 @@ use boffins_vendor\components\controllers\MenuWidget;
     .content-header{
         display:none;
     }
+.view-task-board{
+	display: none;
+	background-color: #fff;
+	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
+	padding-bottom: 50px;
+	padding-top: 10px;
+	position: relative;
+}
+
 
 </style>
 
@@ -125,11 +136,14 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             <section>
             	<div class="row">
-            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
+            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $task]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
         </div>
+    </div>
+    <div class="view-task-board">
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder]) ?>
     </div>
 </section>
 
@@ -153,6 +167,17 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 <?php 
 $indexJs = <<<JS
+
+$(function(){
+    $("#boardButton").click(function(){
+    	$('.view-task-board').slideToggle({ "opacity" : "show", bottom: "100" }, 700);
+        $(".container-fluid").hide();
+  });
+  $('.task-icon').click(function(){
+        $('.container-fluid').slideToggle({ "opacity" : "show", top: "100" }, 700);
+	    $(".view-task-board").hide();
+   });
+});
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })

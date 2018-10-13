@@ -307,7 +307,7 @@ a.addTaskButton.active {
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <svg class="drag-header-more" data-target="options1" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
+                <svg class="drag-header-more" data-target="options<?= $id; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
             </span>
                 
             <div class="drag-options" id="options<?=$id;?>"></div>
@@ -332,7 +332,7 @@ a.addTaskButton.active {
                 </div>
                     <div class="bottom-content">
                       <div class="dropdown testdrop">
-                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i></a>
+                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
@@ -366,7 +366,7 @@ PopoverX::begin([
 
  $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
                     <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'id' => 'task-popover', 'placeholder' => "Write some task here"])->label(false) ?>
-                  <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                  <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'taskButton']) ?>
                   <?php ActiveForm::end();
 
 PopoverX::end();

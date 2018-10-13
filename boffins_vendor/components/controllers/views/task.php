@@ -124,7 +124,7 @@ $boardUrl = Url::to(['task/index']);
 }
  .todo__state:checked ~ .todo__text {
    transition-delay: 0s;
-   color: #5EBEC1;
+   color: #ccc;;
    opacity: 0.6;
 }
  .todo__state:checked ~ .todo__icon .todo__box {
@@ -180,10 +180,11 @@ $boardUrl = Url::to(['task/index']);
 #taskButton {
     display: none;
 }
+
 </style>
 
 	 <div class="col-md-4">
-        <?php Pjax::begin(['id'=>'task-referesh']); ?>
+        <?php Pjax::begin(['id'=>'task-refresh']); ?>
         <div class="bg-info column-margin">
 	        <div class="task-header">
                 <span>TASKS</span>
@@ -198,8 +199,8 @@ $boardUrl = Url::to(['task/index']);
     </linearGradient>
 
     <linearGradient id="lineGradient">
-      <stop offset="0%"    stop-color="#0FC0F5"/>
-      <stop offset="100%"  stop-color="#27FDC7"/>
+      <stop offset="0%"    stop-color="#ccc"/>
+      <stop offset="100%"  stop-color="#ccc"/>
     </linearGradient>
 
     <path id="todo__line" stroke="url(#lineGradient)" d="M21 12.3h168v0.1z"></path>
@@ -216,9 +217,9 @@ $boardUrl = Url::to(['task/index']);
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == 24){ ?>
-        <input class="todo__state" id="<?= $value->id; ?>" type="checkbox" checked/>
+        <input class="todo__state" data-id="<?= $value->id; ?>" type="checkbox" checked/>
     <?php }else { ?>
-        <input class="todo__state" id="<?= $value->id; ?>" type="checkbox"/>
+        <input class="todo__state" data-id="<?= $value->id; ?>" type="checkbox"/>
     <?php } ?>
     
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon">
@@ -256,17 +257,7 @@ $boardUrl = Url::to(['task/index']);
 
 
 
-<? 
-    Modal::begin([
-        'header' =>'<h1 id="headers"></h1>',
-        'id' => 'boardModal',
-        'size' => 'modal-lg',  
-    ]);
-?>
-<div id="viewboard"></div>
-<?
-    Modal::end();
-?>
+
 
 <?php 
 $taskUrl = Url::to(['site/task']);
@@ -280,11 +271,14 @@ $(function(){
         });
     });
 
+
 $("input:checkbox").change(function() {
     var checkedId;
-    checkedId = $(this).attr("id");
+    checkedId = $(this).data('id');
     _UpdateStatus(checkedId);        
 });
+
+//$(".todo__icon").click(false);
 
 function _UpdateStatus(checkedId){
           $.ajax({

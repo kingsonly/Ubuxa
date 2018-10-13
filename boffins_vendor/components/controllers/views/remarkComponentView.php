@@ -621,45 +621,7 @@ $('#size').on('change', function() {
    $('.editor').css('fontSize', size + 'px');
 });
 
-$('#color').spectrum({
-   color: '#000',
-   showPalette: true,
-   showInput: true,
-   showInitial: true,
-   showInput: true,
-   preferredFormat: "hex",
-   showButtons: false,
-   change: function(color) {
-      color = color.toHexString();
-      document.execCommand('foreColor', false, color);
-   }
-});
 
-$('.editor').perfectScrollbar();
-
-
-
-var users = [
-  {username: 'Nnamdi', fullname: 'Ogundu Nnamdi'},
-  {username: 'Kingsley', fullname: 'Achumie Kingsley'},
-  {username: 'Emeka', fullname: 'Kanikwu Emeka'},
-  {username: 'Anthony', fullname: 'Anthony Okechukwu'},
-  {username: 'Paschal', fullname: 'Paschal Soribe'},
-];
-
-$('#example-1').suggest('@', {
-  data: users,
-  filter: {
-            casesensitive: true,
-            limit: 10
-        },
-  map: function(user) {
-    return {
-      value: user.username,
-      text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
-    }
-  }
-})
 
 JS;
  
