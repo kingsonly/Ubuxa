@@ -33,6 +33,7 @@
 		"kartik-v/yii2-widget-fileinput": "@dev",
 		"mongosoft/yii2-upload-behavior": "*",
         "npm-asset/dragula": "3.7.2",
+        "npm-asset/perfect-scrollbar": "*",
 		"kartik-v/bootstrap-fileinput": "dev-master",
 		"kartik-v/yii2-popover-x": "dev-master"
 

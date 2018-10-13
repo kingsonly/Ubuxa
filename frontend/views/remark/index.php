@@ -23,18 +23,18 @@ $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 
 $jqueryscript = <<<JS
 var mypage = 1;
- mycontent(mypage);
+mycontent(mypage);
 jQuery(
   function($)
   {
     $('#flux').bind('scroll', function()
-                              {
-                                if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
-                                {
-                                  mypage++;
-                                  mycontent(mypage);
-                                }
-                              })
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mypage++;
+          mycontent(mypage);
+        }
+      })
   }
 );
 
