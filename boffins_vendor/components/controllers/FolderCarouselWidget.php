@@ -26,11 +26,15 @@ class FolderCarouselWidget extends Widget{
 		parent::init();
 	}
 	public $folderModel;
+	public $displayType;
+	public $height;
 	// output the outcome of loopmenu
 	public function run(){
 		
 		return $this->render('foldercarouselwidgetview',[
 			'folderModel' => $this->folderModel,
+			'displayType' => $this->displayType,
+			'height' => $this->height,
 			
 		]);
 	}

@@ -69,8 +69,6 @@ text-overflow: ellipsis;
 
 <?
 
-
-
 foreach($attributues as $v){
 	if(!isset($v['xeditable'])){
 		?>
@@ -117,7 +115,7 @@ foreach($attributues as $v){
 		PopoverX::begin([	
 								'placement' => PopoverX::ALIGN_LEFT,
 								 
-								'toggleButton' => ['src'=>'/ubuxabeta/frontend/web/images/company/folder_image/image_placeholder.png','tag'=>'img', 'class'=>'folder_image'],
+								'toggleButton' => ['src'=>Url::to('@web/'.$displayImage),'tag'=>'img', 'class'=>'folder_image'],
 								'header' => '<i class="glyphicon glyphicon-lock"></i> Enter credentials',
 								'footer' => Html::button('Submit', [
 										'class' => 'btn btn-sm btn-primary', 
@@ -133,14 +131,18 @@ foreach($attributues as $v){
 			
 		
 
-                
-
-
-<?= FileInput::widget([
+       
+	
+	
+	
+	<?= FileInput::widget([
     'model' => $model,
     'attribute' => 'upload_file',
     'options' => ['accept' => 'image/*'],
-				'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => $url]
+	'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => $imageUrl],
+	    'pluginEvents' => [
+        "fileuploaded" => 'function() { xeditableSuccessCallback() }',
+    ]
 	
 	]);?>
 	
@@ -166,16 +168,46 @@ foreach($attributues as $v){
 <?
 $xeditableBoffins = <<<XeditableBoffins
   
-		$(".xinput").mouseover(function() {
+$(".xinput").mouseover(function() {
     $(this).removeClass("ellipsis");
 	$(this).attr("title", $(this).text());
     $(this).attr("data-toggle", "tooltip");
     $(this).attr("data-placement", "bottom");
     
-   
-    
-	
 });
+
+function xeditableSuccessCallback(){
+	options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": true,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut",
+		"tapToDismiss": false
+		}
+	
+        // hide popover
+
+
+    	var thiss = $('[data-toggle="popover-x"]');
+	href = thiss.attr('href'),
+	dialog = $(thiss.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))), //strip for ie7
+	option = dialog.data('popover-x') ? 'toggle' : $.extend({remote: !/#/.test(href) && href});
+	dialog.popoverX('hide');
+         
+		
+		toastr.success('Image was Changed', "", options);
+		$.pjax.reload({container:"#folder-details-refresh",async: false});
+}
 
 $(".xinput").mouseout(function() {
     

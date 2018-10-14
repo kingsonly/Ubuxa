@@ -45,7 +45,7 @@ use yii\widgets\Pjax;
 		background-color: #fff;
 	}
 	.subheader{
-		margin-bottom: 10px;
+		margin-bottom: 20px;
 	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -82,6 +82,7 @@ use yii\widgets\Pjax;
 		</div>
 	</div>
 </div>
+
 
 <?php Pjax::end(); ?>
 

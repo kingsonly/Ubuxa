@@ -27,17 +27,47 @@ use yii\helpers\Url;
 	display: table-cell;
 	vertical-align: middle;
 }
+	.icon{
+		background: #ccc;
+		text-align: center;
+		vertical-align: middle;
+		height: 50px;
+		width: 40%;
+		position: relative;
+		margin-top: 1px;
+	}
+	
+	.icondesign{
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		background: green;
+		margin: 0 auto;
+		margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+	}
+	.icondesign .fa{
+		color: #fff !important;
+		padding-top: 8px;
+	}
 
 </style>
 
 
 <section id="carousles">
-	<? if($buttonType !== 'text'){?>
-		<div id="button-image"></div>
-	<? }else{?>
-		<div id="button-text">
+	<? if($buttonType == 'text'){?>
+	<div id="button-text" class="<?= $class;?>">
 			<span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
 		</div>
+	
+		
+	<? }elseif($buttonType == 'icon'){ ?>
+	<div id="<?= $class;?>" class="<?= $class;?>">
+			<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
+		</div>
+	<? } else{?>
+		<div id="button-image"></div>
 	<?}?>
 </section>
 

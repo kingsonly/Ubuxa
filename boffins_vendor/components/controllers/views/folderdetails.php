@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 ?>
 
@@ -63,7 +64,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 		background: red;
 	}
 </style>
-
+<?php Pjax::begin(['id'=>'folder-details-refresh']); ?>
 <div class="col-md-5 folderdetls">
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
@@ -82,8 +83,8 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 		<div class="col-sm-5 col-xs-5 box-folders-count">
             <div class="folder-image-cont">
 				<div class="image-holder">
-					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-					['modelAttribute'=>'folder_image','xeditable' => 'image','url' => $url],
+					<?= ViewWithXeditableWidget::widget(['model'=>$model,'imageDisplayUrl'=>$folderDetailsImage,'imageUrlOutput' => $imageUrl,'attributues'=>[
+					['modelAttribute'=>'folder_image','xeditable' => 'image'],
 					
 					]]); ?>
 				</div>
@@ -103,3 +104,4 @@ updateImage;
  
 $this->registerJs($updateImage);
 ?>
+<?php Pjax::end(); ?>
