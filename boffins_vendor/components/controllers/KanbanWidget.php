@@ -12,6 +12,7 @@ class KanbanWidget extends Widget{
 	public $dataProvider;
 	public $id;
 	public $reminder;
+	public $taskStatus;
 
 	public function init()
 	{
@@ -20,11 +21,12 @@ class KanbanWidget extends Widget{
 	
 	// output the outcome of loopmenu
 	public function run(){
-		return $this->render('createreminder',[
+		return $this->render('kanban',[
 			'task' => $this->task,
 			'dataProvider' => $this->dataProvider,
 			'id' => $this->id,
 			'reminder' => $this->reminder,
+			'taskStatus' => $this->taskStatus,
 		]);
 	}
 	

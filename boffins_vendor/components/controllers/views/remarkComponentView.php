@@ -368,13 +368,6 @@ body {
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
-    font-family: calibri;
-}
-.by-author a{
-  display: inline-block;
-}
-.by-author a{
-  text-transform: capitalize;
 }
 
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
@@ -409,12 +402,12 @@ body {
 </style>
 <div class="" style="min-height: 200px">
   <div class="row">
-    <div class="col-md-12" id="flux" style="height: 200px;overflow:auto">
+    <div class="col-md-12" style="height: 200px;overflow:auto">
       <!-- Contenedor Principal -->
     <div class="comments-container">
         <h4>Recent Comments <a href="http://creaticode.com" style="display: none;">creaticode.com</a></h4>
 
-        <ul id="comments-list" class="comments-list results">
+        <ul id="comments-list" class="comments-list">
             <li>
                 <div class="comment-main-level">
                     <!-- Avatar -->
@@ -568,44 +561,11 @@ body {
 </div>
   
 <?php 
-$remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkJs = <<<JS
-
-
-
-var mypage = 1;
-mycontent(mypage);
-jQuery(
-  function($)
-  {
-    $('#flux').bind('scroll', function()
-      {
-        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
-        {
-          mypage++;
-          mycontent(mypage);
-        }
-      })
-  }
-);
-
-function mycontent(mypage){
-    $('#ani_img').show();
-    $.post('$remarkUrl',
-    {page:mypage},
-    function(data){
-        if(data.trim().lenght == 0){
-            $('#loading').text('finished');
-        }
-        $('.results').append(data);
-        $('.welll').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
-        $('#ani_img').hide();
-        })
-}
 
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
-  $('.wrapp').slideDown("slow");
+  $('.wrapp').show()
   })
 
 
@@ -661,45 +621,7 @@ $('#size').on('change', function() {
    $('.editor').css('fontSize', size + 'px');
 });
 
-$('#color').spectrum({
-   color: '#000',
-   showPalette: true,
-   showInput: true,
-   showInitial: true,
-   showInput: true,
-   preferredFormat: "hex",
-   showButtons: false,
-   change: function(color) {
-      color = color.toHexString();
-      document.execCommand('foreColor', false, color);
-   }
-});
 
-$('.editor').perfectScrollbar();
-
-
-
-var users = [
-  {username: 'Nnamdi', fullname: 'Ogundu Nnamdi'},
-  {username: 'Kingsley', fullname: 'Achumie Kingsley'},
-  {username: 'Emeka', fullname: 'Kanikwu Emeka'},
-  {username: 'Anthony', fullname: 'Anthony Okechukwu'},
-  {username: 'Paschal', fullname: 'Paschal Soribe'},
-];
-
-$('#example-1').suggest('@', {
-  data: users,
-  filter: {
-            casesensitive: true,
-            limit: 10
-        },
-  map: function(user) {
-    return {
-      value: user.username,
-      text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
-    }
-  }
-});
 
 JS;
  

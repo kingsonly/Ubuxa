@@ -7,6 +7,8 @@ use frontend\assets\AppAsset;
 use boffins_vendor\components\controllers\CreateReminderWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
+use kartik\popover\PopoverX;
+use yii\widgets\ActiveForm;
 
 AppAsset::register($this);
 
@@ -154,8 +156,15 @@ AppAsset::register($this);
 .task-head {
   text-align: center;
 }
+.task-icon {
+  position: absolute;
+  top: 10px;
+    left: 10px;
+    font-size: 30px;
+    cursor: pointer;
+}
 .bottom-content {
-    /* display: none; */
+    display: none;
     position: absolute;
     bottom: 0;
     left: 5px;
@@ -276,13 +285,14 @@ a.addTaskButton.active {
     padding-top: 10px;
     cursor: pointer;
 }
-
-
+.taskpop {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+}
 </style>
 
 <div class="task-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <!-- <p>
         <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
@@ -293,16 +303,19 @@ a.addTaskButton.active {
 <section class="task-head">
     <h1>Task Board</h1>
 </section>
+<div class="task-icon">
+  <i class="glyphicon glyphicon-remove"></i>
+</div>
 
 <div class="drag-container">
     <ul class="drag-list">
         <?php
         $id = 1; 
-        foreach($task as $key => $value){ ?>
+        foreach($taskStatus as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <svg class="drag-header-more" data-target="options1" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
+                <svg class="drag-header-more" data-target="options<?= $id; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
             </span>
                 
             <div class="drag-options" id="options<?=$id;?>"></div>
@@ -314,9 +327,9 @@ a.addTaskButton.active {
 
                         if($values->status_id == $value->id){
                       $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                      $check = $values->id;
+                      $reminderUrl = Url::to(['reminder/create']);
                  ?>
-                <li data-filename="<?= $values->id;?>" id="boardButton_<?= $check ?>" class="drag-item test_<?= $values->id;?>">
+                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                   <div class="task-title">
                     <?= $values->title; ?>
@@ -327,11 +340,8 @@ a.addTaskButton.active {
                 </div>
                     <div class="bottom-content">
                       <div class="dropdown testdrop">
-                        <a class="dropdown-toggle test2" type="button" id="<?= $values->id; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <?
-                            $reminderUrl = Url::to(['reminder/create']);
-                          ?>
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       
@@ -347,12 +357,30 @@ a.addTaskButton.active {
         <?php $id++; }?>
     </ul>
 </div>
-<div class='wrapit'>
+<!-- <div class='wrapit'>
   <div class='content'>
     <div id="load-data"></div>
   </div>
 </div>
   <a class='button glyphicon glyphicon-plus addTaskButton' href='#'></a>
+-->
+<?php 
+PopoverX::begin([
+    'header' => 'Add Task',
+    'size' => PopoverX::SIZE_MEDIUM,
+    'placement' => PopoverX::ALIGN_LEFT,
+    'toggleButton' => ['label'=>'Add Task', 'class'=>'btn btn-primary taskpop'],
+]);
+
+ $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
+                    <?= $form->field($task, 'title')->textInput(['maxlength' => true, 'id' => 'task-popover', 'placeholder' => "Write some task here"])->label(false) ?>
+                  <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'taskButton2']) ?>
+                  <?php ActiveForm::end();
+
+PopoverX::end();
+
+?>
+
 
 <? 
     Modal::begin([
@@ -372,8 +400,7 @@ a.addTaskButton.active {
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
-
-    $.fn.closest_descendent = function(filter) {
+$.fn.closest_descendent = function(filter) {
     var found = $(),
         currentSet = this; // Current place
     while (currentSet.length) {
@@ -520,15 +547,15 @@ var showOptions = (function () {
 createOptions.create();
 showOptions.init();
 
-$('.addTaskButton').on('click', function(){
-  $('.wrapit, a').toggleClass('active');
-  $( "#load-data" ).load( "$formUrl" );
-  return false;
-  });
+//$('.addTaskButton').on('click', function(){
+  //$('.wrapit, a').toggleClass('active');
+  //$( "#load-data" ).load( "$formUrl" );
+  //return false;
+  //});
 
-//$(".dropdown").click(function () {
-  //$(".bottom-content").css("display","block");
-//});
+$(".dropdown").click(function () {
+  $(".bottom-content").css("display","block");
+});
 
  window.onscroll = function(ev) {
    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {

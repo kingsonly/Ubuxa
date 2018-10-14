@@ -33,6 +33,7 @@ use frontend\models\InviteUsersForm;
 use frontend\models\Task;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
+use frontend\models\Reminder;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -83,11 +84,14 @@ class SiteController extends BoffinsBaseController {
 		$folder = new Folder();
 		$dashboardFolders = $folder->getDashboardItems(5);
 		$task = new Task();
+		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+		$reminder = new Reminder();
 				
         return $this->render('index',[
+        	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
 			'task' => $task,
-			'taskModel' => $task,
+			'reminder' => $reminder,
 		]);
        
     }
