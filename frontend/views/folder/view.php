@@ -6,6 +6,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
 use boffins_vendor\components\controllers\TaskWidget;
+use boffins_vendor\components\controllers\KanbanWidget;
 use boffins_vendor\components\controllers\RemarksWidget;
 use boffins_vendor\components\controllers\ComponentWidget;
 use boffins_vendor\components\controllers\FolderDetails;
@@ -94,6 +95,15 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
+    .view-task-board{
+	display: none;
+	background-color: #fff;
+	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
+	padding-bottom: 50px;
+	padding-top: 10px;
+	position: relative;
+
+}
     
 </style>
 
@@ -125,12 +135,17 @@ $img = $model->folder_image;
 			?>
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
             <section>
-            	<div class="row">
+            	<div class="row test5">
             		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
         </div>
+    </div>
+    <div class="view-task-board">
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder]) ?>
+    </div>
+        
 </section>
 
   <? $this->beginBlock('sidebar')?>
@@ -153,6 +168,19 @@ $img = $model->folder_image;
 
 <?php 
 $indexJs = <<<JS
+
+$(function(){
+    $("#boardButton").on('click', function(e){
+        $(".test5").slideUp('slow');
+        $('.view-task-board').show();
+  });
+  $('.task-icon').on('click',function(e){
+  		e.preventDefault();
+	    //$(".view-task-board").hi('slow');
+	    $(".view-task-board").hide();
+	    $('.test5').slideDown('slow');
+   });
+});
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
