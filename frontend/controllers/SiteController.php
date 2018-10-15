@@ -14,6 +14,7 @@ use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
+//use frontend\controllers\ForbiddenHttpException;
 
 //models
 use frontend\models\SignupForm;

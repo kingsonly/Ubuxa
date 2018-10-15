@@ -168,16 +168,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
-$(function(){
-    $("#boardButton").click(function(){
-    	$('.view-task-board').slideToggle({ "opacity" : "show", bottom: "100" }, 700);
-        $(".container-fluid").hide();
-  });
-  $('.task-icon').click(function(){
-        $('.container-fluid').slideToggle({ "opacity" : "show", top: "100" }, 700);
-	    $(".view-task-board").hide();
-   });
-});
+
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })

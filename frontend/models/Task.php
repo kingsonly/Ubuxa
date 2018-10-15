@@ -136,6 +136,11 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->person->first_name;
     }
+    
+    public function getFullname()
+    {
+        return $this->person->first_name.' '.$this->person->surname;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
