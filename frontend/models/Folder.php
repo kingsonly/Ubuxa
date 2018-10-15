@@ -48,7 +48,7 @@ class Folder extends FolderARModel
             [['title'], 'required'],	
             [['last_updated','privateFolder','upload_file','folder_image'], 'safe'],
             [['title'], 'string', 'max' => 40],
-            [['description'], 'string', 'max' => 255],
+            [['description','folder_image'], 'string', 'max' => 255],
         ];
     }
 
@@ -205,7 +205,7 @@ class Folder extends FolderARModel
 	
 	
 	
-		public function uploads()
+		public function upload()
     {
         if ($this->validate()) {
 			$holdPath = '';
@@ -213,29 +213,29 @@ class Folder extends FolderARModel
 			$ext = $file->extension;
 			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
 			$basePath = explode('/',\Yii::$app->basePath);
-			\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
-			$path = '/web/uploads/' . $newName;
+			//\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
+			$path = 'uploads/' . $newName;
 			$dbpath = 'uploads/' . $newName;
-			$file->saveAs($path);
+			
 			$holdPath= $dbpath;
 			
-			if($this->save()){
+			if($file->saveAs($path)){
 				
-				$this->folder_image = $holdPath;
-				$this->save();
+				$this->folder_image = $path;
+				
 			}
 			//$this->file_location = implode(",",$holdPath);
 			
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 	
 	
 	
 	
-	 public function upload()
+	 public function uploads()
     {
         if ($this->validate()) {
             $this->upload_file->saveAs('uploads/' . $this->upload_file->baseName . '.' . $this->upload_file->extension);

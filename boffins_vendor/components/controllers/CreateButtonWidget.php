@@ -29,6 +29,7 @@ class CreateButtonWidget extends Widget{
 		
 		return $this->render('createbuttonview',[
 			'buttonType' => $this->buttonType,
+			'class' => $this->buttonType,
 		]);
 	}
 	

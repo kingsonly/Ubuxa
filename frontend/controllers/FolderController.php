@@ -150,11 +150,16 @@ class FolderController extends Controller
             $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
             if ($model->upload()) {
                 // file is uploaded successfully
-                return;
+				if($model->save()){
+					return 1234;	
+				} else{
+					return 1233333;
+				}
+                
             }
         }
 
-        return $this->render('upload', ['model' => $model]);
+       // return $this->render('upload', ['model' => $model]);
     	
     
         }

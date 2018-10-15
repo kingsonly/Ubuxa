@@ -14,7 +14,8 @@ use yii;
 
 class ViewWithXeditableWidget extends Widget{
 	public $model;
-	public $url;
+	public $imageUrlOutput;
+	public $imageDisplayUrl;
 	
 	public $attributues = [];
 
@@ -25,10 +26,14 @@ class ViewWithXeditableWidget extends Widget{
 	
 	// output the outcome of loopmenu
 	public function run(){
+		if(empty($this->imageDisplayUrl)){
+			$this->imageDisplayUrl = 'images/company/folder_image/image_placeholder.png';
+		} 
 		return $this->render('viewwithxeditablewidgetview',[
 			'model' => $this->model,
 			'attributues' => $this->attributues,
-			'url' => $this->url,
+			'imageUrl' => $this->imageUrlOutput,
+			'displayImage' => $this->imageDisplayUrl,
 		]);
 	}
 	

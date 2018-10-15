@@ -25,6 +25,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 /* @var $this yii\web\View */
 
+$img = $model->folder_image; 
 ?>
 <style>
 	#flash {
@@ -111,6 +112,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 <section>
 	
+	
     <div class="container-fluid">
         <div class="row">
             <section>
@@ -119,7 +121,7 @@ use boffins_vendor\components\controllers\MenuWidget;
                   	<?= OnlineClients::widget() ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model,'url' => Url::to(['folder/update-folder-image'])]) ?>
+   						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders]) ?>
                     	</div>
 
@@ -127,7 +129,11 @@ use boffins_vendor\components\controllers\MenuWidget;
         </div>
 
         <div class="row">
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers]) ?>
+			<?
+	//just for test 
+				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
+			?>
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
             <section>
             	<div class="row test5">
             		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>

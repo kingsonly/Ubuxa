@@ -117,7 +117,7 @@ hr{
 	
 	.owl-prev {
     width: 15px;
-    height: 57px;
+    height: <?= !empty($height)?$height.'px':'57px' ; ?> ;
     position: absolute;
     top: 0%;
     margin-left: -20px;
@@ -127,7 +127,7 @@ hr{
 
 .owl-next {
     width: 15px;
-    height: 57px;
+    height: <?= !empty($height)?$height.'px':'57px' ;?> ;
     position: absolute;
     top: 0%;
     right: 8px;
@@ -180,11 +180,33 @@ text-overflow: ellipsis;
 	display:none;
 }
 #carousles{
-	margin-top: 10px;
+	
 }
 .owl-prev{
 	width:23px !important;
 } 
+.component-list{
+	list-style: none;
+	}
+	.component-holder{
+	
+    line-height: 40px;
+    height: inherit;
+	padding-top: 10px;
+	
+	}
+	.active-component{
+		width: 70%;
+		margin: 0 auto;
+		border-bottom: solid 3px red;
+		padding-bottom: 9px !important;
+		text-decoration: none;
+		list-style: disc !important;
+	}
+	#carousles button .fa{
+		color: green !important;
+	}
+	
 </style>
 
 
@@ -196,6 +218,16 @@ text-overflow: ellipsis;
           <div class="owl-carousel owl-theme">
               <?php foreach ($folderModel as $folder) { ?>
 		 <div class="item">
+			 <? if($displayType == 'component'){?>
+			 <div class="component-holder">
+				 <li class="component-list ">
+					 <?= $folder ?>
+				 </li>
+			 </div>
+			 
+			
+			 <? } else{?>
+			
 			<?
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
@@ -221,14 +253,18 @@ text-overflow: ellipsis;
 				
 				</a>
 			 </div>
-			
+			 <? }?>
 			</div>
 		<?php } ?>
             
             
           </div>
          <?}else{?>
+			<? if($displayType == 'component'){?>
+			Click on the Create Button to Add A new component to folder 
+			<? }else{?>
 			<div><?= CreateButtonWidget::widget(['buttonType' => 'text']);?></div>
+			<? }?>
          <?}?>
         </div>
       </div>
@@ -256,7 +292,7 @@ var owl = $('.owl-carousel');
                     items: 2
                   },
                   1000: {
-                    items: 3
+                    items: 4
                   }
                 },
 				navText : ['<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>','<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>'],
@@ -288,6 +324,13 @@ $(".folder-text").mouseout(function() {
         scrollLeft: 0
     }, 'slow');
 });
+
+$('.component-list').on('click',function(){
+	$('.component-list').removeClass('active-component');
+	$(this).addClass('active-component');
+	$('.comps').removeClass('margin-bottom');
+	$('.component-display-wrapper').show()
+})
 
 Carousels;
  

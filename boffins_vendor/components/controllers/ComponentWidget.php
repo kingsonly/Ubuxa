@@ -22,6 +22,8 @@ use yii\helpers\Html;
 class ComponentWidget extends Widget
 {
 	public $users;
+	public $components;
+	public $otherAttributes;
     public function init()
     {
         parent::init();
@@ -29,8 +31,12 @@ class ComponentWidget extends Widget
 
     public function run()
     {
-         
-        return $this->render('components',['users'=>$this->users]);
+         $height = !empty($this->otherAttributes['height'])?$this->otherAttributes['height']:'';
+        return $this->render('components',[
+			'users'=>$this->users,
+			'components'=>$this->components,
+			'height'=>$height,
+		]);
     }
 }
 ?>
