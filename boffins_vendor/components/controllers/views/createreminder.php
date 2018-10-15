@@ -18,7 +18,7 @@ $taskremnider = new TaskReminder();
     <?php $form = ActiveForm::begin(['id' => 'save-rem-form'.$id]); ?>
     <h3>Reminder</h3>
     <?php echo $form->field($reminder, 'reminder_time')->widget(DateTimePicker::classname(), [
-    'options' => ['placeholder' => 'Select date'],
+    'options' => ['placeholder' => 'Select date','id' => $id,],
     'pluginOptions' => [
         'autoclose' => true,
     ]
