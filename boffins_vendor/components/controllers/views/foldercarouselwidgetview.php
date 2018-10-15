@@ -211,16 +211,17 @@ text-overflow: ellipsis;
 
 
 <section id="carousles">
+
       <div class="row folder-new-content">
 		  
         <div class="large-12 columns">
 			<? if(!empty($folderModel)){?>
-          <div class="owl-carousel owl-theme">
+          <div class="owl-carousel owl-theme <?= $displayType;?>">
               <?php foreach ($folderModel as $folder) { ?>
 		 <div class="item">
 			 <? if($displayType == 'component'){?>
 			 <div class="component-holder">
-				 <li class="component-list ">
+				 <li class="component-list " data-url = "<?= Url::to(['/invoice'])?>">
 					 <?= $folder ?>
 				 </li>
 			 </div>
@@ -277,7 +278,7 @@ text-overflow: ellipsis;
 <?
 $Carousel = <<<Carousels
 
-var owl = $('.owl-carousel');
+var owl = $('.'+'$displayType');
 
               owl.owlCarousel({
                 nav: true,
@@ -292,7 +293,7 @@ var owl = $('.owl-carousel');
                     items: 2
                   },
                   1000: {
-                    items: 4
+                    items: $numberOfDisplayedItems
                   }
                 },
 				navText : ['<i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>','<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>'],
@@ -327,9 +328,12 @@ $(".folder-text").mouseout(function() {
 
 $('.component-list').on('click',function(){
 	$('.component-list').removeClass('active-component');
+	data = $(this).data('url');
 	$(this).addClass('active-component');
 	$('.comps').removeClass('margin-bottom');
+	$('.component-display').load(data);
 	$('.component-display-wrapper').show()
+	
 })
 
 Carousels;

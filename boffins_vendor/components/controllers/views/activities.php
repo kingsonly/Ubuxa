@@ -38,6 +38,12 @@
 	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }
 
+	.active-text{
+		text-align: center !important;
+		position: absolute;
+		bottom: 0;
+		width: 100%
+	}
 </style>
 
 <div class="col-md-6">
@@ -52,7 +58,10 @@
 
 		<div class="col-sm-2 col-xs-4 activedetls">
 			<div class="info-1">
-				<div class="box-content-active">Hello</div>
+				<div class="box-content-active">
+					<h1 style="margin:0; text-align:center;color:red;">4</h1>
+					<div class="active-text"> New Activity</div>
+				</div>
 			</div>
 		</div>
 	</div>

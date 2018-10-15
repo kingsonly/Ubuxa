@@ -10,15 +10,15 @@ use yii\base\Behavior;
 use yii\behaviors\AttributeBehavior;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
-use app\boffins_vendor\behaviors\DeleteUpdateBehavior;
-use app\boffins_vendor\behaviors\DateBehavior;
-use app\boffins_vendor\behaviors\ComponentsBehavior;
+use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use boffins_vendor\behaviors\DateBehavior;
+use boffins_vendor\behaviors\ComponentsBehavior;
 use yii\db\ActiveQuery;
-use app\boffins_vendor\classes\StandardQuery;
-use app\models\FolderComponent;
-use app\models\UserDb;
-use app\models\EDocFileLocation;
-use app\models\ComponentManager;
+use boffins_vendor\classes\StandardQuery;
+use frontend\models\FolderComponent;
+use frontend\models\UserDb;
+use frontend\models\EDocFileLocation;
+use frontend\models\ComponentManager;
 
 
 /**

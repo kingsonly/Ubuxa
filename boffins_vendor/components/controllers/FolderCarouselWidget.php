@@ -28,13 +28,16 @@ class FolderCarouselWidget extends Widget{
 	public $folderModel;
 	public $displayType;
 	public $height;
+	public $numberOfDisplayedItems;
 	// output the outcome of loopmenu
 	public function run(){
+		$numberOfDisplayedOfItems = !empty($this->numberOfDisplayedItems)?$this->numberOfDisplayedItems:3;
 		
 		return $this->render('foldercarouselwidgetview',[
 			'folderModel' => $this->folderModel,
-			'displayType' => $this->displayType,
+			'displayType' => empty($this->displayType)?'folders-carocel-js':$this->displayType,
 			'height' => $this->height,
+			'numberOfDisplayedItems' => $numberOfDisplayedOfItems,
 			
 		]);
 	}

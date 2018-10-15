@@ -5,7 +5,7 @@ use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii;
-use app\models\Component;
+use frontend\models\Component;
 ?>
 
 
