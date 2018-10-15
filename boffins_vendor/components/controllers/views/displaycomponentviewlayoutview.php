@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
-use app\boffins_vendor\components\controllers\Menu;
+use boffins_vendor\components\controllers\Menu;
 use yii\bootstrap\Modal;
 use yii\jui\Draggable;
 

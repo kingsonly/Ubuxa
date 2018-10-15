@@ -35,7 +35,7 @@ use yii\widgets\Pjax;
 		<div class="box">
 			<div class="folder-index">
 				<h1> 
-					<div class="floatright btn btn-danger" id="create<?= strtolower($modelClassName);?>" data-formurl="<?= Url::to(['create']) ?>">Create New <?= strtolower($modelClassName);?>
+					<div class="floatright btn btn-success" id="create<?= strtolower($modelClassName);?>" data-formurl="<?= Url::to(['create']) ?>">Create New <?= strtolower($modelClassName);?>
 					</div>
 				</h1>
 

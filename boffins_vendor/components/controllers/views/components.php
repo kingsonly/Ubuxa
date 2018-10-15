@@ -73,6 +73,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 							'folderModel' => $components, 
 							'displayType' => 'component',
 							'height' => $height,
+							'numberOfDisplayedItems' => 5,
 						]) ?>
 				</div>
 				</div>

@@ -1,6 +1,6 @@
 <?php
 use yii\widgets\DetailView;
-use app\boffins_vendor\components\controllers\DisplayLinkedComponents;
+use boffins_vendor\components\controllers\DisplayLinkedComponents;
 /* @var $this yii\web\View */
 /* @var $model app\models\Payment */
 ?>
@@ -30,10 +30,7 @@ use app\boffins_vendor\components\controllers\DisplayLinkedComponents;
 					'attributes' => $viewAttributes,
 					]); ?>
 
-					<?= DisplayLinkedComponents::widget([
-					'subComponents' => $subComponents,
-					'files' => $files,
-					]); ?>
+					
 				</div>
 			</div>
 		</div> 
