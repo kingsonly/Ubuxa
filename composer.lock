@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc8c0ebe68655f3248e482bb4e075359",
+    "content-hash": "b2c49d87ce462f929ee128231d397b89",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2426,6 +2426,52 @@
             "description": "Drag and drop so simple it hurts",
             "homepage": "https://github.com/bevacqua/dragula",
             "time": "2016-09-12T12:35:26+00:00"
+        },
+        {
+            "name": "npm-asset/easy-pie-chart",
+            "version": "2.1.7",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/easy-pie-chart/-/easy-pie-chart-2.1.7.tgz",
+                "reference": null,
+                "shasum": "35e49fb7daf9a94e52b8294f51626919bcaee7cc"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/rendro/easy-pie-chart/issues"
+                },
+                "npm-asset-main": "dist/easypiechart.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/rendro/easy-pie-chart.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "grunt karma:ci"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Robert Fleischmann",
+                    "email": "rendro87@gmail.com",
+                    "url": "http://robert-fleischmann.de"
+                },
+                {
+                    "name": "Moritz",
+                    "url": "https://github.com/mrzmyr"
+                }
+            ],
+            "description": "Lightweight plugin to render simple, animated and retina optimized pie charts",
+            "homepage": "https://github.com/rendro/easy-pie-chart#readme",
+            "keywords": [
+                "chart",
+                "circular progress",
+                "pie chart",
+                "precent",
+                "progress bar"
+            ],
+            "time": "2015-05-08T14:09:42+00:00"
         },
         {
             "name": "npm-asset/perfect-scrollbar",
