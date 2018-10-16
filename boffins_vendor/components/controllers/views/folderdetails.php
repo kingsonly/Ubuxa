@@ -7,8 +7,9 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
 <style type="text/css">
 	.folder_image{
-		width: 100%;
-		height: 120px;
+		width: 72%;
+		height: 92px;
+		transition: transform .2s; /* Animation */
 	}
 	
 	.folder-image-cont{
@@ -80,9 +81,9 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
 			</div>
 		</div>
-		<div class="col-sm-5 col-xs-5 box-folders-count">
+		<div class="col-sm-5 col-xs-5 box-folders-count" style="height:125px">
             <div class="folder-image-cont">
-				<div class="image-holder">
+				<div class="image-holder" style="text-align:center">
 					<?= ViewWithXeditableWidget::widget(['model'=>$model,'imageDisplayUrl'=>$folderDetailsImage,'imageUrlOutput' => $imageUrl,'attributues'=>[
 					['modelAttribute'=>'folder_image','xeditable' => 'image'],
 					
