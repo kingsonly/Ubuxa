@@ -57,6 +57,7 @@ class FolderController extends Controller
      */
     public function actionView($id)
     {
+		
 		$model = $this->findModel($id);
 		$task = new Task();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();

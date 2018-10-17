@@ -89,7 +89,7 @@ class SettingsComponent extends Component
 		 * if content is an image use image tage else formart as string
 		 */
 		if (in_array($ext, $supported_image)) {
-			return '<img  style="height: 50px;width: 50px;margin:3px 5px 3px 25px" src="'.$logoSettings.'" />';
+			return '<img  style="height: 45px;width: 160px;margin:3px 5px 3px 25px" src="'.$logoSettings.'" />';
 		} else {
 			return $logoSettings;
 		}

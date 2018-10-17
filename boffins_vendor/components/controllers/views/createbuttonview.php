@@ -3,17 +3,17 @@
 use frontend\models\Folder;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+$jsEventTriger = $htmlAttributes['class'];
 ?>
 <style>	
-#button-image {
+.image {
 	background-image: url('images/folder/newfolder.png');
 	background-repeat: no-repeat; 
 	width: 79px;
 	background-size: contain;
 	height: 60px;
 }
-#button-text {
+.text {
 	color: rgb(122, 134, 154);
 	width: 100%;
 	height: 48px;
@@ -23,7 +23,7 @@ use yii\helpers\Url;
 	padding-left: 20px;
 }
 
-#button-text span {
+.text span {
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -57,25 +57,26 @@ use yii\helpers\Url;
 
 <section id="carousles">
 	<? if($buttonType == 'text'){?>
-	<div id="button-text" class="<?= $class;?>">
+	<div id="<?= $jsEventTriger;?>-text" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
 			<span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
 		</div>
 	
 		
 	<? }elseif($buttonType == 'icon'){ ?>
-	<div id="<?= $class;?>" class="<?= $class;?>">
+	<div id="<?= $jsEventTriger;?>-icon" class="<?= $class;?> <?= $jsEventTriger;?>-icon">
 			<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
 		</div>
 	<? } else{?>
-		<div id="button-image"></div>
+		<div id="<?= $jsEventTriger;?>-image" class="image <?= $jsEventTriger;?>-image"></div>
 	<?}?>
 </section>
 
 
 <?
+
 $Carousel = <<<Carousels
 
-$("#button-image").click(function(e){
+$("#"+"$jsEventTriger"+"-image").click(function(e){
     
 	$( ".folder-new-content" ).slideUp( 300 ).delay( 800 );
 	$( ".create-new-folder" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
@@ -83,9 +84,15 @@ $("#button-image").click(function(e){
      e.stopPropagation();
 });
 
-$("#button-text").click(function(e){
+$("#"+"$jsEventTriger"+"-text").click(function(e){
 	$( ".folder-new-content" ).hide();
 	$( ".create-new-folder" ).delay( 100 ).fadeIn( 400 );
+     e.stopPropagation();
+});
+
+
+$("#"+"$jsEventTriger"+"-icon").click(function(e){
+	alert(1);
      e.stopPropagation();
 });
 

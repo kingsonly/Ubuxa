@@ -278,7 +278,7 @@ text-overflow: ellipsis;
 <?
 $Carousel = <<<Carousels
 
-var owl = $('.'+'$displayType');
+var owl = $('.owl-carousel');
 
               owl.owlCarousel({
                 nav: true,

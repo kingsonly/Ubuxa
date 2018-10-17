@@ -23,6 +23,7 @@ class CreateButtonWidget extends Widget{
 		parent::init();
 	}
 	public $buttonType ;
+	public $htmlAttributes ;
 	
 	// output the outcome of loopmenu
 	public function run(){
@@ -30,6 +31,7 @@ class CreateButtonWidget extends Widget{
 		return $this->render('createbuttonview',[
 			'buttonType' => $this->buttonType,
 			'class' => $this->buttonType,
+			'htmlAttributes' => $this->htmlAttributes,
 		]);
 	}
 	
