@@ -170,20 +170,18 @@ AppAsset::register($this);
     cursor: pointer;
 }
 .bottom-content {
-    /*display: none; */
+    display: none; 
     position: absolute;
     bottom: 0;
     left: 5px;
 }
 
-.drag-item:hover .bottom-content{
-    display: block;
-}
+
 
 .icons {
     width: 30px;
     padding-right: 60px;
-    //position: fixed;
+   /* position: fixed;*/
 }
 
 .modal-content {
@@ -311,6 +309,9 @@ a.addTaskButton.active {
 }
 .assigndrop{
   width:340px;
+}
+.bottom-content{
+  display: none;
 }
 </style>
 <div class="task-index">
@@ -604,8 +605,30 @@ showOptions.init();
   //return false;
   //});
 
+$('.dropdown').on('click',function(){
+  if($(this).hasClass('clicked')){
+    $(this).removeClass('clicked');
+    $(this).parent().parent().css('display','none');
+  } else {
+  $(this).addClass('clicked');
+  }
+  })
+
+$('.drag-item').mouseenter(function(){
+       $(this).find('.bottom-content').css("display","block");
+  }).mouseleave(function(){
+          if($(this).find('.dropdown').hasClass('clicked')){
+            $(this).find('.bottom-content').css("display","block");
+          } else {
+            $(this).find('.bottom-content').css("display","none");
+          }
+         
+    })
+
 $(".dropdown").click(function () {
-  $(".bottom-content").css("display","block");
+  
+  $(this).find('.bottom-content').css("display","block");
+ // $(".bottom-content").css("display","block");
 });
 
  /* window.onscroll = function(ev) {
@@ -617,12 +640,18 @@ $(".dropdown").click(function () {
       $('.testdrop').addClass('dropdown');
    }
 }; */
+$(document).click(function (e) {
+    e.stopPropagation();
+    var container = $(".dropdown");
+    var containerr = container.find('.clicked');
 
-
+    //check if the clicked area is dropDown or not
+    if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
+        container.removeClass('clicked');
+        $('.bottom-content').hide();
+    }
+})
 JS;
  
 $this->registerJs($board);
 ?>
-
-
-
