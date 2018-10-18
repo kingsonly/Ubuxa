@@ -24,6 +24,7 @@ AppAsset::register($this);
 
 
 ?>
+
 <?= Html::csrfMetaTags() ?>
 <style>
     ul {
@@ -312,7 +313,6 @@ a.addTaskButton.active {
   width:340px;
 }
 </style>
-
 <div class="task-index">
 
     <!-- <p>
@@ -368,6 +368,7 @@ a.addTaskButton.active {
                   </span>
                   </div>
                 <?php } ?>
+                
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -620,4 +621,6 @@ JS;
  
 $this->registerJs($board);
 ?>
+
+
 
