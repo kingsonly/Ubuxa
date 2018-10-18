@@ -368,7 +368,9 @@ a.addTaskButton.active {
                   </span>
                   </div>
                 <?php } ?>
-                
+                <div class="assignedto">
+                    <?= Yii::$app->formatter->asDatetime($values->reminderTime); ?>
+                  </div>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -606,7 +608,7 @@ $(".dropdown").click(function () {
   $(".bottom-content").css("display","block");
 });
 
- window.onscroll = function(ev) {
+ /* window.onscroll = function(ev) {
    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
        $('.testdrop').removeClass('dropdown');
        $('.testdrop').addClass('dropup');
@@ -614,7 +616,7 @@ $(".dropdown").click(function () {
       $('.testdrop').removeClass('dropup');
       $('.testdrop').addClass('dropdown');
    }
-};
+}; */
 
 
 JS;
