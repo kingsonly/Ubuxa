@@ -12,6 +12,7 @@ use frontend\models\StatusType;
 use yii\db\Expression;
 use frontend\models\Reminder;
 use frontend\models\TaskReminder;
+use frontend\models\TaskAssignedUser;
 
 
 
@@ -62,8 +63,34 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $status = StatusType::find()->where(['status_group' => 'task'])->all();
+
+        // Check if there is an Editable ajax request
+    if (isset($_POST['hasEditable'])) {
+        // use Yii's response format to encode output as JSON
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        // read your posted model attributes
+        if ($model->load(Yii::$app->request->post())) {
+            // read or convert your posted information
+            
+            $model->save(false);
+            // return JSON encoded output in the below format
+            return ['output'=>'', 'message'=>''];
+            
+            // alternatively you can return a validation error
+            // return ['output'=>'', 'message'=>'Validation error'];
+        }
+        // else if nothing to do always return an empty JSON encoded output
+        else {
+            return ['output'=>'', 'message'=>''];
+        }
+    }
+
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'status' => $status,
         ]);
     }
 
@@ -80,8 +107,8 @@ class TaskController extends Controller
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model = new Task();
         }
 
         return $this->renderAjax('create', [
@@ -102,7 +129,7 @@ class TaskController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['site']);
         }
 
         return $this->render('update', [
@@ -120,6 +147,35 @@ class TaskController extends Controller
             $statusid = $data['status_id'];
             $model->status_id = $statusid;
             $model->save();
+        }
+    }
+
+    public function actionAssignee()
+    {    
+        $model = new TaskAssignedUser();
+        
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $user =  $data['user_id'];
+            $task =  $data['task_id'];
+            $exists = TaskAssignedUser::find()->where(['task_id' => $task, 'user_id' => $user])->exists();
+            $assignee = TaskAssignedUser::findOne(['task_id' => $task, 'user_id' => $user]);
+
+            if($exists && $assignee->status == 1) {
+                $assignee->status = 0;
+                $assignee->save();
+            }else if($exists && $assignee->status == 0){
+                $assignee->status = 1;
+                $assignee->assigned_date = new Expression('NOW()');
+                $assignee->save();
+            }else{
+                $model->user_id = $user;
+                $model->task_id = $task;
+                $model->status = 1;
+                $model->assigned_date = new Expression('NOW()');
+                $model->save();
+            }
+
         }
     }
 

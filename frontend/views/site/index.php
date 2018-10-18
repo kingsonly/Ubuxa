@@ -135,16 +135,18 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<div class="row">
-            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $task]) ?>
+            	<div class="row test5">
+            			<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $task]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
         </div>
     </div>
+    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder]) ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
     </div>
+    <?php Pjax::end(); ?>
 </section>
 
   <? $this->beginBlock('sidebar')?>
@@ -168,8 +170,18 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
-
-
+$(function(){
+    $("#boardButton").on('click', function(e){
+        $(".test5").slideUp('slow');
+        $('.view-task-board').show();
+  });
+  $('.task-icon').on('click',function(e){
+  		e.preventDefault();
+	    //$(".view-task-board").hi('slow');
+	    $(".view-task-board").hide();
+	    $('.test5').slideDown('slow');
+   });
+});
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
 

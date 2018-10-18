@@ -11,6 +11,7 @@ use frontend\models\Task;
 class TaskWidget extends Widget
 {
 	public $task;
+    public $id;
     public $taskModel;
     public function init()
     {
@@ -23,6 +24,7 @@ class TaskWidget extends Widget
         return $this->render('task', [
         	'display' => $this->task,
             'taskModel' => $this->taskModel,
+            'id' => $this->id,
         	]);
     }
 }

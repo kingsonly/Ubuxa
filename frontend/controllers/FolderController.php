@@ -7,6 +7,8 @@ use frontend\models\Folder;
 use frontend\models\Task;
 use frontend\models\StatusType;
 use frontend\models\Reminder;
+use frontend\models\TaskAssignedUser;
+use frontend\models\UserDb;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -62,6 +64,9 @@ class FolderController extends Controller
 		$task = new Task();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $users = UserDb::find()->where(['cid' => $cid])->all();
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -90,6 +95,8 @@ class FolderController extends Controller
 			'taskModel' => $task,
 		    'taskStatus' => $taskStatus,
             'reminder' => $reminder,
+            'taskAssignedUser' => $taskAssignedUser,
+            'users' => $users,
         ]);
     }
 

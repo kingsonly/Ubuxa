@@ -18,7 +18,7 @@ $taskremnider = new TaskReminder();
     <?php $form = ActiveForm::begin(['id' => 'save-rem-form'.$id]); ?>
     <h3>Reminder</h3>
     <?php echo $form->field($reminder, 'reminder_time')->widget(DateTimePicker::classname(), [
-    'options' => ['placeholder' => 'Select date'],
+    'options' => ['placeholder' => 'Select date','id' => 'save-rem'.$id,],
     'pluginOptions' => [
         'autoclose' => true,
     ]
@@ -26,6 +26,7 @@ $taskremnider = new TaskReminder();
     ]); ?>
 
     <?= $form->field($reminder, 'notes')->textarea(['maxlength' => true]) ?>
+    <?= $form->field($taskremnider, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $id])->label(false); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success save-rem']) ?>
@@ -84,7 +85,7 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
                       "tapToDismiss": false
                     }
                 toastr.success('Folder was created successfully', "", options);
-               $.pjax.reload({container:"#create-folder-refresh",async: false});
+               $.pjax.reload({container:"#asign-refresh",async: false});
 
             }else{
                     options = {
@@ -106,7 +107,7 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
           }
           alert(jsonResult);
         toastr.error('Somthing went wrong', "", options);
-             $.pjax.reload({container:"#create-folder-refresh",async: false});
+             $.pjax.reload({container:"#asign-refresh",async: false});
             }
             }).fail(function(){
             console.log('Server Error');

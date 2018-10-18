@@ -18,8 +18,6 @@ use yii\widgets\Pjax;
 
     <?= $form->field($model, 'details')->textarea(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'assigned_to')->textInput() ?>
-
     <?= $form->field($model, 'due_date')->textInput() ?>
 
     <div class="form-group">
