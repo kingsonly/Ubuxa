@@ -608,15 +608,15 @@ $(".dropdown").click(function () {
   $(".bottom-content").css("display","block");
 });
 
- /* window.onscroll = function(ev) {
-   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-       $('.testdrop').removeClass('dropdown');
-       $('.testdrop').addClass('dropup');
-   }else {
-      $('.testdrop').removeClass('dropup');
-      $('.testdrop').addClass('dropdown');
-   }
-}; */
+ // window.onscroll = function(ev) {
+   //if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      // $('.testdrop').removeClass('dropdown');
+       //$('.testdrop').addClass('dropup');
+   //}else {
+     // $('.testdrop').removeClass('dropup');
+      //$('.testdrop').addClass('dropdown');
+   //}
+//}; 
 
 
 JS;
