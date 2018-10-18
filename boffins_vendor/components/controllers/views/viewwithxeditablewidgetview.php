@@ -58,6 +58,11 @@ text-overflow: ellipsis;
 	.kv-editable{
 		
 	}
+	.folder_image:hover{
+		cursor: pointer;
+		border:1px solid #ccc;
+		transform: scale(1.5);
+	}
 	
 </style>
 <?

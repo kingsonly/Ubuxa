@@ -80,6 +80,13 @@ return [
     'settings' => [
         'class' => 'frontend\settings\Module',
 		],
+		'wiki'=>[
+		'class'=>'asinfotrack\yii2\wiki\Module',
+		'processContentCallback'=>function($content) {
+			//example if you want to use markdown in your wiki
+			return Parsedown::instance()->parse($content);
+		}
+	],
 	],
 
 	'defaultRoute' => 'site/login',

@@ -72,7 +72,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
         <div class="navbar-header">
           
 			 
-			<? Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
 
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
