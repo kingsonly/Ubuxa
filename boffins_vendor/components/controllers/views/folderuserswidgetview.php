@@ -138,7 +138,7 @@ transition: margin-top 0.1s ease-out 0s;
 <?php 
 $userJs = <<<JS
 
-	$('.image').mouseenter(function(){
+	$('.images').mouseenter(function(){
     $(this).css({
         'height':'40px',
         'width':'40px',
