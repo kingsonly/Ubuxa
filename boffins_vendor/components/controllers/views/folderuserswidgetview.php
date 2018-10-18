@@ -98,7 +98,7 @@ transition: margin-top 0.1s ease-out 0s;
         position: relative;
         
     }
-    .image{
+    .images{
         width:35px;
         height:35px;
         border: 1px solid #fff;
@@ -113,7 +113,7 @@ transition: margin-top 0.1s ease-out 0s;
         transition: height 0.2s;
     }
     
-    .image:hover{
+    .images:hover{
         cursor: pointer;
     }
     
@@ -128,7 +128,7 @@ transition: margin-top 0.1s ease-out 0s;
 	$count--;
 	?>
 		
-		    <div class="image blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users['username'];?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
+		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users['username'];?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
 		
 	
 	
@@ -138,7 +138,7 @@ transition: margin-top 0.1s ease-out 0s;
 <?php 
 $userJs = <<<JS
 
-	$('.image').mouseenter(function(){
+	$('.images').mouseenter(function(){
     $(this).css({
         'height':'40px',
         'width':'40px',

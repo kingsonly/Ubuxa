@@ -172,6 +172,16 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasMany(Reminder::className(), ['id' => 'reminder_id'])->via('taskReminders');
     }
 
+    public function getReminderTime()
+    {
+        $time = [];
+        $data = $this->reminders;
+        foreach($data as $attr) {
+            $time[] = $attr->reminder_time;
+        }
+        return implode(" ", $time);
+    }
+
     public function getTaskAssignedUsers()
     {
         return $this->hasMany(TaskAssignedUser::className(), ['task_id' => 'id'])->andOnCondition(['status' => 1]);
