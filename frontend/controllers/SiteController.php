@@ -35,6 +35,7 @@ use frontend\models\Task;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
+use frontend\models\TaskAssignedUser;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -87,12 +88,17 @@ class SiteController extends BoffinsBaseController {
 		$task = new Task();
 		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
 		$reminder = new Reminder();
+		$taskAssignedUser = new TaskAssignedUser();
+		$cid = Yii::$app->user->identity->cid;
+        $users = UserDb::find()->where(['cid' => $cid])->all();
 				
         return $this->render('index',[
         	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
 			'task' => $task,
 			'reminder' => $reminder,
+			'taskAssignedUser' => $taskAssignedUser,
+			'users' => $users,
 		]);
        
     }

@@ -35,11 +35,6 @@ class Task extends \yii\db\ActiveRecord
      */
     const TASK_COMPLETED = 24;
     /***
-     * accessible value linked to the database id of "cancelled" in status_type under task group.. 
-     * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
-     */
-    const TASK_CANCELLED = 23;
-    /***
      * accessible value linked to the database id of "completed" in status_type under task group.. 
      * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
      */
@@ -64,12 +59,12 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [[ 'owner','status_id', 'create_date'], 'required'],
-            [['title','last_updated', 'details', 'deleted', 'assigned_to', 'due_date', 'assigned_to'], 'safe'],
-            [['owner', 'assigned_to', 'status_id', 'deleted', 'cid'], 'integer'],
-            [['create_date', 'due_date', 'last_updated'], 'safe'],
-            [['title'], 'string', 'max' => 50],
+            [['title','last_updated', 'details', 'deleted', 'due_date'], 'safe'],
+            [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
+            [['create_date', 'due_date', 'last_updated', 'label'], 'safe'],
+            [['title', 'label'], 'string', 'max' => 50],
             [['details'], 'string', 'max' => 255],
-            [['assigned_to'], 'exist', 'skipOnError' => true, 'targetClass' => UserDb::className(), 'targetAttribute' => ['assigned_to' => 'id']],
+            
             [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => UserDb::className(), 'targetAttribute' => ['owner' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => StatusType::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
@@ -85,7 +80,7 @@ class Task extends \yii\db\ActiveRecord
             'title' => 'Title',
             'details' => 'Details',
             'owner' => 'Owner',
-            'assigned_to' => 'Assigned To',
+            'label' => 'label',
             'status_id' => 'Status ID',
             'create_date' => 'Create Date',
             'due_date' => 'Due Date',
@@ -121,7 +116,7 @@ class Task extends \yii\db\ActiveRecord
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+     
     public function getAssignedTo()
     {
         return $this->hasOne(UserDb::className(), ['id' => 'assigned_to']);
@@ -141,6 +136,7 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->person->first_name.' '.$this->person->surname;
     }
+    */
 
     /**
      * @return \yii\db\ActiveQuery
@@ -171,9 +167,41 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasMany(TaskReminder::className(), ['task_id' => 'id']);
     }
 
+    public function getReminders()
+    {
+        return $this->hasMany(Reminder::className(), ['id' => 'reminder_id'])->via('taskReminders');
+    }
+
+    public function getTaskAssignedUsers()
+    {
+        return $this->hasMany(TaskAssignedUser::className(), ['task_id' => 'id'])->andOnCondition(['status' => 1]);
+    }
+
+    public function getTaskAssignees()
+    {
+            return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('taskAssignedUsers');
+    }
+
+    public function getPerson()
+    {
+        return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('taskAssignees');
+    }
+
+    public function getPersonName()
+    {   
+        $names = [];
+        $data = $this->person;
+        foreach($data as $attr) {
+            $names[] = $attr->first_name.' '.$attr->surname;
+        }
+        return implode(" ", $names);
+
+        //return $this->person->first_name;
+    }
+
     public function displayTask()
     {
-        $task = $this->find()->all();
+        $task = $this->find()->orderBy(['id'=>SORT_DESC])->all();
         return $task;
     }
 }

@@ -182,14 +182,14 @@ $boardUrl = Url::to(['task/index']);
 }
 
 </style>
-
+  
 	 <div class="col-md-4">
-        <?php Pjax::begin(['id'=>'task-refresh']); ?>
         <div class="bg-info column-margin">
 	        <div class="task-header">
                 <span>TASKS</span>
                  <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success'])?> 
             </div>
+            <?php Pjax::begin(['id'=>'task-list-refresh']); ?>
 	        <div class="box-content-task">
              <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
   <defs>
@@ -217,9 +217,9 @@ $boardUrl = Url::to(['task/index']);
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == 24){ ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" type="checkbox" checked/>
+        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
     <?php }else { ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" type="checkbox"/>
+        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
     
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon">
@@ -231,7 +231,7 @@ $boardUrl = Url::to(['task/index']);
 
     <div class="todo__text">
         <span><?= $value->title; ?></span>
-        <span class="assignee"><?= $value->personName; ?></span>
+        
     </div>
     
   </label>
@@ -239,20 +239,22 @@ $boardUrl = Url::to(['task/index']);
   <?php $id++; }?>
 </div>   
 </div>
+<?php Pjax::end(); ?>
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
-                    <?php $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
+                  <?php Pjax::begin(['id'=>'task-refresh']); ?>
+                    <?php $form = ActiveForm::begin(['id' => 'create-task','options' => ['data-pjax' => true ]]); ?>
                     <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
-                 <!-- <input type="text" placeholder="Write some task here" id="addTask"/> -->
-                  <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
-                  <!-- <button type="submit" id="taskButton">Save</button> -->
-                  <?php ActiveForm::end(); ?>
+                   <!-- <input type="text" placeholder="Write some task here" id="addTask"/> -->
+                    <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                    <!-- <button type="submit" id="taskButton">Save</button> -->
+                    <?php ActiveForm::end(); ?>
+                  <?php Pjax::end(); ?>
                 </div> 
             </div>  
         </div>
     </div>
-    <?php Pjax::end(); ?>
 </div>
 
 
@@ -261,6 +263,7 @@ $boardUrl = Url::to(['task/index']);
 
 <?php 
 $taskUrl = Url::to(['site/task']);
+$createUrl = Url::to(['task/create']);
 $task = <<<JS
 
 $(function(){
@@ -272,7 +275,7 @@ $(function(){
     });
 
 
-$("input:checkbox").change(function() {
+$(".todo__state").change(function() {
     var checkedId;
     checkedId = $(this).data('id');
     _UpdateStatus(checkedId);        
@@ -288,6 +291,7 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                $.pjax.reload({container:"#asign-refresh",async: false});
                    console.log('Status updated');
               },
               error: function(res, sec){
@@ -295,6 +299,27 @@ function _UpdateStatus(checkedId){
               }
           });
 }
+
+$('#create-task').on('beforeSubmit', function(e) { 
+           var form = $(this);
+           e.preventDefault();
+            if(form.find('.has-error').length) {
+                return false;
+            }
+            $.ajax({
+                url: '$createUrl',
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) { 
+                    console.log('completed');
+                    $.pjax.reload({container:"#task-list-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+            });    
+});
 
 $("#addTask").bind("keyup change", function() {
     var value = $(this).val();

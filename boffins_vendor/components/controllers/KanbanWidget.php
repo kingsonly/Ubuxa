@@ -13,6 +13,8 @@ class KanbanWidget extends Widget{
 	public $id;
 	public $reminder;
 	public $taskStatus;
+	public $users;
+	public $taskAssignedUser;
 
 	public function init()
 	{
@@ -27,6 +29,8 @@ class KanbanWidget extends Widget{
 			'id' => $this->id,
 			'reminder' => $this->reminder,
 			'taskStatus' => $this->taskStatus,
+			'users' => $this->users,
+			'taskAssignedUser' => $this->taskAssignedUser,
 		]);
 	}
 	

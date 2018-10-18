@@ -5,10 +5,15 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use frontend\assets\AppAsset;
 use boffins_vendor\components\controllers\CreateReminderWidget;
+use boffins_vendor\components\controllers\AssigneeViewWidget;
+use boffins_vendor\components\controllers\CreateLabelWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
+use yii\web\JsExpression;
+use yii\helpers\ArrayHelper;
 
 AppAsset::register($this);
 
@@ -164,7 +169,7 @@ AppAsset::register($this);
     cursor: pointer;
 }
 .bottom-content {
-    display: none;
+    /*display: none; */
     position: absolute;
     bottom: 0;
     left: 5px;
@@ -175,7 +180,9 @@ AppAsset::register($this);
 }
 
 .icons {
-    width: 43px;
+    width: 30px;
+    padding-right: 60px;
+    //position: fixed;
 }
 
 .modal-content {
@@ -290,6 +297,20 @@ a.addTaskButton.active {
   right: 10px;
   top: 15px;
 }
+.confirm {
+  display: flex;
+    justify-content: center;
+}
+.label-task {
+    background: #3B5998;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    border-radius: 3px;
+}
+.assigndrop{
+  width:340px;
+}
 </style>
 
 <div class="task-index">
@@ -307,6 +328,7 @@ a.addTaskButton.active {
   <i class="glyphicon glyphicon-remove"></i>
 </div>
 
+<?php Pjax::begin(['id'=>'asign-refresh']); ?>
 <div class="drag-container">
     <ul class="drag-list">
         <?php
@@ -328,25 +350,45 @@ a.addTaskButton.active {
                         if($values->status_id == $value->id){
                       $boardUrl = Url::to(['task/view', 'id' => $values->id]);
                       $reminderUrl = Url::to(['reminder/create']);
+                      $listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                   <div class="task-title">
                     <?= $values->title; ?>
                   </div>
+                  
                   <div class="assignedto">
                     <?= $values->personName; ?>
                   </div>
+                  <?php if(!empty($values->label)){ ?>
+                  <div class="task-label-title">
+                    <span class="label-task">
+                    <?= $values->label; ?>
+                  </span>
+                  </div>
+                <?php } ?>
                 </div>
                     <div class="bottom-content">
+                      <div class="confirm">
                       <div class="dropdown testdrop">
-                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
-                      
-                        <a href='#'><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
-                        <a href='#'><i class="fa fa-tags icons" aria-hidden="true"></i></a>
+                      </div>
+                      <div class="dropdown testdrop">
+                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
+                        <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
+                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id]) ?>  
+                        </div>
+                      </div>
+                      <div class="dropdown testdrop">
+                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                         <?= CreateLabelWidget::widget(['id' => $id,'task' => $task, 'taskid' => $values->id]) ?>
+                        </div>
+                      </div>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </div>
                     </div>
@@ -355,8 +397,10 @@ a.addTaskButton.active {
             </ul>
         </li>
         <?php $id++; }?>
-    </ul>
+    </ul> 
 </div>
+<?php Pjax::end(); ?>
+
 <!-- <div class='wrapit'>
   <div class='content'>
     <div id="load-data"></div>
@@ -400,6 +444,9 @@ PopoverX::end();
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
+
+
+
 $.fn.closest_descendent = function(filter) {
     var found = $(),
         currentSet = this; // Current place
@@ -412,6 +459,7 @@ $.fn.closest_descendent = function(filter) {
     return found.first(); // Return first match of the collection
 }
 
+
 $(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')
@@ -419,7 +467,6 @@ $(function(){
         .load($(this).attr('value'));
         });
   });
-
 
     dragula([
     document.getElementById('1'),
@@ -479,6 +526,7 @@ function _UpdateTask(status, contain){
                   status_id: contain, 
                 },
               success: function(res, sec){
+                $.pjax.reload({container:"#task-list-refresh",async: false});
                    console.log('Completed');
               },
               error: function(res, sec){
