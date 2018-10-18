@@ -6,7 +6,7 @@ use yii\helpers\Url;
 $jsEventTriger = $htmlAttributes['class'];
 ?>
 <style>	
-.image {
+.creste-image {
 	background-image: url('images/folder/newfolder.png');
 	background-repeat: no-repeat; 
 	width: 79px;
@@ -71,18 +71,18 @@ $jsEventTriger = $htmlAttributes['class'];
 		</div>
 	
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
-                          <li>a b c</li>
+                          <li>Create Invoice</li>
+							<hr>
+                          <li>Create Project</li>
+							<hr>
+                          <li>Create Payment</li>
+							<hr>
+                          <li>Create Order</li>
+                          
                         </div>
                         </div>
 	<? } else{?>
-		<div id="<?= $jsEventTriger;?>-image" class="image <?= $jsEventTriger;?>-image"></div>
+		<div id="<?= $jsEventTriger;?>-image" class="creste-image <?= $jsEventTriger;?>-image"></div>
 	<?}?>
 </section>
 
