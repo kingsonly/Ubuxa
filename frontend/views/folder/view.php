@@ -102,7 +102,7 @@ $img = $model->folder_image;
 	padding-bottom: 50px;
 	padding-top: 10px;
 	position: relative;
-
+	overflow: scroll;
 }
     
 </style>

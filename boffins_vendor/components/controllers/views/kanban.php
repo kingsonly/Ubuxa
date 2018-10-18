@@ -39,12 +39,10 @@ AppAsset::register($this);
 .drag-list {
   display: flex;
   align-items: flex-start;
+  overflow: scroll;
+  width: 1000px;
 }
-@media (max-width: 690px) {
-  .drag-list {
-    display: block;
-  }
-}
+
 .fa {
     color: black !important;
 }
@@ -90,7 +88,7 @@ AppAsset::register($this);
 }
 .drag-item {
   margin: 10px;
-  height: 100px;
+  min-height: 100px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
@@ -170,20 +168,14 @@ AppAsset::register($this);
     cursor: pointer;
 }
 .bottom-content {
-    /*display: none; */
+    display: none;
     position: absolute;
     bottom: 0;
-    left: 5px;
+    width: 100%;
 }
 
 .drag-item:hover .bottom-content{
     display: block;
-}
-
-.icons {
-    width: 30px;
-    padding-right: 60px;
-    //position: fixed;
 }
 
 .modal-content {
@@ -290,8 +282,10 @@ a.addTaskButton.active {
 }
 .task-test {
     padding-left: 10px;
-    padding-top: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
     cursor: pointer;
+    padding-bottom: 40px;
 }
 .taskpop {
   position: absolute;
@@ -308,10 +302,34 @@ a.addTaskButton.active {
     padding-right: 10px;
     color: #fff;
     border-radius: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 .assigndrop{
   width:340px;
 }
+.date-time {
+      color: rgba(0,0,0,.87);
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #6b808c;
+}
+.time-icon {
+  font-size: 12px;
+  color: #6b808c;
+}
+.reminder-time{
+  float: right;
+  padding-right: 8px;
+}
+.drop-icon{
+    padding-right: 50px;
+    cursor: pointer;
+}
+
 </style>
 <div class="task-index">
 
@@ -358,7 +376,7 @@ a.addTaskButton.active {
                     <?= $values->title; ?>
                   </div>
                   
-                  <div class="assignedto">
+                  <div class="assignedto" data-toggle="tooltip" title="<?= $values->personName; ?>">
                     <?= $values->personName; ?>
                   </div>
                   <?php if(!empty($values->label)){ ?>
@@ -368,26 +386,38 @@ a.addTaskButton.active {
                   </span>
                   </div>
                 <?php } ?>
-                <div class="assignedto">
-                    <?= Yii::$app->formatter->asDatetime($values->reminderTime); ?>
+                <?php 
+                  $time = $values->reminderTime;
+                  $check = date("Y-m-d H:i:s");
+                if(!empty($time) && $time >= $check){ ?>
+                <div class="reminder-time">
+                  <span class="glyphicon glyphicon-time time-icon"></span>
+                  <span class="date-time">
+                    <?php
+                      $date = $values->reminderTime;
+                      $date = date('M j, g:i a', strtotime($date));
+                      echo $date;
+                    ?>
+                </span>
                   </div>
+                  <?php } ?>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true" data-toggle="tooltip" title="Add reminder"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       </div>
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
                         <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
                             <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id]) ?>  
                         </div>
                       </div>
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                          <?= CreateLabelWidget::widget(['id' => $id,'task' => $task, 'taskid' => $values->id]) ?>
                         </div>
@@ -448,6 +478,9 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
 
 
 $.fn.closest_descendent = function(filter) {
@@ -608,15 +641,7 @@ $(".dropdown").click(function () {
   $(".bottom-content").css("display","block");
 });
 
- // window.onscroll = function(ev) {
-   //if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      // $('.testdrop').removeClass('dropdown');
-       //$('.testdrop').addClass('dropup');
-   //}else {
-     // $('.testdrop').removeClass('dropup');
-      //$('.testdrop').addClass('dropdown');
-   //}
-//}; 
+
 
 
 JS;
