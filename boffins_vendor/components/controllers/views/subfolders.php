@@ -64,7 +64,7 @@ use yii\widgets\Pjax;
 		<? if(!empty($folderModel)){?>
 		<div class="col-xs-5 col-sm-2 sub-second">
 				<div class="info-2">
-					<div class="box-subfolders"><?= CreateButtonWidget::widget();?></div>
+					<div class="box-subfolders"><?= CreateButtonWidget::widget(['htmlAttributes'=>['class'=>$createButtonWidgetAttributes['class']]]);?></div>
 				</div>
    		</div>
 		<? }?>
@@ -76,13 +76,14 @@ use yii\widgets\Pjax;
 		<? }?>
 			<div class="info-2">
 				<div class="box-sub-folders">
-					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel]) ?></div>
+					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel,'numberOfDisplayedItems' => 3,'htmlAttributes'=>$folderCarouselWidgetAttributes['class']]) ?>
 				</div>
-			
+			</div>
 		</div>
 	</div>
 </div>
 
 
+	
 <?php Pjax::end(); ?>
 

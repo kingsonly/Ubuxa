@@ -19,12 +19,20 @@ class SubFolders extends Widget
         parent::init();
     }
 	public $folderModel;
+	public $htmlAttributes;
+	public $folderCarouselWidgetAttributes;
+	public $createButtonWidgetAttributes;
+	
     public function run()
     {
        
         return $this->render('subfolders',[
 			'folderModel' => $this->folderModel,
+			'htmlAttributes' => $this->htmlAttributes['class'],
+			'folderCarouselWidgetAttributes' => $this->folderCarouselWidgetAttributes,
+			'createButtonWidgetAttributes' => $this->createButtonWidgetAttributes,
 		]);
     }
 }
 ?>
+

@@ -44,7 +44,7 @@ class StandardFormsAsset extends AssetBundle
 		
     ];
     public $js = [
-		'js/bootstrap.min.js',
+		
 		'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',
 		'js/jquery.sticky-kit.min.js',
         //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',

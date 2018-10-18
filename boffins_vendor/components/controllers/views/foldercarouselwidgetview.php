@@ -176,7 +176,7 @@ hr{
 text-overflow: ellipsis;
 }
 
-.create-new-folder{
+.create-new-<?= $htmlAttributes; ?>{
 	display:none;
 }
 #carousles{
@@ -212,11 +212,11 @@ text-overflow: ellipsis;
 
 <section id="carousles">
 
-      <div class="row folder-new-content">
+      <div class="row <?= $htmlAttributes; ?>-new-content">
 		  
         <div class="large-12 columns">
 			<? if(!empty($folderModel)){?>
-          <div class="owl-carousel owl-theme <?= $displayType;?>">
+          <div class="owl-carousel owl-theme <?= $displayType;?> <?= $htmlAttributes; ?>">
               <?php foreach ($folderModel as $folder) { ?>
 		 <div class="item">
 			 <? if($displayType == 'component'){?>
@@ -264,12 +264,14 @@ text-overflow: ellipsis;
 			<? if($displayType == 'component'){?>
 			Click on the Create Button to Add A new component to folder 
 			<? }else{?>
-			<div><?= CreateButtonWidget::widget(['buttonType' => 'text']);?></div>
+			<div>
+				<?= CreateButtonWidget::widget(['buttonType' => 'text','htmlAttributes'=>['class'=>$htmlAttributes]]);?>
+			</div>
 			<? }?>
          <?}?>
         </div>
       </div>
-	<div class="create-new-folder">
+	<div class="create-new-<?= $htmlAttributes; ?>">
 		<?= FolderCreateWidget::widget();?>
 	</div>
     </section>
@@ -302,7 +304,7 @@ var owl = $('.'+'$displayType');
 			  
 			  $("#search").on("keyup", function() {
     var value = $(this).val().toLowerCase();
-    $(".owl-item").filter(function() {
+    $(".$htmlAttributes").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
