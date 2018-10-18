@@ -16,10 +16,10 @@ class M181017035343Add_clip_table extends Migration
     {
 		// create a table for ClipBars. 
 		$this->createTable("{{%clip}}", [
-										'id' => $this->primaryKey(11),
-										'bar_id' => $this->integer(11)->comment('where the clip is attached - the clip bar'), 
-										'owner_id' => $this->integer(11)->comment('who the clip is for remark? task? other???'),
-										'owner_type_id' => $this->integer(11)->comment('clip owner type id'),
+			'id' => $this->primaryKey(11),
+			'bar_id' => $this->integer(11)->comment('where the clip is attached - the clip bar'), 
+			'owner_id' => $this->integer(11)->comment('who the clip is for remark? task? other???'),
+			'owner_type_id' => $this->integer(11)->comment('clip owner type id'),
         ]);
 		
 		// creates index for owner_id

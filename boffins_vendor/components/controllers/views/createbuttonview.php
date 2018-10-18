@@ -21,6 +21,7 @@ $jsEventTriger = $htmlAttributes['class'];
 	font-size: 14px;
 	font-weight: 400;
 	padding-left: 20px;
+	
 }
 
 .text span {
@@ -52,6 +53,7 @@ $jsEventTriger = $htmlAttributes['class'];
 		padding-top: 8px;
 	}
 
+	
 </style>
 
 
@@ -63,9 +65,22 @@ $jsEventTriger = $htmlAttributes['class'];
 	
 		
 	<? }elseif($buttonType == 'icon'){ ?>
-	<div id="<?= $jsEventTriger;?>-icon" class="<?= $class;?> <?= $jsEventTriger;?>-icon">
+	<div class="dropdown">
+	<div id="<?= $jsEventTriger;?>-icon" class="<?= $class;?> <?= $jsEventTriger;?>-icon dropdown-toggle" id="dropdownMenuButton_<?= $jsEventTriger;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
 		</div>
+	
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                          <li>a b c</li>
+                        </div>
+                        </div>
 	<? } else{?>
 		<div id="<?= $jsEventTriger;?>-image" class="image <?= $jsEventTriger;?>-image"></div>
 	<?}?>
@@ -78,23 +93,20 @@ $Carousel = <<<Carousels
 
 $("#"+"$jsEventTriger"+"-image").click(function(e){
     
-	$( ".folder-new-content" ).slideUp( 300 ).delay( 800 );
-	$( ".create-new-folder" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
+	$( ".$jsEventTriger-new-content" ).slideUp( 300 ).delay( 800 );
+	$( ".create-new-$jsEventTriger" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
 	
      e.stopPropagation();
 });
 
 $("#"+"$jsEventTriger"+"-text").click(function(e){
-	$( ".folder-new-content" ).hide();
-	$( ".create-new-folder" ).delay( 100 ).fadeIn( 400 );
+	$( ".$jsEventTriger-new-content" ).hide();
+	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
      e.stopPropagation();
 });
 
 
-$("#"+"$jsEventTriger"+"-icon").click(function(e){
-	alert(1);
-     e.stopPropagation();
-});
+
 
 
 
@@ -105,6 +117,15 @@ $(".create-new-folder").click(function(e){
 $(document).click(function(){
     $('.folder-new-content').show()
 	$('.create-new-folder').hide()
+});
+
+$(document).on("show.bs.dropdown", function () {
+  var dropdownToggle = $(this).find(".dropdown-toggle");
+  var dropdownMenu = $(this).find(".dropdown-menu");
+  dropdownMenu.css({
+    "top": (dropdownToggle.position().top + dropdownToggle.outerHeight()) + "px",
+    "left": dropdownToggle.position().left + "px"
+  });
 });
 
 
