@@ -113,7 +113,7 @@ transition: margin-top 0.1s ease-out 0s;
         transition: height 0.2s;
     }
     
-    .image:hover{
+    .images:hover{
         cursor: pointer;
     }
     
