@@ -110,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <span>Assignee</span>
     <div class="asign">
-        <span class="task-titless"><?= $model->fullname; ?></span>
+        <span class="task-titless"><?= $model->personName; ?></span>
     </div>
     <span>Status</span>
     <div class="asign">
