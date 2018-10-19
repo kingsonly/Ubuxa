@@ -52,7 +52,7 @@ AppAsset::register($this);
   position: relative;
   background: rgba(193, 198, 212, 0.2);
   /* overflow: hidden; */
-  border-radius: 4px;
+  border-radius: 5px;
 }
 @media (max-width: 690px) {
   .drag-column {
@@ -82,6 +82,7 @@ AppAsset::register($this);
   align-items: center;
   justify-content: space-between;
   padding: 10px;
+  border-radius: 3px;
 }
 .drag-inner-list {
   min-height: 50px;
