@@ -377,7 +377,7 @@ a.addTaskButton.active {
                         <?= $values->title; ?>
                       </div>
                       
-                      <div class="assignedto" data-toggle="tooltip" title="<?= $values->personName; ?>">
+                      <div class="assignedto">
                         <?= $values->personName; ?>
                       </div>
                       <?php if(!empty($values->label)){ ?>
