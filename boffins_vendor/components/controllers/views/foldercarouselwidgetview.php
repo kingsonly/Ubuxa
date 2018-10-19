@@ -190,7 +190,7 @@ text-overflow: ellipsis;
 	}
 	.component-holder{
 	
-    line-height: 40px;
+    line-height: 29px;
     height: inherit;
 	padding-top: 10px;
 	
@@ -212,7 +212,7 @@ text-overflow: ellipsis;
 
 <section id="carousles">
 
-      <div class="row <?= $htmlAttributes; ?>-new-content">
+      <div class="<?= $htmlAttributes; ?>-new-content">
 		  
         <div class="large-12 columns">
 			<? if(!empty($folderModel)){?>

@@ -15,7 +15,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 	padding-left: 15px;
 	padding-right:15px;
-	overflow: hidden;
+	
 }
 
 	
@@ -65,7 +65,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
    		</div>
 		
 		
-			<div class="col-xs-7 col-sm-10 subfirst ">
+			<div class="col-xs-7 col-sm-10 component-carousel ">
 		
 			<div class="">
 				<div class="">
@@ -73,7 +73,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 							'folderModel' => $components, 
 							'displayType' => 'component',
 							'height' => $height,
-							'numberOfDisplayedItems' => 5,
+							'numberOfDisplayedItems' => 4,
 						]) ?>
 				</div>
 				</div>
