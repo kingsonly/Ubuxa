@@ -411,12 +411,12 @@ body {
             <li>
                 <div class="comment-main-level">
                     <!-- Avatar -->
-                    <div class="comment-avatar"><img src="http://i9.photobucket.com/albums/a88/creaticode/avatar_1_zps8e1c80cd.jpg" alt=""></div>
+                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
                             <h6 class="comment-name by-author"><a href="http://creaticode.com/blog">Agustin Ortiz</a></h6>
-                            <span>hace 20 minutos</span>
+                            <span>20 minutes ago</span>
                             <i class="fa fa-reply"></i>
                             <i class="fa fa-heart"></i>
                         </div>
@@ -429,12 +429,12 @@ body {
                 <ul class="comments-list reply-list">
                     <li>
                         <!-- Avatar -->
-                        <div class="comment-avatar"><img src="http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg" alt=""></div>
+                        <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
                         <!-- Contenedor del Comentario -->
                         <div class="comment-box">
                             <div class="comment-head">
                                 <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                                <span>hace 10 minutos</span>
+                                <span>10 minutes ago</span>
                                 <i class="fa fa-reply"></i>
                                 <i class="fa fa-heart"></i>
                             </div>
@@ -446,12 +446,12 @@ body {
 
                     <li>
                         <!-- Avatar -->
-                        <div class="comment-avatar"><img src="http://i9.photobucket.com/albums/a88/creaticode/avatar_1_zps8e1c80cd.jpg" alt=""></div>
+                        <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
                         <!-- Contenedor del Comentario -->
                         <div class="comment-box">
                             <div class="comment-head">
                                 <h6 class="comment-name by-author"><a href="http://creaticode.com/blog">Agustin Ortiz</a></h6>
-                                <span>hace 10 minutos</span>
+                                <span>15 hours ago</span>
                                 <i class="fa fa-reply"></i>
                                 <i class="fa fa-heart"></i>
                             </div>
@@ -466,12 +466,12 @@ body {
             <li>
                 <div class="comment-main-level">
                     <!-- Avatar -->
-                    <div class="comment-avatar"><img src="http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg" alt=""></div>
+                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default-user.png'); ?>" alt=""></div>
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
                             <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                            <span>hace 10 minutos</span>
+                            <span>16 hours ago</span>
                             <i class="fa fa-reply"></i>
                             <i class="fa fa-heart"></i>
                         </div>
@@ -484,12 +484,12 @@ body {
             <li>
                 <div class="comment-main-level">
                     <!-- Avatar -->
-                    <div class="comment-avatar"><img src="http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg" alt=""></div>
+                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
                             <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                            <span>hace 10 minutos</span>
+                            <span>20 minutes ago</span>
                             <i class="fa fa-reply"></i>
                             <i class="fa fa-heart"></i>
                         </div>
