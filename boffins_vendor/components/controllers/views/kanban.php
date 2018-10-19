@@ -282,7 +282,7 @@ a.addTaskButton.active {
     padding-right: 10px;
     padding-top: 2px;
     cursor: pointer;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
 }
 .taskpop {
   position: absolute;
