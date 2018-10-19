@@ -280,6 +280,7 @@ a.addTaskButton.active {
 .task-test {
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 2px;
     cursor: pointer;
     padding-bottom: 40px;
 }
@@ -390,8 +391,8 @@ a.addTaskButton.active {
                       $check = date("Y-m-d H:i:s");
                     if(!empty($time) && $time >= $check){ ?>
                     <div class="reminder-time">
-                        <i class="fa fa-bell time-icon" aria-hidden="true" data-toggle="tooltip" title="Reminder"></i>
-                        <span class="date-time">
+                        <i class="fa fa-bell time-icon"></i>
+                        <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
                           <?php
                             $date = $values->reminderTime;
                             $date = date('M j, g:i a', strtotime($date));
