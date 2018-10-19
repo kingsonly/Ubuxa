@@ -174,9 +174,6 @@ AppAsset::register($this);
     width: 100%;
 }
 
-.drag-item:hover .bottom-content{
-    display: block;
-}
 
 .modal-content {
     border-radius: 6px !important; 
@@ -283,7 +280,6 @@ a.addTaskButton.active {
 .task-test {
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 8px;
     cursor: pointer;
     padding-bottom: 40px;
 }
@@ -329,6 +325,9 @@ a.addTaskButton.active {
     padding-right: 50px;
     cursor: pointer;
 }
+.task-label-title {
+  margin-bottom: 4px;
+}
 
 </style>
 <div class="task-index">
@@ -366,41 +365,52 @@ a.addTaskButton.active {
                     foreach ($dataProvider as $key => $values) {
 
                         if($values->status_id == $value->id){
-                      $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                      $reminderUrl = Url::to(['reminder/create']);
-                      $listData=ArrayHelper::map($users,'id','username');
+                        $boardUrl = Url::to(['task/view', 'id' => $values->id]);
+                        $reminderUrl = Url::to(['reminder/create']);
+                        $listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
-                  <div class="task-title">
-                    <?= $values->title; ?>
-                  </div>
-                  
-                  <div class="assignedto" data-toggle="tooltip" title="<?= $values->personName; ?>">
-                    <?= $values->personName; ?>
-                  </div>
-                  <?php if(!empty($values->label)){ ?>
-                  <div class="task-label-title">
-                    <span class="label-task">
-                    <?= $values->label; ?>
-                  </span>
-                  </div>
-                <?php } ?>
-                <?php 
-                  $time = $values->reminderTime;
-                  $check = date("Y-m-d H:i:s");
-                if(!empty($time) && $time >= $check){ ?>
-                <div class="reminder-time">
-                  <span class="glyphicon glyphicon-time time-icon"></span>
-                  <span class="date-time">
-                    <?php
-                      $date = $values->reminderTime;
-                      $date = date('M j, g:i a', strtotime($date));
-                      echo $date;
-                    ?>
-                </span>
-                  </div>
-                  <?php } ?>
+                      <div class="task-title">
+                        <?= $values->title; ?>
+                      </div>
+                      
+                      <div class="assignedto" data-toggle="tooltip" title="<?= $values->personName; ?>">
+                        <?= $values->personName; ?>
+                      </div>
+                      <?php if(!empty($values->label)){ ?>
+                      <div class="task-label-title">
+                        <span class="label-task">
+                        <?= $values->label; ?>
+                      </span>
+                      </div>
+                    <?php } ?>
+                    <?php 
+                      $time = $values->reminderTime;
+                      $check = date("Y-m-d H:i:s");
+                    if(!empty($time) && $time >= $check){ ?>
+                    <div class="reminder-time">
+                        <i class="fa fa-bell time-icon" aria-hidden="true" data-toggle="tooltip" title="Reminder"></i>
+                        <span class="date-time">
+                          <?php
+                            $date = $values->reminderTime;
+                            $date = date('M j, g:i a', strtotime($date));
+                            echo $date;
+                          ?>
+                        </span>
+                      </div>
+                      <?php } ?>
+                      <div class="due-date">
+                        <span class="glyphicon glyphicon-time time-icon"></span>
+                          <?php
+                            $date = $values->due_date;
+                            $date = date('M j, g:i a', strtotime($date));
+                            $boardDate = date('M j', strtotime($date))
+                          ?>
+                          <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Due: <?=$date; ?>">
+                            <?= $boardDate; ?>
+                          </span>
+                      </div>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -637,17 +647,53 @@ showOptions.init();
   //return false;
   //});
 
+$('.dropdown').on('click',function(){
+  if($(this).hasClass('clicked')){
+    $(this).removeClass('clicked');
+    $(this).parent().parent().css('display','none');
+  } else {
+  $(this).addClass('clicked');
+  }
+  })
+
+$('.drag-item').mouseenter(function(){
+       $(this).find('.bottom-content').css("display","block");
+  }).mouseleave(function(){
+          if($(this).find('.dropdown').hasClass('clicked')){
+            $(this).find('.bottom-content').css("display","block");
+          } else {
+            $(this).find('.bottom-content').css("display","none");
+          }
+         
+    })
+
 $(".dropdown").click(function () {
-  $(".bottom-content").css("display","block");
+  
+  $(this).find('.bottom-content').css("display","block");
+ // $(".bottom-content").css("display","block");
 });
 
+ /* window.onscroll = function(ev) {
+   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+       $('.testdrop').removeClass('dropdown');
+       $('.testdrop').addClass('dropup');
+   }else {
+      $('.testdrop').removeClass('dropup');
+      $('.testdrop').addClass('dropdown');
+   }
+}; */
+$(document).click(function (e) {
+    e.stopPropagation();
+    var container = $(".dropdown");
+    var containerr = container.find('.clicked');
 
-
-
+    //check if the clicked area is dropDown or not
+    if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
+        container.removeClass('clicked');
+        $('.bottom-content').hide();
+    }
+})
 JS;
  
 $this->registerJs($board);
 ?>
-
-
-

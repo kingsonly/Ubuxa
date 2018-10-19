@@ -99,7 +99,6 @@ $img = $model->folder_image;
 	display: none;
 	background-color: #fff;
 	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-bottom: 50px;
 	padding-top: 10px;
 	position: relative;
 	overflow: scroll;
