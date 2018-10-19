@@ -39,12 +39,10 @@ AppAsset::register($this);
 .drag-list {
   display: flex;
   align-items: flex-start;
+  overflow: scroll;
+  width: 1000px;
 }
-@media (max-width: 690px) {
-  .drag-list {
-    display: block;
-  }
-}
+
 .fa {
     color: black !important;
 }
@@ -54,7 +52,7 @@ AppAsset::register($this);
   position: relative;
   background: rgba(193, 198, 212, 0.2);
   /* overflow: hidden; */
-  border-radius: 4px;
+  border-radius: 5px;
 }
 @media (max-width: 690px) {
   .drag-column {
@@ -84,13 +82,14 @@ AppAsset::register($this);
   align-items: center;
   justify-content: space-between;
   padding: 10px;
+  border-radius: 3px;
 }
 .drag-inner-list {
   min-height: 50px;
 }
 .drag-item {
   margin: 10px;
-  height: 100px;
+  min-height: 100px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
@@ -170,19 +169,12 @@ AppAsset::register($this);
     cursor: pointer;
 }
 .bottom-content {
-    display: none; 
+    display: none;
     position: absolute;
     bottom: 0;
-    left: 5px;
+    width: 100%;
 }
 
-
-
-.icons {
-    width: 30px;
-    padding-right: 60px;
-   /* position: fixed;*/
-}
 
 .modal-content {
     border-radius: 6px !important; 
@@ -288,8 +280,10 @@ a.addTaskButton.active {
 }
 .task-test {
     padding-left: 10px;
-    padding-top: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
     cursor: pointer;
+    padding-bottom: 20px;
 }
 .taskpop {
   position: absolute;
@@ -306,13 +300,37 @@ a.addTaskButton.active {
     padding-right: 10px;
     color: #fff;
     border-radius: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 .assigndrop{
   width:340px;
 }
-.bottom-content{
-  display: none;
+.date-time {
+      color: rgba(0,0,0,.87);
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #6b808c;
 }
+.time-icon {
+  font-size: 12px;
+  color: #6b808c;
+}
+.reminder-time{
+  float: right;
+  padding-right: 8px;
+}
+.drop-icon{
+    padding-right: 50px;
+    cursor: pointer;
+}
+.task-label-title {
+  margin-bottom: 4px;
+}
+
 </style>
 <div class="task-index">
 
@@ -349,46 +367,69 @@ a.addTaskButton.active {
                     foreach ($dataProvider as $key => $values) {
 
                         if($values->status_id == $value->id){
-                      $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                      $reminderUrl = Url::to(['reminder/create']);
-                      $listData=ArrayHelper::map($users,'id','username');
+                        $boardUrl = Url::to(['task/view', 'id' => $values->id]);
+                        $reminderUrl = Url::to(['reminder/create']);
+                        $listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
-                  <div class="task-title">
-                    <?= $values->title; ?>
-                  </div>
-                  
-                  <div class="assignedto">
-                    <?= $values->personName; ?>
-                  </div>
-                  <?php if(!empty($values->label)){ ?>
-                  <div class="task-label-title">
-                    <span class="label-task">
-                    <?= $values->label; ?>
-                  </span>
-                  </div>
-                <?php } ?>
-                <div class="assignedto">
-                    <?= Yii::$app->formatter->asDatetime($values->reminderTime); ?>
-                  </div>
+                      <div class="task-title">
+                        <?= $values->title; ?>
+                      </div>
+                      
+                      <div class="assignedto" data-toggle="tooltip" title="<?= $values->personName; ?>">
+                        <?= $values->personName; ?>
+                      </div>
+                      <?php if(!empty($values->label)){ ?>
+                      <div class="task-label-title">
+                        <span class="label-task">
+                        <?= $values->label; ?>
+                      </span>
+                      </div>
+                    <?php } ?>
+                    <?php 
+                      $time = $values->reminderTime;
+                      $check = date("Y-m-d H:i:s");
+                    if(!empty($time) && $time >= $check){ ?>
+                    <div class="reminder-time">
+                        <i class="fa fa-bell time-icon"></i>
+                        <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
+                          <?php
+                            $date = $values->reminderTime;
+                            $date = date('M j, g:i a', strtotime($date));
+                            echo $date;
+                          ?>
+                        </span>
+                      </div>
+                      <?php } ?>
+                      <div class="due-date">
+                        <span class="glyphicon glyphicon-time time-icon"></span>
+                          <?php
+                            $date = $values->due_date;
+                            $date = date('M j, g:i a', strtotime($date));
+                            $boardDate = date('M j', strtotime($date))
+                          ?>
+                          <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Due: <?=$date; ?>">
+                            <?= $boardDate; ?>
+                          </span>
+                      </div>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true" data-toggle="tooltip" title="Add reminder"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       </div>
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
                         <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
                             <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id]) ?>  
                         </div>
                       </div>
                       <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true"></i></a>
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                          <?= CreateLabelWidget::widget(['id' => $id,'task' => $task, 'taskid' => $values->id]) ?>
                         </div>
@@ -449,6 +490,9 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
 
 
 $.fn.closest_descendent = function(filter) {
