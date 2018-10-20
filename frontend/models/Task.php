@@ -211,6 +211,12 @@ class Task extends \yii\db\ActiveRecord
 
     public function displayTask()
     {
+        $task = $this->find()->orderBy(['id'=>SORT_ASC])->all();
+        return $task;
+    }
+
+    public function getDashboardTask()
+    {
         $task = $this->find()->orderBy(['id'=>SORT_DESC])->all();
         return $task;
     }

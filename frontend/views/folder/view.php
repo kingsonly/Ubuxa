@@ -135,7 +135,7 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
             <section>
             	<div class="row test5">
-            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
+            		<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $taskModel]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
