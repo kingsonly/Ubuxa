@@ -85,7 +85,7 @@ foreach($attributues as $v){
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
 			'size'=>'sm',
-			'options'=>['placeholder'=>'Enter location...'],
+			'options'=>['placeholder'=>'Enter title...'],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
 			
 		]);
@@ -112,6 +112,29 @@ foreach($attributues as $v){
 			Editable::end();
 			?>
 	</div>
+	<?
+	}elseif($v['xeditable'] == 'notes'){
+			?>
+<div>
+	<?
+		echo Editable::widget([
+	    'model'=>$model,
+	    'asPopover' => false,
+	    'inputType' => Editable::INPUT_TEXTAREA,
+	    'attribute'=>$v['modelAttribute'],
+	    'header' => 'Notes',
+	    'submitOnEnter' => false,
+	    'options' => [
+	        'class'=>'form-control', 
+	        'rows'=>5, 
+	        //'style'=>'width:400px', 
+	        'placeholder'=>'Enter details...'
+    ]
+]);
+
+	?>
+</div>
+
 	<?
 		}elseif($v['xeditable'] == 'image'){
 			?>

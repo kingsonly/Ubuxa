@@ -7,6 +7,7 @@ use frontend\assets\AppAsset;
 use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
+use boffins_vendor\components\controllers\AddCardWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
@@ -89,7 +90,7 @@ AppAsset::register($this);
 }
 .drag-item {
   margin: 10px;
-  min-height: 100px;
+  min-height: 60px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
@@ -330,6 +331,37 @@ a.addTaskButton.active {
 .task-label-title {
   margin-bottom: 4px;
 }
+.add-card {
+    color: #6b808c;
+    display: block;
+    flex: 0 0 auto;
+    padding: 8px;
+    padding-top: 0px;
+    position: relative;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.add-title:hover {
+  border-bottom: 1px solid #337ab7;
+}
+.card-add {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 7px;
+  display: none;
+}
+#cardButton {
+    background-color: #519839;
+    box-shadow: 0 1px 0 0 #3f6f21;
+    border: none;
+    color: #fff;
+    border-radius: 2px;
+}
+
 
 </style>
 <div class="task-index">
@@ -402,6 +434,7 @@ a.addTaskButton.active {
                         </span>
                       </div>
                       <?php } ?>
+                      <?php if(!empty($values->due_date)){ ?>
                       <div class="due-date">
                         <span class="glyphicon glyphicon-time time-icon"></span>
                           <?php
@@ -413,6 +446,7 @@ a.addTaskButton.active {
                             <?= $boardDate; ?>
                           </span>
                       </div>
+                    <?php } ?>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -440,36 +474,18 @@ a.addTaskButton.active {
                 </li>
             <?php $id2++;}}?>
             </ul>
+            <a class="add-card" href="#">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span class="add-title"> Add Card </span>
+            </a>
+            <div class="card-add">
+                <?= AddCardWidget::widget(['id' => $id,'taskModel' => $task, 'statusid' => $value->id]) ?>
+            </div>
         </li>
         <?php $id++; }?>
     </ul> 
 </div>
 <?php Pjax::end(); ?>
-
-<!-- <div class='wrapit'>
-  <div class='content'>
-    <div id="load-data"></div>
-  </div>
-</div>
-  <a class='button glyphicon glyphicon-plus addTaskButton' href='#'></a>
--->
-<?php 
-PopoverX::begin([
-    'header' => 'Add Task',
-    'size' => PopoverX::SIZE_MEDIUM,
-    'placement' => PopoverX::ALIGN_LEFT,
-    'toggleButton' => ['label'=>'Add Task', 'class'=>'btn btn-primary taskpop'],
-]);
-
- $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
-                    <?= $form->field($task, 'title')->textInput(['maxlength' => true, 'id' => 'task-popover', 'placeholder' => "Write some task here"])->label(false) ?>
-                  <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'taskButton2']) ?>
-                  <?php ActiveForm::end();
-
-PopoverX::end();
-
-?>
-
 
 <? 
     Modal::begin([
@@ -695,6 +711,20 @@ $(document).click(function (e) {
         $('.bottom-content').hide();
     }
 })
+$(document).ready(
+    function(){
+        $(".add-card").click(function (e) {
+            e.preventDefault();
+            $(this).hide();
+            $(this).next('div.card-add').show("slow");
+        });
+        $(".close-add").click(function (e) {
+            e.preventDefault();
+            $('.card-add').hide();
+            $('.add-card').fadeIn();
+        });
+
+    });
 JS;
  
 $this->registerJs($board);

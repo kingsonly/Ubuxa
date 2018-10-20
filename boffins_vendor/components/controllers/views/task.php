@@ -263,7 +263,7 @@ $boardUrl = Url::to(['task/index']);
 
 <?php 
 $taskUrl = Url::to(['site/task']);
-$createUrl = Url::to(['task/create']);
+$createUrl = Url::to(['task/dashboardcreate']);
 $task = <<<JS
 
 $(function(){
