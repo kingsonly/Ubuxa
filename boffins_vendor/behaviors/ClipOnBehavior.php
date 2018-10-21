@@ -81,19 +81,87 @@ class ClipOnBehavior extends Behavior
 	{
 		
 		return [
-			ActiveRecord::EVENT_AFTER_INSERT => 'behaviorCreateClipBarAfterSave', 
+			ActiveRecord::EVENT_AFTER_INSERT => 'behaviorAfterSave', 
+			ActiveRecord::EVENT_AFTER_FIND => 'fetchAllClipOn', 
 		];
    }
 	
 
-	public function behaviorCreateClipBarAfterSave($event) 
+	public function behaviorAfterSave($event) 
 	{
 		$this->createClipOnBar();
+		$this->createClipOn();
 	}
 	
-	private function createClipOn(){}
+	private function createClipOn(){
+		if(!empty($this->owner->ownerId)){
+			//
+			$clipOwnerTypeModel = new ClipOwnerType();
+			$clipBarModel  = new ClipBar();
+			$clipModel  = new Clip();
+			$getClassName = $this->_getShortClassName($this->owner);
+			
+			$getOwnerTypeId = $clipOwnerTypeModel->find([])->select(['id'])->where(['owner_type' => $getClassName])->one();
+			
+			$getClipBarId = $clipBarModel->find()->select(['id'])->where(['owner_id' => $this->owner->ownerId])->one();
+			$clipModel->owner_id = $this->owner->id;
+			$clipModel->bar_id = $getClipBarId->id;
+			$clipModel->owner_type_id = $getOwnerTypeId->id;
+			$clipModel->save();
+			
+		}else{
+			return;
+		}
+	}
 	
-	private function fetchAllClipOn(){}
+	public function fetchAllClipOn(){
+		$this->getClipDetails();
+		//var_dump($this->getAllClips());
+	}
+	
+	private function getClipDetails(){
+		$allClips = [];
+		
+		$getAllClipOwnerType = ClipOwnerType::find()->all();
+		foreach($getAllClipOwnerType as $value){
+			$allClips[$value->owner_type] = [];
+		}
+		
+		if(empty($this->getAllClips())){
+			return;
+		}
+		foreach($this->getAllClips() as $value){
+			$clips = $this->switchAmongClipTypes($value->ownerType->owner_type,$value->owner_id);
+			array_push($allClips[$value->ownerType->owner_type],$clips);
+		}
+		$this->clipOn = $allClips;
+	}
+	
+	private function switchAmongClipTypes($clipType,$clipId){
+		$clipParentClass = ucwords($clipType);
+		$clipTypeModel = '\\frontend\\models\\'.$clipParentClass;
+		$getClipDetails = $clipTypeModel::find()->where(['id' => $clipId])->one();
+		return $getClipDetails;
+	}
+	
+	private function getAllClips(){
+		$clipBarModel = new ClipBar();
+		$ownerId = $this->owner->id;
+		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;
+		$getClipBarcount = $clipBarModel->find()->where(['owner_id' => $ownerId])->count();
+		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();
+		if($getClipBarcount  !== '0'){
+			if(!empty($getClipBar->clips)){
+				$getClips = $getClipBar->clips;
+				return  $getClips;
+			}
+			return;
+			
+		}else{
+			return ;
+		}
+		
+	}
 	
 	private function createClipOnBar(){
 		$ownerTypeModel = new ClipBarOwnerType();
@@ -101,6 +169,7 @@ class ClipOnBehavior extends Behavior
 		
 		$getClassName = $this->_getShortClassName($this->owner) == 'Folder'?'folder':'component';
 		$searchOwnerTypeId = $ownerTypeModel->find()->select(['id'])->where(['owner_type' => $getClassName])->one();
+		
 		$clipBarModel->owner_id = $this->owner->id;
 		$clipBarModel->owner_type_id = $searchOwnerTypeId->id;
 		$clipBarModel->save(false);
@@ -109,7 +178,6 @@ class ClipOnBehavior extends Behavior
 	
 	private function _getShortClassName($classMethod)
 	{
-		
 		return (new \ReflectionClass($classMethod))->getShortName();
 	}
 	

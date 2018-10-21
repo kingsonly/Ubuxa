@@ -44,6 +44,8 @@ class FolderARModel extends ActiveRecord
 	 */
 	public $upload_file;
 	
+	public $ownerId;
+	
 	/* 
 	 * Variable to indicate to stop ComponentBehavior from acting on any events.
 	 */

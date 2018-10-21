@@ -244,11 +244,15 @@ $boardUrl = Url::to(['task/index']);
             <div class="form-containers">
                  <div class="embed-submit-field">
                   <?php Pjax::begin(['id'=>'task-refresh']); ?>
+					 
                     <?php $form = ActiveForm::begin(['id' => 'create-task','options' => ['data-pjax' => true ]]); ?>
+					 
                     <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
-                   <!-- <input type="text" placeholder="Write some task here" id="addTask"/> -->
+					 
+					 <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+                   
                     <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
-                    <!-- <button type="submit" id="taskButton">Save</button> -->
+                    
                     <?php ActiveForm::end(); ?>
                   <?php Pjax::end(); ?>
                 </div> 
