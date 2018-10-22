@@ -4,6 +4,8 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\Url;
+use boffins_vendor\classes\BoffinsArRootModel;
+
 
 /**
  * This is the model class for table "{{%remark}}".
@@ -22,7 +24,7 @@ use yii\helpers\Url;
  * @property Folder $folder
  * @property Person $person
  */
-class Remark extends \yii\db\ActiveRecord
+class Remark extends BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
@@ -40,7 +42,7 @@ class Remark extends \yii\db\ActiveRecord
         return [
             [['folder_id', 'person_id', 'view_id', 'cid'], 'integer'],
             [['project_id', 'remark_date', 'person_id', 'component_name', 'view_id'], 'required'],
-            [['remark_date'], 'safe'],
+            [['remark_date','ownerId'], 'safe'],
             [['project_id', 'remark_type', 'text'], 'string', 'max' => 255],
             [['component_name'], 'string', 'max' => 50],
             [['folder_id'], 'exist', 'skipOnError' => true, 'targetClass' => Folder::className(), 'targetAttribute' => ['folder_id' => 'id']],
