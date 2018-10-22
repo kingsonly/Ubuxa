@@ -178,6 +178,7 @@ class TaskController extends Controller
             $model = $this->findModel($id);
             $statusid = $data['status_id'];
             $model->status_id = $statusid;
+            $model->last_updated = new Expression('NOW()');
             $model->save();
         }
     }
@@ -190,21 +191,28 @@ class TaskController extends Controller
             $data = Yii::$app->request->post();   
             $user =  $data['user_id'];
             $task =  $data['task_id'];
+            $taskModel = $this->findModel($task);
             $exists = TaskAssignedUser::find()->where(['task_id' => $task, 'user_id' => $user])->exists();
             $assignee = TaskAssignedUser::findOne(['task_id' => $task, 'user_id' => $user]);
 
             if($exists && $assignee->status == 1) {
                 $assignee->status = 0;
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $assignee->save();
             }else if($exists && $assignee->status == 0){
                 $assignee->status = 1;
                 $assignee->assigned_date = new Expression('NOW()');
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $assignee->save();
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
                 $model->status = 1;
                 $model->assigned_date = new Expression('NOW()');
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $model->save();
             }
 
