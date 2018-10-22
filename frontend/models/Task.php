@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
 
 /**
  * This is the model class for table "{{%task}}".
@@ -27,7 +28,7 @@ use Yii;
  * @property TaskStatus $status
  * @property TaskReminder[] $taskReminders
  */
-class Task extends \yii\db\ActiveRecord
+class Task extends BoffinsArRootModel
 {
     /***
      * accessible value linked to the database id of "completed" in status_type under task group.. 
@@ -59,9 +60,8 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [[ 'owner','status_id', 'create_date'], 'required'],
-            [['title','last_updated', 'details', 'deleted', 'due_date'], 'safe'],
             [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
-            [['create_date', 'due_date', 'last_updated', 'label'], 'safe'],
+            [['create_date', 'due_date', 'last_updated', 'label','ownerId','title'], 'safe'],
             [['title', 'label'], 'string', 'max' => 50],
             [['details'], 'string', 'max' => 255],
             

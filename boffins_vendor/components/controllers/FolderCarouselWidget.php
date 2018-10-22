@@ -25,6 +25,7 @@ class FolderCarouselWidget extends Widget{
 	{
 		parent::init();
 	}
+	
 	public $folderModel;
 	public $displayType;
 	public $height;

@@ -71,7 +71,7 @@ $jsEventTriger = $htmlAttributes['class'];
 		</div>
 	
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <li>Create Invoice</li>
+                          <li id="<?= $jsEventTriger;?>-component" class="">Create Invoice</li>
 							<hr>
                           <li>Create Project</li>
 							<hr>
@@ -105,6 +105,12 @@ $("#"+"$jsEventTriger"+"-text").click(function(e){
      e.stopPropagation();
 });
 
+$("#"+"$jsEventTriger"+"-component").click(function(e){
+	$( ".$jsEventTriger-new-content" ).hide();
+	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+     e.stopPropagation();
+});
+
 
 
 
@@ -119,14 +125,7 @@ $(document).click(function(){
 	$('.create-new-folder').hide()
 });
 
-$(document).on("show.bs.dropdown", function () {
-  var dropdownToggle = $(this).find(".dropdown-toggle");
-  var dropdownMenu = $(this).find(".dropdown-menu");
-  dropdownMenu.css({
-    "top": (dropdownToggle.position().top + dropdownToggle.outerHeight()) + "px",
-    "left": dropdownToggle.position().left + "px"
-  });
-});
+
 
 
 

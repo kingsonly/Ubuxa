@@ -13,6 +13,8 @@ class TaskWidget extends Widget
 	public $task;
     public $id;
     public $taskModel;
+    public $parentOwnerId;
+	
     public function init()
     {
         parent::init();
@@ -25,6 +27,7 @@ class TaskWidget extends Widget
         	'display' => $this->task,
             'taskModel' => $this->taskModel,
             'id' => $this->id,
+            'parentOwnerId' => $this->parentOwnerId,
         	]);
     }
 }

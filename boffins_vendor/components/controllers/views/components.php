@@ -60,7 +60,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 		
 		<div class="col-xs-5 col-sm-2 ">
 				<div class="">
-					<div class=""><?= CreateButtonWidget::widget(['buttonType' => 'icon' ]);?></div>
+					<div class=""><?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test'] ]);?></div>
 				</div>
    		</div>
 		
@@ -74,6 +74,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 							'displayType' => 'component',
 							'height' => $height,
 							'numberOfDisplayedItems' => 4,
+							'htmlAttributes'=>'test',
 						]) ?>
 				</div>
 				</div>

@@ -120,7 +120,26 @@ transition: margin-top 0.1s ease-out 0s;
 	</style>
 <div id="folderusers">
 	<div id="invitenewuser">AUTHORIZED USERS</div>
-	<span id="plus-button"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>
+	
+	
+	<div class="dropdown">
+		<span id="plus-button" class="dropdown-toggle" id="dropdownMenuButtons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>
+	
+	
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
+                          <li id="" class="">Create Invoice</li>
+							<hr>
+                          <li>Create Project</li>
+							<hr>
+                          <li>Create Payment</li>
+							<hr>
+                          <li>Create Order</li>
+                          
+                        </div>
+                        </div>
+	
+	
+	
 	<div class="user-image">
 	<?php $count=100; ?>
 <?php foreach($attributues as $users){ 

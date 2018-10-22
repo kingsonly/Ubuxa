@@ -97,6 +97,7 @@ class FolderController extends Controller
             'reminder' => $reminder,
             'taskAssignedUser' => $taskAssignedUser,
             'users' => $users,
+            'id' => $id,
         ]);
     }
 

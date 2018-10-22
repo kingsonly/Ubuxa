@@ -214,6 +214,7 @@ $boardUrl = Url::to(['task/index']);
 <div class="todo-list">
   <?php 
     $id = 1;
+	if(!empty($display)){
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == 24){ ?>
@@ -237,18 +238,25 @@ $boardUrl = Url::to(['task/index']);
   </label>
 
   <?php $id++; }?>
-</div>   
+</div> 
+				<? }else{ ?>
+				<div> no task </div>
+		<? }?>
 </div>
 <?php Pjax::end(); ?>
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
                   <?php Pjax::begin(['id'=>'task-refresh']); ?>
+					 
                     <?php $form = ActiveForm::begin(['id' => 'create-task','options' => ['data-pjax' => true ]]); ?>
+					 
                     <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
-                   <!-- <input type="text" placeholder="Write some task here" id="addTask"/> -->
+					 
+					 <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+                   
                     <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
-                    <!-- <button type="submit" id="taskButton">Save</button> -->
+                    
                     <?php ActiveForm::end(); ?>
                   <?php Pjax::end(); ?>
                 </div> 
