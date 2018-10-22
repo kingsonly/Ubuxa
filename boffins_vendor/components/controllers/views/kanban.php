@@ -384,6 +384,7 @@ a.addTaskButton.active {
     <ul class="drag-list">
         <?php
         $id = 1; 
+		if(!empty($dataProvider)){
         foreach($taskStatus as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
@@ -396,6 +397,7 @@ a.addTaskButton.active {
             <ul class="drag-inner-list" id="<?=$id;?>" data-contain="<?= $value->id; ?>">
                 <?php 
                     $id2 = 1;
+				   if(!empty($dataProvider)){
                     foreach ($dataProvider as $key => $values) {
 
                         if($values->status_id == $value->id){
@@ -472,7 +474,8 @@ a.addTaskButton.active {
                         </div>
                     </div>
                 </li>
-            <?php $id2++;}}?>
+            <?php $id2++;}}}?>
+				
             </ul>
             <a class="add-card" href="#">
               <span class="glyphicon glyphicon-plus"></span>
@@ -482,7 +485,7 @@ a.addTaskButton.active {
                 <?= AddCardWidget::widget(['id' => $id,'taskModel' => $task, 'statusid' => $value->id]) ?>
             </div>
         </li>
-        <?php $id++; }?>
+        <?php $id++; }} ?>
     </ul> 
 </div>
 <?php Pjax::end(); ?>

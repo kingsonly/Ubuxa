@@ -214,6 +214,7 @@ $boardUrl = Url::to(['task/index']);
 <div class="todo-list">
   <?php 
     $id = 1;
+	if(!empty($display)){
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == 24){ ?>
@@ -237,7 +238,10 @@ $boardUrl = Url::to(['task/index']);
   </label>
 
   <?php $id++; }?>
-</div>   
+</div> 
+				<? }else{ ?>
+				<div> no task </div>
+		<? }?>
 </div>
 <?php Pjax::end(); ?>
 	   <div class="box-input1">
