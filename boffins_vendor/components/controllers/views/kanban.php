@@ -384,7 +384,6 @@ a.addTaskButton.active {
     <ul class="drag-list">
         <?php
         $id = 1; 
-		if(!empty($dataProvider)){
         foreach($taskStatus as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
@@ -397,13 +396,12 @@ a.addTaskButton.active {
             <ul class="drag-inner-list" id="<?=$id;?>" data-contain="<?= $value->id; ?>">
                 <?php 
                     $id2 = 1;
-				   if(!empty($dataProvider)){
-                    foreach ($dataProvider as $key => $values) {
-
-                        if($values->status_id == $value->id){
-                        $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                        $reminderUrl = Url::to(['reminder/create']);
-                        $listData=ArrayHelper::map($users,'id','username');
+                      if(!empty($dataProvider)){
+                        foreach ($dataProvider as $key => $values) {
+                          if($values->status_id == $value->id){
+                          $boardUrl = Url::to(['task/view', 'id' => $values->id]);
+                          $reminderUrl = Url::to(['reminder/create']);
+                          $listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
@@ -415,26 +413,26 @@ a.addTaskButton.active {
                         <?= $values->personName; ?>
                       </div>
                       <?php if(!empty($values->label)){ ?>
-                      <div class="task-label-title">
-                        <span class="label-task">
-                        <?= $values->label; ?>
-                      </span>
-                      </div>
-                    <?php } ?>
+                        <div class="task-label-title">
+                          <span class="label-task">
+                          <?= $values->label; ?>
+                        </span>
+                        </div>
+                      <?php } ?>
                     <?php 
                       $time = $values->reminderTime;
                       $check = date("Y-m-d H:i:s");
-                    if(!empty($time) && $time >= $check){ ?>
-                    <div class="reminder-time">
-                        <i class="fa fa-bell time-icon"></i>
-                        <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
-                          <?php
-                            $date = $values->reminderTime;
-                            $date = date('M j, g:i a', strtotime($date));
-                            echo $date;
-                          ?>
-                        </span>
-                      </div>
+                        if(!empty($time) && $time >= $check){ ?>
+                        <div class="reminder-time">
+                            <i class="fa fa-bell time-icon"></i>
+                            <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
+                              <?php
+                                $date = $values->reminderTime;
+                                $date = date('M j, g:i a', strtotime($date));
+                                echo $date;
+                              ?>
+                            </span>
+                          </div>
                       <?php } ?>
                       <?php if(!empty($values->due_date)){ ?>
                       <div class="due-date">
@@ -485,7 +483,7 @@ a.addTaskButton.active {
                 <?= AddCardWidget::widget(['id' => $id,'taskModel' => $task, 'statusid' => $value->id]) ?>
             </div>
         </li>
-        <?php $id++; }} ?>
+        <?php $id++;} ?>
     </ul> 
 </div>
 <?php Pjax::end(); ?>
