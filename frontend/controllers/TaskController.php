@@ -103,15 +103,47 @@ class TaskController extends Controller
     {
         $model = new Task();
         $model->owner = Yii::$app->user->identity->id;
-        $model->status_id = 21;
+        //$model->status_id = 21;
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if(empty($model->due_date)){
+                $model->due_date = NULL;
+                $model->save();
+            }else{
+                $model->save();
+            }
+            
             $model = new Task();
         }
 
         return $this->renderAjax('create', [
+            'reminder' => $reminder,
+            'model' => $model,
+        ]);
+    }
+
+    public function actionDashboardcreate()
+    {
+        $model = new Task();
+        $model->owner = Yii::$app->user->identity->id;
+        $model->status_id = 21;
+        $model->create_date=new Expression('NOW()');
+        $model->last_updated=new Expression('NOW()');
+        $reminder = new Reminder();
+        if ($model->load(Yii::$app->request->post())) {
+            if(empty($model->due_date)){
+                $model->due_date = NULL;
+                $model->save();
+            }else{
+                $model->save();
+            }
+            
+            $model = new Task();
+        }
+
+        return $this->renderAjax('dashboardcreate', [
             'reminder' => $reminder,
             'model' => $model,
         ]);

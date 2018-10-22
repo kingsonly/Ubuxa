@@ -10,12 +10,13 @@ use yii\base\Behavior;
 use yii\behaviors\AttributeBehavior;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
-use app\boffins_vendor\behaviors\DeleteUpdateBehavior;
-use app\boffins_vendor\behaviors\DateBehavior;
-use app\boffins_vendor\behaviors\ComponentsBehavior;
+use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use boffins_vendor\behaviors\DateBehavior;
+use boffins_vendor\behaviors\ComponentsBehavior;
+use boffins_vendor\behaviors\ClipOnBehavior;
 use yii\db\ActiveQuery;
-use app\boffins_vendor\classes\StandardQuery;
-use app\models\FolderComponent;
+use boffins_vendor\classes\StandardQuery;
+use frontend\models\FolderComponent;
 
 
 
@@ -30,7 +31,7 @@ class BoffinsArRootModel extends ActiveRecord
 	 */
 	public $defaltBehaviour;
 	
-	
+	public $ownerId;
 	
 	/*
 	 * @array or string to list date values in the ARModel/Child class
@@ -183,6 +184,7 @@ class BoffinsArRootModel extends ActiveRecord
 			"dateValues" => [
 				"class" => DateBehavior::className(),
 			],
+			'ClipOnBehavior' => ClipOnBehavior::className(),
 			
 			"deleteUpdateBehavior2" => DeleteUpdateBehavior::className(),
 		];

@@ -173,7 +173,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             <section>
             	<div class="row test5">
-            			<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $task]) ?>
+            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>

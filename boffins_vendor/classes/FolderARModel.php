@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use boffins_vendor\behaviors\FolderBehavior;
+use boffins_vendor\behaviors\ClipOnBehavior;
 use boffins_vendor\behaviors\ComponentsBehavior;
 use yii\db\ActiveQuery;
 use boffins_vendor\classes\StandardQuery;
@@ -42,6 +43,8 @@ class FolderARModel extends ActiveRecord
      * upload_file would hold all the needed files to be uploaded when a file is linked
 	 */
 	public $upload_file;
+	
+	public $ownerId;
 	
 	/* 
 	 * Variable to indicate to stop ComponentBehavior from acting on any events.
@@ -152,6 +155,7 @@ class FolderARModel extends ActiveRecord
 		return [
             
             'folderBehaviour' => FolderBehavior::className(),
+            'ClipOnBehavior' => ClipOnBehavior::className(),
         ];	
 	}
 	

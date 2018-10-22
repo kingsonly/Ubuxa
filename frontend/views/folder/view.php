@@ -135,7 +135,8 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
             <section>
             	<div class="row test5">
-            		<?= TaskWidget::widget(['task' => $task->displayTask(), 'taskModel' => $taskModel]) ?>
+					
+            		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
@@ -143,7 +144,7 @@ $img = $model->folder_image;
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
     </div>
     <?php Pjax::end(); ?>
         

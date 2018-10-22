@@ -169,10 +169,13 @@ class Folder extends FolderARModel
         
     }
 	
+	public function getAllChildFolder(){
+		
+	}
+	
 	public function getRole()
     {
 		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity])->select('role');
-		
 		
         
     }
