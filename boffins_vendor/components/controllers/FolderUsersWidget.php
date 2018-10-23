@@ -20,16 +20,20 @@ use yii;
 ************/
 class FolderUsersWidget extends Widget{
 	public $attributues = [];
+	public $removeButtons;
+	
 
 	public function init()
 	{
 		parent::init();
+		
 	}
 	
 	
 	public function run(){
 		return $this->render('folderuserswidgetview',[
 			'attributues' => $this->attributues,
+			'removeButtons' => $this->removeButtons,
 		]);
 	}
 	

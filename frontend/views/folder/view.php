@@ -129,6 +129,8 @@ $img = $model->folder_image;
 
         <div class="row">
 			<?
+	//$id = Yii::$app->queue->push(new SomeJob());
+
 	//just for test 
 				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
 			?>
