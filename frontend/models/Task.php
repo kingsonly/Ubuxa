@@ -220,4 +220,29 @@ class Task extends BoffinsArRootModel
         $task = $this->find()->orderBy(['id'=>SORT_DESC])->all();
         return $task;
     }
+
+    public function formatInterval($interval) {
+        $result = "";
+        if ($interval->y) { $result .= $interval->format("%y years "); }
+        if ($interval->m) { $result .= $interval->format("%m months "); }
+        if ($interval->d) { $result .= $interval->format("%d days "); }
+        if ($interval->h) { $result .= $interval->format("%h hours "); }
+        if ($interval->i) { $result .= $interval->format("%i minutes "); }
+        if ($interval->s) { $result .= $interval->format("%s seconds "); }
+
+        return $result;
+    }
+
+    public function getTimeCompletion()
+    {
+        $startTime = new \DateTime($this->in_progress_time);
+        $endTime = new \DateTime($this->completion_time);
+
+        
+        $timeTaken = $startTime->diff($endTime);
+
+        //$timeTaken = $endTime - $startTime;
+
+        return $this->formatInterval($timeTaken);
+    }
 }

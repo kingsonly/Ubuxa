@@ -30,7 +30,8 @@ $('#activeLabel'+'$taskid').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 success: function(response) {
                     console.log('completed');
-                    $.pjax.reload({container:"#asign-refresh"});
+                    //$.pjax.reload({container:"#asign-refresh"});
+                    $.pjax.reload({container:"#kanban-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

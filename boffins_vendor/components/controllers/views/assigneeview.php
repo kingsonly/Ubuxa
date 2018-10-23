@@ -206,7 +206,8 @@ function _AddUser(user,taskid){
                   task_id: taskid, 
                 },
               success: function(res, sec){
-                $.pjax.reload({container:"#asign-refresh",async: false});
+                //$.pjax.reload({container:"#asign-refresh",async: false});
+                $.pjax.reload({container:"#kanban-refresh",async: false});
                    console.log('Completed');
               },
               error: function(res, sec){
