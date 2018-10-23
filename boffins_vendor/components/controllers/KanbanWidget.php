@@ -17,7 +17,8 @@ class KanbanWidget extends Widget{
 	public $users;
 	public $taskAssignedUser;
 	public $folderId;
-	public $attributues = [];
+	public $label;
+	public $taskLabel;
 
 	public function init()
 	{
@@ -36,7 +37,8 @@ class KanbanWidget extends Widget{
 			'users' => $this->users,
 			'taskAssignedUser' => $this->taskAssignedUser,
 			'folderId' => $this->folderId,
-			'attributues' => $this->attributues,
+			'label' => $this->label,
+			'taskLabel' => $this->taskLabel,
 		]);
 	}
 	

@@ -422,10 +422,10 @@ a.addTaskButton.active {
                         </div>
 
                       </div>
-                      <?php if(!empty($values->label)){ ?>
+                      <?php if(!empty($values->labelNames)){ ?>
                         <div class="task-label-title">
-                          <span class="label-task">
-                          <?= $values->label; ?>
+                          <span class="label-task" id="label<?=$values->id.$count?>">
+                          <?= $values->labelNames; ?>
                         </span>
                         </div>
                       <?php } ?>
@@ -475,7 +475,7 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <?= CreateLabelWidget::widget(['id' => $count,'task' => $task, 'taskid' => $values->id]) ?>
+                         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id]) ?>
                         </div>
                       </div>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
