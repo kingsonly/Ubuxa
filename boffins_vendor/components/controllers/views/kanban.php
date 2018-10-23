@@ -8,6 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
+use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
@@ -408,17 +409,8 @@ a.addTaskButton.active {
                         <?= $values->personName; ?>
 
                         <div class="user-image">
-                          <?php $cnt=100; ?>
-                            <?php foreach($users as $test){ 
-                              $image = !empty($test["image"])?$test["image"]:'default-user.png';
-                              $cnt--;
-                              ?>
-                                
-                                    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $cnt;?>" data-placement="bottom" title="<?= $test['username'];?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
-                                
-                              
-                              
-                            <?php }; ?>
+                         
+							<?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
 
                       </div>

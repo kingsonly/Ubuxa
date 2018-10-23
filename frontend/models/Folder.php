@@ -151,7 +151,7 @@ class Folder extends FolderARModel
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
         }
 	public function getFolderUsers(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManager')->asArray();
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
         }
 
 
