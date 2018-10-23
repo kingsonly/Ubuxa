@@ -85,7 +85,8 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
                       "tapToDismiss": false
                     }
                 toastr.success('Folder was created successfully', "", options);
-               $.pjax.reload({container:"#asign-refresh",async: false});
+               //$.pjax.reload({container:"#asign-refresh",async: false});
+                $.pjax.reload({container:"#kanban-refresh",async: false});
 
             }else{
                     options = {
@@ -107,7 +108,8 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
           }
           alert(jsonResult);
         toastr.error('Somthing went wrong', "", options);
-             $.pjax.reload({container:"#asign-refresh",async: false});
+             //$.pjax.reload({container:"#asign-refresh",async: false});
+            $.pjax.reload({container:"#kanban-refresh",async: false});
             }
             }).fail(function(){
             console.log('Server Error');

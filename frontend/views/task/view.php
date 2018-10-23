@@ -76,9 +76,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="createDate">
             <span>Created <?= Yii::$app->formatter->format($model->create_date, 'relativeTime') ?></span>
         </div>
+    <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == 24){ ?>
         <div>
-            <span>Updated <?= Yii::$app->formatter->format($model->last_updated, 'relativeTime') ?></span>
+            Task completed in <?= $model->timeCompletion; ?>
         </div>
+    <?php } ?>
     </div>
 </div>
 

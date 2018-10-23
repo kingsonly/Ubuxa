@@ -103,13 +103,18 @@ class TaskController extends Controller
     {
         $model = new Task();
         $model->owner = Yii::$app->user->identity->id;
-        //$model->status_id = 21;
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
                 $model->due_date = NULL;
+                $model->save();
+            }elseif ($model->status_id == 22) {
+                $model->in_progress_time = new Expression('NOW()');
+                $model->save();
+            }elseif ($model->status_id == 24) {
+                $model->completion_time = new Expression('NOW()');
                 $model->save();
             }else{
                 $model->save();
@@ -134,6 +139,8 @@ class TaskController extends Controller
         $reminder = new Reminder();
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
+                $model->completion_time = NULL;
+                $model->in_progress_time = NULL;
                 $model->due_date = NULL;
                 $model->save();
             }else{
@@ -178,6 +185,14 @@ class TaskController extends Controller
             $model = $this->findModel($id);
             $statusid = $data['status_id'];
             $model->status_id = $statusid;
+            $model->last_updated = new Expression('NOW()');
+            if($statusid == 24){
+                $model->completion_time = new Expression('NOW()');
+                $model->save();
+            } elseif ($statusid == 22) {
+                $model->in_progress_time = new Expression('NOW()');
+                $model->save();
+            }
             $model->save();
         }
     }
@@ -190,21 +205,28 @@ class TaskController extends Controller
             $data = Yii::$app->request->post();   
             $user =  $data['user_id'];
             $task =  $data['task_id'];
+            $taskModel = $this->findModel($task);
             $exists = TaskAssignedUser::find()->where(['task_id' => $task, 'user_id' => $user])->exists();
             $assignee = TaskAssignedUser::findOne(['task_id' => $task, 'user_id' => $user]);
 
             if($exists && $assignee->status == 1) {
                 $assignee->status = 0;
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $assignee->save();
             }else if($exists && $assignee->status == 0){
                 $assignee->status = 1;
                 $assignee->assigned_date = new Expression('NOW()');
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $assignee->save();
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
                 $model->status = 1;
                 $model->assigned_date = new Expression('NOW()');
+                $taskModel->last_updated = new Expression('NOW()');
+                $taskModel->save();
                 $model->save();
             }
 

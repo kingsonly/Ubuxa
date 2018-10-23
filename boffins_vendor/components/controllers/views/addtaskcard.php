@@ -43,6 +43,7 @@ use yii\widgets\ActiveForm;
 <?php $form = ActiveForm::begin(['id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Write some task here", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
+    <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
     <?= Html::submitButton('Add Card', ['id' => 'cardButton']) ?>
     <span class="glyphicon glyphicon-remove close-add"></span> 
 <?php ActiveForm::end(); ?>
@@ -61,7 +62,8 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 success: function(response) {
                     console.log('completed');
-                    $.pjax.reload({container:"#asign-refresh"});
+                    //$.pjax.reload({container:"#asign-refresh"});
+                    $.pjax.reload({container:"#kanban-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

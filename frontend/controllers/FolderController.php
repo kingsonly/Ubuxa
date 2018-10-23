@@ -66,7 +66,7 @@ class FolderController extends Controller
         $reminder = new Reminder();
         $taskAssignedUser = new TaskAssignedUser();
         $cid = Yii::$app->user->identity->cid;
-        $users = UserDb::find()->where(['cid' => $cid])->all();
+        $users = $model->users;
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

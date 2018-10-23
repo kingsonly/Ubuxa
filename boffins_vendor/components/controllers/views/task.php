@@ -189,7 +189,7 @@ $boardUrl = Url::to(['task/index']);
                 <span>TASKS</span>
                  <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success'])?> 
             </div>
-            <?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            
 	        <div class="box-content-task">
              <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
   <defs>
@@ -214,7 +214,7 @@ $boardUrl = Url::to(['task/index']);
 <div class="todo-list">
   <?php 
     $id = 1;
-	if(!empty($display)){
+    if(!empty($display)){
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == 24){ ?>
@@ -237,19 +237,18 @@ $boardUrl = Url::to(['task/index']);
     
   </label>
 
-  <?php $id++; }?>
+  <?php $id++;}}else{
+    echo "No task";
+  }?>
 </div> 
-				<? }else{ ?>
-				<div> no task </div>
-		<? }?>
+
 </div>
-<?php Pjax::end(); ?>
+
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
-                  <?php Pjax::begin(['id'=>'task-refresh']); ?>
 					 
-                    <?php $form = ActiveForm::begin(['id' => 'create-task','options' => ['data-pjax' => true ]]); ?>
+                    <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
                     <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
 					 
@@ -258,7 +257,6 @@ $boardUrl = Url::to(['task/index']);
                     <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
                     <?php ActiveForm::end(); ?>
-                  <?php Pjax::end(); ?>
                 </div> 
             </div>  
         </div>
@@ -299,7 +297,7 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
-                $.pjax.reload({container:"#asign-refresh",async: false});
+                $.pjax.reload({container:"#kanban-refresh",async: false});
                    console.log('Status updated');
               },
               error: function(res, sec){

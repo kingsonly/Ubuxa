@@ -10,6 +10,7 @@ class AssigneeViewWidget extends Widget{
 	
 	public $users;
 	public $taskid;
+	public $attributues;
 
 	public function init()
 	{
@@ -21,6 +22,7 @@ class AssigneeViewWidget extends Widget{
 		return $this->render('assigneeview',[
 			'users' => $this->users,
 			'taskid' => $this->taskid,
+			'attributues' => $this->attributues,
 		]);
 	}
 	

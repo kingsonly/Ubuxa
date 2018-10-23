@@ -137,18 +137,21 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
             <section>
             	<div class="row test5">
-					
+					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::end(); ?>
             		<?= RemarksWidget::widget() ?>
             	</div>
             </section>
         </div>
     </div>
-    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+    
     <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
+    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'id' => $id]) ?>
+    	<?php Pjax::end(); ?>
     </div>
-    <?php Pjax::end(); ?>
+    
         
 </section>
 
@@ -172,19 +175,6 @@ $img = $model->folder_image;
 
 <?php 
 $indexJs = <<<JS
-
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
-  });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
