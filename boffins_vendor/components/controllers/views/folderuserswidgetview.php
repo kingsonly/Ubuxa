@@ -141,7 +141,7 @@ transition: margin-top 0.1s ease-out 0s;
 	
 	
 	<div class="user-image">
-	<?php $count=100; ?>
+	<?php $count= count($attributues); ?>
 <?php foreach($attributues as $users){ 
 	$image = !empty($users["image"])?$users["image"]:'default-user.png';
 	$count--;
