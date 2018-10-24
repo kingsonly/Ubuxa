@@ -7,6 +7,8 @@ use frontend\models\Folder;
 use frontend\models\Task;
 use frontend\models\StatusType;
 use frontend\models\Reminder;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
 use yii\data\ActiveDataProvider;
@@ -64,6 +66,8 @@ class FolderController extends Controller
 		$task = new Task();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
         $taskAssignedUser = new TaskAssignedUser();
         $cid = Yii::$app->user->identity->cid;
         $users = $model->users;
@@ -95,6 +99,8 @@ class FolderController extends Controller
 			'taskModel' => $task,
 		    'taskStatus' => $taskStatus,
             'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
             'taskAssignedUser' => $taskAssignedUser,
             'users' => $users,
             'id' => $id,

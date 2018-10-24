@@ -3,18 +3,17 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Reminder;
+use frontend\models\Label;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\db\Expression;
-use frontend\models\TaskReminder;
+use frontend\models\TaskLabel;
 
 /**
- * ReminderController implements the CRUD actions for Reminder model.
+ * LabelController implements the CRUD actions for Label model.
  */
-class ReminderController extends Controller
+class LabelController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,13 +31,13 @@ class ReminderController extends Controller
     }
 
     /**
-     * Lists all Reminder models.
+     * Lists all Label models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Reminder::find(),
+            'query' => Label::find(),
         ]);
 
         return $this->render('index', [
@@ -47,7 +46,7 @@ class ReminderController extends Controller
     }
 
     /**
-     * Displays a single Reminder model.
+     * Displays a single Label model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -60,32 +59,27 @@ class ReminderController extends Controller
     }
 
     /**
-     * Creates a new Reminder model.
+     * Creates a new Label model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Reminder();
-        $presentTime = new Expression('NOW()');
-		$model->last_updated = $presentTime;
-		$taskReminder = new TaskReminder();
+        $model = new Label();
+        $taskLabel = new TaskLabel();
 
-        if ($model->load(Yii::$app->request->post()) and $taskReminder->load(Yii::$app->request->post()) && $model->save()) {
-         
-                    $taskReminder->reminder_id = $model->id;
-                    $taskReminder->save(false);
-                    
-                }
-        
+        if ($model->load(Yii::$app->request->post()) and $taskLabel->load(Yii::$app->request->post()) && $model->save()) {
+            $taskLabel->label_id = $model->id;
+            $taskLabel->save(false);
+        }
 
-        return $this->renderAjax('create', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing Reminder model.
+     * Updates an existing Label model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -105,7 +99,7 @@ class ReminderController extends Controller
     }
 
     /**
-     * Deletes an existing Reminder model.
+     * Deletes an existing Label model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -119,15 +113,15 @@ class ReminderController extends Controller
     }
 
     /**
-     * Finds the Reminder model based on its primary key value.
+     * Finds the Label model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Reminder the loaded model
+     * @return Label the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Reminder::findOne($id)) !== null) {
+        if (($model = Label::findOne($id)) !== null) {
             return $model;
         }
 

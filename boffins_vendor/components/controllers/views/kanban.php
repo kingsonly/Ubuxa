@@ -404,19 +404,17 @@ a.addTaskButton.active {
                       <div class="task-title">
                         <?= $values->title; ?>
                       </div>
-                      
+                      <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
-                        <?= $values->personName; ?>
-
                         <div class="user-image">
                          
-							<?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
+							           <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
-
                       </div>
+                    <?php }?>
                       <?php if(!empty($values->label)){ ?>
                         <div class="task-label-title">
-                          <span class="label-task">
+                          <span class="label-task" id="label<?=$values->id.$count?>">
                           <?= $values->label; ?>
                         </span>
                         </div>
@@ -467,7 +465,7 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <?= CreateLabelWidget::widget(['id' => $count,'task' => $task, 'taskid' => $values->id]) ?>
+                         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id]) ?>
                         </div>
                       </div>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
