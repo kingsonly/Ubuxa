@@ -185,21 +185,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <span class="glyphicon glyphicon-plus addLabels"></span>
                 </a>
             </div>  
-            <?php if(!empty($model->label)){ ?>  
+            <?php if(!empty($model->labelNames)){ ?>  
                 <div class="task-labels">
-                    <span class="label-task"><?= $model->label; ?></span>
+                    <span class="label-task"><?= $model->labelNames; ?></span>
                 </div>
             <?php } ?>
         </div>
-
-     <div class="dropdown taskdrop">
-                        <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign task"></span>
-                        </a>
-                            <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
-                                    <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
-                            </div>
-                </div>
 
         <div class="alldates">
             <div class="due-dates">
