@@ -17,17 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'folder_id') ?>
-
-    <?= $form->field($model, 'project_id') ?>
-
-    <?= $form->field($model, 'remark_type') ?>
+    <?= $form->field($model, 'parent_id') ?>
 
     <?= $form->field($model, 'remark_date') ?>
 
-    <?php // echo $form->field($model, 'text') ?>
+    <?= $form->field($model, 'text') ?>
 
-    <?php // echo $form->field($model, 'cid') ?>
+    <?= $form->field($model, 'cid') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
