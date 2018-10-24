@@ -404,20 +404,18 @@ a.addTaskButton.active {
                       <div class="task-title">
                         <?= $values->title; ?>
                       </div>
-                      
+                      <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
-                        <?= $values->personName; ?>
-
                         <div class="user-image">
                          
-							<?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
+							           <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
-
                       </div>
-                      <?php if(!empty($values->labelNames)){ ?>
+                    <?php }?>
+                      <?php if(!empty($values->label)){ ?>
                         <div class="task-label-title">
                           <span class="label-task" id="label<?=$values->id.$count?>">
-                          <?= $values->labelNames; ?>
+                          <?= $values->label; ?>
                         </span>
                         </div>
                       <?php } ?>
