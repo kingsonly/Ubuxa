@@ -395,7 +395,7 @@ a.addTaskButton.active {
                       if(!empty($dataProvider)){
                         foreach ($dataProvider as $key => $values) {
                           if($values->status_id == $value->id){
-                          $boardUrl = Url::to(['task/view', 'id' => $values->id]);
+                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $folderId]);
                           $reminderUrl = Url::to(['reminder/create']);
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
