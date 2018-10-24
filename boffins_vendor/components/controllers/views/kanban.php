@@ -412,10 +412,10 @@ a.addTaskButton.active {
                         </div>
                       </div>
                     <?php }?>
-                      <?php if(!empty($values->label)){ ?>
+                      <?php if(!empty($values->labelNames)){ ?>
                         <div class="task-label-title">
                           <span class="label-task" id="label<?=$values->id.$count?>">
-                          <?= $values->label; ?>
+                          <?= $values->labelNames; ?>
                         </span>
                         </div>
                       <?php } ?>

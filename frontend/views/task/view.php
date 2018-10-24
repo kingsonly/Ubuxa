@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
     font-weight: 500;
 }
 </style>
-<?php Pjax::begin(['id'=>'task-refresh']); ?>
+<?php Pjax::begin(['id'=>'task-modal-refresh']); ?>
     <div class="task-view">
 
         <div class="task-titlez">
@@ -182,11 +182,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="allassignees">
             <div class="assignContent">
                 <span class="assignUsers">Labels</span>
-                <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
-                </a>
-                <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
-                    <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
+                <div class="dropdown taskdrop">
+                    <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
+                    </a>
+                    <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
+                        <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
+                    </div>
                 </div>
             </div>  
             <?php if(!empty($model->labelNames)){ ?>  
