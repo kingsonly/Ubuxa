@@ -43,6 +43,12 @@ return [
             'redis' => 'redis', // Redis connection component or its config
             'channel' => 'queue', // Queue channel key
         ],
+	    'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ],
     ],
 	'controllerMap' => [
 		// Common migrations for the whole application
