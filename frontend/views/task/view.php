@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
+use boffins_vendor\components\controllers\CreateLabelWidget;
 
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
@@ -163,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="assignUsers">Assignees</span>
                 <div class="dropdown taskdrop">
                         <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign task"></span>
+                            <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                         </a>
                             <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
                                     <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
@@ -181,9 +182,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="allassignees">
             <div class="assignContent">
                 <span class="assignUsers">Labels</span>
-                <a class="moreusers">
-                    <span class="glyphicon glyphicon-plus addLabels"></span>
+                <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
                 </a>
+                <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
+                    <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
+                </div>
             </div>  
             <?php if(!empty($model->labelNames)){ ?>  
                 <div class="task-labels">
