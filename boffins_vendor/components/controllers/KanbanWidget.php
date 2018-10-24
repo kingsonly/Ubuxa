@@ -27,6 +27,7 @@ class KanbanWidget extends Widget{
 	
 	// output the outcome of loopmenu
 	public function run(){
+		$this->folderId = $this->id;
 		return $this->render('kanban',[
 			'task' => $this->task,
 			'model' => $this->model,

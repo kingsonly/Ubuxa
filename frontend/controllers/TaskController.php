@@ -64,12 +64,12 @@ class TaskController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id,$folderId)
     {
         $model = $this->findModel($id);
         $status = StatusType::find()->where(['status_group' => 'task'])->all();
         $folderModel = new Folder();
-        $folder = $folderModel->findOne(19);
+        $folder = $folderModel->findOne($folderId);
         $users = $folder->users;
         $label = new label();
         $taskLabel = new TaskLabel();
