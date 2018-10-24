@@ -13,6 +13,8 @@ use yii\db\Expression;
 use frontend\models\Reminder;
 use frontend\models\Folder;
 use frontend\models\TaskReminder;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 
 
@@ -66,9 +68,11 @@ class TaskController extends Controller
     {
         $model = $this->findModel($id);
         $status = StatusType::find()->where(['status_group' => 'task'])->all();
-        //$folderModel = new Folder();
-        //$folder = $folderModel->findOne(19);
-        //$users = $folder->users;
+        $folderModel = new Folder();
+        $folder = $folderModel->findOne(19);
+        $users = $folder->users;
+        $label = new label();
+        $taskLabel = new TaskLabel();
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -95,7 +99,9 @@ class TaskController extends Controller
         return $this->renderAjax('view', [
             'model' => $model,
             'status' => $status,
-            //'users' => $users,
+            'users' => $users,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
         ]);
     }
 
