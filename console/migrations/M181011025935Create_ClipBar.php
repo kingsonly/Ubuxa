@@ -22,6 +22,7 @@ class M181011025935Create_ClipBar extends Migration
 										'capacity' =>  $this->integer()
 															->defaultValue(0)
 															->comment('maximum number of clips allowed 0 means no limit'),
+										'cid' => $this->integer(11),
         ]);
 		
 		// creates index for owner_id
@@ -60,12 +61,11 @@ class M181011025935Create_ClipBar extends Migration
      */
     public function safeDown()
     {
-        echo "M181011025935Create_ClipBar is a permanent feature and should not be reverted.\n";
+        echo "M181011025935Create_ClipBar is a permanent feature and should not be reverted.\n Reverting for development. \n";
 		$this->dropForeignKey('ClipBarOwnerType', "{{%clip_bar}}");
 		$this->dropIndex('idx-clip_bar-owner_id', "{{%clip_bar}}");
 		$this->dropTable("{{%clip_bar_owner_type}}");
 		$this->dropTable("{{%clip_bar}}");
-
 
     }
 
