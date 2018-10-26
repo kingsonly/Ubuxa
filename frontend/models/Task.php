@@ -175,7 +175,29 @@ class Task extends BoffinsArRootModel
         foreach($data as $attr) {
             $time[] = $attr->reminder_time;
         }
-        return implode(" ", $time);
+        return implode(",", $time);
+    }
+
+    public function getReminderTimeTask()
+    {
+        $time = [];
+        $data = $this->reminders;
+        foreach($data as $attr) {
+            $time[] = $attr->reminder_time;
+        }
+        return $time;
+    }
+
+    public function closestReminder($reminders, $date)
+    {
+        foreach($reminders as $day){
+            $interval[] = abs(strtotime($date) - strtotime($day));
+        }
+
+        asort($interval);
+        $closest = key($interval);
+
+        return $reminders[$closest];
     }
 
     public function getTaskAssignedUsers()
