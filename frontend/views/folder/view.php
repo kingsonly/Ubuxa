@@ -123,7 +123,11 @@ $img = $model->folder_image;
    						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder'],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
                     	</div>
-
+<?
+				if(!empty($model->subFolders)){
+					var_dump($model->subFolders);
+				}
+				?>
             </section>
         </div>
 
@@ -134,7 +138,7 @@ $img = $model->folder_image;
 	//just for test 
 				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
 			?>
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
             <section>
             	<div class="row test5">
 					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>

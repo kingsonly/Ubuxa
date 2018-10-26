@@ -1,5 +1,13 @@
 <?
 use yii\helpers\Url;
+use yii\helpers\Html;
+use kartik\select2\Select2; // or kartik\select2\Select2
+use yii\web\JsExpression;
+use frontend\models\InviteUsers;
+use yii\widgets\ActiveForm;
+$userModel = new InviteUsers();
+$url = Url::to(['folder/users']);
+$url2 = Url::to(['folder/add-users','id' => $id]);
 ?>
 <style>
 	.img-circular{
@@ -128,14 +136,36 @@ transition: margin-top 0.1s ease-out 0s;
 	
 	
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
-                          <li id="" class="">Create Invoice</li>
-							<hr>
-                          <li>Create Project</li>
-							<hr>
-                          <li>Create Payment</li>
-							<hr>
-                          <li>Create Order</li>
-                          
+							<li id="" class="">
+	<?$form = ActiveForm::begin(['action'=>Url::to(['folder/add-users']),'id' => 'add-new-user']); ?>
+	<?= $form->field($userModel, 'users[]')->widget(Select2::classname(), [
+     // set the initial display text
+    'options' => ['placeholder' => 'Search for a user ...', 'multiple' => true],
+'pluginOptions' => [
+    'allowClear' => true,
+	'tags' => true,
+     'tokenSeparators' => [',', ' '],
+    'minimumInputLength' => 3,
+    'language' => [
+        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+    ],
+    'ajax' => [
+        'url' => $url,
+        'dataType' => 'json',
+        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+    ],
+    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+    'templateResult' => new JsExpression('function(user) { return user.surname + user.first_name ; }'),
+    'templateSelection' => new JsExpression('function (user) { return user.surname +" " + user.first_name ;}'),
+],
+]);
+	?>
+    <div class="form-group">
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+							</li>
                         </div>
                         </div>
 	<? }?>
@@ -175,6 +205,31 @@ $userJs = <<<JS
 	})
 	$('[data-toggle="tooltip-user"]').tooltip();
 	$('[data-toggle="tooltip"]').tooltip();
+	
+	
+	
+	
+	
+	$('body').on('beforeSubmit', '#add-new-user', function () {
+     var form = $(this);
+     // return false if form still have some validation errors
+     if (form.find('.has-error').length) {
+          return false;
+     }
+     // submit form
+     $.ajax({
+          url: '$url2',
+          type: 'post',
+          data: form.serialize(),
+          success: function (response) {
+               // do something with response
+			   alert(3456)
+          }
+     });
+     return false;
+});
+
+  
 JS;
 
 $this->registerJs($userJs);

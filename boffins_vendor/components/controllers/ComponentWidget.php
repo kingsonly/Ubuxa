@@ -24,6 +24,7 @@ class ComponentWidget extends Widget
 	public $users;
 	public $components;
 	public $otherAttributes;
+	public $id;
     public function init()
     {
         parent::init();
@@ -35,6 +36,7 @@ class ComponentWidget extends Widget
         return $this->render('components',[
 			'users'=>$this->users,
 			'components'=>$this->components,
+			'id'=>$this->id,
 			'height'=>$height,
 		]);
     }
