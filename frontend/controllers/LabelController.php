@@ -70,10 +70,10 @@ class LabelController extends Controller
 
         if ($model->load(Yii::$app->request->post()) and $taskLabel->load(Yii::$app->request->post()) && $model->save()) {
             $taskLabel->label_id = $model->id;
-            $taskLabel->save(false);
+            $taskLabel->save();
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }

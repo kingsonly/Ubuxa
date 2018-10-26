@@ -7,15 +7,18 @@ use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 
 ?>
+<?php Pjax::begin(['id'=>'label-refresh']); ?>
 <?php 
-    $form = ActiveForm::begin(['id' => 'activeLabel'.$taskid, 'action'=>Url::to(['label/create'])]); ?>
+    $form = ActiveForm::begin(['id' => 'activeLabel'.$taskid,'options' => ['data-pjax' => true, 'class' => 'task-label-class']]); ?>
     <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id, 'placeholder' => "Add label"]) ?>
     <?= $form->field($taskLabel, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $taskid])->label(false); ?>
     <?= Html::submitButton('Save', ['class' => 'btn btn-success labelButton', 'id'=>'checkb'.$id, 'data-id' => $id]) ?>
     
 <?php ActiveForm::end(); ?>
+<?php Pjax::end(); ?>
 
 <?php
+$labelUrl = Url::to(['label/create']);
 $assignee = <<<JS
 $('#activeLabel'+'$taskid').on('beforeSubmit', function(e) { 
            var form = $(this);
@@ -23,14 +26,14 @@ $('#activeLabel'+'$taskid').on('beforeSubmit', function(e) {
                 return false;
             }
             $.ajax({
-                url: form.attr('action'),
+                url: '$labelUrl',
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
                     console.log('completed');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-modal-refresh",async: false});
+                    $.pjax.reload({container:"#task-label-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

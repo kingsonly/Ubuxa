@@ -6,7 +6,6 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
-
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use yii\helpers\ArrayHelper;
@@ -26,7 +25,18 @@ $this->params['breadcrumbs'][] = $this->title;
 .panel{
     border: none;
 }
-
+.X{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+.task-label-class{
+    margin-left: 10px !important;
+    margin-right: 10px !important; 
+}
+.reminder-form {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
 
 .timestamp {
     color: #707070;
@@ -54,8 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
     margin-bottom: 10px;
 }
 .task-detailzz {
-    margin-bottom: 10px;
-    /* display: inline-block; */
+    display: block;
+    margin: 0 8px 8px 0;
+    max-width: 100%;
+    margin-right: 8px;
+    min-width: 140px;
 }
 .assignContent {
     margin-bottom: 5px;
@@ -73,15 +86,19 @@ $this->params['breadcrumbs'][] = $this->title;
     margin: 0px 2px 4px 0;
 }
 .moreusers{
-    background-color: rgba(9,45,66,.08);
     border-radius: 2px;
     color: #6b808c;
     cursor: pointer;
-    padding: 6px;
     margin: 0 8px 8px 0;
     transition-property: background-color,border-color,box-shadow;
     transition-duration: 85ms;
     transition-timing-function: ease;
+    margin-right: 0px;
+    padding-left: 5px;
+}
+.taskdrop {
+    background-color: rgba(9,45,66,.08);
+    padding: 6px;
 }
 .modal-content {
     background-color: #ecf0f1;
@@ -99,20 +116,20 @@ $this->params['breadcrumbs'][] = $this->title;
 .addLabels {
     padding: 5px;
     font-size: 12px;
-    padding-right: 4px;
+    padding-right: 10px;
 }
 
 .allassignees {
     display: block;
-    float: left;
     margin: 0 8px 8px 0;
     max-width: 100%;
+    margin-right: 8px;
+    min-width: 140px;
 }
 .task-labels {
     margin-top: 15px;
 }
 .task-details-title{
-    padding-right: 100%;
     color: #6b808c;
     font-size: 12px;
     font-weight: 500;
@@ -140,8 +157,26 @@ $this->params['breadcrumbs'][] = $this->title;
 .task-titless {
     font-weight: 500;
 }
+.reminder-title {
+    color: #6b808c;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    line-height: 16px;
+    margin-top: 16px;
+    text-transform: uppercase;
+    line-height: 20px;
+    margin: 0px 2px 4px 0;
+}
+.alldates {
+    display: block;
+    max-width: 100%;
+}
+.all-labels{
+    margin-bottom: 10px;
+}
 </style>
-<?php Pjax::begin(['id'=>'task-modal-refresh']); ?>
+
     <div class="task-view">
 
         <div class="task-titlez">
@@ -162,14 +197,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="allassignees">
             <div class="assignContent">
                 <span class="assignUsers">Assignees</span>
-                <div class="dropdown taskdrop">
+                <span class="dropdown taskdrop">
                         <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                         </a>
                             <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
                                     <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
                             </div>
-                </div>
+                </span>
             </div>
             <?php if(!empty($model->taskAssignees)){?>
 
@@ -178,18 +213,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             <?php } ?>
         </div>
-    
-        <div class="allassignees">
+        <div class="all-labels">
             <div class="assignContent">
                 <span class="assignUsers">Labels</span>
-                <div class="dropdown taskdrop">
+                <span class="dropdown taskdrop">
                     <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
                     </a>
                     <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
                         <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
                     </div>
-                </div>
+                </span>
             </div>  
             <?php if(!empty($model->labelNames)){ ?>  
                 <div class="task-labels">
@@ -198,8 +232,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php } ?>
         </div>
 
-        <div class="alldates">
+
+    <div class="task-detailzz">
+        <div>
+            <span class="glyphicon glyphicon-tasks"></span>
+            <span class="task-details-title">Details</span>
+        </div>
+           <div class="task-detailz">
+                       <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+                        ['modelAttribute'=>'details','xeditable' => 'notes'],
+                        ]]); ?>
+           </div>
+    </div>
+
+    <div class="alldates">
             <div class="due-dates">
+                <span class="glyphicon glyphicon-time"></span>
                 <span class="assignUsers">Due Date</span>
             </div>    
             <div class="due-labels">
@@ -207,25 +255,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['modelAttribute'=>'due_date','xeditable' => 'datetime'],
                         ]]); ?></span>
             </div>
-        </div>  
-
-    <div class="task-detailzz">
-        <div><span class="task-details-title">Details</span></div>
-        <div class="task-detailz">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-                        ['modelAttribute'=>'details','xeditable' => 'notes'],
-                        ]]); ?>
-        </div>
     </div>
 
     <div class="allreminder">
             <div class="reminder-dates">
+                <i class="fa fa-bell icons"></i>
                 <span class="reminder-title">Reminder</span>
             </div>    
             <div class="reminder-labels">
-                <span class="label-reminder"><?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-                        ['modelAttribute'=>'reminderTime','xeditable' => 'datetime'],
-                        ]]); ?></span>
+                <span class="label-reminder">
+                    <?php 
+                    $tests = $model->reminderTimeTask;
+                     foreach ($tests as $test) { 
+                        var_dump($test);
+                        ?>
+                        <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+                        ['modelAttribute'=>'reminderTimeTask[]','xeditable' => 'datetime'],
+                        ]]); ?>
+                    <?php }?>
+                    </span>                    
+                    
             </div>
         </div>
   
@@ -241,4 +290,3 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
-<?php Pjax::end(); ?>

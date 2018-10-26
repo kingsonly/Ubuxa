@@ -67,4 +67,12 @@ class Reminder extends \yii\db\ActiveRecord
         return $this->hasMany(Task::className(), ['id' => 'task_id'])
             ->via('taskReminders');
     }
+
+    public function checkForReminders($presentTime)
+    {
+        $reminderAlert = Reminder::find()->where(['<=', 'reminder_time', $presentTime])
+            ->andWhere(['deleted'=>0]) 
+            ->all();
+        return $reminderAlert;
+    }
 }

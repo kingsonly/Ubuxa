@@ -49,6 +49,7 @@ AppAsset::register($this);
     color: black !important;
 }
 .drag-column {
+  min-width: 315px;
   flex: 1;
   margin: 0 10px;
   position: relative;
@@ -90,6 +91,7 @@ AppAsset::register($this);
   min-height: 50px;
 }
 .drag-item {
+  width: 295px;
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -384,7 +386,7 @@ a.addTaskButton.active {
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
+                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
             </span>
                 
             <div class="drag-options" id="options<?=$count;?>"></div>
@@ -421,16 +423,15 @@ a.addTaskButton.active {
                       <?php } ?>
                     <?php 
                       $time = $values->reminderTime;
+                      $timers = explode(",",$time);
                       $check = date("Y-m-d H:i:s");
-                        if(!empty($time) && $time >= $check){ ?>
+                      $closest = $values->closestReminder($timers, $check);
+                      $reminders = date('M j, g:i a', strtotime($closest));
+                        if(!empty($time) && $reminders >= $check){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
                             <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
-                              <?php
-                                $date = $values->reminderTime;
-                                $date = date('M j, g:i a', strtotime($date));
-                                echo $date;
-                              ?>
+                              <?= $reminders; ?>
                             </span>
                           </div>
                       <?php } ?>
@@ -678,31 +679,25 @@ showOptions.init();
   //return false;
   //});
 
-$('.testdrop').on('click',function(){
-  if($(this).hasClass('clicked')){
-    $(this).removeClass('clicked');
-    $(this).parent().parent().css('visibility','hidden');
-  } else {
-  $(this).addClass('clicked');
-  }
-  })
+$('.dropdown').on('click',function(){
+  if($(this).hasClass('testdrop')){
+    $(this).addClass('clicked');
+    //$(this).parent().parent().css('visibility','hidden');
+  } 
+})
 
 $('.drag-item').mouseenter(function(){
        $(this).find('.bottom-content').css("visibility","visible");
   }).mouseleave(function(){
-          if($(this).find('.dropdown').hasClass('clicked')){
+          if($(this).find('.testdrop').hasClass('open')){
             $(this).find('.bottom-content').css("visibility","visible");
-          } else {
+          } else{
+            //$(this).removeClass('clicked');
             $(this).find('.bottom-content').css("visibility","hidden");
           }
          
     })
 
-$(".testdrop").click(function () {
-  
-  $(this).find('.bottom-content').css("visibility","visible");
- // $(".bottom-content").css("visibility","visible");
-});
 
  window.onscroll = function(ev) {
    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -715,13 +710,13 @@ $(".testdrop").click(function () {
 }; 
 $(document).click(function (e) {
     e.stopPropagation();
-    var container = $(".dropdown");
+    var container = $(".testdrop");
     var containerr = container.find('.clicked');
 
     //check if the clicked area is dropDown or not
     if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
         container.removeClass('clicked');
-        $('.bottom-content').hide();
+        $('.bottom-content').css("visibility","hidden");
     }
 })
 $(document).ready(
