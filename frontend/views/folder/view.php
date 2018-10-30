@@ -123,22 +123,17 @@ $img = $model->folder_image;
    						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder'],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
                     	</div>
-<?
-				if(!empty($model->subFolders)){
-					var_dump($model->subFolders);
-				}
-				?>
             </section>
         </div>
 
         <div class="row">
+			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
-	//$id = Yii::$app->queue->push(new SomeJob());
-
-	//just for test 
 				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
 			?>
+			
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
+			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
 					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
