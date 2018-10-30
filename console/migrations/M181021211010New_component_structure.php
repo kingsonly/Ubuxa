@@ -45,7 +45,22 @@ class M181021211010New_component_structure extends Migration
 										'name' => $this->string(55)->comment('just a public name for the customer/user'),
 										'type' => $this->string()->comment('must be a type: integer, varchar, decimal, classname, or blob'),
 										'default_format' => $this->string(255)->comment('a default format if the user does not set one'), 
-										'cid' => $this->integer()->comment('we need to discuss this as attribute types will be common to all customers'),
+        ]);
+		
+		//add a few rows to  the table
+		$this->batchInsert("{{%component_attribute_type}}", ['name', 'type'], [
+													['Number', 'integer'],
+													['Short Text', 'short_string'],
+													['Long Text', 'long_string'],
+													['Amount (Money)', 'money'],
+													['Currency', 'known_class'],
+													['Client', 'known_class'],
+													['Supplier', 'known_class'],
+													['User', 'known_class'],
+													['File Location', 'short_string'],
+													['File Binary', 'variant_object'],
+													['Timestamp', 'timestamp'],
+													['XML Object', 'variant_string'],
         ]);
 		
 		// create a table for behaviours (do not forget actions, relationships and events - later)
@@ -62,7 +77,7 @@ class M181021211010New_component_structure extends Migration
 		$this->addColumn( '{{%component}}', 'title', $this->string(255)->after('id') );
 		$this->addColumn( '{{%component}}', 'component_template_id', $this->integer(11)->after('id') );
 
-		// create a table for ComponentInstanceAttribute. 
+		// create a table for ComponentAttribute. 
 		$this->createTable("{{%component_attribute}}", [
 										'id' => $this->primaryKey(11),
 										'component_id' => $this->integer(11)->comment('foreign key to component table'),
