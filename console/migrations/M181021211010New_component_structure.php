@@ -127,6 +127,12 @@ class M181021211010New_component_structure extends Migration
 													'value' => "LONGTEXT NOT NULL",
 													'type' => $this->string()->comment("a preferred data type to convert the value to if it is not serialised - this is not indexed"),
 		]);
+		`
+		// create a table for all other strings not mapped above (json?, html? etc). 
+		$this->createTable("{{%value_timestamp}}", [
+													'id' => $this->primaryKey(11),
+													'value' => $this->timestamp()->comment("the actual value of the cell"),
+		]);
 		
 		//create an index on name in component_template
         $this->createIndex(
@@ -220,6 +226,13 @@ class M181021211010New_component_structure extends Migration
         $this->createIndex(
             'idx-value_money-value',
             "{{%value_money}}",
+            'value'
+        );
+		
+		//create an index on value in value_timestamp
+        $this->createIndex(
+            'idx-value_timestamp-value',
+            "{{%value_timestamp}}",
             'value'
         );
 		
