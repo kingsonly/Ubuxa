@@ -1,6 +1,6 @@
 <?php
 
-namespace console\migrations;
+//namespace console\migrations;
 
 use yii\db\Migration;
 
@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `tm_entity` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8 COMMENT='Connects to Persons and Corporate to allow payments from/to ';
 IDT;
+		echo "The DB: " . $this->db->dsn;
 		$this->execute($sql_entity);
 		//create person table 
 		$this->createTable("{{%person}}", [
