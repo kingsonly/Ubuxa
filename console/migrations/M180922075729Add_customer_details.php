@@ -1,6 +1,6 @@
 <?php
 
-namespace console\migrations;
+//namespace console\migrations;
 
 use yii\db\Migration;
 
@@ -9,12 +9,18 @@ use yii\db\Migration;
  */
 class M180922075729Add_customer_details extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+	/***
+	 *  a suffix to add to database name (Yii Application Component ID) for  different (special) migration controllers
+	 *  to determine the context of the migration. (really just for test = _test suffix)
+	 */
+	public $db_suffix = '';
+	
+	/***
+	 *  {@inheritdoc}
+	 */
 	public function init()
     {
-        $this->db = 'db_tenant';
+        $this->db = 'db_tenant' . $this->db_suffix;
         parent::init();
     }
 	
@@ -32,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `tm_entity` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8 COMMENT='Connects to Persons and Corporate to allow payments from/to ';
 IDT;
+		echo "The DB: " . $this->db->dsn;
 		$this->execute($sql_entity);
 		//create person table 
 		$this->createTable("{{%person}}", [

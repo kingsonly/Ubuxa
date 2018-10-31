@@ -1,6 +1,6 @@
 <?php
 
-namespace console\migrations;
+//namespace console\migrations;
 
 use yii\db\Migration;
 
@@ -23,7 +23,7 @@ class M180919034504Create_user_image extends Migration
      */
     public function safeDown()
     {
-        echo "M180919034504Create_user_image cannot be reverted.\n";
+        echo "M180919034504Create_user_image cannot be reverted. Reverting for development\n";
 
         return false;
     }
