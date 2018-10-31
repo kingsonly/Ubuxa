@@ -129,7 +129,6 @@ transition: margin-top 0.1s ease-out 0s;
 <div class="folderusers">
 	<? if($removeButtons !== false){?>
 	<div id="invitenewuser">AUTHORIZED USERS</div>
-	<? var_dump($removeButtons)?>
 	
 	<div class="dropdown">
 		<span id="plus-button" class="dropdown-toggle" id="dropdownMenuButtons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>

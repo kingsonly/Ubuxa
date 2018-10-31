@@ -22,6 +22,7 @@ class SubFolders extends Widget
 	public $htmlAttributes;
 	public $folderCarouselWidgetAttributes;
 	public $createButtonWidgetAttributes;
+	public $folderPrivacy;
 	
     public function run()
     {
@@ -31,6 +32,7 @@ class SubFolders extends Widget
 			'htmlAttributes' => $this->htmlAttributes['class'],
 			'folderCarouselWidgetAttributes' => $this->folderCarouselWidgetAttributes,
 			'createButtonWidgetAttributes' => $this->createButtonWidgetAttributes,
+			'folderPrivacy' => $this->folderCarouselWidgetAttributes['folderPrivacy'],
 		]);
     }
 }

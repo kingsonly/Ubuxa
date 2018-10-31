@@ -272,12 +272,13 @@ text-overflow: ellipsis;
         </div>
       </div>
 	<div class="create-new-<?= $htmlAttributes; ?>">
-		<?= FolderCreateWidget::widget();?>
+		<?= FolderCreateWidget::widget(['folderPrivacy'=>$folderCarouselWidgetAttributes['folderPrivacy']]);?>
 	</div>
     </section>
 
 
 <?
+
 $Carousel = <<<Carousels
 
 var owl = $('.'+'$displayType');
