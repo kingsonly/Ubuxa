@@ -189,8 +189,57 @@ text-overflow: ellipsis;
         <?= FolderCreateWidget::widget(); ?>
     </p>
 	<div class="row" style="background:#fff;">
-		<? foreach($dataProvider as $folder){?>
-		<?
+		<? 
+		$categoryToTag1 = array();
+		foreach ($dataProvider as $folderOneFilter) {
+			
+			if($folderOneFilter->parent_id == '0'){
+				if($folderOneFilter->folderManagerFilter->role == 'author'){
+				$categoryToTag1['mainfolder'][$folderOneFilter->private_folder][] = $folderOneFilter;
+			}else{
+				$categoryToTag1['mainfolder']['shared'][] = $folderOneFilter;
+			}
+			} else{
+				if($folderOneFilter->folderManagerFilter->role == 'author'){
+				$categoryToTag1['subfolder'][$folderOneFilter->private_folder][] = $folderOneFilter;
+			}else{
+				$categoryToTag1['subfolder']['shared'][] = $folderOneFilter;
+			}
+			}
+			
+
+		}
+		
+		foreach($categoryToTag1 as $key => $folder){?>
+		
+			<div style="border:solid 2px red; margin-top:20px;">
+				<?= $key;?>
+			<? foreach($folder as $actuallFolder){?>
+			
+			<? foreach($actuallFolder as $newactualfolder){?>
+		
+			
+				<?= $newactualfolder->id;?>
+			
+			<? }?>
+		
+			<? }?> 
+			</div>
+		<? }?> 
+	
+	</div>
+	
+
+
+	
+</div>
+
+<pre>
+		<? //var_dump($categoryToTag1);?>
+	</pre>	
+
+<!--
+<?/*
 			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
 			 ?>
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
@@ -199,15 +248,9 @@ text-overflow: ellipsis;
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
-						<?= $folder['title']; ?>
+						<?= $folder['title'];*/ ?>
 					
 				</div>
 				</a>
         </div>
-		<? }?>
-	</div>
-	
-
-
-	
-</div>
+-->
