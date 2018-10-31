@@ -4,15 +4,15 @@ namespace frontend\assets;
 use yii\web\AssetBundle;
 use yii\web\View;
 
-class DragulaAsset extends AssetBundle
+class CaretAsset extends AssetBundle
 {
-	public $sourcePath="@npm/dragula";
+	public $sourcePath="@npm/jquery.caret";
 	public $baseUrl = '@web';
 	public $css = [
-		'dist/dragula.min.css',
+
     ];
-	public $js =[
-		'dist/dragula.min.js',
+	public $js        =[
+		'dist/jquery.caret.js',
 	];
 	public $jsOptions =[
 		'position'=>View::POS_HEAD,

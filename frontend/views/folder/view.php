@@ -18,7 +18,6 @@ use kartik\popover\PopoverX;
 
 
 
-
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -130,6 +129,7 @@ $img = $model->folder_image;
         <div class="row">
 			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
+
 				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
 			?>
 			
@@ -137,7 +137,7 @@ $img = $model->folder_image;
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
-					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+					
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id, 'remarks' => $model->clipOn['remark'] ]) ?>
@@ -146,13 +146,11 @@ $img = $model->folder_image;
             </section>
         </div>
     </div>
-    
+    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'id' => $id, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
-    	<?php Pjax::end(); ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
     </div>
-    
+    <?php Pjax::end(); ?>
         
 </section>
 
@@ -176,6 +174,19 @@ $img = $model->folder_image;
 
 <?php 
 $indexJs = <<<JS
+
+$(function(){
+    $("#boardButton").on('click', function(e){
+        $(".test5").slideUp('slow');
+        $('.view-task-board').show();
+  });
+  $('.task-icon').on('click',function(e){
+  		e.preventDefault();
+	    //$(".view-task-board").hi('slow');
+	    $(".view-task-board").hide();
+	    $('.test5').slideDown('slow');
+   });
+});
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })

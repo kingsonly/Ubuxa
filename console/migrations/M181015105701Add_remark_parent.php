@@ -14,7 +14,8 @@ class M181015105701Add_remark_parent extends Migration
      */
     public function safeUp()
     {
-		$this->addColumn("{{%remark}}", 'parent_id', $this->integer(11)->defaultValue(0)->after('id') );
+        $this->addColumn("{{%remark}}", 'parent_id', $this->integer(11)->defaultValue(0)->after('id') );
+
 		//drop folder id and project id in the future 
     }
 

@@ -10,7 +10,8 @@ class RemarksWidget extends Widget
 {
 	public $remarkModel;
 	public $parentOwnerId;
-	public $remarks;
+    public $remarks;
+	public $modelName;
 
     public function init()
     {
@@ -23,7 +24,8 @@ class RemarksWidget extends Widget
         return $this->render('remarks',[
         	'remarkModel' => $this->remarkModel,
         	'parentOwnerId' => $this->parentOwnerId,
-        	'remarks' => $this->remarks,
+            'remarks' => $this->remarks,
+        	'modelName' => $this->modelName,
         ]);
     }
 }

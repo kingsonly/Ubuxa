@@ -12,7 +12,8 @@ class RemarkComponentViewWidget extends Widget
 
 	public $remarkModel;
 	public $parentOwnerId;
-	public $remarks;
+    public $remarks;
+	public $modelName;
 
     public function init()
     {
@@ -25,7 +26,8 @@ class RemarkComponentViewWidget extends Widget
         return $this->render('remarkComponentView',[
         	'remarkModel' => $this->remarkModel,
         	'parentOwnerId' => $this->parentOwnerId,
-        	'remarks' => $this->remarks,
+            'remarks' => $this->remarks,
+        	'modelName' => $this->modelName,
         ]);
     }
 }
