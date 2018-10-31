@@ -31,6 +31,7 @@ class FolderCarouselWidget extends Widget{
 	public $height;
 	public $numberOfDisplayedItems;
 	public $htmlAttributes;
+	public $folderCarouselWidgetAttributes;
 	// output the outcome of loopmenu
 	public function run(){
 		$numberOfDisplayedOfItems = !empty($this->numberOfDisplayedItems)?$this->numberOfDisplayedItems:3;
@@ -41,6 +42,7 @@ class FolderCarouselWidget extends Widget{
 			'height' => $this->height,
 			'numberOfDisplayedItems' => $numberOfDisplayedOfItems,
 			'htmlAttributes' => $this->htmlAttributes,
+			'folderCarouselWidgetAttributes' => $this->folderCarouselWidgetAttributes,
 			
 		]);
 	}

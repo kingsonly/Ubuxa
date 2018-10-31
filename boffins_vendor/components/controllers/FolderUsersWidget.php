@@ -21,6 +21,7 @@ use yii;
 class FolderUsersWidget extends Widget{
 	public $attributues = [];
 	public $removeButtons;
+	public $id;
 	
 
 	public function init()
@@ -34,6 +35,7 @@ class FolderUsersWidget extends Widget{
 		return $this->render('folderuserswidgetview',[
 			'attributues' => $this->attributues,
 			'removeButtons' => $this->removeButtons,
+			'id' => $this->id,
 		]);
 	}
 	

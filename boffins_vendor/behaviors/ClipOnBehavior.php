@@ -82,6 +82,7 @@ class ClipOnBehavior extends Behavior
 		
 		return [
 			ActiveRecord::EVENT_AFTER_INSERT => 'behaviorAfterSave', 
+			ActiveRecord::EVENT_BEFORE_DELETE => 'behaviorBeforeDelete', 
 			ActiveRecord::EVENT_AFTER_FIND => 'fetchAllClipOn', 
 		];
    }
@@ -91,6 +92,29 @@ class ClipOnBehavior extends Behavior
 	{
 		$this->createClipOnBar();
 		$this->createClipOn();
+	}
+	
+	// this method is to be called just before the clip is actually deleted
+	public function behaviorBeforeDelete($event) 
+	{
+		
+		$clipBarModel = new ClipBar();// instatnciate clipbar
+		$clipOwnerTypeModel = new ClipOwnerType();// instatnciate clipownertypemodel
+		$ownerId = $this->owner->id;// owners id 
+		$ownerType = $this->_getShortClassName($this->owner) ;// get class name eg remaks
+		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;// Change this fetch from the db 
+		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
+		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->where(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
+		$findClip = $clip->find()->where(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
+		// delete clip 
+		if($findClip->delete()){
+			// check is deletedt clip has a bar 
+			if(!empty($getClipBar)){
+				// delete bar 
+				$getClipBar->delete();
+			}
+		}
+		
 	}
 	
 	private function createClipOn(){

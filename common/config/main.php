@@ -45,6 +45,7 @@ return [
         ],
         'queue' => [
             'class' => \yii\queue\redis\Queue::class,
+		    'as log' => \yii\queue\LogBehavior::class,
             'redis' => 'redis', // Redis connection component or its config
             'channel' => 'queue', // Queue channel key
         ],

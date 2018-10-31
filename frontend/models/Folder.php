@@ -188,6 +188,14 @@ class Folder extends FolderARModel
         
     }
 	
+	public function getFolderManagerFilter()
+    {
+		
+			return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity]);
+		
+        
+    }
+	
 	public function getAllChildFolder(){
 		
 	}

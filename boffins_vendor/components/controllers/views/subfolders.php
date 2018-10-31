@@ -76,7 +76,7 @@ use yii\widgets\Pjax;
 		<? }?>
 			<div class="info-2">
 				<div class="box-sub-folders">
-					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel,'numberOfDisplayedItems' => 3,'htmlAttributes'=>$folderCarouselWidgetAttributes['class']]) ?>
+					<?= FolderCarouselWidget::widget(['folderModel' => $folderModel,'numberOfDisplayedItems' => 3,'htmlAttributes'=>$folderCarouselWidgetAttributes['class'],'folderCarouselWidgetAttributes'=>['folderPrivacy'=>$folderPrivacy]]) ?>
 				</div>
 			</div>
 		</div>
