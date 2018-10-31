@@ -49,10 +49,35 @@ class FolderController extends Controller
     public function actionIndex()
     {
         $folderModel = new Folder();
-       $dataProvider = $folderModel->find()->all();
+       $folder = $folderModel->find()->all();
+		
+		$seperateFolders = array();
+		foreach ($folder as $folderOneFilter) {
+			if($folderOneFilter->private_folder == 0){
+				$folderStatus = 'public';
+			}else{
+				$folderStatus = 'private';
+			}
+			if($folderOneFilter->parent_id == '0'){
+				if($folderOneFilter->folderManagerFilter->role == 'author'){
+				$seperateFolders['mainfolder'][$folderStatus][] = $folderOneFilter;
+			}else{
+				$seperateFolders['mainfolder']['shared'][] = $folderOneFilter;
+			}
+			} else{
+				if($folderOneFilter->folderManagerFilter->role == 'author'){
+				
+				$seperateFolders['subfolder'][$folderStatus][] = $folderOneFilter;
+			}else{
+				$seperateFolders['subfolder']['shared'][] = $folderOneFilter;
+			}
+			}
+			
+
+		}
 		
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'folders' => $seperateFolders,
            
         ]);
     }
