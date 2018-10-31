@@ -162,10 +162,7 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-<<<<<<< HEAD
-=======
 
->>>>>>> 7585fdaa34470b263663766717a190bfeccec4fd
             	<div class="row" style="margin-bottom: 32px;">
             			<div class="col-md-12">
             				<div class="col-md-12" style="min-height: 100px;padding: 10px; background: #fff">
