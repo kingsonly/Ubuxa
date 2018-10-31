@@ -8,6 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
+//use boffins_vendor\components\controllers\DeleteCardWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
@@ -469,8 +470,13 @@ a.addTaskButton.active {
                          <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id, 'labelId' => $count]) ?>
                         </div>
                       </div>
-                        <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
+                      <div class="dropdown testdrop">
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trash icons" aria-hidden="true" data-toggle="tooltip" title="Delete task"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                         
                         </div>
+                      </div>
+                      </div>
                     </div>
                 </li>
             <?php $count2++;}}}?>

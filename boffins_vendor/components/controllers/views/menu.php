@@ -37,14 +37,7 @@ use boffins_vendor\components\controllers\MenuAccordionWidget;
   <div id="content">
     <div id="one">
     	<ul class="list_load">
-			    	 <?php
-			    		foreach($componentMenu as $k => $v){
-			    			$url = $v.'/index';
-							echo Html::tag('li',Html::a(Html::tag('i', '', ['class' => 'fa '.$icons[$v],'title' => $v]).'  '. Html::tag('span', ucfirst($v), 
-								['class' => '','title' => $v]), [$url], ['class' => '','title' => 'Open'.$v,]),
-								['class' => [(Yii::$app->controller->id == $v) ? 'active' : 'false', 'list_item']]);
-			    		}
-			    	?>
+			 <?= MenuAccordionWidget::widget();?>
 		</ul>
     </div>
 <?php if (isset($this->blocks['sidebar'])){ ?>
