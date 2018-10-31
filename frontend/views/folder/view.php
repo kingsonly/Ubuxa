@@ -18,6 +18,7 @@ use kartik\popover\PopoverX;
 
 
 
+
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 

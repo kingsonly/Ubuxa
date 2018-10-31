@@ -124,11 +124,10 @@ lH = li Header
 
 </style>
 
-<div class="X" id="cover<?=$taskid; ?>">
+<div class="X" id="cover<?=$taskid.$assigneeId; ?>">
   <div class="asignee-head"><span class="span-header">Assignees</span></div>
-<input type="search" id="iS<?= $taskid ?>" onkeyup="fS()" placeholder="Search names..." class="search-field">
+<input type="search" id="iS<?= $taskid.$assigneeId ?>" onkeyup="fS()" placeholder="Search names..." class="search-field">
 <div class="bott">
-<?php Pjax::begin(['id' => 'assignee']) ?>
 <ul id="list-body" class="list-bodytest ghpd">
     <?php 
         $id = 1;
@@ -140,11 +139,11 @@ lH = li Header
             <a class="list-name" data-userid="<?= $user->id;?>" id="list<?= $id; ?>">
         <div class="boxes" id="box<?= $id; ?>">
           <?php if($exists){ ?>
-            <input type="checkbox" id="box-<?= $id.'-'.$taskid; ?>" data-userid="<?= $user->id; ?>" data-taskid="<?= $taskid; ?>" class="assign-input" checked>
-            <label for="box-<?= $id.'-'.$taskid; ?>" class="assign-name"><?= $user->fullName; ?></label>
+            <input type="checkbox" id="box-<?= $id.'-'.$taskid.$assigneeId; ?>" data-userid="<?= $user->id; ?>" data-taskid="<?= $taskid; ?>" class="assign-input" checked>
+            <label for="box-<?= $id.'-'.$taskid.$assigneeId; ?>" class="assign-name"><?= $user->fullName; ?></label>
           <?php }else { ?>
-            <input type="checkbox" id="box-<?= $id.'-'.$taskid; ?>" data-userid="<?= $user->id; ?>" data-taskid="<?= $taskid; ?>" class="assign-input">
-            <label for="box-<?= $id.'-'.$taskid; ?>" class="assign-name"><?= $user->fullName; ?></label>
+            <input type="checkbox" id="box-<?= $id.'-'.$taskid.$assigneeId; ?>" data-userid="<?= $user->id; ?>" data-taskid="<?= $taskid; ?>" class="assign-input">
+            <label for="box-<?= $id.'-'.$taskid.$assigneeId; ?>" class="assign-name"><?= $user->fullName; ?></label>
           <?php } ?>
         </div>
       </a>
@@ -152,7 +151,6 @@ lH = li Header
     </li>
     <?php $id++;  } ?>
 </ul>
-<?php Pjax::end() ?>
 </div>
 
 </div>

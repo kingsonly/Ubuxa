@@ -182,10 +182,8 @@ class Task extends BoffinsArRootModel
     {
         $time = [];
         $data = $this->reminders;
-        foreach($data as $attr) {
-            $time[] = $attr->reminder_time;
-        }
-        return $time;
+        
+        return $data;
     }
 
     public function closestReminder($reminders, $date)

@@ -41,7 +41,7 @@ AppAsset::register($this);
 .drag-list {
   display: flex;
   align-items: flex-start;
-  overflow: scroll;
+  /* overflow: scroll; */
   width: 1000px;
 }
 
@@ -176,6 +176,7 @@ AppAsset::register($this);
     /*position: absolute;*/
     bottom: 0;
     width: 100%;
+    clear: right;
 }
 
 
@@ -286,7 +287,6 @@ a.addTaskButton.active {
     padding-right: 10px;
     padding-top: 2px;
     cursor: pointer;
-    padding-bottom: 20px;
     min-height: 40px;
 }
 .taskpop {
@@ -379,7 +379,7 @@ a.addTaskButton.active {
 
 
 <div class="drag-container">
-    <ul class="drag-list">
+    <ul class="drag-list" id="kanban-board">
         <?php
         $count = 1; 
         foreach($taskStatus as $key => $value){ ?>
@@ -460,13 +460,13 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
                         <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
-                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id]) ?>  
+                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
                         </div>
                       </div>
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id]) ?>
+                         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id, 'labelId' => $count]) ?>
                         </div>
                       </div>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -480,7 +480,7 @@ a.addTaskButton.active {
               <span class="glyphicon glyphicon-plus"></span>
               <span class="add-title"> Add Card </span>
             </a>
-            <div class="card-add">
+            <div class="card-add" id="add-new-cardz">
                 <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id, 'parentOwnerId' => $id]) ?>
             </div>
         </li>
@@ -737,3 +737,4 @@ JS;
  
 $this->registerJs($board);
 ?>
+

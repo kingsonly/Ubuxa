@@ -11,6 +11,7 @@ class AssigneeViewWidget extends Widget{
 	public $users;
 	public $taskid;
 	public $attributues;
+	public $assigneeId;
 
 	public function init()
 	{
@@ -23,6 +24,7 @@ class AssigneeViewWidget extends Widget{
 			'users' => $this->users,
 			'taskid' => $this->taskid,
 			'attributues' => $this->attributues,
+			'assigneeId' => $this->assigneeId,
 		]);
 	}
 	

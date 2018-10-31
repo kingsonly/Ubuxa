@@ -12,6 +12,8 @@ class CreateLabelWidget extends Widget{
 	public $taskid;
 	public $label;
 	public $taskLabel;
+	public $labelId;
+
 
 	public function init()
 	{
@@ -25,6 +27,7 @@ class CreateLabelWidget extends Widget{
 			'taskid' => $this->taskid,
 			'label' => $this->label,
 			'taskLabel' => $this->taskLabel,
+			'labelId' => $this->labelId,
 		]);
 	}
 	
