@@ -73,7 +73,6 @@ text-overflow: ellipsis;
 ?>
 
 <?
-
 foreach($attributues as $v){
 	if(!isset($v['xeditable'])){
 		?>
@@ -124,10 +123,10 @@ foreach($attributues as $v){
 				'asPopover' => false,
 				'header' => 'Due Date',
 				'size'=>'md',
-				'options'=>[
+				'options'=>['id' => 'x-editable-date'.$xEditableDateId,
 					'options'=>['placeholder'=>'Enter date']
 				],
-				'editableValueOptions'=>['class'=>'well well-sm']
+				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
 			]);
 			?>
 	</div>
@@ -204,9 +203,7 @@ foreach($attributues as $v){
 	<?
 		}
 	}
-	
-
-	
+		
 }
 
 

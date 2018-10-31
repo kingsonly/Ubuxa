@@ -297,3 +297,36 @@ a,
 	.list_item a:hover {
 		background: rgba(255,255,255,.2);
 	}
+	.side-images{
+        width:65px;
+        height:65px;
+        border: 1px solid rgb(7, 71, 166);;
+        background-repeat: no-repeat;
+ 		background-size: cover;
+        border-radius: 50%;
+        margin-left: 15px;
+    	margin-top: 5px;
+    	display: inline-block;
+    }
+    
+    .side-images:hover{
+        cursor: pointer;
+    }
+    .client-name {
+    	display: inline-block;
+    	position: absolute;
+    	top: 20px;
+    	margin-left: 10px;
+    }
+    .top-sidebar{
+    	position: relative;
+    }
+    .profile-link{
+    	color: #fff;
+    }
+    .first-name {
+    	color: #fff;
+    	font-family: calibri;
+    	font-size: 18px;
+    	text-transform: capitalize;
+    }

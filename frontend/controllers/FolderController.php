@@ -12,6 +12,7 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
+use frontend\models\Person;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

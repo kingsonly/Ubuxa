@@ -3,7 +3,9 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use frontend\models\Remark;
+use frontend\models\Person;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,17 +36,33 @@ class RemarkController extends Controller
      */
     public function actionIndex()
     {
-        $perpage=4;
+        $perpage=10;
+
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
+                $ownerid = Yii::$app->request->post('ownerId');
+                $modelName = Yii::$app->request->post('modelName');
+                $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $popsisi = (($numpage-1) * $perpage);
-                $remarks = Remark::find()->where(['parent_id' => 0])->orderBy('id DESC')->limit($perpage)->offset($popsisi)->all();
+                $remarkss = new Remark();
                 $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
-                return $this->renderAjax('index2', [
-                'remarks' => $remarks,
-                'remarkReply' => $remarkReply,
-                ]);
+                
+                //if url is site index get all the remarks
+                if($DashboardUrlParam == 'site'){
+                     $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($popsisi)->orderBy('id DESC')->all();
+                     return $this->renderAjax('siteremarks', [
+                     'remarks' => $remarks,
+                     'remarkReply' => $remarkReply,
+                     ]);
+                } else {
+                     $remarks = $remarkss->remarkfetchall($perpage, $popsisi,$modelName,$ownerid); 
+                     return $this->renderAjax('index2', [
+                     'remarks' => $remarks,
+                     'remarkReply' => $remarkReply,
+                     ]);
+                }
+                
             } else {
                 $numpage = 10;
                 $remarks = Remark::find()->limit($numpage)->all();
@@ -127,6 +145,17 @@ class RemarkController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionMention(){
+        $users = new Person();
+        $getUsers = $users->find()->all();
+        $name = array();
+        $names = ['nnamdi','ogundu','uchechukwu'];
+        foreach ($getUsers as $user) {
+            $name[] = $user['first_name'].' '.$user['surname'];
+        }
+       return json_encode($name);
     }
 
     /**

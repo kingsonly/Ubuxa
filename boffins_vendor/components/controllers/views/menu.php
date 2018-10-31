@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use frontend\models\UserDb;
 ?>
 <div class="side_menu">
 	<div class="burger_box">
@@ -13,7 +14,17 @@ use yii\helpers\Url;
 		</div>
 	</div>
 	<div class="container">
-		<h2 class="menu_title">UBUXA</h2>
+		<div class="top-sidebar">
+			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
+				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('images/users/'.yii::$app->user->identity->profile_image); ?>')"></div>
+			<?php }else{?>
+				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
+			<?php }?>
+			<div class="client-name">
+				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
+				<div><a class="profile-link" href="#">View profile</a></div>
+			</div>
+		</div>
 			<div class="wrap">
   
   <ul class="tabs group">
@@ -35,9 +46,24 @@ use yii\helpers\Url;
 			    	?>
 		</ul>
     </div>
-<?php if (isset($this->blocks['sidebar'])): ?>
+<?php if (isset($this->blocks['sidebar'])){ ?>
             <?= $this->blocks['sidebar'] ?>
-          <?php endif; ?>
+<?php }else{ ?>
+      <div id="two">
+    	<ul class="list_load">
+    		<li class="list_item"><a href="#">List Item 01</a></li>
+			<li class="list_item"><a href="#">List Item 02</a></li>
+			<li class="list_item"><a href="#">List Item 03</a></li>
+    	</ul>
+    </div>
+    <div id="three">
+    	<ul class="list_load">
+			<li class="list_item"><a href="#">Settings</a></li>
+			<li class="list_item"><a href="<?= Url::to(['site/logout'])?>">Logout</a></li>
+			
+		</ul>
+    </div>
+<?php } ?>
   </div>
   
 </div>
