@@ -138,7 +138,7 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
 					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?// TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id, 'remarks' => $model->clipOn['remark'] ]) ?>
 
@@ -149,7 +149,7 @@ $img = $model->folder_image;
     
     <div class="view-task-board">
     	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'id' => $id, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
+    	<?// KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'id' => $id, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
     	<?php Pjax::end(); ?>
     </div>
     
