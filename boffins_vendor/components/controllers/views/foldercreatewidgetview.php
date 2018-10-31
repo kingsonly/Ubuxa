@@ -104,7 +104,15 @@ if(isset($_GET['id'])){
 <div id="form-content">
 	<span>
 	<?
-		$privacy = ['fa fa-unlock-alt'=>'Public','fa fa-lock'=>'Private']
+		
+		if(isset($_GET['id']) and $folderPrivacy == 0){
+			$privacy = ['fa fa-unlock-alt'=>'Public','fa fa-lock'=>'Private'];
+		}elseif(!isset($_GET['id']) and empty($folderPrivacy)){
+			$privacy = ['fa fa-unlock-alt'=>'Public','fa fa-lock'=>'Private'];
+		}else{
+			$privacy = ['fa fa-lock'=>'Private'];
+		}
+		
 	?>
 		  <?= $form->field($folderModel, 'privateFolder')->widget(Select2::classname(), [
     'data' => $privacy,

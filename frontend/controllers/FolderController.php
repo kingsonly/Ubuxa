@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Folder;
+use frontend\models\Person;
+use frontend\models\InviteUsers;
 use frontend\models\Task;
 use frontend\models\Remark;
 use frontend\models\StatusType;
@@ -19,6 +21,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Expression;
 use yii\web\UploadedFile;
+use boffins_vendor\queue\FolderUsersQueue;
 
 /**
  * FolderController implements the CRUD actions for Folder model.
@@ -110,6 +113,44 @@ class FolderController extends Controller
             'id' => $id,
         ]);
     }
+	
+	public function actionUsers($q = null, $id = null) {
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$out = ['results' => ['id' => '', 'text' => '']];
+		if (!is_null($q)) {
+			$query = new Person();
+			$allUsers = $query->find()->select('id, first_name, surname')
+				->where(['like', 'first_name', $q])->orWhere(['like', 'surname', $q])->all();
+			
+			$out['results'] = array_values($allUsers);
+		}
+		elseif ($id > 0) {
+			$out['results'] = ['id' => 0, 'first_name' => 'could not find ','surname' => 'a any user'];
+		}
+		return $out;
+	}
+	public function actionAddUsers($id) {
+		$inviteUsersModel = new InviteUsers();
+		$userModel = new UserDb();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		//$tt = new FolderUsersQueue();
+		//$abc = $tt->addNewUser();
+		//var_dump($abc);
+		//return;
+		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
+			  $test = 0;
+			 foreach($inviteUsersModel->users as $value){
+				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
+				 $test = $getUserId['id'];
+				 Yii::$app->queue->push(new FolderUsersQueue([
+					'userId' => $getUserId['id'],
+					'folderId' => $id,
+				]));
+			 }
+			 
+            return ['output'=>$id, 'message'=> $test];
+        }
+	}
 
     /**
      * Creates a new Folder model.
@@ -222,4 +263,29 @@ class FolderController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+	
+		
+	private function checkFolderParentRelationship(){
+		$folderModel = Folder::findOne(34);
+		return $folderModel -> subFolders;
+	}
+	
+	private function reQueueEachChildFolder(){
+		//$this->addNewUser(24, 34);
+		
+		if(!empty($this->checkFolderParentRelationship())){
+			
+			
+			//foreach($this->checkFolderParentRelationship() as $folderId){
+				
+				$queue = new Queue();
+				 $queue->push(new FolderUsersQueue([
+					'userId' => 24,
+					'folderId' => 34,
+				]));
+			//$this->addNewUser(24, 34);
+				
+			//}
+		} 
+	}
 }

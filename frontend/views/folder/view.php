@@ -121,23 +121,27 @@ $img = $model->folder_image;
                   </div>  
                     	<div class="row">
    						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder'],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
+   						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
                     	</div>
-
             </section>
         </div>
 
         <div class="row">
+			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
-	//just for test 
+
 				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
 			?>
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45]]) ?>
+			
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
+			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
 					
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
+
             	</div>
             </section>
         </div>

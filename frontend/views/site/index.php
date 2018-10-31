@@ -162,6 +162,10 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7585fdaa34470b263663766717a190bfeccec4fd
             	<div class="row" style="margin-bottom: 32px;">
             			<div class="col-md-12">
             				<div class="col-md-12" style="min-height: 100px;padding: 10px; background: #fff">
@@ -200,8 +204,9 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             <section>
             	<div class="row test5">
-            			<?//= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
+
             	</div>
             </section>
         </div>
@@ -210,7 +215,7 @@ use boffins_vendor\components\controllers\MenuWidget;
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?//= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
     </div>
     <?php Pjax::end(); ?>
 </section>

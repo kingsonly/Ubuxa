@@ -38,6 +38,20 @@ return [
                 ],
             ],
         ],
+
+		'queue' => [
+            'class' => \yii\queue\redis\Queue::class,
+		    'as log' => \yii\queue\LogBehavior::class,
+            'redis' => 'redis', // Redis connection component or its config
+            'channel' => 'queue', // Queue channel key
+        ],
+	    'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ],
+
 		'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
@@ -51,6 +65,7 @@ return [
 		'db_backup' => $db_backup,
 		'db_tenant' => $db_tenant, 
 		'db_test' => $db_test,*/
+
     ],
     'params' => $params,
 ];
