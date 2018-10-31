@@ -9,12 +9,18 @@ use yii\db\Migration;
  */
 class M180922075729Add_customer_details extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
+	/***
+	 *  a suffix to add to database name (Yii Application Component ID) for  different (special) migration controllers
+	 *  to determine the context of the migration. (really just for test = _test suffix)
+	 */
+	public $db_suffix = '';
+	
+	/***
+	 *  {@inheritdoc}
+	 */
 	public function init()
     {
-        $this->db = 'db_tenant';
+        $this->db = 'db_tenant' . $this->db_suffix;
         parent::init();
     }
 	

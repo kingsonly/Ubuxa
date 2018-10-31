@@ -1,5 +1,4 @@
 <?php
-
 //namespace console\migrations;
 
 use yii\db\Migration;
@@ -142,7 +141,7 @@ class M181021211010New_component_structure extends Migration
 													'value' => "LONGTEXT NOT NULL",
 													'type' => $this->string()->comment("a preferred data type to convert the value to if it is not serialised - this is not indexed"),
 		]);
-		`
+		
 		// create a table for all other strings not mapped above (json?, html? etc). 
 		$this->createTable("{{%value_timestamp}}", [
 													'id' => $this->primaryKey(11),
@@ -258,7 +257,7 @@ class M181021211010New_component_structure extends Migration
             'value'
         );
 				
-		// add foreign key to table `component_template`
+		//add foreign key to table component_template
         $this->addForeignKey(
             'AttributeComponentTemplate',
             "{{%component_template_attribute}}",
@@ -268,7 +267,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component_attribute_type`
+		// add foreign key to ttable component_attribute_type
         $this->addForeignKey(
             'AttributeType',
             "{{%component_template_attribute}}",
@@ -278,7 +277,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component_template`
+		// add foreign key to ttable component_template
         $this->addForeignKey(
             'ComponentTemplate',
             "{{%component}}",
@@ -288,7 +287,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component`
+		// add foreign key to ttable component
         $this->addForeignKey(
             'AttributeInstance',
             "{{%component_attribute}}",
@@ -298,7 +297,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component_template_attribute`
+		// add foreign key to ttable component_template_attribute
         $this->addForeignKey(
             'AttributeTemplate',
             "{{%component_attribute}}",
@@ -308,7 +307,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component`
+		// add foreign key to ttable component
         $this->addForeignKey(
             'ComponentStart',
             "{{%component_component}}",
@@ -318,7 +317,7 @@ class M181021211010New_component_structure extends Migration
             'CASCADE'
         );
 		
-		// add foreign key to table `component`
+		// add foreign key to ttable component
         $this->addForeignKey(
             'LinkedComponent',
             "{{%component_component}}",
@@ -377,6 +376,7 @@ class M181021211010New_component_structure extends Migration
 		$this->dropTable("{{%value_known_class}}");
 		$this->dropTable("{{%value_variant_object}}");
 		$this->dropTable("{{%value_variant_string}}");
+		$this->dropTable("{{%value_timestamp}}");
 		
 		$this->dropColumn("{{%component}}", 'deleted');
 		$this->dropColumn("{{%component}}", 'last_updated');
