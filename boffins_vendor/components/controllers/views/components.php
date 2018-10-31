@@ -27,10 +27,6 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 		padding-left: 0px !important;
 	}
 	
-	.component-contetnt{
-		height: 100px;
-	}
-	
 	.component-display{
 		height: 600px;
 		background-color: white;

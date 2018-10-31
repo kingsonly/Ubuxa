@@ -135,7 +135,7 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<div class="row test5">
+            	<div class="row task-kanban">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
             		<?php Pjax::end(); ?>
@@ -174,14 +174,13 @@ $indexJs = <<<JS
 
 $(function(){
     $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
+        $(".task-kanban").slideUp('slow');
         $('.view-task-board').show();
   });
   $('.task-icon').on('click',function(e){
   		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
 	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
+	    $('.task-kanban').slideDown('slow');
    });
 });
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false

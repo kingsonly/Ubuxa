@@ -9,6 +9,8 @@ use boffins_vendor\components\controllers\CreateLabelWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use yii\helpers\ArrayHelper;
+use frontend\models\Reminder;
+
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Task */
@@ -69,6 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
     max-width: 100%;
     margin-right: 8px;
     min-width: 140px;
+    clear: left;
 }
 .assignContent {
     margin-bottom: 5px;
@@ -125,6 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
     max-width: 100%;
     margin-right: 8px;
     min-width: 140px;
+    float: left;
 }
 .task-labels {
     margin-top: 15px;
@@ -142,6 +146,8 @@ $this->params['breadcrumbs'][] = $this->title;
 }
 .all-status {
     margin-bottom: 10px;
+    float: right;
+    margin-right: 30px;
 }
 .stat-title {
     color: #6b808c;
@@ -175,8 +181,20 @@ $this->params['breadcrumbs'][] = $this->title;
 .all-labels{
     margin-bottom: 10px;
 }
+.label-reminder {
+    display: flex;
+    flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    overflow: scroll;
+}
+.multi-reminder {
+    min-width: 160px;
+}
 </style>
-
+<?php Pjax::begin(['id'=>'task-modal-refresh']); ?>
     <div class="task-view">
 
         <div class="task-titlez">
@@ -184,16 +202,32 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>
-
-        <div class="all-status">
-            <div class="task-statuz">
-                <span class="stat-title">Status</span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="alldates">
+                    <div class="due-dates">
+                        <span class="glyphicon glyphicon-time"></span>
+                        <span class="assignUsers">Due Date</span>
+                    </div>    
+                    <div class="due-labels">
+                        <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+                                ['modelAttribute'=>'due_date','xeditable' => 'datetime'],
+                                ]]); ?></span>
+                    </div>
+                </div>
             </div>
-            <div class="task-status">
-                <span class="task-titless"><?= $model->statusTitle; ?></span>
+            
+            <div class="col-md-6">
+                <div class="all-status">
+                    <div class="task-statuz">
+                        <span class="stat-title">Status</span>
+                    </div>
+                    <div class="task-status">
+                        <span class="task-titless"><?= $model->statusTitle; ?></span>
+                    </div>
+                </div>
             </div>
         </div>
-
         <div class="allassignees">
             <div class="assignContent">
                 <span class="assignUsers">Assignees</span>
@@ -231,8 +265,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             <?php } ?>
         </div>
-
-
     <div class="task-detailzz">
         <div>
             <span class="glyphicon glyphicon-tasks"></span>
@@ -245,17 +277,6 @@ $this->params['breadcrumbs'][] = $this->title;
            </div>
     </div>
 
-    <div class="alldates">
-            <div class="due-dates">
-                <span class="glyphicon glyphicon-time"></span>
-                <span class="assignUsers">Due Date</span>
-            </div>    
-            <div class="due-labels">
-                <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-                        ['modelAttribute'=>'due_date','xeditable' => 'datetime'],
-                        ]]); ?></span>
-            </div>
-    </div>
 
     <div class="allreminder">
             <div class="reminder-dates">
@@ -265,14 +286,16 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="reminder-labels">
                 <span class="label-reminder">
                     <?php 
-                    $tests = $model->reminderTimeTask;
-                     foreach ($tests as $test) { 
-                        var_dump($test);
-                        ?>
-                        <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
-                        ['modelAttribute'=>'reminderTimeTask[]','xeditable' => 'datetime'],
-                        ]]); ?>
-                    <?php }?>
+                    $reminders = $model->reminderTimeTask;
+                    $count = 1;
+                     foreach ($reminders as $reminder) {
+                       ${'model'.$count}= new Reminder();
+                        ${'model1'.$count} = ${'model'.$count}->findOne($reminder->id);
+                    ?>
+                        <?= ViewWithXeditableWidget::widget(['model'=>${'model1'.$count},'attributues'=>[
+                        ['modelAttribute'=>'reminder_time','xeditable' => 'datetime'],
+                        ],'xEditableDateId' => $count]); ?>
+                    <?php $count++; }?>
                     </span>                    
                     
             </div>
@@ -289,4 +312,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } ?>
     </div>
 </div>
-
+<?php Pjax::end(); ?>

@@ -9,10 +9,10 @@ use yii\widgets\ActiveForm;
 ?>
 <?php Pjax::begin(['id'=>'label-refresh']); ?>
 <?php 
-    $form = ActiveForm::begin(['id' => 'activeLabel'.$taskid,'options' => ['data-pjax' => true, 'class' => 'task-label-class']]); ?>
-    <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id, 'placeholder' => "Add label"]) ?>
+    $form = ActiveForm::begin(['id' => 'activeLabel'.$taskid.$labelId,'options' => ['data-pjax' => true, 'class' => 'task-label-class']]); ?>
+    <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id.$labelId, 'placeholder' => "Add label"]) ?>
     <?= $form->field($taskLabel, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $taskid])->label(false); ?>
-    <?= Html::submitButton('Save', ['class' => 'btn btn-success labelButton', 'id'=>'checkb'.$id, 'data-id' => $id]) ?>
+    <?= Html::submitButton('Save', ['class' => 'btn btn-success labelButton', 'id'=>'checkb'.$id.$labelId, 'data-id' => $id]) ?>
     
 <?php ActiveForm::end(); ?>
 <?php Pjax::end(); ?>
@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 <?php
 $labelUrl = Url::to(['label/create']);
 $assignee = <<<JS
-$('#activeLabel'+'$taskid').on('beforeSubmit', function(e) { 
+$('.task-label-class').on('beforeSubmit', function(e) { 
            var form = $(this);
             if(form.find('#activeLabel').length) {
                 return false;
