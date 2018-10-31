@@ -61,8 +61,8 @@ class Task extends BoffinsArRootModel
         return [
             [[ 'owner','status_id', 'create_date'], 'required'],
             [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
-            [['create_date', 'due_date', 'last_updated', 'label','ownerId','title'], 'safe'],
-            [['title', 'label'], 'string', 'max' => 50],
+            [['create_date', 'due_date', 'last_updated','ownerId','title'], 'safe'],
+            [['title'], 'string', 'max' => 50],
             [['details'], 'string', 'max' => 255],
             
             [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => UserDb::className(), 'targetAttribute' => ['owner' => 'id']],
@@ -80,7 +80,6 @@ class Task extends BoffinsArRootModel
             'title' => 'Title',
             'details' => 'Details',
             'owner' => 'Owner',
-            'label' => 'label',
             'status_id' => 'Status ID',
             'create_date' => 'Create Date',
             'due_date' => 'Due Date',
