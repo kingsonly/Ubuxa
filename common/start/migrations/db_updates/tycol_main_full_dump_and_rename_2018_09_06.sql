@@ -1498,11 +1498,6 @@ CREATE TABLE IF NOT EXISTS `tm_migration` (
 -- Dumping data for table `tm_migration`
 --
 
-INSERT INTO `tm_migration` (`version`, `apply_time`) VALUES
-('m000000_000000_base', 1535949798),
-('m180828_132404_update_e_document_table', 1535949810),
-('m180903_031403_add_tenant_id', 1536219155),
-('m180905_153706_create_folder_parent', 1536219155);
 
 -- --------------------------------------------------------
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c9cb8f79bf47d54cd6ff0237e7c7305",
+    "content-hash": "c043053c97b6042a7cc6ec4451da8009",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -327,6 +327,117 @@
             "time": "2017-09-13T13:09:47+00:00"
         },
         {
+            "name": "doctrine/lexer",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2014-09-09T13:34:57+00:00"
+        },
+        {
+            "name": "egulias/email-validator",
+            "version": "2.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/egulias/EmailValidator.git",
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "^1.0.1",
+                "php": ">= 5.5"
+            },
+            "require-dev": {
+                "dominicsayers/isemail": "dev-master",
+                "phpunit/phpunit": "^4.8.35||^5.7||^6.0",
+                "satooshi/php-coveralls": "^1.0.1"
+            },
+            "suggest": {
+                "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Egulias\\EmailValidator\\": "EmailValidator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Gulias Davis"
+                }
+            ],
+            "description": "A library for validating emails against several RFCs",
+            "homepage": "https://github.com/egulias/EmailValidator",
+            "keywords": [
+                "email",
+                "emailvalidation",
+                "emailvalidator",
+                "validation",
+                "validator"
+            ],
+            "time": "2018-09-25T20:47:26+00:00"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.10.0",
             "source": {
@@ -556,22 +667,22 @@
         },
         {
             "name": "kartik-v/bootstrap-fileinput",
-            "version": "dev-master",
+            "version": "v4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "7aa9bf7ef66bcae34b6bbb889bc8c5497ab9ae8b"
+                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/7aa9bf7ef66bcae34b6bbb889bc8c5497ab9ae8b",
-                "reference": "7aa9bf7ef66bcae34b6bbb889bc8c5497ab9ae8b",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/7fbc8473783febfd123178dd00c9f5ee1bf73531",
+                "reference": "7fbc8473783febfd123178dd00c9f5ee1bf73531",
                 "shasum": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.5.x-dev"
+                    "dev-master": "4.4.x-dev"
                 }
             },
             "autoload": {
@@ -605,7 +716,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-10-23T06:28:42+00:00"
+            "time": "2018-09-25T15:16:57+00:00"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -905,36 +1016,31 @@
         },
         {
             "name": "kartik-v/yii2-popover-x",
-            "version": "dev-master",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-popover-x.git",
-                "reference": "3576874635fa9d79146757945afbc975ae810a5b"
+                "reference": "b1c458338a315d047b74356532563722ce9e29c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/3576874635fa9d79146757945afbc975ae810a5b",
-                "reference": "3576874635fa9d79146757945afbc975ae810a5b",
+                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/b1c458338a315d047b74356532563722ce9e29c6",
+                "reference": "b1c458338a315d047b74356532563722ce9e29c6",
                 "shasum": ""
             },
             "require": {
-                "kartik-v/bootstrap-popover-x": "~1.4",
-                "kartik-v/yii2-krajee-base": ">=1.9"
+                "kartik-v/bootstrap-popover-x": "*",
+                "kartik-v/yii2-krajee-base": "*"
             },
             "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "kartik\\popover\\": "src"
+                    "kartik\\popover\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD-3-Clause"
+                "BSD 3-Clause"
             ],
             "authors": [
                 {
@@ -954,7 +1060,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2018-09-14T11:30:15+00:00"
+            "time": "2014-11-25T09:26:09+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -1168,7 +1274,7 @@
         },
         {
             "name": "kartik-v/yii2-widget-datepicker",
-            "version": "dev-master",
+            "version": "v1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
@@ -1330,7 +1436,7 @@
         },
         {
             "name": "kartik-v/yii2-widget-fileinput",
-            "version": "dev-master",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-fileinput.git",
@@ -1977,48 +2083,6 @@
             "time": "2018-10-09T17:40:19+00:00"
         },
         {
-            "name": "kingsonly/yii2-wiki",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kingsonly/yii2-wiki.git",
-                "reference": "2c062d842e80430afb69a81a833519b59cd22dca"
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "2.0.*",
-                "yiisoft/yii2-bootstrap": "*",
-                "yiisoft/yii2-codeception": "~2.0.0"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "asinfotrack\\yii2\\wiki\\": ""
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Pascal Mueller",
-                    "email": "pascal.mueller@asinfotrack.ch",
-                    "homepage": "http://www.asinfotrack.ch"
-                }
-            ],
-            "description": "Yii2-Wiki is a flexible implementation of a wiki for Yii2",
-            "keywords": [
-                "module",
-                "wiki",
-                "yii2"
-            ],
-            "support": {
-                "source": "https://github.com/asinfotrack/yii2-wiki",
-                "issues": "https://github.com/asinfotrack/yii2-wiki/issues"
-            },
-            "time": "2018-10-16T16:29:23+00:00"
-        },
-        {
             "name": "mongosoft/yii2-upload-behavior",
             "version": "0.2.1",
             "source": {
@@ -2126,453 +2190,6 @@
             "time": "2017-02-24T16:06:33+00:00"
         },
         {
-            "name": "npm-asset/at.js",
-            "version": "1.5.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/at.js/-/at.js-1.5.4.tgz",
-                "reference": null,
-                "shasum": "8fc60cc80eadbe4874449b166a818e7ae1d784c1"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/ichord/At.js/issues"
-                },
-                "npm-asset-main": "dist/js/jquery.atwho.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/ichord/At.js.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "gulp test"
-                },
-                "npm-asset-engines": {
-                    "node": ">= 0.6.0"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "chord.luo",
-                    "email": "chord.luo@gmail.com"
-                }
-            ],
-            "description": "**An autocompletion library to autocomplete mentions, smileys etc. just like on Github!**   [![Build Status](https://travis-ci.org/ichord/At.js.png)](https://travis-ci.org/ichord/At.js)",
-            "homepage": "http://ichord.github.com/At.js",
-            "time": "2018-05-07T13:02:27+00:00"
-        },
-        {
-            "name": "npm-asset/atoa",
-            "version": "1.0.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/atoa/-/atoa-1.0.0.tgz",
-                "reference": null,
-                "shasum": "0cc0e91a480e738f923ebc103676471779b34a49"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/bevacqua/atoa/issues"
-                },
-                "npm-asset-main": "atoa.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/bevacqua/atoa.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "echo \"Error: no test specified\" && exit 1"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Bevacqua",
-                    "email": "nicolasbevacqua@gmail.com",
-                    "url": "http://bevacqua.io/"
-                }
-            ],
-            "description": "Creates a true array based on `arraylike`, starting at `startIndex`.",
-            "homepage": "https://github.com/bevacqua/atoa#readme",
-            "time": "2015-07-02T15:12:19+00:00"
-        },
-        {
-            "name": "npm-asset/contra",
-            "version": "1.9.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/contra/-/contra-1.9.4.tgz",
-                "reference": null,
-                "shasum": "f53bde42d7e5b5985cae4d99a8d610526de8f28d"
-            },
-            "require": {
-                "npm-asset/atoa": "1.0.0",
-                "npm-asset/ticky": "1.0.1"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/bevacqua/contra/issues"
-                },
-                "npm-asset-main": "contra.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/bevacqua/contra.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "browserify -s contra -do dist/contra.js contra.js && uglifyjs -m -c -o dist/contra.min.js dist/contra.js",
-                    "build-shim": "browserify -do dist/contra.shim.js contra.shim.js && uglifyjs -m -c -o dist/contra.shim.min.js dist/contra.shim.js",
-                    "deploy": "npm run build && npm run build-shim && npm run test && npm run deployment",
-                    "deployment": "git add dist && npm version ${BUMP:-\"patch\"} --no-git-tag-version && git add package.json && git commit -am \"Autogenerated pre-deployment commit\" && bower version ${BUMP:-\"patch\"} && git reset HEAD~2 && git add . && git commit -am \"Release $(cat package.json | jq -r .version)\" && git push --tags && npm publish && git push",
-                    "test": "mocha --reporter tap && jshint --reporter node_modules/jshint-tap/jshint-tap.js test/*.js"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Bevacqua",
-                    "email": "hello@bevacqua.io",
-                    "url": "http://bevacqua.io"
-                }
-            ],
-            "description": "Asynchronous flow control with a functional taste to it",
-            "homepage": "https://github.com/bevacqua/contra",
-            "keywords": [
-                "a",
-                "async",
-                "asynchronous",
-                "control",
-                "flow",
-                "generator",
-                "promises",
-                "q"
-            ],
-            "time": "2016-05-20T17:01:34+00:00"
-        },
-        {
-            "name": "npm-asset/crossvent",
-            "version": "1.5.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/crossvent/-/crossvent-1.5.4.tgz",
-                "reference": null,
-                "shasum": "da2c4f8f40c94782517bf2beec1044148194ab92"
-            },
-            "require": {
-                "npm-asset/custom-event": "1.0.0"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/bevacqua/crossvent/issues"
-                },
-                "npm-asset-main": "src/crossvent.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/bevacqua/crossvent.git"
-                },
-                "npm-asset-scripts": []
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Bevacqua",
-                    "email": "hello@bevacqua.io",
-                    "url": "http://bevacqua.io"
-                }
-            ],
-            "description": "Cross-platform browser event handling",
-            "homepage": "https://github.com/bevacqua/crossvent",
-            "time": "2015-08-25T00:19:47+00:00"
-        },
-        {
-            "name": "npm-asset/custom-event",
-            "version": "1.0.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/custom-event/-/custom-event-1.0.0.tgz",
-                "reference": null,
-                "shasum": "2e4628be19dc4b214b5c02630c5971e811618062"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/webmodules/custom-event/issues"
-                },
-                "npm-asset-main": "index.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git://github.com/webmodules/custom-event.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "make test"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nathan Rajlich",
-                    "email": "nathan@tootallnate.net",
-                    "url": "http://n8.io/"
-                }
-            ],
-            "description": "Cross-browser `CustomEvent` constructor",
-            "homepage": "https://github.com/webmodules/custom-event",
-            "keywords": [
-                "browser",
-                "constructor",
-                "custom",
-                "customevent",
-                "dom",
-                "event"
-            ],
-            "time": "2015-01-07T22:33:23+00:00"
-        },
-        {
-            "name": "npm-asset/dragula",
-            "version": "3.7.2",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/dragula/-/dragula-3.7.2.tgz",
-                "reference": null,
-                "shasum": "4a35c9d3981ffac1a949c29ca7285058e87393ce"
-            },
-            "require": {
-                "npm-asset/contra": "1.9.4",
-                "npm-asset/crossvent": "1.5.4"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/bevacqua/dragula/issues"
-                },
-                "npm-asset-main": "dragula.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/bevacqua/dragula.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "npm run scripts && npm run styles",
-                    "deploy": "npm run build && npm run deployment && npm run sync",
-                    "deploy-plugins": "npm run deploy-react ; npm run deploy-angular ; cd ../dragula",
-                    "deploy-react": "cd ../react-dragula ; git pull ; npm i -S dragula@* ; git commit package.json -m 'bumped dragula version'; npm run deploy",
-                    "deploy-angular": "cd ../angular-dragula ; git pull ; npm i -S dragula@* ; git commit package.json -m 'bumped dragula version'; npm run deploy",
-                    "deployment": "git add dist && npm version ${BUMP:-\"patch\"} --no-git-tag-version && git add package.json && git commit -am \"Autogenerated pre-deployment commit\" && bower version ${BUMP:-\"patch\"} && git reset HEAD~2 && git add . && git commit -am \"Release $(cat package.json | jq -r .version)\" && git push --tags && npm publish && git push",
-                    "scripts": "jshint . && browserify -s dragula -do dist/dragula.js dragula.js && uglifyjs -m -c -o dist/dragula.min.js dist/dragula.js",
-                    "start": "watchify -dvo example/example.min.js example/example.js & watchify -dvs dragula -o dist/dragula.js dragula.js & stylus -w dragula.styl --import node_modules/nib -o dist",
-                    "styles": "stylus dragula.styl --import node_modules/nib -o dist && cleancss dist/dragula.css -o dist/dragula.min.css",
-                    "sync": "git checkout gh-pages ; git merge master ; git push ; git checkout master",
-                    "lint": "jshint . --reporter node_modules/jshint-stylish/index.js",
-                    "test": "npm run lint && browserify test/*.js | tape-run",
-                    "test-watch": "hihat test/*.js -p tap-dev-tool"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Bevacqua",
-                    "email": "nicolasbevacqua@gmail.com",
-                    "url": "http://bevacqua.io/"
-                }
-            ],
-            "description": "Drag and drop so simple it hurts",
-            "homepage": "https://github.com/bevacqua/dragula",
-            "time": "2016-09-12T12:35:26+00:00"
-        },
-        {
-            "name": "npm-asset/easy-pie-chart",
-            "version": "2.1.7",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/easy-pie-chart/-/easy-pie-chart-2.1.7.tgz",
-                "reference": null,
-                "shasum": "35e49fb7daf9a94e52b8294f51626919bcaee7cc"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/rendro/easy-pie-chart/issues"
-                },
-                "npm-asset-main": "dist/easypiechart.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/rendro/easy-pie-chart.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "grunt karma:ci"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Robert Fleischmann",
-                    "email": "rendro87@gmail.com",
-                    "url": "http://robert-fleischmann.de"
-                },
-                {
-                    "name": "Moritz",
-                    "url": "https://github.com/mrzmyr"
-                }
-            ],
-            "description": "Lightweight plugin to render simple, animated and retina optimized pie charts",
-            "homepage": "https://github.com/rendro/easy-pie-chart#readme",
-            "keywords": [
-                "chart",
-                "circular progress",
-                "pie chart",
-                "precent",
-                "progress bar"
-            ],
-            "time": "2015-05-08T14:09:42+00:00"
-        },
-        {
-            "name": "npm-asset/jquery.caret",
-            "version": "0.3.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
-                "reference": null,
-                "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-main": "dist/jquery.caret.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": "",
-                "npm-asset-scripts": {
-                    "test": "grunt test --verbose"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Harold.luo",
-                    "email": "chord.luo@gmail.com"
-                }
-            ],
-            "description": "Get caret position and offset from inputor",
-            "keywords": [
-                "caret",
-                "jquery",
-                "offset",
-                "position"
-            ],
-            "time": "2016-06-25T06:50:23+00:00"
-        },
-        {
-            "name": "npm-asset/perfect-scrollbar",
-            "version": "1.4.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz",
-                "reference": null,
-                "shasum": "5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/utatti/perfect-scrollbar/issues"
-                },
-                "npm-asset-files": [
-                    "css",
-                    "dist",
-                    "src",
-                    "types"
-                ],
-                "npm-asset-main": "dist/perfect-scrollbar.common.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/utatti/perfect-scrollbar.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "npm run format:lint && npm run build",
-                    "build": "npm run clean && node build",
-                    "clean": "rm -rf dist",
-                    "watch": "npm run build && SHELL=/bin/bash chokidar 'src/**/*.js' -c 'npm run format && npm run build'",
-                    "format": "prettier --write --single-quote --trailing-comma es5 'src/**/*.js'",
-                    "format:lint": "prettier -l --single-quote --trailing-comma es5 'src/**/*.js'",
-                    "release": "./release"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hyunje Jun",
-                    "email": "me@noraesae.net"
-                }
-            ],
-            "description": "Minimalistic but perfect custom scrollbar plugin",
-            "homepage": "https://github.com/utatti/perfect-scrollbar#readme",
-            "keywords": [
-                "frontend",
-                "scroll",
-                "scrollbar"
-            ],
-            "time": "2018-06-07T05:01:12+00:00"
-        },
-        {
-            "name": "npm-asset/ticky",
-            "version": "1.0.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/ticky/-/ticky-1.0.1.tgz",
-                "reference": null,
-                "shasum": "b7cfa71e768f1c9000c497b9151b30947c50e46d"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/bevacqua/ticky/issues"
-                },
-                "npm-asset-main": "ticky.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/bevacqua/ticky.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "echo \"Error: no test specified\" && exit 1"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Bevacqua",
-                    "email": "nicolasbevacqua@gmail.com",
-                    "url": "http://bevacqua.io/"
-                }
-            ],
-            "description": "Run a callback as soon as possible",
-            "homepage": "https://github.com/bevacqua/ticky#readme",
-            "time": "2016-05-20T16:56:23+00:00"
-        },
-        {
             "name": "piwik/device-detector",
             "version": "3.11.2",
             "source": {
@@ -2678,29 +2295,34 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.12",
+            "version": "v6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "181b89f18a90f8925ef805f950d47a7190e9b950"
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/181b89f18a90f8925ef805f950d47a7190e9b950",
-                "reference": "181b89f18a90f8925ef805f950d47a7190e9b950",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/8ddcb66ac10c392d3beb54829eef8ac1438595f4",
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "egulias/email-validator": "~2.0",
+                "php": ">=7.0.0"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1",
-                "symfony/phpunit-bridge": "~3.2"
+                "symfony/phpunit-bridge": "~3.3@dev"
+            },
+            "suggest": {
+                "ext-intl": "Needed to support internationalized email addresses",
+                "true/punycode": "Needed to support internationalized email addresses, if ext-intl is not installed"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -2728,7 +2350,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2018-07-31T09:26:32+00:00"
+            "time": "2018-09-11T07:12:52+00:00"
         },
         {
             "name": "thadafinser/package-info",
@@ -3201,52 +2823,6 @@
             "time": "2018-02-16T10:41:52+00:00"
         },
         {
-            "name": "yiisoft/yii2-codeception",
-            "version": "2.0.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-codeception.git",
-                "reference": "086c8c2d28736e7a484a7a8611b5cc84024e9fb3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-codeception/zipball/086c8c2d28736e7a484a7a8611b5cc84024e9fb3",
-                "reference": "086c8c2d28736e7a484a7a8611b5cc84024e9fb3",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": ">=2.0.4"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\codeception\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Jebri",
-                    "email": "mark.github@yandex.ru"
-                }
-            ],
-            "description": "The Codeception integration for the Yii framework",
-            "keywords": [
-                "codeception",
-                "yii2"
-            ],
-            "abandoned": "codeception/codeception",
-            "time": "2017-05-22T12:08:21+00:00"
-        },
-        {
             "name": "yiisoft/yii2-composer",
             "version": "2.0.7",
             "source": {
@@ -3352,31 +2928,31 @@
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
-            "version": "2.0.7",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-swiftmailer.git",
-                "reference": "8a03a62cbcb82e7697d3002eb43a8d2637f566ec"
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/8a03a62cbcb82e7697d3002eb43a8d2637f566ec",
-                "reference": "8a03a62cbcb82e7697d3002eb43a8d2637f566ec",
+                "url": "https://api.github.com/repos/yiisoft/yii2-swiftmailer/zipball/09659a55959f9e64b8178d842b64a9ffae42b994",
+                "reference": "09659a55959f9e64b8178d842b64a9ffae42b994",
                 "shasum": ""
             },
             "require": {
-                "swiftmailer/swiftmailer": "~5.0",
-                "yiisoft/yii2": "~2.0.4"
+                "swiftmailer/swiftmailer": "~6.0",
+                "yiisoft/yii2": ">=2.0.4"
             },
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\swiftmailer\\": ""
+                    "yii\\swiftmailer\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3398,7 +2974,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2017-05-01T08:29:00+00:00"
+            "time": "2018-09-23T22:00:47+00:00"
         }
     ],
     "packages-dev": [
@@ -3482,16 +3058,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.5.0",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "dee493561daf644134c95cf176fd2c25aff59ea9"
+                "reference": "e0a658c64e98811a6fd4f6aa7c3222e0609066a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/dee493561daf644134c95cf176fd2c25aff59ea9",
-                "reference": "dee493561daf644134c95cf176fd2c25aff59ea9",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/e0a658c64e98811a6fd4f6aa7c3222e0609066a9",
+                "reference": "e0a658c64e98811a6fd4f6aa7c3222e0609066a9",
                 "shasum": ""
             },
             "require": {
@@ -3570,7 +3146,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2018-09-24T09:33:01+00:00"
+            "time": "2018-10-29T21:23:19+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",
@@ -4453,16 +4029,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "21ad88bbba7c3d93530d93994e0a33cd45f02ace"
+                "reference": "c99e3be9d3e85f60646f152f9002d46ed7770d18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/21ad88bbba7c3d93530d93994e0a33cd45f02ace",
-                "reference": "21ad88bbba7c3d93530d93994e0a33cd45f02ace",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/c99e3be9d3e85f60646f152f9002d46ed7770d18",
+                "reference": "c99e3be9d3e85f60646f152f9002d46ed7770d18",
                 "shasum": ""
             },
             "require": {
@@ -4498,7 +4074,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2018-02-01T13:16:43+00:00"
+            "time": "2018-10-30T05:52:18+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -5961,12 +5537,9 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "bower-asset/jquery-ui": 0,
-        "kartik-v/yii2-widget-datepicker": 20,
+        "kartik-v/yii2-widget-datepicker": 0,
         "kartik-v/yii2-widgets": 20,
-        "kartik-v/yii2-widget-fileinput": 20,
-        "kartik-v/bootstrap-fileinput": 20,
-        "kartik-v/yii2-popover-x": 20,
-        "kingsonly/yii2-wiki": 20
+        "kartik-v/yii2-widget-fileinput": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
