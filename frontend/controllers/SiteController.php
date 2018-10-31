@@ -32,6 +32,7 @@ use frontend\models\CustomerSignupForm;
 use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
 use frontend\models\Task;
+use frontend\models\Remark;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
@@ -88,6 +89,7 @@ class SiteController extends BoffinsBaseController {
 		$folder = new Folder();
 		$dashboardFolders = $folder->getDashboardItems(5);
 		$task = new Task();
+		$remarkModel = new Remark();
 		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
 		$reminder = new Reminder();
 		$label = new label();
@@ -100,6 +102,7 @@ class SiteController extends BoffinsBaseController {
         	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
 			'task' => $task,
+			'remarkModel' => $remarkModel,
 			'reminder' => $reminder,
 			'taskAssignedUser' => $taskAssignedUser,
 			'users' => $users,

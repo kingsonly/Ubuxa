@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Remark;
-use frontend\models\RemarkSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,47 +36,23 @@ class RemarkController extends Controller
     {
         $perpage=4;
         if(isset($_GET['src'])){
-        $searchModel = new RemarkSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        
-        //$popsis = (($numpage-1) * $perpage);
-        if(Yii::$app->request->post('page')){
-            $numpage = Yii::$app->request->post('page');
-            $popsisi = (($numpage-1) * $perpage);
-            $remarks = Remark::find()->limit($perpage)->offset($popsisi)->all();
-            return $this->renderAjax('index2', [
-            //'searchModel' => $searchModel,
-            //'dataProvider' => $dataProvider,
-            'remarks' => $remarks,
-        ]);
-        } else {
-            $numpage = 10;
-            $remarks = Remark::find()->limit($numpage)->all();
-            return $this->render('index', [
-            //'searchModel' => $searchModel,
-            //'dataProvider' => $dataProvider,
-            'remarks' => $remarks,
-        ]);
+            if(Yii::$app->request->post('page')){
+                $numpage = Yii::$app->request->post('page');
+                $popsisi = (($numpage-1) * $perpage);
+                $remarks = Remark::find()->where(['parent_id' => 0])->orderBy('id DESC')->limit($perpage)->offset($popsisi)->all();
+                $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
+                return $this->renderAjax('index2', [
+                'remarks' => $remarks,
+                'remarkReply' => $remarkReply,
+                ]);
+            } else {
+                $numpage = 10;
+                $remarks = Remark::find()->limit($numpage)->all();
+                return $this->render('index', [
+                'remarks' => $remarks,
+                ]);
+            }
         }
-
-
-        
-       
-        
-        
-    }
-     
-        
-    }
-
-    public function actionRemark()
-    {
-            $remarks = Remark::find()->limit(10)->all();
-            return $this->render('remark', [
-            //'searchModel' => $searchModel,
-            //'dataProvider' => $dataProvider,
-            'remarks' => $remarks,
-    ]);
     }
 
     /**
@@ -98,22 +73,21 @@ class RemarkController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    
     public function actionCreate()
     {
-         $model = new Remark();
+        $model = new Remark();
+        $commenterId = Yii::$app->user->identity->person_id;
+        $model->person_id = $commenterId;
+        if(!empty(Yii::$app->request->post('&moredata'))){
+            $model->text = Yii::$app->request->post('&moredata');
+        } else {
+            return 'field cannot be empty';
+        }
         
-         $getLocation = $model->trackLocation();
-        
-         $model->component_name = $getLocation[0];
-         $model->view_id = 1;
-        
-         $commenterId = Yii::$app->user->identity->person_id;
-         $model->person_id = $commenterId;
-        if ($model->load(Yii::$app->request->post())) {
-           if($model->save()){
-            return $this->redirect(['view', 'id' => $model->id]);
-           }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $remarkSaved = "remark saved successfully";
+            return $remarkSaved;
         }
 
         return $this->render('create', [
@@ -170,6 +144,4 @@ class RemarkController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-    
 }

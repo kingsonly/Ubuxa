@@ -2,10 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\helpers\Url;
-use frontend\assets\AppAsset;
-AppAsset::register($this);
-use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Remark */
@@ -29,15 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    
- 
-<?= RemarkComponentViewWidget::widget(); ?>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3 results"></div>
-    </div>
-    <div class="text-center" id="loading">
-        <img src="ajax-loader.gif" id="ani_img"/>
-    </div>
-</div>
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            'parent_id',
+            'remark_date',
+            'text',
+            'cid',
+        ],
+    ]) ?>
+
 </div>

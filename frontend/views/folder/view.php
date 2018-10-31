@@ -139,8 +139,9 @@ $img = $model->folder_image;
             	<div class="row test5">
 					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
-            		<?php Pjax::end(); ?>
-            		<?= RemarksWidget::widget() ?>
+
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id, 'remarks' => $model->clipOn['remark'] ]) ?>
+
             	</div>
             </section>
         </div>
