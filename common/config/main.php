@@ -30,6 +30,25 @@ return [
 		'global' => [
 			'class' => 'boffins_vendor\classes\GlobalComponent',
 		],
+	          'redis' => [
+            'class' => \yii\redis\Connection::class,
+            // ...
+
+            // retry connecting after connection has timed out
+            // yiisoft/yii2-redis >=2.0.7 is required for this.
+            'retries' => 1,
+        ],
+        'queue' => [
+            'class' => \yii\queue\redis\Queue::class,
+            'redis' => 'redis', // Redis connection component or its config
+            'channel' => 'queue', // Queue channel key
+        ],
+	    'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ],
     ],
 	'controllerMap' => [
 		// Common migrations for the whole application

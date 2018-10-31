@@ -43,7 +43,9 @@
         "npm-asset/easy-pie-chart": "*",
 		"kartik-v/bootstrap-fileinput": "dev-master",
 		"kartik-v/yii2-popover-x": "dev-master",
-		"kingsonly/yii2-wiki": "dev-master"
+		"kingsonly/yii2-wiki": "dev-master",
+		"yiisoft/yii2-queue": "~2.0",
+		"yiisoft/yii2-redis": "dev-master"
 		
 
     }, 

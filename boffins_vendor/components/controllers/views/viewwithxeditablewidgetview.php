@@ -113,6 +113,25 @@ foreach($attributues as $v){
 			?>
 	</div>
 	<?
+	}elseif($v['xeditable'] == 'datetime'){
+			?>
+<div>
+<?
+			echo Editable::widget([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'inputType' => Editable::INPUT_DATETIME,
+				'asPopover' => false,
+				'header' => 'Due Date',
+				'size'=>'md',
+				'options'=>[
+					'options'=>['placeholder'=>'Enter date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+			?>
+	</div>
+	<?
 	}elseif($v['xeditable'] == 'notes'){
 			?>
 <div>
@@ -127,7 +146,7 @@ foreach($attributues as $v){
 	    'options' => [
 	        'class'=>'form-control', 
 	        'rows'=>5, 
-	        //'style'=>'width:400px', 
+	        'style'=>'width:400px', 
 	        'placeholder'=>'Enter details...'
     ]
 ]);

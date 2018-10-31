@@ -37,6 +37,8 @@ use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -90,6 +92,8 @@ class SiteController extends BoffinsBaseController {
 		$remarkModel = new Remark();
 		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
 		$reminder = new Reminder();
+		$label = new label();
+        $taskLabel = new TaskLabel();
 		$taskAssignedUser = new TaskAssignedUser();
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
@@ -102,6 +106,8 @@ class SiteController extends BoffinsBaseController {
 			'reminder' => $reminder,
 			'taskAssignedUser' => $taskAssignedUser,
 			'users' => $users,
+			'label' => $label,
+            'taskLabel' => $taskLabel,
 		]);
        
     }

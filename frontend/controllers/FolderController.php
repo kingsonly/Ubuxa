@@ -8,6 +8,8 @@ use frontend\models\Task;
 use frontend\models\Remark;
 use frontend\models\StatusType;
 use frontend\models\Reminder;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
 use yii\data\ActiveDataProvider;
@@ -66,9 +68,11 @@ class FolderController extends Controller
 		$remark = new Remark();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
         $taskAssignedUser = new TaskAssignedUser();
         $cid = Yii::$app->user->identity->cid;
-        $users = UserDb::find()->where(['cid' => $cid])->all();
+        $users = $model->users;
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -98,6 +102,8 @@ class FolderController extends Controller
 			'remarkModel' => $remark,
 		    'taskStatus' => $taskStatus,
             'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
             'taskAssignedUser' => $taskAssignedUser,
             'users' => $users,
             'id' => $id,

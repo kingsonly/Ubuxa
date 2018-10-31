@@ -10,7 +10,8 @@ class CreateLabelWidget extends Widget{
 	
 	public $id;
 	public $taskid;
-	public $task;
+	public $label;
+	public $taskLabel;
 
 	public function init()
 	{
@@ -22,7 +23,8 @@ class CreateLabelWidget extends Widget{
 		return $this->render('createtasklabel',[
 			'id' => $this->id,
 			'taskid' => $this->taskid,
-			'task' => $this->task,
+			'label' => $this->label,
+			'taskLabel' => $this->taskLabel,
 		]);
 	}
 	

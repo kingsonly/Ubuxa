@@ -12,6 +12,8 @@ class AddCardWidget extends Widget
 	public $statusid;
     public $id;
     public $taskModel;
+    public $parentOwnerId;
+    
     public function init()
     {
         parent::init();
@@ -24,6 +26,7 @@ class AddCardWidget extends Widget
         	'statusid' => $this->statusid,
             'taskModel' => $this->taskModel,
             'id' => $this->id,
+            'parentOwnerId' => $this->parentOwnerId,
         	]);
     }
 }
