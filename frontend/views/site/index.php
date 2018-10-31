@@ -25,6 +25,12 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 ?>
 <style>
+	#exampleInputRemark{
+		display: none !important;
+	}
+	#flux{
+		height:260px !important;
+	}
 	#flash {
 		display: none;
 	}
@@ -36,6 +42,11 @@ use boffins_vendor\components\controllers\MenuWidget;
 		grid-template-areas: 	'folders folders folders'
 								'flash flash flash'
 								'remarks tasks tasks';
+	}
+
+	.row{
+		margin-right: 0px !important;
+		margin-left: 0px !important;
 	}
 	
 	.grid-item {
@@ -131,6 +142,22 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             </section>
         </div>
+        <div class="row">
+        	<div class="col-md-1"></div>
+        	<div class="col-md-11">
+        		<div class="owl-carousel owl-theme row">
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+		        	<div class = 'item' style="border:1px solid #ccc; height:100%; "></div>
+	        	</div>
+        	</div>
+        </div>
+        
 
         <div class="row">
 
@@ -208,6 +235,13 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 <?php 
 $indexJs = <<<JS
+
+$('.owl-carousel').owlCarousel({
+      loop:true,
+      margin:0,
+      nav:true,
+      
+  	});
 
 $(function(){
     $("#boardButton").on('click', function(e){
@@ -288,6 +322,8 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
+
+	
 
 JS;
  

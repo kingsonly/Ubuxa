@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use boffins_vendor\components\controllers\RemarkComponentViewWidget;
+use yii\widgets\Pjax;
 ?>
 <style type="text/css">
     .bg-info {
@@ -33,6 +34,8 @@ use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 <div class="col-md-8">
     <div class="col-md-12 bg-info">
       	<div class="header">REMARKS</div>
-	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $parentOwnerId, 'remarks'=> $remarks]); ?></div>
+        <?php Pjax::begin(['id'=>'remark-refresh']); ?>
+	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $parentOwnerId, 'remarks'=> $remarks, 'modelName'=> $modelName]); ?></div>
+         <?php Pjax::end(); ?>
     </div>
 </div>

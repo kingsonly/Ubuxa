@@ -180,7 +180,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
     {
         return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
-	
+
 	/***
      * @return \yii\db\ActiveQuery
      */

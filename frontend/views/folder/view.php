@@ -137,7 +137,7 @@ $img = $model->folder_image;
             	<div class="row test5">
 					
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id, 'remarks' => $model->clipOn['remark'] ]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
             	</div>
             </section>
         </div>

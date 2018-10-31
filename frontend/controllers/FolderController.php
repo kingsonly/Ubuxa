@@ -10,6 +10,7 @@ use frontend\models\StatusType;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
+use frontend\models\Person;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
