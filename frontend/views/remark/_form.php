@@ -12,11 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'folder_id')->textInput() ?>
-
-    <?= $form->field($model, 'project_id')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'remark_type')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'parent_id')->textInput() ?>
 
     <?= $form->field($model, 'remark_date')->textInput() ?>
 

@@ -8,10 +8,10 @@ use yii\helpers\Url;
 /* @var $searchModel frontend\models\RemarkSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->title = 'Remarks';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
- 
-
-<div id="flux" style="width:200px;height:150px;overflow:auto;">
+<div id="flux" style="width:200px;height:150px;overflow:auto;background: #fff">
     <div class="rows">
         <div class="results">
         </div>

@@ -1,8 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
+use boffins_vendor\components\controllers\RemarkComponentViewWidget;
+use yii\widgets\Pjax;
 use frontend\assets\AppAsset;
 AppAsset::register($this);
 
@@ -69,7 +72,7 @@ AppAsset::register($this);
    margin-left: 17px;
 }
 
-select {
+#fonts {
    height: 24px;
    font-size: 12px;
    font-weight: bold;
@@ -82,7 +85,7 @@ select {
    cursor: pointer;
 }
 
-select > option {
+#fonts option {
    font-size: 15px;
    background: #fafafa;
 }
@@ -148,19 +151,15 @@ select > option {
     box-sizing: border-box;
  }
 
- a {
+ .comments-container a {
     color: #03658c;
     text-decoration: none;
  }
 
-ul {
+.comments-container ul {
     list-style-type: none;
 }
 
-body {
-    font-family: 'Roboto', Arial, Helvetica, Sans-serif, Verdana;
-    background: #dee1e3;
-}
 
 /** ====================
  * Lista de Comentarios
@@ -399,117 +398,45 @@ body {
     .reply-list .comment-box {
         width: 320px;
 	}
+
+  
+  }
+
+  #remarkSaveForm{
+    display: none;
+  }
+
+  #remarkReplyForm{
+    display: none;
+  }
+  .wrapp{
+    display: none;
+  }
 </style>
 <div class="" style="min-height: 200px">
   <div class="row">
-    <div class="col-md-12" style="height: 200px;overflow:auto">
+    
+    <div class="col-md-12" id="flux" style="height: 200px;overflow:auto">
       <!-- Contenedor Principal -->
-    <div class="comments-container">
-        <h4>Recent Comments <a href="http://creaticode.com" style="display: none;">creaticode.com</a></h4>
+    
+    <div class="comments-container" id="comments-container">
 
-        <ul id="comments-list" class="comments-list">
-            <li>
-                <div class="comment-main-level">
-                    <!-- Avatar -->
-                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
-                    <!-- Contenedor del Comentario -->
-                    <div class="comment-box">
-                        <div class="comment-head">
-                            <h6 class="comment-name by-author"><a href="http://creaticode.com/blog">Agustin Ortiz</a></h6>
-                            <span>20 minutes ago</span>
-                            <i class="fa fa-reply"></i>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                        <div class="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                        </div>
-                    </div>
-                </div>
-                <!-- Respuestas de los comentarios -->
-                <ul class="comments-list reply-list">
-                    <li>
-                        <!-- Avatar -->
-                        <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
-                        <!-- Contenedor del Comentario -->
-                        <div class="comment-box">
-                            <div class="comment-head">
-                                <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                                <span>10 minutes ago</span>
-                                <i class="fa fa-reply"></i>
-                                <i class="fa fa-heart"></i>
-                            </div>
-                            <div class="comment-content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                            </div>
-                        </div>
-                    </li>
-
-                    <li>
-                        <!-- Avatar -->
-                        <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
-                        <!-- Contenedor del Comentario -->
-                        <div class="comment-box">
-                            <div class="comment-head">
-                                <h6 class="comment-name by-author"><a href="http://creaticode.com/blog">Agustin Ortiz</a></h6>
-                                <span>15 hours ago</span>
-                                <i class="fa fa-reply"></i>
-                                <i class="fa fa-heart"></i>
-                            </div>
-                            <div class="comment-content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-
-            <li>
-                <div class="comment-main-level">
-                    <!-- Avatar -->
-                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default-user.png'); ?>" alt=""></div>
-                    <!-- Contenedor del Comentario -->
-                    <div class="comment-box">
-                        <div class="comment-head">
-                            <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                            <span>16 hours ago</span>
-                            <i class="fa fa-reply"></i>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                        <div class="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="comment-main-level">
-                    <!-- Avatar -->
-                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/default.png'); ?>" alt=""></div>
-                    <!-- Contenedor del Comentario -->
-                    <div class="comment-box">
-                        <div class="comment-head">
-                            <h6 class="comment-name"><a href="http://creaticode.com/blog">Lorena Rojero</a></h6>
-                            <span>20 minutes ago</span>
-                            <i class="fa fa-reply"></i>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                        <div class="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                        </div>
-                    </div>
-                </div>
-            </li>
+        <ul id="comments-list" class="comments-list results">
+           
     </div>
+    
   </div>
+
+  <div id="remark-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
   <div class="row">
     <div class="col-md-12">
-      <form>
+       <form>
   <div class="form-group">
-    <input type="text" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
   </div>
   </form>
-
-  <div class="wrapp" style="display: none">
+  <div class="wrapp">
    <div class="toolbar">
       <button class="remark-btn" id="bold" title="Bold (Ctrl+B)"><i class="fa fa-bold"></i></button>
       <button class="remark-btn" id="italic" title="Italic (Ctrl+I)"><i class="fa fa-italic"></i></button>
@@ -545,7 +472,7 @@ body {
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
-            <li id="link"><a href="#"><span title="Attach link"><i class="fa fa-link"></i></span><span id="textLi">Add Link</span></a></li>
+            <li id="linka"><a href="#"><span title="Attach link"><i class="fa fa-link"></i></span><span id="textLi">Add Link</span></a></li>
             <li id="image"><a href="#"><span title="Insert Image"><i class="fa fa-image"></i></span><span id="textLi">Files and Images</span></a></li>
            
           </ul>
@@ -555,17 +482,160 @@ body {
    <div class="editor" id="example-1" contenteditable></div>
 </div>
 
+    <?php $form = ActiveForm::begin(['id'=>'create-remark', 'validateOnSubmit' => false]); ?>
+    <?= $form->field($remarkModel, 'parent_id')->hiddenInput(['id'=>'parent-id','value' => 0])->label(false) ?>
+
+    <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
+
+    <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
+
+    <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
+    
+    <div class="form-group" id="remarkSaveForm">
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
+    </div>
+
+    <div class="form-group" id="remarkReplyForm">
+        <?= Html::submitButton('Reply', ['class' => 'btn btn-success', 'id' => 'remarkReply']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+    <img src="<?= Url::to('@web/images/loader/loader.gif'); ?>" style = "display: none" id="remarkLoader">
+  
 
     </div>
   </div>
 </div>
   
 <?php 
+$remarkUrl = Url::to(['remark/index','src' => 'ref1']);
+$remarkUrlSave = Url::to(['remark/create']);
+$remarkUrlMention = Url::to(['remark/mention']);
+$DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$DashboardUrlParam = $DashboardUrl[0];
 $remarkJs = <<<JS
+
+var issues = [
+  { name: "1", content: "stay foolish"},
+  { name: "2", content: "stay hungry"},
+  { name: "3", content: "stay heathly"},
+  { name: "4", content: "this happiess"},
+];
+$('.editor').atwho({
+    at: "@",
+    data:'$remarkUrlMention'
+}).atwho({
+    at: "#", 
+    displayTpl: '<li>\${name} <small>\${content}</small></li>',
+    data: issues
+  })
+
+var mypage = 1;
+var getOwnerId = $('#owner-id').val();
+var getModelName = $('.getModelName').val();
+mycontent(mypage);
+jQuery(
+  function($)
+  {
+    $('#flux').bind('scroll', function()
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mypage++;
+          mycontent(mypage);
+        }
+      })
+  }
+);
+
+$('#example-1').keyup(function(){
+   if($(this).text().length !=0)
+            $('#remarkSave').attr('disabled', false);            
+        else
+            $('#remarkSave').attr('disabled',true);
+  })
+
+$('#create-remark').submit(function(e) { 
+           e.preventDefault();
+    e.stopImmediatePropagation();
+           var remark_value = $('#example-1').html();
+           var form = $(this);
+
+           var datas = form.serializeArray();
+           datas.push({name: '&moredata', value: remark_value});
+
+           $('#remarkSave').hide();
+           $('#remarkLoader').show();
+           $.ajax({
+                url: '$remarkUrlSave',
+                type: 'POST',
+                data: datas,
+                success: function(response) { 
+                    $('#example-1').empty();
+                    $.pjax.reload({container:"#remark-refresh",async: false});
+                    $('#remarkLoader').hide();
+                    $('#remarkSave').show();
+                    $('#remarkSave').attr('disabled',true);
+                },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+            });  
+});
+
+function mycontent(mypage){
+    $('#remark-content-loading').show();
+    $.post('$remarkUrl',
+    {
+      page:mypage,
+      ownerId:getOwnerId,
+      modelName:getModelName,
+      DashboardUrlParam:'$DashboardUrlParam'
+    },
+    function(data){
+        if(data.trim().lenght == 0){
+            $('#remark-content-loading').text('finished');
+        }
+        $('#remark-content-loading').hide();
+        $('.results').append(data);
+        $('.welll').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
+        $('#ani_img').hide();
+        })
+}
+
+$('.remark-reply').click(function(){
+  if($(this).hasClass('reply-clicked')){
+    var getRemarkId = $(this).data('id');
+    $('.wrapp').slideUp(1000);
+    $('#exampleInputRemark').show();
+    $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 1000,function(){
+       $('#remarkReplyForm').hide();
+    });
+    $(this).removeClass('reply-clicked');
+  } else {
+    var getRemarkId = $(this).data('id');
+    $('#exampleInputRemark').hide();
+    $('.wrapp').slideDown(1000);
+    $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
+        $('#remarkReplyForm').show();
+    });
+ 
+    $('#parent-id').val(getRemarkId);
+
+    $(this).addClass('reply-clicked');
+    }
+ 
+  })
+
 
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
-  $('.wrapp').show()
+  $('.wrapp').slideDown(1000);
+  $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
+    $('#remarkSaveForm').show();
+    $('#remarkSave').attr('disabled', true);
+  });
+  
   })
 
 
@@ -574,7 +644,7 @@ $('#bold').on('click', function() {
    document.execCommand('bold', false, null);
 });
 
-$('#link').on('click', function(e) {
+$('#linka').on('click', function(e) {
     e.preventDefault();
    document.execCommand('createLink', false, null);
 });
@@ -604,7 +674,7 @@ $('#align-right').on('click', function() {
 });
 
 $('#list-ul').on('click', function() {
-   document.execCommand('insertUnorderedList', false, null);
+   document.execCommand("insertUnorderedList");
 });
 
 $('#list-ol').on('click', function() {
@@ -618,10 +688,8 @@ $('#fonts').on('change', function() {
 
 $('#size').on('change', function() {
    var size = $(this).val();
-   $('.editor').css('fontSize', size + 'px');
+   $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
-
-
 
 JS;
  

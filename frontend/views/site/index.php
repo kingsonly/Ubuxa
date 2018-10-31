@@ -136,14 +136,51 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<div class="row task-kanban">
-            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
-            		<?php Pjax::end(); ?>
-            		<?= RemarksWidget::widget() ?>
+            	<div class="row" style="margin-bottom: 32px;">
+            			<div class="col-md-12">
+            				<div class="col-md-12" style="min-height: 100px;padding: 10px; background: #fff">
+            					<div class="row">
+            						<div class="col-md-12">hfguh</div>
+            					</div>
+            					<div class="row">
+            						<div class="col-md-12">
+            							<div class="row">
+            								<div class="col-md-2">
+            									<div style="width:100%;border-right: 1px solid #ccc">
+            										<div style="width: 100%; height:150px;background-image: url('<?= Url::to("@web/images/folder/newfolder.png"); ?>'); background-repeat: no-repeat;background-size: cover">
+            											
+            										</div>
+            										
+            									</div>
+            								</div>
+            								<div class="col-md-10" style="padding-top: 20px">
+            									<?php for ($i=1;$i<7;$i++){?>
+            									<div class="col-md-2" style="display: inline-block;">
+            										<img src="<?= Url::to('@web/images/folder/folderempty.png'); ?>" alt="">
+            									</div>
+            								<?php } ?>
+            								</div>
+            							</div>
+            						</div>
+            					</div>
+            					
+            				</div>
+            			</div>
             	</div>
             </section>
         </div>
+
+        <div class="row">
+
+            <section>
+            	<div class="row test5">
+            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
+            	</div>
+            </section>
+        </div>
+
+        
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
@@ -176,13 +213,14 @@ $indexJs = <<<JS
 
 $(function(){
     $("#boardButton").on('click', function(e){
-        $(".task-kanban").slideUp('slow');
+        $(".test5").slideUp('slow');
         $('.view-task-board').show();
   });
   $('.task-icon').on('click',function(e){
   		e.preventDefault();
+	    //$(".view-task-board").hi('slow');
 	    $(".view-task-board").hide();
-	    $('.task-kanban').slideDown('slow');
+	    $('.test5').slideDown('slow');
    });
 });
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false

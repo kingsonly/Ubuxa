@@ -5,12 +5,14 @@ namespace frontend\controllers;
 use Yii;
 use frontend\models\Folder;
 use frontend\models\Task;
+use frontend\models\Remark;
 use frontend\models\StatusType;
 use frontend\models\Reminder;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
+use frontend\models\Person;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,7 +65,8 @@ class FolderController extends Controller
     {
 		
 		$model = $this->findModel($id);
-		$task = new Task();
+        $task = new Task();
+		$remark = new Remark();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
         $label = new label();
@@ -96,7 +99,8 @@ class FolderController extends Controller
         return $this->render('view', [
             'model' => $model,
 			'task' => $task,
-			'taskModel' => $task,
+            'taskModel' => $task,
+			'remarkModel' => $remark,
 		    'taskStatus' => $taskStatus,
             'reminder' => $reminder,
             'label' => $label,
