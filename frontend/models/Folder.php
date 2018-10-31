@@ -98,7 +98,7 @@ class Folder extends FolderARModel
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
+        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
     }
 
     /**
@@ -151,8 +151,27 @@ class Folder extends FolderARModel
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
         }
 	public function getFolderUsers(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManager')->asArray();
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
         }
+
+
+    public function getPerson()
+    {
+        return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('users');
+    }
+
+
+    public function getPersonName()
+    {   
+        $names = [];
+        $data = $this->person;
+        foreach($data as $attr) {
+            $names[] = $attr->first_name.' '.$attr->surname;
+        }
+        return implode(" ", $names);
+
+        //return $this->person->first_name;
+    }
 
     public function getFolderManagerInheritance()
     {

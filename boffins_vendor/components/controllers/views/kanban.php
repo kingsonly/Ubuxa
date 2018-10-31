@@ -8,6 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
+use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
@@ -40,7 +41,7 @@ AppAsset::register($this);
 .drag-list {
   display: flex;
   align-items: flex-start;
-  overflow: scroll;
+  /* overflow: scroll; */
   width: 1000px;
 }
 
@@ -48,6 +49,7 @@ AppAsset::register($this);
     color: black !important;
 }
 .drag-column {
+  min-width: 315px;
   flex: 1;
   margin: 0 10px;
   position: relative;
@@ -89,8 +91,8 @@ AppAsset::register($this);
   min-height: 50px;
 }
 .drag-item {
+  width: 295px;
   margin: 10px;
-  min-height: 60px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
@@ -170,10 +172,11 @@ AppAsset::register($this);
     cursor: pointer;
 }
 .bottom-content {
-    display: none;
-    position: absolute;
+    visibility: hidden;
+    /*position: absolute;*/
     bottom: 0;
     width: 100%;
+    clear: right;
 }
 
 
@@ -284,7 +287,7 @@ a.addTaskButton.active {
     padding-right: 10px;
     padding-top: 2px;
     cursor: pointer;
-    padding-bottom: 20px;
+    min-height: 40px;
 }
 .taskpop {
   position: absolute;
@@ -364,73 +367,71 @@ a.addTaskButton.active {
 
 
 </style>
-<div class="task-index">
 
-    <!-- <p>
-        <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
-    </p> -->
-
-</div>
-
+<?php Pjax::begin(['id'=>'asign-refresh']); ?>
 <section class="task-head">
     <h1>Task Board</h1>
+
 </section>
 <div class="task-icon">
   <i class="glyphicon glyphicon-remove"></i>
 </div>
 
-<?php Pjax::begin(['id'=>'asign-refresh']); ?>
+
 <div class="drag-container">
-    <ul class="drag-list">
+    <ul class="drag-list" id="kanban-board">
         <?php
-        $id = 1; 
+        $count = 1; 
         foreach($taskStatus as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <svg class="drag-header-more" data-target="options<?= $id; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
+                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
             </span>
                 
-            <div class="drag-options" id="options<?=$id;?>"></div>
+            <div class="drag-options" id="options<?=$count;?>"></div>
             
-            <ul class="drag-inner-list" id="<?=$id;?>" data-contain="<?= $value->id; ?>">
+            <ul class="drag-inner-list" id="<?=$count;?>" data-contain="<?= $value->id; ?>">
                 <?php 
-                    $id2 = 1;
+                    $count2 = 1;
                       if(!empty($dataProvider)){
                         foreach ($dataProvider as $key => $values) {
                           if($values->status_id == $value->id){
-                          $boardUrl = Url::to(['task/view', 'id' => $values->id]);
+                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $folderId]);
                           $reminderUrl = Url::to(['reminder/create']);
-                          $listData=ArrayHelper::map($users,'id','username');
+                          //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
                         <?= $values->title; ?>
                       </div>
-                      
+                      <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
-                        <?= $values->personName; ?>
+                        <div class="user-image">
+                         
+							           <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
+                        </div>
                       </div>
-                      <?php if(!empty($values->label)){ ?>
+                    <?php }?>
+                      <?php if(!empty($values->labelNames)){ ?>
                         <div class="task-label-title">
-                          <span class="label-task">
-                          <?= $values->label; ?>
+                          <span class="label-task" id="label<?=$values->id.$count?>">
+                          <?= $values->labelNames; ?>
                         </span>
                         </div>
                       <?php } ?>
                     <?php 
                       $time = $values->reminderTime;
+                      $timers = explode(",",$time);
                       $check = date("Y-m-d H:i:s");
-                        if(!empty($time) && $time >= $check){ ?>
+                      $closest = $values->closestReminder($timers, $check);
+                      $reminders = date('M j, g:i a', strtotime($closest));
+                        if(!empty($time) && $reminders >= $check){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
                             <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
-                              <?php
-                                $date = $values->reminderTime;
-                                $date = date('M j, g:i a', strtotime($date));
-                                echo $date;
-                              ?>
+                              <?= $reminders; ?>
                             </span>
                           </div>
                       <?php } ?>
@@ -459,31 +460,31 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
                         <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
-                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id]) ?>  
+                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
                         </div>
                       </div>
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <?= CreateLabelWidget::widget(['id' => $id,'task' => $task, 'taskid' => $values->id]) ?>
+                         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id, 'labelId' => $count]) ?>
                         </div>
                       </div>
                         <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </li>
-            <?php $id2++;}}}?>
+            <?php $count2++;}}}?>
 				
             </ul>
             <a class="add-card" href="#">
               <span class="glyphicon glyphicon-plus"></span>
               <span class="add-title"> Add Card </span>
             </a>
-            <div class="card-add">
-                <?= AddCardWidget::widget(['id' => $id,'taskModel' => $task, 'statusid' => $value->id]) ?>
+            <div class="card-add" id="add-new-cardz">
+                <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id, 'parentOwnerId' => $id]) ?>
             </div>
         </li>
-        <?php $id++;} ?>
+        <?php $count++;} ?>
     </ul> 
 </div>
 <?php Pjax::end(); ?>
@@ -511,6 +512,18 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
 });
 
+$(function(){
+    $("#boardButton").on('click', function(e){
+        $(".test5").slideUp('slow');
+        $('.view-task-board').show();
+  });
+  $('.task-icon').on('click',function(e){
+      e.preventDefault();
+      //$(".view-task-board").hi('slow');
+      $(".view-task-board").hide();
+      $('.test5').slideDown('slow');
+   });
+});
 
 $.fn.closest_descendent = function(filter) {
     var found = $(),
@@ -667,30 +680,24 @@ showOptions.init();
   //});
 
 $('.dropdown').on('click',function(){
-  if($(this).hasClass('clicked')){
-    $(this).removeClass('clicked');
-    $(this).parent().parent().css('display','none');
-  } else {
-  $(this).addClass('clicked');
-  }
-  })
+  if($(this).hasClass('testdrop')){
+    $(this).addClass('clicked');
+    //$(this).parent().parent().css('visibility','hidden');
+  } 
+})
 
 $('.drag-item').mouseenter(function(){
-       $(this).find('.bottom-content').css("display","block");
+       $(this).find('.bottom-content').css("visibility","visible");
   }).mouseleave(function(){
-          if($(this).find('.dropdown').hasClass('clicked')){
-            $(this).find('.bottom-content').css("display","block");
-          } else {
-            $(this).find('.bottom-content').css("display","none");
+          if($(this).find('.testdrop').hasClass('open')){
+            $(this).find('.bottom-content').css("visibility","visible");
+          } else{
+            //$(this).removeClass('clicked');
+            $(this).find('.bottom-content').css("visibility","hidden");
           }
          
     })
 
-$(".testdrop").click(function () {
-  
-  $(this).find('.bottom-content').css("display","block");
- // $(".bottom-content").css("display","block");
-});
 
  window.onscroll = function(ev) {
    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
@@ -703,13 +710,13 @@ $(".testdrop").click(function () {
 }; 
 $(document).click(function (e) {
     e.stopPropagation();
-    var container = $(".dropdown");
+    var container = $(".testdrop");
     var containerr = container.find('.clicked');
 
     //check if the clicked area is dropDown or not
     if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
         container.removeClass('clicked');
-        $('.bottom-content').hide();
+        $('.bottom-content').css("visibility","hidden");
     }
 })
 $(document).ready(
@@ -730,3 +737,4 @@ JS;
  
 $this->registerJs($board);
 ?>
+

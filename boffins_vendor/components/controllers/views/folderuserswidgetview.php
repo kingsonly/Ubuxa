@@ -23,7 +23,7 @@ transition: margin-top 0.1s ease-out 0s;
 		padding-top: 7.3px;*/
 	}
 
-	#folderusers{
+	.folderusers{
 		display: flex;
 		flex: 1;
 		height: 47px;
@@ -118,9 +118,10 @@ transition: margin-top 0.1s ease-out 0s;
     }
     
 	</style>
-<div id="folderusers">
+<div class="folderusers">
+	<? if($removeButtons !== false){?>
 	<div id="invitenewuser">AUTHORIZED USERS</div>
-	
+	<? var_dump($removeButtons)?>
 	
 	<div class="dropdown">
 		<span id="plus-button" class="dropdown-toggle" id="dropdownMenuButtons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>
@@ -137,17 +138,17 @@ transition: margin-top 0.1s ease-out 0s;
                           
                         </div>
                         </div>
-	
+	<? }?>
 	
 	
 	<div class="user-image">
-	<?php $count=100; ?>
+	<?php $count= count($attributues); ?>
 <?php foreach($attributues as $users){ 
 	$image = !empty($users["image"])?$users["image"]:'default-user.png';
 	$count--;
 	?>
 		
-		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users['username'];?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
+		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
 		
 	
 	

@@ -11,7 +11,10 @@ use yii\filters\VerbFilter;
 use frontend\models\StatusType;
 use yii\db\Expression;
 use frontend\models\Reminder;
+use frontend\models\Folder;
 use frontend\models\TaskReminder;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 
 
@@ -61,10 +64,15 @@ class TaskController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id,$folderId)
     {
         $model = $this->findModel($id);
         $status = StatusType::find()->where(['status_group' => 'task'])->all();
+        $folderModel = new Folder();
+        $folder = $folderModel->findOne($folderId);
+        $users = $folder->users;
+        $label = new label();
+        $taskLabel = new TaskLabel();
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -91,6 +99,9 @@ class TaskController extends Controller
         return $this->renderAjax('view', [
             'model' => $model,
             'status' => $status,
+            'users' => $users,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
         ]);
     }
 
@@ -103,13 +114,18 @@ class TaskController extends Controller
     {
         $model = new Task();
         $model->owner = Yii::$app->user->identity->id;
-        //$model->status_id = 21;
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
                 $model->due_date = NULL;
+                $model->save();
+            }elseif ($model->status_id == 22) {
+                $model->in_progress_time = new Expression('NOW()');
+                $model->save();
+            }elseif ($model->status_id == 24) {
+                $model->completion_time = new Expression('NOW()');
                 $model->save();
             }else{
                 $model->save();
@@ -134,6 +150,8 @@ class TaskController extends Controller
         $reminder = new Reminder();
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
+                $model->completion_time = NULL;
+                $model->in_progress_time = NULL;
                 $model->due_date = NULL;
                 $model->save();
             }else{
@@ -179,6 +197,13 @@ class TaskController extends Controller
             $statusid = $data['status_id'];
             $model->status_id = $statusid;
             $model->last_updated = new Expression('NOW()');
+            if($statusid == 24){
+                $model->completion_time = new Expression('NOW()');
+                $model->save();
+            } elseif ($statusid == 22) {
+                $model->in_progress_time = new Expression('NOW()');
+                $model->save();
+            }
             $model->save();
         }
     }

@@ -35,6 +35,25 @@ return [
 		'global' => [
 			'class' => 'boffins_vendor\classes\GlobalComponent',
 		],
+	          'redis' => [
+            'class' => \yii\redis\Connection::class,
+            // ...
+
+            // retry connecting after connection has timed out
+            // yiisoft/yii2-redis >=2.0.7 is required for this.
+            'retries' => 1,
+        ],
+        'queue' => [
+            'class' => \yii\queue\redis\Queue::class,
+            'redis' => 'redis', // Redis connection component or its config
+            'channel' => 'queue', // Queue channel key
+        ],
+	    'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
+        ],
     ],
 	'controllerMap' => [
 		// Common migrations for the whole application
@@ -43,17 +62,17 @@ return [
 			'class' => 'boffins_vendor\migration\SpecialMigration',
 			//'migrationNamespaces' => ['console\migrations'],
 			'migrationTable' => '{{%migration}}',
-			'migrationPath' => 'console\migrations',
-			'templateFile' => 'boffins_vendor\migration\special_migration_template.php',
+			'migrationPath' => 'console/migrations',
+			'templateFile' => 'boffins_vendor/migration/special_migration_template.php',
 		],
 		// Migrations for testing only 
 		'migrate-test' => [
 			'class' => 'boffins_vendor\migration\SpecialMigration',
 			//'migrationNamespaces' => ['common\tests\migrations'],
 			'migrationTable' => '{{%migration}}',
-			'migrationPath' => 'console\migrations',
+			'migrationPath' => 'console/migrations',
 			//'db' => $db_test,
-			'templateFile' => 'boffins_vendor\migration\special_migration_template.php',
+			'templateFile' => 'boffins_vendor/migration/special_migration_template.php',
 			'db_suffix' => '_test',
 		],
 		// Migrations for testing only 

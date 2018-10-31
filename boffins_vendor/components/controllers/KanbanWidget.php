@@ -9,12 +9,16 @@ use yii;
 class KanbanWidget extends Widget{
 	
 	public $task;
+	public $model;
 	public $dataProvider;
 	public $id;
 	public $reminder;
 	public $taskStatus;
 	public $users;
 	public $taskAssignedUser;
+	public $folderId;
+	public $label;
+	public $taskLabel;
 
 	public function init()
 	{
@@ -23,14 +27,19 @@ class KanbanWidget extends Widget{
 	
 	// output the outcome of loopmenu
 	public function run(){
+		$this->folderId = $this->id;
 		return $this->render('kanban',[
 			'task' => $this->task,
+			'model' => $this->model,
 			'dataProvider' => $this->dataProvider,
 			'id' => $this->id,
 			'reminder' => $this->reminder,
 			'taskStatus' => $this->taskStatus,
 			'users' => $this->users,
 			'taskAssignedUser' => $this->taskAssignedUser,
+			'folderId' => $this->folderId,
+			'label' => $this->label,
+			'taskLabel' => $this->taskLabel,
 		]);
 	}
 	

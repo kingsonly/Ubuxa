@@ -5,6 +5,7 @@ use yii\bootstrap\Modal;
 use boffins_vendor\components\controllers\TaskViewWidget;
 use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 
 $boardUrl = Url::to(['task/index']);
@@ -182,15 +183,15 @@ $boardUrl = Url::to(['task/index']);
 }
 
 </style>
-  
+
 	 <div class="col-md-4">
         <div class="bg-info column-margin">
 	        <div class="task-header">
                 <span>TASKS</span>
                  <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success'])?> 
             </div>
-            <?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-	        <div class="box-content-task">
+            
+	        <div class="box-content-task" id="box-content">
              <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
   <defs>
     <linearGradient id="boxGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="25" y2="25">
@@ -223,7 +224,7 @@ $boardUrl = Url::to(['task/index']);
         <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
     
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>
       <use xlink:href="#todo__check" class="todo__check"></use>
@@ -243,13 +244,12 @@ $boardUrl = Url::to(['task/index']);
 </div> 
 
 </div>
-<?php Pjax::end(); ?>
+
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
-                  <?php Pjax::begin(['id'=>'task-refresh']); ?>
 					 
-                    <?php $form = ActiveForm::begin(['id' => 'create-task','options' => ['data-pjax' => true ]]); ?>
+                    <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
                     <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
 					 
@@ -258,7 +258,6 @@ $boardUrl = Url::to(['task/index']);
                     <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
                     <?php ActiveForm::end(); ?>
-                  <?php Pjax::end(); ?>
                 </div> 
             </div>  
         </div>
@@ -299,7 +298,7 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
-                $.pjax.reload({container:"#asign-refresh",async: false});
+                $.pjax.reload({container:"#kanban-refresh",async: false});
                    console.log('Status updated');
               },
               error: function(res, sec){
@@ -341,4 +340,31 @@ JS;
  
 $this->registerJs($task);
 ?>
+  <?php 
+$steps[0] = [
+    'title'=>'Step 1',
+    'content'=>'Content and stuff',
+    'element'=>'#boardButton'
+];
 
+// $steps[1] = ... etc
+$steps[1] = [
+    'title'=>'Step 2',
+    'content'=>'Content and stuff',
+    'element'=>'#box-content'
+];
+$steps[2] = [
+    'title'=>'Step 3',
+    'content'=>'Content and stuff',
+    'element'=>'#task-box'
+];
+
+
+
+\macrowish\widgets\BootstrapTour::widget([
+    'steps'=>$steps,
+    'options'=>[
+        'backdrop'=>'true',
+        //'storage' => 'false',
+        ]
+]); ?>

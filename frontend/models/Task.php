@@ -116,34 +116,30 @@ class Task extends BoffinsArRootModel
 
     /**
      * @return \yii\db\ActiveQuery
-     
-    public function getAssignedTo()
-    {
-        return $this->hasOne(UserDb::className(), ['id' => 'assigned_to']);
-    }
-
-    public function getPerson()
-    {
-        return $this->hasOne(Person::className(), ['id' => 'person_id'])->via('assignedTo');
-    }
-
-    public function getPersonName()
-    {
-        return $this->person->first_name;
-    }
-    
-    public function getFullname()
-    {
-        return $this->person->first_name.' '.$this->person->surname;
-    }
-    */
-
-    /**
-     * @return \yii\db\ActiveQuery
      */
     public function getOwner0()
     {
         return $this->hasOne(User::className(), ['id' => 'owner']);
+    }
+
+    public function getTaskLabels()
+    {
+        return $this->hasMany(TaskLabel::className(), ['task_id' => 'id']);
+    }
+
+    public function getLabels()
+    {
+        return $this->hasMany(Label::className(), ['id' => 'label_id'])->via('taskLabels');
+    }
+
+    public function getLabelNames()
+    {
+        $label = [];
+        $data = $this->labels;
+        foreach($data as $attr) {
+            $label[] = $attr->name;
+        }
+        return implode('</span>' . PHP_EOL . '<span class="label-task">', $label);
     }
 
     /**
@@ -179,7 +175,27 @@ class Task extends BoffinsArRootModel
         foreach($data as $attr) {
             $time[] = $attr->reminder_time;
         }
-        return implode(" ", $time);
+        return implode(",", $time);
+    }
+
+    public function getReminderTimeTask()
+    {
+        $time = [];
+        $data = $this->reminders;
+        
+        return $data;
+    }
+
+    public function closestReminder($reminders, $date)
+    {
+        foreach($reminders as $day){
+            $interval[] = abs(strtotime($date) - strtotime($day));
+        }
+
+        asort($interval);
+        $closest = key($interval);
+
+        return $reminders[$closest];
     }
 
     public function getTaskAssignedUsers()
@@ -219,5 +235,30 @@ class Task extends BoffinsArRootModel
     {
         $task = $this->find()->orderBy(['id'=>SORT_DESC])->all();
         return $task;
+    }
+
+    public function formatInterval($interval) {
+        $result = "";
+        if ($interval->y) { $result .= $interval->format("%y years "); }
+        if ($interval->m) { $result .= $interval->format("%m months "); }
+        if ($interval->d) { $result .= $interval->format("%d days "); }
+        if ($interval->h) { $result .= $interval->format("%h hours "); }
+        if ($interval->i) { $result .= $interval->format("%i minutes "); }
+        if ($interval->s) { $result .= $interval->format("%s seconds "); }
+
+        return $result;
+    }
+
+    public function getTimeCompletion()
+    {
+        $startTime = new \DateTime($this->in_progress_time);
+        $endTime = new \DateTime($this->completion_time);
+
+        
+        $timeTaken = $startTime->diff($endTime);
+
+        //$timeTaken = $endTime - $startTime;
+
+        return $this->formatInterval($timeTaken);
     }
 }
