@@ -31,8 +31,9 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['address_line', 'code', 'cid'], 'required'],
-            [['address_line', 'code'], 'string', 'max' => 255],			
+            [['cid'], 'required'],
+            [['address_line', 'code'], 'safe'],
+            [['address_line', 'code'], 'string', 'max' => 255],		
         ];
     }
 

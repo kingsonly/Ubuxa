@@ -15,7 +15,7 @@ use app\models\Component;
 * its aimed at porviding a single graphical representation of all list views
 * Has a 5 public property and two public methods
 **************** Basic Usage ****************
-*	use app\boffins_vendor\components\controllers\ComponentListViewWidget;
+*	use app\boffins_vendor\components\controllers\ComponentListViewWidget; // attach to the top of the page 
 *
 *	$attributes = [
 *				'receivedpurchaseorder_id',

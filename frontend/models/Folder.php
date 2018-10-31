@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\FolderARModel;
+use yii\web\UploadedFile;
 
 
 /**
@@ -31,6 +32,7 @@ class Folder extends FolderARModel
      * {@inheritdoc}
      */
 	public $privateFolder;
+	public $upload_file;
     public static function tableName()
     {
         return 'tm_folder';
@@ -42,11 +44,11 @@ class Folder extends FolderARModel
     public function rules()
     {
         return [
-            [['parent_id', 'deleted', 'cid'], 'integer'],
-            [['title'], 'required'],
-            [['last_updated','privateFolder'], 'safe'],
+            [['parent_id', 'deleted', 'cid','private_folder'], 'integer'],
+            [['title'], 'required'],	
+            [['last_updated','privateFolder','upload_file','folder_image'], 'safe'],
             [['title'], 'string', 'max' => 40],
-            [['description'], 'string', 'max' => 255],
+            [['description','folder_image'], 'string', 'max' => 255],
         ];
     }
 
@@ -96,7 +98,7 @@ class Folder extends FolderARModel
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
+        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
     }
 
     /**
@@ -125,7 +127,10 @@ class Folder extends FolderARModel
 	
 	public function getSubFolders()
     {
-        return $this->hasMany($this::className(), ['parent_id' => 'id']);
+        return $this->hasMany($this::className(), ['parent_id' => 'id'])->orderBy([
+  'last_updated' => SORT_DESC,
+  //'item_no'=>SORT_ASC
+]);
     }
 	
 	public function getTree()
@@ -143,11 +148,30 @@ class Folder extends FolderARModel
 	}
 	
 	 public function getFolderUsersInheritance(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManagerInheritance');
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
         }
 	public function getFolderUsers(){
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','image'])->via('folderManager')->asArray();
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
         }
+
+
+    public function getPerson()
+    {
+        return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('users');
+    }
+
+
+    public function getPersonName()
+    {   
+        $names = [];
+        $data = $this->person;
+        foreach($data as $attr) {
+            $names[] = $attr->first_name.' '.$attr->surname;
+        }
+        return implode(" ", $names);
+
+        //return $this->person->first_name;
+    }
 
     public function getFolderManagerInheritance()
     {
@@ -164,10 +188,86 @@ class Folder extends FolderARModel
         
     }
 	
+	public function getAllChildFolder(){
+		
+	}
+	
+	public function getRole()
+    {
+		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity])->select('role');
+		
+        
+    }
+	
+	public function getIsPrivate()
+    {
+		
+			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id'])->asArray()->count() == 1 ? true : false;
+		
+        
+    }
+	
 	public function getIsEmpty() 
 	{
 		return empty( $this->components ) ? true: false;
 	}
+	public function getFolderColors() 
+	{
+		$colorStatus = '';
+		if($this->private_folder === 1){
+			$colorStatus =  'private';
+		} elseif($this->role->role == 'author'){
+			$colorStatus = 'author';
+		}else{
+			$colorStatus = 'users';
+		}
+		return $colorStatus;
+	}
+	
+	
+	
+	
+		public function upload()
+    {
+        if ($this->validate()) {
+			$holdPath = '';
+			$file = $this->upload_file;
+			$ext = $file->extension;
+			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
+			$basePath = explode('/',\Yii::$app->basePath);
+			//\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
+			$path = 'uploads/' . $newName;
+			$dbpath = 'uploads/' . $newName;
+			
+			$holdPath= $dbpath;
+			
+			if($file->saveAs($path)){
+				
+				$this->folder_image = $path;
+				
+			}
+			//$this->file_location = implode(",",$holdPath);
+			
+            return true;
+        } else {
+            return false;
+        }
+    }
+	
+	
+	
+	
+	 public function uploads()
+    {
+        if ($this->validate()) {
+            $this->upload_file->saveAs('uploads/' . $this->upload_file->baseName . '.' . $this->upload_file->extension);
+            return true;
+        } else {
+            return false;
+        }
+    }
+	
+	
 	
 	
 }

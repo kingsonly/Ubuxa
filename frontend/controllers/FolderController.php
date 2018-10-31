@@ -4,10 +4,19 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Folder;
+use frontend\models\Task;
+use frontend\models\StatusType;
+use frontend\models\Reminder;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
+use frontend\models\TaskAssignedUser;
+use frontend\models\UserDb;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Expression;
+use yii\web\UploadedFile;
 
 /**
  * FolderController implements the CRUD actions for Folder model.
@@ -35,13 +44,12 @@ class FolderController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Folder::find(),
-        ]);
+        $folderModel = new Folder();
+       $dataProvider = $folderModel->find()->all();
 		
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-           'model' => $this->findModel(42),
+           
         ]);
     }
 
@@ -53,7 +61,16 @@ class FolderController extends Controller
      */
     public function actionView($id)
     {
+		
 		$model = $this->findModel($id);
+		$task = new Task();
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+        $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $users = $model->users;
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -64,7 +81,7 @@ class FolderController extends Controller
             
             $model->save(false);
             // return JSON encoded output in the below format
-            return ['output'=>'$value', 'message'=>'sent'];
+            return ['output'=>'', 'message'=>''];
             
             // alternatively you can return a validation error
             // return ['output'=>'', 'message'=>'Validation error'];
@@ -74,8 +91,19 @@ class FolderController extends Controller
             return ['output'=>'', 'message'=>''];
         }
     }
+		
+
         return $this->render('view', [
             'model' => $model,
+			'task' => $task,
+			'taskModel' => $task,
+		    'taskStatus' => $taskStatus,
+            'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
+            'taskAssignedUser' => $taskAssignedUser,
+            'users' => $users,
+            'id' => $id,
         ]);
     }
 
@@ -88,9 +116,17 @@ class FolderController extends Controller
     {
         $model = new Folder();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['view', 'id' => $model->id]);
-            return ['output'=>$model->id, 'message'=>'sent'];;
+        if ($model->load(Yii::$app->request->post())) {
+			$model->last_updated =  new Expression('NOW()');
+			if($model->privateFolder === 'fa fa-lock'){
+				$model->private_folder = 1;	
+			}
+			
+			if($model->save()){
+				//return $this->redirect(['view', 'id' => $model->id]);
+            return ['output'=>$model->id, 'message'=>'sent'];
+			}
+            
         }
 
         return $this->render('create', [
@@ -117,6 +153,33 @@ class FolderController extends Controller
             'model' => $model,
         ]);
     }
+	
+	
+	public function actionUpdateFolderImage($id)
+    {
+		
+        $model =  $this->findModel($id);
+		
+
+        if (Yii::$app->request->isPost) {
+            $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+            if ($model->upload()) {
+                // file is uploaded successfully
+				if($model->save()){
+					return 1234;	
+				} else{
+					return 1233333;
+				}
+                
+            }
+        }
+
+       // return $this->render('upload', ['model' => $model]);
+    	
+    
+        }
+
+    
 
     /**
      * Deletes an existing Folder model.

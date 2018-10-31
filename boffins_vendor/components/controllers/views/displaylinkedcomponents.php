@@ -18,8 +18,7 @@ __________ Varialbel list and explanation __________________
 	<? foreach($subComponents as $key => $value){ 
 		$getId =  $value->component_classname::find()->where(["component_id" =>  $value->id])->one();
 		$id = $getId->getPrimaryKey();
-		?>
-		<? 
+		
 		/*
 		* Check for the availability of edocument component on the looped list
 		* if it exist extract it using the component id

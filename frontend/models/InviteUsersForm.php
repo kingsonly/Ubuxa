@@ -39,18 +39,20 @@ class InviteUsersForm extends Model
     public function sendEmail($email)
     {
         $cid = Yii::$app->user->identity->cid;
-
-
-        $sendTest = Yii::$app->mailer->compose()
+        $tests = $this->email;
+        foreach ($tests as $test) {
+           $sendTest = Yii::$app->mailer->compose()
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
             ->setSubject("Ubuxa Invite")
             ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
                 Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/invite','email'=> $this->email,'cid'=>$cid,'role' => $this->role]
+                ['site/invite','email'=> $test,'cid'=>$cid,'role' => $this->role]
                 ))
                 )
             ->send();
+        }
+        
         return $sendTest;
     }
 

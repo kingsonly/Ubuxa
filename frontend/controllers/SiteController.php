@@ -13,6 +13,8 @@ use yii\db\Expression;
 use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
+use yii\helpers\ArrayHelper;
+//use frontend\controllers\ForbiddenHttpException;
 
 //models
 use frontend\models\SignupForm;
@@ -29,6 +31,13 @@ use frontend\models\Folder;
 use frontend\models\CustomerSignupForm;
 use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
+use frontend\models\Task;
+use frontend\models\StatusType;
+use frontend\models\UserDb;
+use frontend\models\Reminder;
+use frontend\models\TaskAssignedUser;
+use frontend\models\Label;
+use frontend\models\TaskLabel;
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -78,8 +87,24 @@ class SiteController extends BoffinsBaseController {
 		$this->layout = 'new_index_dashboard_layout';
 		$folder = new Folder();
 		$dashboardFolders = $folder->getDashboardItems(5);
+		$task = new Task();
+		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+		$reminder = new Reminder();
+		$label = new label();
+        $taskLabel = new TaskLabel();
+		$taskAssignedUser = new TaskAssignedUser();
+		$cid = Yii::$app->user->identity->cid;
+        $users = UserDb::find()->where(['cid' => $cid])->all();
+				
         return $this->render('index',[
+        	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
+			'task' => $task,
+			'reminder' => $reminder,
+			'taskAssignedUser' => $taskAssignedUser,
+			'users' => $users,
+			'label' => $label,
+            'taskLabel' => $taskLabel,
 		]);
        
     }
@@ -156,7 +181,7 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email,$cid)
+  public function actionSignup($email,$cid,$role)
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -169,6 +194,7 @@ class SiteController extends BoffinsBaseController {
 	        if ($user->load(Yii::$app->request->post())) {
 	        	$user->address = $email;
 	        	$user->cid = $cid;
+	        	$user->basic_role = $role;
 				if($user->save()){
 					$customer->status = 1;
 					$customer->save();
@@ -185,33 +211,34 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
-    public function actionCustomersignup()
+    public function actionCustomersignup($plan_id)
     {
 		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
 		
-		
         //yii\helpers\VarDumper::dump(Yii::$app->request->post());
         if ($customer->load(Yii::$app->request->post())) {
         	$email = $customer->master_email;
+        	$date = strtotime("+7 day");
+        	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
         	if($customer->signup($customerModel)){
         		$sendEmail = \Yii::$app->mailer->compose()
-        		->setTo($customer->master_email)
-				->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-				->setSubject('Signup Confirmation')
-				->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-				Yii::$app->urlManager->createAbsoluteUrl(
-				['site/signup','email' => $email,'cid'=>$customerModel->cid]
-				))
-				)->send();
-				if($sendEmail){
-					Yii::$app->getSession()->setFlash('success','Check Your email!');
-				} else{
-					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-				}
-			}
-		} else {
+                ->setTo($email)
+                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+                ->setSubject('Signup Confirmation')
+                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+                Yii::$app->urlManager->createAbsoluteUrl(
+                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+                ))
+                )->send();
+        		if($sendEmail){
+        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
+                } else{
+                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+            	}
+        	}
+		}else {
             return $this->render('createCustomer', [
 				'customerForm' => $customer,
 				'action' => ['createCustomer'],
@@ -228,14 +255,11 @@ class SiteController extends BoffinsBaseController {
 	    		$emails = $model->email;
 	    		//var_dump($emails);
 	    		if(!empty($emails)){
-	    			foreach ($emails as $email) {
-	    				echo $email;
-	    				if($model->sendEmail($email)){
+	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
 	    				}
-	    			}
 	    		} else {
 	    			echo "Email cannot be empty";
 	    		} 
@@ -244,6 +268,73 @@ class SiteController extends BoffinsBaseController {
 				'model' => $model,
 			]);
 	    }
+    }
+
+    public function actionAjaxValidateForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new CustomerSignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (Customer)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (Customer)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	 public function actionAjaxValidateUserForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new SignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (User)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (User)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	public function actionBoard()
+    {
+        return $this->renderAjax('board');
+    }
+
+    public function actionTask()
+    {
+    	$task = new Task();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $checkedid =  $data['id'];
+
+            $model = Task::findOne($checkedid);
+
+            if($model->status_id != $task::TASK_COMPLETED){
+            	$model->status_id = $task::TASK_COMPLETED;
+            	$model->save();
+            } else {
+            	$model->status_id = $task::TASK_NOT_STARTED;
+            	$model->save();
+            }
+            
+        }
     }
 
 }

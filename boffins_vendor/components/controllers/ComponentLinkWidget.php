@@ -10,10 +10,10 @@ use yii;
 
 <?php 
 /*
-* ComponentLinkWidget was designed to make it easy for developers to attach componet linking feature to the creation 
-* of new component in an easy manner.
-* as such this feature is attached to any form which is responsible to carring out the creation action for new 
-* componet
+* ComponentLinkWidget was designed to make it easy for developers to attach componet linking feature to 
+*  the creation of any new component in an easy manner.
+* as such this feature is attached to any form which is responsible to carring out the creation action 
+* for new componet
 *  Note : Most of the havy lifting has been done buy javascript .
 * (check out *present_derectory/views/componentlinkview.php) for more details on functionality of the widget
 *********************  Basic Usage *************************

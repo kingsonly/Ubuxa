@@ -50,7 +50,7 @@ class Customer extends \yii\db\ActiveRecord
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
             [['master_email'], 'email'],
-            ['master_email', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This email address has already been taken.'],
+            ['master_email', 'unique', 'message' => 'This email address has already been taken.'],
             [['cid'], 'unique'],
         ];
     }
@@ -69,26 +69,6 @@ class Customer extends \yii\db\ActiveRecord
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
         ];
-    }
-
-    public function sendEmail($email)
-    {
-        
-        $sendEmail = \Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-                ->setSubject('Signup Confirmation')
-                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-                Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/signup','cid'=>$this->cid, 'email' => $email]
-                ))
-                )->send();
-           if($sendEmail){
-                    Yii::$app->getSession()->setFlash('success','Check Your email!');
-                } else{
-                            Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-            }
-        
     }
 
 

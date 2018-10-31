@@ -14,7 +14,10 @@ $params = array_merge(
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+					'queue', 
+					'log'
+					],
     'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

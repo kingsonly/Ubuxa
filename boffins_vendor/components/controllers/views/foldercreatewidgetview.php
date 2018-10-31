@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 /* @var $form yii\widgets\ActiveForm */
@@ -32,7 +33,7 @@ use yii\web\JsExpression;
 		 flex:1;
 	}
 	
-	#folder-title{
+	#create-new-folder-title{
 		height: 33px;
 		border:0px;
 		width: 100%;
@@ -118,7 +119,7 @@ if(isset($_GET['id'])){
 ])->label(false);?>
 	</span>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true, 'id' => 'folder-title'])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['id' => 'create-new-folder-title','placeholder'=>'Folder title'])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>
@@ -141,23 +142,51 @@ $url = Url::to(['folder/check-if-folder-name-exist']);
 $js = <<<JSS
 
  function useSameName(){
-	$('#loadingdiv').show();
 			var \$form = $('#folderform');
 			$.post(\$form.attr('action'),\$form.serialize())
 			.always(function(result){
-			jsonResult = JSON.parse(result);
-			$(document).find('#loadingdiv').html(jsonResult.message);
-
+			jsonResult = result;
 		   if(jsonResult.message == 'sent'){
-
-			   //$(document).find('#loader1').html(result.message).show();
-			   // bring green toast
-			   alert(jsonResult.message)
+		   			options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": true,
+					  "progressBar": true,
+					  "positionClass": "toast-top-right",
+					  "preventDuplicates": true,
+					  "showDuration": "300",
+					  "hideDuration": "1000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut",
+					  "tapToDismiss": false
+		  			}
+				toastr.success('Folder was created successfully', "", options);
+			   $.pjax.reload({container:"#create-folder-refresh",async: false});
 
 			}else{
-			//$(document).find('#loader1').html(result).show();
-			// bring red toast 
-			alert(jsonResult.message)
+					options = {
+		  "closeButton": true,
+		  "debug": false,
+		  "newestOnTop": true,
+		  "progressBar": true,
+		  "positionClass": "toast-top-right",
+		  "preventDuplicates": true,
+		  "showDuration": "300",
+		  "hideDuration": "1000",
+		  "timeOut": "5000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut",
+		  "tapToDismiss": false
+		  }
+		toastr.error('Somthing went wrong', "", options);
+			 $.pjax.reload({container:"#create-folder-refresh",async: false});
 			}
 			}).fail(function(){
 			console.log('Server Error');
@@ -169,8 +198,8 @@ $js = <<<JSS
 areyousure = 'are you sure ';
 $('#submit-folder').on('click', function (e) {
 	
-	getInputId = $('#folder-title').val();
-	$.get('$url'+'&folderName='+getInputId, function(data) {
+	getInputIds = $('#create-new-folder-title').val();
+	$.get('$url'+'&folderName='+getInputIds, function(data) {
 		if(data == 1){
 		options = {
 		  "closeButton": true,
@@ -191,6 +220,7 @@ $('#submit-folder').on('click', function (e) {
 		  }
 		toastr.error('name exist and could cause a conflict, you could change or use same name if you chose.<div><button type="button" id="okBtn" onclick="useSameName()" class="btn btn-primary">Use Same Name</button></div>', "Title", options);
 		}else{
+		
 		useSameName();
 		}
 		

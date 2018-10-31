@@ -5,7 +5,17 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use yii\bootstrap\Alert;
+use frontend\assets\AppAsset;
+use boffins_vendor\components\controllers\TaskWidget;
+use boffins_vendor\components\controllers\KanbanWidget;
+use boffins_vendor\components\controllers\RemarksWidget;
+use boffins_vendor\components\controllers\ComponentWidget;
+use boffins_vendor\components\controllers\FolderDetails;
+use boffins_vendor\components\controllers\SubFolders;
+use boffins_vendor\components\controllers\ActivitiesWidget;
+use boffins_vendor\components\controllers\OnlineClients;
 
+AppAsset::register($this);
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -47,6 +57,14 @@ use boffins_vendor\components\controllers\MenuWidget;
 	.grid-item.task-box {
 		grid-area: tasks;
 	}
+
+	.folderdiv{
+		height: 50px;
+	}
+
+	.top-box {
+		padding-bottom: 50px;
+	}
 	
 	@media screen and (min-width: 280px) and (max-width: 599px) {
 			#dashboard-content {
@@ -58,43 +76,81 @@ use boffins_vendor\components\controllers\MenuWidget;
 										'remarks';
 			}
 	}
+
+	@media (max-width:991px) {
+ 	 	.column-margin { 
+ 	 		margin: 20px 0; 
+ 	 	}
+ 	 	.act-margin {
+ 	 		margin: 5px 0;
+ 	 	}
+ 	 	.info-1 {
+			margin-left: 0px;
+		}
+		.activedetls{
+			padding-left: 0px !important;
+			border-bottom: 5px solid green;
+		}
+		.box-content-active {
+			height: 87px !important;
+			-webkit-box-shadow: none !important;
+	        -moz-box-shadow: none !important;
+	        box-shadow: none !important;
+		}
+	}
     .content-header{
         display:none;
     }
+.view-task-board{
+	display: none;
+	background-color: #fff;
+	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
+	padding-bottom: 50px;
+	padding-top: 10px;
+	position: relative;
+}
+
+
 </style>
 
 
 
 
 <section>
+	
     <div class="container-fluid">
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
-                <section id="dashboard-content">
-                    <div class="grid-item folder">
-                        <?=$this->render('/folder/latest', ['folders' =>$folders]);?>
-                    </div>
-                </section>
-    
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
+            <section>
+                  <div class="row top-box">
+                  	<?= ActivitiesWidget::widget() ?>
+                  	<?= OnlineClients::widget() ?>
+                  </div>  
+                    	<div class="row">
+   						 	
+                    	</div>
 
             </section>
         </div>
+
         <div class="row">
-            <section style="border:1px solid #000; min-height:400px">
 
-                <div class="container">
-                    <div class="row"></div>
-                    <div class="row"></div>
-                </div>
-
+            <section>
+            	<div class="row test5">
+            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+            		<?php Pjax::end(); ?>
+            		<?= RemarksWidget::widget() ?>
+            	</div>
             </section>
         </div>
     </div>
+    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+    <div class="view-task-board">
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
+    </div>
+    <?php Pjax::end(); ?>
 </section>
+
   <? $this->beginBlock('sidebar')?>
   	<div id="two">
     	<ul class="list_load">
@@ -116,6 +172,18 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
+$(function(){
+    $("#boardButton").on('click', function(e){
+        $(".test5").slideUp('slow');
+        $('.view-task-board').show();
+  });
+  $('.task-icon').on('click',function(e){
+  		e.preventDefault();
+	    //$(".view-task-board").hi('slow');
+	    $(".view-task-board").hide();
+	    $('.test5').slideDown('slow');
+   });
+});
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
 
@@ -183,14 +251,11 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
+
 JS;
  
 $this->registerJs($indexJs);
 ?>
-
-
-
-
 
 
 <?= MenuWidget::widget(); ?>

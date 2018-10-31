@@ -40,7 +40,7 @@ class IndexDashboardAsset extends AssetBundle
         //'js/bootstrap.min.js',
         //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
         'js/morris.min.js',
-        
+        'js/jquery.flip.min.js',
         //'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
         'js/app.js',
         '//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',

@@ -1,9 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400&subset=latin,latin-ext);
 
-body {
-    overflow-y: scroll;
-  
-}
 .wrap {
   margin: 0 auto;
   margin-top: -25px;
@@ -87,9 +83,9 @@ ul.tabs li a.active {
   width: 300px;
   height: 350px;
   margin: 0 auto;
--webkit-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
-   	   -moz-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
-   	        box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+-webkit-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
+   	   -moz-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
+   	        box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
   -webkit-border-bottom-right-radius: 8px;
 -webkit-border-bottom-left-radius: 8px;
 -moz-border-radius-bottomright: 8px;
@@ -97,14 +93,7 @@ ul.tabs li a.active {
 border-bottom-right-radius: 8px;
 border-bottom-left-radius: 8px;
 }
-p{
-  font-family: 'Open Sans', sans-serif;
-  padding: 30px 40px;
-  color: #ffffff;
-  line-height: 26px;
-  font-size: 18px;
-  margin: 0;
-}
+
 #one {
   
 }
@@ -117,17 +106,7 @@ p{
 
 /* side menu*/
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,700);
-body {	
-	color: #fff;
-	font-family: 'Raleway', Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	font-weight: 300;
-	line-height: 140%;
-	margin: 0;
-	height: 100%;
-	padding: 0;
-	width: 100%;
-}
+
 
 /* PEN STYLES ========== */
 a,
@@ -164,6 +143,7 @@ a,
 	.burger_box a.menu-icon {
 		position: absolute;
 	    background-color: rgb(7, 71, 166);
+	    cursor: pointer;
 	    height: 50px;
 	    padding: 0;
 	    margin: 0;
@@ -208,9 +188,9 @@ a,
 	    width: 200px;
 	    height: 350px;
 	    margin-left: 0px;
-	    -webkit-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
-	    -moz-box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
-	    box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
+	    -webkit-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
+	    -moz-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
+	    box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
 	    -webkit-border-bottom-right-radius: 8px;
 	    -webkit-border-bottom-left-radius: 8px;
 	    -moz-border-radius-bottomright: 8px;
@@ -243,6 +223,14 @@ a,
 		position: absolute;
 		width: 100%;
 	}
+
+	.ubuxalogo {
+		margin-left: -7px;
+		margin-top: -5px;
+		border-right-style: solid;
+		cursor: pointer;
+	}
+
 	.burger_box .menu-icon_line--1 {
 		top: 2px;
 	}

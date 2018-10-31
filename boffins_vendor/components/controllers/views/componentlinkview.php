@@ -4,18 +4,16 @@ use kartik\file\FileInput;
 
 ?>
 <style>
-	.boffins_cascader{
-		display: inline-block;
-		margin-right: 6px;
-		margin-bottom: 10px;
-	}
+.boffins_cascader{
+	display: inline-block;
+	margin-right: 6px;
+	margin-bottom: 10px;
+}
 </style>
 <div class="row">
-  <div class="col-sm-12 loadhere">
-	<div class="boffins_cascader actives"></div>
-
-
-  </div>
+	<div class="col-sm-12 loadhere">
+		<div class="boffins_cascader actives"></div>
+	</div>
 </div>
  
 
@@ -46,31 +44,30 @@ $this->registerCssFile('@web/js/specific.js');
 
 
 
-$testView = <<<js
+$javascriptView = <<<js
 	
    
-	function test(){
-		$.ajax({
-  			url: '$loadData',
-			success: function(response){
-				
-				$('.boffins_cascader').bsCascader({
-					openOnHover: true,
-					loadData: function (openedItems, callback) {
-					  callback(response);
-					}
-				  });
-  
-			},
-  
-});
-	   }
-	   
-	   test();
+function componentlink(){
+	$.ajax({
+		url: '$loadData',
+		success: function(response){
+			$('.boffins_cascader').bsCascader({
+				openOnHover: true,
+				loadData: function (openedItems, callback) {
+					callback(response);
+				}
+			});
+
+		},
+
+	});
+}
+
+componentlink();
 	   
 	 
 
 js;
  
-$this->registerJs($testView);
+$this->registerJs($javascriptView);
 ?>

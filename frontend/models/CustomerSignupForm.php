@@ -82,11 +82,34 @@ class CustomerSignupForm extends Model
             $customer->billing_date = $this->billing_date;
             $customer->status = 0;
             $customer->cid = $this->plan_id.rand(10, 10000);
-            $cid = $customer->cid;
             
 
             return $customer->save();
                 
     }
+
+    public function checkUniq($attribute, $params)
+    {
+        $uniq = self::find()->where(['master_email'=>$this->master_email])->one();
+        if (count($uniq)==1){
+            $this->addError('master_email', 'This email already exist.');
+        }
+        
+    }
+    
+    public function clientValidateAttribute($model, $attribute, $view)
+    {
+    
+    $uniq = self::find()->where(['master_email'=>$this->master_email])->one();
+    if (count($uniq)==1){
+        
+        return <<<JS
+        deferred.push(messages.push('test'));
+JS;
+    }
+    
+}
+
+
 
 }

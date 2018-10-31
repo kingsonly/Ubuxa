@@ -26,7 +26,7 @@ class AddressEntity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['address_id', 'entity_id'], 'required'],
+            [['address_id', 'entity_id'], 'safe'],
             [['address_id', 'entity_id'], 'integer'],
         ];
     }

@@ -34,14 +34,17 @@ class StandardFormsAsset extends AssetBundle
 		//BOFFINS INCLUDED css
 		'css/forms/simple.css',
         'css/fontawesome/css/font-awesome.css',
+        'owlcarousel/assets/owl.carousel.min.css',
+        'owlcarousel/assets/owl.theme.default.min.css',
 		
         //'css/fontawesome/css/font-awesome.min.css',
         'css/hover.css',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/css/fileinput.min.css',
 		
     ];
     public $js = [
-		//'js/bootstrap.min.js',
+		
 		'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',
 		'js/jquery.sticky-kit.min.js',
         //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
@@ -62,6 +65,10 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.flip.min.js',
 		'js/script.js',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
+		'owlcarousel/owl.carousel.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/plugins/piexif.min.js',
+		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js',
+		
 		///'js/dragables.js'
 		
 		

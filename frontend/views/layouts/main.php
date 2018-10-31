@@ -163,6 +163,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
       <!-- Main content -->
      <section class="content">
         <?= $content ?>
+		 <?= MenuWidget::widget(); ?>
     </section>
       <!-- /.content -->
     </div>
@@ -172,7 +173,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
   
 </div>
 
-<?= MenuWidget::widget(); ?>
+
     
 <footer class="main-footer">
     <div class="pull-right hidden-xs">

@@ -4,9 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
+use frontend\models\Plan;
 use kartik\date\DatePicker;
-use frontend\models\Role;
-use frontend\models\Country;
 
 
 
@@ -14,253 +13,265 @@ use frontend\models\Country;
 /* @var $model app\models\Tmuser */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
 <style>
-#userloader,#userloader1{
+#loader{
 display: none;
 }
-*{
-  margin:0;
-  padding:0;
-}
-html{
-  height:100%;
-  background: #ccc;
-}
-body{
-  font-family: 'Montserrat', sans-serif;
-}
-#form-id{
-  width: 65%;
-  margin:50px auto;
-  text-align:center;
-  position: relative;
-}
-#form-id fieldset{
-  border:0 none;
-  border-radius:3px;
-  box-sizing:border-box;
-  padding:20px 30px;
-  width:100%;
-  margin:0 10%;
-  position: relative;  
-}
-#form-id fieldset:not(:first-of-type){
-  display:none;
+  html, body * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
+
+
+
+.container {
+  width: 100%;
+  padding-bottom: 100px;
 }
 
-#form-id input{
-  border:1px solid #ccc;
-  border-radius:3px;
-  padding:15px;
-  color:#2C3E50;
-  font-family: 'Montserrat', sans-serif;
-  margin-bottom:10px;
-  font-size:13px;
-  box-sizing:border-box; 
-  width:100%;
-}
-#form-id .custom-button{
-  width:30%;
-  background: #3B5998;
-  font-weight: bold;
-  color:#fff;
-  border:0;
-  pointer:cursor;
-  padding:10px;
-  margin:10px;
-  border-radius: 5px;  
-}
-
-.form-control{
-  height:50px;
-  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.3);
-}
-
-#form-id .custom-button:hover{
-  box-shadow:0 0 0 2px #fff, 0 0 0 4px #3B5998;
-}
-.title{
-  font-size:30px;
-  margin-bottom:10px;
-  color:#2C3E50;
-  text-transform:uppercase;
-}
-.sub-title{
-  font-size:13px;
-  margin-bottom:20px;
-  font-weight:normal;
-  color:#666;
-}
-
-.input {
+.frame {
+  height: auto;
+  width: 40%;
+   background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
+  background-size: cover;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: solid 1px rgba(255,255,255,.5);
   border-radius: 5px;
-    padding: 10px;
-    width: 80%;
-    overflow: hidden;
-    font-family: 'Lato';
-    font-weight: 400;
-    font-size: 16px;
-    position: relative;
-    margin: 5px;
-}
-.heading{
-    padding-right: 50%
-}
-.under_title{
-    padding-right: 30%;
+  box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
+  overflow: hidden;
+  transition: all .5s ease;
 }
 
-.prev-button{
-    width: 10%;
-    padding: 10px;
-    border-radius: 5px;
-    background: #3B5998;
-    border: 0;
+.frame-long {
+  height: auto;
 }
 
-.prev-button:hover{
-  box-shadow:0 0 0 2px #fff, 0 0 0 4px #3B5998;
+.frame-short {
+    height: auto;
+  margin-top: 50px;
+  box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
+  width: 40%;
+}
+    
+@media screen and (max-width: 600px) {
+.frame {
+  height: auto;
+  margin-top: 30px;
+  width: 100%;
+  background: #37474f;
+  background-size: cover;
+  margin-left: auto;
+  margin-right: auto;
+  border-top: solid 1px rgba(255,255,255,.5);
+  border-radius: 5px;
+  box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
+  overflow: hidden;
+  transition: all .5s ease;
+}
+
+.frame-short {
+  height: 280px;
+    margin-top: 100px;
+    box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+}
+
+.nav {
+  width: 100%;
+  height: 100px;
+  padding-top: 40px;
+  opacity: 1;
+  transition: all .5s ease;
+}
+
+.nav-up {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+
+li {
+  padding-left: 10px;
+  font-size: 18px;
+  display: inline;
+  text-align: left;
+  text-transform: uppercase;
+  padding-right: 10px;
+  color: #ffffff;
+}
+
+
+.signup-active a {
+  cursor: pointer;
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: solid 2px #1059FF;
+  padding-bottom: 10px;
+}
+
+.form-signup {
+  width: 100%;
+  height: auto;
+  font-size: 16px;
+  font-weight: 300;
+  padding-left: 37px;
+  padding-right: 37px;
+  padding-top: 20px;
+  position: relative;
+  top: -375px;
+  left: 400px;
+  opacity: 0;
+  transition: all .6s ease;
+  top: 0px;
+}
+
+.form-signup-left {
+  transform: translateX(-399px);
+  opacity: 1;
+}
+
+.form-signup-down {
+  top: 0px;
+  opacity: 0;
+}
+
+.success {
+  width: 80%;
+  height: 150px;
+  text-align: center;
+  position: relative;
+  top: -890px;
+  left: 450px;
+  opacity: .0;
+  transition: all .8s .4s ease;
+}
+
+
+.form-signup input {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.form-styling {
+  width: 100%;
+  height: 35px;
+  padding-left: 15px;
+  border: none;
+  border-radius: 20px;
+  margin-bottom: 1px;
+  background: rgba(255,255,255,.2);
+}
+
+label {
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding-left: 15px;
+  padding-bottom: 5px;
+  color: rgba(255,255,255,.7);
+  display: block;
+}
+
+:focus {outline: none;
+}
+
+ .form-signup input:focus, textarea:focus {
+    background: rgba(255,255,255,.3);
+    border: none; 
+    padding-right: 40px;
+    transition: background .5s ease;
+ }
+
+.btn-signup {
+  float: left;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+  text-align: center;
+  color: #ffffff;
+  width: 50%;
+  height: 35px;
+  border: none;
+  border-radius: 20px;
+  margin-top: 23px;
+  background-color: #1059FF;
+  margin-left: 25%;
 }
 
 </style>
-<div class="user-form">
+<div class="container">
+    <div class="frame">
+        <div class="nav">
+          <ul class"links">
+            <li class="signup-active"><a class="btn">Sign Up</a></li>
+          </ul>
+        </div>
+        <div ng-app ng-init="checked = false">
+           
+            <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $userForm->attributes(),'enableAjaxValidation' => true, 'validationUrl' => ['site/ajax-validate-user-form'], 'options' => [
+                'class' => 'form-signup', 'id' => 'userForm']
+            ]); ?>
 
+              <div class="form-group">
+                <?= $form->field($userForm, 'first_name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-    <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $userForm->attributes(),'enableAjaxValidation' => false,'id' => 'form-id']); ?>
+                <?= $form->field($userForm, 'surname')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-        <fieldset>
-            <div class='heading'>
-                <h2 class='title'>Personal Details</h2>
+                <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+
+                <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
+                <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
             </div>
-            <div class="input">
-                <?= $form->field($userForm, 'first_name')->textInput()->input('first_name', ['placeholder' => "Enter Your First Name"])->label(false); ?>
+                    <div>
+                    <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
+                    </div>
 
-                <?= $form->field($userForm, 'surname')->textInput(['maxlength' => true])->input('surname', ['placeholder' => "Enter Your Surname"])->label(false) ?>
-
-                <?= DatePicker::widget([
-                'name' => 'dob', 
-                'value' => date('d-M-Y', strtotime('+2 days')),
-                'options' => ['placeholder' => 'Select issue date ...'],
-                'pluginOptions' => [
-                  'format' => 'dd-M-yyyy',
-                  'todayHighlight' => true
-                ]
-              ]); ?>
-            </div>
-            <?= Html::button('Contact Details <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
-        </fieldset>
-        <fieldset>
-            <div class='heading'>
-                <h2 class='title'>Contact Details</h2>
-            </div>
-            <div class="input">
+            <?php ActiveForm::end(); ?>
+            <div class="success">
                 
-
-                <?= $form->field($userForm, 'telephone_number')->textInput(['maxlength' => true])->input('first_name', ['placeholder' => "Phone Number"])->label(false) ?>
             </div>
-                <?= Html::button('<i class="fa fa-arrow-left"></i>', ['class' => 'prev-button']) ?>
-                <?= Html::button('Proceed to Address <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
-        </fieldset>
-
-        <fieldset>
-            <div class='heading'>
-                <h2 class='title'>Address</h2>
-            </div>
-            <div class="input">
-                <?= $form->field($userForm, 'address_line')->textInput(['maxlength' => true])->input('address_line', ['placeholder' => "Address"])->label(false) ?>
-
-                <?= $form->field($userForm, 'country_id')->dropDownList(ArrayHelper::map(Country::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Country'), 'options' => ['class' => 'form_input'] ])->label(false) ?>
-
-                <?= $form->field($userForm, 'state_id')->textInput(['maxlength' => true])->input('state_id', ['placeholder' => "Choose state"])->label(false) ?>
-
-                <?= $form->field($userForm, 'code')->textInput(['maxlength' => true])->input('code', ['placeholder' => "Enter Your Zip code"])->label(false) ?>
-            </div>
-            
-            <?= Html::button('<i class="fa fa-arrow-left"></i>', ['class' => 'prev-button']) ?>
-                <?= Html::button('Login Details <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
-        </fieldset>
-        <fieldset>
-            <div class="heading">
-                <h2 class='title'>Set your username and password</h2>
-            </div>
-            <div class="input">
-                <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'minlenght'=>8])->input('first_name', ['placeholder' => "Enter your username"])->label(false) ?>
-                <?= $form->field($userForm, 'password')->passwordInput()->input('password', ['placeholder' => "Enter Your password"])->label(false) ?>
-            </div>
-            <?= Html::button('<i class="fa fa-arrow-left"></i>', ['class' => 'prev-button']) ?>
-                <?= Html::button('Proceed to Role <i class="fa fa-arrow-right"></i>', ['class' => 'next-button custom-button']) ?>
-        </fieldset>
-        <fieldset>
-            <div class="heading">
-                <h2 class='title'>Role</h2>
-            </div>
-            <div class="input">
-                <?= $form->field($userForm, 'basic_role')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form_input'] ]) ?>
-            </div>
-            <?= Html::button('<i class="fa fa-arrow-left"></i>', ['class' => 'prev-button']) ?>
-                <?= Html::submitButton($userForm->isNewRecord ? '<span id="userbuttonText">Signup</span> <img id="userloader" src="images/45.gif" " /> <span id="userloader1"><span>' : 'Update', ['class' => $userForm->isNewRecord ? 'btn btn-danger' : 'btn btn-danger','id'=>'usersubmit_id']) ?>
-        </fieldset>
-    <?php ActiveForm::end(); ?>
-   
-
+        </div>
+    </div>
 </div>
-<?php 
+
+
+<?php
 $js = <<<JS
 
-$('#userform').on('beforeSubmit', function (e) {
-    $('#userbuttonText').hide();
-    $('#userloader').show();
-    var \$form = $(this);
-    $.post(\$form.attr('action'),\$form.serialize())
-    .always(function(result){
-    
-    $(document).find('#userloader').hide();
-   if(result == 'sent'){
+$('#userForm').on('beforeSubmit', function (e) {
+    var form = $(this);
+    var formData = form.serialize();
+
+    $.ajax({
+        url: form.attr("action"),
+        type: form.attr("method"),
+        data: formData,
+        success: function (data) {
+            
+        },
+        error: function () {
+            alert("Something went wrong");
+        },
+        beforeSend: function(){
+            $("#loader").show()
+        },
        
-       $(document).find('#userloader1').html(result).show();
-       
-    
-    }else{
-    $(document).find('#userloader1').html(result).show();
-    
-    }
-    }).fail(function(){
-    console.log('Server Error');
     });
-    
-    setTimeout(function(){ 
-    $(document).find('#userloader').hide();
-    $(document).find('#userloader1').hide();
-    $(document).find('#userbuttonText').show();
-    }, 5000);
+
     return false;
     
     
     
 });
 
-$(document).ready(function(){
-  $('.next-button').click(function(){
-        var current = $(this).parent();
-        var next = $(this).parent().next();
-        $(".progress li").eq($("fieldset").index(next)).addClass("active");
-        current.hide();
-        next.show();
-  })
-  
-  $('.prev-button').click(function(){
-        var current = $(this).parent();
-        var prev = $(this).parent().prev()
-        $(".progress li").eq($("fieldset").index(current)).removeClass("active");
-        current.hide();
-        prev.show();
-  })
-})
+$(document).ready(function () {
+    $(".form-signup").toggleClass("form-signup-left");
+    $(".frame").toggleClass("frame-long");
+});
+
+
+
 JS;
  
 $this->registerJs($js);
 ?>
-
 

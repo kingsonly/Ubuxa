@@ -14,7 +14,7 @@ class M180922061905Add_private_column extends Migration
      */
     public function safeUp()
     {
-		$this->addColumn('{{%folder}}', 'private', $this->boolean()->defaultValue(0)->after('description') );
+		$this->addColumn('{{%folder}}', 'private_folder', $this->boolean()->defaultValue(0)->after('description') );
     }
 
     /**
