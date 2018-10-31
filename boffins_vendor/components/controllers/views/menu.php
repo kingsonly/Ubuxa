@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\UserDb;
+use boffins_vendor\components\controllers\MenuAccordionWidget;
 ?>
 <div class="side_menu">
 	<div class="burger_box">
@@ -36,7 +37,7 @@ use frontend\models\UserDb;
   <div id="content">
     <div id="one">
     	<ul class="list_load">
-			    	<?php
+			    	 <?php
 			    		foreach($componentMenu as $k => $v){
 			    			$url = $v.'/index';
 							echo Html::tag('li',Html::a(Html::tag('i', '', ['class' => 'fa '.$icons[$v],'title' => $v]).'  '. Html::tag('span', ucfirst($v), 

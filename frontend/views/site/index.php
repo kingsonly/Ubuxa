@@ -118,6 +118,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
 	padding-bottom: 50px;
 	padding-top: 10px;
+	overflow: scroll;
 	position: relative;
 }
 
