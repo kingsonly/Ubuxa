@@ -46,7 +46,9 @@
 		"yiisoft/yii2-queue": "~2.0",
 		"yiisoft/yii2-redis": "dev-master",
 		"kartik-v/yii2-widget-fileinput": "@stable",
-		"mongosoft/yii2-upload-behavior": "*"
+		"mongosoft/yii2-upload-behavior": "*",
+		"npm-asset/at.js": "1.5.4",
+        "npm-asset/jquery.caret": "0.3.1"
 
     }, 
     "require-dev": {
