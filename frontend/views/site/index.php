@@ -200,7 +200,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             <section>
             	<div class="row test5">
-            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+            			<?//= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
             	</div>
             </section>
@@ -210,7 +210,7 @@ use boffins_vendor\components\controllers\MenuWidget;
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
+    	<?//= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
     </div>
     <?php Pjax::end(); ?>
 </section>
