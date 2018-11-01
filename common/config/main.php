@@ -10,7 +10,7 @@ $transport = require(__DIR__ . '/transport.php');
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm'   => '@vendor/npm',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -62,7 +62,7 @@ return [
 			'class' => 'boffins_vendor\migration\SpecialMigration',
 			//'migrationNamespaces' => ['console\migrations'],
 			'migrationTable' => '{{%migration}}',
-			'migrationPath' => 'console\migrations',
+			'migrationPath' => 'console/migrations',
 			'templateFile' => 'boffins_vendor\migration\special_migration_template.php',
 		],
 		// Migrations for testing only 
