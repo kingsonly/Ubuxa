@@ -52,7 +52,7 @@ class SpecialMigration extends MigrateController
             $migration->db_suffix = $this->db_suffix;
 			$this->stdout("*##	Injecting db_suffix for this migration ", yii\helpers\Console::FG_RED);
         } 
-		$migration->init();
+		$migration->init(); //reinitialise to ensure the injection replaces old value (first initialise is done before this function is run)
 		
         return $migration;
     }

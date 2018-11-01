@@ -6,14 +6,15 @@ use yii\helpers\Url;
 
 class LoginCest
 {
-    public function checkLoginPage(\frontend\tests\Step\Acceptance\BaseUserTester $I)
+    public function checkLoginPage(\frontend\tests\_support\Step\Acceptance\BaseUserTester $I)
     {
         $I->amOnPage(Url::toRoute('/site/index'));
 		$I->expectTo("See some key elements on the page");
         $I->canSee('TycolMain');
         //$I->canSee(['name' => 'login-button']);
         $I->canSee('Login');
-		$I->login();
+		$I->seeCookie('ds');
+		$I->login('admin', 'secreter');
 		
 		
         /*$I->click('About');

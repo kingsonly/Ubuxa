@@ -1,6 +1,6 @@
 {
     "name": "ubuxa/beta",
-    "description": "Yii 2 Advanced Project Template",
+    "description": "Ubuxa 2.0 Beta Yii 2 Advanced Template",
     "keywords": ["yii2", "framework", "advanced", "project template"],
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
@@ -36,6 +36,8 @@
         "thadafinser/user-agent-parser": "^2.0",
 		"yii2mod/yii2-settings": "*",
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
+		"kartik-v/yii2-widget-fileinput": "@stable",
+		"mongosoft/yii2-upload-behavior": "*",
         "npm-asset/dragula": "3.7.2",
         "npm-asset/perfect-scrollbar": "*",
         "npm-asset/easy-pie-chart": "*",
