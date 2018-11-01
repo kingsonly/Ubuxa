@@ -105,6 +105,12 @@ $("#"+"$jsEventTriger"+"-text").click(function(e){
      e.stopPropagation();
 });
 
+$("#"+"$jsEventTriger"+"-icon").click(function(e){
+	$( ".$jsEventTriger-new-content" ).hide();
+	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+     e.stopPropagation();
+});
+
 $("#"+"$jsEventTriger"+"-component").click(function(e){
 	$( ".$jsEventTriger-new-content" ).hide();
 	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
