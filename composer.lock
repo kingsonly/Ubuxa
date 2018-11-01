@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ad37eb1a6e687949ac47d3625482925",
+    "content-hash": "4789bcced01d58efcf2e642cc63bd62c",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2261,6 +2261,46 @@
             "time": "2017-02-24T16:06:33+00:00"
         },
         {
+            "name": "npm-asset/at.js",
+            "version": "1.5.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/at.js/-/at.js-1.5.4.tgz",
+                "reference": null,
+                "shasum": "8fc60cc80eadbe4874449b166a818e7ae1d784c1"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/ichord/At.js/issues"
+                },
+                "npm-asset-main": "dist/js/jquery.atwho.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "git+https://github.com/ichord/At.js.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "gulp test"
+                },
+                "npm-asset-engines": {
+                    "node": ">= 0.6.0"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "chord.luo",
+                    "email": "chord.luo@gmail.com"
+                }
+            ],
+            "description": "**An autocompletion library to autocomplete mentions, smileys etc. just like on Github!**   [![Build Status](https://travis-ci.org/ichord/At.js.png)](https://travis-ci.org/ichord/At.js)",
+            "homepage": "http://ichord.github.com/At.js",
+            "time": "2018-05-07T13:02:27+00:00"
+        },
+        {
             "name": "npm-asset/atoa",
             "version": "1.0.0",
             "dist": {
@@ -2584,6 +2624,42 @@
                 "progress bar"
             ],
             "time": "2015-05-08T14:09:42+00:00"
+        },
+        {
+            "name": "npm-asset/jquery.caret",
+            "version": "0.3.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
+                "reference": null,
+                "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-main": "dist/jquery.caret.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": "",
+                "npm-asset-scripts": {
+                    "test": "grunt test --verbose"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Harold.luo",
+                    "email": "chord.luo@gmail.com"
+                }
+            ],
+            "description": "Get caret position and offset from inputor",
+            "keywords": [
+                "caret",
+                "jquery",
+                "offset",
+                "position"
+            ],
+            "time": "2016-06-25T06:50:23+00:00"
         },
         {
             "name": "npm-asset/perfect-scrollbar",
@@ -4548,16 +4624,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.1.3",
+            "version": "6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "4d3ae9b21a7d7e440bd0cf65565533117976859f"
+                "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4d3ae9b21a7d7e440bd0cf65565533117976859f",
-                "reference": "4d3ae9b21a7d7e440bd0cf65565533117976859f",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/807e6013b00af69b6c5d9ceb4282d0393dbb9d8d",
+                "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d",
                 "shasum": ""
             },
             "require": {
@@ -4607,7 +4683,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-10-23T05:59:32+00:00"
+            "time": "2018-10-31T16:06:48+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -5794,7 +5870,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -5852,16 +5928,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
                 "shasum": ""
             },
             "require": {
@@ -5907,7 +5983,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2018-09-21T13:07:52+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -6212,12 +6288,12 @@
         "bower-asset/jquery-ui": 0,
         "kartik-v/yii2-widget-datepicker": 0,
         "kartik-v/yii2-widgets": 20,
+        "kartik-v/yii2-widget-fileinput": 0,
         "macrowish/yii2-bootstrap-tour": 20,
         "kartik-v/bootstrap-fileinput": 20,
         "kartik-v/yii2-popover-x": 20,
         "kingsonly/yii2-wiki": 20,
-        "yiisoft/yii2-redis": 20,
-        "kartik-v/yii2-widget-fileinput": 0
+        "yiisoft/yii2-redis": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

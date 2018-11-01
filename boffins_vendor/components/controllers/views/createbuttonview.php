@@ -59,14 +59,14 @@ $jsEventTriger = $htmlAttributes['class'];
 
 <section id="carousles">
 	<? if($buttonType == 'text'){?>
-	<div id="<?= $jsEventTriger;?>-text" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
+	<div id="<?= $jsEventTriger;?>-text" style="<?= $style;?>" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
 			<span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
 		</div>
 	
 		
 	<? }elseif($buttonType == 'icon'){ ?>
 	<div class="dropdown">
-	<div id="<?= $jsEventTriger;?>-icon" class="<?= $class;?> <?= $jsEventTriger;?>-icon dropdown-toggle" id="dropdownMenuButton_<?= $jsEventTriger;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<div id="<?= $jsEventTriger;?>-icon" style="<?= $style;?>" class="<?= $class;?> <?= $jsEventTriger;?>-icon dropdown-toggle" id="dropdownMenuButton_<?= $jsEventTriger;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
 		</div>
 	
@@ -82,7 +82,7 @@ $jsEventTriger = $htmlAttributes['class'];
                         </div>
                         </div>
 	<? } else{?>
-		<div id="<?= $jsEventTriger;?>-image" class="creste-image <?= $jsEventTriger;?>-image"></div>
+		<div id="<?= $jsEventTriger;?>-image" style="<?= $style;?>" class="creste-image <?= $jsEventTriger;?>-image"></div>
 	<?}?>
 </section>
 

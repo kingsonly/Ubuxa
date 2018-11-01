@@ -229,20 +229,37 @@ text-overflow: ellipsis;
     width: 100%;
   }
 }
-	.create-new-test{
-		display: none;
+	.create-new-test1{
+		display: block !important;
+		visibility: hidden;
 	}
 </style>
 <div class="folder-index">
 
-    <p>
-        
-		<?= CreateButtonWidget::widget(['buttonType' => 'text','htmlAttributes'=>['class'=>'test']]);?>
-    </p>
-	<div class="create-new-test">
-		<?= FolderCreateWidget::widget(); ?>
-	</div>
-	<div class="accordion js-accordion">
+		<? $style = 'background-color:transparent;float: right;width: 20px;';?>
+   
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div>
+				<div class="create-new-test1 col-sm-8">
+					<div class="create-new-test">
+						<?= FolderCreateWidget::widget(); ?>
+					</div>
+					
+					<br>
+				</div>
+
+				<div style="" class="col-sm-4">
+					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test'],'style'=>$style]);?>
+				</div>
+			</div>
+			</div>
+			
+		</div>
+		<div class="row">
+		<div class="col-sm-12">
+			<div class="accordion js-accordion">
 		<? 
 		
 		$i = 1;
@@ -295,6 +312,13 @@ text-overflow: ellipsis;
 		<? $i++; }?> 
 	
 	</div>
+		</div>
+	</div>
+	</div>
+	
+	
+	
+	
 	
 
 

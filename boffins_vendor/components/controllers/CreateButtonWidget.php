@@ -24,6 +24,7 @@ class CreateButtonWidget extends Widget{
 	}
 	public $buttonType ;
 	public $htmlAttributes ;
+	public $style ;
 	
 	// output the outcome of loopmenu
 	public function run(){
@@ -32,6 +33,7 @@ class CreateButtonWidget extends Widget{
 			'buttonType' => $this->buttonType,
 			'class' => $this->buttonType,
 			'htmlAttributes' => $this->htmlAttributes,
+			'style' => $this->style,
 		]);
 	}
 	
