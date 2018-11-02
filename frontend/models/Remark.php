@@ -53,32 +53,6 @@ class Remark extends BoffinsArRootModel
         ];
     }
 
-    public function remarkfetchall($perpage, $popsisi,$modelName,$barId){
-        $query = new \yii\db\Query();
-        $query  ->select([
-        'tm_remark.id AS remarkId',
-        'tm_remark.parent_id AS remarkParentId',
-        'tm_remark.text AS remarkText',
-        ]
-        )  
-        ->from('tm_remark')
-        ->join('INNER JOIN', 'tm_clip',
-            'tm_remark.id =tm_clip.owner_id')      
-        ->join('INNER JOIN', 'tm_clip_bar', 
-            'tm_clip.bar_id =tm_clip_bar.id')
-        ->join('INNER JOIN', 'tm_clip_bar_owner_type', 
-            'tm_clip.owner_type_id =tm_clip_bar_owner_type.id')
-        ->where(['tm_clip_bar.owner_id' => $barId,'tm_clip_bar_owner_type.owner_type'=>$modelName,'tm_remark.parent_id'=>0])
-        ->orderBy('tm_remark.id DESC')
-        ->limit($perpage)
-        ->offset($popsisi)
-        ->all()  ; 
-        
-        $command = $query->createCommand();
-        $data = $command->queryAll();
-        return $data;
-    }
-
     public function getPerson()
     {
         return $this->hasOne(Person::className(), ['id' => 'person_id']);
