@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use boffins_vendor\components\controllers\FolderCreateWidget;
+use boffins_vendor\components\controllers\CreateButtonWidget;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Folders';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
@@ -61,43 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	width: 69px;
 }
 
-.cabinet {
-	background-image: url('images/cabinet_resized.png');
-	background-repeat: no-repeat; 
-}
 
-.folder-ref,
-.cabinet-span {
-	width: 100%;
-	height: 100%;
-	display: block;
-	position: relative;
-}
 
-.folder-ref a,
-.cabinet-span a {
-	width: 100%;
-	height: 100%;
-	display: block;
-	position:absolute;
-	left: 0;
-	top: 0;
-	text-decoration: none; /* No underlines on the link */
-	z-index: 10; /* Places the link above everything else in the div */
-	background-color: #FFF; /* Fix to make div clickable in IE */
-	opacity: 0; /* Fix to make div clickable in IE */
-	filter: alpha(opacity=1); /* Fix to make div clickable in IE */
-}
 
-@media screen and (min-width: 320px) and (max-width: 599px) {
-	/*************BASIC MOBILE PHONE(320px AN ABOVE) TO TABLET VIEW (600px ABD ABOVE) ***************/
-	.folder-item {
-		order: 2;
-	}
-	.cabinet {
-		order: 1;
-	}
-}
 
 .owl-buttons {
   display: none;
@@ -185,17 +151,10 @@ text-overflow: ellipsis;
 <style>
 
 
-body {
-  font-size: 62.5%;
-  background: #dadada;
-  font-family: 'Open Sans', sans-serif;
-  line-height: 2;
-  padding: 5em;
-}
+
 
 .accordion {
-  font-size: 1rem;
-  width: 30vw;
+  
   margin: 0 auto;
   border-radius: 5px;
 }
@@ -211,7 +170,6 @@ body {
   text-transform: uppercase;
   color: white;
   cursor: pointer;
-  font-size: .8em;
   letter-spacing: .1em;
   transition: all .3s;
 }
@@ -225,13 +183,9 @@ body {
 .accordion-body {
   background: #fcfcfc;
   color: #3f3c3c;
-  display: none;
+  
 }
 
-.accordion-body__contents {
-  padding: 1.5em 1.5em;
-  font-size: .85em;
-}
 
 .accordion__item.active:last-child .accordion-header {
   border-radius: none;
@@ -242,8 +196,8 @@ body {
 }
 
 .accordion__item > .accordion-header:after {
-  content: "\f3d0";
-  font-family: IonIcons;
+ content: "\f0d8";
+  font-family: FontAwesome;
   font-size: 1.2em;
   float: right;
   position: relative;
@@ -264,236 +218,119 @@ body {
   background: #f1f1f1;
   color: black;
 }
+.accordion__item .accordion__item {
+  border-bottom: 1px dotted #2D3D99;
+}
 
 @media screen and (max-width: 1000px) {
-  body {
-    padding: 1em;
-  }
+  
   
   .accordion {
     width: 100%;
   }
 }
+	.create-new-test1{
+		display: block !important;
+		visibility: hidden;
+	}
 </style>
 <div class="folder-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+		<? $style = 'background-color:transparent;float: right;width: 20px;';?>
+   
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<div>
+				<div class="create-new-test1 col-sm-8">
+					<div class="create-new-test">
+						<?= FolderCreateWidget::widget(); ?>
+					</div>
+					
+					<br>
+				</div>
 
-    <p>
-        <?= FolderCreateWidget::widget(); ?>
-    </p>
-	<div class="row" style="background:#fff;">
+				<div style="" class="col-sm-4">
+					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test'],'style'=>$style]);?>
+				</div>
+			</div>
+			</div>
+			
+		</div>
+		<div class="row">
+		<div class="col-sm-12">
+			<div class="accordion js-accordion">
 		<? 
 		
+		$i = 1;
 		
 		foreach($folders as $firstKey => $folder){?>
 		
-			<div style="border:solid 2px red; margin-top:20px;">
-				<?= $firstKey;?>
+			<div class="accordion__item js-accordion-item ">
+    <div class="accordion-header js-accordion-header"><?= $firstKey;?></div> 
+				<div class="accordion-body js-accordion-body">
+    	
 			<? foreach($folder as $secondKey => $actuallFolder){?>
-			<?= $secondKey;?>
-			<? foreach($actuallFolder as $newactualfolder){?>
-		
 			
-				<?= $newactualfolder->id;?>
+			<div class="accordion js-accordion">
+        <div class="accordion__item js-accordion-item">
+           <div class="accordion-header js-accordion-header"><?= $secondKey;?> folder</div> 
+           <div class="accordion-body js-accordion-body">
+             <div class="accordion-body__contents">
+				 <div class="container">
+				 <div class="row">
+              <? foreach($actuallFolder as $newactualfolder){?>
+		
+			<?
+			 $url = Url::to(['folder/view', 'id' => $newactualfolder['id']]);
+			 ?>
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
+            <a href="<?= $url;?>" data-pjax="0">
+			 	<div id="folder-item-<?php echo $newactualfolder['id']; ?>" class="folder-item <?php echo $newactualfolder->isEmpty ? 'empty' : 'filled' ?> <?= $newactualfolder->folderColors; ?>" data-toggle="tooltip" title="<?= $newactualfolder['title']; ?>" data-placement="bottom"> 
+				</div>
+			 	<div class="folder-text .ellipsis">
+					
+						<?= $newactualfolder['title']; ?>
+					
+				</div>
+				</a>
+        </div>
+				 
+
 			
 			<? }?>
-		
+			   </div>
+			   </div>
+             </div><!-- end of sub accordion item body contents -->
+           </div><!-- end of sub accordion item body -->
+        </div><!-- end of sub accordion item -->
+			
+					</div>
 			<? }?> 
 			</div>
-		<? }?> 
+			</div>
+		<? $i++; }?> 
 	
 	</div>
+		</div>
+	</div>
+	</div>
+	
+	
+	
+	
 	
 
 
 	
 </div>
 
-<pre>
-		<? //var_dump($categoryToTag1);?>
-	</pre>	
-
-<!--
-<?/*
-			 $url = Url::to(['folder/view', 'id' => $folder['id']]);
-			 ?>
-		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
-            <a href="<?= $url;?>" data-pjax="0">
-			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
-				</div>
-			 	<div class="folder-text .ellipsis">
-					
-						<?= $folder['title'];*/ ?>
-					
-				</div>
-				</a>
-        </div>
--->
 
 
 
-<div class="accordion js-accordion">
-  <div class="accordion__item js-accordion-item">
-    <div class="accordion-header js-accordion-header">Panel 1</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-  <div class="accordion__item js-accordion-item active">
-    <div class="accordion-header js-accordion-header">Panel 2</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-    <div class="accordion__item js-accordion-item">
-    <div class="accordion-header js-accordion-header">Panel 3</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-     <div class="accordion__item js-accordion-item">
-    <div class="accordion-header js-accordion-header">Panel 4</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-     <div class="accordion__item js-accordion-item">
-    <div class="accordion-header js-accordion-header">Panel 5</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-     <div class="accordion__item js-accordion-item">
-    <div class="accordion-header js-accordion-header">Panel 6</div> 
-  <div class="accordion-body js-accordion-body">
-    <div class="accordion-body__contents">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-    </div>
-      <div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 1</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header">Sub Panel 2</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos sequi placeat distinctio dolor, amet magnam voluptatibus eos ex vero, sunt veritatis esse. Nostrum voluptatum et repudiandae vel sed, explicabo in?
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
-      </div><!-- end of sub accordion -->
-    </div><!-- end of accordion body -->
-  </div><!-- end of accordion item -->
-</div><!-- end of accordion -->
- 
-	
+
+
+
 	
 	
 	<?php 
@@ -522,11 +359,6 @@ var accordion = (function(){
       
       $.extend(settings, settingss); 
       
-      // ensure only one accordion is active if oneOpen is true
-      if(settings.oneOpen && $('.js-accordion-item.active').length > 1) {
-        $('.js-accordion-item.active:not(:first)').removeClass('active');
-      }
-      
       // reveal the active accordion bodies
       $('.js-accordion-item.active').find('> .js-accordion-body').show();
     },
@@ -548,7 +380,7 @@ var accordion = (function(){
 })();
 
 $(document).ready(function(){
-  accordion.init({ speed: 300, oneOpen: true });
+  accordion.init({ speed: 300, oneOpen: false });
 });
 	
 JS;

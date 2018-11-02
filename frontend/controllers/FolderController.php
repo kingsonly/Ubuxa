@@ -60,16 +60,16 @@ class FolderController extends Controller
 			}
 			if($folderOneFilter->parent_id == '0'){
 				if($folderOneFilter->folderManagerFilter->role == 'author'){
-				$seperateFolders['mainfolder'][$folderStatus][] = $folderOneFilter;
+				$seperateFolders['root folder'][$folderStatus][] = $folderOneFilter;
 			}else{
-				$seperateFolders['mainfolder']['shared'][] = $folderOneFilter;
+				$seperateFolders['root folder']['shared'][] = $folderOneFilter;
 			}
 			} else{
 				if($folderOneFilter->folderManagerFilter->role == 'author'){
 				
-				$seperateFolders['subfolder'][$folderStatus][] = $folderOneFilter;
+				$seperateFolders['sub folder'][$folderStatus][] = $folderOneFilter;
 			}else{
-				$seperateFolders['subfolder']['shared'][] = $folderOneFilter;
+				$seperateFolders['sub folder']['shared'][] = $folderOneFilter;
 			}
 			}
 			

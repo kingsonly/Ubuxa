@@ -74,58 +74,10 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
 			 
 			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
 
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-            <i class="fa fa-bars"></i>
-          </button>
+          
         </div>
 
-        <!-- Main link menu start -->
         
-        <!-- /.navbar-collapse -->
-        <!-- Navbar Right Menu -->
-        <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">
-            
-            <!-- Tasks Menu -->
-            
-            <!-- User Account Menu -->
-            <li class="dropdown user user-menu">
-              <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding-right: 30px;">
-                <!-- The user image in the navbar-->
-               
-				  <?= Html::img('@web/images/male.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
-                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
-              </a>
-              <ul class="dropdown-menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                 
-				  <?= Html::img('@web/images/male.png', ['alt' => 'logo', 'class' => 'img-circle' ]); ?>
-
-                  <p><?= Yii::$app->user->identity->username ?></p>
-                </li>
-                <!-- Menu Body -->
-                
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  </div>
-                  <div class="pull-right"> 
-					  <?= Html::a('Logout', Url::to(['/site/logout']), ['data-method' => 'POST','class' => 'btn btn-default btn-flat']) ?>
-					  
-                    
-                </div>
-                </li>
-              </ul>
-            </li>
-			  
-			 
-          </ul>
-        </div>
-        <!-- /.navbar-custom-menu -->
       </div>
       <!-- /.container-fluid -->
     </nav>
@@ -147,16 +99,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
           <?php endif; ?>
         
       </h1>
-      <?= 
-   Breadcrumbs::widget([
-      'homeLink' => [ 
-                      'label' => Yii::t('yii', 'Dashboard'),
-                      'url' => Url::to(['site/index']),
-                 ],
-      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-   ]) 
-?>
-		
+      
 		
     </section>
 
