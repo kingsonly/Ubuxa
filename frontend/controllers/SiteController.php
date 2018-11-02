@@ -99,7 +99,7 @@ class SiteController extends BoffinsBaseController {
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
 
-        if(!empty($dashboardFolders)){
+        if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
         	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
