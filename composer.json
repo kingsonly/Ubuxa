@@ -51,7 +51,6 @@
 		"mongosoft/yii2-upload-behavior": "*",
 		"npm-asset/at.js": "1.5.4",
         "npm-asset/jquery.caret": "0.3.1"
-
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
