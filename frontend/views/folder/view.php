@@ -140,7 +140,7 @@ $img = $model->folder_image;
 					
             		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
 
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id, 'remarks' => $model->clipOn['remark'] ]) ?>
+            		
 
             	</div>
             </section>
@@ -148,7 +148,7 @@ $img = $model->folder_image;
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
     <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
+    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel]) ?>
     </div>
     <?php Pjax::end(); ?>
         
@@ -167,9 +167,30 @@ $img = $model->folder_image;
 			<li class="list_item"><a href="#">List Item 01</a></li>
 			<li class="list_item"><a href="#">List Item 02</a></li>
 			<li class="list_item"><a href="#">List Item 03</a></li>
-			<li class="list_item"><a href="#">List Item 04</a></li>
+			<li class="list_item"><a href="#">List Item 09</a></li>
 		</ul>
     </div>
+  <? $this->endBlock();?>
+  <? $this->beginBlock('subfolders')?>
+  	<?php 
+          $num = 1;
+
+          foreach ($model->subFolders as $subfolders) {
+          $checks = $subfolders->buildTree($subfolders->subFolders, $subfolders->id);
+          $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
+
+         	?>
+         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
+            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+            <?php
+            	$num2 = 2;
+            	foreach ($checks as $innerFolders) { ?>
+            		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>">
+		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>
+              		</ul>
+      
+           <?php } ?>
+        <?php $num2++;$num++; }?>
   <? $this->endBlock();?>
 
 <?php 
@@ -262,12 +283,6 @@ JS;
 $this->registerJs($indexJs);
 ?>
 
-
-
-
-
-
-<?= MenuWidget::widget(); ?>
 	
 	
 			

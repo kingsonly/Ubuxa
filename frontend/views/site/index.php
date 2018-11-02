@@ -136,7 +136,6 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-
             	<div class="row" style="margin-bottom: 32px;">
             			<div class="col-md-12">
             				<div class="col-md-12" style="min-height: 100px;padding: 10px; background: #fff">
@@ -176,8 +175,6 @@ use boffins_vendor\components\controllers\MenuWidget;
             <section>
             	<div class="row test5">
             			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
-<
             	</div>
             </section>
         </div>

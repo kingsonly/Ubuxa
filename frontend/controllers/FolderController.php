@@ -14,7 +14,6 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
-use frontend\models\Person;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -92,7 +91,7 @@ class FolderController extends Controller
     public function actionView($id)
     {
 		
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
         $task = new Task();
 		$remark = new Remark();
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();

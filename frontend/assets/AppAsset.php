@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         '\frontend\assets\DragulaAsset',
-        '\frontend\assets\CaretAsset',
-        '\frontend\assets\AtMentionAsset',
+        //'\frontend\assets\CaretAsset',
+        //'\frontend\assets\AtMentionAsset',
     ];
 }
