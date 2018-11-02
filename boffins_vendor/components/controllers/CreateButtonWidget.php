@@ -18,13 +18,15 @@ use frontend\models\Folder;
 
 class CreateButtonWidget extends Widget{
 	
+	public $buttonType ;
+	public $htmlAttributes ;
+	public $style ;
+	public $iconJs ;
+	
 	public function init()
 	{
 		parent::init();
 	}
-	public $buttonType ;
-	public $htmlAttributes ;
-	public $style ;
 	
 	// output the outcome of loopmenu
 	public function run(){
@@ -34,6 +36,7 @@ class CreateButtonWidget extends Widget{
 			'class' => $this->buttonType,
 			'htmlAttributes' => $this->htmlAttributes,
 			'style' => $this->style,
+			'iconJs' => $this->iconJs,
 		]);
 	}
 	

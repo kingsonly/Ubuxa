@@ -175,7 +175,7 @@ class Folder extends FolderARModel
 
     public function getFolderManagerInheritance()
     {
-		if($this->parent_id > 0){
+		if($this->parent_id > self::DEFAULT_FOLDER_PARENT_STATUS){
 			return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
 		}
         
@@ -222,7 +222,7 @@ class Folder extends FolderARModel
 	public function getFolderColors() 
 	{
 		$colorStatus = '';
-		if($this->private_folder === 1){
+		if($this->private_folder > self::DEFAULT_PRIVATE_FOLDER_STATUS){
 			$colorStatus =  'private';
 		} elseif($this->role->role == 'author'){
 			$colorStatus = 'author';

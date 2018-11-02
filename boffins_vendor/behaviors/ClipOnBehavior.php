@@ -167,7 +167,7 @@ class ClipOnBehavior extends Behavior
 		$getClipDetails = $clipTypeModel::find()->where(['id' => $clipId])->one();
 		return $getClipDetails;
 	}
-	
+
 	private function getAllClips(){
 		$clipBarModel = new ClipBar();
 		$ownerId = $this->owner->id;
@@ -186,6 +186,49 @@ class ClipOnBehavior extends Behavior
 		}
 		
 	}
+	
+	
+	private function tagetClipTypes($clipType,$clipIds){
+		$clipParentClass = ucwords($clipType);
+		$clipTypeModel = '\\frontend\\models\\'.$clipParentClass;
+		if($clipType == 'remark'){
+			$getClipDetails = $clipTypeModel::find()->where(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->andWhere(['parent_id' => $clipTypeModel::DEFAULT_PARENT_ID ])->all();
+		}else{
+			$getClipDetails = $clipTypeModel::find()->where(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->all();
+		}
+		return $getClipDetails;
+		
+	}
+	
+	public function specificClips($ownerid=0,$ownerTypeId=1,$offset=0,$limit=1,$ownerType='remark'){
+		$clipBarModel = new ClipBar(); // instanciate clip bar 
+		$ownerId = $ownerid;// this could be folder id, but specifically the model a user is accessing
+		
+		//$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2; // validate if owner is a folder or a component or something else 
+		
+		$getClipBarcount = $clipBarModel->find()->where(['owner_id' => $ownerId])->count(); // check to see if specified element has a clipbar *** which would be used for checkig in the below if clause ******
+		
+		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();
+		// if the bar exist then get all its clips 
+		if($getClipBarcount  !== '0'){
+			if(!empty($getClipBar->clips)){
+				$getClips = $this->owner->specificClipsWithLimitAndOffset($limit,$offset,$ownerTypeId,$getClipBar->id);
+				$getArrayValues = [];
+				foreach($getClips as $value){
+					array_push($getArrayValues,$value['owner_id']); // convert clip owners id 
+				}
+				return  $this->tagetClipTypes($ownerType,array_values($getArrayValues));
+				//return  array_values($getArrayValues);
+			}
+			return;
+			
+		}else{
+			return ;
+		}
+		
+	}
+	
+	
 	
 	private function createClipOnBar(){
 		$ownerTypeModel = new ClipBarOwnerType();

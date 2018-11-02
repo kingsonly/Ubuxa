@@ -34,9 +34,8 @@ class NewIndexDashboardAsset extends AssetBundle
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
     ];
     public $js = [
-        
-		
 		'js/jquery.sticky-kit.min.js',
+		'js/feedify.min.js',
         'js/datatables/jquery.dataTables.min.js',
         'js/datatables/dataTables.bootstrap.min.js',
         //'js/bootstrap.min.js',
