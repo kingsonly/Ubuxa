@@ -23,4 +23,17 @@ class AcceptanceTester extends \Codeception\Actor
    /**
     * Define custom actions here
     */
+	
+	public function _fixtures()
+    {
+        return [
+            'users' => [
+                'class' => UserFixture::className(),
+                // fixture data located in tests/_data/userdb.php
+                'dataFile' => codecept_data_dir() . 'user.php'
+            ],
+        ];
+    }
+
+	
 }

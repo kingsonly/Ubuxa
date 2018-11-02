@@ -17,6 +17,7 @@ use boffins_vendor\behaviors\ClipOnBehavior;
 use yii\db\ActiveQuery;
 use boffins_vendor\classes\StandardQuery;
 use frontend\models\FolderComponent;
+use frontend\models\Clip;
 
 
 
@@ -252,6 +253,11 @@ class BoffinsArRootModel extends ActiveRecord
 	/***
 	 * returns a list of the folders as a string. 
 	 */ 
-	
+	public function specificClipsWithLimitAndOffset($limit=4,$offset=0,$ownerTypeId=2,$barId = 0)
+    {
+        return Clip::find()->select(['owner_id'])->where(['bar_id' => $barId])->andWhere(['owner_type_id' => $ownerTypeId])->asArray()->limit($limit)->offset($offset)->all();
+		
+		
+    }
 	
 }

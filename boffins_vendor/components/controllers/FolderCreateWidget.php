@@ -27,13 +27,15 @@ class FolderCreateWidget extends Widget{
 		parent::init();
 	}
 	private $folderModel; // hold instance of folder model 
-	public $folderPrivacy; // Used to check if a folder is private or not  
+	public $folderPrivacy; // Used to check if a folder is private or not
+	public $refreshSectionElement; // holds the id of the div or section to be refreshed after creation
 	
 	public function run(){
 		$this->folderModel = new Folder();
 		return $this->render('foldercreatewidgetview',[
 			'folderModel' => $this->folderModel,
 			'folderPrivacy' => $this->folderPrivacy,
+			'pjaxId' => $this->refreshSectionElement,
 		]);
 	}
 	

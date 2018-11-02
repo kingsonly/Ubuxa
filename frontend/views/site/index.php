@@ -26,12 +26,6 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 ?>
 <style>
-	#exampleInputRemark{
-		display: none !important;
-	}
-	#flux{
-		height:260px !important;
-	}
 	#flash {
 		display: none;
 	}
@@ -43,11 +37,6 @@ use boffins_vendor\components\controllers\MenuWidget;
 		grid-template-areas: 	'folders folders folders'
 								'flash flash flash'
 								'remarks tasks tasks';
-	}
-
-	.row{
-		margin-right: 0px !important;
-		margin-left: 0px !important;
 	}
 	
 	.grid-item {
@@ -311,6 +300,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
+<<<<<<< HEAD
 $('.owl-carousel').owlCarousel({
 	  items:10,
       loop:false,
@@ -334,6 +324,8 @@ $('.close-create').click(function(e){
 
 })
 
+=======
+>>>>>>> afdb7e5423a060f7ccab44948274e8645c93fe62
 $(function(){
     $("#boardButton").on('click', function(e){
         $(".test5").slideUp('slow');
@@ -413,8 +405,6 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
-
-	
 
 JS;
  

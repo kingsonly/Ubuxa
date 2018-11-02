@@ -340,7 +340,9 @@ JS;
  
 $this->registerJs($task);
 ?>
-  <?php 
+ 
+<?php 
+/*
 $steps[0] = [
     'title'=>'Step 1',
     'content'=>'Content and stuff',
@@ -367,4 +369,4 @@ $steps[2] = [
         'backdrop'=>'true',
         //'storage' => 'false',
         ]
-]); ?>
+]); */ ?>
