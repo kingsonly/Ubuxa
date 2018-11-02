@@ -289,9 +289,6 @@ a,
 		transition: all 200ms ease-in-out;
 	}
 	.list_item a {
-		color: #fff;
-		display: block;
-		padding: 5px 10px;
 		text-decoration: none;
 	}
 	.list_item a:hover {

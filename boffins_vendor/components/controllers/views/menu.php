@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\UserDb;
 use boffins_vendor\components\controllers\MenuAccordionWidget;
+use boffins_vendor\components\controllers\ViewBoardWidget;
 ?>
 <div class="side_menu">
 	<div class="burger_box">
@@ -23,7 +24,7 @@ use boffins_vendor\components\controllers\MenuAccordionWidget;
 			<?php }?>
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
-				<div><a class="profile-link" href="#">View profile</a></div>
+				<div><a class="profile-link" href="#">Edit profile</a></div>
 			</div>
 		</div>
 			<div class="wrap">
@@ -38,6 +39,7 @@ use boffins_vendor\components\controllers\MenuAccordionWidget;
     <div id="one">
     	<ul class="list_load">
 			 <?= MenuAccordionWidget::widget();?>
+			<li class="list_item"><?= ViewBoardWidget::widget();?></li> 
 		</ul>
     </div>
 <?php if (isset($this->blocks['sidebar'])){ ?>

@@ -1,3 +1,7 @@
+<?php
+use boffins_vendor\components\controllers\ViewBoardWidget;
+?>
+
 <style>
  
 /* -------------------------------- 
@@ -11,6 +15,7 @@ Main Components
     -moz-border-radius: 4px;
     border-radius: 4px;
     margin: 25px auto 20px;
+    margin-bottom: 0px;
 }
 .cd-accordion-menu .first-list {
   /* by defa.first-listt hide all sub menus */
@@ -202,39 +207,21 @@ Main Components
 
   <ul class="cd-accordion-menu animated">
     <li class="has-children">
+      <label for="group-2" class="accord-label"><i class="fa fa-folder iconz"></i>Folder Vault</label>
+    </li>
+    <li class="has-children">
 
       <input type="checkbox" name="group-1" class="accord-input" id="group-1">
-      <label class="accord-label" for="group-1"><i class="fa fa-folder iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
+      <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
 
           <ul class="first-list">
             <li class="has-children">
               <?php if (isset($this->blocks['subfolders'])){ ?>
                   <?= $this->blocks['subfolders'] ?>
-              <?php } ?>
-
-              
-            </li>
-            <li class="has-children">
-              <input type="checkbox" name ="sub-group-2" class="accord-input"  id="sub-group-2">
-          <label class="accord-label" for="sub-group-2">Sub Group 2</label>
-
-          <ul class="first-list">
-            <li class="has-children">
-              <input type="checkbox" name ="sub-group-level-3" class="accord-input" id="sub-group-level-3">
-              <label for="sub-group-level-3" class="accord-label">Sub Group Level 3</label>
-
-              <ul class="first-list">
-                <li class="second-list"><a href="#0" class="list-link">Image</a></li>
-                <li class="second-list"><a href="#0" class="list-link">Image</a></li>
-              </ul>
-            </li>
-            <li class="second-list"><a href="#0" class="list-link">Image</a></li>
-          </ul>
-            </li>
-            <li class="second-list"><a href="#0" class="list-link">Image</a></li>
+              <?php } ?>           
+            </li>      
           </ul>
     </li>
-    
   </ul>
 
 <?php

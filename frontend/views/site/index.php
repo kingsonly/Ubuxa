@@ -101,15 +101,7 @@ use boffins_vendor\components\controllers\MenuWidget;
     .content-header{
         display:none;
     }
-.view-task-board{
-	display: none;
-	background-color: #fff;
-	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-bottom: 50px;
-	padding-top: 10px;
-	overflow: scroll;
-	position: relative;
-}
+
 
 
 </style>
@@ -173,7 +165,7 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<div class="row test5">
+            	<div class="row">
             			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
             	</div>
             </section>
@@ -182,10 +174,10 @@ use boffins_vendor\components\controllers\MenuWidget;
         
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
-    	
-    </div>
+    <? $this->beginBlock('kanban')?>
+	    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
+	    	
+    <? $this->endBlock();?>
     <?php Pjax::end(); ?>
 </section>
 
@@ -209,19 +201,6 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 <?php 
 $indexJs = <<<JS
-
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
-  });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
 

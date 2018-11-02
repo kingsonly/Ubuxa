@@ -139,7 +139,7 @@ class Folder extends FolderARModel
         return array_reverse($this->containsFolderTree([],$this->parent_id));
     }
 
-    public function buildTree($elements, $parentId = []) {
+    public function buildTree($elements = [], $parentId) {
         $branch = array();
 
         foreach ($elements as $element) {

@@ -95,14 +95,6 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-    .view-task-board{
-	display: none;
-	background-color: #fff;
-	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-top: 10px;
-	position: relative;
-	overflow: scroll;
-}
     
 </style>
 
@@ -147,9 +139,11 @@ $img = $model->folder_image;
         </div>
     </div>
     <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel]) ?>
-    </div>
+    <? $this->beginBlock('kanban')?>
+	    <div class="view-task-board">
+	    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+	    </div>
+    <? $this->endBlock();?>
     <?php Pjax::end(); ?>
         
 </section>
@@ -166,20 +160,18 @@ $img = $model->folder_image;
     	<ul class="list_load">
 			<li class="list_item"><a href="#">List Item 01</a></li>
 			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
+			<li class="list_item"><a href="#">TY</a></li>
 			<li class="list_item"><a href="#">List Item 09</a></li>
 		</ul>
     </div>
   <? $this->endBlock();?>
   <? $this->beginBlock('subfolders')?>
   	<?php 
-          $num = 1;
-
-          foreach ($model->subFolders as $subfolders) {
-          $checks = $subfolders->buildTree($subfolders->subFolders, $subfolders->id);
-          $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
-
-         	?>
+    	$num = 1;
+        foreach ($model->subFolders as $subfolders) {
+        $checks = $subfolders->buildTree($subfolders->subFolders, $subfolders->id);
+        $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
+    ?>
          	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
             <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
             <?php
@@ -195,19 +187,6 @@ $img = $model->folder_image;
 
 <?php 
 $indexJs = <<<JS
-
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
-  });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
 
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
