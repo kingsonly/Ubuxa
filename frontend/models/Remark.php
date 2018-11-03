@@ -20,6 +20,7 @@ class Remark extends BoffinsArRootModel
     /**
      * {@inheritdoc}
      */
+	public const DEFAULT_PARENT_ID = 0;
     public static function tableName()
     {
         return '{{%remark}}';

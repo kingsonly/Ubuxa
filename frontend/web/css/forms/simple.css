@@ -58,7 +58,7 @@ label {
 	
 }
 
-.fixed { height:400px; overflow:hidden; background:orange; }
+.fixed { height:400px; }
 
 .scrollit { height:400px; overflow-y:scroll; background:lightgray; }
 

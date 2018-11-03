@@ -6,7 +6,7 @@ use boffins_vendor\components\controllers\TaskViewWidget;
 use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use yii\web\View;
-
+use frontend\models\Task;
 
 $boardUrl = Url::to(['task/index']);
 ?>
@@ -38,11 +38,6 @@ $boardUrl = Url::to(['task/index']);
         height: 50px;
     }
 
-    #boardButton {
-        position: absolute;
-        right: 0px;
-        top: 4px;
-    }
      .todo-list {
    background: #FFF;
    font-size: 13px;
@@ -188,7 +183,7 @@ $boardUrl = Url::to(['task/index']);
         <div class="bg-info column-margin">
 	        <div class="task-header">
                 <span>TASKS</span>
-                 <?= Html::button('View Board', ['id' => 'boardButton', 'value' => $boardUrl, 'class' => 'btn btn-success'])?> 
+                 
             </div>
             
 	        <div class="box-content-task" id="box-content">
@@ -218,7 +213,7 @@ $boardUrl = Url::to(['task/index']);
     if(!empty($display)){
     foreach ($display as $key => $value) { ?>
   <label class="todo">
-    <?php if($value->status_id == 24){ ?>
+    <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
         <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
     <?php }else { ?>
         <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
@@ -251,11 +246,11 @@ $boardUrl = Url::to(['task/index']);
 					 
                     <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
-                    <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
-					 
-					 <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-                   
-                    <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
+  					 
+  					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+                     
+                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
                     <?php ActiveForm::end(); ?>
                 </div> 
@@ -273,13 +268,7 @@ $taskUrl = Url::to(['site/task']);
 $createUrl = Url::to(['task/dashboardcreate']);
 $task = <<<JS
 
-$(function(){
-    $('#boardButton').click(function(){
-        $('#boardModal').modal('show')
-        .find('#viewboard')
-        .load($(this).attr('value'));
-        });
-    });
+
 
 
 $(".todo__state").change(function() {
@@ -340,7 +329,10 @@ JS;
  
 $this->registerJs($task);
 ?>
-  <?php 
+
+ 
+<?php 
+/*
 $steps[0] = [
     'title'=>'Step 1',
     'content'=>'Content and stuff',
@@ -367,4 +359,4 @@ $steps[2] = [
         'backdrop'=>'true',
         //'storage' => 'false',
         ]
-]); ?>
+]); */ ?>

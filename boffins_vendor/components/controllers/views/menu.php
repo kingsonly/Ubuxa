@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\UserDb;
+use boffins_vendor\components\controllers\MenuAccordionWidget;
+use boffins_vendor\components\controllers\ViewBoardWidget;
 ?>
 <div class="side_menu">
 	<div class="burger_box">
@@ -22,7 +24,7 @@ use frontend\models\UserDb;
 			<?php }?>
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
-				<div><a class="profile-link" href="#">View profile</a></div>
+				<div><a class="profile-link" href="#">Edit profile</a></div>
 			</div>
 		</div>
 			<div class="wrap">
@@ -36,14 +38,8 @@ use frontend\models\UserDb;
   <div id="content">
     <div id="one">
     	<ul class="list_load">
-			    	<?php
-			    		foreach($componentMenu as $k => $v){
-			    			$url = $v.'/index';
-							echo Html::tag('li',Html::a(Html::tag('i', '', ['class' => 'fa '.$icons[$v],'title' => $v]).'  '. Html::tag('span', ucfirst($v), 
-								['class' => '','title' => $v]), [$url], ['class' => '','title' => 'Open'.$v,]),
-								['class' => [(Yii::$app->controller->id == $v) ? 'active' : 'false', 'list_item']]);
-			    		}
-			    	?>
+			 <?= MenuAccordionWidget::widget();?>
+			<li class="list_item"><?= ViewBoardWidget::widget();?></li> 
 		</ul>
     </div>
 <?php if (isset($this->blocks['sidebar'])){ ?>

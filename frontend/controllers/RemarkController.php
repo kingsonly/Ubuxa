@@ -44,32 +44,28 @@ class RemarkController extends Controller
                 $ownerid = Yii::$app->request->post('ownerId');
                 $modelName = Yii::$app->request->post('modelName');
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
-                $popsisi = (($numpage-1) * $perpage);
+                $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
                 $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
                 if($DashboardUrlParam == 'site'){
-                     $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($popsisi)->orderBy('id DESC')->all();
+                     $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
+					
                      return $this->renderAjax('siteremarks', [
-                     'remarks' => $remarks,
-                     'remarkReply' => $remarkReply,
+						 'remarks' => $remarks,
+						 'remarkReply' => $remarkReply,
                      ]);
                 } else {
-                     $remarks = $remarkss->remarkfetchall($perpage, $popsisi,$modelName,$ownerid); 
+                     
+                     $remarks = $remarkss->specificClips($ownerid,1,$offset,$perpage,'remark');
                      return $this->renderAjax('index2', [
-                     'remarks' => $remarks,
-                     'remarkReply' => $remarkReply,
-                     ]);
+						 'remarks' => $remarks,
+						 'remarkReply' => $remarkReply,
+					 ]);
                 }
                 
-            } else {
-                $numpage = 10;
-                $remarks = Remark::find()->limit($numpage)->all();
-                return $this->render('index', [
-                'remarks' => $remarks,
-                ]);
-            }
+            } 
         }
     }
 

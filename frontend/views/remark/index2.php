@@ -2,6 +2,7 @@
 	use yii\helpers\Url;
 ?>
 <?php	
+
     if(!empty($remarks)){
         foreach ($remarks as $key => $remark) {
     
@@ -16,17 +17,17 @@
                         <div class="comment-head">
                             <h6 class="comment-name by-author"><a href="http://creaticode.com/blog"><?//= $remark['fullname']; ?></a></h6>
                             <span><?//= $remark['timeElapsedString'];?></span>
-                            <i class="fa fa-reply remark-reply" data-id="<?= $remark['remarkId'];?>" id="<?= $remark['remarkId'];?>"></i>
+                            <i class="fa fa-reply remark-reply" data-id="<?= $remark['id'];?>" id="<?= $remark['id'];?>"></i>
                             <i class="fa fa-heart"></i>
                         </div>
                         <div class="comment-content">
-                            <?php  echo $remark['remarkText']; ?>
+                            <?php  echo $remark['text']; ?>
                         </div>
                     </div>
                 </div>
 
                  <?php foreach($remarkReply as $reply){
-                      if($remark['remarkId'] == $reply['parent_id'] ){ 
+                      if($remark['id'] == $reply['parent_id'] ){ 
                  ?>
 
                 <ul class="comments-list reply-list">

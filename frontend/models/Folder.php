@@ -138,6 +138,23 @@ class Folder extends FolderARModel
 		 
         return array_reverse($this->containsFolderTree([],$this->parent_id));
     }
+
+    public function buildTree($elements = [], $parentId) {
+        $branch = array();
+
+        foreach ($elements as $element) {
+            if ($element['parent_id'] == $parentId) {
+                $children = $this->buildTree($elements, $element['id']);
+                if ($children) {
+                    $element['children'] = $children;
+                }
+                $branch[] = $element;
+            }
+        }
+        return $branch;
+    }
+
+
 	
 	public  function getDashboardItems($limit = 100) 
 	{
@@ -175,7 +192,7 @@ class Folder extends FolderARModel
 
     public function getFolderManagerInheritance()
     {
-		if($this->parent_id > 0){
+		if($this->parent_id > self::DEFAULT_FOLDER_PARENT_STATUS){
 			return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
 		}
         
@@ -222,7 +239,7 @@ class Folder extends FolderARModel
 	public function getFolderColors() 
 	{
 		$colorStatus = '';
-		if($this->private_folder === 1){
+		if($this->private_folder > self::DEFAULT_PRIVATE_FOLDER_STATUS){
 			$colorStatus =  'private';
 		} elseif($this->role->role == 'author'){
 			$colorStatus = 'author';

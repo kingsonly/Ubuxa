@@ -8,6 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
+//use boffins_vendor\components\controllers\DeleteCardWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
@@ -29,6 +30,10 @@ AppAsset::register($this);
 
 <?= Html::csrfMetaTags() ?>
 <style>
+.icons {
+  color: #000 !important;
+  font-size: 14px;
+}
     ul {
   list-style-type: none;
   margin: 0;
@@ -36,7 +41,7 @@ AppAsset::register($this);
 }
 .drag-container {
   max-width: 1000px;
-  margin: 20px auto;
+  /*margin: 20px auto;*/
 }
 .drag-list {
   display: flex;
@@ -45,11 +50,8 @@ AppAsset::register($this);
   width: 1000px;
 }
 
-.fa {
-    color: black !important;
-}
 .drag-column {
-  min-width: 315px;
+  min-width: 300px;
   flex: 1;
   margin: 0 10px;
   position: relative;
@@ -91,7 +93,7 @@ AppAsset::register($this);
   min-height: 50px;
 }
 .drag-item {
-  width: 295px;
+  width: 280px;
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -164,19 +166,14 @@ AppAsset::register($this);
 .task-head {
   text-align: center;
 }
-.task-icon {
-  position: absolute;
-  top: 10px;
-    left: 10px;
-    font-size: 30px;
-    cursor: pointer;
-}
+
 .bottom-content {
     visibility: hidden;
     /*position: absolute;*/
     bottom: 0;
     width: 100%;
     clear: right;
+    text-align: center;
 }
 
 
@@ -373,11 +370,6 @@ a.addTaskButton.active {
     <h1>Task Board</h1>
 
 </section>
-<div class="task-icon">
-  <i class="glyphicon glyphicon-remove"></i>
-</div>
-
-
 <div class="drag-container">
     <ul class="drag-list" id="kanban-board">
         <?php
@@ -397,14 +389,14 @@ a.addTaskButton.active {
                       if(!empty($dataProvider)){
                         foreach ($dataProvider as $key => $values) {
                           if($values->status_id == $value->id){
-                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $folderId]);
+                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
                           $reminderUrl = Url::to(['reminder/create']);
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
-                        <?= $values->title; ?>
+                        <span><?= $values->title; ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
@@ -469,8 +461,13 @@ a.addTaskButton.active {
                          <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id, 'labelId' => $count]) ?>
                         </div>
                       </div>
-                        <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
+                      <div class="dropdown testdrop">
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trash icons" aria-hidden="true" data-toggle="tooltip" title="Delete task"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                         
                         </div>
+                      </div>
+                      </div>
                     </div>
                 </li>
             <?php $count2++;}}}?>
@@ -481,7 +478,7 @@ a.addTaskButton.active {
               <span class="add-title"> Add Card </span>
             </a>
             <div class="card-add" id="add-new-cardz">
-                <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id, 'parentOwnerId' => $id]) ?>
+                <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
             </div>
         </li>
         <?php $count++;} ?>
@@ -510,19 +507,6 @@ $board = <<<JS
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
-});
-
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
-  });
-  $('.task-icon').on('click',function(e){
-      e.preventDefault();
-      //$(".view-task-board").hi('slow');
-      $(".view-task-board").hide();
-      $('.test5').slideDown('slow');
-   });
 });
 
 $.fn.closest_descendent = function(filter) {

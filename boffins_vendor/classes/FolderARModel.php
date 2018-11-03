@@ -20,6 +20,7 @@ use boffins_vendor\classes\StandardQuery;
 use models\FolderComponent;
 use models\UserDb;
 use frontend\models\Folder;
+use frontend\models\Clip;
 //use app\models\ComponentManager;
 use boffins_vendor\classes\StandardFolderQuery;
 
@@ -103,6 +104,13 @@ class FolderARModel extends ActiveRecord
 	 */
 	protected $_junctionFK = false;
 	
+	public const DEFAULT_PRIVATE_FOLDER_STATUS = 0; // by default when a folder is not private its = 0
+	
+	public const DEFAULT_FOLDER_PARENT_STATUS = 0; // by default when a folder has no parent its  = 0 meaning ints not a child folder
+	
+	public const DEFAULT_AJAX_SUCCESS_STATUS = 1; // when an ajax call is successful return 1
+	
+	public const DEFAULT_AJAX_ERROR_STATUS = 0; // when an ajax call is not successful return 0
 	/* 
 	 * attach soft delete events set by DeleteUpdateBehavior and create component events 
 	 * created by componentBehavior
@@ -874,5 +882,13 @@ class FolderARModel extends ActiveRecord
 		$joinStrin = $video.','.$text.','.$image;
 		return $joinStrin;
 	}
+	
+	
+	public function specificClipsWithLimitAndOffset($limit=4,$offset=0,$ownerTypeId=2,$barId = 0)
+    {
+        return Clip::find()->select(['owner_id'])->where(['bar_id' => $barId])->andWhere(['owner_type_id' => $ownerTypeId])->asArray()->limit($limit)->offset($offset)->all();
+		
+		
+    }
 	
 }

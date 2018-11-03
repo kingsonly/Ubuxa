@@ -106,9 +106,8 @@ $("#"+"$jsEventTriger"+"-text").click(function(e){
 });
 
 $("#"+"$jsEventTriger"+"-icon").click(function(e){
-	$( ".$jsEventTriger-new-content" ).hide();
-	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
-     e.stopPropagation();
+	
+	 $iconJs
 });
 
 $("#"+"$jsEventTriger"+"-component").click(function(e){

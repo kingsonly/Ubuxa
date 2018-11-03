@@ -48,29 +48,30 @@ class FolderController extends Controller
      */
     public function actionIndex()
     {
-        $folderModel = new Folder();
-       $folder = $folderModel->find()->all();
-		
+       	$folder = Folder::find()->all();
 		$seperateFolders = array();
-		foreach ($folder as $folderOneFilter) {
-			if($folderOneFilter->private_folder == 0){
+		foreach ($folder as $firstFolderFilter) {
+			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
 				$folderStatus = 'public';
 			}else{
 				$folderStatus = 'private';
 			}
-			if($folderOneFilter->parent_id == '0'){
-				if($folderOneFilter->folderManagerFilter->role == 'author'){
-				$seperateFolders['root folder'][$folderStatus][] = $folderOneFilter;
-			}else{
-				$seperateFolders['root folder']['shared'][] = $folderOneFilter;
+			if($firstFolderFilter->parent_id > $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS){
+				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]); 
 			}
+			if($firstFolderFilter->parent_id == $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS ){
+				if($firstFolderFilter->folderManagerFilter->role == 'author'){
+					$seperateFolders['root folder'][$folderStatus][] = $firstFolderFilter;
+				}else{
+					$seperateFolders['root folder']['shared'][] = $firstFolderFilter;
+				}
 			} else{
-				if($folderOneFilter->folderManagerFilter->role == 'author'){
+				if($firstFolderFilter->folderManagerFilter->role == 'author'){
 				
-				$seperateFolders['sub folder'][$folderStatus][] = $folderOneFilter;
-			}else{
-				$seperateFolders['sub folder']['shared'][] = $folderOneFilter;
-			}
+					$seperateFolders['sub folder'][$folderStatus][] = $firstFolderFilter;
+				}else{
+					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
+				}
 			}
 			
 
@@ -78,7 +79,6 @@ class FolderController extends Controller
 		
         return $this->render('index', [
             'folders' => $seperateFolders,
-           
         ]);
     }
 
@@ -90,7 +90,6 @@ class FolderController extends Controller
      */
     public function actionView($id)
     {
-		
 		$model = $this->findModel($id);
         $task = new Task();
 		$remark = new Remark();
@@ -153,14 +152,11 @@ class FolderController extends Controller
 		}
 		return $out;
 	}
+	
 	public function actionAddUsers($id) {
 		$inviteUsersModel = new InviteUsers();
 		$userModel = new UserDb();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		//$tt = new FolderUsersQueue();
-		//$abc = $tt->addNewUser();
-		//var_dump($abc);
-		//return;
 		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
 			  $test = 0;
 			 foreach($inviteUsersModel->users as $value){
@@ -171,7 +167,6 @@ class FolderController extends Controller
 					'folderId' => $id,
 				]));
 			 }
-			 
             return ['output'=>$id, 'message'=> $test];
         }
 	}
@@ -192,8 +187,7 @@ class FolderController extends Controller
 			}
 			
 			if($model->save()){
-				//return $this->redirect(['view', 'id' => $model->id]);
-            return ['output'=>$model->id, 'message'=>'sent'];
+            	return ['output'=>$model->id, 'message'=>'sent'];
 			}
             
         }
