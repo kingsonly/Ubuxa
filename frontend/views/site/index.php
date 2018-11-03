@@ -300,7 +300,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
-<<<<<<< HEAD
+
 $('.owl-carousel').owlCarousel({
 	  items:10,
       loop:false,
@@ -324,8 +324,6 @@ $('.close-create').click(function(e){
 
 })
 
-=======
->>>>>>> afdb7e5423a060f7ccab44948274e8645c93fe62
 $(function(){
     $("#boardButton").on('click', function(e){
         $(".test5").slideUp('slow');
