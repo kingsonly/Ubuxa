@@ -10,7 +10,7 @@ $transport = require(__DIR__ . '/transport.php');
 return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm'   => '@vendor/npm',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
