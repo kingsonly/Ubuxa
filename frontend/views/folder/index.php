@@ -316,7 +316,7 @@ text-overflow: ellipsis;
 				</div>
 
 				<div style="" class="col-sm-4">
-					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test'],'style'=>$style,'iconJs'=>$iconJs]);?>
+					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test','style' => $style],'iconJs'=>$iconJs]);?>
 				</div>
 			</div>
 			</div>
