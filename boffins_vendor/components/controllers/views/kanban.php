@@ -267,9 +267,7 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 20px;
     border-right-width: 1px;
-    padding-right: 20px;
     width: 272px;
     cursor: pointer;
 }
@@ -392,7 +390,7 @@ a.addTaskButton.active {
                           $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
                           $reminderUrl = Url::to(['reminder/create']);
                           //$listData=ArrayHelper::map($users,'id','username');
-                 ?><span style="font-size:30px;cursor:pointer" onclick="openOverlay()">
+                 ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
@@ -440,7 +438,6 @@ a.addTaskButton.active {
                           </span>
                       </div>
                     <?php } ?>
-                </span>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -487,20 +484,6 @@ a.addTaskButton.active {
 </div>
 <?php Pjax::end(); ?>
 
-<? 
-    Modal::begin([
-        'header' =>'<h1 id="headers"></h1>',
-        'id' => 'boardContent',
-        'size' => 'modal-md',  
-    ]);
-?>
-<div id="viewcontent"></div>
-<?
-    Modal::end();
-?>
-
-
-
 <?php 
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
@@ -523,13 +506,7 @@ $.fn.closest_descendent = function(filter) {
 }
 
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
 
     dragula([
     document.getElementById('1'),
@@ -722,21 +699,3 @@ JS;
  
 $this->registerJs($board);
 ?>
-
-<?php 
-$taskView = Url::to(['task/view','id' => $values->id,'folderId' => $id]);
-$overlay = <<<JS
-    function openOverlay() {
-        $('#content').load( '$taskView' );
-      document.getElementById("myOverlay").style.width = "50%";
-    }
-
-    function closeOverlay() {
-      document.getElementById("myOverlay").style.width = "0%";
-    }
-
-    
-JS;
-$this->registerJs($overlay, $this::POS_END);
-?>     
-

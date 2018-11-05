@@ -129,9 +129,9 @@ $img = $model->folder_image;
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
-					
-            		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
-
+					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::end(); ?>
             		
 
             	</div>
@@ -148,23 +148,7 @@ $img = $model->folder_image;
         
 </section>
 
-  <? $this->beginBlock('sidebar')?>
-  	<div id="two">
-    	<ul class="list_load">
-    		<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-    	</ul>
-    </div>
-    <div id="three">
-    	<ul class="list_load">
-			<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">TY</a></li>
-			<li class="list_item"><a href="#">List Item 09</a></li>
-		</ul>
-    </div>
-  <? $this->endBlock();?>
+  
   <? $this->beginBlock('subfolders')?>
   	<?php 
     	$num = 1;
@@ -178,12 +162,25 @@ $img = $model->folder_image;
             	$num2 = 2;
             	foreach ($checks as $innerFolders) { ?>
             		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>">
-		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>`
+		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>
               		</ul>
       
            <?php } ?>
         <?php $num2++;$num++; }?>
   <? $this->endBlock();?>
+
+<? 
+    Modal::begin([
+        'header' =>'<h1 id="headers"></h1>',
+        'id' => 'boardContent',
+        'size' => 'modal-md',
+        //'backdrop' => false,  
+    ]);
+?>
+<div id="viewcontent"></div>
+<?
+    Modal::end();
+?>
 
 <?php 
 $indexJs = <<<JS
@@ -255,6 +252,14 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 					$(document).find('#sliderwizz2').hide();
 					$(document).find('#sliderwizz1').hide();
 	})
+
+	$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
 	
 	
 JS;

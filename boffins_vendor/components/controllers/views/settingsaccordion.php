@@ -7,27 +7,27 @@ use boffins_vendor\components\controllers\ViewBoardWidget;
 /* -------------------------------- 
 Main Components 
 -------------------------------- */
-.cd-accordion-menu {
+.cd-accordss-menu {
     width: 100%;
     max-width: 360px;
     background: #FFF;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    /* margin: 25px auto 20px; */
+    margin: 25px auto 20px;
     margin-bottom: 0px;
 }
-.cd-accordion-menu .first-list {
+.cd-accordss-menu .first-list {
   /* by defa.first-listt hide all sub menus */
   display: none;
 }
-.cd-accordion-menu .second-list {
+.cd-accordss-menu .second-list {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-.cd-accordion-menu .accord-input {
+.cd-accordss-menu .accord-input {
   /* hide native checkbox */
   position: absolute;
   opacity: 0;
@@ -38,17 +38,17 @@ Main Components
 .second-list{
   border-bottom: 1px solid #6d6d6d;
 }
-.cd-accordion-menu .accord-label, .cd-accordion-menu a {
+.cd-accordss-menu .accord-label, .cd-accordss-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
   background: #fff;
   color: #ffffff;
   font-size: 1.6rem;
 }
-.no-touch .cd-accordion-menu .accord-label:hover, .no-touch .cd-accordion-menu a:hover {
+.no-touch .cd-accordss-menu .accord-label:hover, .no-touch .cd-accordss-menu a:hover {
   background: #52565d;
 }
-.cd-accordion-menu .accord-label::before, .cd-accordion-menu .accord-label::after, .cd-accordion-menu a::after {
+.cd-accordss-menu .accord-label::before, .cd-accordss-menu .accord-label::after, .cd-accordss-menu a::after {
   /* icons */
   content: '';
   display: inline-block;
@@ -62,7 +62,7 @@ Main Components
   -o-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-.cd-accordion-menu .accord-label {
+.cd-accordss-menu .accord-label {
   cursor: pointer;
   display: block;
   padding: 15px 15px 15px 42px;
@@ -79,11 +79,11 @@ Main Components
 .accord-label {
   margin-bottom: 0px;
 }
-.cd-accordion-menu .accord-label::before, .cd-accordion-menu .accord-label::after {
+.cd-accordss-menu .accord-label::before, .cd-accordss-menu .accord-label::after {
   background-image: url(../img/cd-icons.svg);
   background-repeat: no-repeat;
 }
-.cd-accordion-menu .accord-label::before {
+.cd-accordss-menu .accord-label::before {
   /* arrow icon */
   left: 18px;
   background-position: 0 0;
@@ -93,17 +93,17 @@ Main Components
   -o-transform: translateY(-50%) rotate(-90deg);
   transform: translateY(-50%) rotate(-90deg);
 }
-.cd-accordion-menu .accord-label::after {
+.cd-accordss-menu .accord-label::after {
   /* folder icons */
   left: 41px;
   background-position: -16px 0;
 }
-.cd-accordion-menu a::after {
+.cd-accordss-menu a::after {
   /* image icon */
   left: 36px;
   background: url(../img/cd-icons.svg) no-repeat -48px 0;
 }
-.cd-accordion-menu .accord-input:checked + .accord-label::before {
+.cd-accordss-menu .accord-input:checked + .accord-label::before {
   /* rotate arrow */
   -webkit-transform: translateY(-50%);
   -moz-transform: translateY(-50%);
@@ -111,66 +111,66 @@ Main Components
   -o-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-.cd-accordion-menu .accord-input:checked + .accord-label::after {
+.cd-accordss-menu .accord-input:checked + .accord-label::after {
   /* show open folder icon if item is checked */
   background-position: -32px 0;
 }
-.cd-accordion-menu .accord-input:checked + .accord-label + .first-list,
-.cd-accordion-menu .accord-input:checked + .accord-label:nth-of-type(n) + .first-list {
+.cd-accordss-menu .accord-input:checked + .accord-label + .first-list,
+.cd-accordss-menu .accord-input:checked + .accord-label:nth-of-type(n) + .first-list {
   /* use label:nth-of-type(n) to fix a bug on safari (<= 8.0.8) with m.first-listtiple adjacent-sibling selectors*/
   /* show children when item is checked */
   display: block;
 }
-.cd-accordion-menu .first-list .accord-label,
-.cd-accordion-menu .first-list a {
+.cd-accordss-menu .first-list .accord-label,
+.cd-accordss-menu .first-list a {
   padding-left: 60px;
   background: #444359;
   font-size: 14px;
   color: #d9d9d9;
   border-radius: unset;
 }
-.no-touch .cd-accordion-menu .first-list .accord-label:hover, .no-touch
-.cd-accordion-menu .first-list a:hover {
+.no-touch .cd-accordss-menu .first-list .accord-label:hover, .no-touch
+.cd-accordss-menu .first-list a:hover {
   background: #3c3f45;
 }
-.cd-accordion-menu > li:last-of-type > .accord-label,
-.cd-accordion-menu > li:last-of-type > a,
-.cd-accordion-menu > li > .first-list > li:last-of-type .accord-label,
-.cd-accordion-menu > li > .first-list > li:last-of-type a {
+.cd-accordss-menu > li:last-of-type > .accord-label,
+.cd-accordss-menu > li:last-of-type > a,
+.cd-accordss-menu > li > .first-list > li:last-of-type .accord-label,
+.cd-accordss-menu > li > .first-list > li:last-of-type a {
   box-shadow: none;
 }
-.cd-accordion-menu .first-list .accord-label::before {
+.cd-accordss-menu .first-list .accord-label::before {
   left: 36px;
 }
-.cd-accordion-menu .first-list .accord-label::after,
-.cd-accordion-menu .first-list a::after {
+.cd-accordss-menu .first-list .accord-label::after,
+.cd-accordss-menu .first-list a::after {
   left: 59px;
 }
-.cd-accordion-menu .first-list .first-list .accord-label,
-.cd-accordion-menu .first-list .first-list a {
+.cd-accordss-menu .first-list .first-list .accord-label,
+.cd-accordss-menu .first-list .first-list a {
   padding-left: 100px;
 }
-.cd-accordion-menu .first-list .first-list .accord-label::before {
+.cd-accordss-menu .first-list .first-list .accord-label::before {
   left: 54px;
 }
-.cd-accordion-menu .first-list .first-list .accord-label::after,
-.cd-accordion-menu .first-list .first-list a::after {
+.cd-accordss-menu .first-list .first-list .accord-label::after,
+.cd-accordss-menu .first-list .first-list a::after {
   left: 77px;
 }
-.cd-accordion-menu .first-list .first-list .first-list .accord-label,
-.cd-accordion-menu .first-list .first-list .first-list a {
+.cd-accordss-menu .first-list .first-list .first-list .accord-label,
+.cd-accordss-menu .first-list .first-list .first-list a {
   padding-left: 118px;
 }
-.cd-accordion-menu .first-list .first-list .first-list .accord-label::before {
+.cd-accordss-menu .first-list .first-list .first-list .accord-label::before {
   left: 72px;
 }
-.cd-accordion-menu .first-list .first-list .first-list .accord-label::after,
-.cd-accordion-menu .first-list .first-list .first-list a::after {
+.cd-accordss-menu .first-list .first-list .first-list .accord-label::after,
+.cd-accordss-menu .first-list .first-list .first-list a::after {
   left: 95px;
 }
 
-.cd-accordion-menu.animated .accord-label::before {
-  /* this class is used if you're using jquery to animate the accordion */
+.cd-accordss-menu.animated .accord-label::before {
+  /* this class is used if you're using jquery to animate the accordss */
   -webkit-transition: -webkit-transform 0.3s;
   -moz-transition: -moz-transform 0.3s;
   transition: transform 0.3s;
@@ -205,33 +205,31 @@ Main Components
 }
 </style>
 
-  <ul class="cd-accordion-menu animated">
+  <ul class="cd-accordss-menu animated">
     <li class="has-children">
 
-      <input type="checkbox" name="group-1" class="accord-input" id="group-1">
-      <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
+      <input type="checkbox" name="group-4" class="accord-input" id="group-4">
+      <label class="accord-label" for="group-4"><i class="fa fa-cog iconz iconz"></i>Settings<i class="fa fa-chevron-down iconz-down"></i></label>
 
           <ul class="first-list">
             <li class="has-children">
-              <?php if (isset($this->blocks['subfolders'])){ ?>
-                  <?= $this->blocks['subfolders'] ?>
-              <?php } ?>           
+              Test          
             </li>      
           </ul>
     </li>
   </ul>
 
 <?php
-$accordion = <<<JS
+$accordss = <<<JS
 $(document).ready(function(){
-  var accordionsMenu = $('.cd-accordion-menu');
+  var accordsssMenu = $('.cd-accordss-menu');
 
-  if( accordionsMenu.length > 0 ) {
+  if( accordsssMenu.length > 0 ) {
     
-    accordionsMenu.each(function(){
-      var accordion = $(this);
+    accordsssMenu.each(function(){
+      var accordss = $(this);
       //detect change in the input[type="checkbox"] value
-      accordion.on('change', 'input[type="checkbox"]', function(){
+      accordss.on('change', 'input[type="checkbox"]', function(){
         var checkbox = $(this);
         console.log(checkbox.prop('checked'));
         ( checkbox.prop('checked') ) ? checkbox.siblings('ul').attr('style', 'display:none;').slideDown(300) : checkbox.siblings('ul').attr('style', 'display:block;').slideUp(300);
@@ -240,5 +238,5 @@ $(document).ready(function(){
   }
 });
 JS;
-$this->registerJs($accordion);
+$this->registerJs($accordss);
 ?>
