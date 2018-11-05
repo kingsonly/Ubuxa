@@ -267,7 +267,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
+  padding-left: 10px;
     border-right-width: 1px;
+    padding-right: 10px;
     width: 272px;
     cursor: pointer;
 }
