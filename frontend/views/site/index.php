@@ -261,7 +261,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 
         
 
-        <div class="row widget-bottom">
+        <div class="row">
 
             <section>
             	<div class="row test5">
