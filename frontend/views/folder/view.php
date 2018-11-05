@@ -136,13 +136,15 @@ $img = $model->folder_image;
             </section>
         </div>
     </div>
-    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+    
     <? $this->beginBlock('kanban')?>
-	    <div class="view-task-board">
-	    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
-	    </div>
+    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+		    <div class="view-task-board">
+		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+		    </div>
+	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-    <?php Pjax::end(); ?>
+    
         
 </section>
 

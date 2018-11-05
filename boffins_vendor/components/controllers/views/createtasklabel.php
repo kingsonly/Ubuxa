@@ -34,7 +34,7 @@ $('.task-label-class').on('beforeSubmit', function(e) {
                     console.log('completed');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-label-refresh",async: false});
+                    //$.pjax.reload({container:"#task-label-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
