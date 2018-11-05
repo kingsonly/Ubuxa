@@ -392,7 +392,7 @@ a.addTaskButton.active {
                           $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
                           $reminderUrl = Url::to(['reminder/create']);
                           //$listData=ArrayHelper::map($users,'id','username');
-                 ?>
+                 ?><span style="font-size:30px;cursor:pointer" onclick="openOverlay()">
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
@@ -440,6 +440,7 @@ a.addTaskButton.active {
                           </span>
                       </div>
                     <?php } ?>
+                </span>
                 </div>
                     <div class="bottom-content">
                       <div class="confirm">
@@ -721,4 +722,21 @@ JS;
  
 $this->registerJs($board);
 ?>
+
+<?php 
+$taskView = Url::to(['task/view','id' => $values->id,'folderId' => $id]);
+$overlay = <<<JS
+    function openOverlay() {
+        $('#content').load( '$taskView' );
+      document.getElementById("myOverlay").style.width = "50%";
+    }
+
+    function closeOverlay() {
+      document.getElementById("myOverlay").style.width = "0%";
+    }
+
+    
+JS;
+$this->registerJs($overlay, $this::POS_END);
+?>     
 

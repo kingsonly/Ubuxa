@@ -178,7 +178,7 @@ $img = $model->folder_image;
             	$num2 = 2;
             	foreach ($checks as $innerFolders) { ?>
             		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>">
-		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>
+		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>`
               		</ul>
       
            <?php } ?>
