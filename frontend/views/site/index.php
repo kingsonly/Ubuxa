@@ -27,7 +27,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 ?>
 <style>
 	#flash {
-		display: none;
+		display: none !important;
 	}
 
 	#dashboard-content {
