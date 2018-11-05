@@ -267,9 +267,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 20px;
+  padding-left: 10px;
     border-right-width: 1px;
-    padding-right: 20px;
+    padding-right: 10px;
     width: 272px;
     cursor: pointer;
 }
@@ -486,20 +486,6 @@ a.addTaskButton.active {
 </div>
 <?php Pjax::end(); ?>
 
-<? 
-    Modal::begin([
-        'header' =>'<h1 id="headers"></h1>',
-        'id' => 'boardContent',
-        'size' => 'modal-md',  
-    ]);
-?>
-<div id="viewcontent"></div>
-<?
-    Modal::end();
-?>
-
-
-
 <?php 
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
@@ -522,13 +508,7 @@ $.fn.closest_descendent = function(filter) {
 }
 
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
 
     dragula([
     document.getElementById('1'),
@@ -721,4 +701,3 @@ JS;
  
 $this->registerJs($board);
 ?>
-

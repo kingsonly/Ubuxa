@@ -181,23 +181,7 @@ use boffins_vendor\components\controllers\MenuWidget;
     <?php Pjax::end(); ?>
 </section>
 
-  <? $this->beginBlock('sidebar')?>
-  	<div id="two">
-    	<ul class="list_load">
-    		<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-    	</ul>
-    </div>
-    <div id="three">
-    	<ul class="list_load">
-			<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-			<li class="list_item"><a href="#">List Item 04</a></li>
-		</ul>
-    </div>
-  <? $this->endBlock();?>
+  
 
 <?php 
 $indexJs = <<<JS

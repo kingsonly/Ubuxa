@@ -281,6 +281,7 @@ a,
 	.list_load {
 		padding: 0;
 		font-size: 16px;
+		margin-top: 25px;
 	}
 	.list_item {
 		margin-left: -20px;
@@ -327,3 +328,23 @@ a,
     	font-size: 18px;
     	text-transform: capitalize;
     }
+    .menu-settings{
+    	cursor: pointer;
+	    display: block;
+	    padding: 0px 0px 0px 42px;
+	    font-size: 14px;
+	    font-weight: 700;
+	    border-bottom: 1px solid #aba6a6;
+	    position: relative;
+	    -webkit-transition: all 0.4s ease;
+	    -o-transition: all 0.4s ease;
+	    transition: all 0.4s ease;
+	    border-radius: 3px;
+	    padding-bottom: 15px;
+	    padding-top: 15px;
+	    background: #fff;
+	}
+	.menu-list{
+		color: #4D4D4D;
+	}
+	

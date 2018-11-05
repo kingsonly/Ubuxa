@@ -84,7 +84,7 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
                       "hideMethod": "fadeOut",
                       "tapToDismiss": false
                     }
-                toastr.success('Folder was created successfully', "", options);
+                //toastr.success('Folder was created successfully', "", options);
                $.pjax.reload({container:"#task-list-refresh",async: false});
                 $.pjax.reload({container:"#kanban-refresh",async: false});
                 $.pjax.reload({container:"#task-modal-refresh",async: false});
@@ -107,8 +107,8 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
           "hideMethod": "fadeOut",
           "tapToDismiss": false
           }
-          alert(jsonResult);
-        toastr.error('Somthing went wrong', "", options);
+          //alert(jsonResult);
+        //toastr.error('Somthing went wrong', "", options);
              $.pjax.reload({container:"#task-list-refresh",async: false});
             $.pjax.reload({container:"#task-modal-refresh",async: false});
             }

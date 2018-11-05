@@ -277,7 +277,7 @@ $this->params['breadcrumbs'][] = $this->title;
            </div>
     </div>
 
-
+    <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
                 <i class="fa fa-bell icons"></i>
@@ -300,12 +300,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     
             </div>
         </div>
+    <?php }?>
   
     <div class ="timestamp">
         <div class="createDate">
             <span>Created <?= Yii::$app->formatter->format($model->create_date, 'relativeTime') ?></span>
         </div>
-    <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == 24){ ?>
+    <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == $model::TASK_COMPLETED){ ?>
         <div>
             Task completed in <?= $model->timeCompletion; ?>
         </div>
