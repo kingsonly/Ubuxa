@@ -165,9 +165,11 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<div class="row">
-            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
-            	</div>
+            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+	            	<div class="row">
+	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+	            	</div>
+            	<?php Pjax::end(); ?>
             </section>
         </div>
 

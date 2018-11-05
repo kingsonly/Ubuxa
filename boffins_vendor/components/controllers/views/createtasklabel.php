@@ -20,7 +20,8 @@ use yii\widgets\ActiveForm;
 <?php
 $labelUrl = Url::to(['label/create']);
 $assignee = <<<JS
-$('.task-label-class').on('beforeSubmit', function(e) { 
+$('.task-label-class').on('beforeSubmit', function(e) {
+            e.preventDefault(); 
            var form = $(this);
             if(form.find('#activeLabel').length) {
                 return false;
