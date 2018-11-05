@@ -165,6 +165,8 @@ use boffins_vendor\components\controllers\MenuWidget;
   transform: rotateX(180deg);
 }
 
+
+
 .flip-box-front, .flip-box-back {
   position: absolute;
   width: 100%;
