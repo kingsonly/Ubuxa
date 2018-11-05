@@ -128,13 +128,11 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
+            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             	<div class="row test5">
-					<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
-            		<?php Pjax::end(); ?>
-            		
-
             	</div>
+            	<?php Pjax::end(); ?>
             </section>
         </div>
     </div>
