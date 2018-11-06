@@ -175,7 +175,9 @@ AppAsset::register($this);
     clear: right;
     text-align: center;
 }
-
+.bg-info{
+  background-color: #fff !important;
+}
 
 .modal-content {
     border-radius: 6px !important; 

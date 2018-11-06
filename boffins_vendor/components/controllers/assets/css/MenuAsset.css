@@ -29,10 +29,10 @@ ul.tabs li a {
 	text-align: center;	
 	text-decoration: none;
 	color: #ffffff;
-	background: linear-gradient(to bottom, #33ccff 19%, #9999ff 100%);
-	-webkit-box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
-	   -moz-box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
-	        box-shadow: 8px 12px 25px 2px rgba(0,0,0,0.4);
+	background: #582f2f;
+	-webkit-box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
+	   -moz-box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
+	        box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
 	        	border: 0px solid #000000;
 	-webkit-transition: padding 0.2s ease, margin 0.2s ease;
        -moz-transition: padding 0.2s ease, margin 0.2s ease;
@@ -65,7 +65,7 @@ ul.tabs li a:hover {
 ul.tabs li a.active {
 	margin: 30px 0 0 0;
 	padding: 10px 0 10px 0;
-	background: rgb(7, 71, 166);
+	background: #3F51B5;
 	color: #6edeef;
 	/*color: #ff6831;*/
 	z-index: 4;
@@ -83,9 +83,6 @@ ul.tabs li a.active {
   width: 300px;
   height: 350px;
   margin: 0 auto;
--webkit-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
-   	   -moz-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
-   	        box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
   -webkit-border-bottom-right-radius: 8px;
 -webkit-border-bottom-left-radius: 8px;
 -moz-border-radius-bottomright: 8px;
@@ -121,7 +118,7 @@ a,
 		padding-left: 30px;
 	}
 	.side_menu {
-		background-color: rgb(7, 71, 166);
+		background-color: #3F51B5;
 		height: 100vh;
 		left: -300px;
 		position: fixed;
@@ -142,7 +139,7 @@ a,
 	}
 	.burger_box a.menu-icon {
 		position: absolute;
-	    background-color: rgb(7, 71, 166);
+	    background-color: #3F51B5;
 	    cursor: pointer;
 	    height: 50px;
 	    padding: 0;
@@ -155,7 +152,7 @@ a,
 	@media screen and (max-width: 400px) {
     .burger_box a.menu-icon {
 	    position: absolute;
-	    background-color: rgb(7, 71, 166);
+	    background-color: #3F51B5;
 	    padding: 0;
 	    margin: 0;
 	    bottom: 40px;
@@ -188,9 +185,6 @@ a,
 	    width: 200px;
 	    height: 350px;
 	    margin-left: 0px;
-	    -webkit-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
-	    -moz-box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
-	    box-shadow: -8px 6px 25px -2px rgba(0,0,0,0.3);
 	    -webkit-border-bottom-right-radius: 8px;
 	    -webkit-border-bottom-left-radius: 8px;
 	    -moz-border-radius-bottomright: 8px;
@@ -204,7 +198,7 @@ a,
 		opacity: 1;
 	}
 	.burger_box a.menu-icon.opened {
-		background: rgba(0,20,60,.9);
+		background: rgb(7, 71, 166);
 	}
 	.burger_box .menu-icon_box {
 		display: block;
@@ -342,9 +336,9 @@ a,
 	    border-radius: 3px;
 	    padding-bottom: 15px;
 	    padding-top: 15px;
-	    background: #fff;
+	    background: #3F51B5;
 	}
 	.menu-list{
-		color: #4D4D4D;
+		color: #fff;
 	}
 	

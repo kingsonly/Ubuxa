@@ -14,6 +14,7 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
+use yii\web\View;
 
 
 
@@ -266,8 +267,62 @@ JS;
  
 $this->registerJs($indexJs);
 ?>
+	
+<?php
+	$steps[0] = [
+    'title'=>'Step 1',
+    'content'=>'Find all task in this folder here.',
+    'element'=>'.taskz-listz'
+];
 
-	
-	
-			
+// $steps[1] = ... etc
+$steps[1] = [
+    'title'=>'Step 2',
+    'content'=>'You can create new task here',
+    'element'=>'#addTask'
+];
+
+$steps[2] = [
+    'title'=>'Step 3',
+    'content'=>'Do more from the side bar',
+    'element'=>'.menu-icon',
+    'onShow' => $this->registerJs(
+    	"$(function(tour) {
+    		$('.list_load, .list_item').stop();
+	$(this).removeClass('closed').addClass('opened');
+
+	$('.side_menu').css({ 'left':'0px' });
+
+	var count = $('.list_item').length;
+	$('.list_load').slideDown( (count*.6)*100 );
+	$('.list_item').each(function(i){
+		var thisLI = $(this);
+		timeOut = 100*i;
+		setTimeout(function(){
+			thisLI.css({
+				'opacity':'1',
+				'margin-left':'0'
+			});
+		},100*i);
+	});
+    })"
+    )
+];
+
+$steps[3] = [
+    'title'=>'Step 4',
+    'content'=>'Side bar',
+    'element'=>'.side_menu'
+];
+
+
+\macrowish\widgets\BootstrapTour::widget([
+    'steps'=>$steps,
+    'options'=>[
+        'backdrop'=>'true',
+        'storage' => 'false',
+        'debug' => 'true'
+        ]
+]);
+?>			
 		

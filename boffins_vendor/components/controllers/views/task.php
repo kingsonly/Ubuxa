@@ -180,7 +180,7 @@ $boardUrl = Url::to(['task/index']);
 </style>
 
 	 <div class="col-md-4">
-        <div class="bg-info column-margin">
+        <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
                 <span>TASKS</span>
                  
@@ -310,6 +310,7 @@ $('#create-task').on('beforeSubmit', function(e) {
                     console.log('completed');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#task-modal-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
