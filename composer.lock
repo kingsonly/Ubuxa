@@ -652,12 +652,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "41afa3dcb68ed950623be4914047c9078a94621e"
+                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/41afa3dcb68ed950623be4914047c9078a94621e",
-                "reference": "41afa3dcb68ed950623be4914047c9078a94621e",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/d0fc759da07da74bbd13f09ae37bd85cc74d8032",
+                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032",
                 "shasum": ""
             },
             "type": "library",
@@ -697,7 +697,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-10-30T13:37:51+00:00"
+            "time": "2018-11-05T12:38:12+00:00"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -1001,12 +1001,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-popover-x.git",
-                "reference": "3576874635fa9d79146757945afbc975ae810a5b"
+                "reference": "4cefe82d2c61e4191b6380a4a659229ce4ce5a77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/3576874635fa9d79146757945afbc975ae810a5b",
-                "reference": "3576874635fa9d79146757945afbc975ae810a5b",
+                "url": "https://api.github.com/repos/kartik-v/yii2-popover-x/zipball/4cefe82d2c61e4191b6380a4a659229ce4ce5a77",
+                "reference": "4cefe82d2c61e4191b6380a4a659229ce4ce5a77",
                 "shasum": ""
             },
             "require": {
@@ -1046,7 +1046,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2018-09-14T11:30:15+00:00"
+            "time": "2018-11-05T10:53:30+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -2007,12 +2007,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widgets.git",
-                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3"
+                "reference": "8c108835456d529984e6acd173455954958b1b18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/e5a030d700243a90eccf96a070380bd3b76e17a3",
-                "reference": "e5a030d700243a90eccf96a070380bd3b76e17a3",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widgets/zipball/8c108835456d529984e6acd173455954958b1b18",
+                "reference": "8c108835456d529984e6acd173455954958b1b18",
                 "shasum": ""
             },
             "require": {
@@ -2066,7 +2066,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T17:40:19+00:00"
+            "time": "2018-11-05T12:31:44+00:00"
         },
         {
             "name": "kingsonly/yii2-wiki",

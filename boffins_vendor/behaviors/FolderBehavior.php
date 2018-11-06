@@ -23,51 +23,11 @@ use frontend\models\UserDb;
 
 
 
-/**
- * ComponentsBehavior automatically fetches all the associated component of a Parent component and stores value  
- * in a global/ public array to be used in any controller based on the AFTER_FIND_EVENT . 
- * 
- * This only applies to Component models 
- *
- * To use ComponentsBehavior, insert the following code to your ActiveRecord class:
- *
- * ```php
- * use app\tm_vendor\ComponentsBehavior;
- *
- * public function behaviors()
- * {
- *     return [
- *         ComponentsBehavior::className(),
- *     ];
- * }
- * ```
- *
- * By default, ComponentBehavior returns a nested array of subComponets which is identified by the variable *'$subComponents'.
- * 
- * 
- * By default component type are 6 and are held as a data type (string) in a '$componentType' numeric key array 
- * 
- * If the component names are different then this can be changed by changing the values of 'componentType', to achive this change 
- * 'newComponetsType' property to true  and add new component as an array of strings to 'componentTypeSetting' eg 
- *
- *	public function behaviors()
- * 	{
- *     return [
- *				[
- *					'class'=>ComponentsBehavior::className(),
- *					'componentTypeSetting' =>['payment','goods','products'],// add new components
- 					"newComponetsType" => 'TRUE',// determine if componetTypeSetting  should  be treated as new components or  as the only components as such making the existing 								  default components null
-					
- *				] 	
- *     		 ];
- * 	}
- *
- * 
- *
- */
 class FolderBehavior extends Behavior
 {
 	
+	public const FOLDER_LOCK_STRING = 'fa fa-lock'; //string to detremin if folder creation is private or not, basicaly used by folderbehaviour
+	public const BASIC_ADMIN_ROLES = [1,2]; //Basic admin roles in the database, which are 1 admin and 2 for manager
     public function init()
     {
         parent::init();
@@ -79,9 +39,6 @@ class FolderBehavior extends Behavior
      */
 	public function events() 
 	{
-		if ( $this->owner->stopComponentBehaviors ) {
-			return [];
-		}
 		return [
 			ActiveRecord::EVENT_AFTER_INSERT => 'behaviorFolderAfterSave', // commence linking on afer save event. 
 			//ActiveRecord::EVENT_AFTER_UPDATE => 'behaviorFolderAfterSave', // commence linking on afer save event. 
@@ -96,7 +53,7 @@ class FolderBehavior extends Behavior
 		$role = 'author';
 		$folderManager = $this->linkUserToFolder($userId,$folderId,$role);
 		
-		if($this->owner->privateFolder === 'fa fa-lock'){
+		if($this->owner->privateFolder === self::FOLDER_LOCK_STRING){
 			if($folderManager->save()){
 				return;
 			}
@@ -123,8 +80,7 @@ class FolderBehavior extends Behavior
 	{
 		$model = new UserDb();
 		$getAllAdmin  = $model->find()
-			->select(['id'])->where(['basic_role' => 1])
-			->orWhere(['basic_role' => 2])->all();
+			->select(['id'])->where(['in','basic_role',self::BASIC_ADMIN_ROLES])->all();
 		return $getAllAdmin;
 	}
 	
