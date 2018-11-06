@@ -34,6 +34,7 @@ class Folder extends FolderARModel
      */
 	public $privateFolder;
 	public $upload_file;
+	
     public static function tableName()
     {
         return 'tm_folder';
@@ -141,9 +142,7 @@ class Folder extends FolderARModel
 
     public function buildTree($elements = [], $parentId) 
 	{
-		
         $branch = array();
-
         foreach ($elements as $element) {
             if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id']);
@@ -154,21 +153,17 @@ class Folder extends FolderARModel
             }
         }
         return $branch;
-    
 	}
 
-
-	
 	public  function getDashboardItems($limit = 100) 
 	{
 		return $this->find()
-				
 				->limit($limit)
 				->all();
 	}
 	
-	 public function getFolderUsersInheritance()
-	 {
+	public function getFolderUsersInheritance()
+	{
 		 return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
 	 }
 	
@@ -177,23 +172,19 @@ class Folder extends FolderARModel
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
     }
 
-
     public function getPerson()
     {
         return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('users');
     }
-
-
+	
     public function getPersonName()
     {   
-        $names = [];
-        $data = $this->person;
-        foreach($data as $attr) {
-            $names[] = $attr->first_name.' '.$attr->surname;
-        }
-        return implode(" ", $names);
-
-        //return $this->person->first_name;
+		$names = [];
+		$data = $this->person;
+		foreach($data as $attr) {
+			$names[] = $attr->first_name.' '.$attr->surname;
+		}
+		return implode(" ", $names);
     }
 
     public function getFolderManagerInheritance()
@@ -201,23 +192,16 @@ class Folder extends FolderARModel
 		if($this->parent_id > self::DEFAULT_FOLDER_PARENT_STATUS){
 			return $this->hasMany(FolderManager::className(), ['folder_id' => 'parent_id']);
 		}
-        
     }
 	
 	public function getFolderManager()
     {
-		
-			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
-		
-        
+		return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
     }
 	
 	public function getFolderManagerFilter()
     {
-		
-			return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity]);
-		
-        
+		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['user_id' => yii::$app->user->identity]);
     }
 	
 	public function getAllChildFolder(){
@@ -238,7 +222,6 @@ class Folder extends FolderARModel
 	
 	public function getIsPrivate()
     {
-		
 			return $this->hasMany(FolderManager::className(), ['folder_id' => 'id'])->asArray()->count() == 1 ? true : false;
     }
 	
@@ -246,7 +229,7 @@ class Folder extends FolderARModel
 	{
 		return empty( $this->components ) ? true: false;
 	}
-	
+
 	public function getFolderColors() 
 	{
 		$colorStatus = '';
@@ -259,9 +242,6 @@ class Folder extends FolderARModel
 		}
 		return $colorStatus;
 	}
-	
-	
-	
 	
 	public function upload()
     {
@@ -290,10 +270,7 @@ class Folder extends FolderARModel
         }
     }
 	
-	
-	
-	
-	 public function uploads()
+	public function uploads()
     {
         if ($this->validate()) {
             $this->upload_file->saveAs('uploads/' . $this->upload_file->baseName . '.' . $this->upload_file->extension);
