@@ -59,30 +59,33 @@ $jsEventTriger = $htmlAttributes['class'];
 
 <section id="carousles">
 	<? if($buttonType == 'text'){?>
-	<div id="<?= $jsEventTriger;?>-text" style="<?= $style;?>" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
-			<span><h4><i class="fa fa-plus"></i> Create folder</h4></span>
-		</div>
-	
-		
+			<div id="<?= $jsEventTriger;?>-text" style="<?= array_key_exists("style",$htmlAttributes)?$htmlAttributes['style']:'';?>" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
+				<span>
+					<h4>
+						<i class="fa fa-plus"></i>
+						Create folder
+					</h4>
+				</span>
+			</div>
 	<? }elseif($buttonType == 'icon'){ ?>
-	<div class="dropdown">
-	<div id="<?= $jsEventTriger;?>-icon" style="<?= $style;?>" class="<?= $class;?> <?= $jsEventTriger;?>-icon dropdown-toggle" id="dropdownMenuButton_<?= $jsEventTriger;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
+		<div class="dropdown">
+		<div id="<?= $jsEventTriger;?>-icon" style="<?= array_key_exists("style",$htmlAttributes)?$htmlAttributes['style']:''; ?>" class="<?= $class;?> <?= $jsEventTriger;?>-icon dropdown-toggle" id="dropdownMenuButton_<?= $jsEventTriger;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<div class="icondesign"><strong><i class="fa fa-plus"></i></strong></div>
 		</div>
-	
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <li id="<?= $jsEventTriger;?>-component" class="">Create Invoice</li>
-							<hr>
-                          <li>Create Project</li>
-							<hr>
-                          <li>Create Payment</li>
-							<hr>
-                          <li>Create Order</li>
-                          
-                        </div>
-                        </div>
+
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<li id="<?= $jsEventTriger;?>-component" class="">Create Invoice</li>
+		<hr>
+		<li>Create Project</li>
+		<hr>
+		<li>Create Payment</li>
+		<hr>
+		<li>Create Order</li>
+
+		</div>
+		</div>
 	<? } else{?>
-		<div id="<?= $jsEventTriger;?>-image" style="<?= $style;?>" class="creste-image <?= $jsEventTriger;?>-image"></div>
+		<div id="<?= $jsEventTriger;?>-image" style="<?= array_key_exists("style",$htmlAttributes)?$htmlAttributes['style']:'';?>" class="creste-image <?= $jsEventTriger;?>-image"></div>
 	<?}?>
 </section>
 

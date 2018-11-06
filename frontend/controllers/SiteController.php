@@ -39,6 +39,7 @@ use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -87,7 +88,7 @@ class SiteController extends BoffinsBaseController {
 	{
 		$this->layout = 'new_index_dashboard_layout';
 		$folder = new Folder();
-		$dashboardFolders = $folder->getDashboardItems(5);
+		$dashboardFolders = $folder->getDashboardItems(100);
 		$task = new Task();
 		$remarkModel = new Remark();
 		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
@@ -97,8 +98,9 @@ class SiteController extends BoffinsBaseController {
 		$taskAssignedUser = new TaskAssignedUser();
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
-				
-        return $this->render('index',[
+
+        if(empty($dashboardFolders)){
+        	return $this->render('empty_index',[
         	'taskStatus' => $taskStatus,
 			'folders' => $dashboardFolders,
 			'task' => $task,
@@ -108,7 +110,21 @@ class SiteController extends BoffinsBaseController {
 			'users' => $users,
 			'label' => $label,
             'taskLabel' => $taskLabel,
-		]);
+			]);
+        } else {
+				
+	        return $this->render('index',[
+	        	'taskStatus' => $taskStatus,
+				'folders' => $dashboardFolders,
+				'task' => $task,
+				'remarkModel' => $remarkModel,
+				'reminder' => $reminder,
+				'taskAssignedUser' => $taskAssignedUser,
+				'users' => $users,
+				'label' => $label,
+	            'taskLabel' => $taskLabel,
+				]);
+   		 }
        
     }
 

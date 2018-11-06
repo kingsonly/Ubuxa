@@ -13,7 +13,6 @@ return [
 					'queue', 
 					'log'
 					],
-	'language'=>'en-US',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
