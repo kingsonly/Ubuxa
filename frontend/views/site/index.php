@@ -268,7 +268,11 @@ use boffins_vendor\components\controllers\MenuWidget;
 
             <section>
             	<div class="row test5">
-            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+	            	
+	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+	            	
+            		<?php Pjax::end(); ?>
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
 
             	</div>
@@ -316,20 +320,24 @@ $('.owl-carousel').owlCarousel({
       
   	});
 
-$('[data-toggle="tooltip-folder"]').tooltip({container: 'body'});
-
-$('#createfolder').click(function(e){
+ $('#createfolder').click(function(e){
 	e.preventDefault();
 	$('.flip-box-inner').addClass('flip-box-innerr')
 	$('.flip-box').addClass('flip-boxx')
 
 })
+
 $('.close-create').click(function(e){
 	e.preventDefault();
 	$('.flip-box-inner').removeClass('flip-box-innerr')
 	$('.flip-box').removeClass('flip-boxx')
 
 })
+
+
+$('[data-toggle="tooltip-folder"]').tooltip({container: 'body'});
+
+
 
 $(function(){
     $("#boardButton").on('click', function(e){
