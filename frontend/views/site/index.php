@@ -26,6 +26,9 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 ?>
 <style>
+	#exampleInputRemark{
+		display: none !important;
+	}
 	#flash {
 		display: none !important;
 	}
@@ -227,7 +230,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 			        	<div class="col-md-1" id="createfolder" data-toggle="tooltip-folder" data-placement="bottom" title="create new folder" style="height:100px;background-image: url('<?= Url::to("@web/images/folder/newfolder.png"); ?>'); background-repeat: no-repeat;background-size: cover"></div>
 			        	<div class="col-md-11 flip-box">
 			        		<div class=" flip-box-inner">
-				        		<div class="owl-carousel owl-theme flip-box-front row">
+				        		<div class="owl-carousel owl-theme flip-box-front rows">
 				        			<?php foreach($folders as $folder){
 				        				$folder_name_logo = Url::to("@web/images/folder_images/". $folder['folder_image']);
 				        				$folderUrl = Url::to(['folder/view', 'id' => $folder['id']]);
