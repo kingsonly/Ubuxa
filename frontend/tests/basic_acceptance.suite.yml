@@ -1,0 +1,13 @@
+suite_namespace: frontend\tests\basic_acceptance
+actor: BasicAcceptanceTester 
+modules:
+    enabled:
+        - WebDriver:
+            url: http://127.0.0.1/ubuxabeta/frontend/web
+            browser: firefox
+            #clear_cookies: false 
+            #log_js_errors: true
+        - Yii2:
+            part: [orm, fixtures]
+            entryScript: index.php
+            cleanup: false

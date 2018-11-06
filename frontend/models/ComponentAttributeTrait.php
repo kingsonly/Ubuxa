@@ -5,19 +5,19 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_component_attribute_trait".
+ * This is the model class for table "{{%component_attribute_trait}}".
  *
  * @property int $attribute_id foreign key to trait table
  * @property int $trait_id foreign key to component_template_attribute table
  */
-class ComponentAttributeTrait extends \yii\db\ActiveRecord
+class ComponentAttributeTrait extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_component_attribute_trait';
+        return '{{%component_attribute_trait}}';
     }
 
     /**
@@ -36,8 +36,8 @@ class ComponentAttributeTrait extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'attribute_id' => 'Attribute ID',
-            'trait_id' => 'Trait ID',
+            'attribute_id' => Yii::t('component', 'Attribute ID'),
+            'trait_id' => Yii::t('component', 'Trait ID'),
         ];
     }
 }

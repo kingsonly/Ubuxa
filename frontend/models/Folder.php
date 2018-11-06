@@ -148,7 +148,7 @@ class Folder extends FolderARModel
             if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id']);
                 if ($children) {
-                    $element['children'] = $children;
+                    $element['title'] = $children;
                 }
                 $branch[] = $element;
             }

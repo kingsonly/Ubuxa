@@ -5,7 +5,7 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_component_template_attribute".
+ * This is the model class for table "{{%component_template_attribute}}".
  *
  * @property int $id
  * @property int $component_template_id foreign key to component_template table
@@ -18,16 +18,16 @@ use Yii;
  *
  * @property ComponentAttribute[] $componentAttributes
  * @property ComponentTemplate $componentTemplate
- * @property ComponentAttributeType $attributeType
+ * @property ComponentAttributeType $attributeType0
  */
-class ComponentTemplateAttribute extends \yii\db\ActiveRecord
+class ComponentTemplateAttribute extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_component_template_attribute';
+        return '{{%component_template_attribute}}';
     }
 
     /**
@@ -50,19 +50,19 @@ class ComponentTemplateAttribute extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'component_template_id' => 'Component Template ID',
-            'name' => 'Name',
-            'format' => 'Format',
-            'attribute_type_id' => 'Attribute Type ID',
-            'show_in_grid' => 'Show In Grid',
-            'sort_order' => 'Sort Order',
-            'cid' => 'Cid',
+            'id' => Yii::t('component', 'ID'),
+            'component_template_id' => Yii::t('component', 'Template'),
+            'name' => Yii::t('component', 'Name'),
+            'format' => Yii::t('component', 'Format'),
+            'attribute_type_id' => Yii::t('component', 'Data Type'),
+            'show_in_grid' => Yii::t('component', 'Show In Grid'),
+            'sort_order' => Yii::t('component', 'Sort Order'),
+            'cid' => Yii::t('component', 'Customer Number'),
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery or subclass
      */
     public function getComponentAttributes()
     {
@@ -70,7 +70,7 @@ class ComponentTemplateAttribute extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery or subclass
      */
     public function getComponentTemplate()
     {
@@ -78,7 +78,7 @@ class ComponentTemplateAttribute extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\ActiveQuery or subclass
      */
     public function getAttributeType()
     {

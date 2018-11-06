@@ -14,7 +14,7 @@ Main Components
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    margin: 25px auto 20px;
+    /* margin: 25px auto 20px; */
     margin-bottom: 0px;
 }
 .cd-accordion-menu .first-list {
@@ -206,9 +206,6 @@ Main Components
 </style>
 
   <ul class="cd-accordion-menu animated">
-    <li class="has-children">
-      <label for="group-2" class="accord-label"><i class="fa fa-folder iconz"></i>Folder Vault</label>
-    </li>
     <li class="has-children">
 
       <input type="checkbox" name="group-1" class="accord-input" id="group-1">

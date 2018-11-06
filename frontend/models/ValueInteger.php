@@ -5,19 +5,19 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_value_integer".
+ * This is the model class for table "{{%value_integer}}".
  *
  * @property int $id
  * @property int $value the actual value of the cell
  */
-class ValueInteger extends \yii\db\ActiveRecord
+class ValueInteger extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_value_integer';
+        return '{{%value_integer}}';
     }
 
     /**
@@ -36,8 +36,8 @@ class ValueInteger extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'value' => 'Value',
+            'id' => Yii::t('component', 'ID'),
+            'value' => Yii::t('component', 'Value'),
         ];
     }
 }

@@ -5,19 +5,19 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_value_long_string".
+ * This is the model class for table "{{%value_long_string}}".
  *
  * @property int $id preferred table for long strings as it has an index for searching
  * @property string $value
  */
-class ValueLongString extends \yii\db\ActiveRecord
+class ValueLongString extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_value_long_string';
+        return '{{%value_long_string}}';
     }
 
     /**
@@ -37,8 +37,8 @@ class ValueLongString extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'value' => 'Value',
+            'id' => Yii::t('component', 'ID'),
+            'value' => Yii::t('component', 'Value'),
         ];
     }
 }

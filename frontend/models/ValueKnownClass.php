@@ -5,20 +5,20 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_value_known_class".
+ * This is the model class for table "{{%value_known_class}}".
  *
  * @property int $id
  * @property string $value full class name including namespace of the class
  * @property string $query query to be applied against the class to get the instance needed
  */
-class ValueKnownClass extends \yii\db\ActiveRecord
+class ValueKnownClass extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_value_known_class';
+        return '{{%value_known_class}}';
     }
 
     /**
@@ -37,9 +37,9 @@ class ValueKnownClass extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'value' => 'Value',
-            'query' => 'Query',
+            'id' => Yii::t('component', 'ID'),
+            'value' => Yii::t('component', 'Value'),
+            'query' => Yii::t('component', 'Query'),
         ];
     }
 }

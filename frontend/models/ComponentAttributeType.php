@@ -5,7 +5,7 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_component_attribute_type".
+ * This is the model class for table "{{%component_attribute_type}}".
  *
  * @property int $id types may be money/amount, string, object 
  * @property string $name just a public name for the customer/user
@@ -14,14 +14,14 @@ use Yii;
  *
  * @property ComponentTemplateAttribute[] $componentTemplateAttributes
  */
-class ComponentAttributeType extends \yii\db\ActiveRecord
+class ComponentAttributeType extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_component_attribute_type';
+        return '{{%component_attribute_type}}';
     }
 
     /**
@@ -41,10 +41,10 @@ class ComponentAttributeType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'type' => 'Type',
-            'default_format' => 'Default Format',
+            'id' => Yii::t('component', 'ID'),
+            'name' => Yii::t('component', 'Name'),
+            'type' => Yii::t('component', 'Type'),
+            'default_format' => Yii::t('component', 'Default Format'),
         ];
     }
 

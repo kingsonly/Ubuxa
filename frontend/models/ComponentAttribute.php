@@ -5,7 +5,7 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "tm_component_attribute".
+ * This is the model class for table "{{%component_attribute}}".
  *
  * @property int $id
  * @property int $component_id foreign key to component table
@@ -16,14 +16,14 @@ use Yii;
  * @property Component $component
  * @property ComponentTemplateAttribute $componentTemplateAttribute
  */
-class ComponentAttribute extends \yii\db\ActiveRecord
+class ComponentAttribute extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'tm_component_attribute';
+        return '{{%component_attribute}}';
     }
 
     /**
@@ -44,11 +44,11 @@ class ComponentAttribute extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'component_id' => 'Component ID',
-            'component_template_attribute_id' => 'Component Template Attribute ID',
-            'value_id' => 'Value ID',
-            'cid' => 'Cid',
+            'id' => Yii::t('component', 'ID'),
+            'component_id' => Yii::t('component', 'Component ID'),
+            'component_template_attribute_id' => Yii::t('component', 'Component Template Attribute ID'),
+            'value_id' => Yii::t('component', 'Value ID'),
+            'cid' => Yii::t('component', 'Cid'),
         ];
     }
 
