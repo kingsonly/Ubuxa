@@ -51,7 +51,7 @@ class Telephone extends \yii\db\ActiveRecord
 	
 	public function getNumberFromUser($userId)
 	{
-		$user = Userdb::getPersonId($userId);
+		$user = Userdb::getPersonId($userId); //there is a bug here waiting to happen! AAO 03/11/18
 		$person = Person::getPersonEntityId($user);
 		$telephoneEntityId = TelephoneEntity::getEntityId($person);
 		$telephone = Telephone::getTelephoneNumber($telephoneEntityId);

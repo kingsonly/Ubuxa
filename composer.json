@@ -1,6 +1,6 @@
 {
     "name": "ubuxa/beta",
-    "description": "Yii 2 Advanced Project Template",
+    "description": "Ubuxa 2.0 Beta Yii 2 Advanced Template",
     "keywords": ["yii2", "framework", "advanced", "project template"],
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
@@ -29,14 +29,14 @@
 		"bower-asset/jquery-ui" : "1.11.*@stable",
 		"yiisoft/yii2-jui": "^2.0",
 		"kartik-v/yii2-editable": "*",
-        "kartik-v/yii2-widget-datepicker": "@dev",
+        "kartik-v/yii2-widget-datepicker": "@stable",
 		"kartik-v/dependent-dropdown": "^1.4.7",
 	    "kartik-v/yii2-widgets": "dev-master",
         "piwik/device-detector": "^3.8",
         "thadafinser/user-agent-parser": "^2.0",
 		"yii2mod/yii2-settings": "*",
 		"2amigos/yii2-ckeditor-widget" : "~2.1",
-		"kartik-v/yii2-widget-fileinput": "@dev",
+		"kartik-v/yii2-widget-fileinput": "@stable",
 		"mongosoft/yii2-upload-behavior": "*",
         "npm-asset/dragula": "3.7.2",
         "npm-asset/perfect-scrollbar": "*",
@@ -46,15 +46,16 @@
 		"kartik-v/yii2-popover-x": "dev-master",
 		"kingsonly/yii2-wiki": "dev-master",
 		"yiisoft/yii2-queue": "~2.0",
-		"yiisoft/yii2-redis": "dev-master"
-		
-
+		"yiisoft/yii2-redis": "dev-master",
+		"npm-asset/at.js": "1.5.4",
+        "npm-asset/jquery.caret": "0.3.1",
+        "codeception/specify": "^1.1"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/codeception": "^2.2.3",
+        "codeception/codeception": "2.4.0",
         "codeception/verify": "~0.3.1"
     },
 	
@@ -67,7 +68,6 @@
             }
         }
     },
-
     "scripts": {
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"

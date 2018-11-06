@@ -49,9 +49,10 @@ use yii\widgets\ActiveForm;
 <?php ActiveForm::end(); ?>
 
 <?php
-$taskUrl = Url::to(['task/create']);
+$taskUrl = Url::to(['task/dashboardcreate']);
 $addCard = <<<JS
-$('#create-task-card$statusid').on('beforeSubmit', function(e) { 
+$('#create-task-card$statusid').on('beforeSubmit', function(e) {
+        e.preventDefault(); 
            var form = $(this);
             if(form.find('#create-task-card$statusid').length) {
                 return false;

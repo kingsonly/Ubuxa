@@ -142,7 +142,7 @@ if(isset($_GET['id'])){
 
 
     <?php ActiveForm::end(); 
-		var_dump($pjaxId);
+		
 	?>
 
 </div>

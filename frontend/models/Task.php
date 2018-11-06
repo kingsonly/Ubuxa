@@ -48,6 +48,9 @@ class Task extends BoffinsArRootModel
     /**
      * {@inheritdoc}
      */
+    const TASK_ASSIGNED_STATUS = 1;
+
+    const TASK_NOT_ASSIGNED_STATUS = 0;
     public static function tableName()
     {
         return '{{%task}}';

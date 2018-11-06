@@ -5,8 +5,8 @@ modules:
         - WebDriver:
             url: http://127.0.0.1/ubuxabeta/frontend/web
             browser: firefox
-            clear_cookies: false 
-            log_js_errors: true
+            #clear_cookies: false 
+            #log_js_errors: true
         - Yii2:
             part: init
             entryScript: index.php

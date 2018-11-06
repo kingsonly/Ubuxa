@@ -8,9 +8,13 @@ $db_test = require(__DIR__ . '/testDb.php');
 $transport = require(__DIR__ . '/transport.php');
 
 return [
+	'name' => 'Ubuxa',
+	'language' => 'en-GB',
+	'sourceLanguage' => 'en-GB',
+	'timeZone' => 'Africa/Lagos',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm'   => '@vendor/npm',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [

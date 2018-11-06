@@ -1,153 +1,243 @@
+<?php
+use boffins_vendor\components\controllers\ViewBoardWidget;
+?>
+
 <style>
-  
-.under_list {
+ 
+/* -------------------------------- 
+Main Components 
+-------------------------------- */
+.cd-accordion-menu {
+    width: 100%;
+    max-width: 360px;
+    background: #FFF;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    /* margin: 25px auto 20px; */
+    margin-bottom: 0px;
+}
+.cd-accordion-menu .first-list {
+  /* by defa.first-listt hide all sub menus */
+  display: none;
+}
+.cd-accordion-menu .second-list {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.cd-accordion-menu .accord-input {
+  /* hide native checkbox */
+  position: absolute;
+  opacity: 0;
+}
+.has-children {
   list-style-type: none;
 }
-
-
- .accordion {
-  width: 100%;
-  max-width: 360px;
-  margin: 30px auto 20px;
-  background: #FFF;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
- }
-
-.accordion .link {
+.second-list{
+  border-bottom: 1px solid #6d6d6d;
+}
+.cd-accordion-menu .accord-label, .cd-accordion-menu a {
+  display: block;
+  padding: 18px 18px 18px 64px;
+  background: #fff;
+  color: #ffffff;
+  font-size: 1.6rem;
+}
+.no-touch .cd-accordion-menu .accord-label:hover, .no-touch .cd-accordion-menu a:hover {
+  background: #52565d;
+}
+.cd-accordion-menu .accord-label::before, .cd-accordion-menu .accord-label::after, .cd-accordion-menu a::after {
+  /* icons */
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.cd-accordion-menu .accord-label {
   cursor: pointer;
   display: block;
   padding: 15px 15px 15px 42px;
   color: #4D4D4D;
   font-size: 14px;
   font-weight: 700;
-  border-bottom: 1px solid #CCC;
+  border-bottom: 1px solid #aba6a6;
   position: relative;
   -webkit-transition: all 0.4s ease;
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;
+  border-radius: 3px;
+}
+.accord-label {
+  margin-bottom: 0px;
+}
+.cd-accordion-menu .accord-label::before, .cd-accordion-menu .accord-label::after {
+  background-image: url(../img/cd-icons.svg);
+  background-repeat: no-repeat;
+}
+.cd-accordion-menu .accord-label::before {
+  /* arrow icon */
+  left: 18px;
+  background-position: 0 0;
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+  -moz-transform: translateY(-50%) rotate(-90deg);
+  -ms-transform: translateY(-50%) rotate(-90deg);
+  -o-transform: translateY(-50%) rotate(-90deg);
+  transform: translateY(-50%) rotate(-90deg);
+}
+.cd-accordion-menu .accord-label::after {
+  /* folder icons */
+  left: 41px;
+  background-position: -16px 0;
+}
+.cd-accordion-menu a::after {
+  /* image icon */
+  left: 36px;
+  background: url(../img/cd-icons.svg) no-repeat -48px 0;
+}
+.cd-accordion-menu .accord-input:checked + .accord-label::before {
+  /* rotate arrow */
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.cd-accordion-menu .accord-input:checked + .accord-label::after {
+  /* show open folder icon if item is checked */
+  background-position: -32px 0;
+}
+.cd-accordion-menu .accord-input:checked + .accord-label + .first-list,
+.cd-accordion-menu .accord-input:checked + .accord-label:nth-of-type(n) + .first-list {
+  /* use label:nth-of-type(n) to fix a bug on safari (<= 8.0.8) with m.first-listtiple adjacent-sibling selectors*/
+  /* show children when item is checked */
+  display: block;
+}
+.cd-accordion-menu .first-list .accord-label,
+.cd-accordion-menu .first-list a {
+  padding-left: 60px;
+  background: #444359;
+  font-size: 14px;
+  color: #d9d9d9;
+  border-radius: unset;
+}
+.no-touch .cd-accordion-menu .first-list .accord-label:hover, .no-touch
+.cd-accordion-menu .first-list a:hover {
+  background: #3c3f45;
+}
+.cd-accordion-menu > li:last-of-type > .accord-label,
+.cd-accordion-menu > li:last-of-type > a,
+.cd-accordion-menu > li > .first-list > li:last-of-type .accord-label,
+.cd-accordion-menu > li > .first-list > li:last-of-type a {
+  box-shadow: none;
+}
+.cd-accordion-menu .first-list .accord-label::before {
+  left: 36px;
+}
+.cd-accordion-menu .first-list .accord-label::after,
+.cd-accordion-menu .first-list a::after {
+  left: 59px;
+}
+.cd-accordion-menu .first-list .first-list .accord-label,
+.cd-accordion-menu .first-list .first-list a {
+  padding-left: 100px;
+}
+.cd-accordion-menu .first-list .first-list .accord-label::before {
+  left: 54px;
+}
+.cd-accordion-menu .first-list .first-list .accord-label::after,
+.cd-accordion-menu .first-list .first-list a::after {
+  left: 77px;
+}
+.cd-accordion-menu .first-list .first-list .first-list .accord-label,
+.cd-accordion-menu .first-list .first-list .first-list a {
+  padding-left: 118px;
+}
+.cd-accordion-menu .first-list .first-list .first-list .accord-label::before {
+  left: 72px;
+}
+.cd-accordion-menu .first-list .first-list .first-list .accord-label::after,
+.cd-accordion-menu .first-list .first-list .first-list a::after {
+  left: 95px;
 }
 
-.accordion li:last-child .link {
-  border-bottom: 0;
+.cd-accordion-menu.animated .accord-label::before {
+  /* this class is used if you're using jquery to animate the accordion */
+  -webkit-transition: -webkit-transform 0.3s;
+  -moz-transition: -moz-transform 0.3s;
+  transition: transform 0.3s;
 }
-
-.accordion .first-list i {
+.iconz {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    font-size: 18px;
+    color: #595959 !important;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.iconz-down {
+    right: 12px;
+    left: auto;
+    font-size: 16px;
+    position: absolute;
+    top: 16px;
+    color: #595959 !important;
+    transition: all 0.4s ease;
+}
+.iconzz {
   position: absolute;
-  top: 16px;
-  left: 12px;
+  left: 50px;
   font-size: 18px;
-  color: #595959;
+  color: #595959 !important;
   -webkit-transition: all 0.4s ease;
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
-
-.accordion .first-list i.fa-chevron-down {
-  right: 12px;
-  left: auto;
-  font-size: 16px;
-}
-
-.accordion .first-list .open .link {
-  color: #b63b4d;
-}
-
-.accordion .first-list .open i {
-  color: #b63b4d;
-}
-.accordion .first-list .open i.fa-chevron-down {
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
-.accordion .first-list .default .submenu {display: block;}
-/**
- * Submenu
- -----------------------------*/
- .submenu {
-  display: none;
-  background: #444359;
-  font-size: 14px;
- }
-
- .submenu first-list {
-  border-bottom: 1px solid #4b4a5e;
- }
-
- .submenu a {
-  display: block;
-  text-decoration: none;
-  color: #d9d9d9;
-  padding: 12px;
-  padding-left: 42px;
-  -webkit-transition: all 0.25s ease;
-  -o-transition: all 0.25s ease;
-  transition: all 0.25s ease;
- }
-
-.accord:hover {
-  background: #b63b4d;
-  color: #FFF;
- }
 </style>
 
-  <ul id="accordion" class="accordion under_list">
-    <li class="first-list">
-      <div class="link"><i class="fa fa-paint-brush iconz"></i>Diseño web<i class="fa fa-chevron-down"></i></div>
-      <ul class="submenu under_list">
-        <li class="second-list"><a href="#" class="accord">Photoshop</a></li>
-      </ul>
-    </li>
-    <li class="first-list">
-      <div class="link"><i class="fa fa-code iconz"></i>Desarrollo front-end<i class="fa fa-chevron-down"></i></div>
-      <ul class="submenu under_list">
-        <li class="second-list"><a href="#" class="accord">Javascript</a></li>
-      </ul>
-    </li>
-    <li class="first-list">
-      <div class="link"><i class="fa fa-mobile iconz"></i>Diseño responsive<i class="fa fa-chevron-down"></i></div>
-      <ul class="submenu under_list">
-        <li class="second-list"><a href="#" class="accord">Tablets</a></li>
-      </ul>
-    </li>
-    <li class="first-list"><div class="link"><i class="fa fa-globe iconz"></i>Posicionamiento web<i class="fa fa-chevron-down"></i></div>
-      <ul class="submenu under_list">
-        <li class="second-list"><a href="#" class="accord">Google</a></li>
-      </ul>
+  <ul class="cd-accordion-menu animated">
+    <li class="has-children">
+
+      <input type="checkbox" name="group-1" class="accord-input" id="group-1">
+      <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
+
+          <ul class="first-list">
+            <li class="has-children">
+              <?php if (isset($this->blocks['subfolders'])){ ?>
+                  <?= $this->blocks['subfolders'] ?>
+              <?php } ?>           
+            </li>      
+          </ul>
     </li>
   </ul>
 
 <?php
 $accordion = <<<JS
-  $(function() {
-  var Accordion = function(el, multiple) {
-    this.el = el || {};
-    this.multiple = multiple || false;
+$(document).ready(function(){
+  var accordionsMenu = $('.cd-accordion-menu');
 
-    // Variables privadas
-    var links = this.el.find('.link');
-    // Evento
-    links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+  if( accordionsMenu.length > 0 ) {
+    
+    accordionsMenu.each(function(){
+      var accordion = $(this);
+      //detect change in the input[type="checkbox"] value
+      accordion.on('change', 'input[type="checkbox"]', function(){
+        var checkbox = $(this);
+        console.log(checkbox.prop('checked'));
+        ( checkbox.prop('checked') ) ? checkbox.siblings('ul').attr('style', 'display:none;').slideDown(300) : checkbox.siblings('ul').attr('style', 'display:block;').slideUp(300);
+      });
+    });
   }
-
-  Accordion.prototype.dropdown = function(e) {
-    var \$el = e.data.el;
-      \$this = $(this),
-      \$next = \$this.next();
-
-    \$next.slideToggle();
-    \$this.parent().toggleClass('open');
-
-    if (!e.data.multiple) {
-      \$el.find('.submenu').not(\$next).slideUp().parent().removeClass('open');
-    };
-  } 
-
-  var accordion = new Accordion($('#accordion'), false);
 });
 JS;
 $this->registerJs($accordion);
