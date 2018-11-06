@@ -5,19 +5,19 @@ namespace frontend\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%value_long_string}}".
+ * This is the model class for table "{{%value_money}}".
  *
- * @property int $id preferred table for long strings as it has an index for searching
- * @property string $value
+ * @property int $id
+ * @property string $value the actual value of the cell
  */
-class ValueLongString extends \boffins_vendor\classes\BoffinsArRootModel
+class ValueMoney extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%value_long_string}}';
+        return '{{%value_money}}';
     }
 
     /**
@@ -26,8 +26,7 @@ class ValueLongString extends \boffins_vendor\classes\BoffinsArRootModel
     public function rules()
     {
         return [
-            [['value'], 'required'],
-            [['value'], 'string'],
+            [['value'], 'number'],
         ];
     }
 
