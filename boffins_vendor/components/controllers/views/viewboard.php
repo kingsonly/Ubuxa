@@ -13,20 +13,20 @@
     transition: 0.5s;
     padding-top: 20px;
     overflow: scroll;
+    margin: auto;
 }
 
 .sidenav .closebtn {
-    padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
     display: block;
     transition: 0.3s;
-
+    border-radius: 50%;
 }
 
 .sidenav .closebtn:hover{
-    color: #f1f1f1;
+    color: #000;
 }
 
 .sidenav .closebtn {
@@ -50,7 +50,8 @@
     border-radius: 3px;
     padding-bottom: 15px;
     padding-top: 15px;
-    background: #fff;
+    background: #3F51B5;
+    color: #fff;
 }
 
 </style>

@@ -73,6 +73,7 @@ class TaskController extends Controller
         $users = $folder->users;
         $label = new label();
         $taskLabel = new TaskLabel();
+        $reminder = new Reminder();
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -102,6 +103,7 @@ class TaskController extends Controller
             'users' => $users,
             'label' => $label,
             'taskLabel' => $taskLabel,
+            'reminder' => $reminder,
         ]);
     }
 
