@@ -165,11 +165,11 @@ use boffins_vendor\components\controllers\MenuWidget;
         <div class="row">
 
             <section>
-            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
 	            	<div class="row">
+	            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
 	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+	            		<?php Pjax::end(); ?>
 	            	</div>
-            	<?php Pjax::end(); ?>
             </section>
         </div>
 
