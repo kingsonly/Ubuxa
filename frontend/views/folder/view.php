@@ -15,12 +15,10 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
-
-
-
+use frontend\assets\AppAsset;
+AppAsset::register($this);
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
-
 
 use boffins_vendor\components\controllers\MenuWidget;
 
@@ -96,7 +94,7 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-    
+
 </style>
 
 
@@ -131,9 +129,16 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
-            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+
+
             	<div class="row test5">
-            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::end(); ?>
+
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
+
+
             	</div>
             	<?php Pjax::end(); ?>
             </section>
@@ -147,6 +152,7 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
+
     
         
 </section>
@@ -185,89 +191,42 @@ $img = $model->folder_image;
     Modal::end();
 ?>
 
+
 <?php 
 $indexJs = <<<JS
 
-$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
-}); })
+	$(document).ready(function() {
 
-	$('.test3').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
+  var tour = new Tour({
 
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-   $('.test1').each(function(){
-	$(this).click(function(){
-		$('#task2'+$(this).data('number')).slideToggle();
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Title1",            
+          content: "Message 1.",
+          debug:true
+        },
+        {
+          element: "#addTask",
+          title: "Title2",
+          content: "Message 2",
+         debug:true
+        }
 
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    
-    $('.test').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
+      ],
+      backdrop: true,
+      storage: false,
+      debug: true
 
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-
-	
-
-	$('.client').on('click', function() {
-					$(document).find('#sliderwizz1').show();
-					$(document).find('#sliderwizz').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz3').hide();
-	})
-	
-	$('.supplier').on('click', function() {
-					$(document).find('#sliderwizz2').show();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('.contact').on('click', function() {
-					$(document).find('#sliderwizz3').show();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('#activeuser').on('click', function() {
-					$(document).find('#sliderwizz').show();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-	})
-
-	$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
   });
-	
-	
+ tour.init();
+ tour.start();
+
+});	
+
 JS;
  
-$this->registerJs($indexJs);
+$this->registerJs($indexJs, $this::POS_READY);
 ?>
 	
 <?php
@@ -276,6 +235,7 @@ $this->registerJs($indexJs);
     'content'=>'Find all task in this folder here.',
     'element'=>'.taskz-listz'
 ];
+
 
 // $steps[1] = ... etc
 $steps[1] = [
@@ -327,4 +287,7 @@ $steps[3] = [
         ]
 ]);
 ?>			
+
+<?= MenuWidget::widget(); ?>
+	
 		
