@@ -105,15 +105,6 @@ use boffins_vendor\components\controllers\MenuWidget;
     .content-header{
         display:none;
     }
-.view-task-board{
-	display: none;
-	background-color: #fff;
-	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-bottom: 50px;
-	padding-top: 10px;
-	overflow: scroll;
-	position: relative;
-}
 .owl-nav{
 	display:none;
 }
@@ -269,7 +260,7 @@ use boffins_vendor\components\controllers\MenuWidget;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-	            	
+	            			
 	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
 	            	
             		<?php Pjax::end(); ?>
@@ -281,33 +272,15 @@ use boffins_vendor\components\controllers\MenuWidget;
 
         <span class="folder"></span>
     </div>
-    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    <div class="view-task-board">
+    <? $this->beginBlock('kanban')?>
+	    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+	    <div class="view-task-board">
 
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
-    </div>
-    <?php Pjax::end(); ?>
+	    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
+	    </div>
+	    <?php Pjax::end(); ?>
+    <? $this->endBlock();?>
 </section>
-
-
-  <? $this->beginBlock('sidebar')?>
-  	<div id="two">
-    	<ul class="list_load">
-    		<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-    	</ul>
-    </div>
-    <div id="three">
-    	<ul class="list_load">
-			<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-			<li class="list_item"><a href="#">List Item 04</a></li>
-		</ul>
-    </div>
-  <? $this->endBlock();?>
-
 <?php 
 $indexJs = <<<JS
 

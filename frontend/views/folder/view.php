@@ -14,8 +14,9 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
+use frontend\assets\AppAsset;
 
-
+AppAsset::register($this);
 
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
@@ -95,14 +96,7 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-    .view-task-board{
-	display: none;
-	background-color: #fff;
-	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-top: 10px;
-	position: relative;
-	overflow: scroll;
-}
+
     
 </style>
 
@@ -134,9 +128,11 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
+
             	<div class="row test5">
-					
-            		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::end(); ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
 
@@ -144,13 +140,6 @@ $img = $model->folder_image;
             </section>
         </div>
     </div>
-<<<<<<< HEAD
-    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
-    </div>
-    <?php Pjax::end(); ?>
-=======
     
     <? $this->beginBlock('kanban')?>
     	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
@@ -159,54 +148,42 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-    
->>>>>>> 1c66a941306da80cf156b903d55eb031872e006e
-        
 </section>
-
-  <? $this->beginBlock('sidebar')?>
-  	<div id="two">
-    	<ul class="list_load">
-    		<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-    	</ul>
-    </div>
-    <div id="three">
-    	<ul class="list_load">
-			<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-			<li class="list_item"><a href="#">List Item 04</a></li>
-		</ul>
-    </div>
-  <? $this->endBlock();?>
-
 <?php 
 $indexJs = <<<JS
 
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
+	$(document).ready(function() {
+
+  var tour = new Tour({
+
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Title1",            
+          content: "Message 1.",
+          debug:true
+        },
+        {
+          element: "#addTask",
+          title: "Title2",
+          content: "Message 2",
+         debug:true
+        }
+
+      ],
+      backdrop: true,
+      storage: false,
+      debug: true
+
   });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
-	
+ tour.init();
+ tour.start();
+
+});	
 JS;
  
-$this->registerJs($indexJs);
+$this->registerJs($indexJs, $this::POS_READY);
 ?>
-
-
-
-
-
 
 <?= MenuWidget::widget(); ?>
 	
