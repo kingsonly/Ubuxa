@@ -177,8 +177,14 @@ text-overflow: ellipsis;
 }
 
 .create-new-<?= $htmlAttributes; ?>{
-	display:none;
+	
 }
+.display-non{
+	display: none;
+	}
+.display{
+	display: block;
+	}
 #carousles{
 	
 }
@@ -271,8 +277,8 @@ text-overflow: ellipsis;
          <?}?>
         </div>
       </div>
-	<div class="create-new-<?= $htmlAttributes; ?>">
-		<?= FolderCreateWidget::widget(['folderPrivacy'=>$folderCarouselWidgetAttributes['folderPrivacy']]);?>
+	<div class="create-new-<?= $htmlAttributes; ?> display-non">
+		<?= FolderCreateWidget::widget(['folderPrivacy'=>$folderCarouselWidgetAttributes['folderPrivacy'],'refreshSectionElement' => 'create-folder-refresh']);?>
 	</div>
     </section>
 

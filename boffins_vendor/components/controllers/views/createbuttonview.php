@@ -97,14 +97,16 @@ $Carousel = <<<Carousels
 $("#"+"$jsEventTriger"+"-image").click(function(e){
     
 	$( ".$jsEventTriger-new-content" ).slideUp( 300 ).delay( 800 );
-	$( ".create-new-$jsEventTriger" ).slideDown( 300 ).delay( 800 ).fadeIn( 400 );
+	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
+	$( ".create-new-$jsEventTriger" ).addClass('display');
 	
      e.stopPropagation();
 });
 
 $("#"+"$jsEventTriger"+"-text").click(function(e){
 	$( ".$jsEventTriger-new-content" ).hide();
-	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
+	$( ".create-new-$jsEventTriger" ).addClass('display');
      e.stopPropagation();
 });
 
@@ -115,7 +117,9 @@ $("#"+"$jsEventTriger"+"-icon").click(function(e){
 
 $("#"+"$jsEventTriger"+"-component").click(function(e){
 	$( ".$jsEventTriger-new-content" ).hide();
-	$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+	//$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
+	$( ".create-new-$jsEventTriger" ).addClass('display');
      e.stopPropagation();
 });
 
@@ -129,8 +133,10 @@ $(".create-new-folder").click(function(e){
 });
 
 $(document).click(function(){
+	//$('.create-new-folder').hide();
+	$('.create-new-folder').addClass('display-non');
+	$('.create-new-folder').removeClass('display');
     $('.folder-new-content').show()
-	$('.create-new-folder').hide()
 });
 
 

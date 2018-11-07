@@ -39,6 +39,15 @@ class Folder extends FolderARModel
     {
         return 'tm_folder';
     }
+	
+	public  function init()
+    {
+		parent::init();
+		//if(empty($this->description)){
+			//$this->description = 'Add a description';
+		//}
+        Yii::$app->formatter->nullDisplay = 'N\A';
+    }
 
     /**
      * {@inheritdoc}

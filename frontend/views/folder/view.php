@@ -113,7 +113,9 @@ $img = $model->folder_image;
                   	<?= OnlineClients::widget() ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+   						 	
+							<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+							
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
                     	</div>
             </section>
@@ -200,7 +202,7 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 			}
 		})
 	})
-    $('.test1').each(function(){
+   $('.test1').each(function(){
 	$(this).click(function(){
 		$('#task2'+$(this).data('number')).slideToggle();
 

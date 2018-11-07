@@ -284,7 +284,7 @@ text-overflow: ellipsis;
 }
 </style>
 
-<?php Pjax::begin(['id'=>'testsss']); ?>
+<?php Pjax::begin(['id'=>'refresh-after-create']); ?>
 <div class="folder-index">
 
 		<? 
@@ -309,7 +309,7 @@ text-overflow: ellipsis;
 				<div>
 				<div class="create-new-test col-sm-8">
 					<div class="create-new-test">
-						<?= FolderCreateWidget::widget(['refreshSectionElement' => 'testsss']); ?>
+						<?= FolderCreateWidget::widget(['refreshSectionElement' => 'refresh-after-create']); ?>
 					</div>
 					
 					<br>

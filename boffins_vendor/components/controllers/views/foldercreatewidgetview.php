@@ -178,7 +178,7 @@ $js = <<<JSS
 			   $.pjax.reload({container:"#"+"$pjaxId",async: false});
 
 			}else{
-					options = {
+			options = {
 		  "closeButton": true,
 		  "debug": false,
 		  "newestOnTop": true,
