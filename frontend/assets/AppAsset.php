@@ -27,6 +27,6 @@ class AppAsset extends AssetBundle
         '\frontend\assets\DragulaAsset',
         '\frontend\assets\CaretAsset',
         '\frontend\assets\AtMentionAsset',
-        '\frontend\assets\BootstrapTour',
+        
     ];
 }

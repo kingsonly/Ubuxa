@@ -140,7 +140,7 @@ $img = $model->folder_image;
 
 
             	</div>
-            	<?php Pjax::end(); ?>
+            	
             </section>
         </div>
     </div>
