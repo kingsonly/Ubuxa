@@ -15,10 +15,12 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
-use frontend\assets\AppAsset;
-AppAsset::register($this);
+
+
+
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
+
 
 use boffins_vendor\components\controllers\MenuWidget;
 
@@ -27,6 +29,75 @@ use boffins_vendor\components\controllers\MenuWidget;
 $img = $model->folder_image; 
 ?>
 <style>
+.row.content {
+	 height: 1500px;
+}
+ .onboardnav {
+	 background-color: #f1f1f1;
+	 height: 100%;
+}
+ footer {
+	 background-color: #555;
+	 color: white;
+	 padding: 15px;
+}
+ @media screen and (max-width: 767px) {
+	 .onboardnav {
+		 height: auto;
+		 padding: 15px;
+	}
+	 .row.content {
+		 height: auto;
+	}
+}
+ .popover {
+	 max-width: 375px;
+}
+ .popover .fa {
+	 color: #D47075;
+	 padding-top: 5px;
+}
+ .popover-content {
+	 /* padding: 5px 0; */
+}
+ .hca-tooltip--left-nav {
+	 position: absolute;
+	 background-color: #fff;
+	 border-radius: 6px;
+	 border: 1px solid #efefef;
+	 left: 78px;
+	 top: 60px;
+	 padding: 10px 10px 15px 15px;
+	 font-size: 1em;
+	 width: 340px;
+	 box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	 color: #000;
+	 z-index: 1000;
+	 text-decoration: none;
+}
+ .hca-tooltip--left-nav .hca-tooltip--okay-btn {
+	 padding: 12px 20px;
+	 line-height: 15px;
+	 background-color: #408DDD;
+	 border: none;
+	 color: #fff;
+}
+ .hca-tooltip--left-nav .hca-border-circle--40 {
+	 width: 40px;
+	 height: 40px;
+	 margin-top: 10px;
+	 border-radius: 50%;
+	 font-size: .8em;
+	 color: #F07C8B;
+	 line-height: 38px;
+	 text-align: center;
+	 background: #fff;
+	 border: 1px solid #F07C8B;
+}
+
+*{
+	text-decoration: none;
+}
 	#flash {
 		display: none;
 	}
@@ -94,7 +165,7 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-
+    
 </style>
 
 
@@ -111,9 +182,7 @@ $img = $model->folder_image;
                   	<?= OnlineClients::widget() ?>
                   </div>  
                     	<div class="row">
-   						 	
-							<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-							
+   						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
                     	</div>
             </section>
@@ -129,18 +198,12 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
-
-
+            	
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?php Pjax::end(); ?>
-
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
-
-
             	</div>
-            	
             </section>
         </div>
     </div>
@@ -152,7 +215,6 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-
     
         
 </section>
@@ -191,65 +253,104 @@ $img = $model->folder_image;
     Modal::end();
 ?>
 
-
 <?php 
 $indexJs = <<<JS
 
-	$(document).ready(function() {
+$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
+}); })
+
+	$('.test3').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    $('.test1').each(function(){
+	$(this).click(function(){
+		$('#task2'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    
+    $('.test').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+
+	
+
+	$('.client').on('click', function() {
+					$(document).find('#sliderwizz1').show();
+					$(document).find('#sliderwizz').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz3').hide();
+	})
+	
+	$('.supplier').on('click', function() {
+					$(document).find('#sliderwizz2').show();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('.contact').on('click', function() {
+					$(document).find('#sliderwizz3').show();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('#activeuser').on('click', function() {
+					$(document).find('#sliderwizz').show();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+	})
+
+	$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
+
+  $(function() {
 
   var tour = new Tour({
-
     steps: [
         {
           element: ".taskz-listz",
           title: "Title1",            
-          content: "Message 1.",
-          debug:true
+          content: "Message 1"
         },
         {
           element: "#addTask",
           title: "Title2",
           content: "Message 2",
-         debug:true
-        }
-
-      ],
-      backdrop: true,
-      storage: false,
-      debug: true
-
-  });
- tour.init();
- tour.start();
-
-});	
-
-JS;
- 
-$this->registerJs($indexJs, $this::POS_READY);
-?>
-	
-<?php
-	$steps[0] = [
-    'title'=>'Step 1',
-    'content'=>'Find all task in this folder here.',
-    'element'=>'.taskz-listz'
-];
-
-
-// $steps[1] = ... etc
-$steps[1] = [
-    'title'=>'Step 2',
-    'content'=>'You can create new task here',
-    'element'=>'#addTask'
-];
-
-$steps[2] = [
-    'title'=>'Step 3',
-    'content'=>'Do more from the side bar',
-    'element'=>'.menu-icon',
-    'onShow' => $this->registerJs(
-    	"$(function(tour) {
+        },
+        {
+          element: ".side_menu",
+          title: "Title3",
+          content: "Message 3",
+          onShow: function(tour) {
     		$('.list_load, .list_item').stop();
 	$(this).removeClass('closed').addClass('opened');
 
@@ -267,27 +368,42 @@ $steps[2] = [
 			});
 		},100*i);
 	});
-    })"
-    )
-];
+    }
+        },
+        {
+          element: ".side_menu",
+          title: "Title4",
+          content: "Message 4",
+        },
+        
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,    
+    onEnd: function (tour) {
+  		$('.list_load, .list_item').stop();
+	$(this).removeClass('opened').addClass('closed');
 
-$steps[3] = [
-    'title'=>'Step 4',
-    'content'=>'Side bar',
-    'element'=>'.side_menu'
-];
+	$('.side_menu').css({ 'left':'-300px' });
 
+	var count = $('.list_item').length;
+	$('.list_item').css({
+		'opacity':'0',
+		'margin-left':'-20px'
+	});
+	$('.list_load').slideUp(300);
+  		},
+  });
+ tour.init();
+ tour.start(true);
 
-\macrowish\widgets\BootstrapTour::widget([
-    'steps'=>$steps,
-    'options'=>[
-        'backdrop'=>'true',
-        'storage' => 'false',
-        'debug' => 'true'
-        ]
-]);
-?>			
-
-<?= MenuWidget::widget(); ?>
+});
 	
+	
+JS;
+ 
+$this->registerJs($indexJs);
+?>
+	
+		
 		
