@@ -6,15 +6,15 @@ use yii\web\View;
 
 class BootstrapTour extends AssetBundle
 {
-	public $sourcePath="@npm/bootstrap-tour";
+	public $sourcePath="@vendor/sorich87/bootstrap-tour/build";
 	public $baseUrl = '@web';
 	public $css = [
-		'build/css/bootstrap-tour.min.css',
+		'css/bootstrap-tour.css',
     ];
-	public $js        =[
-		'build/js/bootstrap-tour.js',
+	public $js=[
+		'js/bootstrap-tour.js',
 	];
-	public $jsOptions =[
-		'position'=>View::POS_HEAD,
-	];
+	public $depends = [
+        'yii\bootstrap\BootstrapPluginAsset',
+    ];
 }

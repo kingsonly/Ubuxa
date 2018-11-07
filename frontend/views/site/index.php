@@ -273,12 +273,9 @@ use boffins_vendor\components\controllers\MenuWidget;
         <span class="folder"></span>
     </div>
     <? $this->beginBlock('kanban')?>
-	    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-	    <div class="view-task-board">
-
+    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
 	    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $task->displayTask(), 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser, 'label' => $label, 'taskLabel' => $taskLabel]) ?>
-	    </div>
-	    <?php Pjax::end(); ?>
+	  	<?php Pjax::end(); ?> 
     <? $this->endBlock();?>
 </section>
 <?php 

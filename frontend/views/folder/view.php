@@ -14,7 +14,7 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
-use frontend\assets\AppAsset;
+use yii\web\View;
 
 AppAsset::register($this);
 
@@ -29,6 +29,75 @@ use boffins_vendor\components\controllers\MenuWidget;
 $img = $model->folder_image; 
 ?>
 <style>
+.row.content {
+	 height: 1500px;
+}
+ .onboardnav {
+	 background-color: #f1f1f1;
+	 height: 100%;
+}
+ footer {
+	 background-color: #555;
+	 color: white;
+	 padding: 15px;
+}
+ @media screen and (max-width: 767px) {
+	 .onboardnav {
+		 height: auto;
+		 padding: 15px;
+	}
+	 .row.content {
+		 height: auto;
+	}
+}
+ .popover {
+	 max-width: 375px;
+}
+ .popover .fa {
+	 color: #D47075;
+	 padding-top: 5px;
+}
+ .popover-content {
+	 /* padding: 5px 0; */
+}
+ .hca-tooltip--left-nav {
+	 position: absolute;
+	 background-color: #fff;
+	 border-radius: 6px;
+	 border: 1px solid #efefef;
+	 left: 78px;
+	 top: 60px;
+	 padding: 10px 10px 15px 15px;
+	 font-size: 1em;
+	 width: 340px;
+	 box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	 color: #000;
+	 z-index: 1000;
+	 text-decoration: none;
+}
+ .hca-tooltip--left-nav .hca-tooltip--okay-btn {
+	 padding: 12px 20px;
+	 line-height: 15px;
+	 background-color: #408DDD;
+	 border: none;
+	 color: #fff;
+}
+ .hca-tooltip--left-nav .hca-border-circle--40 {
+	 width: 40px;
+	 height: 40px;
+	 margin-top: 10px;
+	 border-radius: 50%;
+	 font-size: .8em;
+	 color: #F07C8B;
+	 line-height: 38px;
+	 text-align: center;
+	 background: #fff;
+	 border: 1px solid #F07C8B;
+}
+
+*{
+	text-decoration: none;
+}
 	#flash {
 		display: none;
 	}
@@ -128,14 +197,12 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
-
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?php Pjax::end(); ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
-
             	</div>
             </section>
         </div>
@@ -176,17 +243,76 @@ $indexJs = <<<JS
       debug: true
 
   });
- tour.init();
- tour.start();
+  $(function() {
 
-});	
+  var tour = new Tour({
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Title1",            
+          content: "Message 1"
+        },
+        {
+          element: "#addTask",
+          title: "Title2",
+          content: "Message 2",
+        },
+        {
+          element: ".side_menu",
+          title: "Title3",
+          content: "Message 3",
+          onShow: function(tour) {
+    		$('.list_load, .list_item').stop();
+	$(this).removeClass('closed').addClass('opened');
+
+	$('.side_menu').css({ 'left':'0px' });
+
+	var count = $('.list_item').length;
+	$('.list_load').slideDown( (count*.6)*100 );
+	$('.list_item').each(function(i){
+		var thisLI = $(this);
+		timeOut = 100*i;
+		setTimeout(function(){
+			thisLI.css({
+				'opacity':'1',
+				'margin-left':'0'
+			});
+		},100*i);
+	});
+    }
+        },
+        {
+          element: ".side_menu",
+          title: "Title4",
+          content: "Message 4",
+        },
+        
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,    
+    onEnd: function (tour) {
+  		$('.list_load, .list_item').stop();
+	$(this).removeClass('opened').addClass('closed');
+
+	$('.side_menu').css({ 'left':'-300px' });
+
+	var count = $('.list_item').length;
+	$('.list_item').css({
+		'opacity':'0',
+		'margin-left':'-20px'
+	});
+	$('.list_load').slideUp(300);
+  		},
+  });
+ tour.init();
+ tour.start(true);
+
+});
+
 JS;
  
 $this->registerJs($indexJs, $this::POS_READY);
 ?>
-
-<?= MenuWidget::widget(); ?>
-	
-	
-			
+		
 		
