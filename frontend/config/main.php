@@ -18,6 +18,10 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
+	'formatter' => [
+        'class' => 'yii\i18n\Formatter',
+        'nullDisplay' => '',
+    ],
         'user' => [
 			'class' => 'boffins_vendor\classes\UserComponent',
             'identityClass' => 'frontend\models\UserDb',
