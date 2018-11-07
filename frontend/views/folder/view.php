@@ -15,6 +15,7 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
+use frontend\assets\AppAsset;
 
 AppAsset::register($this);
 
