@@ -124,6 +124,9 @@ a,
 		position: fixed;
 		top: 0;
 		min-width: 300px;
+		
+	}
+	.side-drop{
 		z-index: 1000;
 	}
 	.side_menu .container {

@@ -10,6 +10,7 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 ?>
+<<<<<<< HEAD
 <style type="text/css">
 table{
   width:100%;
@@ -51,7 +52,7 @@ td{
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 
 </style>
-<div class="side_menu">
+<div class="side_menu side-drop">
 
     	<div class="client-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
     		<div class="row client-content" style="display: none">
