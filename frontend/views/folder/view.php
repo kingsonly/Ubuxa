@@ -15,9 +15,7 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
-//use frontend\assets\AppAsset;
-
-//AppAsset::register($this);
+use frontend\assets\AppAsset;
 
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
@@ -200,10 +198,10 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?//= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?php Pjax::end(); ?>
 
-            		<?//= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
             	</div>
             </section>
         </div>
@@ -212,37 +210,53 @@ $img = $model->folder_image;
     <? $this->beginBlock('kanban')?>
     	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
 		    <div class="view-task-board">
-		    	<?//= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-</section>
+    
+  <? $this->beginBlock('subfolders')?>
+  	<?php 
+    	$num = 1;
+        foreach ($model->subFolders as $subfolders) {
+        $checks = $subfolders->buildTree($subfolders->subFolders, $subfolders->id);
+        $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
+    ?>
+         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
+            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+            <?php
+            	$num2 = 2;
+            	foreach ($checks as $innerFolders) { ?>
+            		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>">
+		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>
+              		</ul>
+      
+           <?php } ?>
+        <?php $num2++;$num++; }?>
+  <? $this->endBlock();?>
+  </section>
+
+<? 
+    Modal::begin([
+        'header' =>'<h1 id="headers"></h1>',
+        'id' => 'boardContent',
+        'size' => 'modal-md',
+        //'backdrop' => false,  
+    ]);
+?>
+<div id="viewcontent"></div>
+<?
+    Modal::end();
+?>
 <?php 
 $indexJs = <<<JS
 
-	$(document).ready(function() {
-
-  var tour = new Tour({
-
-    steps: [
-        {
-          element: ".taskz-listz",
-          title: "Title1",            
-          content: "Message 1.",
-          debug:true
-        },
-        {
-          element: "#addTask",
-          title: "Title2",
-          content: "Message 2",
-         debug:true
-        }
-
-      ],
-      backdrop: true,
-      storage: false,
-      debug: true
-
+$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
   });
   $(function() {
 
@@ -263,36 +277,81 @@ $indexJs = <<<JS
           title: "Title3",
           content: "Message 3",
           onShow: function(tour) {
+          	$('.side_menu').removeClass('side-drop');
     		$('.list_load, .list_item').stop();
-	$(this).removeClass('closed').addClass('opened');
+			$(this).removeClass('closed').addClass('opened');
 
-	$('.side_menu').css({ 'left':'0px' });
+			$('.side_menu').css({ 'left':'0px' });
 
-	var count = $('.list_item').length;
-	$('.list_load').slideDown( (count*.6)*100 );
-	$('.list_item').each(function(i){
-		var thisLI = $(this);
-		timeOut = 100*i;
-		setTimeout(function(){
-			thisLI.css({
-				'opacity':'1',
-				'margin-left':'0'
+			var count = $('.list_item').length;
+			$('.list_load').slideDown( (count*.6)*100 );
+			$('.list_item').each(function(i){
+				var thisLI = $(this);
+				timeOut = 100*i;
+				setTimeout(function(){
+					thisLI.css({
+						'opacity':'1',
+						'margin-left':'0'
+					});
+				},100*i);
 			});
-		},100*i);
-	});
-    }
+		    }
         },
         {
-          element: ".side_menu",
+          element: ".open-board",
           title: "Title4",
           content: "Message 4",
+          onShow: function(tour){
+          	$('.side_menu').addClass('side-drop');
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo("#content");
+		    $(".tour-step-background").appendTo("#content");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-container",
+          title: "Task board",
+          content: "This is your task board.",
+          placement: "bottom",
+          onShow: function(tour){
+          	$('#mySidenav').css({'width':'100%'});
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".view-task-board");
+		    $(".tour-step-background").appendTo(".view-task-board");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-item:first",
+          title: "Title 6",
+          content: "Message 6",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-container");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".add-card:first",
+          title: "Title 7",
+          content: "Message 7",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-column:first");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
         },
         
       ],
     backdrop: true,  
-    storage: false,
+    storage: true,
     smartPlacement: true,    
     onEnd: function (tour) {
+    	$('.side_menu').addClass('side-drop');
+        $('#mySidenav').css({'width':'0'})
   		$('.list_load, .list_item').stop();
 	$(this).removeClass('opened').addClass('closed');
 
@@ -313,7 +372,5 @@ $indexJs = <<<JS
 
 JS;
  
-$this->registerJs($indexJs, $this::POS_READY);
+$this->registerJs($indexJs);
 ?>
-		
-		

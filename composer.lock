@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6c17c3e408ace738c6746df8196d811f",
+    "content-hash": "241cc475c7ee5d9d67852fae13283874",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2383,126 +2383,7 @@
                 }
             ],
             "description": "Creates a true array based on `arraylike`, starting at `startIndex`.",
-            "homepage": "https://github.com/bevacqua/atoa#readme",
-            "time": "2015-07-02T15:12:19+00:00"
-        },
-        {
-            "name": "npm-asset/bootstrap",
-            "version": "3.3.7",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-3.3.7.tgz",
-                "reference": null,
-                "shasum": "5a389394549f23330875a3b150656574f8a9eb71"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/twbs/bootstrap/issues"
-                },
-                "npm-asset-files": [
-                    "dist",
-                    "fonts",
-                    "grunt",
-                    "js/*.js",
-                    "less/**/*.less",
-                    "Gruntfile.js",
-                    "LICENSE"
-                ],
-                "npm-asset-main": "./dist/js/npm",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/twbs/bootstrap.git"
-                },
-                "npm-asset-scripts": {
-                    "change-version": "node grunt/change-version.js",
-                    "update-shrinkwrap": "npm shrinkwrap --dev && shx mv ./npm-shrinkwrap.json ./grunt/npm-shrinkwrap.json",
-                    "test": "grunt test"
-                },
-                "npm-asset-engines": {
-                    "node": ">=0.10.1"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Twitter, Inc."
-                }
-            ],
-            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
-            "homepage": "http://getbootstrap.com",
-            "keywords": [
-                "css",
-                "framework",
-                "front-end",
-                "less",
-                "mobile-first",
-                "responsive",
-                "web"
-            ],
-            "time": "2016-07-25T16:09:42+00:00"
-        },
-        {
-            "name": "npm-asset/bootstrap-tour",
-            "version": "0.12.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/bootstrap-tour/-/bootstrap-tour-0.12.0.tgz",
-                "reference": null,
-                "shasum": "c56eb48debe9cf788378a20184ef5a761b13b650"
-            },
-            "require": {
-                "npm-asset/bootstrap": "~3",
-                "npm-asset/jquery": ">=1.8"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/sorich87/bootstrap-tour/issues"
-                },
-                "npm-asset-main": "./build/js/bootstrap-tour.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/sorich87/bootstrap-tour.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "gulp dist",
-                    "test": "gulp test"
-                },
-                "npm-asset-engines": {
-                    "node": ">= 0.8.0"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Ulrich Sossou",
-                    "email": "sorich87@gmail.com",
-                    "url": "http://ulrichsossou.com"
-                },
-                {
-                    "name": "Emanuele Marchi",
-                    "email": "emanuele@lostcrew.it",
-                    "url": "http://lostcrew.it"
-                },
-                {
-                    "name": "Nicola Molinari",
-                    "email": "emmenko@gmail.com"
-                }
-            ],
-            "description": "Quick and easy way to build your product tours with Bootstrap Popovers.",
-            "homepage": "http://bootstraptour.com",
-            "keywords": [
-                "bootstrap",
-                "intro",
-                "js",
-                "tour",
-                "tour"
-            ],
-            "time": "2017-10-03T13:49:46+00:00"
+            "homepage": "https://github.com/bevacqua/atoa#readme"
         },
         {
             "name": "npm-asset/contra",
@@ -2516,6 +2397,15 @@
             "require": {
                 "npm-asset/atoa": "1.0.0",
                 "npm-asset/ticky": "1.0.1"
+            },
+            "require-dev": {
+                "npm-asset/assert": "~1.1.0",
+                "npm-asset/browserify": "10.2.4",
+                "npm-asset/jshint": "~2.4.1",
+                "npm-asset/jshint-stylish": "~0.1.5",
+                "npm-asset/jshint-tap": "0.0.1",
+                "npm-asset/mocha": "~1.17.0",
+                "npm-asset/uglify-js": "2.4.23"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2557,8 +2447,7 @@
                 "generator",
                 "promises",
                 "q"
-            ],
-            "time": "2016-05-20T17:01:34+00:00"
+            ]
         },
         {
             "name": "npm-asset/crossvent",
@@ -2571,6 +2460,23 @@
             },
             "require": {
                 "npm-asset/custom-event": "1.0.0"
+            },
+            "require-dev": {
+                "npm-asset/browserify": ">=4.1.3,<5.0.0",
+                "npm-asset/contra": ">=1.6.10,<2.0.0",
+                "npm-asset/gulp": ">=3.6.2,<4.0.0",
+                "npm-asset/gulp-bump": "~0.1.0",
+                "npm-asset/gulp-clean": "~0.2.3",
+                "npm-asset/gulp-git": "~0.2.0",
+                "npm-asset/gulp-header": ">=1.0.2,<2.0.0",
+                "npm-asset/gulp-rename": "~0.2.2",
+                "npm-asset/gulp-size": "~0.1.1",
+                "npm-asset/gulp-streamify": "0.0.5",
+                "npm-asset/gulp-uglify": "~0.1.0",
+                "npm-asset/gzip-size": ">=1.0.0,<2.0.0",
+                "npm-asset/jquery": ">=1.11.1,<2.0.0",
+                "npm-asset/pretty-bytes": ">=1.0.1,<2.0.0",
+                "npm-asset/vinyl-source-stream": ">=0.1.1,<0.2.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2596,8 +2502,7 @@
                 }
             ],
             "description": "Cross-platform browser event handling",
-            "homepage": "https://github.com/bevacqua/crossvent",
-            "time": "2015-08-25T00:19:47+00:00"
+            "homepage": "https://github.com/bevacqua/crossvent"
         },
         {
             "name": "npm-asset/custom-event",
@@ -2607,6 +2512,9 @@
                 "url": "https://registry.npmjs.org/custom-event/-/custom-event-1.0.0.tgz",
                 "reference": null,
                 "shasum": "2e4628be19dc4b214b5c02630c5971e811618062"
+            },
+            "require-dev": {
+                "npm-asset/zuul": "~1.16.3"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2642,8 +2550,7 @@
                 "customevent",
                 "dom",
                 "event"
-            ],
-            "time": "2015-01-07T22:33:23+00:00"
+            ]
         },
         {
             "name": "npm-asset/dragula",
@@ -2657,6 +2564,23 @@
             "require": {
                 "npm-asset/contra": "1.9.4",
                 "npm-asset/crossvent": "1.5.4"
+            },
+            "require-dev": {
+                "npm-asset/bower": "1.5.2",
+                "npm-asset/browserify": "11.0.0",
+                "npm-asset/clean-css": "3.3.6",
+                "npm-asset/electron-prebuilt": "0.30.1",
+                "npm-asset/hihat": "1.2.1",
+                "npm-asset/jshint": "2.8.0",
+                "npm-asset/jshint-stylish": "2.0.1",
+                "npm-asset/nib": "1.1.0",
+                "npm-asset/phantomjs": "2.1.3",
+                "npm-asset/stylus": "0.52.0",
+                "npm-asset/tap-dev-tool": "1.3.0",
+                "npm-asset/tape": "4.0.1",
+                "npm-asset/tape-run": ">=2.1.3,<3.0.0",
+                "npm-asset/uglify-js": "2.4.24",
+                "npm-asset/watchify": "3.3.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2696,8 +2620,7 @@
                 }
             ],
             "description": "Drag and drop so simple it hurts",
-            "homepage": "https://github.com/bevacqua/dragula",
-            "time": "2016-09-12T12:35:26+00:00"
+            "homepage": "https://github.com/bevacqua/dragula"
         },
         {
             "name": "npm-asset/easy-pie-chart",
@@ -2746,56 +2669,6 @@
             "time": "2015-05-08T14:09:42+00:00"
         },
         {
-            "name": "npm-asset/jquery",
-            "version": "3.3.1",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery/-/jquery-3.3.1.tgz",
-                "reference": null,
-                "shasum": "958ce29e81c9790f31be7792df5d4d95fc57fbca"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/jquery/jquery/issues"
-                },
-                "npm-asset-main": "dist/jquery.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "git+https://github.com/jquery/jquery.git"
-                },
-                "npm-asset-scripts": {
-                    "build": "npm install && grunt",
-                    "start": "grunt watch",
-                    "test:browserless": "grunt && grunt test:slow",
-                    "test:browser": "grunt && grunt karma:main",
-                    "test": "grunt && grunt test:slow && grunt karma:main",
-                    "jenkins": "npm run test:browserless",
-                    "precommit": "grunt lint:newer qunit_fixture",
-                    "commitmsg": "node node_modules/commitplease"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "JS Foundation and other contributors",
-                    "url": "https://github.com/jquery/jquery/blob/3.3.1/AUTHORS.txt"
-                }
-            ],
-            "description": "JavaScript library for DOM operations",
-            "homepage": "https://jquery.com",
-            "keywords": [
-                "browser",
-                "javascript",
-                "jquery",
-                "library"
-            ],
-            "time": "2018-01-20T17:27:11+00:00"
-        },
-        {
             "name": "npm-asset/jquery.caret",
             "version": "0.3.1",
             "dist": {
@@ -2803,6 +2676,16 @@
                 "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
                 "reference": null,
                 "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
+            },
+            "require-dev": {
+                "npm-asset/grunt": "~0.4.1",
+                "npm-asset/grunt-cli": ">=1.2.0,<2.0.0",
+                "npm-asset/grunt-contrib-coffee": "~0.6.4",
+                "npm-asset/grunt-contrib-jasmine": "~0.5.1",
+                "npm-asset/grunt-contrib-uglify": "~0.2.0",
+                "npm-asset/grunt-contrib-watch": ">=0.6.1,<0.7.0",
+                "npm-asset/grunt-json-replace": "~0.1.2",
+                "npm-asset/grunt-umd": ">=2.2.1,<3.0.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2828,8 +2711,7 @@
                 "jquery",
                 "offset",
                 "position"
-            ],
-            "time": "2016-06-25T06:50:23+00:00"
+            ]
         },
         {
             "name": "npm-asset/perfect-scrollbar",
@@ -2920,8 +2802,7 @@
                 }
             ],
             "description": "Run a callback as soon as possible",
-            "homepage": "https://github.com/bevacqua/ticky#readme",
-            "time": "2016-05-20T16:56:23+00:00"
+            "homepage": "https://github.com/bevacqua/ticky#readme"
         },
         {
             "name": "phar-io/manifest",
@@ -4291,6 +4172,33 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2016-10-03T07:35:21+00:00"
+        },
+        {
+            "name": "sorich87/bootstrap-tour",
+            "version": "v0.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sorich87/bootstrap-tour.git",
+                "reference": "942af8331ac82a1595b060d91ad6189160067b72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sorich87/bootstrap-tour/zipball/942af8331ac82a1595b060d91ad6189160067b72",
+                "reference": "942af8331ac82a1595b060d91ad6189160067b72",
+                "shasum": ""
+            },
+            "type": "component",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Show people how to use your web site",
+            "homepage": "http://bootstraptour.com/",
+            "keywords": [
+                "bootstrap",
+                "tour"
+            ],
+            "time": "2016-08-06T06:05:19+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

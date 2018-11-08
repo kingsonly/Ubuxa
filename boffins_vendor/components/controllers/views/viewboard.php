@@ -59,26 +59,30 @@
 
 <div id="mySidenav" class="sidenav">
   <div class="close-kanban">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="javascript:void(0)" class="closebtn">&times;</a>
       <?php if (isset($this->blocks['kanban'])){ ?>
               <?= $this->blocks['kanban'] ?>
       <?php }?>
   </div>
 </div>
 
-
-<span class="open-board" onclick="openNav()"><i class="fa fa-tasks iconz"></i>View Board</span>
-
+<div class="board-open">
+    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Board</span>
+</div>
 
 <?
 $viewBoard = <<<JS
-  function openNav() {
-    document.getElementById("mySidenav").style.width = "100%";
-}
 
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
+
+    $('.board-open').click(function(){
+        $('#mySidenav').css({'width':'100%'})
+    });
+
+    $('.closebtn').click(function(){
+        $('#mySidenav').css({'width':'0'})
+    });
+
+
 JS;
 $this->registerJs($viewBoard, $this::POS_END);
 ?>

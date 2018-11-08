@@ -281,7 +281,6 @@ use boffins_vendor\components\controllers\MenuWidget;
 <?php 
 $indexJs = <<<JS
 
-
 $('.owl-carousel').owlCarousel({
 	  items:10,
       loop:false,
@@ -307,87 +306,6 @@ $('.close-create').click(function(e){
 
 $('[data-toggle="tooltip-folder"]').tooltip({container: 'body'});
 
-
-
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
-  });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
-$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
-}); })
-
-	$('.test3').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    $('.test1').each(function(){
-	$(this).click(function(){
-		$('#task2'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    
-    $('.test').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-
-	
-
-	$('.client').on('click', function() {
-					$(document).find('#sliderwizz1').show();
-					$(document).find('#sliderwizz').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz3').hide();
-	})
-	
-	$('.supplier').on('click', function() {
-					$(document).find('#sliderwizz2').show();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('.contact').on('click', function() {
-					$(document).find('#sliderwizz3').show();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('#activeuser').on('click', function() {
-					$(document).find('#sliderwizz').show();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-	})
 
 JS;
  
