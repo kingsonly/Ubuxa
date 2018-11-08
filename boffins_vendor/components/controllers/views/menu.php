@@ -10,7 +10,7 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 ?>
-<div class="side_menu">
+<div class="side_menu side-drop">
 	<div class="burger_box">
 		<div class="menu-icon-container">
 			<a href="#" class="menu-icon js-menu_toggle closed">

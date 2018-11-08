@@ -404,7 +404,7 @@ a.addTaskButton.active {
                       <div class="assignedto">
                         <div class="user-image">
                          
-							           <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
+                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
                       </div>
                     <?php }?>
@@ -473,11 +473,13 @@ a.addTaskButton.active {
                     </div>
                 </li>
             <?php $count2++;}}}?>
-				
+        
             </ul>
             <a class="add-card" href="#">
-              <span class="glyphicon glyphicon-plus"></span>
-              <span class="add-title"> Add Card </span>
+              <span class="cardTask">
+                <span class="glyphicon glyphicon-plus"></span>
+                <span class="add-title"> Add Card </span>
+              </span>
             </a>
             <div class="card-add" id="add-new-cardz">
                 <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
@@ -703,3 +705,4 @@ JS;
  
 $this->registerJs($board);
 ?>
+

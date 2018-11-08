@@ -256,73 +256,6 @@ $img = $model->folder_image;
 <?php 
 $indexJs = <<<JS
 
-$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
-}); })
-
-	$('.test3').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    $('.test1').each(function(){
-	$(this).click(function(){
-		$('#task2'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    
-    $('.test').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-
-	
-
-	$('.client').on('click', function() {
-					$(document).find('#sliderwizz1').show();
-					$(document).find('#sliderwizz').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz3').hide();
-	})
-	
-	$('.supplier').on('click', function() {
-					$(document).find('#sliderwizz2').show();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('.contact').on('click', function() {
-					$(document).find('#sliderwizz3').show();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('#activeuser').on('click', function() {
-					$(document).find('#sliderwizz').show();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-	})
 
 	$(function(){
     $('.task-test').click(function(){
@@ -351,29 +284,70 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
           title: "Title3",
           content: "Message 3",
           onShow: function(tour) {
+          	$('.side_menu').removeClass('side-drop');
     		$('.list_load, .list_item').stop();
-	$(this).removeClass('closed').addClass('opened');
+			$(this).removeClass('closed').addClass('opened');
 
-	$('.side_menu').css({ 'left':'0px' });
+			$('.side_menu').css({ 'left':'0px' });
 
-	var count = $('.list_item').length;
-	$('.list_load').slideDown( (count*.6)*100 );
-	$('.list_item').each(function(i){
-		var thisLI = $(this);
-		timeOut = 100*i;
-		setTimeout(function(){
-			thisLI.css({
-				'opacity':'1',
-				'margin-left':'0'
+			var count = $('.list_item').length;
+			$('.list_load').slideDown( (count*.6)*100 );
+			$('.list_item').each(function(i){
+				var thisLI = $(this);
+				timeOut = 100*i;
+				setTimeout(function(){
+					thisLI.css({
+						'opacity':'1',
+						'margin-left':'0'
+					});
+				},100*i);
 			});
-		},100*i);
-	});
-    }
+		    }
         },
         {
-          element: ".side_menu",
+          element: ".open-board",
           title: "Title4",
           content: "Message 4",
+          onShown: function(tour){
+          	$('.side_menu').addClass('side-drop');
+          	$(".tour-backdrop").appendTo(".side_menu");
+		    $(".tour-step-background").appendTo(".side_menu");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-container",
+          title: "Task board",
+          content: "This is your task board.",
+          placement: "bottom",
+          onShow: function(tour){
+          	$('#mySidenav').css({'width':'100%'});
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".view-task-board");
+		    $(".tour-step-background").appendTo(".view-task-board");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-item:first",
+          title: "Title 6",
+          content: "Message 6",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-container");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".add-card:first",
+          title: "Title 7",
+          content: "Message 7",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-column:first");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
         },
         
       ],
@@ -381,6 +355,7 @@ $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
     storage: false,
     smartPlacement: true,    
     onEnd: function (tour) {
+        $('#mySidenav').css({'width':'0'})
   		$('.list_load, .list_item').stop();
 	$(this).removeClass('opened').addClass('closed');
 
