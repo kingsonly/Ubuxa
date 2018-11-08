@@ -10,7 +10,6 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 ?>
-<<<<<<< HEAD
 <style type="text/css">
 table{
   width:100%;
