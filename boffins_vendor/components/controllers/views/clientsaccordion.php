@@ -208,7 +208,7 @@ Main Components
 
           <ul class="first-list">
             <li class="has-clients-children">
-              Test          
+              Test test         
             </li>      
           </ul>
     </li>
@@ -230,8 +230,35 @@ $(document).ready(function(){
         ( checkbox.prop('checked') ) ? checkbox.siblings('ul').attr('style', 'display:none;').slideDown(300) : checkbox.siblings('ul').attr('style', 'display:block;').slideUp(300);
       });
     });
-  }
+  } 
+
+  $('.animated').click(function(){
+     $('.client-container').css({
+       'visibility':'visible',
+       '-webkit-transition':'width 2s',
+       'transition':'width 2s, height 2s',
+       'width':'600px',
+       'min-height':'500px'
+      });
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+  })
+
+  $('.close-arrow').click(function(){
+     $('.client-container').css({
+       'width':'300px',
+       'min-height':'1px',
+       'visibility':'hidden'
+      });
+      $('.client-content').hide();
+      setTimeout(function() { 
+        $('.sider').show('slow');
+    }, 900);
+      
+      
+  })
 });
+
 JS;
-$this->registerJs($clientsaccord);
+$this->registerJs($clientsaccord, $this::POS_READY);
 ?>
