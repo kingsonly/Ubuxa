@@ -90,6 +90,7 @@ class FolderController extends Controller
      */
     public function actionView($id)
     {
+		//Yii::$app->formatter->nullDisplay = 'N\A';
 		$model = $this->findModel($id);
         $task = new Task();
 		$remark = new Remark();

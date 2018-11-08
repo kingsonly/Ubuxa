@@ -162,12 +162,14 @@ $(function(){
         $(".test5").slideUp('slow');
         $('.view-task-board').show();
   });
+  
   $('.task-icon').on('click',function(e){
   		e.preventDefault();
 	    //$(".view-task-board").hi('slow');
 	    $(".view-task-board").hide();
 	    $('.test5').slideDown('slow');
    });
+   
 });
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })

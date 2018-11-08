@@ -15,9 +15,9 @@ use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
-use frontend\assets\AppAsset;
+//use frontend\assets\AppAsset;
 
-AppAsset::register($this);
+//AppAsset::register($this);
 
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
@@ -200,10 +200,10 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            				<?//= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?php Pjax::end(); ?>
 
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
+            		<?//= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
             	</div>
             </section>
         </div>
@@ -212,7 +212,7 @@ $img = $model->folder_image;
     <? $this->beginBlock('kanban')?>
     	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
 		    <div class="view-task-board">
-		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+		    	<?//= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>

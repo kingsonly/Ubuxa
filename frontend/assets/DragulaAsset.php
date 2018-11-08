@@ -15,6 +15,6 @@ class DragulaAsset extends AssetBundle
 		'dist/dragula.min.js',
 	];
 	public $jsOptions =[
-		'position'=>View::POS_HEAD,
+		//'position'=>View::POS_HEAD,
 	];
 }
