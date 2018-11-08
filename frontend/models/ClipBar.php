@@ -56,6 +56,8 @@ class ClipBar extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Clip::className(), ['bar_id' => 'id']);
     }
+	
+	
 
     /**
      * @return \yii\db\ActiveQuery

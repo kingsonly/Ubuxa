@@ -331,3 +331,33 @@ JS;
 $this->registerJs($task);
 ?>
 
+ 
+<?php 
+/*
+$steps[0] = [
+    'title'=>'Step 1',
+    'content'=>'Content and stuff',
+    'element'=>'#boardButton'
+];
+
+// $steps[1] = ... etc
+$steps[1] = [
+    'title'=>'Step 2',
+    'content'=>'Content and stuff',
+    'element'=>'#box-content'
+];
+$steps[2] = [
+    'title'=>'Step 3',
+    'content'=>'Content and stuff',
+    'element'=>'#task-box'
+];
+
+
+
+\macrowish\widgets\BootstrapTour::widget([
+    'steps'=>$steps,
+    'options'=>[
+        'backdrop'=>'true',
+        //'storage' => 'false',
+        ]
+]); */ ?>

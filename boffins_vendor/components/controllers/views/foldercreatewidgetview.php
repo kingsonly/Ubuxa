@@ -141,7 +141,9 @@ if(isset($_GET['id'])){
 </div>
 
 
-    <?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); 
+		
+	?>
 
 </div>
 
@@ -173,10 +175,10 @@ $js = <<<JSS
 					  "tapToDismiss": false
 		  			}
 				toastr.success('Folder was created successfully', "", options);
-			   $.pjax.reload({container:"#create-folder-refresh",async: false});
+			   $.pjax.reload({container:"#"+"$pjaxId",async: false});
 
 			}else{
-					options = {
+			options = {
 		  "closeButton": true,
 		  "debug": false,
 		  "newestOnTop": true,
@@ -194,7 +196,7 @@ $js = <<<JSS
 		  "tapToDismiss": false
 		  }
 		toastr.error('Somthing went wrong', "", options);
-			 $.pjax.reload({container:"#create-folder-refresh",async: false});
+			 $.pjax.reload({container:"#"+"$pjaxId",async: false});
 			}
 			}).fail(function(){
 			console.log('Server Error');

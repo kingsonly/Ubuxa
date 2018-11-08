@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace frontend\models; //this model should be in a different namespace - possibly a lot closer to where it is required. 
 
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 
@@ -25,7 +25,8 @@ use boffins_vendor\behaviors\DeleteUpdateBehavior;
 class UserDbDoNotAttachDateBehavour extends UserDb
 {
 	
-	public function behaviors()
+	public function behaviors() //I am incredibly surprised that this does not cause errors. It's parent's parent makes this a final class!
+								//AAO 06/11/18
 	{
 		return ['DeleteUpdate' => DeleteUpdateBehavior::className()];
 			

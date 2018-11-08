@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -145,6 +146,10 @@ text-overflow: ellipsis;
 .owl-prev{
 	width:23px !important;
 } 
+.ubuxaTimes{
+		content: "\f00d" !important;
+  		font-family: FontAwesome !important;
+	}
 </style>
 
 
@@ -172,6 +177,7 @@ text-overflow: ellipsis;
   cursor: pointer;
   letter-spacing: .1em;
   transition: all .3s;
+  
 }
 
 .accordion-header:hover {
@@ -229,29 +235,88 @@ text-overflow: ellipsis;
     width: 100%;
   }
 }
-	.create-new-test1{
+	.create-new-test{
 		display: block !important;
 		visibility: hidden;
 	}
+	.showvisible{
+		visibility:visible;
+	}
+	
+	
+.followMeBar {
+  background: #999;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+.followMeBar.ubuxa-fixed {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 0;
+}
+.followMeBar.ubuxa-fixed.absolute {
+  position: absolute;
+}
+/* For aesthetics only */
+
+
+	
+	
+	
+	.feedify .feedify-item {
+  position: relative;
+}
+.feedify .feedify-item .feedify-item-header {
+  z-index: 100;
+  transform: translate3d(0, 0, 0);
+}
+.feedify .feedify-item.fixed .feedify-item-header {
+  position: fixed;
+  top: 0;
+}
+.feedify .feedify-item.bottom .feedify-item-header {
+  position: absolute;
+  bottom: 0;
+}
 </style>
+
+<?php Pjax::begin(['id'=>'refresh-after-create']); ?>
 <div class="folder-index">
 
-		<? $style = 'background-color:transparent;float: right;width: 20px;';?>
+		<? 
+			$style = 'background-color:transparent;float: right;width: 20px;';
+			$iconJs = 'if($(this).hasClass("ubuxaTimes")){
+		$(this).removeClass("ubuxaTimes");
+		$(this).find("i").removeClass("fa-times");
+		$(this).find("i").addClass("fa-plus");
+		$( ".create-new-test" ).removeClass("showvisible");
+	}else{
+		$(this).addClass("ubuxaTimes");
+		$(this).find("i").removeClass("fa-plus");
+		$(this).find("i").addClass("fa-times");
+		$( ".create-new-test" ).addClass("showvisible");
+	}
+	e.stopPropagation();';
+		?>
    
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12">
 				<div>
-				<div class="create-new-test1 col-sm-8">
+				<div class="create-new-test col-sm-8">
 					<div class="create-new-test">
-						<?= FolderCreateWidget::widget(); ?>
+						<?= FolderCreateWidget::widget(['refreshSectionElement' => 'refresh-after-create']); ?>
 					</div>
 					
 					<br>
 				</div>
 
 				<div style="" class="col-sm-4">
-					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test'],'style'=>$style]);?>
+					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test','style' => $style],'iconJs'=>$iconJs]);?>
 				</div>
 			</div>
 			</div>
@@ -259,22 +324,21 @@ text-overflow: ellipsis;
 		</div>
 		<div class="row">
 		<div class="col-sm-12">
-			<div class="accordion js-accordion">
-		<? 
+			<div class="accordion js-accordion feedify">
+		 
 		
-		$i = 1;
-		
+			<?
 		foreach($folders as $firstKey => $folder){?>
 		
-			<div class="accordion__item js-accordion-item ">
-    <div class="accordion-header js-accordion-header"><?= $firstKey;?></div> 
-				<div class="accordion-body js-accordion-body">
+			<div class="accordion__item js-accordion-item feedify-item">
+    <div class="accordion-header js-accordion-header feedify-item-header"><?= $firstKey;?></div> 
+				<div class="accordion-body js-accordion-body feedify-item-body">
     	
 			<? foreach($folder as $secondKey => $actuallFolder){?>
 			
 			<div class="accordion js-accordion">
         <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header"><?= $secondKey;?> folder</div> 
+           <div class="accordion-header js-accordion-header " ><?= $secondKey;?> folder</div> 
            <div class="accordion-body js-accordion-body">
              <div class="accordion-body__contents">
 				 <div class="container">
@@ -295,6 +359,7 @@ text-overflow: ellipsis;
 				</div>
 				</a>
         </div>
+					 
 				 
 
 			
@@ -309,7 +374,7 @@ text-overflow: ellipsis;
 			<? }?> 
 			</div>
 			</div>
-		<? $i++; }?> 
+		<?  }?> 
 	
 	</div>
 		</div>
@@ -326,8 +391,7 @@ text-overflow: ellipsis;
 </div>
 
 
-
-
+	
 
 
 
@@ -382,8 +446,84 @@ var accordion = (function(){
 $(document).ready(function(){
   accordion.init({ speed: 300, oneOpen: false });
 });
-	
+
+
+
+
+
+
+
+var stickyHeaders = (function() {
+
+    var \$stickies;
+
+    var load = function(stickies, target) {
+
+        if (typeof stickies === "object" && stickies instanceof jQuery && stickies.length > 0) {
+
+            \$stickies = stickies.each(function() {
+
+                var \$thisSticky = $(this);
+
+                \$thisSticky
+                    .data('originalPosition', \$thisSticky.offset().top)
+                    .data('originalHeight', \$thisSticky.outerHeight());               
+            });
+
+            target.off("scroll.stickies").on("scroll.stickies", function(event) {
+                 _whenScrolling(event);     
+            });
+        }
+    };
+
+    var _whenScrolling = function(event) {
+
+        var \$scrollTop = $(event.currentTarget).scrollTop();
+
+        \$stickies.each(function(i) {            
+
+            var \$thisSticky = $(this),
+                \$stickyPosition = \$thisSticky.data('originalPosition'),
+                \$newPosition,
+                \$nextSticky;
+
+            if (\$stickyPosition <= \$scrollTop) {
+
+                \$newPosition = \$scrollTop - \$stickyPosition
+                \$nextSticky = \$stickies.eq(i + 1);
+
+                if(\$nextSticky.length > 0) {
+
+                    \$newPosition = Math.min(\$newPosition, (\$nextSticky.data('originalPosition') -  \$stickyPosition) - \$thisSticky.data('originalHeight'));
+                }
+
+            } else {
+
+                \$newPosition = 0;
+            }
+
+            //\$thisSticky.css('transform', 'translateY(' + \$newPosition + 'px)');
+
+            //could just as easily use top instead of transform
+            \$thisSticky.css('top', \$newPosition + 'px');
+        });
+    };
+
+    return {
+        load: load
+    };
+})();
+
+$(function() {
+    stickyHeaders.load($(".followMeBar"), $(window));
+});
+
+$(function() {
+  $('.feedify').feedify();
+});	
 JS;
  
 $this->registerJs($indexJs);
 ?>
+
+<?php Pjax::end(); ?>

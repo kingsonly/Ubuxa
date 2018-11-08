@@ -13,7 +13,7 @@ class m181031_095822_task_column extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%task_Assigned_User}}', 'status', $this->integer(11)->defaultValue(0)->after('assigned_date') );
+        $this->addColumn('{{%task_assigned_user}}', 'status', $this->integer(11)->defaultValue(0)->after('assigned_date') );
 
         $this->addColumn('{{%task}}', 'in_progress_time', $this->dateTime()->after('due_date') );
         $this->addColumn('{{%task}}', 'completion_time', $this->dateTime()->after('in_progress_time') );

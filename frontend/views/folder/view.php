@@ -17,8 +17,6 @@ use kartik\popover\PopoverX;
 use yii\web\View;
 
 
-
-
 $this->title = Yii::t('dashboard', 'dashboard_title');
 
 
@@ -165,6 +163,7 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
+
     
 </style>
 
@@ -172,8 +171,6 @@ $img = $model->folder_image;
 
 
 <section>
-	
-	
     <div class="container-fluid">
         <div class="row">
             <section>
@@ -198,11 +195,12 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
-            	
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             		<?php Pjax::end(); ?>
+
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
             	</div>
             </section>
         </div>
@@ -216,10 +214,6 @@ $img = $model->folder_image;
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
     
-        
-</section>
-
-  
   <? $this->beginBlock('subfolders')?>
   	<?php 
     	$num = 1;
@@ -239,6 +233,7 @@ $img = $model->folder_image;
            <?php } ?>
         <?php $num2++;$num++; }?>
   <? $this->endBlock();?>
+  </section>
 
 <? 
     Modal::begin([
@@ -252,19 +247,16 @@ $img = $model->folder_image;
 <?
     Modal::end();
 ?>
-
 <?php 
 $indexJs = <<<JS
 
-
-	$(function(){
+$(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')
         .find('#viewcontent')
         .load($(this).attr('value'));
         });
   });
-
   $(function() {
 
   var tour = new Tour({
@@ -308,10 +300,12 @@ $indexJs = <<<JS
           element: ".open-board",
           title: "Title4",
           content: "Message 4",
-          onShown: function(tour){
+          onShow: function(tour){
           	$('.side_menu').addClass('side-drop');
-          	$(".tour-backdrop").appendTo(".side_menu");
-		    $(".tour-step-background").appendTo(".side_menu");
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo("#content");
+		    $(".tour-step-background").appendTo("#content");
 		    $(".tour-step-background").css("left", "0px");
           	},
         },
@@ -352,9 +346,10 @@ $indexJs = <<<JS
         
       ],
     backdrop: true,  
-    storage: false,
+    storage: true,
     smartPlacement: true,    
     onEnd: function (tour) {
+    	$('.side_menu').addClass('side-drop');
         $('#mySidenav').css({'width':'0'})
   		$('.list_load, .list_item').stop();
 	$(this).removeClass('opened').addClass('closed');
@@ -373,12 +368,8 @@ $indexJs = <<<JS
  tour.start(true);
 
 });
-	
-	
+
 JS;
  
 $this->registerJs($indexJs);
 ?>
-	
-		
-		

@@ -14,17 +14,25 @@ use frontend\models\Folder;
 
 /** this widget is responsible for dispaying the button which is used to create a new Folder,
 ** This display can either be an image or a plane text
-***************************/
+****************************** Basic Usage 
+* echo CreateButtonWidget::widget();
+* 3 public properties 
+* buttonType the widget is design in such a way that a user can chose button type, default is folder image for 
+* creating a  new folder, other options include as an icon or text with icon.
+* htmlAttributes is an array which holds all html attributes associated to this widget eg class, id, style etc
+* iconJs is a uniqe property, which actually holds the javascript action of the icon whenclicked
+********************/
 
 class CreateButtonWidget extends Widget{
+	
+	public $buttonType ;// types coulde be icon,text,orimage
+	public $htmlAttributes ;// including style,class,idetc
+	public $iconJs ;// javascript action for icon type click event 
 	
 	public function init()
 	{
 		parent::init();
 	}
-	public $buttonType ;
-	public $htmlAttributes ;
-	public $style ;
 	
 	// output the outcome of loopmenu
 	public function run(){
@@ -33,7 +41,7 @@ class CreateButtonWidget extends Widget{
 			'buttonType' => $this->buttonType,
 			'class' => $this->buttonType,
 			'htmlAttributes' => $this->htmlAttributes,
-			'style' => $this->style,
+			'iconJs' => $this->iconJs,
 		]);
 	}
 	
