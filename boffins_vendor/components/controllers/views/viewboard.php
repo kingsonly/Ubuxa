@@ -8,7 +8,7 @@
     z-index: 10000;
     top: 0;
     left: 0;
-    background-color: rgb(214, 240, 255);
+    background-color: #f8f6f6;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 20px;

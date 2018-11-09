@@ -6,6 +6,7 @@ use Yii;
 use boffins_vendor\classes\FolderARModel;
 use yii\web\UploadedFile;
 use boffins_vendor\behaviors\FolderBehavior;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -149,20 +150,46 @@ class Folder extends FolderARModel
         return array_reverse($this->containsFolderTree([],$this->parent_id));
     }
 
-    public function buildTree($elements = [], $parentId) 
+    public function buildTree(array $elements, $parentId) 
 	{
         $branch = array();
         foreach ($elements as $element) {
             if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id']);
-                if ($children) {
-                    $element['title'] = $children;
+                if (!empty($children)) {
+                    $element['children'] = $children;
                 }
                 $branch[] = $element;
             }
         }
         return $branch;
 	}
+
+    public function printTree($tree, $r = 0, $p = null) {
+
+        foreach ($tree as $i => $t) {
+
+            $dash = ($t['parent_id'] == 0) ? '' : str_repeat('', $r) .' ';
+
+            printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['title']);
+
+            if ($t['parent_id'] == $p) {
+
+                // reset $r
+
+                $r = 0;
+
+            }
+
+            if (isset($t['children'])) {
+
+                $this->printTree($t['children'], $r+1, $t['parent_id']);
+
+            }
+
+        }
+
+    }
 
 	public  function getDashboardItems($limit = 100) 
 	{
