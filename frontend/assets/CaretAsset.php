@@ -15,6 +15,6 @@ class CaretAsset extends AssetBundle
 		'dist/jquery.caret.js',
 	];
 	public $jsOptions =[
-		'position'=>View::POS_HEAD,
+		//'position'=>View::POS_HEAD,
 	];
 }

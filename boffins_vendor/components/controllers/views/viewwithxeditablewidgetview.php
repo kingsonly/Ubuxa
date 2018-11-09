@@ -63,6 +63,9 @@ text-overflow: ellipsis;
 		border:1px solid #ccc;
 		transform: scale(1.5);
 	}
+	em.value-if-null{
+		color: red;
+	}
 	
 </style>
 <?
@@ -83,6 +86,7 @@ foreach($attributues as $v){
 			'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
@@ -102,6 +106,7 @@ foreach($attributues as $v){
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
