@@ -22,8 +22,8 @@ class AppAsset extends AssetBundle
         'owlcarousel/owl.carousel.min.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+       // 'yii\web\YiiAsset',
+        //'yii\bootstrap\BootstrapAsset',
         '\frontend\assets\DragulaAsset',
         '\frontend\assets\CaretAsset',
         '\frontend\assets\AtMentionAsset',

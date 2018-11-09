@@ -47,7 +47,7 @@ class Folder extends FolderARModel
 		//if(empty($this->description)){
 			//$this->description = 'Add a description';
 		//}
-        Yii::$app->formatter->nullDisplay = 'N\A';
+        
     }
 
     /**

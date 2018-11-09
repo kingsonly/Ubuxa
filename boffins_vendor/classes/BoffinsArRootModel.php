@@ -233,7 +233,7 @@ class BoffinsArRootModel extends ActiveRecord
 	
 	/***
 	 * Get the type of a given attribute 
-	 */
+	
 	public function getAttributeType($attribute)
 	{
 		return $this->hasAttribute($attribute) ? self::getTableSchema()->columns[$attribute]->type : trigger_error('This attribute ({$attribute}) does not exist: ' . $attribute . ' ' . __METHOD__);

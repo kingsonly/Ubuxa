@@ -32,7 +32,7 @@ use boffins_vendor\components\controllers\MenuWidget;
   cursor: pointer;
   transition: all 0.3s ease 0s;
   height: 100px;
-  background: #ffe581;
+  background: green;
   border-radius: 50%;
   display: flex;
   position: relative;
@@ -40,7 +40,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 .plus__line {
   width: 6px;
   height: 50px;
-  background: #000;
+  background: #fff;
   border-radius: 10px;
   position: absolute;
   left: calc(50% - 3px);
@@ -109,14 +109,18 @@ html, body {
        						<td style="text-align:center">
        							<div style=" width: 100%; height: 100%">
          							<div class="centered">
+                        
                         <div class="plus" id="plus">
-                          <div class="plus__line plus__line--v">
+                          <div class="plus__line plus__line--v" id="plus__line plus__line--v">
+                            <div>
+                          <?= FolderCreateWidget::widget();?>
+                        </div>
                             <a href="#" class="plus__link ion-person"></a>
                             <a href="#" class="plus__link ion-images"></a>
                             <a href="#" class="plus__link ion-music-note"></a>
                             <a href="#" class="plus__link ion-location"></a>
                           </div>
-                          <div class="plus__line plus__line--h"></div>
+                          <div class="plus__line plus__line--h" id = "plus__line--h"></div>
                         </div>
                       </div>
                     </div>
@@ -151,23 +155,34 @@ html, body {
 <?php 
 $indexJs = <<<JS
  var plus = document.getElementById('plus');
+ var plus_child = document.getElementById('plus__line plus__line--v');
 
  function plusToggle() {
+    $('.plus__line').css('background','#fff');
+    $('.folder-form').click(function(e){
+      alert(456)
+      e.stopPropagation();
+      })
     plus.classList.toggle('plus--active');
+    
 }
 
 plus.addEventListener('click', plusToggle);
+
+
 $(function(){
     $("#boardButton").on('click', function(e){
         $(".test5").slideUp('slow');
         $('.view-task-board').show();
   });
+  
   $('.task-icon').on('click',function(e){
   		e.preventDefault();
 	    //$(".view-task-board").hi('slow');
 	    $(".view-task-board").hide();
 	    $('.test5').slideDown('slow');
    });
+   
 });
 $('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
 }); })
