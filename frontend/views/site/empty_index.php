@@ -26,6 +26,15 @@ use boffins_vendor\components\controllers\MenuWidget;
 
 ?>
 <style type="text/css">
+header{
+  display: none;
+}
+.breadcrumb{
+  display: none;
+}
+.side_menu{
+  display: none;
+}
 	
 	.plus {
   width: 100px;
@@ -90,6 +99,9 @@ use boffins_vendor\components\controllers\MenuWidget;
   align-items: center;
   justify-content: center;
 }
+.empty_index_folder_create{
+  display: none
+}
 html, body {
   height: 100%;
 }
@@ -112,7 +124,7 @@ html, body {
                         
                         <div class="plus" id="plus">
                           <div class="plus__line plus__line--v" id="plus__line plus__line--v">
-                            <div>
+                            <div class ="empty_index_folder_create" style="display: none">
                           <?= FolderCreateWidget::widget();?>
                         </div>
                             <a href="#" class="plus__link ion-person"></a>
@@ -159,8 +171,13 @@ $indexJs = <<<JS
 
  function plusToggle() {
     $('.plus__line').css('background','#fff');
+    if($('.empty_index_folder_create').hasClass('shown')){
+      $('.empty_index_folder_create').removeClass('shown');
+    } else {
+      $('.empty_index_folder_create').addClass('shown');
+    }
+    $('.empty_index_folder_create').show()
     $('.folder-form').click(function(e){
-      alert(456)
       e.stopPropagation();
       })
     plus.classList.toggle('plus--active');

@@ -597,7 +597,9 @@ function mycontent(mypage){
             $('#remark-content-loading').text('finished');
         }
         $('#remark-content-loading').hide();
+        if ($.trim(data)){ 
         $('.results').append(data);
+        }
         $('.welll').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
         $('#ani_img').hide();
         })

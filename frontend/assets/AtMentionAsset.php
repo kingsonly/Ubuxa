@@ -15,6 +15,6 @@ class AtMentionAsset extends AssetBundle
 		'dist/js/jquery.atwho.js',
 	];
 	public $depends = [
-        //'\frontend\assets\CaretAsset',
+        '\frontend\assets\CaretAsset',
     ];
 }
