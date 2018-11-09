@@ -1,9 +1,10 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
-use app\boffins_vendor\behaviors\DeleteUpdateBehavior;
+use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use frontend\models\Corporation;
 /**
  * This is the model class for table "{{%tm_client}}".
  *

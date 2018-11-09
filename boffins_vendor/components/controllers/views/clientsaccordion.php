@@ -200,7 +200,7 @@ Main Components
 }
 </style>
 
-  <ul class="cd-clients-accord-menu animated">
+  <ul class="cd-clients-accord-menu animatedd">
     <li class="has-clients-children">
 
       <input type="checkbox" name="clients-100" class="accord-input" id="clients-100">
@@ -232,7 +232,7 @@ $(document).ready(function(){
     });
   } 
 
-  $('.animated').click(function(){
+  $('.animatedd').click(function(){
      $('.client-container').css({
        'visibility':'visible',
        '-webkit-transition':'width 2s',
