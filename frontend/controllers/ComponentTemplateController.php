@@ -7,16 +7,16 @@ use frontend\models\ComponentTemplate;
 use frontend\models\ComponentAttributeType;
 use frontend\models\ComponentTemplateAttribute;
 use frontend\models\AttrModel;
+use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ComponentTemplateAttributeController implements the CRUD actions for ComponentTemplate model.
+ * ComponentTemplateController implements the CRUD actions for ComponentTemplate model.
  */
-class ComponentTemplateAttributeController extends Controller
+class ComponentTemplateController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -65,8 +65,8 @@ class ComponentTemplateAttributeController extends Controller
      * Creates a new ComponentTemplate model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
-     
-    public function actionCreate()
+     */
+   /* public function actionCreate()
     {
         $model = new ComponentTemplate();
 
@@ -77,8 +77,61 @@ class ComponentTemplateAttributeController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }*/
+	
+	
+	public function actionCreate()
+    {
+        $componentTemplate = new ComponentTemplate;
+        $componentTemplateAttributeModel = [new ComponentTemplateAttribute];
+		$attributeType = ArrayHelper::map(ComponentAttributeType::find()->all(), 'id', 'name');
+        if ($componentTemplate->load(Yii::$app->request->post())) {
+
+            $attributeModel = AttrModel::createMultiple(ComponentTemplateAttribute::classname());
+            AttrModel::loadMultiple($attributeModel, Yii::$app->request->post());
+
+            // ajax validation
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ArrayHelper::merge(
+                    ActiveForm::validateMultiple($attributeModel),
+                    ActiveForm::validate($componentTemplate)
+                );
+            }
+
+            // validate all models
+            $valid = $componentTemplate->validate();
+            $valid = AttrModel::validateMultiple($attributeModel) && $valid;
+            
+            if ($valid) {   
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $componentTemplate->save(false)) {
+                        foreach ($attributeModel as $modelAddress) {
+                            $modelAddress->component_template_id = $componentTemplate->id;
+                            if (! ($flag = $modelAddress->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
+                    }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $componentTemplate->id]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+
+        return $this->render('create', [
+            'model' => $componentTemplate,
+            'attributeType' => $attributeType,
+            'attributeModel' => (empty($attributeModel)) ? [new ComponentTemplateAttribute] : $attributeModel
+        ]);
     }
-*/
+
     /**
      * Updates an existing ComponentTemplate model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -128,6 +181,4 @@ class ComponentTemplateAttributeController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-	
-	
 }

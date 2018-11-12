@@ -172,6 +172,7 @@ $img = $model->folder_image;
 
 
 <section>
+	
     <div class="container-fluid">
         <div class="row">
             <section>
@@ -181,7 +182,7 @@ $img = $model->folder_image;
                   </div>  
                     	<div class="row">
    						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
+   						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders]) ?>
                     	</div>
             </section>
         </div>
@@ -190,10 +191,11 @@ $img = $model->folder_image;
 			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
 
-				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
+				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE'];
+			
 			?>
 			
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
@@ -250,7 +252,7 @@ $img = $model->folder_image;
 ?>
 <?php 
 $indexJs = <<<JS
-
+localStorage.setItem("skipValidation", "");
 $(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')

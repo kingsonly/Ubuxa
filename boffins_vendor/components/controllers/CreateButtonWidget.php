@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii;
 use frontend\models\Folder;
+use frontend\models\ComponentTemplate;
 
 ?>
 
@@ -35,14 +36,21 @@ class CreateButtonWidget extends Widget{
 	}
 	
 	// output the outcome of loopmenu
-	public function run(){
-		
+	public function run()
+	{
+		$componentTemplate = $this->getComponentTemplate();
 		return $this->render('createbuttonview',[
 			'buttonType' => $this->buttonType,
 			'class' => $this->buttonType,
 			'htmlAttributes' => $this->htmlAttributes,
 			'iconJs' => $this->iconJs,
+			'componentTemplate' => $componentTemplate,
 		]);
+	}
+	// fetch all company and default atrribute 
+	private function getComponentTemplate()
+	{
+		return  ComponentTemplate::find()->where(['cid'=>0])->orWhere(['cid' =>yii::$app->user->identity->cid])->all();
 	}
 	
 }
