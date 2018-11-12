@@ -1,9 +1,9 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
-use app\boffins_vendor\behaviors\DeleteUpdateBehavior;
+use boffins_vendor\behaviors\DeleteUpdateBehavior;
 
 /**
  * This is the model class for table "{{%supplier}}".
