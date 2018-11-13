@@ -228,18 +228,17 @@ $img = $model->folder_image;
         foreach ($model->subFolders as $subfolders) {
         $checks = $subfolders->buildTree($results, $subfolders->id);
         $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
-    ?>
-         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
-            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
-            
-            		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num ?>">
-		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconzz"></i><? $subfolders->printTree($checks); ?></a></li>
-              		</ul>
-      
+    ?>		<li class="has-children">
+	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
+	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+	            
+	            		<? $subfolders->printTree($checks); ?>
+            </li>
            
         <?php $num++; }?>
   <? $this->endBlock();?>
   </section>
+
 
 <? 
     Modal::begin([

@@ -152,38 +152,30 @@ class Folder extends FolderARModel
 
     public function buildTree(array $elements, $parentId) 
 	{
-        $branch = array();
+        $child = array();
         foreach ($elements as $element) {
             if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id']);
                 if (!empty($children)) {
                     $element['children'] = $children;
                 }
-                $branch[] = $element;
+                $child[] = $element;
             }
         }
-        return $branch;
+        return $child;
 	}
 
-    public function printTree($tree, $r = 0, $p = null) {
+    public function printTree($trees) {
 
-        foreach ($tree as $i => $t) {
+        foreach ($trees as $tree) {
 
-            $dash = ($t['parent_id'] == 0) ? '' : str_repeat('', $r) .' ';
+            printf("<ul class='first-list' id='menu-folders%d'>
+                        <li class='second-list' id='menu-folders%d'><a href='#'' class='list-link%d'><i class='fa fa-folder iconzz'></i>%s</a></li>
+                    </ul>", $tree['id'], $tree['id'], $tree['id'], $tree['title']);
 
-            printf("\t<option value='%d'>%s%s</option>\n", $t['id'], $dash, $t['title']);
+            if (isset($tree['children'])) {
 
-            if ($t['parent_id'] == $p) {
-
-                // reset $r
-
-                $r = 0;
-
-            }
-
-            if (isset($t['children'])) {
-
-                $this->printTree($t['children'], $r+1, $t['parent_id']);
+                $this->printTree($tree['children'], $tree['parent_id']);
 
             }
 

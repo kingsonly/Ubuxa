@@ -54,12 +54,13 @@
     color: #fff;
 }
 
+
 </style>
 
 
 <div id="mySidenav" class="sidenav">
   <div class="close-kanban">
-    <a href="javascript:void(0)" class="closebtn">&times;</a>
+    <a class="closebtn">&times;</a>
       <?php if (isset($this->blocks['kanban'])){ ?>
               <?= $this->blocks['kanban'] ?>
       <?php }?>
@@ -84,6 +85,6 @@ $viewBoard = <<<JS
 
 
 JS;
-$this->registerJs($viewBoard, $this::POS_END);
+$this->registerJs($viewBoard);
 ?>
 

@@ -45,7 +45,7 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
-        $model = new Task;
+        /** $model = new Task;
         $dataProvider = $model->displayTask();
         $task = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
@@ -55,7 +55,22 @@ class TaskController extends Controller
             'model' => $model,
             'task' => $task,
             'reminder' => $reminder,
-        ]);
+        ]); */
+        $perpage=10;
+        $task = new Task();
+        if(isset($_GET['src1'])){
+            if(Yii::$app->request->post('page')){
+                $numpage = Yii::$app->request->post('page');
+                $ownerid = Yii::$app->request->post('ownerId');
+                $offset = (($numpage-1) * $perpage);
+                     
+                $taskclips = $task->specificClips($ownerid,2,$offset,$perpage,'task');
+                return $this->renderAjax('index', [
+                         'tasks' => $taskclips,
+                     ]);
+                
+            } 
+        }
     }
 
     /**
