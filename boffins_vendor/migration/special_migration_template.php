@@ -32,7 +32,8 @@ class <?= $className ?> extends Migration
 	 */
 	public function init()
     {
-        $this->db = $this->db . $this->db_suffix; . 
+		//if changing the database connection, the next 3 lines need to be uncommented. Works with SpecialMigration controller only.
+        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; . 
         parent::init();
     }
 
