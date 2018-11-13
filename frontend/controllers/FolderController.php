@@ -14,11 +14,13 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
+use frontend\models\Component;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Expression;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 use boffins_vendor\queue\FolderUsersQueue;
 
@@ -97,10 +99,12 @@ class FolderController extends Controller
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
         $label = new label();
+        $componentModel = new Component();
         $taskLabel = new TaskLabel();
         $taskAssignedUser = new TaskAssignedUser();
         $cid = Yii::$app->user->identity->cid;
         $users = $model->users;
+		$componentCreateUrl = Url::to(['component/create']);
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -134,6 +138,8 @@ class FolderController extends Controller
             'taskAssignedUser' => $taskAssignedUser,
             'users' => $users,
             'id' => $id,
+            'componentCreateUrl' => $componentCreateUrl,
+            'componentModel' => $componentModel,
         ]);
     }
 	

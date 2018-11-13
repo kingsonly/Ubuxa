@@ -19,10 +19,12 @@ class SubFolders extends Widget
         parent::init();
     }
 	public $folderModel;
+	public $displayModel;
 	public $htmlAttributes;
 	public $folderCarouselWidgetAttributes;
 	public $createButtonWidgetAttributes;
 	public $folderPrivacy;
+	public $formAction;
 	
     public function run()
     {
@@ -33,6 +35,8 @@ class SubFolders extends Widget
 			'folderCarouselWidgetAttributes' => $this->folderCarouselWidgetAttributes,
 			'createButtonWidgetAttributes' => $this->createButtonWidgetAttributes,
 			'folderPrivacy' => $this->folderCarouselWidgetAttributes['folderPrivacy'],
+			'formAction' => $this->formAction,
+			'displayModel' => $this->displayModel,
 		]);
     }
 }

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 
+
 /* @var $this yii\web\View */
 /* @var $model frontend\models\ComponentTemplate */
 /* @var $form yii\widgets\ActiveForm */
@@ -85,19 +86,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     <?php ActiveForm::end(); ?>
 
+
 </div>
 
-
-
-
-
-
-
-
-
-
-
-	<?php 
+<?php 
 $indexJs = <<<JS
 
 	$(".dynamicform_wrapper").on("beforeInsert", function(e, item) {

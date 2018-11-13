@@ -35,6 +35,7 @@ class Folder extends FolderARModel
      */
 	public $privateFolder;
 	public $upload_file;
+	public $externalTemplateId;
 	
     public static function tableName()
     {
@@ -44,9 +45,7 @@ class Folder extends FolderARModel
 	public  function init()
     {
 		parent::init();
-		//if(empty($this->description)){
-			//$this->description = 'Add a description';
-		//}
+		
         
     }
 
@@ -58,7 +57,7 @@ class Folder extends FolderARModel
         return [
             [['parent_id', 'deleted', 'cid','private_folder'], 'integer'],
             [['title'], 'required'],	
-            [['last_updated','privateFolder','upload_file','folder_image'], 'safe'],
+            [['last_updated','privateFolder','upload_file','folder_image','externalTemplateId'], 'safe'],
             [['title'], 'string', 'max' => 40],
             [['description','folder_image'], 'string', 'max' => 255],
         ];
@@ -96,6 +95,14 @@ class Folder extends FolderARModel
     {
         return $this->hasMany(Component::className(), ['id' => 'component_id'])->viaTable('tm_folder_component', ['folder_id' => 'id']);
     }
+	public function getComponentTemplateAsComponents()
+    {
+        return $this->hasMany(Component::className(), ['id' => 'component_id',])->andWhere(['component_template_id' => $this->externalTemplateId])->viaTable('tm_folder_component', ['folder_id' => 'id']);
+    }
+	
+	public function getFolderComponentTemplate(){
+		return $this->hasMany(ComponentTemplate::className(), ['id' => 'component_template_id'])->via('components');
+	}
 
     /**
      * @return \yii\db\ActiveQuery

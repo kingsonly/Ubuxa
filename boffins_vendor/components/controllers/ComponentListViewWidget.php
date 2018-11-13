@@ -64,20 +64,11 @@ class ComponentListViewWidget extends Widget{
 			'modelClassName' => $modelClassName,
 			'content' => $this->content,
 			'hoverEffect' => $this->hoverEffect,
-			'action' => $this->action,
-			'icons' => $this->icons(),
+			
+			
 		]);
 	}
-	/*
-	* Private icons used to diaplay FA Fonts for action buttons 
-	*
-	*/
-	private function icons(){
-		return [
-			'delete' => 'fa fa-trash',
-			'update' => 'fa fa-pencil',
-		];
-	}
+	
 	
 	
 }

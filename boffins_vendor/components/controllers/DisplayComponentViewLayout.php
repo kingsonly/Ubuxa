@@ -23,6 +23,10 @@ class DisplayComponentViewLayout extends Widget{
 	public $viewAttributes;  
 	public $listAttributes; 
 	public $menuAttributes; 
+	
+	public $folderId; 
+	public $componentId; 
+	public $templateId; 
 	/*
 	this properties are presently not in use, but could be used in  the future
 	*/
@@ -50,6 +54,9 @@ class DisplayComponentViewLayout extends Widget{
 			'listAttributes' => $this->listAttributes,
 			'menuAttributes' => $this->menuAttributes,
 			'id' => $this->id,
+			'folderId' => $this->folderId,
+			'componentId' => $this->componentId,
+			'templateId' => $this->templateId,
 		]);
 	}
 	

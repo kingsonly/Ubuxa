@@ -74,13 +74,10 @@ $jsEventTriger = $htmlAttributes['class'];
 		</div>
 
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		<li id="<?= $jsEventTriger;?>-component" class="">Create Invoice</li>
-		<hr>
-		<li>Create Project</li>
-		<hr>
-		<li>Create Payment</li>
-		<hr>
-		<li>Create Order</li>
+		<? foreach($componentTemplate as $componentList){?>
+		<li id="<?= $jsEventTriger.$componentList->id;?>-component" data-templateid="<?= $componentList->id; ?>" class="<?= $jsEventTriger;?>-component">Create <?= $componentList->name;?></li>
+		
+		<?}?>
 
 		</div>
 		</div>
@@ -115,9 +112,10 @@ $("#"+"$jsEventTriger"+"-icon").click(function(e){
 	 $iconJs
 });
 
-$("#"+"$jsEventTriger"+"-component").click(function(e){
+$("."+"$jsEventTriger"+"-component").click(function(e){
 	$( ".$jsEventTriger-new-content" ).hide();
 	//$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
+	$( ".create-new-$jsEventTriger" ).find('#component-component_template_id').val($(this).data('templateid'));
 	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
 	$( ".create-new-$jsEventTriger" ).addClass('display');
      e.stopPropagation();

@@ -65,12 +65,21 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 		
 			<div class="">
 				<div class="">
+				
 					<?= FolderCarouselWidget::widget([
-							'folderModel' => $components, 
+							'folderModel' => $model, 
+							'model' => $displayModel, 
+							'folderId' => $folderId, 
 							'displayType' => 'component',
 							'height' => $height,
 							'numberOfDisplayedItems' => 4,
 							'htmlAttributes'=>'test',
+							'createFormWidgetAttribute'=>[
+								'formId'=>'create-component-form', 
+								'formAction'=>$formAction,
+								'refreshSectionElement'=>'component-create-refresh',
+								
+							]
 						]) ?>
 				</div>
 				</div>
