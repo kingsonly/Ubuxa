@@ -95,14 +95,6 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-    .view-task-board{
-	display: none;
-	background-color: #fff;
-	box-shadow: 5px 8px 25px -2px rgba(0,0,0,0.1);
-	padding-top: 10px;
-	position: relative;
-	overflow: scroll;
-}
     
 </style>
 
@@ -110,6 +102,8 @@ $img = $model->folder_image;
 
 
 <section>
+	
+	
     <div class="container-fluid">
         <div class="row">
             <section>
@@ -134,69 +128,145 @@ $img = $model->folder_image;
         	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
 			<?php Pjax::end(); ?>
             <section>
+            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             	<div class="row test5">
-					
-            		<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
-
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
-
+            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
             	</div>
+            	<?php Pjax::end(); ?>
             </section>
         </div>
     </div>
-    <?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-    <div class="view-task-board">
-    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser]) ?>
-    </div>
-    <?php Pjax::end(); ?>
+    
+    <? $this->beginBlock('kanban')?>
+    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
+		    <div class="view-task-board">
+		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+		    </div>
+	    <?php Pjax::end(); ?>
+    <? $this->endBlock();?>
+    
         
 </section>
 
-  <? $this->beginBlock('sidebar')?>
-  	<div id="two">
-    	<ul class="list_load">
-    		<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-    	</ul>
-    </div>
-    <div id="three">
-    	<ul class="list_load">
-			<li class="list_item"><a href="#">List Item 01</a></li>
-			<li class="list_item"><a href="#">List Item 02</a></li>
-			<li class="list_item"><a href="#">List Item 03</a></li>
-			<li class="list_item"><a href="#">List Item 04</a></li>
-		</ul>
-    </div>
+  
+  <? $this->beginBlock('subfolders')?>
+  	<?php 
+    	$num = 1;
+        foreach ($model->subFolders as $subfolders) {
+        $checks = $subfolders->buildTree($subfolders->subFolders, $subfolders->id);
+        $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
+    ?>
+         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
+            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+            <?php
+            	$num2 = 2;
+            	foreach ($checks as $innerFolders) { ?>
+            		<ul class="first-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>">
+		                <li class="second-list" id="menu-folders<?=$subfolders->id.'-'.$num2 ?>"><a href="#0" class="list-link<?=$subfolders->id.'-'.$num2 ?>"><i class="fa fa-folder iconzz"></i><?= $innerFolders->title; ?></a></li>
+              		</ul>
+      
+           <?php } ?>
+        <?php $num2++;$num++; }?>
   <? $this->endBlock();?>
+
+<? 
+    Modal::begin([
+        'header' =>'<h1 id="headers"></h1>',
+        'id' => 'boardContent',
+        'size' => 'modal-md',
+        //'backdrop' => false,  
+    ]);
+?>
+<div id="viewcontent"></div>
+<?
+    Modal::end();
+?>
 
 <?php 
 $indexJs = <<<JS
 
-$(function(){
-    $("#boardButton").on('click', function(e){
-        $(".test5").slideUp('slow');
-        $('.view-task-board').show();
+$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
+}); })
+
+	$('.test3').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    $('.test1').each(function(){
+	$(this).click(function(){
+		$('#task2'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+    
+    $('.test').each(function(){
+	$(this).click(function(){
+		$('#task'+$(this).data('number')).slideToggle();
+
+		if($(this).hasClass('fa-caret-down')){
+				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
+			} else {
+				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
+			}
+		})
+	})
+
+	
+
+	$('.client').on('click', function() {
+					$(document).find('#sliderwizz1').show();
+					$(document).find('#sliderwizz').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz3').hide();
+	})
+	
+	$('.supplier').on('click', function() {
+					$(document).find('#sliderwizz2').show();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('.contact').on('click', function() {
+					$(document).find('#sliderwizz3').show();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+					$(document).find('#sliderwizz').hide();
+	})
+	
+	$('#activeuser').on('click', function() {
+					$(document).find('#sliderwizz').show();
+					$(document).find('#sliderwizz3').hide();
+					$(document).find('#sliderwizz2').hide();
+					$(document).find('#sliderwizz1').hide();
+	})
+
+	$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
   });
-  $('.task-icon').on('click',function(e){
-  		e.preventDefault();
-	    //$(".view-task-board").hi('slow');
-	    $(".view-task-board").hide();
-	    $('.test5').slideDown('slow');
-   });
-});
+	
 	
 JS;
  
 $this->registerJs($indexJs);
 ?>
 
-
-
-
-
-
-<?= MenuWidget::widget(); ?>
 	
 	
 			

@@ -20,7 +20,8 @@ use yii\widgets\ActiveForm;
 <?php
 $labelUrl = Url::to(['label/create']);
 $assignee = <<<JS
-$('.task-label-class').on('beforeSubmit', function(e) { 
+$('.task-label-class').on('beforeSubmit', function(e) {
+            e.preventDefault(); 
            var form = $(this);
             if(form.find('#activeLabel').length) {
                 return false;
@@ -33,7 +34,7 @@ $('.task-label-class').on('beforeSubmit', function(e) {
                     console.log('completed');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-label-refresh",async: false});
+                    //$.pjax.reload({container:"#task-label-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
