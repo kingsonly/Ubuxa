@@ -7,7 +7,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clients';
+$this->title = 'Suppliers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style type="text/css">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
  }
 .tbl-contents{
   min-height:300px;
-  margin-top: 0px;
+  margin-top: 50px;
   border: 1px solid rgba(255,255,255,0.3);
 }
 td{
@@ -65,7 +65,6 @@ td{
     padding-left: 24px;
 }
 .table-headers{
-    display: none;
     background: #3c8dbc;
     padding: 20px 15px;
     text-align: left;
@@ -74,8 +73,29 @@ td{
     color: #fff !important;
     text-transform: uppercase;
 }
-.table-rows{
+.table-rows td{
     border-bottom: 1px solid #ccc;
+}
+.th-table{
+    display: none;
+    position: fixed;
+    background: #367fa9;
+    width: 491px;
+    z-index: 1;
+    /* top: 0; */
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+    font-size: 12px;
+    color: #fff;
+    text-transform: uppercase;
+}
+.img-corp{
+    height: 100px;
+    width: 100px;
+    padding-left: 17px;
+    border-radius: 50%;
 }
 
 
@@ -84,40 +104,12 @@ td{
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 </style>
 <div class="client-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<div >
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'corporation_id',
-            [
-                'label' => 'Name',
-                'value' => 'name'
-            ],
-            'last_updated',
-            'deleted',
-            'cid',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
-    <div style="background:#fff;padding: 10px">
+    <div style="background:#fff;padding: 10px;height:600px;overflow-y:scroll;padding-top:0px">
           <div class="tbl-header">
             <table cellpadding="0" cellspacing="0" border="0">
               <thead class="table-headers">
                 <tr>
-                  <th>Company Name</th>
-                  <th>Short Name</th>
-                  <th>Action</th>
+                  <th class="th-table">Employees</th>
                 </tr>
               </thead>
             </table>
@@ -125,30 +117,30 @@ td{
           <div class="tbl-contents">
             <table cellpadding="0" cellspacing="0" border="0">
               <tbody>
-                <? foreach($clients as $client){?>
+                <? foreach($dataProvider as $data){?>
                     <tr class="table-rows">
                       <td>
                         <div class="row">
                           <div class="client-info-block col-md-12">
-                            <div class=" col-md-2">
-                              <div class="user-avatar user-default-avatar" style="background: url('<?= Url::to('@web/images/company/logo/company2.png'); ?>') no-repeat center center; background-size: cover;"></div>
+                            <div class="img-corp col-md-2">
+                              <div class="user-avatar user-default-avatar" style="background: url('<?= Url::to('@web/images/users/default-user.png'); ?>') no-repeat center center; background-size: cover;"></div>
                               </div>
-                              <div class="col-md-10">
+                              <div class="col-md-10" style="padding:0px">
                                 <div class="company-name">
                                     <div class="company-name-id" style="text-transform: uppercase;">
-                                        <?= $client['name']; ?>
+                                        <?= $data->fullname; ?>
                                     </div>
                                     
                                 </div>
                                 <div class="company-name">
                                     <div class="company-name-id">
-                                        <?= $client['notes']; ?>
+                                        <?//= $supplier['notes']; ?>
                                     </div>
                                     
                                 </div>
                                 <div class="company-name">
                                     <div class="company-name-id">
-                                        <button class="btn btn-primary"><?= $client['shortName']; ?></button>
+                                        <button class="btn btn-primary"><?= $data->role->name; ?></button>
                                     </div>
                                     
                                 </div>
