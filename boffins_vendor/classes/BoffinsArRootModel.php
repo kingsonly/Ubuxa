@@ -24,7 +24,6 @@ use frontend\models\Clip;
 
 class BoffinsArRootModel extends ActiveRecord
 {
-	
 	/**
      * Initialise AR. 
 	 * Respond to new Events defined in DeleteUpdateBehavior
@@ -182,12 +181,6 @@ class BoffinsArRootModel extends ActiveRecord
 	{
 		return [
 			
-			"dateValues" => [
-				"class" => DateBehavior::className(),
-			],
-			'ClipOnBehavior' => ClipOnBehavior::className(),
-			
-			"deleteUpdateBehavior2" => DeleteUpdateBehavior::className(),
 		];
 
 	}
