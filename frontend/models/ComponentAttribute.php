@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\Sortable;
 
 /**
  * This is the model class for table "{{%component_attribute}}".
@@ -16,7 +18,7 @@ use Yii;
  * @property Component $component
  * @property ComponentTemplateAttribute $componentTemplateAttribute
  */
-class ComponentAttribute extends \boffins_vendor\classes\BoffinsArRootModel
+class ComponentAttribute extends BoffinsArRootModel implements Sortable
 {
     /**
      * {@inheritdoc}
@@ -48,7 +50,7 @@ class ComponentAttribute extends \boffins_vendor\classes\BoffinsArRootModel
             'component_id' => Yii::t('component', 'Component ID'),
             'component_template_attribute_id' => Yii::t('component', 'Component Template Attribute ID'),
             'value_id' => Yii::t('component', 'Value ID'),
-            'cid' => Yii::t('component', 'Cid'),
+            'value' => Yii::t('component', 'Value'),
         ];
     }
 
@@ -67,4 +69,32 @@ class ComponentAttribute extends \boffins_vendor\classes\BoffinsArRootModel
     {
         return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id']);
     }
+	
+	/**
+	 *  @brief retrieve the relation between the attribute and it's actual value (a member of ValueARModel)
+	 *  
+	 *  @return \yii\db\ActiveQuery or subclass
+	 *  
+	 *  @details retrieves the valueClassName from the attribute Template (componentTemplateAttribute relation)
+	 *  and then uses value_id to retrieve the actual relation
+	 */
+	protected function getValueObject()
+	{
+		$valueClassNme = $this->componentTemplateAttribute->valueClassName;
+		return $this->hasOne($valueClassNme::className(), ['id' => 'value_id']);
+	}
+	
+	public function getValue()
+	{
+		if (empty($this->valueObject)) {
+			Yii::warning("Trying to get a value for an attribute but the value is empty!");
+			return '';
+		}
+		return $this->valueObject->stringValue();
+	}
+	
+	public function getSortField()
+	{
+		return $this->value->sortfield;
+	}
 }

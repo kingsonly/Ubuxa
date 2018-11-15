@@ -3,18 +3,20 @@
 namespace frontend\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use yii\db\ActiveQuery;
+
+
 /**
  * This is the model class for table "{{%component_attribute_type}}".
  *
  * @property int $id types may be money/amount, string, object 
  * @property string $name just a public name for the customer/user
- * @property string $type must be a type: integer, varchar, decimal, classname, or blob
+ * @property string $type must be a type: integer, varchar, decimal, known_class_name, or variant_object etc
  * @property string $default_format a default format if the user does not set one
  *
  * @property ComponentTemplateAttribute[] $componentTemplateAttributes
  */
-class ComponentAttributeType extends ActiveRecord
+class ComponentAttributeType extends \boffins_vendor\classes\BoffinsArRootModel
 {
     /**
      * {@inheritdoc}
@@ -55,4 +57,13 @@ class ComponentAttributeType extends ActiveRecord
     {
         return $this->hasMany(ComponentTemplateAttribute::className(), ['attribute_type_id' => 'id']);
     }
+	
+	/***
+	 *  @inheritdoc
+	 */
+	public static function find()
+	{
+		return new ActiveQuery(get_called_class());	
+	}
+
 }

@@ -11,7 +11,7 @@ use Yii;
  * @property string $value
  * @property string $type a preferred data type to convert the value to if it is not serialised - this is not indexed
  */
-class ValueVariantString extends \boffins_vendor\classes\BoffinsArRootModel
+class ValueVariantString extends \boffins_vendor\classes\models\ValueARModel
 {
     /**
      * {@inheritdoc}

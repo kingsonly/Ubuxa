@@ -6338,10 +6338,10 @@ CREATE TABLE IF NOT EXISTS `tm_user` (
 --
 
 INSERT INTO `tm_user` (`id`, `person_id`, `basic_role`, `username`, `password`, `salt`, `authKey`, `last_login`, `last_updated`, `deleted`, `cid`) VALUES
-(24, 2, 1, 'admin', '$2y$13$C0AmXXsce9pIJEbsq67rJ.LG6.um9bVYOqMwOK4aUCeproz8v3JYu', '2X6zOUK7d', NULL, '2018-09-05 04:32:18', '0000-00-00', 0, NULL),
-(31, 3, 2, 'demo2', '$2y$13$Mu7HMKy4HWywBbmGimt3Ke5ChkMeUHphJQJrMQ3qMQPf0U0JmBl3W', 'QjZDJqf2I', NULL, NULL, '2017-10-06', NULL, NULL),
-(33, 48, 3, 'guest', '$2y$13$bALWS4jJCxPAJK3NuAQ7Q.ohjx5n5rWt0AIywhcpi7xSp31ovrQNe', 'ER4E6YMDQ', NULL, '2018-05-25 06:51:23', '0000-00-00', NULL, NULL),
-(34, 49, 3, 'gabriel', '$2y$13$pzpLjehLmW6K6cZ8Cqu/EOfSTc9N2fGP3eZrZ5oQMz5tFNzdk17aa', 'ncwKNqfYp', NULL, '2017-11-24 17:17:16', '0000-00-00', NULL, NULL);
+(24, 2, 1, 'admin', '$2y$13$C0AmXXsce9pIJEbsq67rJ.LG6.um9bVYOqMwOK4aUCeproz8v3JYu', '2X6zOUK7d', NULL, '2018-09-05 04:32:18', '0000-00-00', 0, 33),
+(31, 3, 2, 'demo2', '$2y$13$Mu7HMKy4HWywBbmGimt3Ke5ChkMeUHphJQJrMQ3qMQPf0U0JmBl3W', 'QjZDJqf2I', NULL, NULL, '2017-10-06', 1, 33),
+(33, 48, 3, 'guest', '$2y$13$bALWS4jJCxPAJK3NuAQ7Q.ohjx5n5rWt0AIywhcpi7xSp31ovrQNe', 'ER4E6YMDQ', NULL, '2018-05-25 06:51:23', '0000-00-00', 0, 33),
+(34, 49, 3, 'gabriel', '$2y$13$pzpLjehLmW6K6cZ8Cqu/EOfSTc9N2fGP3eZrZ5oQMz5tFNzdk17aa', 'ncwKNqfYp', NULL, '2017-11-24 17:17:16', '0000-00-00', 0, 33);
 
 -- --------------------------------------------------------
 
