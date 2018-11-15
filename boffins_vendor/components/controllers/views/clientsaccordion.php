@@ -6,7 +6,7 @@ Main Components
 .cd-clients-accord-menu {
     width: 100%;
     max-width: 360px;
-    background: #FFF;
+    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -36,7 +36,7 @@ Main Components
 .cd-clients-accord-menu .accord-label, .cd-clients-accord-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #fff;
+  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -61,7 +61,7 @@ Main Components
   cursor: pointer;
   display: block;
   padding: 15px 15px 15px 42px;
-  color: #4D4D4D;
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   border-bottom: 1px solid #aba6a6;
@@ -200,7 +200,7 @@ Main Components
 }
 </style>
 
-  <ul class="cd-clients-accord-menu animated">
+  <ul class="cd-clients-accord-menu animatedd">
     <li class="has-clients-children">
 
       <input type="checkbox" name="clients-100" class="accord-input" id="clients-100">
@@ -208,7 +208,7 @@ Main Components
 
           <ul class="first-list">
             <li class="has-clients-children">
-              Test          
+              Test test         
             </li>      
           </ul>
     </li>
@@ -230,8 +230,35 @@ $(document).ready(function(){
         ( checkbox.prop('checked') ) ? checkbox.siblings('ul').attr('style', 'display:none;').slideDown(300) : checkbox.siblings('ul').attr('style', 'display:block;').slideUp(300);
       });
     });
-  }
+  } 
+
+  $('.animatedd').click(function(){
+     $('.client-container').css({
+       'visibility':'visible',
+       '-webkit-transition':'width 2s',
+       'transition':'width 2s, height 2s',
+       'width':'600px',
+       'min-height':'500px'
+      });
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+  })
+
+  $('.close-arrow').click(function(){
+     $('.client-container').css({
+       'width':'300px',
+       'min-height':'1px',
+       'visibility':'hidden'
+      });
+      $('.client-content').hide();
+      setTimeout(function() { 
+        $('.sider').show('slow');
+    }, 900);
+      
+      
+  })
 });
+
 JS;
-$this->registerJs($clientsaccord);
+$this->registerJs($clientsaccord, $this::POS_READY);
 ?>

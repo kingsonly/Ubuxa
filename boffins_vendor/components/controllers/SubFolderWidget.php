@@ -17,6 +17,7 @@ use frontend\models\Folder;
 // this widget helps to display folder on the folder index page and on the dashboard 
 class SubFolderWidget extends Widget{
 	public $model;
+	public $creationModel;
 	public function init()
 	{
 		parent::init();
@@ -26,6 +27,7 @@ class SubFolderWidget extends Widget{
 	public function run(){
 		return $this->render('subfolderwidgetview',[
 			'model' => $this->model,
+			'creationModel' => $this->creationModel,
 		]);
 	}
 	

@@ -14,8 +14,8 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
-
-
+use yii\web\View;
+use frontend\assets\AppAsset;
 
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
@@ -28,6 +28,75 @@ use boffins_vendor\components\controllers\MenuWidget;
 $img = $model->folder_image; 
 ?>
 <style>
+.row.content {
+	 height: 1500px;
+}
+ .onboardnav {
+	 background-color: #f1f1f1;
+	 height: 100%;
+}
+ footer {
+	 background-color: #555;
+	 color: white;
+	 padding: 15px;
+}
+ @media screen and (max-width: 767px) {
+	 .onboardnav {
+		 height: auto;
+		 padding: 15px;
+	}
+	 .row.content {
+		 height: auto;
+	}
+}
+ .popover {
+	 max-width: 375px;
+}
+ .popover .fa {
+	 color: #D47075;
+	 padding-top: 5px;
+}
+ .popover-content {
+	 /* padding: 5px 0; */
+}
+ .hca-tooltip--left-nav {
+	 position: absolute;
+	 background-color: #fff;
+	 border-radius: 6px;
+	 border: 1px solid #efefef;
+	 left: 78px;
+	 top: 60px;
+	 padding: 10px 10px 15px 15px;
+	 font-size: 1em;
+	 width: 340px;
+	 box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	 color: #000;
+	 z-index: 1000;
+	 text-decoration: none;
+}
+ .hca-tooltip--left-nav .hca-tooltip--okay-btn {
+	 padding: 12px 20px;
+	 line-height: 15px;
+	 background-color: #408DDD;
+	 border: none;
+	 color: #fff;
+}
+ .hca-tooltip--left-nav .hca-border-circle--40 {
+	 width: 40px;
+	 height: 40px;
+	 margin-top: 10px;
+	 border-radius: 50%;
+	 font-size: .8em;
+	 color: #F07C8B;
+	 line-height: 38px;
+	 text-align: center;
+	 background: #fff;
+	 border: 1px solid #F07C8B;
+}
+
+*{
+	text-decoration: none;
+}
 	#flash {
 		display: none;
 	}
@@ -95,6 +164,7 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
+
     
 </style>
 
@@ -102,7 +172,6 @@ $img = $model->folder_image;
 
 
 <section>
-	
 	
     <div class="container-fluid">
         <div class="row">
@@ -113,7 +182,7 @@ $img = $model->folder_image;
                   </div>  
                     	<div class="row">
    						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['folderModel' => $model->subFolders,'folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder']]) ?>
+   						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders]) ?>
                     	</div>
             </section>
         </div>
@@ -122,17 +191,20 @@ $img = $model->folder_image;
 			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
 
-				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE']
+				$components  = ['PAYMENT','PROJECT','INVOICE','ORDER','CORRESPONDECE'];
+			
 			?>
 			
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id]) ?>
+        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
 			<?php Pjax::end(); ?>
             <section>
-            	<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
             	<div class="row test5">
-            			<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            		<?php Pjax::end(); ?>
+
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
             	</div>
-            	<?php Pjax::end(); ?>
             </section>
         </div>
     </div>
@@ -145,10 +217,6 @@ $img = $model->folder_image;
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
     
-        
-</section>
-
-  
   <? $this->beginBlock('subfolders')?>
   	<?php 
     	$num = 1;
@@ -168,6 +236,7 @@ $img = $model->folder_image;
            <?php } ?>
         <?php $num2++;$num++; }?>
   <? $this->endBlock();?>
+  </section>
 
 <? 
     Modal::begin([
@@ -181,93 +250,129 @@ $img = $model->folder_image;
 <?
     Modal::end();
 ?>
-
 <?php 
 $indexJs = <<<JS
-
-$('#refresh').click(function(){ $.pjax.reload({container:"#content",async: false
-}); })
-
-	$('.test3').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    $('.test1').each(function(){
-	$(this).click(function(){
-		$('#task2'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-    
-    $('.test').each(function(){
-	$(this).click(function(){
-		$('#task'+$(this).data('number')).slideToggle();
-
-		if($(this).hasClass('fa-caret-down')){
-				$(this).removeClass('fa-caret-down').addClass('fa-caret-up');
-			} else {
-				$(this).removeClass('fa-caret-up').addClass('fa-caret-down');
-			}
-		})
-	})
-
-	
-
-	$('.client').on('click', function() {
-					$(document).find('#sliderwizz1').show();
-					$(document).find('#sliderwizz').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz3').hide();
-	})
-	
-	$('.supplier').on('click', function() {
-					$(document).find('#sliderwizz2').show();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('.contact').on('click', function() {
-					$(document).find('#sliderwizz3').show();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-					$(document).find('#sliderwizz').hide();
-	})
-	
-	$('#activeuser').on('click', function() {
-					$(document).find('#sliderwizz').show();
-					$(document).find('#sliderwizz3').hide();
-					$(document).find('#sliderwizz2').hide();
-					$(document).find('#sliderwizz1').hide();
-	})
-
-	$(function(){
+localStorage.setItem("skipValidation", "");
+$(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')
         .find('#viewcontent')
         .load($(this).attr('value'));
         });
   });
-	
-	
+  $(function() {
+
+  var tour = new Tour({
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Title1",            
+          content: "Message 1"
+        },
+        {
+          element: "#addTask",
+          title: "Title2",
+          content: "Message 2",
+        },
+        {
+          element: ".side_menu",
+          title: "Title3",
+          content: "Message 3",
+          onShow: function(tour) {
+          	$('.side_menu').removeClass('side-drop');
+    		$('.list_load, .list_item').stop();
+			$(this).removeClass('closed').addClass('opened');
+
+			$('.side_menu').css({ 'left':'0px' });
+
+			var count = $('.list_item').length;
+			$('.list_load').slideDown( (count*.6)*100 );
+			$('.list_item').each(function(i){
+				var thisLI = $(this);
+				timeOut = 100*i;
+				setTimeout(function(){
+					thisLI.css({
+						'opacity':'1',
+						'margin-left':'0'
+					});
+				},100*i);
+			});
+		    }
+        },
+        {
+          element: ".open-board",
+          title: "Title4",
+          content: "Message 4",
+          onShow: function(tour){
+          	$('.side_menu').addClass('side-drop');
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo("#content");
+		    $(".tour-step-background").appendTo("#content");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-container",
+          title: "Task board",
+          content: "This is your task board.",
+          placement: "bottom",
+          onShow: function(tour){
+          	$('#mySidenav').css({'width':'100%'});
+          	},
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".view-task-board");
+		    $(".tour-step-background").appendTo(".view-task-board");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".drag-item:first",
+          title: "Title 6",
+          content: "Message 6",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-container");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        {
+          element: ".add-card:first",
+          title: "Title 7",
+          content: "Message 7",
+          onShown: function(tour){
+          	$(".tour-backdrop").appendTo(".drag-column:first");
+		    $(".tour-step-background").appendTo(".drag-container");
+		    $(".tour-step-background").css("left", "0px");
+          	},
+        },
+        
+      ],
+    backdrop: true,  
+    storage: true,
+    smartPlacement: true,    
+    onEnd: function (tour) {
+    	$('.side_menu').addClass('side-drop');
+        $('#mySidenav').css({'width':'0'})
+  		$('.list_load, .list_item').stop();
+	$(this).removeClass('opened').addClass('closed');
+
+	$('.side_menu').css({ 'left':'-300px' });
+
+	var count = $('.list_item').length;
+	$('.list_item').css({
+		'opacity':'0',
+		'margin-left':'-20px'
+	});
+	$('.list_load').slideUp(300);
+  		},
+  });
+ tour.init();
+ tour.start(true);
+
+});
+
 JS;
  
 $this->registerJs($indexJs);
 ?>
-
-	
-	
-			
-		

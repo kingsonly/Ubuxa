@@ -7,10 +7,10 @@ use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use yii\web\JsExpression;
 use yii\widgets\Pjax;
+use frontend\models\Folder;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Folder */
 /* @var $form yii\widgets\ActiveForm */
-
 ?>
 <style>
 	#loadingdiv{
@@ -33,7 +33,7 @@ use yii\widgets\Pjax;
 		 flex:1;
 	}
 	
-	#create-new-folder-title{
+	#create-new-<?=$formId;?>-title{
 		height: 33px;
 		border:0px;
 		width: 100%;
@@ -68,7 +68,7 @@ use yii\widgets\Pjax;
 		padding-right: 4px;
 		height: 40px;
 	}
-	#folderform{
+	#folderform-<?=$formId;?>{
 		background: #fff;
 		border: solid 2px green;
 		display: block;
@@ -97,11 +97,14 @@ if(isset($_GET['id'])){
 	}else{
 		$folderId = 0;
 	}
-    $form = ActiveForm::begin(['action'=>Url::to(['folder/create']),'id'=> 'folderform','fieldConfig' => ['template' => '{label}{input}']]); ?>
-<div id="loadingdiv"> loading .....</div>
+    $form = ActiveForm::begin(['action'=>!empty($formAction)?$formAction:Url::to(['folder/create']),'id'=> 'folderform-'.$formId,'fieldConfig' => ['template' => '{label}{input}']]); ?>
+
     
 
 <div id="form-content">
+	
+	
+	<? if($creationType == 'folder'){?>
 	<span>
 	<?
 		
@@ -114,20 +117,25 @@ if(isset($_GET['id'])){
 		}
 		
 	?>
-		  <?= $form->field($folderModel, 'privateFolder')->widget(Select2::classname(), [
-    'data' => $privacy,
-    'options' => [],
-	'hideSearch' => true,
-    'pluginOptions' => [
-        'templateResult' => new JsExpression('format'),
-        'templateSelection' => new JsExpression('format'),
-        'escapeMarkup' => $escape,
-        
-    ],
-])->label(false);?>
+		<?= $form->field($folderModel, 'privateFolder')->widget(Select2::classname(),
+																[
+																	'data' => $privacy,
+																	'options' => ['id'=>$pjaxId.'sss'],
+																	'hideSearch' => true,
+																	'pluginOptions' => [
+																		'templateResult' => new JsExpression('format'),
+																		'templateSelection' => new JsExpression('format'),
+																		'escapeMarkup' => $escape,
+																		],
+																])->label(false);?>
 	</span>
+	<? }else{?>
+	<? $folderComponentJunctionTableModel = new \frontend\models\FolderComponent;?>
+		<?= $form->field($folderComponentJunctionTableModel, 'folder_id')->hiddenInput(['value' => $folderId])->label(false); ?>
+		<?= $form->field($folderModel, 'component_template_id')->hiddenInput(['value' => ''])->label(false); ?>
+	<? }?>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['id' => 'create-new-folder-title','placeholder'=>'Folder title'])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['id' => 'create-new-'.$formId.'-title','placeholder'=>'Folder title'])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>
@@ -135,7 +143,8 @@ if(isset($_GET['id'])){
 	
 
     <span class="form-group">
-        <?= Html::button('Create', ['class' => 'btn btn-success', 'id' => 'submit-folder']) ?>
+        <?= Html::submitButton('Create', ['class' => 'btn btn-success', 'id' =>$formId,'data-button' => $formId ]) ?>
+		<div id="loadingdiv"> loading .....</div>
     </span>
 
 </div>
@@ -150,67 +159,28 @@ if(isset($_GET['id'])){
 <?php 
 $url = Url::to(['folder/check-if-folder-name-exist']);
 $js = <<<JSS
-
- function useSameName(){
-			var \$form = $('#folderform');
-			$.post(\$form.attr('action'),\$form.serialize())
-			.always(function(result){
-			jsonResult = result;
-		   if(jsonResult.message == 'sent'){
-		   			options = {
-					  "closeButton": true,
-					  "debug": false,
-					  "newestOnTop": true,
-					  "progressBar": true,
-					  "positionClass": "toast-top-right",
-					  "preventDuplicates": true,
-					  "showDuration": "300",
-					  "hideDuration": "1000",
-					  "timeOut": "5000",
-					  "extendedTimeOut": "1000",
-					  "showEasing": "swing",
-					  "hideEasing": "linear",
-					  "showMethod": "fadeIn",
-					  "hideMethod": "fadeOut",
-					  "tapToDismiss": false
-		  			}
-				toastr.success('Folder was created successfully', "", options);
-			   $.pjax.reload({container:"#"+"$pjaxId",async: false});
-
-			}else{
-					options = {
-		  "closeButton": true,
-		  "debug": false,
-		  "newestOnTop": true,
-		  "progressBar": true,
-		  "positionClass": "toast-top-right",
-		  "preventDuplicates": true,
-		  "showDuration": "300",
-		  "hideDuration": "1000",
-		  "timeOut": "5000",
-		  "extendedTimeOut": "1000",
-		  "showEasing": "swing",
-		  "hideEasing": "linear",
-		  "showMethod": "fadeIn",
-		  "hideMethod": "fadeOut",
-		  "tapToDismiss": false
-		  }
-		toastr.error('Somthing went wrong', "", options);
-			 $.pjax.reload({container:"#"+"$pjaxId",async: false});
-			}
-			}).fail(function(){
-			console.log('Server Error');
-			});
-
-
-			return false;
-};
-areyousure = 'are you sure ';
-$('#submit-folder').on('click', function (e) {
+ $(document).on('click','#ok',function(){
+ localStorage.setItem("skipValidation", "yes");
+ 	formId = $(this).data('formid');
+	$('#'+formId).trigger('beforeSubmit');
 	
-	getInputIds = $('#create-new-folder-title').val();
+})
+x = 'are you sure ';
+\$buttonId = $(this).data('data-button');
+
+$('#folderform-$formId').on('beforeSubmit', function(e) {  
+	e.preventDefault();
+	if(localStorage.getItem("skipValidation") === 'yes'){
+	
+	}else{
+		localStorage.setItem("skipValidation", "no");
+	}
+	var \$form = $(this);
+	var  \$getIdOfForm = \$form.attr('id');
+	getInputIds = $('#create-new-$formId-title').val();
 	$.get('$url'+'&folderName='+getInputIds, function(data) {
-		if(data == 1){
+	if(data == 1 && localStorage.getItem("skipValidation") === 'no'){
+		
 		options = {
 		  "closeButton": true,
 		  "debug": false,
@@ -228,21 +198,102 @@ $('#submit-folder').on('click', function (e) {
 		  "hideMethod": "fadeOut",
 		  "tapToDismiss": false
 		  }
-		toastr.error('name exist and could cause a conflict, you could change or use same name if you chose.<div><button type="button" id="okBtn" onclick="useSameName()" class="btn btn-primary">Use Same Name</button></div>', "Title", options);
+		  
+		toastr.error('name exist and could cause a conflict, you could change or use same name if you chose.<div><button type="button" id="ok" data-formid="folderform-$formId"  class="btn btn-primary">Use Same Name</button></div>', "Title", options);
+		
 		}else{
-		
-		useSameName();
-		}
-		
-		
-	});
-
-    
-    
-    
+		$.ajax({
+                url: \$form.attr('action'),
+                type: 'POST',
+                data: \$form.serialize(),
+                success: function(response) {
+				jsonResult = response;
+		   if(jsonResult.message == 'sent'){
+                    
+			   if(jsonResult.area == 'folder'){
+			       options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": true,
+					  "progressBar": true,
+					  "positionClass": "toast-top-right",
+					  "preventDuplicates": true,
+					  "showDuration": "300",
+					  "hideDuration": "1000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut",
+					  "tapToDismiss": false
+		  			}
+				toastr.success('Folder was created successfully', "", options);
+				if(localStorage.getItem("skipValidation") === 'yes'){
+					localStorage.setItem("skipValidation", "no");
+				}
+			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});	
+			   }else{
+			  		options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": true,
+					  "progressBar": true,
+					  "positionClass": "toast-top-right",
+					  "preventDuplicates": true,
+					  "showDuration": "300",
+					  "hideDuration": "1000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut",
+					  "tapToDismiss": false
+		  			}
+				toastr.success('Element was created successfully', "", options);
+				if(localStorage.getItem("skipValidation") === 'yes'){
+					localStorage.setItem("skipValidation", "no");
+				}
+			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   }
+			   }else{
+			   			options = {
+		  "closeButton": true,
+		  "debug": false,
+		  "newestOnTop": true,
+		  "progressBar": true,
+		  "positionClass": "toast-top-right",
+		  "preventDuplicates": true,
+		  "showDuration": "300",
+		  "hideDuration": "1000",
+		  "timeOut": "5000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut",
+		  "tapToDismiss": false
+		  }
+		  if(localStorage.getItem("skipValidation") === 'yes'){
+			localStorage.setItem("skipValidation", "no");
+			}
+		toastr.error('Somthing went wrong', "", options);
+			 //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   }
+                },
+              
+            });
+			
+			
+		}  
+		});
+	return false;
 });
+
 
 JSS;
  
 $this->registerJs($js);
 ?>
+

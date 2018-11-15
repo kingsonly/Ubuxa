@@ -57,27 +57,16 @@ class ComponentListViewWidget extends Widget{
 	
 	
 	public function run(){
-		$modelClassName = \yii\helpers\StringHelper::basename(get_class($this->model));
 		return $this->render('componentlistviewwidgetview',[
 			'model' => $this->model,
 			'attributes' => $this->attributes,
-			'modelClassName' => $modelClassName,
 			'content' => $this->content,
 			'hoverEffect' => $this->hoverEffect,
-			'action' => $this->action,
-			'icons' => $this->icons(),
+			
+			
 		]);
 	}
-	/*
-	* Private icons used to diaplay FA Fonts for action buttons 
-	*
-	*/
-	private function icons(){
-		return [
-			'delete' => 'fa fa-trash',
-			'update' => 'fa fa-pencil',
-		];
-	}
+	
 	
 	
 }

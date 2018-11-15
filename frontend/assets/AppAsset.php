@@ -17,13 +17,16 @@ class AppAsset extends AssetBundle
         'owlcarousel/assets/owl.theme.carousel.min.css',
     ];
     public $js = [
+        
+        //'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
         'owlcarousel/owl.carousel.min.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+       // 'yii\web\YiiAsset',
+        //'yii\bootstrap\BootstrapAsset',
         '\frontend\assets\DragulaAsset',
-        //'\frontend\assets\CaretAsset',
-        //'\frontend\assets\AtMentionAsset',
+        '\frontend\assets\CaretAsset',
+        '\frontend\assets\AtMentionAsset',
+        '\frontend\assets\BootstrapTour',
     ];
 }

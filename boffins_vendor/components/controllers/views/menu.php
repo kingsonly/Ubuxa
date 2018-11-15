@@ -10,7 +10,91 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 ?>
-<div class="side_menu">
+<style type="text/css">
+.kan-menu-table{
+  width: 100%;
+  table-layout: fixed;
+}
+.tbl-header{
+  background-color: rgba(255,255,255,0.3);
+ }
+.tbl-content{
+  height:300px;
+  overflow-x:auto;
+  margin-top: 0px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.kan-menu-table th{
+  padding: 20px 15px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+}
+.kan-menu-table td{
+  padding: 15px;
+  text-align: left;
+  vertical-align:middle;
+  font-weight: 300;
+  font-size: 12px;
+  color: #666;
+  border-bottom: solid 1px rgba(255,255,255,0.1);
+}
+.close-arrow{
+	cursor: pointer;
+}
+
+
+/* demo styles */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
+</style>
+<div class="side_menu side-drop">
+
+    	<div class="client-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
+    		<div class="row client-content" style="display: none">
+    			<div class="col-sm-12">
+    				<div class="col-md-10" style="height: 100px"></div>
+    				<div class="col-md-2" style="padding-top:20px">
+    					<i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
+    				</div>
+    			</div>
+    			<div>
+    				<section style="margin: 50px">
+		  <!--for demo wrap-->
+		  <h1>Fixed Table header</h1>
+		  <div class="tbl-header">
+		    <table cellpadding="0" cellspacing="0" border="0" id="kan-menu-table">
+		      <thead>
+		        <tr>
+		          <th>Code</th>
+		          <th>Company</th>
+		          <th>Price</th>
+		          <th>Change</th>
+		          <th>Change %</th>
+		        </tr>
+		      </thead>
+		    </table>
+		  </div>
+		  <div class="tbl-content">
+		    <table cellpadding="0" cellspacing="0" border="0">
+		      <tbody>
+		        <tr>
+		          <td>AAC</td>
+		          <td>AUSTRALIAN COMPANY </td>
+		          <td>$1.38</td>
+		          <td>+2.01</td>
+		          <td>-0.36%</td>
+		        </tr>
+		      </tbody>
+		    </table>
+		  </div>
+		</section>
+    			</div>
+    		</div>
+    	</div>
 	<div class="burger_box">
 		<div class="menu-icon-container">
 			<a href="#" class="menu-icon js-menu_toggle closed">
@@ -20,7 +104,7 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
 			</a>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container sider">
 		<div class="top-sidebar">
 			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
 				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('images/users/'.yii::$app->user->identity->profile_image); ?>')"></div>

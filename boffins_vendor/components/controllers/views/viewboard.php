@@ -13,20 +13,20 @@
     transition: 0.5s;
     padding-top: 20px;
     overflow: scroll;
+    margin: auto;
 }
 
 .sidenav .closebtn {
-    padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
     display: block;
     transition: 0.3s;
-
+    border-radius: 50%;
 }
 
 .sidenav .closebtn:hover{
-    color: #f1f1f1;
+    color: #000;
 }
 
 .sidenav .closebtn {
@@ -50,7 +50,8 @@
     border-radius: 3px;
     padding-bottom: 15px;
     padding-top: 15px;
-    background: #fff;
+    background: #3F51B5;
+    color: #fff;
 }
 
 </style>
@@ -58,26 +59,30 @@
 
 <div id="mySidenav" class="sidenav">
   <div class="close-kanban">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="javascript:void(0)" class="closebtn">&times;</a>
       <?php if (isset($this->blocks['kanban'])){ ?>
               <?= $this->blocks['kanban'] ?>
       <?php }?>
   </div>
 </div>
 
-
-<span class="open-board" onclick="openNav()"><i class="fa fa-tasks iconz"></i>View Board</span>
-
+<div class="board-open">
+    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Board</span>
+</div>
 
 <?
 $viewBoard = <<<JS
-  function openNav() {
-    document.getElementById("mySidenav").style.width = "100%";
-}
 
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
+
+    $('.board-open').click(function(){
+        $('#mySidenav').css({'width':'100%'})
+    });
+
+    $('.closebtn').click(function(){
+        $('#mySidenav').css({'width':'0'})
+    });
+
+
 JS;
 $this->registerJs($viewBoard, $this::POS_END);
 ?>

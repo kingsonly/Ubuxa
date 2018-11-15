@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Write some task here", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-    <?= Html::submitButton('Add Card', ['id' => 'cardButton']) ?>
+    <?= Html::submitButton('Add Task', ['id' => 'cardButton']) ?>
     <span class="glyphicon glyphicon-remove close-add"></span> 
 <?php ActiveForm::end(); ?>
 
@@ -65,6 +65,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                     console.log('completed');
                     $.pjax.reload({container:"#task-list-refresh"});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#task-modal-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

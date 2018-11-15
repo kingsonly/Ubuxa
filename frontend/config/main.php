@@ -18,6 +18,7 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
+	
         'user' => [
 			'class' => 'boffins_vendor\classes\UserComponent',
             'identityClass' => 'frontend\models\UserDb',

@@ -4,6 +4,7 @@ namespace frontend\settings\components;
 
 use Yii;
 use yii\base\Component;
+use yii\helpers\Url;
 use frontend\settings\models\Settings;
 
 
@@ -89,7 +90,8 @@ class SettingsComponent extends Component
 		 * if content is an image use image tage else formart as string
 		 */
 		if (in_array($ext, $supported_image)) {
-			return '<img  style="height: 45px;width: 160px;margin:3px 5px 3px 25px" src="'.$logoSettings.'" />';
+			return '<img  style="height: 45px;width: 160px;margin:3px 5px 3px 25px" src="'.Url::to("@web/".$logoSettings).'" />';
+			
 		} else {
 			return $logoSettings;
 		}

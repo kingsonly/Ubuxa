@@ -10,7 +10,7 @@ Main Components
 .cd-accordss-menu {
     width: 100%;
     max-width: 360px;
-    background: #FFF;
+    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -41,7 +41,7 @@ Main Components
 .cd-accordss-menu .accord-label, .cd-accordss-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #fff;
+  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -66,7 +66,7 @@ Main Components
   cursor: pointer;
   display: block;
   padding: 15px 15px 15px 42px;
-  color: #4D4D4D;
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   border-bottom: 1px solid #aba6a6;
@@ -180,7 +180,7 @@ Main Components
     top: 16px;
     left: 12px;
     font-size: 18px;
-    color: #595959 !important;
+    color: #fff !important;
     -webkit-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
@@ -191,14 +191,14 @@ Main Components
     font-size: 16px;
     position: absolute;
     top: 16px;
-    color: #595959 !important;
+    color: #fff !important;
     transition: all 0.4s ease;
 }
 .iconzz {
   position: absolute;
   left: 50px;
   font-size: 18px;
-  color: #595959 !important;
+  color: #fff !important;
   -webkit-transition: all 0.4s ease;
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;

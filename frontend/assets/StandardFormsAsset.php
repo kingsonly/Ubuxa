@@ -41,17 +41,12 @@ class StandardFormsAsset extends AssetBundle
         'css/hover.css',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/css/fileinput.min.css',
+		'css/addons/pager/jquery.tablesorter.pager.css',
 		
     ];
     public $js = [
-		
-		//'js/jquery-1.11.3.min.js',
-		'http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js',
 		'js/jquery.sticky-kit.min.js',
-        //'https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js',
         'js/morris.min.js',
-        
-        //'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js',
         'js/app.min.js',
         'js/datatables/jquery.dataTables.min.js',
         'js/datatables/dataTables.bootstrap.min.js',
@@ -62,7 +57,6 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.newstape.js',
 		'assets/82fd07a/jquery-ui.js',
 		'js/dashboard.js',
-		
 		'js/jquery.flip.min.js',
 		'js/script.js',
 		'js/feedify.min.js',
@@ -70,7 +64,9 @@ class StandardFormsAsset extends AssetBundle
 		'owlcarousel/owl.carousel.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/plugins/piexif.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js',
-		
+		'js/jquery.tablesorter.min.js',
+		'js/jquery.tablesorter.widgets.min.js',
+		'js/addons/pager/jquery.tablesorter.pager.js',
 		///'js/dragables.js'
 		
 		

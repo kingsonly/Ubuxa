@@ -6,7 +6,7 @@ Main Components
 .cd-users-accord-menu {
     width: 100%;
     max-width: 360px;
-    background: #FFF;
+    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -36,7 +36,7 @@ Main Components
 .cd-users-accord-menu .accord-label, .cd-users-accord-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #fff;
+  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -61,7 +61,7 @@ Main Components
   cursor: pointer;
   display: block;
   padding: 15px 15px 15px 42px;
-  color: #4D4D4D;
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   border-bottom: 1px solid #aba6a6;

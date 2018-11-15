@@ -63,6 +63,9 @@ text-overflow: ellipsis;
 		border:1px solid #ccc;
 		transform: scale(1.5);
 	}
+	em.value-if-null{
+		color: red;
+	}
 	
 </style>
 <?
@@ -83,6 +86,7 @@ foreach($attributues as $v){
 			'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
@@ -102,6 +106,7 @@ foreach($attributues as $v){
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -160,16 +165,10 @@ foreach($attributues as $v){
 	<?
 		PopoverX::begin([	
 								'placement' => PopoverX::ALIGN_LEFT,
+								'size' => 'md',
 								 
-								'toggleButton' => ['src'=>Url::to('@web/'.$displayImage),'tag'=>'img', 'class'=>'folder_image'],
-								'header' => '<i class="glyphicon glyphicon-lock"></i> Enter credentials',
-								'footer' => Html::button('Submit', [
-										'class' => 'btn btn-sm btn-primary', 
-										'onclick' => '$("#form-signup").trigger("submit")'
-									]) . Html::button('Reset', [
-										'class' => 'btn btn-sm btn-default', 
-										'onclick' => '$("#form-signup").trigger("reset")'
-									])
+								'toggleButton' => ['src'=>Url::to('@web/'.$displayImage),'tag'=>'img', 'class'=>'folder_image','id' => 'folder_image'],
+								'header' => 'Change Folder Image',
 								]);
 
 							   ?>
@@ -241,24 +240,23 @@ function xeditableSuccessCallback(){
 	
         // hide popover
 
-
-    	var thiss = $('[data-toggle="popover-x"]');
+		  	var thiss = $('[data-toggle="popover-x"]');
 	href = thiss.attr('href'),
 	dialog = $(thiss.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))), //strip for ie7
 	option = dialog.data('popover-x') ? 'toggle' : $.extend({remote: !/#/.test(href) && href});
 	dialog.popoverX('hide');
-         
-		
+  
+        $('#w2').popoverX('hide');
+		$("#folder_image").load(' #folder_image');
+
 		toastr.success('Image was Changed', "", options);
-		$.pjax.reload({container:"#folder-details-refresh",async: false});
+		//$.pjax.reload({container:"#folder-details-refresh",async: false});
 }
 
 $(".xinput").mouseout(function() {
-    
     $(this).addClass("ellipsis");
-    
 });
-
+     
 XeditableBoffins;
  
 $this->registerJs($xeditableBoffins);
