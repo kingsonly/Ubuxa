@@ -4,18 +4,27 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Supplier */
+/* @var $model frontend\models\Client */
 
-$this->title = 'Create Supplier';
-$this->params['breadcrumbs'][] = ['label' => 'Suppliers', 'url' => ['index']];
+$this->title = 'Create Client';
+$this->params['breadcrumbs'][] = ['label' => 'Clients', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="supplier-create">
+<div class="client-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->renderAjax('_form', [
         'model' => $model,
+        'coperationModel' => $coperationModel,
+        'emailModel' => $emailModel,
+        'addressModel' => $addressModel,
+        'telephoneModel' => $telephoneModel,
+        'countryModel' => $countryModel,
+        'getCountries' => $getCountries,
+        'state' => $state,
+        'getStates' => $getStates,
+        'getExistingCorperation' => $getExistingCorperation,
     ]) ?>
 
 </div>

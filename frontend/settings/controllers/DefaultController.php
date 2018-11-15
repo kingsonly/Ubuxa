@@ -35,7 +35,7 @@ class DefaultController extends Controller
 			$settings->save(false);
 		}
 
-        return $this->render('index',[
+        return $this->renderAjax('index',[
 			'users'=>$users,
 			'settings' => $settings,
 			'settingsModel' => $settingsModel,

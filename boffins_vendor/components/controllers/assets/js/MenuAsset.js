@@ -55,9 +55,11 @@ $(document).ready(function () {
 		var content = this.hash.replace('/','');
 		tabs.removeClass("active");
 		$(this).addClass("active");
-    $("#content").find('div').hide();
+    $("#content > div").hide();
     $(content).fadeIn(200);
 	});
+
+
 
 });
 

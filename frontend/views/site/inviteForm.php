@@ -24,11 +24,12 @@ use yii\helpers\ArrayHelper;
 		<?php $form = ActiveForm::begin(['id' => 'add_email']); ?>
 			<div class="table-responsive">  
 	                <table class="table borderless" id="dynamic_field">  
-	                    <tr>
+	                    <tr class="dynamics">
 	                    	<td> <?= $form->field($model, 'email[]')->textInput(['autofocus' => true,
 	                    	'class' => 'form-control name_list' ]) ?> </td>
 	                    	<td>
 	                    		<?= $form->field($model, 'role')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form-control'] ]) ?>
+	                    				<i class="fa fa-remove"></i>
 	                    	</td>
 	                    	<td> <?= Html::button('Add more', ['class' => 'btn btn-success', 'name' => 'add', 
 	                    	'id' => 'add']) ?> </td> 
@@ -53,12 +54,20 @@ $(document).ready(function(){
       var i=1;
 
       $('#add').click(function(){  
-           i++;  
-           $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added borderless"><td>addUsers</td><td>'$addRoles'</td><td> <button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button> </td> </tr>');  
+      	  var index = $(this).closest('.dynamics').index();
+      	  
+          $('.dynamics').clone().appendTo('#dynamic_field');
+          if(index === 0){
+      			$('.fa-remove').hide();
+      	  }
       });
-      $(document).on('click', '.btn_remove', function(){  
-           var button_id = $(this).attr("id");   
-           $('#row'+button_id+'').remove();  
+      $(document).on('click', '.fa-remove', function(){
+      		var getIndex = $(this).closest('.dynamics').index();
+      		if(getIndex === 0){
+      			return false;
+      		} else {
+              $(this).closest('.dynamics').remove(); 
+      		} 
       });  
     $('#submit').click(function(){            
         $.ajax({  

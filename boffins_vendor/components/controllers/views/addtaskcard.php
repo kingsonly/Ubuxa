@@ -44,6 +44,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Write some task here", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+    <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
     <?= Html::submitButton('Add Task', ['id' => 'cardButton']) ?>
     <span class="glyphicon glyphicon-remove close-add"></span> 
 <?php ActiveForm::end(); ?>

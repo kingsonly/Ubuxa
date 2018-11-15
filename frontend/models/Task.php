@@ -63,7 +63,7 @@ class Task extends BoffinsArRootModel
     public function rules()
     {
         return [
-            [[ 'owner','status_id', 'create_date'], 'required'],
+            [['title','owner','status_id', 'create_date'], 'required'],
             [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
             [['create_date', 'due_date', 'last_updated','ownerId','title'], 'safe'],
             [['title'], 'string', 'max' => 50],

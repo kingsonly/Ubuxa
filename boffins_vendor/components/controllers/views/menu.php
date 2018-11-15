@@ -9,6 +9,7 @@ use boffins_vendor\components\controllers\ClientsAccordionWidget;
 use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
+
 ?>
 <style type="text/css">
 .kan-menu-table{
@@ -62,6 +63,7 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
     				</div>
     			</div>
     			<div>
+
     				<section style="margin: 50px">
 		  <!--for demo wrap-->
 		  <h1>Fixed Table header</h1>
@@ -92,9 +94,25 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
 		    </table>
 		  </div>
 		</section>
+
     			</div>
     		</div>
     	</div>
+
+    	<div class="settings-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
+        <div class="row settings-content" style="display: none">
+          <div class="col-sm-12">
+            <div class="col-md-10"><span class="settings-text">Settings</span></div>
+            <div class="col-md-2" style="padding-top:20px">
+              <i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
+            </div>
+          </div>
+          <div class="sett-content">
+           
+          </div>
+        </div>
+      </div>
+
 	<div class="burger_box">
 		<div class="menu-icon-container">
 			<a href="#" class="menu-icon js-menu_toggle closed">

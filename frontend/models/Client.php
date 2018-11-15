@@ -4,7 +4,6 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
-use frontend\models\Corporation;
 /**
  * This is the model class for table "{{%tm_client}}".
  *
@@ -104,6 +103,10 @@ class Client extends \yii\db\ActiveRecord
 	public function getShortName() {
 		return $this->corporation->shortName;
 	}
+
+    public function getNotes() {
+        return $this->corporation->notes;
+    }
 	
 	public function getNameString() {
 		return $this->corporation->NameString;
