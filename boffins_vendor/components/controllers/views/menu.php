@@ -53,45 +53,20 @@ td{
 </style>
 <div class="side_menu side-drop">
 
-    	<div class="client-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
+    	<div class="client-containers" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
     		<div class="row client-content" style="display: none">
     			<div class="col-sm-12">
-    				<div class="col-md-10" style="height: 100px"></div>
+    				<div class="col-md-10" style=""></div>
     				<div class="col-md-2" style="padding-top:20px">
-    					<i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
+    					<i class="fa fa-arrow-left fa-2x close-arrow" style=""></i>
     				</div>
     			</div>
     			<div>
     				<section style="margin: 50px">
-		  <!--for demo wrap-->
-		  <h1>Fixed Table header</h1>
-		  <div class="tbl-header">
-		    <table cellpadding="0" cellspacing="0" border="0">
-		      <thead>
-		        <tr>
-		          <th>Code</th>
-		          <th>Company</th>
-		          <th>Price</th>
-		          <th>Change</th>
-		          <th>Change %</th>
-		        </tr>
-		      </thead>
-		    </table>
-		  </div>
-		  <div class="tbl-content">
-		    <table cellpadding="0" cellspacing="0" border="0">
-		      <tbody>
-		        <tr>
-		          <td>AAC</td>
-		          <td>AUSTRALIAN COMPANY </td>
-		          <td>$1.38</td>
-		          <td>+2.01</td>
-		          <td>-0.36%</td>
-		        </tr>
-		      </tbody>
-		    </table>
-		  </div>
-		</section>
+			 			 <div class="tbl-header client_template">
+			 			 	<img class="supplierLoader" src="<?= Url::to('@web/images/loader/spinner.gif'); ?>" style = "display: none;margin-left:230px;margin-top:150px" id="remarkLoader">
+			  			 </div>
+					</section>
     			</div>
     		</div>
     	</div>
