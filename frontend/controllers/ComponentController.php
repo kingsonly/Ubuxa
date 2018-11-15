@@ -21,13 +21,13 @@ class ComponentController extends Controller
 			if($model->save(false)){
 				$folderComponentModel->component_id = $model->id;
 				if($folderComponentModel->save(false)){
-					return ['output'=>$model->id, 'message'=>'sent'];
+					return ['output'=>$model->id, 'message'=>'sent','area'=>'component','templateId'=>$model->component_template_id];
 				}
             	
 			}
             
         }
-		return ['output'=>1, 'message'=>'not sent'];
+		return ['output'=>1, 'message'=>'not sent','area'=>'component','templateId'=>'0'];
        
     }
 

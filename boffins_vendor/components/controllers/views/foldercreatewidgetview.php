@@ -211,6 +211,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		   if(jsonResult.message == 'sent'){
                     
 			   if(jsonResult.area == 'folder'){
+			   alert('folder');
 			       options = {
 					  "closeButton": true,
 					  "debug": false,
@@ -234,6 +235,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				}
 			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});	
 			   }else{
+			   
+			   		templateId = jsonResult.templateId;
+					
 			  		options = {
 					  "closeButton": true,
 					  "debug": false,
@@ -251,11 +255,21 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "hideMethod": "fadeOut",
 					  "tapToDismiss": false
 		  			}
+					
 				toastr.success('Element was created successfully', "", options);
+				alert('component');
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");
 				}
-			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   $.pjax.reload({container:"#"+"component-pjax",async: false});
+			   $('.one-time-template-click-'+templateId).on('click',function(){
+			   		$('.component-list').removeClass('active-component');
+					data = $(this).data('url');
+					$(this).addClass('active-component');
+					$('.comps').removeClass('margin-bottom');
+					$('.component-display').load(data);
+					$('.component-display-wrapper').show()
+			   })
 			   }
 			   }else{
 			   			options = {
