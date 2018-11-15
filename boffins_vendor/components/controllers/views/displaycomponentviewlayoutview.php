@@ -63,12 +63,12 @@ use yii\jui\Draggable;
   
       <div class="row">
           
-		  <div class="col-xs-7" id="listView">
+		  <div class="col-xs-12" id="listView">
 			  <img class="loadergif" src="images/loader.gif"  />
 			
 		  </div>
 		  
-		  <div class="col-xs-5" >
+		  <div id="view-content" class="col-xs-5" style="display:none" >
 			  
 			  <div id="viewcontainer">
 				  <div id="view">
@@ -93,10 +93,16 @@ Modal::begin([
 <?php 
 
 	$urlListView = Url::to(['component/listview','folder'=>$folderId,'component' => $templateId]);
-	$urlView = Url::to(['component/view','id'=>$componentId]);
+	$urlView = Url::to(['component/view','id'=>$componentId->id]);
 	
 $js3 = <<<JS
 
+$('table').tablesorter({
+			widgets        : ['zebra', 'columns'],
+			usNumberFormat : false,
+			sortReset      : true,
+			sortRestart    : true
+		});
 
 $("#listView").load('$urlListView');
 $("#view").load('$urlView',{var2:1});

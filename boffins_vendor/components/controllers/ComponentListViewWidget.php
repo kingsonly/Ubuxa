@@ -57,11 +57,9 @@ class ComponentListViewWidget extends Widget{
 	
 	
 	public function run(){
-		$modelClassName = \yii\helpers\StringHelper::basename(get_class($this->model));
 		return $this->render('componentlistviewwidgetview',[
 			'model' => $this->model,
 			'attributes' => $this->attributes,
-			'modelClassName' => $modelClassName,
 			'content' => $this->content,
 			'hoverEffect' => $this->hoverEffect,
 			

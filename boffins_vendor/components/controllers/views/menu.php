@@ -11,8 +11,8 @@ use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 ?>
 <style type="text/css">
-table{
-  width:100%;
+.kan-menu-table{
+  width: 100%;
   table-layout: fixed;
 }
 .tbl-header{
@@ -24,7 +24,7 @@ table{
   margin-top: 0px;
   border: 1px solid rgba(255,255,255,0.3);
 }
-th{
+.kan-menu-table th{
   padding: 20px 15px;
   text-align: left;
   font-weight: 500;
@@ -32,7 +32,7 @@ th{
   color: #666;
   text-transform: uppercase;
 }
-td{
+.kan-menu-table td{
   padding: 15px;
   text-align: left;
   vertical-align:middle;
@@ -66,7 +66,7 @@ td{
 		  <!--for demo wrap-->
 		  <h1>Fixed Table header</h1>
 		  <div class="tbl-header">
-		    <table cellpadding="0" cellspacing="0" border="0">
+		    <table cellpadding="0" cellspacing="0" border="0" id="kan-menu-table">
 		      <thead>
 		        <tr>
 		          <th>Code</th>

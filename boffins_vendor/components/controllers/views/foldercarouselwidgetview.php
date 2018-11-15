@@ -229,7 +229,7 @@ text-overflow: ellipsis;
 			 <? if($displayType == 'component'){?>
 			 <div class="component-holder">
 				 <? $componentsObject = $folder;// making its easy for developers to relate to .?>
-				 <li class="component-list " data-url = "<?= Url::to(['component/index','folder'=>$folderId,'component' => $componentsObject->id])?>">
+				 <li class="component-list one-time-template-click-<?= $componentsObject->id;?>" data-url = "<?= Url::to(['component/index','folder'=>$folderId,'component' => $componentsObject->id])?>">
 					 <?= $componentsObject->name ?>
 				 </li>
 			 </div>

@@ -17,6 +17,7 @@ class ComponentController extends Controller
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if ($model->load(Yii::$app->request->post()) && $folderComponentModel->load(Yii::$app->request->post())) {
 			$model->last_updated =  new Expression('NOW()');
+			$model->folderId =  $folderComponentModel->folder_id;
 			if($model->save(false)){
 				$folderComponentModel->component_id = $model->id;
 				if($folderComponentModel->save(false)){
@@ -32,29 +33,28 @@ class ComponentController extends Controller
 
     public function actionIndex($folder,$component)
     {
+		$folderModel = new Folder();
+		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
+		$getFolder->externalTemplateId = $component;
         return $this->renderAjax('index',[
 			'folderId'=>$folder,
 			'templateId'=>$component,
-			'componentId'=>$component,
+			'componentId'=>$getFolder->componentTemplateAsComponents[0],
 		]);
     }
 
     public function actionListview($folder,$component)
     {
 		$folderModel = new Folder();
-		
-		
 		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
-		var_dump($getFolder->componentTemplateAsComponents);
-		//var_dump($getFolder->externalTemplateId);
-		return;
-       // return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
+		return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
     }
 
     public function actionView($id)
     {
-        return $this->render('view');
+		$component = Component::findOne($id);
+        return $this->renderAjax('view',['component'=>$component]);
     }
 
 }

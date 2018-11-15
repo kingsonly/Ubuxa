@@ -41,6 +41,7 @@ class StandardFormsAsset extends AssetBundle
         'css/hover.css',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/css/fileinput.min.css',
+		'css/addons/pager/jquery.tablesorter.pager.css',
 		
     ];
     public $js = [
@@ -63,7 +64,9 @@ class StandardFormsAsset extends AssetBundle
 		'owlcarousel/owl.carousel.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/plugins/piexif.min.js',
 		'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/js/fileinput.min.js',
-		
+		'js/jquery.tablesorter.min.js',
+		'js/jquery.tablesorter.widgets.min.js',
+		'js/addons/pager/jquery.tablesorter.pager.js',
 		///'js/dragables.js'
 		
 		

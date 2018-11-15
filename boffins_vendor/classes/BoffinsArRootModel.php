@@ -196,6 +196,7 @@ class BoffinsArRootModel extends ActiveRecord
 	public function myBehaviors() 
 	{
 		return array();
+		
 	}
 	
 	/***

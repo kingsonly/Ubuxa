@@ -56,10 +56,6 @@ use frontend\models\Component;
 
 class ComponentViewWidget extends Widget{
 	public $model; //Component Model.
-	public $viewAttributes; // Content to be displayed on the view page 
-	public $subComponents; // Component which are related to a specific component
-	public $title; // Title of the component to be displayed boldly on the view.
-	public $files; // edocument linked to this conponent are held in this property .
 	
 	 
 	public function init()
@@ -70,14 +66,10 @@ class ComponentViewWidget extends Widget{
 	
 	
 	public function run(){
-		$modelClassName = \yii\helpers\StringHelper::basename(get_class($this->model));
+		
 		return $this->render('componentviewwidgetview',[
 			'model' => $this->model,
-			'viewAttributes' => $this->viewAttributes,
-			'subComponents' => $this->subComponents,
-			'modelClassName' => $modelClassName,
-			'title' => $this->title,
-			'files' => $this->files,
+			
 		]);
 	}
 	

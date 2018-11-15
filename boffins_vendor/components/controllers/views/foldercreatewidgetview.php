@@ -209,7 +209,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
                 success: function(response) {
 				jsonResult = response;
 		   if(jsonResult.message == 'sent'){
-                    options = {
+                    
+			   if(jsonResult.area == 'folder'){
+			       options = {
 					  "closeButton": true,
 					  "debug": false,
 					  "newestOnTop": true,
@@ -230,7 +232,31 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");
 				}
+			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});	
+			   }else{
+			  		options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": true,
+					  "progressBar": true,
+					  "positionClass": "toast-top-right",
+					  "preventDuplicates": true,
+					  "showDuration": "300",
+					  "hideDuration": "1000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut",
+					  "tapToDismiss": false
+		  			}
+				toastr.success('Element was created successfully', "", options);
+				if(localStorage.getItem("skipValidation") === 'yes'){
+					localStorage.setItem("skipValidation", "no");
+				}
 			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   }
 			   }else{
 			   			options = {
 		  "closeButton": true,
