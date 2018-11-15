@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
+use frontend\models\Onboarding;
 ?>
 
 <style type="text/css">
@@ -69,7 +70,22 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 <div class="col-md-5 folderdetls">
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
-		<div class="folder-header">FOLDER DETAILS</div>
+		<div class="folder-header">
+			<?php if(!$onboardingExists){ ?>
+                <div class="help-tip" id="folder-tipz">
+                  <p class="tip=text">Take a tour of task and find out useful tips.
+                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php }else if($onboardingExists && $onboarding->folder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
+              <div class="help-tip" id="folder-tipz">
+                  <p class="tip=text">Take a tour of task and find out useful tips.
+                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php } ?>
+			<span>FOLDER DETAILS</span>
+		</div>
 		<div class="col-sm-7 col-xs-7 box-folders">
 			<div class="folder-side">
 				<div class="box-content-folder">
@@ -98,8 +114,65 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
 
 <?
+$folderdetailsOnboarding = Url::to(['onboarding/folderdetailsonboarding']);
 $updateImage = <<<updateImage
 
+function _FolderDetailsOnboarding(){
+          $.ajax({
+              url: '$folderdetailsOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+
+$(function() {
+
+  var folderTour = new Tour({
+    name: "folderTour",
+    steps: [
+        {
+          element: "#folder-title-cont",
+          title: "Folder Title",            
+          content: "You can edit your folder title by clicking on it.",
+          placement: 'right',
+          onShow: function(){
+          	$('#folder-tipz').hide();
+          }
+        },
+        {
+          element: "#folder-description-cont",
+          title: "Folder Description",
+          content: "You can edit your folder title by clicking on it.",
+          placement: 'right',
+        },
+        {
+          element: "#folder_image",
+          title: "Folder Image",
+          content: "You can add image to your folder here.",
+          placement: 'right',
+        },
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,
+    onEnd: function (remarkTour) {
+            _FolderDetailsOnboarding();
+        },
+  });
+  $('#folder-tour').on('click', function(e){
+       folderTour.start();
+       e.preventDefault();
+    })
+
+});
 
 updateImage;
  

@@ -43,9 +43,7 @@ use yii\helpers\ArrayHelper;
 
 <?php
 $addUsers = $form->field($model, 'email[]')->textInput(['autofocus' => true, 'class' => 'form-control name_list' ]);
-$addRoles = Html::button('Add more', ['class' => 'btn btn-success', 'name' => 'add', 'id' => 'add']); 
-
-
+$addRoles = $form->field($model, 'role')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form-control'] ]); 
 
 $js = <<<JS
 
@@ -54,7 +52,7 @@ $(document).ready(function(){
 
       $('#add').click(function(){  
            i++;  
-           $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added borderless"><td>addUsers</td><td>'$addRoles'</td><td> <button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button> </td> </tr>');  
+           $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added borderless"><td>$addRoles</td><td></td><td> <button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button> </td> </tr>');  
       });
       $(document).on('click', '.btn_remove', function(){  
            var button_id = $(this).attr("id");   

@@ -37,7 +37,7 @@ $model = new Userdb();
     <div class="tab-label-content" id="tab1-content">
       <label for="tab1" class="settings-tabz first-tab">Date Format</label>
       <div class="tab-content first-content">
-      	<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settings-date', 'attributes' => $model->attributes(),'enableAjaxValidation' => false,]); ?>
+      	<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settings-date', 'attributes' => $model->attributes(),'enableAjaxValidation' => true]); ?>
 	<? $settingsModel->date_format  = $settings->date_format;//'MM/dd/yyyy (HH:mm:ss)'; ?>
 	<?= $forms->field($settingsModel, 'date_format')->radioList([
 		'M/d/yy ! (HH:mm:ss)'=>'M/d/yyyy (HH:mm:ss)',
@@ -67,7 +67,7 @@ $model = new Userdb();
       <label for="tab2" class="settings-tabz second-tab">Language</label>
       <div class="tab-content second-content">
       	
-<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settingsLang', 'attributes' => $model->attributes(),'enableAjaxValidation' => false,]); ?>
+<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settingsLang', 'attributes' => $model->attributes(),'enableAjaxValidation' => true]); ?>
 	<? $settingsModel->language  = $settings->language; ?>
 	<?= $forms->field($settingsModel, 'language')->radioList([
 		'es'=>'Spanish',
@@ -91,7 +91,7 @@ $model = new Userdb();
     <div class="tab-label-content" id="tab3-content">
       <label for="tab3" class="settings-tabz third-tab">Theme</label>
       <div class="tab-content third-content">
-      	<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settingsTheme', 'attributes' => $model->attributes(),'enableAjaxValidation' => false,]); ?>
+      	<?php $forms = ActiveForm::begin(['enableClientValidation' => true,'id'=>'settingsTheme', 'attributes' => $model->attributes(),'enableAjaxValidation' => true]); ?>
 	<? $settingsModel->theme  = $settings->theme; ?>
 	<?= $forms->field($settingsModel, 'theme')->radioList([
 		'StandardFormsAsset'=>'red',
@@ -114,10 +114,9 @@ $model = new Userdb();
      <div class="tab-label-content" id="tab4-content">
       <label for="tab4" class="settings-tabz fourth-tab">Logo</label>
       <div class="tab-content fourth-content">
-      	<?php $forms = ActiveForm::begin(['action'=>Url::to(['default/setlogo']),'options' => ['enctype' => 'multipart/form-data'],'enableClientValidation' => true,'id'=>'settingsLogo', 'attributes' => $model->attributes(),'enableAjaxValidation' => false,]); ?>
+      	<?php $forms = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'],'enableClientValidation' => true,'id'=>'settingsLogo', 'attributes' => $model->attributes(),'enableAjaxValidation' => true]); ?>
 	<? $settingsModel->logo  = $settings->logo; ?>
 	
-
 <?= $forms->field($models, 'imageFile')->widget(FileInput::classname(), [
     'options' => ['accept' => 'image/*', 'id' => 'set-logo'],
 	'pluginOptions' => [
@@ -134,10 +133,6 @@ $model = new Userdb();
     ],
 ]);
 ?>
-	<div class="form-group">
-        <?= Html::submitButton('Change', ['class' => 'btn btn-success']) ?>
-		
-    </div>
 
     <?php ActiveForm::end(); ?>
       </div>
@@ -148,8 +143,8 @@ $model = new Userdb();
 </div>
 
 <?php
-$settingsUrl = 'index.php?r=settings%2Fdefault';
-$createSettings = 'index.php?r=settings%2Fdefault%2Fcreate';
+$settingsUrls = 'index.php?r=settings%2Fdefault';
+$setlogoUrl = 'index.php?r=settings%2Fdefault%2Fsetlogo';
 
 $settts = <<<JS
 $('#settings-date').on('submit', function(e) {
@@ -160,7 +155,7 @@ $('#settings-date').on('submit', function(e) {
                 return false;
             }
             $.ajax({
-                url: '$settingsUrl',
+                url: '$settingsUrls',
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
@@ -180,7 +175,7 @@ $('#settingsLang').on('submit', function(e) {
                 return false;
             }
             $.ajax({
-                url: '$settingsUrl',
+                url: '$settingsUrls',
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
@@ -200,7 +195,7 @@ $('#settingsTheme').on('submit', function(e) {
                 return false;
             }
             $.ajax({
-                url: '$settingsUrl',
+                url: '$settingsUrls',
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
@@ -216,26 +211,31 @@ $('#settingsLogo').on('submit', function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
            var form = $(this);
-            if(form.find('#settingsLogo').length) {
+           	if(form.find('#settingsLogo').length) {
                 return false;
             }
             $.ajax({
-                url: '$settingsUrl',
+                url: '$setlogoUrl',
                 type: 'POST',
-                processData: false,
-		      	contentType: false,
-		      	async: false,
-		      	cache: false,
-                data: form.serialize(),
+                dataType: 'json',
+                data: new FormData($('#settingsLogo')[0]),
+                cache: false,
+		        contentType: false,
+		        processData: false,
                 success: function(response) {
-                    console.log('completed');
+                	if(response.status == 1){
+	                	toastr.success(response.msg);
+                	}else{
+                		toastr.error(response.msg);
+                	}
                 },
-              error: function(res, sec){
-                  console.log('Something went wrong');
+              error: function(response){
+              	  toastr.error(response.msg);
               }
             });
-            return true;    
+            return true;;    
 });
+
 JS;
 $this->registerJs($settts);
 ?>

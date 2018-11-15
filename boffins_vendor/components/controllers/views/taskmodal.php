@@ -188,7 +188,7 @@ use frontend\models\Reminder;
     min-width: 160px;
 }
 </style>
-<?php Pjax::begin(['id'=>'task-modal-refresh']); ?>
+
     <div class="task-view">
 
         <div class="task-titlez">
@@ -307,4 +307,3 @@ use frontend\models\Reminder;
     <?php } ?>
     </div>
 </div>
-<?php Pjax::end(); ?>

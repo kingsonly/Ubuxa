@@ -429,7 +429,7 @@ AppAsset::register($this);
 
   <div id="remark-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
     <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
