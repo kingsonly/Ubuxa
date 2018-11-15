@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
 
 /**
  * This is the model class for table "{{%component_template_attribute}}".
@@ -16,12 +17,15 @@ use Yii;
  * @property int $sort_order
  * @property int $cid
  *
- * @property ComponentAttribute[] $componentAttributes
+ * @property ComponentAttribute[] $componentAttributes //Lol Yii na winch - this is because a foreign key comes from
+ * component_attribute to this
+ *
  * @property ComponentTemplate $componentTemplate
- * @property ComponentAttributeType $attributeType0
+ * @property ComponentAttributeType $attributeType
  */
-class ComponentTemplateAttribute extends \boffins_vendor\classes\BoffinsArRootModel
+class ComponentTemplateAttribute extends BoffinsArRootModel 
 {
+	public $baseNameSpace = "frontend\models";
     /**
      * {@inheritdoc}
      */
@@ -36,6 +40,7 @@ class ComponentTemplateAttribute extends \boffins_vendor\classes\BoffinsArRootMo
     public function rules()
     {
         return [
+            [['component_template_id', 'attribute_type_id', 'name', 'cid'], 'required'],
             [['component_template_id', 'attribute_type_id', 'show_in_grid', 'sort_order', 'cid'], 'integer'],
             [['name'], 'string', 'max' => 55],
             [['format'], 'string', 'max' => 255],
@@ -80,8 +85,36 @@ class ComponentTemplateAttribute extends \boffins_vendor\classes\BoffinsArRootMo
     /**
      * @return \yii\db\ActiveQuery or subclass
      */
-    public function getAttributeType()
+    public function getComponentAttributeType()
     {
         return $this->hasOne(ComponentAttributeType::className(), ['id' => 'attribute_type_id']);
     }
+		
+	/**
+	 *  @brief A protected function to retrieve the value class for the value type used by = this attribute template. 
+	 *  
+	 *  @return string. The value class of the value type used by this attribute template
+	 *  
+	 *  @details This uses the attribute_type_id of the attribute template to get the value type 
+	 *  then converts the value type to a value class name. 
+	 */
+	public function getValueClassName()
+	{
+		$valueType = $this->componentAttributeType->type;
+		return $this->baseNameSpace . "\\" . self::convertToValueClass($valueType);
+	}
+	
+	/***
+	 *  @brief converts a snake_case string to CamelCase and adds the string prefic 'Value'
+	 *  
+	 *  @param [in] $attribute_type This should be a string that describes a attribute/value type
+	 *  @return string. The known class name of the value type given the value type meta
+	 *  
+	 *  @details valueType, valueMeta and attributeType describe the same thing and should always provide a consistens answer
+	 *  Class Names are defined thus 'Value' . valueType/valueMeta/attributeType
+	 */
+	public static function convertToValueClass($valueType)
+	{
+		return "Value" . str_replace('_', '', ucwords($valueType, '_'));
+	}
 }
