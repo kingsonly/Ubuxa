@@ -6,6 +6,8 @@ use Yii;
 use boffins_vendor\classes\ComponentARModel;
 use boffins_vendor\classes\ModelCollection;
 use boffins_vendor\classes\StandardQuery;
+use yii\db\ActiveQuery;
+
 
 /**
  * This is the model class for table "tm_component".
@@ -50,8 +52,13 @@ class Component extends ComponentARModel
      * {@inheritdoc}
      */
 	public $folderId; // Holds the value of the corrent folder to be used in behaviour
+	public $componentAttribute;
 	 
 	//public attributeCollection = new ModelCollection([], ['query' => $this->getComponentAttributes() ]);
+	public function init(){
+		parent::init();
+		//$this->componentAttribute = 
+	}
 	
     public static function tableName()
     {
@@ -94,6 +101,11 @@ class Component extends ComponentARModel
     public function getComponentTemplate()
     {
         return $this->hasOne(ComponentTemplate::className(), ['id' => 'component_template_id']);
+    }
+	
+	public function getComponentAttribute()
+    {
+        return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->where(['component_id' => $this->id]) ] );
     }
 
     /**

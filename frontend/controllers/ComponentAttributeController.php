@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\ModelCollection;
 use boffins_vendor\classes\StandardQuery;
+use frontend\models\Folder;
 
 /**
  * ComponentAttributeController implements the CRUD actions for ComponentAttribute model.
@@ -53,7 +54,12 @@ class ComponentAttributeController extends Controller
      */
     public function actionTest()
     {
-		$data2 = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
+		$folderModel = new Folder();
+		$getFolder = $folderModel->find()->where(['id'=>30])->one();
+		$getFolder->externalTemplateId = 5;
+		//return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
+		
+		$data2 = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
 		$data3 = $data2->models;
 		$data4 = count($data3);
 		
