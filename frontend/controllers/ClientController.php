@@ -8,6 +8,17 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\Corporation;
+use frontend\models\Entity;
+use frontend\models\Email;
+use frontend\models\Address;
+use frontend\models\Telephone;
+use frontend\models\Country;
+use frontend\models\EmailEntity;
+use frontend\models\TelephoneEntity;
+use frontend\models\State;
+use yii\helpers\Json;
+use yii\db\Exception;
 
 /**
  * ClientController implements the CRUD actions for Client model.
@@ -35,12 +46,18 @@ class ClientController extends Controller
      */
     public function actionIndex()
     {
+        $model = new Client();
+        $corporations = $model->corporation;
+        $clients = $model->find()->all();
         $dataProvider = new ActiveDataProvider([
-            'query' => Client::find(),
+            'query' => $model->find(),
         ]);
 
-        return $this->render('index', [
+        return $this->renderAjax('index', [
             'dataProvider' => $dataProvider,
+            'corporations' => $corporations,
+            'model' => $model,
+            'clients' => $clients,
         ]);
     }
 
@@ -65,13 +82,81 @@ class ClientController extends Controller
     public function actionCreate()
     {
         $model = new Client();
+        $coperationModel = new Corporation();
+        $entityModel = new Entity();
+        $emailModel = new Email();
+        $addressModel = new Address();
+        $telephoneModel = new Telephone();
+        $country = new Country();
+        $state = new State();
+        $emailEntity = new EmailEntity();
+        $telephoneEntity = new TelephoneEntity();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $getCountries = json_encode($country->find()->all());
+        $getStates = $state->find()->all();
+        $getClients = $model->find()->all();
+
+        $entityModel->entity_type = 'corporation';
+        if ($coperationModel->load(Yii::$app->request->post()) && $telephoneModel->load(Yii::$app->request->post()) && $emailModel->load(Yii::$app->request->post()) && $addressModel->load(Yii::$app->request->post())) {
+
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if($entityModel->save()){
+                    $coperationModel->entity_id = $entityModel->id;
+                    $emailEntity->entity_id = $entityModel->id;
+                    $telephoneEntity->entity_id = $entityModel->id;
+
+                    if($coperationModel->save() && $telephoneModel->save(false) && $emailModel->save(false)){
+                        $model->corporation_id = $coperationModel->id;
+                        $telephoneEntity->telephone_id = $telephoneModel->id;
+                        $emailEntity->email_id = $emailModel->id;
+                        if ($model->save() && $telephoneEntity->save() && $emailEntity->save()) {
+                            $transaction->commit();
+                            exit(json_encode(array("status" => 1, "msg" => 'Client has been successfully created!')));
+                            //echo 'supplier submitted successfully';
+                        } else {
+                            exit(json_encode(array("status" => 2, "msg" => 'Something went wrong!')));
+                        }
+                    } else {
+                        //echo 'error2';
+                    }
+                } else {
+                   //echo 'error3';
+                }
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
         }
+        if(isset($_GET['src'])){
+            if (Yii::$app->request->post('existingId')) {
+                 $model->corporation_id = Yii::$app->request->post('existingId');
+                 if($model->save()){
+                        exit(json_encode(array("status" => 1, "msg" => 'Sent!')));
+                 } else {
+                        exit(json_encode(array("status" => 2, "msg" => 'Something went wrong!')));
+                 }
+            }
+        }
+        
 
-        return $this->render('create', [
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }*/
+        $getExistingCorperation = $coperationModel->find()->all();
+        return $this->renderAjax('create', [
             'model' => $model,
+            'coperationModel' => $coperationModel,
+            'entityModel' => $entityModel,
+            'emailModel' => $emailModel,
+            'addressModel' => $addressModel,
+            'telephoneModel' => $telephoneModel,
+            'countryModel' => $country,
+            'getCountries' => $getCountries,
+            'state' => $state,
+            'getStates' => $getStates,
+            'getExistingCorperation' => $getExistingCorperation,
+            'getClients' => $getClients,
         ]);
     }
 
@@ -82,6 +167,29 @@ class ClientController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+    public function actionSubcat()
+    {
+        $out = [];
+        $state = new State();
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = $state::find()->select(['id','name'])->where(['country_id' => $cat_id])->all(); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+    }
+    echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

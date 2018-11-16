@@ -14,16 +14,20 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
 
 <div class="side_menu side-drop">
 
-    	<div class="client-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
+    	<div class="client-containers" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
     		<div class="row client-content" style="display: none">
     			<div class="col-sm-12">
-    				<div class="col-md-10" style="height: 100px"></div>
+    				<div class="col-md-10" style=""></div>
     				<div class="col-md-2" style="padding-top:20px">
-    					<i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
+    					<i class="fa fa-arrow-left fa-2x close-arrow" style=""></i>
     				</div>
     			</div>
     			<div>
-    				
+    				<section style="margin: 50px">
+			 			 <div class="tbl-header client_template">
+			 			 	<img class="supplierLoader" src="<?= Url::to('@web/images/loader/spinner.gif'); ?>" style = "display: none;margin-left:230px;margin-top:150px" id="remarkLoader">
+			  			 </div>
+					</section>
     			</div>
     		</div>
     	</div>

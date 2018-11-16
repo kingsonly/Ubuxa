@@ -7,7 +7,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clients';
+$this->title = 'Suppliers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style type="text/css">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
  }
 .tbl-contents{
   min-height:300px;
-  margin-top: 0px;
+  margin-top: 50px;
   border: 1px solid rgba(255,255,255,0.3);
 }
 td{
@@ -40,13 +40,13 @@ td{
     min-height: 60px;
     position: relative;
 }
-.user-avatar {
+.user-avatars {
     border-radius: 50%;
     display: block;
     float: left;
-    height: 100px;
-    margin-right: 11px;
-    width: 100px;
+    height: 50px;
+    /*margin-right: 11px;*/
+    width: 50px;
 
 }
 .company-name{
@@ -65,7 +65,6 @@ td{
     padding-left: 24px;
 }
 .table-headers{
-    display: none;
     background: #3c8dbc;
     padding: 20px 15px;
     text-align: left;
@@ -74,8 +73,56 @@ td{
     color: #fff !important;
     text-transform: uppercase;
 }
-.table-rows{
+.table-rows td{
     border-bottom: 1px solid #ccc;
+}
+.th-table{
+    display: none;
+    position: fixed;
+    background: #367fa9;
+    width: 491px;
+    z-index: 1;
+    /* top: 0; */
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 16px;
+    font-size: 12px;
+    color: #fff;
+    text-transform: uppercase;
+}
+.img-corps{
+    height: 50px;
+    width: 50px;
+   /* padding-left: 17px;*/
+    border-radius: 50%;
+}
+.active-users:before{
+	background-color: #baed21;
+    border-radius: 50%;
+    content: '';
+    height: 9px;
+    left: 4px;
+    top: 9px;
+    position: absolute;
+    width: 9px;
+}
+.employ-head{
+    padding: 5px;
+    background: #ccc;
+    border-radius:3px;
+}
+.head-left{
+	padding-left: 27px;
+    font-size: 18px;
+    font-family: calibri;
+    color: #666;
+    font-weight: bold;
+}
+.head-center{
+    font-size: 18px;
+    font-family: calibri;
+    cursor: pointer;
 }
 
 
@@ -84,71 +131,67 @@ td{
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 </style>
 <div class="client-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<div style="display:none">
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'corporation_id',
-            [
-                'label' => 'Name',
-                'value' => 'name'
-            ],
-            'last_updated',
-            'deleted',
-            'cid',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
-    <div style="background:#fff;padding: 10px">
+    <div style="background:#fff;padding: 10px;height:600px;overflow-y:scroll;padding-top:0px">
           <div class="tbl-header">
             <table cellpadding="0" cellspacing="0" border="0">
               <thead class="table-headers">
                 <tr>
-                  <th>Company Name</th>
-                  <th>Short Name</th>
-                  <th>Action</th>
+                  <th class="th-table">Employees</th>
                 </tr>
               </thead>
             </table>
           </div>
+          <div class="col-md-12">
+          	<div class="row employ-head">
+          		<div class="col-md-4 head-left">Employees</div>
+          		<div class="col-md-2">
+          			<div class="">
+          				<span class="active-users head-center">Active</span>
+          			</div>
+          		</div>
+          		<div class="col-md-6">
+          			<div class="bx24-top-bar-search-wrap employee-search-wrap">
+						<form method="GET" name="FILTER_company_search_adv" action="/company/">
+						<input type="hidden" name="show_user" value="active">
+						<input type="hidden" name="current_filter" value="adv">
+						<input class="bx24-top-bar-search" type="text" id="user-search" name="company_search_FIO" value="">
+						<input type="hidden" name="set_filter_company_search" value="Y">
+						<div class="btn btn-default ">
+							<span class="fa fa-search" id="button-search-user"></span>
+						</div> 
+						
+						</form>
+					</div>
+				</div>
+          	</div>
+          </div>
           <div class="tbl-contents">
             <table cellpadding="0" cellspacing="0" border="0">
-              <tbody>
-                <? foreach($clients as $client){?>
-                    <tr class="table-rows">
+              <tbody id="table-body">
+                <? foreach($dataProvider as $data){?>
+                    <tr class="table-rows" id="table-rows">
                       <td>
                         <div class="row">
                           <div class="client-info-block col-md-12">
-                            <div class=" col-md-2">
-                              <div class="user-avatar user-default-avatar" style="background: url('<?= Url::to('@web/images/company/logo/company2.png'); ?>') no-repeat center center; background-size: cover;"></div>
+                            <div class="img-corps col-md-2">
+                              <div class="user-avatars user-default-avatar" style="background: url('<?= Url::to('@web/images/users/default-user.png'); ?>') no-repeat center center; background-size: cover;"></div>
                               </div>
-                              <div class="col-md-10">
+                              <div class="col-md-10" style="padding:0px">
                                 <div class="company-name">
                                     <div class="company-name-id" style="text-transform: uppercase;">
-                                        <?= $client['name']; ?>
+                                        <?= $data->fullname; ?>
                                     </div>
                                     
                                 </div>
                                 <div class="company-name">
                                     <div class="company-name-id">
-                                        <?= $client['notes']; ?>
+                                        <?//= $supplier['notes']; ?>
                                     </div>
                                     
                                 </div>
                                 <div class="company-name">
                                     <div class="company-name-id">
-                                        <button class="btn btn-primary"><?= $client['shortName']; ?></button>
+                                        <button class="btn btn-primary"><?= $data->role->name; ?></button>
                                     </div>
                                     
                                 </div>
@@ -184,7 +227,26 @@ $('.table-rows').mouseenter(function(){
     }).mouseleave(function(){
             $(this).css('background','transparent');
         })
+$(document).on('keyup','#user-search', function(){
+	// Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById('user-search');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("table-body");
+    li = ul.getElementsByTagName('tr');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByClassName("company-name-id")[0];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+})
 JS;
  
 $this->registerJs($clientIndexJs);
 ?>
+
