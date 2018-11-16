@@ -256,20 +256,15 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "tapToDismiss": false
 		  			}
 					
-				toastr.success('Element was created successfully', "", options);
+				//toastr.success('Element was created successfully', "", options);
 				alert('component');
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");
 				}
 			   $.pjax.reload({container:"#"+"component-pjax",async: false});
-			   $('.one-time-template-click-'+templateId).on('click',function(){
-			   		$('.component-list').removeClass('active-component');
-					data = $(this).data('url');
-					$(this).addClass('active-component');
-					$('.comps').removeClass('margin-bottom');
-					$('.component-display').load(data);
-					$('.component-display-wrapper').show()
-			   })
+			  
+			   $('.one-time-template-click-'+templateId).trigger('click');
+			   $('.one-time-component-click1').trigger('click');
 			   }
 			   }else{
 			   			options = {
