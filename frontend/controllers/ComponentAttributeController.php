@@ -8,6 +8,8 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boffins_vendor\classes\ModelCollection;
+use boffins_vendor\classes\StandardQuery;
 
 /**
  * ComponentAttributeController implements the CRUD actions for ComponentAttribute model.
@@ -38,9 +40,30 @@ class ComponentAttributeController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => ComponentAttribute::find(),
         ]);
+		
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+        ]);
+    }
+	
+    /**
+     *  @brief Useless action. 
+     *  Just testing features here.
+     */
+    public function actionTest()
+    {
+		$data2 = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
+		$data3 = $data2->models;
+		$data4 = count($data3);
+		
+		$data2->loadModel(0, ['name' => "New Name Here"] );
+		
+
+        return $this->render('index-test', [
+            'models' => $data3,
+			'usesQuery' => $data2->usesQuery(),
+			'query' => $data2->query,
         ]);
     }
 

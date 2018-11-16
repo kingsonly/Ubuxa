@@ -5,6 +5,7 @@
  
 namespace boffins_vendor\classes;
 
+use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecordInterface;
 use yii\base\Model;
@@ -46,9 +47,11 @@ class ModelCollection extends Collection
      */
     public function getData()
     {
-		if ( $this->usesQuery() && $this->_items === null ) { //check if getModels() is empty - 
+		if ( $this->usesQuery() && empty($this->_items) ) { //check if getModels() is empty - 
 																//note that models can return [] after query but is not null
-			$this->setItems() = $this->queryAll(); //items are already empty so setItems won't throw an exception
+			$this->_items = $this->queryAll(); //items are already empty so setItems won't throw an exception
+			$c = count($this->_items);
+			Yii::trace("Query All is run and {$c} ");
         }
         return parent::getData();
     }
@@ -143,9 +146,9 @@ class ModelCollection extends Collection
         return $this;
     }
 	
-	public function loadModel($key, $attributes, safeOnly = true)
+	public function loadModel($key, $attributes, $safeOnly = true)
 	{
-		$models = $this->getModel();
+		$models = $this->getModels();
 		$model = $models[$key];
 		$model->setAttributes($attributes, $safeOnly);
 	}
@@ -161,7 +164,7 @@ class ModelCollection extends Collection
 	
 	public function saveModel($key, $runValidation = true, $attributeNames = null)
 	{
-		$models = $this->getModel();
+		$models = $this->getModels();
 		$model = $models[$key];
 		$model->save($runValidation, $attributeNames);
 	}
@@ -183,7 +186,7 @@ class ModelCollection extends Collection
 	
 	public function validateModel($key)
 	{
-		$models = $this->getModel();
+		$models = $this->getModels();
 		$model = $models[$key];
 		return $model->validate();
 	}
@@ -197,7 +200,7 @@ class ModelCollection extends Collection
     {
         return $this->map( function($model) use ($fields, $expand, $recursive) {
             /** @var $model Arrayable */
-            return $model->toArray($fields, $expand, $recursive) //inline function
+            return $model->toArray($fields, $expand, $recursive); //inline function
         });
     }
     /**
@@ -224,13 +227,13 @@ class ModelCollection extends Collection
         return $this->query->all();
     }
 	
-	private function _ensureModels()
+	/*private function _ensureModels()
     {
 		if ( $this->usesQuery() && $this->_items === null ) { //check if getModels() is empty - 
 																//note that models can return [] after query but is not null
 			$this->setItems() = $this->queryAll(); //items are already empty so setItems won't throw an exception
         }
-    }
+    }*/
 	
 	/**
 	 *  @brief common function to check if this model collection strictly uses queries and actually has a query set at this point
@@ -272,7 +275,7 @@ class ModelCollection extends Collection
 			throw new InvalidArgumentException( "Argument 'item' must be a member of yii\base\Model" . static::className() ); 
 		}
 		
-		if ( !empty($this->acceptableModelClass) && !$item instanceof Model $this->acceptableModelClass ) {
+		if ( !empty($this->acceptableModelClass) && !($item instanceof $this->acceptableModelClass) ) {
 			throw new InvalidArgumentException( "Argument 'item' must be a member of {$this->acceptableModelClass}" . static::className() ); 
 		}
 		return parent::addItem($item, $key);

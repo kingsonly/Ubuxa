@@ -51,6 +51,7 @@ class ComponentAttribute extends BoffinsArRootModel implements Sortable
             'component_template_attribute_id' => Yii::t('component', 'Component Template Attribute ID'),
             'value_id' => Yii::t('component', 'Value ID'),
             'value' => Yii::t('component', 'Value'),
+			'name' => Yii::t('component', 'Attribute Name'),
         ];
     }
 
@@ -80,14 +81,14 @@ class ComponentAttribute extends BoffinsArRootModel implements Sortable
 	 */
 	protected function getValueObject()
 	{
-		$valueClassNme = $this->componentTemplateAttribute->valueClassName;
-		return $this->hasOne($valueClassNme::className(), ['id' => 'value_id']);
+		$valueClassName = $this->componentTemplateAttribute->valueClassName;
+		return $this->hasOne($valueClassName::className(), ['id' => 'value_id']);
 	}
 	
 	public function getValue()
 	{
 		if (empty($this->valueObject)) {
-			Yii::warning("Trying to get a value for an attribute but the value is empty!");
+			Yii::warning("Trying to get a value for an attribute but the value record is empty!");
 			return '';
 		}
 		return $this->valueObject->stringValue();
@@ -96,5 +97,10 @@ class ComponentAttribute extends BoffinsArRootModel implements Sortable
 	public function getSortField()
 	{
 		return $this->value->sortfield;
+	}
+	
+	public function getName()
+	{
+		return $this->componentTemplateAttribute->name;
 	}
 }
