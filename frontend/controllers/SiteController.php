@@ -33,6 +33,9 @@ use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
 use frontend\models\Task;
 use frontend\models\Remark;
+use frontend\models\TenantEntity;
+use frontend\models\TenantCorporation;
+use frontend\models\TenantPerson;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
@@ -98,6 +101,8 @@ class SiteController extends BoffinsBaseController {
 		$taskAssignedUser = new TaskAssignedUser();
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
+        $allUsers = new UserDb;
+        $userId = Yii::$app->user->identity->id;
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -110,6 +115,9 @@ class SiteController extends BoffinsBaseController {
 			'users' => $users,
 			'label' => $label,
             'taskLabel' => $taskLabel,
+            'folder' => $folder,
+            'allUsers' => $allUsers,
+            'userId' => $userId,
 			]);
         } else {
 				
@@ -123,6 +131,9 @@ class SiteController extends BoffinsBaseController {
 				'users' => $users,
 				'label' => $label,
 	            'taskLabel' => $taskLabel,
+	            'folder' => $folder,
+	            'allUsers' => $allUsers,
+	            'userId' => $userId,
 				]);
    		 }
        
@@ -234,34 +245,45 @@ class SiteController extends BoffinsBaseController {
     {
 		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
+       $tenantEntity = new TenantEntity();
+       $tenantCorporation = new TenantCorporation();
+       $tenantPerson = new TenantPerson();
 		
         //yii\helpers\VarDumper::dump(Yii::$app->request->post());
-        if ($customer->load(Yii::$app->request->post())) {
+        if ($customer->load(Yii::$app->request->post()) && $tenantEntity->load(Yii::$app->request->post())) {
         	$email = $customer->master_email;
         	$date = strtotime("+7 day");
         	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
-        	if($customer->signup($customerModel)){
-        		$sendEmail = \Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-                ->setSubject('Signup Confirmation')
-                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-                Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-                ))
-                )->send();
-        		if($sendEmail){
-        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
-                } else{
-                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-            	}
-        	}
+        	
+        	if($tenantEntity->save()){
+        		$customer->entity_id = $tenantEntity->id;
+	        	if($customer->signup($customerModel)){
+	        		//$tenantCorporation->save();
+	        		$sendEmail = \Yii::$app->mailer->compose()
+	                ->setTo($email)
+	                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+	                ->setSubject('Signup Confirmation')
+	                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+	                Yii::$app->urlManager->createAbsoluteUrl(
+	                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+	                ))
+	                )->send();
+	        		if($sendEmail){
+	        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
+	                } else{
+	                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+	            	}
+	        	}
+	        }
 		}else {
-            return $this->render('createCustomer', [
-				'customerForm' => $customer,
-				'action' => ['createCustomer'],
-			]);
+	            return $this->render('createCustomer', [
+					'customerForm' => $customer,
+					'tenantEntity' => $tenantEntity,
+					'tenantPerson' => $tenantPerson,
+					'tenantCorporation' => $tenantCorporation,
+					'action' => ['createCustomer'],
+				]);
 		}
     }
 

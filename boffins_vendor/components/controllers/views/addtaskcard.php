@@ -44,13 +44,27 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Write some task here", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-    <?= Html::submitButton('Add Task', ['id' => 'cardButton']) ?>
+    <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
+    <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
     <span class="glyphicon glyphicon-remove close-add"></span> 
 <?php ActiveForm::end(); ?>
 
 <?php
 $taskUrl = Url::to(['task/dashboardcreate']);
 $addCard = <<<JS
+
+$(document).ready(function(){
+    $('.cardButton').attr('disabled',true);
+    $('.cardInput').keyup(function(){
+        if($(this).val().length !=0){
+            $('.cardButton').attr('disabled', false);            
+        }
+        else{
+            $('.cardButton').attr('disabled',true);
+        }
+    })
+});
+
 $('#create-task-card$statusid').on('beforeSubmit', function(e) {
         e.preventDefault(); 
            var form = $(this);
@@ -62,7 +76,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                 type: 'POST',
                 data: form.serialize(),
                 success: function(response) {
-                    console.log('completed');
+                    toastr.success('Task created');
                     $.pjax.reload({container:"#task-list-refresh"});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
                     $.pjax.reload({container:"#task-modal-refresh",async: false});
@@ -71,7 +85,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                   console.log('Something went wrong');
               }
             });
-            return true;    
+        return true;    
 });
 
 $(".cardInput").keydown(function(e){

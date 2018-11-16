@@ -7,7 +7,10 @@ use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use yii\web\View;
 use frontend\models\Task;
+use frontend\models\Onboarding;
 
+$checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
 ?>
 <style type="text/css">
@@ -176,12 +179,116 @@ $boardUrl = Url::to(['task/index']);
 #taskButton {
     display: none;
 }
+/*-------------------------
+  Inline help tip
+--------------------------*/
+
+
+.help-tip{
+  position: absolute;
+  top: 7px;
+  right: 18px;
+  text-align: center;
+  background-color: #BCDBEA;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  line-height: 26px;
+  cursor: pointer;
+}
+
+.help-tip:before{
+  content:'?';
+  font-weight: bold;
+  color:#fff;
+}
+
+.help-tip:hover p{
+  display:block;
+  transform-origin: 100% 0%;
+
+  -webkit-animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{
+  display: none;
+  text-align: left;
+  background-color: #4a4b4c;
+  padding: 20px;
+  width: 300px;
+  position: absolute;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  right: -4px;
+  color: #FFF;
+  font-size: 13px;
+  line-height: 1.4;
+  z-index: 99999;
+  opacity: 20;
+}
+
+.help-tip p:before{
+  position: absolute;
+  content: '';
+  width:0;
+  height: 0;
+  border:6px solid transparent;
+  border-bottom-color:#1E2021;
+  right:10px;
+  top:-12px;
+}
+
+.help-tip p:after{
+  width:100%;
+  height:40px;
+  content:'';
+  position: absolute;
+  top:-40px;
+  left:0;
+}
+.tip-text{
+  padding-bottom: 10px;
+}
+@-webkit-keyframes fadeIn {
+  0% { 
+    opacity:0; 
+    transform: scale(0.6);
+  }
+
+  100% {
+    opacity:100%;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  0% { opacity:0; }
+  100% { opacity:100%; }
+}
 
 </style>
 
 	 <div class="col-md-4">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
+            <?php if($checkUrlParam == 'folder'){?>
+              <?php if(!$onboardingExists){ ?>
+                  <div class="help-tip" id="task-tipz">
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+                <div class="help-tip" id="task-tipz">
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php } ?>
+            <?php }?>
                 <span>TASKS</span>
                  
             </div>
@@ -239,11 +346,11 @@ $boardUrl = Url::to(['task/index']);
 </div> 
 
 </div>
-
+      
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
-					 
+					       <?php if($checkUrlParam == 'folder'){?>
                     <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
@@ -253,6 +360,7 @@ $boardUrl = Url::to(['task/index']);
                       <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
                     <?php ActiveForm::end(); ?>
+                  <?php }?>
                 </div> 
             </div>  
         </div>
@@ -265,17 +373,31 @@ $boardUrl = Url::to(['task/index']);
 
 <?php 
 $taskUrl = Url::to(['site/task']);
+$taskOnboarding = Url::to(['onboarding/taskonboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
 $task = <<<JS
-
-
-
 
 $(".todo__state").change(function() {
     var checkedId;
     checkedId = $(this).data('id');
     _UpdateStatus(checkedId);        
 });
+
+function _TaskOnboarding(){
+          $.ajax({
+              url: '$taskOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
 
 //$(".todo__icon").click(false);
 
@@ -298,6 +420,7 @@ function _UpdateStatus(checkedId){
 
 $('#create-task').on('beforeSubmit', function(e) { 
            var form = $(this);
+           var task = $('#addCard').val();
            e.preventDefault();
             if(form.find('.has-error').length) {
                 return false;
@@ -308,6 +431,7 @@ $('#create-task').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 success: function(response) { 
                     console.log('completed');
+                    toastr.success('Task created');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
                     $.pjax.reload({container:"#task-modal-refresh",async: false});
@@ -326,38 +450,136 @@ $("#addTask").bind("keyup change", function() {
         $("#taskButton").hide();
     }
 });
+
+$('#addTask').bind("keyup keypress", function(e) {
+  var code = e.keyCode || e.which; 
+  if (code  == 13) {    
+      if($(this).val()==''){
+          e.preventDefault();
+          return false;
+      }
+  }
+});
+
+$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
+  $(function() {
+
+  var taskTour = new Tour({
+    name: "taskTour",
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Task List",            
+          content: "Find all task here",
+          onShow: function(taskTour){
+            $('#task-tipz').hide();
+          }
+        },
+        {
+          element: "#addTask",
+          title: "Add task",
+          content: "You can create new task",
+        },
+        {
+          element: ".open-board",
+          title: "Task board",
+          content: "You can get access to more features for task management from the action menu.",
+          onShow: function(taskTour){
+                //$('.side_menu').addClass('side-drop');
+                $('.list_load, .list_item').stop();
+                $(this).removeClass('closed').addClass('opened');
+
+                $('.side_menu').css({ 'left':'0px' });
+
+                var count = $('.list_item').length;
+                $('.list_load').slideDown( (count*.6)*100 );
+                $('.list_item').each(function(i){
+                var thisLI = $(this);
+                timeOut = 100*i;
+                setTimeout(function(){
+                  thisLI.css({
+                    'opacity':'1',
+                    'margin-left':'0'
+                  });
+                },100*i);
+              });
+            },
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo("#content");
+            $(".tour-step-background").appendTo("#content");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        {
+          element: ".drag-container",
+          title: "Task board",
+          content: "This is your task board. You can manage all task here.",
+          placement: "bottom",
+          onShow: function(taskTour){
+            $('#mySidenav').css({'width':'100%'});
+            },
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo(".view-task-board");
+            $(".tour-step-background").appendTo(".view-task-board");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        {
+          element: ".drag-item:first",
+          title: "Kanban",
+          content: "You can drag and drop task to the various status, assign task to users and much more",
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo(".drag-container");
+            $(".tour-step-background").appendTo(".drag-container");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        {
+          element: ".add-card:first",
+          title: "Add Task Card",
+          content: "Add task card for each status from here.",
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo(".drag-column:first");
+            $(".tour-step-background").appendTo(".drag-container");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,    
+    onEnd: function (taskTour) {
+      _TaskOnboarding();
+      $('.side_menu').addClass('side-drop');
+      $('#mySidenav').css({'width':'0'})
+      $('.list_load, .list_item').stop();
+      $(this).removeClass('opened').addClass('closed');
+
+      $('.side_menu').css({ 'left':'-300px' });
+
+      var count = $('.list_item').length;
+      $('.list_item').css({
+        'opacity':'0',
+        'margin-left':'-20px'
+      });
+      $('.list_load').slideUp(300);
+          },
+      });
+  $('#task-tour').on('click', function(e){
+       taskTour.start();
+       e.preventDefault();
+    })
+ taskTour.init();
+
+});
 JS;
  
 $this->registerJs($task);
 ?>
-
- 
-<?php 
-/*
-$steps[0] = [
-    'title'=>'Step 1',
-    'content'=>'Content and stuff',
-    'element'=>'#boardButton'
-];
-
-// $steps[1] = ... etc
-$steps[1] = [
-    'title'=>'Step 2',
-    'content'=>'Content and stuff',
-    'element'=>'#box-content'
-];
-$steps[2] = [
-    'title'=>'Step 3',
-    'content'=>'Content and stuff',
-    'element'=>'#task-box'
-];
-
-
-
-\macrowish\widgets\BootstrapTour::widget([
-    'steps'=>$steps,
-    'options'=>[
-        'backdrop'=>'true',
-        //'storage' => 'false',
-        ]
-]); */ ?>

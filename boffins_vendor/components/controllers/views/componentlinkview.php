@@ -20,6 +20,7 @@ use kartik\file\FileInput;
 <?= $form->field($model, 'itemType')->hiddenInput(['maxlength' => true,'id'=>'itemType'])->label(false); ?>
 	
 <?= $form->field($model, 'itemID')->hiddenInput(['maxlength' => true,'id'=>'itemId'])->label(false); ?>
+
 <? if($model->junctionFK != 'edocument_id'){?>
 	<?= $form->field($model, 'upload_file[]')->widget(FileInput::classname(), [
 		'options' => ['accept' => 'image/*',

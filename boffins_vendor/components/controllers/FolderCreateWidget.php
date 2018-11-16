@@ -22,20 +22,40 @@ use frontend\models\Folder;
 ********************************/
 class FolderCreateWidget extends Widget{
 	
-	public function init()
-	{
-		parent::init();
-	}
-	private $folderModel; // hold instance of folder model 
+	public $folderModel; // hold instance of folder model 
 	public $folderPrivacy; // Used to check if a folder is private or not
 	public $refreshSectionElement; // holds the id of the div or section to be refreshed after creation
+	public $formAction; // this makes it possible to use the form for defferent scenerio eg for both folders and components
+	public $formId; // holds the id of form, this is done to make the form used multiple times on a single page 
+	public $creationType; // this property is used to determine if a user wants to create a folder or a component
+	public function init()
+	{
+		// if formId is not set by a user, give a default id 
+		if(empty($this->formId)){
+			$this->formId = 'create-widget-id'; 
+		}
+		
+		// if creation type is empty by default creation type should be folder 
+		if(empty($this->creationType)){
+			$this->creationType = 'folder'; 
+		}
+		// note folderModel is === active form formModel and if its empty by default folder is used  
+		if(empty($this->folderModel)){
+			$this->folderModel = new Folder();
+		}
+		parent::init();
+	}
 	
-	public function run(){
-		$this->folderModel = new Folder();
+	public function run()
+	{
+		
 		return $this->render('foldercreatewidgetview',[
 			'folderModel' => $this->folderModel,
 			'folderPrivacy' => $this->folderPrivacy,
 			'pjaxId' => $this->refreshSectionElement,
+			'formId' => $this->formId,
+			'formAction' => $this->formAction,
+			'creationType' => $this->creationType,
 		]);
 	}
 	

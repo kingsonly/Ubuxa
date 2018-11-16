@@ -18,6 +18,18 @@ ul.tabs li {
 
   
 }
+#tabs li a.inactive{
+    padding-top:5px;
+    padding-bottom:8px;
+  padding-left: 8px;
+  padding-right: 8px;
+    color:#666666;
+    background: #EEE;
+   outline:none;
+   border-bottom: solid 1px #CCC;
+
+}
+
 ul.tabs li a {
 	position: relative;
 	display: block;

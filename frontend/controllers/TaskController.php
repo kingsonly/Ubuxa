@@ -45,7 +45,7 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
-        $model = new Task;
+        /** $model = new Task;
         $dataProvider = $model->displayTask();
         $task = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
@@ -55,7 +55,22 @@ class TaskController extends Controller
             'model' => $model,
             'task' => $task,
             'reminder' => $reminder,
-        ]);
+        ]); */
+        $perpage=10;
+        $task = new Task();
+        if(isset($_GET['src1'])){
+            if(Yii::$app->request->post('page')){
+                $numpage = Yii::$app->request->post('page');
+                $ownerid = Yii::$app->request->post('ownerId');
+                $offset = (($numpage-1) * $perpage);
+                     
+                $taskclips = $task->specificClips($ownerid,2,$offset,$perpage,'task');
+                return $this->renderAjax('index', [
+                         'tasks' => $taskclips,
+                     ]);
+                
+            } 
+        }
     }
 
     /**
@@ -253,12 +268,22 @@ class TaskController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    /** public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    } */
+
+    public function actionDelete()
+    {
+        if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['task_id'];
+            $model = $this->findModel($id)->delete();
+        }
     }
+
 
     /**
      * Finds the Task model based on its primary key value.

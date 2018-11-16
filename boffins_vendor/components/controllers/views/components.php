@@ -50,7 +50,9 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 </style>
 
 <div class="col-sm comps margin-bottom">
-    <div class="auth-users"><?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id])?></div>
+    <div class="auth-users">
+    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id])?>	
+    </div>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">
 		
@@ -65,12 +67,21 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 		
 			<div class="">
 				<div class="">
+				
 					<?= FolderCarouselWidget::widget([
-							'folderModel' => $components, 
+							'folderModel' => $model, 
+							'model' => $displayModel, 
+							'folderId' => $folderId, 
 							'displayType' => 'component',
 							'height' => $height,
 							'numberOfDisplayedItems' => 4,
 							'htmlAttributes'=>'test',
+							'createFormWidgetAttribute'=>[
+								'formId'=>'create-component-form', 
+								'formAction'=>$formAction,
+								'refreshSectionElement'=>'component-create-refresh',
+								
+							]
 						]) ?>
 				</div>
 				</div>

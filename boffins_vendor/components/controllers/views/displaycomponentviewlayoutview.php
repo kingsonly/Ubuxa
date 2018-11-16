@@ -10,10 +10,7 @@ use yii\jui\Draggable;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Folder */
-$controlerStrinName = strtolower(\yii\helpers\StringHelper::basename(get_class($model)));
-$this->title = 'Tycol | '.ucfirst($controlerStrinName);
-$this->params['breadcrumbs'][] = ['label' => ' Folders', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 
 
 ?>
@@ -44,12 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 <?php $this->beginBlock('folderview'); ?>
 
-	<small>Select <?= ucfirst($controlerStrinName);?></small>
+	<small>Select </small>
    
 <?php $this->endBlock(); ?>
 
 <?php $this->beginBlock('folderSidebar'); ?>
-	<?= Menu::widget(); ?>
+	<?//= Menu::widget(); ?>
 <?php $this->endBlock(); ?>
 
 <section class="content">
@@ -95,8 +92,8 @@ Modal::begin([
 
 <?php 
 
-	$urlListView = Url::to([$controlerStrinName.'/'.$controlerStrinName.'listview']);
-	$urlView = Url::to([$controlerStrinName.'/'.$controlerStrinName.'view','id'=>$id]);
+	$urlListView = Url::to(['component/listview','folder'=>$folderId,'component' => $templateId]);
+	$urlView = Url::to(['component/view','id'=>$componentId]);
 	
 $js3 = <<<JS
 
@@ -104,25 +101,7 @@ $js3 = <<<JS
 $("#listView").load('$urlListView');
 $("#view").load('$urlView',{var2:1});
 
-$(document).on('click','.$controlerStrinName'+'url',function(){
-	var parent = $(this).parent();
 
-	$('.$controlerStrinName'+'urltr').removeClass('activelist');
-	parent.addClass('activelist');
-
-	$('#view').html('<img class="loadergif" src="images/loader.gif"  />');
-	var url = parent.data('url');
-	$("#view").load(url,{var2:1},function(){
-		$('#loader').slideUp('slow');
-		$('#viewcontainer').slideDown('fast');
-
-	});
-})
-$(document).on('click','#create'+'$controlerStrinName',function(){
-	var formUrl = $(this).data('formurl');
-	$('#$controlerStrinName'+'viewcreate').modal('show').find('#$controlerStrinName'+'createform').load(formUrl);
-
-})
 
 
 JS;

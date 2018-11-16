@@ -253,8 +253,20 @@ label {
                   <span class="unit">.ubuxa.com</span>
                 </div>
 
-                <?= $form->field($customerForm, 'account_number')->textInput(['maxlength' => true, 'minlenght'=>6, 'class' => 'form-styling']) ?>
+                <?php
+                  echo $form->field($tenantEntity, 'entity_type')->dropDownList(
+                              ['person' => 'Individual', 'corporation' => 'Corporation']
+                      ); ?>
+                <div class="corporation-tenant">
+                  <?= $form->field($tenantCorporation, 'name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                </div>
+                <div class="person-tenant">
+                  <?//= $form->field($tenantPerson, 'first_name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                  <?//= $form->field($tenantPerson, 'surname')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                </div>   
                 <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling', 'id' => 'plan'] ]) ?>
+               
+
             </div>
                     <div>
                     <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>

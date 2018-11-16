@@ -125,7 +125,7 @@ use frontend\models\Reminder;
     float: left;
 }
 .task-labels {
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
 .task-details-title{
     color: #6b808c;
@@ -188,7 +188,7 @@ use frontend\models\Reminder;
     min-width: 160px;
 }
 </style>
-<?php Pjax::begin(['id'=>'task-modal-refresh']); ?>
+
     <div class="task-view">
 
         <div class="task-titlez">
@@ -225,14 +225,14 @@ use frontend\models\Reminder;
         <div class="allassignees">
             <div class="assignContent">
                 <span class="assignUsers">Assignees</span>
-                <span class="dropdown taskdrop">
-                        <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!--<span class="dropdown taskdrop">
+                         <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
-                        </a>
+                        </a> 
                             <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
                                     <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
                             </div>
-                </span>
+                </span> -->
             </div>
             <?php if(!empty($model->taskAssignees)){?>
 
@@ -244,14 +244,14 @@ use frontend\models\Reminder;
         <div class="all-labels">
             <div class="assignContent">
                 <span class="assignUsers">Labels</span>
-                <span class="dropdown taskdrop">
-                    <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!--<span class="dropdown taskdrop">
+                     <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
-                    </a>
+                    </a> 
                     <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
                         <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
                     </div>
-                </span>
+                </span> -->
             </div>  
             <?php if(!empty($model->labelNames)){ ?>  
                 <div class="task-labels">
@@ -307,4 +307,3 @@ use frontend\models\Reminder;
     <?php } ?>
     </div>
 </div>
-<?php Pjax::end(); ?>

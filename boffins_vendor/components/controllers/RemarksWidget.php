@@ -12,6 +12,9 @@ class RemarksWidget extends Widget
 	public $parentOwnerId;
     public $remarks;
 	public $modelName;
+    public $onboarding;
+    public $onboardingExists;
+    public $userId;
 
     public function init()
     {
@@ -26,6 +29,10 @@ class RemarksWidget extends Widget
         	'parentOwnerId' => $this->parentOwnerId,
             'remarks' => $this->remarks,
         	'modelName' => $this->modelName,
+            'onboarding' => $this->onboarding,
+            'onboardingExists' => $this->onboardingExists,
+            'onboardingExists' => $this->onboardingExists,
+            'userId' => $this->userId,
         ]);
     }
 }

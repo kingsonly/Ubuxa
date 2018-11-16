@@ -1,9 +1,9 @@
 <?php
 
 namespace frontend\settings\controllers;
-
 use yii\web\Controller;
 use yii\helpers\Url;
+use yii\helpers\Json;
 use frontend\models\UserDb;
 use frontend\models\AccessPermission;
 use frontend\models\ControllerBaseRoute;
@@ -35,7 +35,7 @@ class DefaultController extends Controller
 			$settings->save(false);
 		}
 
-        return $this->render('index',[
+        return $this->renderAjax('index',[
 			'users'=>$users,
 			'settings' => $settings,
 			'settingsModel' => $settingsModel,
@@ -90,26 +90,32 @@ class DefaultController extends Controller
 		$uploadFormModel = new UploadForm();
 		$model =  Settings::find()->where(['id' => \Yii::$app->user->identity->cid])->one();
 
-		if (\Yii::$app->request->isPost) {
-			$uploadFormModel->imageFile = UploadedFile::getInstance($uploadFormModel, 'imageFile');
-			$ext = $uploadFormModel->imageFile->extension;
-			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
-			$basePath = explode('/',\Yii::$app->basePath);
-			\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/images/';
-			$path = \Yii::$app->params['uploadPath'] . $newName;
-			$dbpath = 'images/' . $newName;
+		if(\Yii::$app->user->identity->basic_role == 1 || \Yii::$app->user->identity->basic_role == 2){
+			if (\Yii::$app->request->isPost) {
+					$uploadFormModel->imageFile = UploadedFile::getInstance($uploadFormModel, 'imageFile');
+				if($uploadFormModel->imageFile){
+					$ext = $uploadFormModel->imageFile->extension;
+					$newName = \Yii::$app->security->generateRandomString().".{$ext}";
+					$basePath = explode('/',\Yii::$app->basePath);
+					\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/images/';
+					$path = \Yii::$app->params['uploadPath'] . $newName;
+					$dbpath = 'images/' . $newName;
+				if ($uploadFormModel->upload($path)) {
+					$model->logo = $dbpath;
+					if($model->save(false)){
+						exit(json_encode(array("status" => 1, "msg" => "Completed")));
+						return $this->render('index2');
+					}
 
-		if ($uploadFormModel->upload($path)) {
-			$model->logo = $dbpath;
-			if($model->save(false)){
-				return $this->render('index2');
+					// file is uploaded successfully
+				   return $this->render('index2'); 
+				}
 			}
-
-			// file is uploaded successfully
-		   return $this->render('index2'); 
+				//return $this->render('index2');
+			}
+		}else{
+			exit(json_encode(array("status" => 2, "msg" => "You don't have permision")));
 		}
-		//return $this->render('index2');
-	}
         
         //$model->setScenario('insert'); // Note! Set upload behavior scenario.
 		//if( $model->load(\Yii::$app->request->post()) && ){

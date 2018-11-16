@@ -219,7 +219,7 @@ label {
                 <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
                 <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
-                <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
+                <?//= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
             </div>
                     <div>
                     <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
@@ -249,7 +249,7 @@ $('#userForm').on('beforeSubmit', function (e) {
             
         },
         error: function () {
-            alert("Something went wrong");
+            //alert("Something went wrong");
         },
         beforeSend: function(){
             $("#loader").show()

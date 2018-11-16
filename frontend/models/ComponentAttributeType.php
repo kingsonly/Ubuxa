@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
 /**
  * This is the model class for table "{{%component_attribute_type}}".
  *
@@ -14,7 +14,7 @@ use Yii;
  *
  * @property ComponentTemplateAttribute[] $componentTemplateAttributes
  */
-class ComponentAttributeType extends \boffins_vendor\classes\BoffinsArRootModel
+class ComponentAttributeType extends ActiveRecord
 {
     /**
      * {@inheritdoc}

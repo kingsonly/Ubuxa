@@ -6,6 +6,7 @@ use Yii;
 use boffins_vendor\classes\FolderARModel;
 use yii\web\UploadedFile;
 use boffins_vendor\behaviors\FolderBehavior;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -34,6 +35,7 @@ class Folder extends FolderARModel
      */
 	public $privateFolder;
 	public $upload_file;
+	public $externalTemplateId;
 	
     public static function tableName()
     {
@@ -43,9 +45,7 @@ class Folder extends FolderARModel
 	public  function init()
     {
 		parent::init();
-		//if(empty($this->description)){
-			//$this->description = 'Add a description';
-		//}
+		
         
     }
 
@@ -57,7 +57,7 @@ class Folder extends FolderARModel
         return [
             [['parent_id', 'deleted', 'cid','private_folder'], 'integer'],
             [['title'], 'required'],	
-            [['last_updated','privateFolder','upload_file','folder_image'], 'safe'],
+            [['last_updated','privateFolder','upload_file','folder_image','externalTemplateId'], 'safe'],
             [['title'], 'string', 'max' => 40],
             [['description','folder_image'], 'string', 'max' => 255],
         ];
@@ -95,6 +95,14 @@ class Folder extends FolderARModel
     {
         return $this->hasMany(Component::className(), ['id' => 'component_id'])->viaTable('tm_folder_component', ['folder_id' => 'id']);
     }
+	public function getComponentTemplateAsComponents()
+    {
+        return $this->hasMany(Component::className(), ['id' => 'component_id',])->andWhere(['component_template_id' => $this->externalTemplateId])->viaTable('tm_folder_component', ['folder_id' => 'id']);
+    }
+	
+	public function getFolderComponentTemplate(){
+		return $this->hasMany(ComponentTemplate::className(), ['id' => 'component_template_id'])->via('components');
+	}
 
     /**
      * @return \yii\db\ActiveQuery
@@ -149,20 +157,38 @@ class Folder extends FolderARModel
         return array_reverse($this->containsFolderTree([],$this->parent_id));
     }
 
-    public function buildTree($elements = [], $parentId) 
+    public function buildTree(array $elements, $parentId) 
 	{
-        $branch = array();
+        $child = array();
         foreach ($elements as $element) {
             if ($element['parent_id'] == $parentId) {
                 $children = $this->buildTree($elements, $element['id']);
-                if ($children) {
-                    $element['title'] = $children;
+                if (!empty($children)) {
+                    $element['children'] = $children;
                 }
-                $branch[] = $element;
+                $child[] = $element;
             }
         }
-        return $branch;
+        return $child;
 	}
+
+    public function printTree($trees) {
+
+        foreach ($trees as $tree) {
+
+            printf("<ul class='first-list' id='menu-folders%d'>
+                        <li class='second-list' id='menu-folders%d'><a href='#'' class='list-link%d'><i class='fa fa-folder iconzz'></i>%s</a></li>
+                    </ul>", $tree['id'], $tree['id'], $tree['id'], $tree['title']);
+
+            if (isset($tree['children'])) {
+
+                $this->printTree($tree['children'], $tree['parent_id']);
+
+            }
+
+        }
+
+    }
 
 	public  function getDashboardItems($limit = 100) 
 	{

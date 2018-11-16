@@ -1,478 +1,294 @@
 <?php
-
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use frontend\assets\AppAsset;
-use boffins_vendor\components\controllers\CreateReminderWidget;
-use yii\base\view;
 use yii\bootstrap\Modal;
-use kartik\popover\PopoverX;
+use boffins_vendor\components\controllers\TaskViewWidget;
+use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
+use yii\web\View;
+use frontend\models\Task;
 
-AppAsset::register($this);
-
-
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-
-
+$boardUrl = Url::to(['task/index']);
 ?>
-<?= Html::csrfMetaTags() ?>
-<style>
-    ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.drag-container {
-  max-width: 1000px;
-  margin: 20px auto;
-}
-.drag-list {
-  display: flex;
-  align-items: flex-start;
-}
-@media (max-width: 690px) {
-  .drag-list {
-    display: block;
-  }
-}
-.fa {
-    color: black !important;
-}
-.drag-column {
-  flex: 1;
-  margin: 0 10px;
-  position: relative;
-  background: rgba(193, 198, 212, 0.2);
-  /* overflow: hidden; */
-  border-radius: 4px;
-}
-@media (max-width: 690px) {
-  .drag-column {
-    margin-bottom: 30px;
-  }
-}
-.drag-column h2 {
-  font-size: 1.2rem;
-  margin: 0;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.drag-column-on-hold .drag-column-header, .drag-column-on-hold .is-moved, .drag-column-on-hold .drag-options {
-  background: #98afc5;
-}
-.drag-column-in-progress .drag-column-header, .drag-column-in-progress .is-moved, .drag-column-in-progress .drag-options {
-  background: #2a92bf;
-}
-.drag-column-needs-review .drag-column-header, .drag-column-needs-review .is-moved, .drag-column-needs-review .drag-options {
-  background: #f4ce46;
-}
-.drag-column-approved .drag-column-header, .drag-column-approved .is-moved, .drag-column-approved .drag-options {
-  background: #00b961;
-}
-.drag-column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-}
-.drag-inner-list {
-  min-height: 50px;
-}
-.drag-item {
-  margin: 10px;
-  height: 100px;
-  background: #FAFAFA;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  cursor: -webkit-grab;
-  cursor: grab;
-  border-radius: 2px;
-  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-  position: relative;
-}
-.drag-item.is-moving {
-  transform: scale(1.5);
-  background: rgba(0, 0, 0, 0.8);
-  cursor: -webkit-grabbing; 
-  cursor: grabbing;
-}
-.drag-header-more {
-  cursor: pointer;
+<style type="text/css">
+    .bg-info {
+        background-color: #fff;
+        box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
+    .task-header {
+        border-bottom: 1px solid #ccc;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .box-content-task {
+        height: 230px;
+        border-bottom: 1px solid #ccc;
+        padding-top: 8px;
+        overflow: auto;
+    }
+
+    .box-input1 {
+        padding-top: 5px;
+        height: 50px;
+    }
+
+     .todo-list {
+   background: #FFF;
+   font-size: 13px;
 }
-.drag-options {
-  position: absolute;
-  top: 44px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+ .todo {
+   display: block;
+   position: relative;
+   padding: 1em 1em 1em 16%;
+   margin: 0 auto;
+   cursor: pointer;
+   border-bottom: solid 1px #ddd;
 }
-.drag-options.active {
-  transform: translateX(0);
-  opacity: 1;
-  z-index: 99;
+ .todo:last-child {
+   border-bottom: none;
 }
-.drag-options-label {
-  display: block;
-  margin: 0 0 5px 0;
+ .todo__state {
+   position: absolute;
+   top: 0;
+   left: 0;
+   opacity: 0;
 }
-.drag-options-label input {
-  opacity: 0.6;
+ .todo__text {
+   color: #135156;
+   transition: all 0.4s linear 0.4s;
 }
-.drag-options-label span {
-  display: inline-block;
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-left: 5px;
+ .todo__icon {
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: auto;
+   margin: auto;
+   fill: none;
+   stroke: #27FDC7;
+   stroke-width: 1;
+   stroke-linejoin: round;
+   stroke-linecap: round;
 }
-/* Dragula CSS  */
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  list-style-type: none;
+ .todo__line, .todo__box, .todo__check {
+   transition: stroke-dashoffset 0.8s cubic-bezier(.9,.0,.5,1);
 }
-.gu-hide {
-  display: none !important;
+ .todo__circle {
+   stroke: #27FDC7;
+   stroke-dasharray: 1 6;
+   stroke-width: 0;
+   transform-origin: 13.5px 12.5px;
+   transform: scale(0.4) rotate(0deg);
+   animation: none 0.8s linear;
 }
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
+ .todo__circle 30% {
+     stroke-width: 3;
+     stroke-opacity: 1;
+     transform: scale(0.8) rotate(40deg);
+  }
+   
+   .todo__circle 100% {
+     stroke-width: 0;
+     stroke-opacity: 0;
+     transform: scale(1.1) rotate(60deg);
+  } 
+  .todo__box {
+   stroke-dasharray: 56.1053, 56.1053;
+   stroke-dashoffset: 0;
+   transition-delay: 0.16s;
 }
-.gu-transit {
-  opacity: 0.2;
+ .todo__check {
+   stroke: #27FDC7;
+   stroke-dasharray: 9.8995, 9.8995;
+   stroke-dashoffset: 9.8995;
+   transition-duration: 0.32s;
 }
-/* Demo info */
-.task-head {
-  text-align: center;
+ .todo__line {
+   stroke-dasharray: 168, 1684;
+   stroke-dashoffset: 168;
 }
-.bottom-content {
-    /* display: none; */
+ .todo__circle {
+   animation-delay: 0.56s;
+   animation-duration: 0.56s;
+}
+ .todo__state:checked ~ .todo__text {
+   transition-delay: 0s;
+   color: #ccc;;
+   opacity: 0.6;
+}
+ .todo__state:checked ~ .todo__icon .todo__box {
+   stroke-dashoffset: 56.1053;
+   transition-delay: 0s;
+}
+ .todo__state:checked ~ .todo__icon .todo__line {
+   stroke-dashoffset: -8;
+}
+ .todo__state:checked ~ .todo__icon .todo__check {
+   stroke-dashoffset: 0;
+   transition-delay: 0.48s;
+}
+ .todo__state:checked ~ .todo__icon .todo__circle {
+   animation-name: explode;
+}
+
+.assignee {
+    float: right;
+}
+
+ .embed-submit-field {
+   position: relative;
+}
+ #addTask {
+   width: 100%;
+   padding: 9px;
+}
+ #taskButton {
     position: absolute;
-    bottom: 0;
-    left: 5px;
+    right: 3px;
+    top: 3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background: #ededed;
+    border-radius: 3px;
+    padding: 6px;
+    width: 60px;
+    transition: all 0.2s;
+}
+ .embed-submit-field #taskButton:hover {
+   background-color: #37c88d;
+   color: #fff;
+   cursor: pointer;
+}
+.form-containers {
+   margin: 0 auto;
+}
+#addTask {
+    border:none;
+}
+#taskButton {
+    display: none;
 }
 
-.drag-item:hover .bottom-content{
-    display: block;
-}
-
-.icons {
-    width: 43px;
-}
-
-.modal-content {
-    border-radius: 6px !important; 
-}
-
-/* NEW DIV */
-.wrapit {
-  position: absolute;
-  overflow: hidden;
-  top: 10%;
-  right: 10%;
-  bottom: 85px;
-  left: 10%;
-  padding: 20px 50px;
-  display: block;
-  border-radius: 4px;
-  transform: translateY(20px);
-  transition: all 0.5s;
-  visibility: hidden;
-}
-.wrapit .content {
-  opacity: 0;
-}
-.wrapit:before {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  background: white;
-  content: "";
-  bottom: 10px;
-  left: 50%;
-  top: 95%;
-  color: #fff;
-  border-radius: 50%;
-  -webkit-transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
-  transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-.wrapit.active {
-  display: block;
-  visibility: visible;
-  box-shadow: 2px 3px 16px silver;
-  transition: all 600ms;
-  transform: translateY(0px);
-  transition: all 0.5s;
-}
-.wrapit.active:before {
-  height: 2000px;
-  width: 2000px;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  margin-left: -1000px;
-  margin-top: -1000px;
-  display: block;
-  -webkit-transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
-  transition: all 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-.wrapit.active .content {
-  position: relative;
-  z-index: 1;
-  opacity: 1;
-  transition: all 600ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
-}
-
-a.addTaskButton {
-  padding: 11px 11px 13px 13px;
-  outline: none;
-  border-radius: 50%;
-  background: #007fed;
-  color: #fff;
-  font-size: 24px;
-  display: block;
-  position: absolute;
-  right: 10px;
-  top: 60px;
-  margin-left: -25px;
-  transition: transform 0.25s;
-}
-a.addTaskButton:hover {
-  text-decoration: none;
-  background: #2198ff;
-}
-a.addTaskButton.active {
-  transform: rotate(135deg);
-  transition: transform 0.5s;
-}
-.holdbtn {
-  position: relative;
-}
-
-.dropdown-menu {
-  padding-left: 20px;
-    border-right-width: 1px;
-    padding-right: 20px;
-    width: 272px;
-    cursor: pointer;
-}
-.dropdown {
-  cursor: pointer;
-}
-.dropup{
-  cursor: pointer;
-}
-.task-test {
-    padding-left: 10px;
-    padding-top: 10px;
-    cursor: pointer;
-}
-.taskpop {
-  position: absolute;
-  right: 10px;
-  top: 60px;
-}
 </style>
 
-<div class="task-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <!-- <p>
-        <?= Html::a('Create Task', ['create'], ['class' => 'btn btn-success']) ?>
-    </p> -->
-
-</div>
-
-<section class="task-head">
-    <h1>Task Board</h1>
-</section>
-
-<div class="drag-container">
-    <ul class="drag-list">
-        <?php
-        $id = 1; 
-        foreach($task as $key => $value){ ?>
-        <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
-            <span class="drag-column-header">
-                <?= $value->status_title;?>
-                <svg class="drag-header-more" data-target="options<?= $id; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-            </span>
-                
-            <div class="drag-options" id="options<?=$id;?>"></div>
+   <div class="col-md-4">
+        <div class="bg-info column-margin taskz-listz">
+          <div class="task-header">
+                <span>TASKS</span>
+                 
+            </div>
             
-            <ul class="drag-inner-list" id="<?=$id;?>" data-contain="<?= $value->id; ?>">
-                <?php 
-                    $id2 = 1;
-                    foreach ($dataProvider as $key => $values) {
+          <div class="box-content-task" id="box-content">
+             <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
+  <defs>
+    <linearGradient id="boxGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="25" y2="25">
+      <stop offset="0%"   stop-color="#27FDC7"/>
+      <stop offset="100%" stop-color="#0FC0F5"/>
+    </linearGradient>
 
-                        if($values->status_id == $value->id){
-                      $boardUrl = Url::to(['task/view', 'id' => $values->id]);
-                      $reminderUrl = Url::to(['reminder/create']);
-                 ?>
-                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
-                  <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
-                  <div class="task-title">
-                    <?= $values->title; ?>
-                  </div>
-                  <div class="assignedto">
-                    <?= $values->personName; ?>
-                  </div>
-                </div>
-                    <div class="bottom-content">
-                      <div class="dropdown testdrop">
-                        <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                          <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
-                        </div>
-                      
-                        <a href='#'><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
-                        <a href='#'><i class="fa fa-tags icons" aria-hidden="true"></i></a>
-                        <a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </li>
-            <?php $id2++;}}?>
-            </ul>
-        </li>
-        <?php $id++; }?>
-    </ul>
-</div>
-<!-- <div class='wrapit'>
-  <div class='content'>
-    <div id="load-data"></div>
-  </div>
-</div>
-  <a class='button glyphicon glyphicon-plus addTaskButton' href='#'></a>
--->
-<?php 
-PopoverX::begin([
-    'header' => 'Add Task',
-    'size' => PopoverX::SIZE_MEDIUM,
-    'placement' => PopoverX::ALIGN_LEFT,
-    'toggleButton' => ['label'=>'Add Task', 'class'=>'btn btn-primary taskpop'],
-]);
+    <linearGradient id="lineGradient">
+      <stop offset="0%"    stop-color="#ccc"/>
+      <stop offset="100%"  stop-color="#ccc"/>
+    </linearGradient>
 
- $form = ActiveForm::begin(['action'=>Url::to(['task/create'])]); ?>
-                    <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'id' => 'task-popover', 'placeholder' => "Write some task here"])->label(false) ?>
-                  <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'taskButton']) ?>
-                  <?php ActiveForm::end();
-
-PopoverX::end();
-
-?>
+    <path id="todo__line" stroke="url(#lineGradient)" d="M21 12.3h168v0.1z"></path>
+    <path id="todo__box" stroke="url(#boxGradient)" d="M21 12.7v5c0 1.3-1 2.3-2.3 2.3H8.3C7 20 6 19 6 17.7V7.3C6 6 7 5 8.3 5h10.4C20 5 21 6 21 7.3v5.4"></path>
+    <path id="todo__check" stroke="url(#boxGradient)" d="M10 13l2 2 5-5"></path>
+    <circle id="todo__circle" cx="13.5" cy="12.5" r="10"></circle>
+  </defs>
+</svg>
 
 
-<? 
-    Modal::begin([
-        'header' =>'<h1 id="headers"></h1>',
-        'id' => 'boardContent',
-        'size' => 'modal-md',  
-    ]);
-?>
-<div id="viewcontent"></div>
-<?
-    Modal::end();
-?>
-
-
-
-<?php 
-$saveUrl = Url::to(['task/kanban']);
-$formUrl = Url::to(['task/create']);
-$board = <<<JS
-
-$.fn.closest_descendent = function(filter) {
-    var found = $(),
-        currentSet = this; // Current place
-    while (currentSet.length) {
-        found = currentSet.filter(filter);
-        if (found.length) break;  // At least one match: break loop
-        // Get all children of the current set
-        currentSet = currentSet.children();
-    }
-    return found.first(); // Return first match of the collection
-}
-
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
-
-
-    dragula([
-    document.getElementById('1'),
-    document.getElementById('2'),
-    document.getElementById('3'),
-    document.getElementById('4'),
-    document.getElementById('5')
-])
-
-.on('drag', function(el) {
+<div class="todo-list">
+  <?php 
+    $id = 1;
+    if(!empty($tasks)){
+    foreach ($tasks as $key => $value) { ?>
+  <label class="todo">
+    <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
+        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
+    <?php }else { ?>
+        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
+    <?php } ?>
     
-    // add 'is-moving' class to element being dragged
-    el.classList.add('is-moving');
-})
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
+      <use xlink:href="#todo__line" class="todo__line"></use>
+      <use xlink:href="#todo__box" class="todo__box"></use>
+      <use xlink:href="#todo__check" class="todo__check"></use>
+      <use xlink:href="#todo__circle" class="todo__circle"></use>
+    </svg>
 
-
-.on('drop', function(el, container) {
-        var c = $(container);
-        var items  = c.find('li[data-filename]');
-        var status  = $('#'+el.id).attr('data-filename');
-        var contain = $('#'+el.id).parent().attr('data-contain');
+    <div class="todo__text">
+        <span><?= $value->title; ?></span>
         
-        var result = [];
-        $.each(items, function(key, item) {
-          result.push($(item).data('filename'));
-        });
-        _UpdateTask(status, contain);
-        //console.log(contain, status);
-        var check = $('#'+el.id).closest_descendent('li[data-filename]');
-        //console.log(check);
-
-})
-.on('dragend', function(el) {
+    </div>
     
-    // remove 'is-moving' class from element after dragging has stopped
-    el.classList.remove('is-moving');
-    
+  </label>
 
-    // add the 'is-moved' class for 600ms then remove it
-    window.setTimeout(function() {
-        el.classList.add('is-moved');
-        
-        window.setTimeout(function() {
-            el.classList.remove('is-moved');
-        }, 600);
-    }, 100);
-   
-    //alert(el.parent().attr('class'));
+  <?php $id++;}}else{
+    echo "No task";
+  }?>
+</div> 
+
+</div>
+
+     <div class="box-input1">
+            <div class="form-containers">
+                 <div class="embed-submit-field">
+           
+                    <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
+           
+                      <?= $form->field($task, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
+             
+                       <?= $form->field($task, 'ownerId')->hiddenInput(['value' => 14, 'id' => 'task-Owner'])->label(false) ?>
+                     
+                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                    
+                    <?php ActiveForm::end(); ?>
+                </div> 
+            </div>  
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<?php 
+$taskUrl = Url::to(['site/task']);
+$createUrl = Url::to(['task/dashboardcreate']);
+$task = <<<JS
+
+
+
+
+$(".todo__state").change(function() {
+    var checkedId;
+    checkedId = $(this).data('id');
+    _UpdateStatus(checkedId);        
 });
 
-function _UpdateTask(status, contain){
+//$(".todo__icon").click(false);
+
+function _UpdateStatus(checkedId){
           $.ajax({
-              url: '$saveUrl',
+              url: '$taskUrl',
               type: 'POST', 
               data: {
-                  id: status,
-                  status_id: contain, 
+                  id: checkedId,
                 },
               success: function(res, sec){
-                   console.log('Completed');
+                $.pjax.reload({container:"#kanban-refresh",async: false});
+                   console.log('Status updated');
               },
               error: function(res, sec){
                   console.log('Something went wrong');
@@ -480,89 +296,55 @@ function _UpdateTask(status, contain){
           });
 }
 
+$('#create-task').on('beforeSubmit', function(e) { 
+           var form = $(this);
+           e.preventDefault();
+            if(form.find('.has-error').length) {
+                return false;
+            }
+            $.ajax({
+                url: '$createUrl',
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) { 
+                    console.log('completed');
+                    $.pjax.reload({container:"#task-list-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#task-modal-refresh",async: false});
+                },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+            });    
+});
 
-var createOptions = (function() {
-    var dragOptions = document.querySelectorAll('.drag-options');
-    
-    // these strings are used for the checkbox labels
-    var options = ['Research', 'Strategy', 'Inspiration', 'Execution'];
-    
-    // create the checkbox and labels here, just to keep the html clean. append the <label> to '.drag-options'
-    function create() {
-        for (var i = 0; i < dragOptions.length; i++) {
-
-            options.forEach(function(item) {
-                var checkbox = document.createElement('input');
-                var label = document.createElement('label');
-                var span = document.createElement('span');
-                checkbox.setAttribute('type', 'checkbox');
-                span.innerHTML = item;
-                label.appendChild(span);
-                label.insertBefore(checkbox, label.firstChild);
-                label.classList.add('drag-options-label');
-                dragOptions[i].appendChild(label);
-            });
-
+var mytaskpage = 1;
+var getTaskOwnerId = $('#task-Owner').val();
+mycontent(mytaskpage);
+jQuery(
+  function($)
+  {
+    $('#flux').bind('scroll', function()
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mytaskpage++;
+          mycontent(mytaskpage);
         }
+      })
+  }
+);
+
+$("#addTask").bind("keyup change", function() {
+    var value = $(this).val();
+    if (value && value.length > 0) {
+        $("#taskButton").show();
+    } else {
+        $("#taskButton").hide();
     }
-    
-    return {
-        create: create
-    }
-    
-    
-}());
-
-var showOptions = (function () {
-    
-    // the 3 dot icon
-    var more = document.querySelectorAll('.drag-header-more');
-    
-    function show() {
-        // show 'drag-options' div when the more icon is clicked
-        var target = this.getAttribute('data-target');
-        var options = document.getElementById(target);
-        options.classList.toggle('active');
-    }
-    
-    
-    function init() {
-        for (i = 0; i < more.length; i++) {
-            more[i].addEventListener('click', show, false);
-        }
-    }
-    
-    return {
-        init: init
-    }
-}());
-
-createOptions.create();
-showOptions.init();
-
-//$('.addTaskButton').on('click', function(){
-  //$('.wrapit, a').toggleClass('active');
-  //$( "#load-data" ).load( "$formUrl" );
-  //return false;
-  //});
-
-//$(".dropdown").click(function () {
-  //$(".bottom-content").css("display","block");
-//});
-
- window.onscroll = function(ev) {
-   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-       $('.testdrop').removeClass('dropdown');
-       $('.testdrop').addClass('dropup');
-   }else {
-      $('.testdrop').removeClass('dropup');
-      $('.testdrop').addClass('dropdown');
-   }
-};
-
-
+});
 JS;
  
-$this->registerJs($board);
+$this->registerJs($task);
 ?>
 

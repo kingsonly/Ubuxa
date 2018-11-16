@@ -140,7 +140,7 @@ class SignupForm extends Model
             // attributes must be a string value
             [['first_name', 'surname', 'username'], 'string'],
             [['password'], 'string', 'min' => 6],
-            [['password_repeat'], 'required'],
+            //[['password_repeat'], 'required'],
             [['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             //attributes should be loaded onto model - safe            
             [[/* 'telephone_number', 'address_line', */'state_id','dob','address','basic_role', 'country_id', 'code', 'cid'], 'safe'],

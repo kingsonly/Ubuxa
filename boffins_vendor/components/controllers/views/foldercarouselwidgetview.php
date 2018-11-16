@@ -221,14 +221,16 @@ text-overflow: ellipsis;
       <div class="<?= $htmlAttributes; ?>-new-content">
 		  
         <div class="large-12 columns">
-			<? if(!empty($folderModel)){?>
+			
+			<? if(!empty($model)){?>
           <div class="owl-carousel owl-theme <?= $displayType;?> <?= $htmlAttributes; ?>">
-              <?php foreach ($folderModel as $folder) { ?>
+              <?php foreach ($model as $folder) { ?>
 		 <div class="item">
 			 <? if($displayType == 'component'){?>
 			 <div class="component-holder">
-				 <li class="component-list " data-url = "<?= Url::to(['/invoice'])?>">
-					 <?= $folder ?>
+				 <? $componentsObject = $folder;// making its easy for developers to relate to .?>
+				 <li class="component-list " data-url = "<?= Url::to(['component/index','folder'=>$folderId,'component' => $componentsObject->id])?>">
+					 <?= $componentsObject->name ?>
 				 </li>
 			 </div>
 			 
@@ -271,14 +273,16 @@ text-overflow: ellipsis;
 			Click on the Create Button to Add A new component to folder 
 			<? }else{?>
 			<div>
-				<?= CreateButtonWidget::widget(['buttonType' => 'text','htmlAttributes'=>['class'=>$htmlAttributes]]);?>
+				<?= CreateButtonWidget::widget(['buttonType' => 'text','htmlAttributes'=>['class'=>$htmlAttributes]]);?> 
 			</div>
 			<? }?>
          <?}?>
         </div>
       </div>
 	<div class="create-new-<?= $htmlAttributes; ?> display-non">
-		<?= FolderCreateWidget::widget(['folderPrivacy'=>$folderCarouselWidgetAttributes['folderPrivacy'],'refreshSectionElement' => 'create-folder-refresh']);?>
+		
+		<?=FolderCreateWidget::widget(['creationType'=>$displayType,'folderModel'=>$folderModel,'folderPrivacy'=>$createForm['folderPrivacy'],'refreshSectionElement' => $createForm['refreshSectionElement'],'formId' => $createForm['formId'],'formAction' =>$createForm['formAction']]);?>
+		
 	</div>
     </section>
 

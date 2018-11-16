@@ -11,16 +11,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 <div class="component-template-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id'=> 'dynamic-form']); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true,'id'=> 'dynamic-form']) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
 
 	
 	
 	
 	<div class="panel panel-default">
-        <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> Addresses</h4></div>
+        <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> Template Attributtes</h4></div>
         <div class="panel-body">
              <?php DynamicFormWidget::begin([
                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -63,8 +63,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 <?= $form->field($attributeModel, "[{$i}]name")->textInput(['maxlength' => true]) ?>
                             </div>
                             <div class="col-sm-6">
-                                <?= $form->field($attributeModel, "[{$i}]attribute_type_id")->textInput(['maxlength' => true]) ?>
+                                <?= $form->field($attributeModel, "[{$i}]attribute_type_id")->dropDownList($attributeType, ['prompt'=> 'select type', 'options' => ['class' => 'form_input'] ]) ?>
                             </div>
+							
                         </div><!-- .row -->
                         
                     </div>
@@ -80,9 +81,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>
 	
 	
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+    
 
     <?php ActiveForm::end(); ?>
 

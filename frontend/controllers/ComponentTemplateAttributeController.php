@@ -4,10 +4,12 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\ComponentTemplate;
+use frontend\models\ComponentAttributeType;
 use frontend\models\ComponentTemplateAttribute;
 use frontend\models\AttrModel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -127,53 +129,5 @@ class ComponentTemplateAttributeController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 	
-	public function actionCreate()
-    {
-        $componentTemplate = new ComponentTemplate;
-        $componentTemplateAttributeModel = [new ComponentTemplateAttribute];
-        if ($componentTemplate->load(Yii::$app->request->post())) {
-
-            $attributeModel = AttrModel::createMultiple(ComponentTemplateAttribute::classname());
-            AttrModel::loadMultiple($attributeModel, Yii::$app->request->post());
-
-            // ajax validation
-            if (Yii::$app->request->isAjax) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ArrayHelper::merge(
-                    ActiveForm::validateMultiple($attributeModel),
-                    ActiveForm::validate($componentTemplate)
-                );
-            }
-
-            // validate all models
-            $valid = $componentTemplate->validate();
-            $valid = Model::validateMultiple($attributeModel) && $valid;
-            
-            if ($valid) {   
-                $transaction = \Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $componentTemplate->save(false)) {
-                        foreach ($attributeModel as $modelAddress) {
-                            $modelAddress->customer_id = $componentTemplate->id;
-                            if (! ($flag = $modelAddress->save(false))) {
-                                $transaction->rollBack();
-                                break;
-                            }
-                        }
-                    }
-                    if ($flag) {
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $componentTemplate->id]);
-                    }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
-                }
-            }
-        }
-
-        return $this->render('create', [
-            'model' => $componentTemplate,
-            'attributeModel' => (empty($attributeModel)) ? [new ComponentTemplateAttribute] : $attributeModel
-        ]);
-    }
+	
 }
