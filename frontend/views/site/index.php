@@ -159,7 +159,9 @@ use boffins_vendor\components\controllers\MenuWidget;
   transform: rotateX(180deg);
 }
 
-
+.row{
+	padding: 0px !important;
+}
 
 
 
