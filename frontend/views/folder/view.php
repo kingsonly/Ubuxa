@@ -179,7 +179,7 @@ $img = $model->folder_image;
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget() ?>
+                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
    						 	<?= FolderDetails::widget(['model' => $model,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
@@ -239,8 +239,8 @@ $img = $model->folder_image;
            
         <?php $num++; }?>
   <? $this->endBlock();?>
-  </section>
 
+  </section>
 <? 
     Modal::begin([
         'header' =>'<h1 id="headers"></h1>',

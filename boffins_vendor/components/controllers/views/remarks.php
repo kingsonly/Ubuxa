@@ -4,7 +4,8 @@ use yii\helpers\Url;
 use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 use yii\widgets\Pjax;
 use frontend\models\Onboarding;
-
+$checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParam = $checkUrl[0];
 ?>
 <style type="text/css">
     .bg-info {
@@ -36,6 +37,7 @@ use frontend\models\Onboarding;
 <div class="col-md-8">
     <div class="col-md-12 bg-info">
       	<div class="header">
+          <?php if($checkUrlParam == 'folder'){?>
             <?php if(!$onboardingExists){ ?>
                 <div class="help-tip" id="remark-tipz">
                   <p class="tip=text">Take a tour of task and find out useful tips.
@@ -49,6 +51,7 @@ use frontend\models\Onboarding;
                   </p>
                 </div>
             <?php } ?>
+          <?php }?>
             <span>REMARKS</span>
         </div>
         <?php Pjax::begin(['id'=>'remark-refresh']); ?>

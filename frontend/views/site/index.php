@@ -203,7 +203,7 @@ use boffins_vendor\components\controllers\MenuWidget;
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget() ?>
+                  	<?= OnlineClients::widget(['task'=>$task, 'folder' => $folder, 'users' => $allUsers]) ?>
                   </div>  
                     	<div class="row">
    						 	
@@ -261,10 +261,10 @@ use boffins_vendor\components\controllers\MenuWidget;
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
 	            			
-	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task]) ?>
+	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task, 'userId' => $userId]) ?>
 	            	
             		<?php Pjax::end(); ?>
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'userId' => $userId]) ?>
 
             	</div>
             </section>

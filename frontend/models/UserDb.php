@@ -84,8 +84,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
         return [
             [['username','password', 'cid'], 'required'],
             [['password'], 'string', 'min' => 6],
-            [['password_repeat'], 'required'],
-            [['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
+            //[['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             [['basic_role','image'], 'safe'],
 
             //[['username', 'password'], 'string', 'max' => 255],
@@ -103,7 +102,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
             'fullname' => 'Full Name',
             'basic_role' => 'Standard Role',
             'password' => 'Password',
-            'password_repeat' => 'Password Repeat',
+            //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
         ];

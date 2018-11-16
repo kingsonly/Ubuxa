@@ -44,8 +44,8 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cid', 'master_email', 'master_doman', 'plan_id', 'billing_date', 'account_number'], 'required'],
-            [['plan_id', 'account_number'], 'integer'],
+            [['cid', 'master_email', 'master_doman', 'plan_id', 'billing_date', 'account_number','entity_id'], 'required'],
+            [['plan_id', 'account_number','entity_id'], 'integer'],
             [['billing_date'], 'safe'],
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
@@ -63,6 +63,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'cid' => 'Cid',
+            'entity_id' => 'Entity Id',
             'master_email' => 'Master Email',
             'master_doman' => 'Master Doman',
             'plan_id' => 'Plan ID',

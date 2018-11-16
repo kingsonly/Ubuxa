@@ -9,6 +9,8 @@ use yii\web\View;
 use frontend\models\Task;
 use frontend\models\Onboarding;
 
+$checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
 ?>
 <style type="text/css">
@@ -272,19 +274,21 @@ $boardUrl = Url::to(['task/index']);
 	 <div class="col-md-4">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
-            <?php if(!$onboardingExists){ ?>
+            <?php if($checkUrlParam == 'folder'){?>
+              <?php if(!$onboardingExists){ ?>
+                  <div class="help-tip" id="task-tipz">
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
                 <div class="help-tip" id="task-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
-                    <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
-              <div class="help-tip" id="task-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
-                    <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php } ?>
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php } ?>
+            <?php }?>
                 <span>TASKS</span>
                  
             </div>
@@ -342,11 +346,11 @@ $boardUrl = Url::to(['task/index']);
 </div> 
 
 </div>
-
+      
 	   <div class="box-input1">
             <div class="form-containers">
                  <div class="embed-submit-field">
-					 
+					       <?php if($checkUrlParam == 'folder'){?>
                     <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
@@ -356,6 +360,7 @@ $boardUrl = Url::to(['task/index']);
                       <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
                     <?php ActiveForm::end(); ?>
+                  <?php }?>
                 </div> 
             </div>  
         </div>
