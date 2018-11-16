@@ -91,6 +91,7 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 		if (!$this->isNewRecord && !empty($this->query)) {
 			$knownNameSpace = $this->value;
 			try {
+				Yii::warning("Value - {$knownNameSpace}");
 				$valueObject = $knownNameSpace::find([$this->query])->asArray();;
 			} catch(Exception $e) {
 				Yii::warning("An exception occured! " . $e->getMessage() . "\n" );

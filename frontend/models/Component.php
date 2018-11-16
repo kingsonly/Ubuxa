@@ -4,6 +4,8 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\ComponentARModel;
+use boffins_vendor\classes\ModelCollection;
+use boffins_vendor\classes\StandardQuery;
 
 /**
  * This is the model class for table "tm_component".
@@ -48,9 +50,12 @@ class Component extends ComponentARModel
      * {@inheritdoc}
      */
 	public $folderId; // Holds the value of the corrent folder to be used in behaviour
+	 
+	//public attributeCollection = new ModelCollection([], ['query' => $this->getComponentAttributes() ]);
+	
     public static function tableName()
     {
-        return 'tm_component';
+        return '{{%component}}';
     }
 
     /**

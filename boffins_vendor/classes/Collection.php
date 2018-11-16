@@ -33,7 +33,7 @@ class Collection extends Component implements StaticInstanceInterface, IteratorA
 	/*
 	 * array that holds the actual items   
 	 */
-	private $_items;
+	protected $_items;
 	
 	/***
 	 *  @brief constructor 
