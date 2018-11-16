@@ -283,7 +283,7 @@ class SiteController extends BoffinsBaseController {
 	    			echo "Email cannot be empty";
 	    		} 
 	    }else{
-	    		return $this->render('inviteusers', [
+	    		return $this->renderAjax('inviteusers', [
 				'model' => $model,
 			]);
 	    }

@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use frontend\models\Remark;
 use frontend\models\Person;
+use frontend\models\Folder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,6 +38,7 @@ class RemarkController extends Controller
     public function actionIndex()
     {
         $perpage=10;
+        
 
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
@@ -152,6 +154,11 @@ class RemarkController extends Controller
             $name[] = $user['first_name'].' '.$user['surname'];
         }
        return json_encode($name);
+    }
+
+    public function actionHashtag(){
+        $folder = Folder::find()->select(['id as name','title as content'])->asArray()->all();
+        return json_encode($folder);
     }
 
     /**

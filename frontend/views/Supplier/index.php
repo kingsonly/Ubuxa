@@ -118,7 +118,7 @@ td{
             <table cellpadding="0" cellspacing="0" border="0">
               <tbody>
                 <? foreach($suppliers as $supplier){?>
-                    <tr class="table-rows">
+                    <tr class="table-rows"> <a href="#modal">
                       <td>
                         <div class="row">
                           <div class="client-info-block col-md-12">
@@ -160,11 +160,19 @@ td{
                                  <a class="dropdown-item" href="#">Something else here</a>
                             </div>
                         </div>
-                    </td>
+                    </td></a>
                     </tr>
                 <? } ?>
               </tbody>
             </table>
+          </div>
+          <div class="remodal" data-remodal-id="modal">
+            <button data-remodal-action="close" class="remodal-close"></button>
+            <h1 style="font-family:calibri;font-weight:bold">Sign in or Register to bookmark this property</h1>
+            <p style="font-family:calibri;font-size:20px">Save properties to your account and sync across all your devices.</p>
+            <br>
+            <a href="sign-in.php?location=<?php echo urlencode($_SESSION['refPage']);?>"><button class="remodal-confirm">Login</button></a>
+            <a href="create-account.php"><button data-remodal-action="cancel" class="remodal-cancel">Register</button></a>
           </div>
         </div>
 </div>

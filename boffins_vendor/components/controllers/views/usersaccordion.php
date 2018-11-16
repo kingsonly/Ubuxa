@@ -1,3 +1,6 @@
+<?php
+use yii\helpers\Url;
+?>
 <style>
  
 /* -------------------------------- 
@@ -207,14 +210,19 @@ Main Components
       <label class="accord-label" for="users-100"><i class="fa fa-users iconz"></i>Users<i class="fa fa-chevron-down iconz-down"></i></label>
 
           <ul class="first-list">
-            <li class="has-users-children">
-              Test          
-            </li>      
+            <li class="has-clients-children client-child user-first-child">
+              <i class="fa fa-eye" style="color:#fff"> </i><span class="child-name">View Users</span>      
+            </li>
+            <li class="has-clients-children client-child user-last-child">
+              <i class="fa fa-plus" style="color:#fff"></i><span class="child-name">Invite User</span>   
+            </li>       
           </ul>
     </li>
   </ul>
 
 <?php
+$userUrlView = Url::to(['user/index']);
+$userUrlInvite = Url::to(['site/inviteusers']);
 $usersaccord = <<<JS
 $(document).ready(function(){
   var usersaccordsMenu = $('.cd-users-accord-menu');
@@ -231,6 +239,95 @@ $(document).ready(function(){
       });
     });
   }
+
+  $(document).on('click','.user-last-child', function(){
+
+      $('.client-containers').css({
+           'visibility':'visible',
+           '-webkit-transition':'width 2s',
+           'transition':'width 2s, height 2s',
+           'width':'600px',
+           'min-height':'500px'
+      });
+    
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+    
+      $('.close-arrow').click(function(){
+          $('.client-containers').css({
+           'width':'300px',
+           'min-height':'1px',
+           'visibility':'hidden'
+          });
+          $('.client-content').hide();
+          setTimeout(function() { 
+            $('.sider').show('slow');
+          }, 900);
+      })
+      $('.supplierLoader').show();
+
+      $.ajax({
+            url: '$userUrlInvite',
+            type: 'POST',
+            data: {
+                existingId:1
+              },
+            success: function(response) {
+            $('.supplierLoader').hide();
+            $('.client_template').html(response);
+            },
+            error: function(res, sec){
+              $('.supplierLoader').show();
+            }
+      }); 
+
+            
+  })
+
+$(document).on('click','.user-first-child', function(){
+      $('.client-containers').css({
+        'visibility':'visible',
+        '-webkit-transition':'width 2s',
+        'transition':'width 2s, height 2s',
+        'width':'600px',
+        'min-height':'500px'
+      });
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+      $(document).find('.th-table').show('slow');
+
+      $('.close-arrow').click(function(){
+          $('.client-containers').css({
+              'width':'300px',
+              'min-height':'1px',
+              'visibility':'hidden'
+          });
+
+          $(document).find('.th-table').hide();
+          $('.client-content').hide();
+          setTimeout(function() { 
+            $('.sider').show('slow');
+          }, 900);
+      })
+    
+    
+      $('.supplierLoader').show();
+
+      $.ajax({
+            url: '$userUrlView',
+            type: 'POST',
+            data: {
+                existingId:1
+              },
+            success: function(response) {
+            $('.supplierLoader').hide();
+            $('.client_template').html(response);
+            },
+            error: function(res, sec){
+              $('.supplierLoader').show();
+          }
+       }); 
+});
 });
 JS;
 $this->registerJs($usersaccord);

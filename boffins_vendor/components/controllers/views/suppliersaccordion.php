@@ -1,3 +1,6 @@
+<?php
+use yii\helpers\Url;
+?>
 <style>
  
 /* -------------------------------- 
@@ -207,14 +210,19 @@ Main Components
       <label class="accord-label" for="supps-100"><i class="fa fa-building iconz"></i>Suppliers<i class="fa fa-chevron-down iconz-down"></i></label>
 
           <ul class="first-list">
-            <li class="has-supps-children">
-              Test          
-            </li>      
+            <li class="has-clients-children client-child supplier-first-child">
+              <i class="fa fa-eye" style="color:#fff"> </i><span class="child-name">View Suppliers</span>      
+            </li>
+            <li class="has-clients-children client-child supplier-last-child">
+              <i class="fa fa-plus" style="color:#fff"></i><span class="child-name">Create Suppliers</span>   
+            </li>    
           </ul>
     </li>
   </ul>
 
 <?php
+$supplierUrlExisting = Url::to(['supplier/create']);
+$supplierUrlView = Url::to(['supplier/index']);
 $suppsaccord = <<<JS
 $(document).ready(function(){
   var suppsaccordsMenu = $('.cd-supps-accord-menu');
@@ -231,6 +239,95 @@ $(document).ready(function(){
       });
     });
   }
+
+  $(document).on('click','.supplier-last-child', function(){
+
+      $('.client-containers').css({
+           'visibility':'visible',
+           '-webkit-transition':'width 2s',
+           'transition':'width 2s, height 2s',
+           'width':'600px',
+           'min-height':'500px'
+      });
+    
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+    
+      $('.close-arrow').click(function(){
+          $('.client-containers').css({
+           'width':'300px',
+           'min-height':'1px',
+           'visibility':'hidden'
+          });
+          $('.client-content').hide();
+          setTimeout(function() { 
+            $('.sider').show('slow');
+          }, 900);
+      })
+      $('.supplierLoader').show();
+
+      $.ajax({
+            url: '$supplierUrlExisting',
+            type: 'POST',
+            data: {
+                existingId:1
+              },
+            success: function(response) {
+            $('.supplierLoader').hide();
+            $('.client_template').html(response);
+            },
+            error: function(res, sec){
+              $('.supplierLoader').show();
+            }
+      }); 
+
+            
+  })
+
+$(document).on('click','.supplier-first-child', function(){
+      $('.client-containers').css({
+        'visibility':'visible',
+        '-webkit-transition':'width 2s',
+        'transition':'width 2s, height 2s',
+        'width':'600px',
+        'min-height':'500px'
+      });
+      $('.sider').hide('slow');
+      $('.client-content').show('slow');
+      $(document).find('.th-table').show('slow');
+
+      $('.close-arrow').click(function(){
+          $('.client-containers').css({
+              'width':'300px',
+              'min-height':'1px',
+              'visibility':'hidden'
+          });
+
+          $(document).find('.th-table').hide();
+          $('.client-content').hide();
+          setTimeout(function() { 
+            $('.sider').show('slow');
+          }, 900);
+      })
+    
+    
+      $('.supplierLoader').show();
+
+      $.ajax({
+            url: '$supplierUrlView',
+            type: 'POST',
+            data: {
+                existingId:1
+              },
+            success: function(response) {
+            $('.supplierLoader').hide();
+            $('.client_template').html(response);
+            },
+            error: function(res, sec){
+              $('.supplierLoader').show();
+          }
+       }); 
+});
 });
 JS;
 $this->registerJs($suppsaccord);

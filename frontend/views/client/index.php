@@ -90,7 +90,7 @@ td{
     <p>
         <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<div >
+<div style="display:none">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [

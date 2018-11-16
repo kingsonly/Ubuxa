@@ -111,9 +111,9 @@ class SupplierController extends Controller
                         $emailEntity->email_id = $emailModel->id;
                         if ($model->save() && $telephoneEntity->save() && $emailEntity->save()) {
                             $transaction->commit();
-                            //echo 'supplier submitted successfully';
+                             exit(json_encode(array("status" => 1, "msg" => 'Supplier has been successfully created!')));
                         } else {
-                            //echo 'error1';
+                            exit(json_encode(array("status" => 2, "msg" => 'Something went wrong!')));
                         }
                     } else {
                         //echo 'error2';
@@ -173,6 +173,27 @@ class SupplierController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+    public function actionSubcat()
+    {
+        $out = [];
+        $state = new State();
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $cat_id = $parents[0];
+                $out = $state::find()->select(['id','name'])->where(['country_id' => $cat_id])->all(); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+    }
+    echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

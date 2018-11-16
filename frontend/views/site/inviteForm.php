@@ -7,6 +7,11 @@ use yii\helpers\ArrayHelper;
 
 ?>
 <style type="text/css">
+
+	h1 {
+    font-size: 30px;
+    font-family: calibri;
+	}
 	#add {
 		margin-top: 25px;
 	}
@@ -17,9 +22,18 @@ use yii\helpers\ArrayHelper;
 	.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
 		border-top: none;
 	}
+
+	.invite-form{
+		border-top:1px solid #ccc;
+		padding-top: 10px;
+	}
+	.invite-btn {
+    margin-right: 80px;
+    float: right;
+	}
 </style>
 
-<div class="container">
+<div class="">
 	<div class="invite-form">
 		<?php $form = ActiveForm::begin(['id' => 'add_email']); ?>
 			<div class="table-responsive">  
@@ -36,7 +50,7 @@ use yii\helpers\ArrayHelper;
 	                    </tr>
 	                  </table> 
 	        <div class="form-group">
-			<?= Html::submitButton('Send Invitation', ['class'=> 'btn btn-primary', 'id' => 'submit', 'name' => 'submit']); ?>
+			<?= Html::submitButton('Send Invitation', ['class'=> 'btn btn-primary invite-btn', 'id' => 'submit', 'name' => 'submit']); ?>
 		</div>
 		<?php ActiveForm::end(); ?>
 	</div>
@@ -55,8 +69,9 @@ $(document).ready(function(){
 
       $('#add').click(function(){  
       	  var index = $(this).closest('.dynamics').index();
+
       	  
-          $('.dynamics').clone().appendTo('#dynamic_field');
+          $(this).closest('.dynamics').clone().appendTo('#dynamic_field').find("#add").remove().end().html();
           if(index === 0){
       			$('.fa-remove').hide();
       	  }

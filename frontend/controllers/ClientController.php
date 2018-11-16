@@ -49,12 +49,11 @@ class ClientController extends Controller
         $model = new Client();
         $corporations = $model->corporation;
         $clients = $model->find()->all();
-        var_dump( $corporations);
         $dataProvider = new ActiveDataProvider([
             'query' => $model->find(),
         ]);
 
-        return $this->render('index', [
+        return $this->renderAjax('index', [
             'dataProvider' => $dataProvider,
             'corporations' => $corporations,
             'model' => $model,
@@ -95,9 +94,10 @@ class ClientController extends Controller
 
         $getCountries = json_encode($country->find()->all());
         $getStates = $state->find()->all();
+        $getClients = $model->find()->all();
 
         $entityModel->entity_type = 'corporation';
-        if ($coperationModel->load(Yii::$app->request->post()) && $model->load(Yii::$app->request->post()) && $telephoneModel->load(Yii::$app->request->post()) && $emailModel->load(Yii::$app->request->post()) && $addressModel->load(Yii::$app->request->post())) {
+        if ($coperationModel->load(Yii::$app->request->post()) && $telephoneModel->load(Yii::$app->request->post()) && $emailModel->load(Yii::$app->request->post()) && $addressModel->load(Yii::$app->request->post())) {
 
             $transaction = Yii::$app->db->beginTransaction();
             try {
@@ -112,28 +112,39 @@ class ClientController extends Controller
                         $emailEntity->email_id = $emailModel->id;
                         if ($model->save() && $telephoneEntity->save() && $emailEntity->save()) {
                             $transaction->commit();
+                            exit(json_encode(array("status" => 1, "msg" => 'Client has been successfully created!')));
+                            //echo 'supplier submitted successfully';
                         } else {
-                            throw new Exception($model->error);
+                            exit(json_encode(array("status" => 2, "msg" => 'Something went wrong!')));
                         }
                     } else {
-                        throw new Exception($telephoneModel->error);
+                        //echo 'error2';
                     }
                 } else {
-                    throw new Exception($entityModel->error);
+                   //echo 'error3';
                 }
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 throw $e;
             }
         }
-
+        if(isset($_GET['src'])){
+            if (Yii::$app->request->post('existingId')) {
+                 $model->corporation_id = Yii::$app->request->post('existingId');
+                 if($model->save()){
+                        exit(json_encode(array("status" => 1, "msg" => 'Sent!')));
+                 } else {
+                        exit(json_encode(array("status" => 2, "msg" => 'Something went wrong!')));
+                 }
+            }
+        }
         
 
         /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }*/
-
-        return $this->render('create', [
+        $getExistingCorperation = $coperationModel->find()->all();
+        return $this->renderAjax('create', [
             'model' => $model,
             'coperationModel' => $coperationModel,
             'entityModel' => $entityModel,
@@ -144,6 +155,8 @@ class ClientController extends Controller
             'getCountries' => $getCountries,
             'state' => $state,
             'getStates' => $getStates,
+            'getExistingCorperation' => $getExistingCorperation,
+            'getClients' => $getClients,
         ]);
     }
 
