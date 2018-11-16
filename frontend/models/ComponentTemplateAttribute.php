@@ -117,4 +117,10 @@ class ComponentTemplateAttribute extends BoffinsArRootModel
 	{
 		return "Value" . str_replace('_', '', ucwords($valueType, '_'));
 	}
+	
+	public static function find() 
+	{
+		return new \yii\db\ActiveQuery(get_called_class());
+	}
+
 }
