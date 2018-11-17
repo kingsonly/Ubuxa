@@ -9,7 +9,6 @@ Main Components
 .cd-clients-accord-menu {
     width: 100%;
     max-width: 360px;
-    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -39,7 +38,6 @@ Main Components
 .cd-clients-accord-menu .accord-label, .cd-clients-accord-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }

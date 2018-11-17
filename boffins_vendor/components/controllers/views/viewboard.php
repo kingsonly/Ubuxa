@@ -50,7 +50,6 @@
     border-radius: 3px;
     padding-bottom: 15px;
     padding-top: 15px;
-    background: #3F51B5;
     color: #fff;
 }
 

@@ -219,6 +219,12 @@ $img = $model->folder_image;
     <? $this->endBlock();?>
     
   <? $this->beginBlock('subfolders')?>
+  <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders
+  	<?php if(!empty($model->subFolders)){ ?>
+  		<i class="fa fa-chevron-down iconz-down"></i>
+  	<?php }?>
+  </label>
+          <ul class="first-list">
   	<?php 
 		$results=ArrayHelper::toArray($model->dashboardItems ,[
 			'frontend\models\Folder'=>[
@@ -230,14 +236,20 @@ $img = $model->folder_image;
         foreach ($model->subFolders as $subfolders) {
         $checks = $subfolders->buildTree($results, $subfolders->id);
         $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
-    ?>		<li class="has-children">
+    ?>		
+    <li class="has-children">
 	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
-	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?>
+	            <?php if(!empty($subfolders->printTree($checks))){ ?>
+	            	<i class="fa fa-chevron-down iconz-down"></i>
+	        	<?php }?>
+	        </label>
 	            
 	            		<? $subfolders->printTree($checks); ?>
             </li>
            
         <?php $num++; }?>
+        </ul>
   <? $this->endBlock();?>
 
   </section>

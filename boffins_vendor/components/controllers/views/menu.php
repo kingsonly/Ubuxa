@@ -104,7 +104,7 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
     	<ul class="list_load">
     		<?= SettingsAccordionWidget::widget();?>
 
-			<li class="list_item menu-settings"><a class="menu-list" href="<?= Url::to(['site/logout'])?>"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</a></li>
+			<a class="menu-list" href="<?= Url::to(['site/logout'])?>"><li class="list_item menu-settings"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</li></a>
 			
 		</ul>
     </div>

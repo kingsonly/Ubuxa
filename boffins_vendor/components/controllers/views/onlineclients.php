@@ -45,23 +45,31 @@
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
                         <em class="fa fa-xl fa-users color-teal" style="font-size: 2em; color:#1ebfae !important"></em>
                         <div class="active-client" style="font-size: 2em;">
-                          <? 
-                            $usersStat = count($users); 
-                            echo $usersStat;
-                          ?>
+                          <?php if(!empty($usersStat)){ ?>
+                            <? 
+                              $usersStat = count($users); 
+                              echo $usersStat;
+                            ?>
+                        <?php }else{
+                          echo 0;
+                        }?>
                         </div>
                         <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Folder Users</div>
                     </div>
                     <div class="col-sm-4 col-xs-4 box-clients-count">
                       <em class="fa fa-circle-o-notch" style="font-size: 2em; color:#d9534f !important"></em>
                       <div class="active-client-number" style="font-size: 2em;">
-                        <?php
-                          $i = 0;
-                          foreach ($taskStats as $key => $assignedTo) {
-                            $i++;
-                          }
-                          echo $i;
-                        ?>
+                        <?php if(!empty($taskStats)){ ?>
+                          <?php
+                            $i = 0;
+                            foreach ($taskStats as $key => $assignedTo) {
+                              $i++;
+                            }
+                            echo $i;
+                          ?>
+                      <?php }else{
+                        echo 0;
+                      }?>
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Task Assigned</div>
 
@@ -69,6 +77,7 @@
                     <div class="col-sm-4 col-xs-4 box-clients-count1" style="text-align:center">
                      <em class="fa fa-circle-o" style="font-size: 2em; color: #5cb85c !important"></em>
                       <div class="active-client-number" style="font-size: 2em;">
+                        <?php if(!empty($taskStats)){ ?>
                           <?php
                             $i = 0;
                             foreach ($taskStats as $key => $completed) {
@@ -78,6 +87,9 @@
                             }
                             echo $i;
                           ?>
+                        <?php }else{
+                          echo 0;
+                        }?>
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Task Completed</div>
                     </div>
@@ -88,20 +100,20 @@
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
                         <em class="fa fa-xl fa-users color-teal" style="font-size: 2em; color:#1ebfae !important"></em>
                         <div class="active-client" style="font-size: 2em;">
-                          <?php 
-                            $allUsers = $users->find()->count();
-                            echo $allUsers; 
-                          ?>
+                            <?php 
+                              $allUsers = $users->find()->count();
+                              echo $allUsers; 
+                            ?>
                         </div>
                         <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Users</div>
                     </div>
                     <div class="col-sm-4 col-xs-4 box-clients-count">
                       <em class="fa fa-folder" style="font-size: 2em; color:#d9534f !important"></em>
                       <div class="active-client-number" style="font-size: 2em;">
-                        <?php 
-                            $allFolders = $folder->find()->count();
-                            echo $allFolders; 
-                        ?>
+                          <?php 
+                              $allFolders = $folder->find()->count();
+                              echo $allFolders; 
+                          ?>
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Folders</div>
 
@@ -109,10 +121,16 @@
                     <div class="col-sm-4 col-xs-4 box-clients-count1" style="text-align:center">
                      <em class="fa fa-circle-o" style="font-size: 2em; color: #5cb85c !important"></em>
                       <div class="active-client-number" style="font-size: 2em;">
-                          <?php 
-                            $allTasks = $task->find()->count();
-                            echo $allTasks;
-                          ?>
+                        <?php 
+                          $tasksCheck = $task->find()->all();
+                          if(!empty($tasksCheck)){ ?>
+                            <?php 
+                              $allTasks = $task->find()->count();
+                              echo $allTasks;
+                            ?>
+                            <?php }else{
+                            echo 0;
+                        }?>
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks</div>
                     </div>

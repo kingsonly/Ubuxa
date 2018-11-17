@@ -228,6 +228,7 @@ class SiteController extends BoffinsBaseController {
 				if($user->save()){
 					$customer->status = 1;
 					$customer->save();
+					Yii::$app->user->login($user);
 					return $this->redirect(['index']);
 				} 
 			} else {
