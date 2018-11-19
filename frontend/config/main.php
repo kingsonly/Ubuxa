@@ -106,7 +106,7 @@ return [
 		'rules' => [
 			[
 				'allow' => true,
-				'actions' => ['login','customersignup','signup', 'ajax-validate-form', 'ajax-validate-user-form'],
+				'actions' => ['login','customersignup','signup', 'ajax-validate-form', 'ajax-validate-user-form', 'request-password-reset'],
 				'roles' => ['?'],
 			],
 			[

@@ -20,7 +20,8 @@ use yii\helpers\ArrayHelper;
 
 AppAsset::register($this);
 
-
+$checkUrls = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParams = $checkUrls[0];
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -452,12 +453,14 @@ a.addTaskButton.active {
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       </div>
-                      <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
-                        <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
-                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
+                      <?php if($checkUrlParams == 'folder'){?>
+                        <div class="dropdown testdrop">
+                          <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
+                          <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
+                              <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
+                          </div>
                         </div>
-                      </div>
+                      <?php }?>
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -476,15 +479,17 @@ a.addTaskButton.active {
             <?php $count2++;}}}?>
         
             </ul>
-            <a class="add-card" href="#">
-              <span class="cardTask">
-                <span class="glyphicon glyphicon-plus"></span>
-                <span class="add-title"> Add Card </span>
-              </span>
-            </a>
-            <div class="card-add" id="add-new-cardz">
-                <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
-            </div>
+            <?php if($checkUrlParams == 'folder'){?>
+              <a class="add-card" href="#">
+                <span class="cardTask">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  <span class="add-title"> Add Task </span>
+                </span>
+              </a>
+              <div class="card-add" id="add-new-cardz">
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
+              </div>
+            <?php }?>
         </li>
         <?php $count++;} ?>
     </ul> 

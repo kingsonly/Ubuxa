@@ -216,7 +216,7 @@ $boardUrl = Url::to(['task/index']);
 .help-tip p{
   display: none;
   text-align: left;
-  background-color: #4a4b4c;
+  background-color: #0b1015a6;
   padding: 20px;
   width: 300px;
   position: absolute;
@@ -285,6 +285,20 @@ $boardUrl = Url::to(['task/index']);
                 <div class="help-tip" id="task-tipz">
                     <p class="tip=text">Take a tour of task and find out useful tips.
                       <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php } ?>
+            <?php }else if($checkUrlParam == 'site'){?>
+              <?php if(!$onboardingExists){ ?>
+                  <div class="help-tip" id="site-tasktour">
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
+                    </p>
+                  </div>
+              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+                <div class="help-tip" id="site-tasktour">
+                    <p class="tip=text">Take a tour of task and find out useful tips.
+                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
                     </p>
                   </div>
               <?php } ?>
@@ -476,7 +490,7 @@ $(function(){
         {
           element: ".taskz-listz",
           title: "Task List",            
-          content: "Find all task here",
+          content: "You can view all task from this section",
           onShow: function(taskTour){
             $('#task-tipz').hide();
           }
@@ -554,7 +568,7 @@ $(function(){
       ],
     backdrop: true,  
     storage: false,
-    
+
     smartPlacement: true,    
     onEnd: function (taskTour) {
       _TaskOnboarding();
@@ -580,6 +594,113 @@ $(function(){
  taskTour.init();
 
 });
+
+$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
+  $(function() {
+
+  var siteTaskTour = new Tour({
+    name: "siteTaskTour",
+    steps: [
+        {
+          element: ".taskz-listz",
+          title: "Task List",            
+          content: "You can view all task from this section",
+          onShow: function(taskTour){
+            $('#site-tasktour').hide();
+          }
+        },
+        {
+          element: ".open-board",
+          title: "Task board",
+          content: "You can get access to more features for task management from the action menu.",
+          onShow: function(siteTaskTour){
+                //$('.side_menu').addClass('side-drop');
+                $('.list_load, .list_item').stop();
+                $(this).removeClass('closed').addClass('opened');
+
+                $('.side_menu').css({ 'left':'0px' });
+
+                var count = $('.list_item').length;
+                $('.list_load').slideDown( (count*.6)*100 );
+                $('.list_item').each(function(i){
+                var thisLI = $(this);
+                timeOut = 100*i;
+                setTimeout(function(){
+                  thisLI.css({
+                    'opacity':'1',
+                    'margin-left':'0'
+                  });
+                },100*i);
+              });
+            },
+          onShown: function(siteTaskTour){
+            $(".tour-backdrop").appendTo("#content");
+            $(".tour-step-background").appendTo("#content");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        {
+          element: ".drag-container",
+          title: "Task board",
+          content: "This is your task board. You can manage all task here.",
+          placement: "bottom",
+          onShow: function(siteTaskTour){
+            $('#mySidenav').css({'width':'100%'});
+            },
+          onShown: function(siteTaskTour){
+            $(".tour-backdrop").appendTo(".sidenav");
+            $(".tour-step-background").appendTo(".sidenav");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        {
+          element: ".drag-item:first",
+          title: "Kanban",
+          content: "You can drag and drop task to the various status, assign task to users and much more",
+          onShown: function(siteTaskTour){
+            $(".tour-backdrop").appendTo(".drag-container");
+            $(".tour-step-background").appendTo(".drag-container");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+        
+      ],
+    backdrop: true,  
+    storage: false,
+
+    smartPlacement: true,    
+    onEnd: function (siteTaskTour) {
+      _TaskOnboarding();
+      $('.side_menu').addClass('side-drop');
+      $('#mySidenav').css({'width':'0'})
+      $('.list_load, .list_item').stop();
+      $(this).removeClass('opened').addClass('closed');
+
+      $('.side_menu').css({ 'left':'-300px' });
+
+      var count = $('.list_item').length;
+      $('.list_item').css({
+        'opacity':'0',
+        'margin-left':'-20px'
+      });
+      $('.list_load').slideUp(300);
+          },
+      });
+  $('#site-task-tour').on('click', function(e){
+       siteTaskTour.start();
+       e.preventDefault();
+    })
+ siteTaskTour.init();
+
+});
+
+
 JS;
  
 $this->registerJs($task);
