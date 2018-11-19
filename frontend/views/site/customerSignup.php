@@ -258,7 +258,7 @@ label {
                               ['person' => 'Individual', 'corporation' => 'Corporation']
                       ); ?>
                 <div class="corporation-tenant">
-                  <?= $form->field($tenantCorporation, 'name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                  <?//= $form->field($tenantCorporation, 'name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
                 </div>
                 <div class="person-tenant">
                   <?//= $form->field($tenantPerson, 'first_name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
