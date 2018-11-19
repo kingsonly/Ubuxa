@@ -43,7 +43,7 @@ class TenantPerson extends \yii\db\ActiveRecord
             [['entity_id'], 'integer'],
             [['first_name', 'surname'], 'string'],
             [['dob', 'create_date'], 'safe'],
-            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => Entity::className(), 'targetAttribute' => ['entity_id' => 'id']],
+            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => TenantEntity::className(), 'targetAttribute' => ['entity_id' => 'id']],
         ];
     }
 
@@ -57,7 +57,7 @@ class TenantPerson extends \yii\db\ActiveRecord
             'entity_id' => 'Entity ID',
             'first_name' => 'First Name',
             'surname' => 'Surname',
-            'dob' => 'Dob',
+            'dob' => 'Date of Birth',
             'create_date' => 'Create Date',
         ];
     }
@@ -67,6 +67,6 @@ class TenantPerson extends \yii\db\ActiveRecord
      */
     public function getEntity()
     {
-        return $this->hasOne(Entity::className(), ['id' => 'entity_id']);
+        return $this->hasOne(TenantEntity::className(), ['id' => 'entity_id']);
     }
 }

@@ -14,7 +14,7 @@ use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
-//use frontend\controllers\ForbiddenHttpException;
+use yii\web\ForbiddenHttpException;
 
 //models
 use frontend\models\SignupForm;
@@ -217,22 +217,32 @@ class SiteController extends BoffinsBaseController {
        $user = new SignupForm;
        $customer = Customer::find()->where([
        	'cid' => $cid,
-       	'status' => 0,
+       	'master_email' =>$email,
 		])->one();
-		
+       //$test = $customer->entity->firstname;
+       //var_dump($test);
 		if(!empty($customer)){
 	        if ($user->load(Yii::$app->request->post())) {
 	        	$user->address = $email;
 	        	$user->cid = $cid;
 	        	$user->basic_role = $role;
+	        	if($customer->entityName == 'person' && $customer->status == 0){
+	        		$user->first_name = $customer->entity->firstname;
+	        		$user->surname = $customer->entity->surname;
+	        	}
 				if($user->save()){
-					$customer->status = 1;
-					$customer->save();
-					Yii::$app->user->login($user);
-					return $this->redirect(['index']);
+					if($customer->status == 0){
+						$customer->status = 1;
+						$customer->save();	
+					}
+					$newUser = UserDb::findOne([$user->id]);
+		            if (Yii::$app->user->login($newUser)){
+		                return $this->redirect(['index']);
+		            }
 				} 
 			} else {
 	            return $this->render('createUser', [
+	            	'customer' => $customer,
 					'userForm' => $user,
 					'action' => ['createUser'],
 				]);
@@ -242,7 +252,7 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
-    public function actionCustomersignup($plan_id)
+    public function actionCustomersignup()
     {
 		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
@@ -250,7 +260,6 @@ class SiteController extends BoffinsBaseController {
        $tenantCorporation = new TenantCorporation();
        $tenantPerson = new TenantPerson();
 		
-        //yii\helpers\VarDumper::dump(Yii::$app->request->post());
         if ($customer->load(Yii::$app->request->post()) && $tenantEntity->load(Yii::$app->request->post())) {
         	$email = $customer->master_email;
         	$date = strtotime("+7 day");
@@ -258,9 +267,21 @@ class SiteController extends BoffinsBaseController {
         	$customerModel = new Customer();
         	
         	if($tenantEntity->save()){
+        		if($tenantEntity->entity_type == 'person'){
+        			if($tenantPerson->load(Yii::$app->request->post())){
+        				$tenantPerson->entity_id = $tenantEntity->id;
+        				$tenantPerson->create_date = new Expression('NOW()');
+        				$tenantPerson->save(false);
+        			}
+        		}elseif ($tenantEntity->entity_type == 'corporation') {
+        			if($tenantCorporation->load(Yii::$app->request->post())){
+        				$tenantCorporation->entity_id = $tenantEntity->id;
+        				$tenantCorporation->create_date = new Expression('NOW()');
+        				$tenantCorporation->save(false);
+        			}
+        		}
         		$customer->entity_id = $tenantEntity->id;
 	        	if($customer->signup($customerModel)){
-	        		//$tenantCorporation->save();
 	        		$sendEmail = \Yii::$app->mailer->compose()
 	                ->setTo($email)
 	                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])

@@ -54,6 +54,7 @@ class CustomerSignupForm extends Model
             ['master_email', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This email address has already been taken.'],
             ['master_doman', 'unique', 'targetClass' => '\frontend\models\Customer', 'message' => 'This name has already been taken.'],
             [['cid'], 'unique'],
+            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => Entity::className(), 'targetAttribute' => ['entity_id' => 'id']],
         ];
     }
 
@@ -87,7 +88,7 @@ class CustomerSignupForm extends Model
             $customer->cid = $this->plan_id.rand(10, 10000); //dummy cid
             
 
-            return $customer->save();
+            return $customer->save(false);
                 
     }
 

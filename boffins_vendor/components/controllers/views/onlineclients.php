@@ -45,7 +45,7 @@
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
                         <em class="fa fa-xl fa-users color-teal" style="font-size: 2em; color:#1ebfae !important"></em>
                         <div class="active-client" style="font-size: 2em;">
-                          <?php if(!empty($usersStat)){ ?>
+                          <?php if(!empty($users)){ ?>
                             <? 
                               $usersStat = count($users); 
                               echo $usersStat;

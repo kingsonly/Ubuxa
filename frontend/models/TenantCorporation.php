@@ -41,7 +41,7 @@ class TenantCorporation extends \yii\db\ActiveRecord
             [['entity_id'], 'integer'],
             [['name'], 'string'],
             [['create_date'], 'safe'],
-            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => Entity::className(), 'targetAttribute' => ['entity_id' => 'id']],
+            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => TenantEntity::className(), 'targetAttribute' => ['entity_id' => 'id']],
         ];
     }
 
@@ -63,6 +63,6 @@ class TenantCorporation extends \yii\db\ActiveRecord
      */
     public function getEntity()
     {
-        return $this->hasOne(Entity::className(), ['id' => 'entity_id']);
+        return $this->hasOne(TenantEntity::className(), ['id' => 'entity_id']);
     }
 }

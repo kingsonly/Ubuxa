@@ -19,6 +19,9 @@ class TenantEntity extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const TENANTENTITY_PERSON = 'person';
+    const TENANTENTITY_CORPORATION = 'corporation';
+
     public static function tableName()
     {
         return '{{%entity}}';
@@ -59,7 +62,7 @@ class TenantEntity extends \yii\db\ActiveRecord
      */
     public function getCorporations()
     {
-        return $this->hasMany(Corporation::className(), ['entity_id' => 'id']);
+        return $this->hasMany(TenantCorporation::className(), ['entity_id' => 'id']);
     }
 
     /**
@@ -75,7 +78,25 @@ class TenantEntity extends \yii\db\ActiveRecord
      */
     public function getPeople()
     {
-        return $this->hasMany(Person::className(), ['entity_id' => 'id']);
+        return $this->hasMany(TenantPerson::className(), ['entity_id' => 'id']);
+    }
+
+    public function getFirstname(){
+        $attributes = [];
+        $data = $this->people;
+        foreach($data as $attr) {
+            $attributes[] = $attr->first_name;
+        }
+        return implode("", $attributes);
+    }
+
+    public function getSurname(){
+        $attributes = [];
+        $data = $this->people;
+        foreach($data as $attr) {
+            $attributes[] = $attr->surname;
+        }
+        return implode("", $attributes);
     }
 
     public function getOptions()

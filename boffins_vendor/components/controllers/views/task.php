@@ -554,6 +554,7 @@ $(function(){
       ],
     backdrop: true,  
     storage: false,
+    
     smartPlacement: true,    
     onEnd: function (taskTour) {
       _TaskOnboarding();
