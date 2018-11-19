@@ -5,6 +5,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use boffins_vendor\components\controllers\SearchFormWidget;
 use yii\widgets\Pjax;
+use frontend\models\Onboarding;
 ?>
 
 <style type="text/css">
@@ -47,6 +48,9 @@ use yii\widgets\Pjax;
 	.subheader{
 		margin-bottom: 20px;
 	}
+	.subfolder-tips{
+		right: 2px !important;
+	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <?php Pjax::begin(['id'=>'create-folder-refresh']); ?>
@@ -60,6 +64,19 @@ use yii\widgets\Pjax;
 			<div class="col-sm-9 col-xs-9 form-widget" >
 				<?= SearchFormWidget::widget();?>
 			</div>
+			<?php if(!$onboardingExists){ ?>
+                <div class="help-tip" id="subfolder-tips">
+                  <p class="tip=text">Take a tour of task and find out useful tips.
+                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php }else if($onboardingExists && $onboarding->subfolder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
+              <div class="help-tip" id="subfolder-tips">
+                  <p class="tip=text">Take a tour of task and find out useful tips.
+                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php } ?>
 		</div>
 		<? if(!empty($displayModel)){?>
 		<div class="col-xs-5 col-sm-2 sub-second">
@@ -84,7 +101,71 @@ use yii\widgets\Pjax;
 	</div>
 </div>
 
+<?
+$subfoldersOnboarding = Url::to(['onboarding/subfoldersonboarding']);
+$subfolders = <<<subfolders
 
+function _SubfoldersOnboarding(){
+          $.ajax({
+              url: '$subfoldersOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+
+$(function() {
+
+  var subfolderTour = new Tour({
+    name: "subfolderTour",
+    steps: [
+        {
+          element: ".subfolder-container",
+          title: "Subfolders",            
+          content: "Find all subfolders for this folder here.",
+          placement: 'left',
+          onShow: function(subfolderTour){
+          	$('#subfolder-tips').hide();
+          },
+        },
+        {
+          element: "#folder-image",
+          title: "Create subfolders",
+          content: "You can create new subfolders for this folder here.",
+          placement: 'left',
+        },
+        {
+          element: "#search_submit",
+          title: "Folder Image",
+          content: "You can add image to your folder here.",
+          placement: 'left',
+        },
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,
+    onEnd: function (remarkTour) {
+            _SubfoldersOnboarding();
+        },
+  });
+  $('#subfolders-tour').on('click', function(e){
+       subfolderTour.start();
+       e.preventDefault();
+    })
+
+});
+
+subfolders;
+ 
+$this->registerJs($subfolders);
+?>
 	
 <?php Pjax::end(); ?>
 

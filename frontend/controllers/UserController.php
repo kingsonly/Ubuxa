@@ -37,7 +37,7 @@ class UserController extends Controller
     {
         $model = new UserDb();
         $dataProvider =$model->find()->all();
-        return $this->render('index', [
+        return $this->renderAjax('index', [
             'dataProvider' => $dataProvider,
         ]);
     }

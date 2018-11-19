@@ -221,14 +221,24 @@ label {
 
 
 .unit { 
-    color: #000;
+    color: #fff;
     position: absolute;
     display: block;
     right: 15px;
-    top: 37px;
+    top: 34px;
     z-index: 9;
-    font-size: 13px;
+    font-size: 15px;
     font-family: sans-serif;
+    font-weight: 600;
+  }
+  .person-tenant{
+    display: none;
+  }
+  .corporation-tenant{
+    display: none;
+  }
+  .confirm-text{
+    font-size: 23px;
   }
 </style>
 <div class="container">
@@ -253,8 +263,27 @@ label {
                   <span class="unit">.ubuxa.com</span>
                 </div>
 
-                <?= $form->field($customerForm, 'account_number')->textInput(['maxlength' => true, 'minlenght'=>6, 'class' => 'form-styling']) ?>
-                <?= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling', 'id' => 'plan'] ]) ?>
+                <?php
+                  echo $form->field($tenantEntity, 'entity_type')->dropDownList(
+                              ['person' => 'Individual', 'corporation' => 'Corporation'], ['prompt'=>'Select Account Type']
+                      ); ?>
+                <div class="corporation-tenant">
+                  <?= $form->field($tenantCorporation, 'name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                </div> 
+
+                <div class="person-tenant">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <?= $form->field($tenantPerson, 'first_name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                    </div>
+                    <div class="col-md-6">
+                      <?= $form->field($tenantPerson, 'surname')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                    </div>
+                  </div>
+                </div>   
+                <?//= $form->field($customerForm, 'plan_id')->dropDownList(ArrayHelper::map(Plan::find()->all(),'id', 'title'), ['prompt'=> Yii::t('customer', 'Choose Plan'), 'options' => ['class' => 'form-styling', 'id' => 'plan'] ]) ?>
+               
+
             </div>
                     <div>
                     <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
@@ -264,7 +293,7 @@ label {
             <div class="success">
               <svg id="check" ng-class="checked ? 'checked' : ''">
                 <div class="successtext">
-                   <p> Thanks for signing up! Check your email for confirmation.</p>
+                   <p class="confirm-text"> Thanks for signing up! Check your email for confirmation.</p>
                 </div>
             </div>
         </div>
@@ -282,9 +311,24 @@ function inTest() {
   $(".frame").toggleClass("frame-short");
 }
 
-function getURLParameter(name) {
+$('#tenantentity-entity_type').on('change', function() {
+    if(this.value == "person")
+    {
+        $(".person-tenant").show();
+        $(".corporation-tenant").hide();
+    } else if(this.value == "corporation")
+    {
+      $(".person-tenant").hide();
+      $(".corporation-tenant").show();
+    }else{
+      $(".person-tenant").hide();
+      $(".corporation-tenant").hide();
+    }
+});
+
+/* function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-}
+} */
 
 $('#customerForm').on('beforeSubmit', function (e) {
     e.preventDefault();

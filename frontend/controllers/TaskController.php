@@ -268,12 +268,22 @@ class TaskController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    /** public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    } */
+
+    public function actionDelete()
+    {
+        if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['task_id'];
+            $model = $this->findModel($id)->delete();
+        }
     }
+
 
     /**
      * Finds the Task model based on its primary key value.

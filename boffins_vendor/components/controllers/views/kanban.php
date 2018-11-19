@@ -8,7 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
-//use boffins_vendor\components\controllers\DeleteCardWidget;
+use boffins_vendor\components\controllers\DeleteTaskWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
@@ -419,9 +419,10 @@ a.addTaskButton.active {
                       $time = $values->reminderTime;
                       $timers = explode(",",$time);
                       $check = date("Y-m-d H:i:s");
+                      $timeNow = strtotime($check);
                       $closest = $values->closestReminder($timers, $check);
                       $reminders = date('M j, g:i a', strtotime($closest));
-                        if(!empty($time) && $reminders >= $check){ ?>
+                        if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
                             <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
@@ -466,7 +467,7 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trash icons" aria-hidden="true" data-toggle="tooltip" title="Delete task"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         
+                         <?= DeleteTaskWidget::widget(['id' => $count,'taskid' => $values->id]) ?>
                         </div>
                       </div>
                       </div>

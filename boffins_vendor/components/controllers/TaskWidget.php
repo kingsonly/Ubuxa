@@ -14,6 +14,9 @@ class TaskWidget extends Widget
     public $id;
     public $taskModel;
     public $parentOwnerId;
+    public $onboarding;
+    public $onboardingExists;
+    public $userId;
 	
     public function init()
     {
@@ -28,6 +31,9 @@ class TaskWidget extends Widget
             'taskModel' => $this->taskModel,
             'id' => $this->id,
             'parentOwnerId' => $this->parentOwnerId,
+            'onboarding' => $this->onboarding,
+            'onboardingExists' => $this->onboardingExists,
+            'userId' => $this->userId,
         	]);
     }
 }

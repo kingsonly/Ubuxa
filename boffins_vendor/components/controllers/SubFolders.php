@@ -25,6 +25,9 @@ class SubFolders extends Widget
 	public $createButtonWidgetAttributes;
 	public $folderPrivacy;
 	public $formAction;
+	public $onboarding;
+    public $onboardingExists;
+    public $userId;
 	
     public function run()
     {
@@ -37,6 +40,9 @@ class SubFolders extends Widget
 			'folderPrivacy' => $this->folderCarouselWidgetAttributes['folderPrivacy'],
 			'formAction' => $this->formAction,
 			'displayModel' => $this->displayModel,
+			'onboarding' => $this->onboarding,
+            'onboardingExists' => $this->onboardingExists,
+            'userId' => $this->userId,
 		]);
     }
 }

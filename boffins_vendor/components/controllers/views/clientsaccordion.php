@@ -9,7 +9,6 @@ Main Components
 .cd-clients-accord-menu {
     width: 100%;
     max-width: 360px;
-    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -39,7 +38,6 @@ Main Components
 .cd-clients-accord-menu .accord-label, .cd-clients-accord-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -232,8 +230,8 @@ li.has-clients-children.client-child {
   </ul>
 
 <?php
-$supplierUrlExisting = Url::to(['supplier/create']);
-$supplierUrlView = Url::to(['supplier/index']);
+$clientUrlExisting = Url::to(['client/create']);
+$clientUrlView = Url::to(['client/index']);
 $clientsaccord = <<<JS
 $(document).ready(function(){
   var clientsaccordsMenu = $('.cd-clients-accord-menu');
@@ -282,7 +280,7 @@ $(document).on('click','.client-last-child', function(){
       $('.supplierLoader').show();
 
       $.ajax({
-            url: '$supplierUrlExisting',
+            url: '$clientUrlExisting',
             type: 'POST',
             data: {
                 existingId:1
@@ -329,7 +327,7 @@ $(document).on('click','.client-first-child', function(){
       $('.supplierLoader').show();
 
       $.ajax({
-            url: '$supplierUrlView',
+            url: '$clientUrlView',
             type: 'POST',
             data: {
                 existingId:1

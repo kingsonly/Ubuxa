@@ -498,7 +498,7 @@ option {
          ]); ?>
       <form class="form-wrapper">
         <fieldset class="section is-active">
-          <h3 style="text-align: center">Client Details</h3>
+          <h3 style="text-align: center">Supplier Details</h3>
           <?= $form->field($coperationModel, 'name')->textInput(['placeholder' => "Corporation Name"])->label(false); ?>
           <?= $form->field($coperationModel, 'short_name')->textInput(['placeholder' => "Corporation Short Name"])->label(false); ?>
           <?= $form->field($model, 'supplier_type')->textInput(['maxlength' => true,'placeholder' => "Supplier type"])->label(false); ?>
@@ -524,7 +524,7 @@ option {
          'pluginOptions'=>[
              'depends'=>['cat-id'],
              'placeholder' => 'Select...',
-             'url' => Url::to(['/client/subcat'])
+             'url' => Url::to(['/supplier/subcat'])
          ]
       ]); ?>
       	  <div class="button_prev">Previous</div>
@@ -569,7 +569,7 @@ option {
 <?php 
 $supplierUrlSave = Url::to(['supplier/create']);
 $supplierUrlExisting = Url::to(['supplier/create','src' => 'existing']);
-$clientFormJs = <<<JS
+$supplierFormJs = <<<JS
 $(document).ready(function(){
   $(".form-wrapper .button").click(function(){
     var button = $(this);
@@ -606,10 +606,15 @@ $('.supplier-form').submit(function(e){
            data: form.serialize(), // serializes the form's elements.
            success: function(data)
            {
+              if (!data.success){
                form.find("input[type=text], textarea, select").val("");
-               $('.supplier-submit').prepend('<p>Supplier submitted successfully</p>');
-               alert(data);
-           }
+               toastr.success(data.msg);
+               console.log(data);
+             }
+           },
+           error: function(data){
+                  toastr.error(data.msg);
+              }
          });
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
@@ -694,6 +699,6 @@ $(function() {
 });
 JS;
  
-$this->registerJs($clientFormJs);
+$this->registerJs($supplierFormJs);
 ?>
 

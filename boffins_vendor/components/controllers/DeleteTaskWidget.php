@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 
 // Task widget is a widget which represent a section on the folder  dashboard which is responsible for the holding of users task and reminder
-class DeleteCardWidget extends Widget
+class DeleteTaskWidget extends Widget
 {
 	public $taskid;
     public $id;
@@ -20,7 +20,7 @@ class DeleteCardWidget extends Widget
     public function run()
     {
          // Register AssetBundle
-        return $this->render('deletecard', [
+        return $this->render('deletetask', [
             'taskid' => $this->taskid,
             'id' => $this->id,
         	]);

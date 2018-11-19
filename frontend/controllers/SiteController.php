@@ -14,7 +14,7 @@ use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
-//use frontend\controllers\ForbiddenHttpException;
+use yii\web\ForbiddenHttpException;
 
 //models
 use frontend\models\SignupForm;
@@ -33,6 +33,9 @@ use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
 use frontend\models\Task;
 use frontend\models\Remark;
+use frontend\models\TenantEntity;
+use frontend\models\TenantCorporation;
+use frontend\models\TenantPerson;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
@@ -98,6 +101,8 @@ class SiteController extends BoffinsBaseController {
 		$taskAssignedUser = new TaskAssignedUser();
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
+        $allUsers = new UserDb;
+        $userId = Yii::$app->user->identity->id;
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -110,6 +115,9 @@ class SiteController extends BoffinsBaseController {
 			'users' => $users,
 			'label' => $label,
             'taskLabel' => $taskLabel,
+            'folder' => $folder,
+            'allUsers' => $allUsers,
+            'userId' => $userId,
 			]);
         } else {
 				
@@ -123,6 +131,9 @@ class SiteController extends BoffinsBaseController {
 				'users' => $users,
 				'label' => $label,
 	            'taskLabel' => $taskLabel,
+	            'folder' => $folder,
+	            'allUsers' => $allUsers,
+	            'userId' => $userId,
 				]);
    		 }
        
@@ -213,21 +224,32 @@ class SiteController extends BoffinsBaseController {
        	$user = new SignupForm;
        	$customer = Customer::find()->where([
        	'cid' => $cid,
-       	'status' => 0,
+       	'master_email' =>$email,
 		])->one();
-		
+       //$test = $customer->entity->firstname;
+       //var_dump($test);
 		if(!empty($customer)){
 	        if ($user->load(Yii::$app->request->post())) {
 	        	$user->address = $email;
 	        	$user->cid = $cid;
 	        	$user->basic_role = $role;
+	        	if($customer->entityName == 'person' && $customer->status == 0){
+	        		$user->first_name = $customer->entity->firstname;
+	        		$user->surname = $customer->entity->surname;
+	        	}
 				if($user->save()){
-					$customer->status = 1;
-					$customer->save();
-					return $this->redirect(['index']);
+					if($customer->status == 0){
+						$customer->status = 1;
+						$customer->save();	
+					}
+					$newUser = UserDb::findOne([$user->id]);
+		            if (Yii::$app->user->login($newUser)){
+		                return $this->redirect(['index']);
+		            }
 				} 
 			} else {
 	            return $this->render('createUser', [
+	            	'customer' => $customer,
 					'userForm' => $user,
 					'action' => ['createUser'],
 				]);
@@ -237,52 +259,75 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
-    public function actionCustomersignup($plan_id)
+    public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
            return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
         }
 		
 		$this->layout = 'loginlayout';
-       	$customer = new CustomerSignupForm;
-       	$settings = new UserSetting();
+
+       $customer = new CustomerSignupForm;
+       $tenantEntity = new TenantEntity();
+       $tenantCorporation = new TenantCorporation();
+       $tenantPerson = new TenantPerson();
+		$settings = new UserSetting();
 		
 		$settings->logo = Yii::$app->settingscomponent-> boffinsDefaultLogo();
 		$settings->theme = Yii::$app->settingscomponent->boffinsDefaultTemplate();
 		$settings->language = Yii::$app->settingscomponent->boffinsDefaultLanguage();
 		$settings->date_format = Yii::$app->settingscomponent->boffinsDefaultDateFormart();
-        //yii\helpers\VarDumper::dump(Yii::$app->request->post());
-        if ($customer->load(Yii::$app->request->post())) {
-			$settings->cid = 33; //  this is static cause cid has not bn generated yet
-			if($settings->save()){
-				$email = $customer->master_email;
-				$date = strtotime("+7 day");
-				$customer->billing_date = date('Y-m-d', $date);
-				$customerModel = new Customer();
-				if($customer->signup($customerModel)){
-
-					$sendEmail = \Yii::$app->mailer->compose()
-					->setTo($email)
-					->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-					->setSubject('Signup Confirmation')
-					->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-					Yii::$app->urlManager->createAbsoluteUrl(
-					['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-					))
-					)->send();
-					if($sendEmail){
-						 Yii::$app->getSession()->setFlash('success','Check Your email!');
-					} else{
-						Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-					}
-				}
+		
+        if ($customer->load(Yii::$app->request->post()) && $tenantEntity->load(Yii::$app->request->post())) {
+			
+        	$email = $customer->master_email;
+        	$date = strtotime("+7 day");
+        	$customer->billing_date = date('Y-m-d', $date);
+        	$customerModel = new Customer();
         	
-        	}
+        	if($tenantEntity->save()){
+        		if($tenantEntity->entity_type == 'person'){
+        			if($tenantPerson->load(Yii::$app->request->post())){
+        				$tenantPerson->entity_id = $tenantEntity->id;
+        				$tenantPerson->create_date = new Expression('NOW()');
+        				$tenantPerson->save(false);
+        			}
+        		}elseif ($tenantEntity->entity_type == 'corporation') {
+        			if($tenantCorporation->load(Yii::$app->request->post())){
+        				$tenantCorporation->entity_id = $tenantEntity->id;
+        				$tenantCorporation->create_date = new Expression('NOW()');
+        				$tenantCorporation->save(false);
+        			}
+        		}
+        		$customer->entity_id = $tenantEntity->id;
+	        	if($customer->signup($customerModel)){
+					$settings->cid = 33;
+					if($settings->save()){
+						$sendEmail = \Yii::$app->mailer->compose()
+						->setTo($email)
+						->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+						->setSubject('Signup Confirmation')
+						->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+						Yii::$app->urlManager->createAbsoluteUrl(
+						['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+						))
+						)->send();
+						if($sendEmail){
+							 Yii::$app->getSession()->setFlash('success','Check Your email!');
+						} else{
+							Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+						}
+					}
+	        	}
+	        }
 		}else {
-            return $this->render('createCustomer', [
-				'customerForm' => $customer,
-				'action' => ['createCustomer'],
-			]);
+	            return $this->render('createCustomer', [
+					'customerForm' => $customer,
+					'tenantEntity' => $tenantEntity,
+					'tenantPerson' => $tenantPerson,
+					'tenantCorporation' => $tenantCorporation,
+					'action' => ['createCustomer'],
+				]);
 		}
     }
 
@@ -304,7 +349,7 @@ class SiteController extends BoffinsBaseController {
 	    			echo "Email cannot be empty";
 	    		} 
 	    }else{
-	    		return $this->render('inviteusers', [
+	    		return $this->renderAjax('inviteusers', [
 				'model' => $model,
 			]);
 	    }

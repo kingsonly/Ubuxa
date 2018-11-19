@@ -10,7 +10,6 @@ Main Components
 .cd-accordion-menu {
     width: 100%;
     max-width: 360px;
-    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -41,7 +40,6 @@ Main Components
 .cd-accordion-menu .accord-label, .cd-accordion-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -209,13 +207,9 @@ Main Components
     <li class="has-children">
 
       <input type="checkbox" name="group-1" class="accord-input" id="group-1">
-      <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
-
-          <ul class="first-list">
               <?php if (isset($this->blocks['subfolders'])){ ?>
                   <?= $this->blocks['subfolders'] ?>
               <?php } ?>           
-          </ul>
     </li>
   </ul>
 

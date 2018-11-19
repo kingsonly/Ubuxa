@@ -16,6 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('customersignup', [
         'customerForm' => $customerForm,
 		'action' => $action,
+		'tenantEntity' => $tenantEntity,
+		'tenantCorporation' => $tenantCorporation,
+		'tenantPerson' => $tenantPerson,
     ]) ?>
 
 </div>

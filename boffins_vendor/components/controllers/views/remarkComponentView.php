@@ -412,6 +412,12 @@ AppAsset::register($this);
   .wrapp{
     display: none;
   }
+  .atwho-inserted {
+      color: #4183C4;
+    }
+    .atwho-query {
+      color: #4183C4;
+    }
 </style>
 <div class="" style="min-height: 200px">
   <div class="row">
@@ -429,7 +435,7 @@ AppAsset::register($this);
 
   <div id="remark-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
     <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
@@ -511,23 +517,27 @@ AppAsset::register($this);
 $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkUrlSave = Url::to(['remark/create']);
 $remarkUrlMention = Url::to(['remark/mention']);
+$remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $remarkJs = <<<JS
+
 
 var issues = [
   { name: "1", content: "stay foolish"},
   { name: "2", content: "stay hungry"},
   { name: "3", content: "stay heathly"},
-  { name: "4", content: "this happiess"},
+  { name: "14", content: "ubuxa"},
 ];
 $('.editor').atwho({
     at: "@",
+    insertTpl: '<a href="https://example.com" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${name}</a>',
     data:'$remarkUrlMention'
 }).atwho({
     at: "#", 
-    displayTpl: '<li>\${name} <small>\${content}</small></li>',
-    data: issues
+    displayTpl: '<li><small>\${content}</small></li>',
+    insertTpl: '<a href="http://localhost/ubuxa-beta/frontend/web/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
+    data: '$remarkUrlMentionFolder'
   })
 
 var mypage = 1;
