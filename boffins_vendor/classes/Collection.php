@@ -55,26 +55,12 @@ class Collection extends Component implements StaticInstanceInterface, IteratorA
 	 *  
 	 *  @return array of items in the collection. 
 	 */
-	public function getItems() 
+	protected function getItems() 
 	{
 		if ( empty($this->_items) ) {
 			Yii::trace("This collection is empty. " . static::className() );
 		}			
 		return $this->_items;
-	}
-	
-	/**
-	 *  @brief next two properties created in the hope that they fulfil the requirements necessary 
-	 *  to use ArrayableTrait
-	 */
-	public function getData()
-	{
-		return $this->getItems();
-	}
-	
-	public function setData($data)
-	{
-		$this->setItems($data);
 	}
 	
 	/***
@@ -87,7 +73,7 @@ class Collection extends Component implements StaticInstanceInterface, IteratorA
 	 *  @details If the collection is not empty, or the argument provided is not an array, or it is empty, 
 	 *  this triggers an error and asks you to use the correct function instead
 	 */
-	public function setItems($items) 
+	protected function setItems($items) 
 	{
 		if ( !empty($this->_items) ) {
 			throw new InvalidCallException( "You can not reset the items in a collection. You can refresh and then addItem or  addItems " . static::className() );
@@ -104,6 +90,19 @@ class Collection extends Component implements StaticInstanceInterface, IteratorA
 		$this->_items = $items;
 	}
 	
+	/**
+	 *  @brief next two properties created in the hope that they fulfil the requirements necessary 
+	 *  to use ArrayableTrait
+	 */
+	public function getData()
+	{
+		return $this->getItems();
+	}
+	
+	public function setData($data)
+	{
+		$this->setItems($data);
+	}
 	
 	/***
 	 *  @brief function to add an item to the collection
