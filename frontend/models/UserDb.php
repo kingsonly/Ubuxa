@@ -203,12 +203,6 @@ class UserDb extends ActiveRecord implements IdentityInterface
 		return $this->username;
 	}
 	
-	//keeping old validation function until all users have hashed password 
-	public function validatePassword2($pw) {
-		return $pw == $this->password;
-	}
-	
-
 	/***
      * Check correct password
      * @param string $pw password to validate
@@ -302,7 +296,7 @@ class UserDb extends ActiveRecord implements IdentityInterface
 	{	
 		//ensure that at this point, the user identity is confirmed, and valid before authenticating device. 
 		if ( $this->authenticateUser() ) {
-			return $this->authenticateDevice();
+			return true;//$this->authenticateDevice();
 		}
 	}
 	

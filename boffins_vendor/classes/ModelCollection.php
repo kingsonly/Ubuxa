@@ -55,6 +55,7 @@ class ModelCollection extends Collection
         }
         return parent::getData();
     }
+	
     /**
      * @return array|BaseActiveRecord[]|ActiveRecordInterface[]|Arrayable[] models contained in this collection.
      */
@@ -148,6 +149,8 @@ class ModelCollection extends Collection
 	
 	public function loadModel($key, $attributes, $safeOnly = true)
 	{
+		$this->scenario('default');
+		Yii::trace("Loading this model {$key} ");
 		$models = $this->getModels();
 		$model = $models[$key];
 		$model->setAttributes($attributes, $safeOnly);
@@ -162,8 +165,9 @@ class ModelCollection extends Collection
         return $this;
     }
 	
-	public function saveModel($key, $runValidation = true, $attributeNames = null)
+	public function saveModel($key, $runValidation = false, $attributeNames = null)
 	{
+		Yii::trace("Saving this model {$key} ");
 		$models = $this->getModels();
 		$model = $models[$key];
 		$model->save($runValidation, $attributeNames);
@@ -196,7 +200,7 @@ class ModelCollection extends Collection
      * @param bool $recursive
      * @return Collection|static
      */
-    public function toArray(array $fields = [], array $expand = [], $recursive = true) //map is not implemented!
+    public function toArray(array $fields = [], array $expand = [], $recursive = true) 
     {
         return $this->map( function($model) use ($fields, $expand, $recursive) {
             /** @var $model Arrayable */
@@ -211,7 +215,7 @@ class ModelCollection extends Collection
      */
     public function toJson($options = 320)
     {
-        return Json::encode($this->toArray()->getModels(), $options); //toArray is not implemented because map does not work 
+        return Json::encode($this->toArray()->getModels(), $options); 
     }
 	
 	/*
@@ -222,8 +226,14 @@ class ModelCollection extends Collection
 	private function queryAll()
     {
         if ($this->query === null) {
-            throw new InvalidCallException('This collection was not created from a query.');
+            throw new InvalidCallException('You need a query for this collection to be populated.');
         }
+		
+		//if the programmer does not set an index, the items in the model collection should be indexed using the model ID. 
+		if ($this->query->indexBy === null) {
+			$this->query->indexBy('id');
+		}
+		
         return $this->query->all();
     }
 	
@@ -252,8 +262,7 @@ class ModelCollection extends Collection
 	 */
 	public function addItems( $items, $commonKey = '' )
 	{
-		if ( $this->usesQuery() ) 
-		{
+		if ( $this->usesQuery() ) {
 			throw new InvalidCallException('This collection was created from a query. And you cannot add items to it.');
 		}
 		return parent::addItems($items, $commonKey);
@@ -266,17 +275,16 @@ class ModelCollection extends Collection
 	 */
 	public function addItem( $item, $key = '' )
 	{
-		if ( $this->usesQuery() ) 
-		{
+		if ( $this->usesQuery() ) {
 			throw new InvalidCallException('This collection was created from a query. And you cannot add items to it.');
 		}
 		
 		if ( ! $item instanceof Model ) {
-			throw new InvalidArgumentException( "Argument 'item' must be a member of yii\base\Model" . static::className() ); 
+			throw new InvalidArgumentException( "Argument 'item' must be a member of yii\base\Model " . static::className() ); 
 		}
 		
 		if ( !empty($this->acceptableModelClass) && !($item instanceof $this->acceptableModelClass) ) {
-			throw new InvalidArgumentException( "Argument 'item' must be a member of {$this->acceptableModelClass}" . static::className() ); 
+			throw new InvalidArgumentException( "Argument 'item' must be a member of {$this->acceptableModelClass} " . static::className() ); 
 		}
 		return parent::addItem($item, $key);
 	}
