@@ -39,6 +39,7 @@ use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+use frontend\models\UserSetting;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -56,8 +57,7 @@ class SiteController extends BoffinsBaseController {
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-					
+                    ]
                 ],
             ],
             'verbs' => [
@@ -86,7 +86,7 @@ class SiteController extends BoffinsBaseController {
 
     public function actionIndex() 
 	{
-		$this->layout = 'new_index_dashboard_layout';
+		//$this->layout = 'new_index_dashboard_layout';
 		$folder = new Folder();
 		$dashboardFolders = $folder->getDashboardItems(100);
 		$task = new Task();
@@ -130,6 +130,10 @@ class SiteController extends BoffinsBaseController {
 
     public function actionLogin() 
 	{	
+		if (!Yii::$app->user->isGuest) {
+			return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+        }
+		
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
 			Yii::$app->session->close();
@@ -202,9 +206,12 @@ class SiteController extends BoffinsBaseController {
 
   public function actionSignup($email,$cid,$role)
     {
+		if (!Yii::$app->user->isGuest) {
+            return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+        }
 		$this->layout = 'loginlayout';
-       $user = new SignupForm;
-       $customer = Customer::find()->where([
+       	$user = new SignupForm;
+       	$customer = Customer::find()->where([
        	'cid' => $cid,
        	'status' => 0,
 		])->one();
@@ -232,30 +239,44 @@ class SiteController extends BoffinsBaseController {
 
     public function actionCustomersignup($plan_id)
     {
-		$this->layout = 'loginlayout';
-       $customer = new CustomerSignupForm;
+		if (!Yii::$app->user->isGuest) {
+           return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+        }
 		
+		$this->layout = 'loginlayout';
+       	$customer = new CustomerSignupForm;
+       	$settings = new UserSetting();
+		
+		$settings->logo = Yii::$app->settingscomponent-> boffinsDefaultLogo();
+		$settings->theme = Yii::$app->settingscomponent->boffinsDefaultTemplate();
+		$settings->language = Yii::$app->settingscomponent->boffinsDefaultLanguage();
+		$settings->date_format = Yii::$app->settingscomponent->boffinsDefaultDateFormart();
         //yii\helpers\VarDumper::dump(Yii::$app->request->post());
         if ($customer->load(Yii::$app->request->post())) {
-        	$email = $customer->master_email;
-        	$date = strtotime("+7 day");
-        	$customer->billing_date = date('Y-m-d', $date);
-        	$customerModel = new Customer();
-        	if($customer->signup($customerModel)){
-        		$sendEmail = \Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-                ->setSubject('Signup Confirmation')
-                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-                Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-                ))
-                )->send();
-        		if($sendEmail){
-        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
-                } else{
-                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-            	}
+			$settings->cid = 33; //  this is static cause cid has not bn generated yet
+			if($settings->save()){
+				$email = $customer->master_email;
+				$date = strtotime("+7 day");
+				$customer->billing_date = date('Y-m-d', $date);
+				$customerModel = new Customer();
+				if($customer->signup($customerModel)){
+
+					$sendEmail = \Yii::$app->mailer->compose()
+					->setTo($email)
+					->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+					->setSubject('Signup Confirmation')
+					->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+					Yii::$app->urlManager->createAbsoluteUrl(
+					['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+					))
+					)->send();
+					if($sendEmail){
+						 Yii::$app->getSession()->setFlash('success','Check Your email!');
+					} else{
+						Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+					}
+				}
+        	
         	}
 		}else {
             return $this->render('createCustomer', [

@@ -103,10 +103,12 @@ class ComponentTemplateController extends Controller
             $valid = $componentTemplate->validate();
             $valid = AttrModel::validateMultiple($attributeModel) && $valid;
             
-            if ($valid) {   
+            if ($valid) {
+				//return 1;
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $componentTemplate->save(false)) {
+						
                         foreach ($attributeModel as $modelAddress) {
                             $modelAddress->component_template_id = $componentTemplate->id;
                             if (! ($flag = $modelAddress->save(false))) {
@@ -123,6 +125,7 @@ class ComponentTemplateController extends Controller
                     $transaction->rollBack();
                 }
             }
+			
         }
 
         return $this->render('create', [

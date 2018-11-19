@@ -6,14 +6,15 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
+use yii\bootstrap\Alert;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
 
-Yii::$app->settingscomponent->buffinsUsersAsset()
+Yii::$app->settingscomponent->boffinsUsersAsset()
 ?>
 <?php $this->beginPage() ?>
-<? Yii::$app->language  = Yii::$app->settingscomponent->buffinsUsersLanguage();?>
+<? Yii::$app->language  = Yii::$app->settingscomponent->boffinsUsersLanguage();?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" ng-app="app">
 <head>
@@ -26,6 +27,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
     <?php $this->head() ?>
 </head>
 <body class="skin-red hold-transition layout-top-nav">
+	
 <?php $this->beginBody() ?>
 <?php
     if(isset(Yii::$app->user->identity->person_id)) {
@@ -72,7 +74,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
         <div class="navbar-header">
           
 			 
-			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
 
           
         </div>
@@ -86,7 +88,10 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
 	
   <!-- Full Width Column -->
   <div class="content-wrapper">
+	  
+	  
     <div class="container">
+		
       <!-- Content Header (Page header) -->
 	
     <section class="content-header">
@@ -105,6 +110,12 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
 
       <!-- Main content -->
      <section class="content">
+		 <div class="col-lg-12">
+			<?= Alert::widget([
+				   'options' => ['class' => 'alert-info','id'=>'flas'],
+				   'body' => 'test<button class="btn btn-success">Feedback</button>',
+					 ]);?>
+		</div>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
     </section>

@@ -10,10 +10,10 @@ use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
 
-Yii::$app->settingscomponent->buffinsUsersAsset()
+Yii::$app->settingscomponent->boffinsUsersAsset()
 ?>
 <?php $this->beginPage() ?>
-<? Yii::$app->language  = Yii::$app->settingscomponent->buffinsUsersLanguage();?>
+<? Yii::$app->language  = Yii::$app->settingscomponent->boffinsUsersLanguage();?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" ng-app="app">
 <head>
@@ -72,7 +72,7 @@ Yii::$app->settingscomponent->buffinsUsersAsset()
         <div class="navbar-header">
           
 			 
-			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->buffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
 
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>

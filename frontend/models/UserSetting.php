@@ -29,7 +29,7 @@ class UserSetting extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'logo', 'theme', 'language', 'date_format'], 'required'],
+            [['logo', 'theme', 'language', 'date_format','cid'], 'required'],
             [['id'], 'integer'],
             [['logo', 'theme', 'language', 'date_format'], 'string', 'max' => 255],
         ];
@@ -46,6 +46,7 @@ class UserSetting extends \yii\db\ActiveRecord
             'theme' => 'Theme',
             'language' => 'Language',
             'date_format' => 'Date Format',
+            'cid' => 'Customer Identity',
         ];
     }
 }

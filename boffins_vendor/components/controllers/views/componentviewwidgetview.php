@@ -8,11 +8,13 @@ use frontend\models\ComponentAttributeModel
 /* @var $model app\models\Payment */
 ?>
 <style>
+	/*
 #invoicecontent{
 	background: #fff;
 	margin-top: 20px;
 	min-height: 600px;
 }
+	 */
 </style>
 <div class="sponsor" title="Click to flip">
 	<div class="sponsorFlip" style="background:red !important">

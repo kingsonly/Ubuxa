@@ -200,16 +200,16 @@ class DateBehavior extends Behavior
 				}
 				Switch ($class) {
 					case self::DATE_CLASS_STAMP:
-						$this->owner->$attribute = $this->settings->buffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
+						$this->owner->$attribute = $this->settings->boffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
 							break;
 					case self::DATE_CLASS_STANDARD:
-						$this->owner->$attribute = $this->settings->buffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
+						$this->owner->$attribute = $this->settings->boffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
 							break;
 					case self::DATE_CLASS_OTHER: 
-						$this->owner->$attribute = $this->settings->buffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
+						$this->owner->$attribute = $this->settings->boffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type);
 						break;
 					default:
-						$this->owner->$attribute = $this->settings->buffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type); 
+						$this->owner->$attribute = $this->settings->boffinsDate($this->owner->$attribute , $this->owner->getTableSchema()->columns[$attribute]->type); 
 				}
 			}
 		}

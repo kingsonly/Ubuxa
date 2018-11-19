@@ -255,6 +255,7 @@ $img = $model->folder_image;
     Modal::end();
 ?>
 <?php 
+$viewUrl = Url::to(['component/view']);
 $indexJs = <<<JS
 localStorage.setItem("skipValidation", "");
 $(function(){
@@ -373,6 +374,7 @@ $(function(){
   });
  tour.init();
  tour.start(true);
+
 
 });
 

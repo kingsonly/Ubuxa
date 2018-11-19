@@ -24,7 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		echo "({Name: {$model['id']} \n"; 
 		echo "Value: {$model['title']} \n"; 
 		echo "This Model: {$models[$i]['title']} )} </br>"; 
-		var_dump($model->getComponentAttribute()[0]['name']);
+		//var_dump($model->getComponentAttribute()[0]['value']);
+		foreach($model->getComponentAttribute() as $key => $componentDetails){
+			echo $componentDetails['value'].'<br>';
+			echo'<pre>';
+			var_dump($componentDetails);
+			echo'</pre>';
+			
+		}
 	
 		$i++;
 	}?>

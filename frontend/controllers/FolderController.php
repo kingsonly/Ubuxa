@@ -193,7 +193,7 @@ class FolderController extends Controller
 			}
 			
 			if($model->save()){
-            	return ['output'=>$model->id, 'message'=>'sent','area'=>'component','templateId'=>'0'];
+            	return ['output'=>$model->id, 'message'=>'sent','area'=>'folder','templateId'=>'0'];
 			}
             
         }

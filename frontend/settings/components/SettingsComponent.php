@@ -27,7 +27,7 @@ class SettingsComponent extends Component
 	private function companySettings()
 	{
 		$model = new Settings();
-		$companySettings = $model->find()->where(['id' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
+		$companySettings = $model->find()->where(['cid' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
 		return $companySettings;
 	}
 	
@@ -37,7 +37,8 @@ class SettingsComponent extends Component
 	 * Checks the database value of all date and time stamp column and converts depending on the column fomart
 	 * takes a single argument $dateTime wich is determine by the date behavior 
 	 */
-	private function companyDate($dateTime){
+	private function companyDate($dateTime)
+	{
 		$companyDateFormart = $this->companySettings();
 		if(!empty($companyDateFormart->date_format)){
 			$seperateDateFromTime = explode('!',$companyDateFormart->date_format);
@@ -57,14 +58,15 @@ class SettingsComponent extends Component
 	}
 	
 	/*
-	 * Method buffinsDate would be use to set the output of all date as set by the customer
+	 * Method boffinsDate would be use to set the output of all date as set by the customer
 	 * presently takes two argument $dateValue and $dateType
 	 * $dateValue = to the actual date passed to the method eg 10/10/17
 	 * $dateType is used to check the database column type so as to decide how to handle the date pased
 	 * $ this method id going to take advantage of the yii2 data formatter for date to make relevant converssions
 	 * 
 	 */
-	public function buffinsDate($dateValue , $dateType){
+	public function boffinsDate($dateValue , $dateType)
+	{
 		
 		\Yii::$app->formatter->{$dateType."Format"} = $this->companyDate($dateType);
 		$actualDate = \Yii::$app->formatter->{'as'.ucfirst($dateType)}($dateValue);
@@ -74,13 +76,14 @@ class SettingsComponent extends Component
 	}
 	
 	/*
-	 * Method buffinsLogo would be use to set the output logo as set by the customer
+	 * Method boffinsLogo would be use to set the output logo as set by the customer
 	 * presently takes no argument 
 	 * makes use of the companySettings() private method to fetch the company define logo 
 	 * checks to see if the logo is a string or an image and displays according to data type on the layout 
 	 * 
 	 */
-	public function buffinsLogo(){
+	public function boffinsLogo()
+	{
 		$companySettings = $this->companySettings();
 		$logoSettings = $companySettings->logo;
 		$supported_image = ['gif', 'jpg','jpeg','png'];
@@ -97,13 +100,39 @@ class SettingsComponent extends Component
 		}
 	}
 	
+	public function boffinsLoaderImage()
+	{
+		return '<img  style="height: 40px;width: 40px;margin:3px 5px 3px 25px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
+	} 
+	
+	public function boffinsDefaultLogo()
+	{
+		return 'images/6uCHTvn3GkT_UYxbI4Fl8DklnwGQw00N.png';
+	} 
+	
+	public function boffinsDefaultLanguage()
+	{
+		return 'En';
+	} 
+	
+	public function boffinsDefaultTemplate()
+	{
+		return 'StandardFormsAsset';
+	} 
+	
+	public function boffinsDefaultDateFormart()
+	{
+		return 'MMMM d  yyyy ! (HH:mm:ss)';
+	} 
+	
 	/*
-	 * Method buffinsUsersAsset would be use to set the theme as set by the customer
+	 * Method boffinsUsersAsset would be use to set the theme as set by the customer
 	 * presently takes no argument 
 	 * makes use of the companySettings() private method to fetch the company define theme  
 	 * 
 	 */
-	public function buffinsUsersAsset(){
+	public function boffinsUsersAsset()
+	{
 		$companySettings = $this->companySettings();
 		$themeSettings = $companySettings->theme;
 		if(\Yii::$app->controller->id == 'site' and \Yii::$app->controller->action->id == 'index' ){
@@ -116,12 +145,13 @@ class SettingsComponent extends Component
 	}
 	
 	/*
-	 * Method buffinsUsersLanguage would be use to set the language as set by the customer
+	 * Method boffinsUsersLanguage would be use to set the language as set by the customer
 	 * presently takes no argument 
 	 * makes use of the companySettings() private method to fetch the company define theme  
 	 * 
 	 */
-	public function buffinsUsersLanguage(){
+	public function boffinsUsersLanguage()
+	{
 		$companySettings = $this->companySettings();
 		$languageSettings = $companySettings->language;
 		

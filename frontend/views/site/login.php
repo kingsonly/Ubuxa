@@ -5,6 +5,7 @@
 /* @var $model app\models\LoginForm */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Alert;
 
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-login">
 <style>
 	.user-image{
-		width:80px;
+		width:inherit;
 		height:80px;
 		border-radius: 20px 20px 20px 20px ;
 	}
@@ -44,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
    <div class="login-box">
       <div class="login-logo">
-		  <?= Html::img('@web/images/logo1.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
+		  <?= Html::img('@web/images/ubu.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
 		  <br>
-        <a href="#" style="color:#000 !important;"><b>Tycol</b>Main</a>
+        
       </div>
         <div class="login-box-body">
 			<?php if (Yii::$app->session->getFlash('error') !== NULL): ?>
@@ -56,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					]);?>
 				<?php endif ?>
 				
-            <p class="login-box-msg">Sign in to start your session</p>
+            <p class="login-box-msg">Sign into your account</p>
         <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
      'enableAjaxValidation' => false,]); ?>
 
@@ -85,11 +86,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="form-group pull-right" id ="login-button">
             
-          <?= Html::submitButton('Login', ['class' => 'btn btn-danger', 'name' => 'login-button']) ?>
+          <?= Html::submitButton('Login', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
         
                     
                 
             </div>
+			
+			<div class="col-xs-12 pull-left" style="padding-left: 0px !important">
+          <div class="checkbox icheck">
+            <label>
+				<a href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a></br>
+              <a href="<?= Url::to(['site/customersignup']);?>">Forgot Password </a>
+            </label>
+          </div>
+        </div>
 
             <?php ActiveForm::end(); ?>
         </div>

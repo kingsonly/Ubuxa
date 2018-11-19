@@ -103,4 +103,9 @@ class ComponentAttribute extends BoffinsArRootModel implements Sortable
 	{
 		return $this->componentTemplateAttribute->name;
 	}
+	
+	public function getType()
+	{
+		return $this->componentTemplateAttribute->componentAttributeType->type;
+	}
 }

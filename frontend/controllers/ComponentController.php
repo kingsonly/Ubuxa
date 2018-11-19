@@ -7,6 +7,7 @@ use yii\db\Expression;
 use frontend\models\Component;
 use frontend\models\FolderComponent;
 use frontend\models\Folder;
+use boffins_vendor\classes\ModelCollection;
 
 class ComponentController extends Controller
 {
@@ -48,8 +49,13 @@ class ComponentController extends Controller
 		$folderModel = new Folder();
 		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
-		return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
+		$data2 = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
+		$data3 = $data2->models;
+		$data4 = count($data3);
+		
+		return $this->renderAjax('listview',['content'=>$data3]);
     }
+	
 
     public function actionView($id)
     {

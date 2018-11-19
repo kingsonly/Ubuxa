@@ -15,6 +15,7 @@ use yii\jui\Draggable;
 
 ?>
 <style>
+	/*
 .floatright{
 	float: right;
 }
@@ -38,6 +39,7 @@ use yii\jui\Draggable;
 	margin-top: 22px;
 	min-height: 600px;
 }
+	*/
 </style>
 <?php $this->beginBlock('folderview'); ?>
 

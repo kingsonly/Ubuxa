@@ -10,6 +10,7 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Folder */
 ?>
 <style>
+	/*
 	#listtable_wrapper .row:first-child{
 		display: none;
 	}
@@ -57,67 +58,42 @@ use yii\widgets\Pjax;
                 padding:20px 5px;
             }
         }
+	*/
 </style>
 <section>
-<?
-	$component = [
-	['component-id' => 1,'title' => 'this is a new invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	
-	['component-id' => 2,'title' => 'this is a second invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 3,'title' => 'this is another  invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 4,'title' => 'lets  try a new invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 5,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 6,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 7,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 8,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 9,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 10,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 11,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 12,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 13,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 14,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 15,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 16,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 17,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 18,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 19,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 20,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 21,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 22,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 23,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 24,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 25,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 26,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 27,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 28,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 29,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 30,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 31,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 32,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 33,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 34,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 35,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 36,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	['component-id' => 37,'title' => 'this is a new invoice and its the last invoice','templateObject'=>['id' => 1,],'attributeObject' =>['value1','value2','value3'],'value_data_type' => 'string'],
-	];
-	?>
 
             <table id="listtable" class="table">
 				<thead>
                 <tr class="table-header">
-                    <th class="cell">Title</th>
-                    <th class="cell">Value1</th>
-                    <th class="cell">Value2</th>
-                    <th class="cell">value2</th>
+					<th class="cell">Title</th>
+					<? $attributeNameHolder = []; if(!empty($content)){?>
+						<? $i=1;foreach($content as $key => $value){?>
+						<? if($i === 1){ ?>
+							<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+								<? array_push($attributeNameHolder,$componentDetails['name']);?>
+                    			
+                    		<? };?>
+						<? }?>
+							
+						<? $i++; }?>
+					<?}?>
                     
+                    <? foreach($attributeNameHolder as $valueHEader){;?>
+						<th class="cell"><?= $valueHEader; ?></th>
+                    <? };?>
                 </tr>
 				</thead>
+	
 				<tbody>
-					<? foreach($component as $key => $value){?>
-					<tr  class="component-table-tr one-time-component-click<?= $value['component-id'];?>" data-componentid="<?= $value['component-id'];?>">
+					<? foreach($content as $key => $value){?>
+					<tr  class="component-table-tr one-time-component-click<?= $value['id'];?>" data-componentid="<?= $value['id'];?>">
                     <td><?= $value['title'];?></td>
-					<? foreach($value['attributeObject'] as $key2 => $value2){?>
-                    <td><?= $value2;?></td>
+					<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+                    <td><?= empty($componentDetails['value'])?$componentDetails['name'].' is empty':$componentDetails['value'];?>
+						
+						<?= empty($componentDetails['type'])?$componentDetails['type'].' is empty':$componentDetails['type'];?>
+						
+						</td>
                     
                     <? };?>
                 	</tr>
@@ -153,7 +129,7 @@ $(document).on('click','.input-sm',function(){
 	$(this).addClass('keep-search-bar');
 })
 
-$(document).on('click','.component-table-tr',function(){
+$(document).off().on('click','.component-table-tr',function(e){
 	clickedElement = $(this);
 	getComponentId = clickedElement.data('componentid');
 	$(document).find('.component-table-tr').removeClass('active-component-tr')
@@ -163,6 +139,7 @@ $(document).on('click','.component-table-tr',function(){
 	$("#view-content").addClass('col-xs-4').show();
 	$("#listView").addClass('col-xs-8').find('#listtable').css('table-layout','auto');
 	$("#view").load('$viewUrl&id='+getComponentId);
+	
 })
 
 listViewJs;
