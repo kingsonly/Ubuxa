@@ -34,7 +34,7 @@ use frontend\models\ComponentAttributeModel
 						$i = 1;
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
 							${'model'.$i} = new ComponentAttributeModel();
-							${'model'.$i}->attributeId = $value->id;
+							${'model'.$i}->attributeId = $value->id;//$attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
 							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'editableArea'=>'component','attributues'=>[
 					['modelAttribute'=>'value'],

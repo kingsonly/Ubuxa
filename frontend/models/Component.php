@@ -107,6 +107,8 @@ class Component extends ComponentARModel
     {
         return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->where(['component_id' => $this->id]) ] );
     }
+	
+
 
     /**
      * @return \yii\db\ActiveQuery

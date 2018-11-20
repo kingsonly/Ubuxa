@@ -69,23 +69,27 @@ class ComponentController extends Controller
 		$collector = new ModelCollection( [], [ 'query' => $query ] ); //using the relation
 		$modelData = $collector->models;
 			if (isset($_POST['hasEditable'])) {
+				Yii::trace("hash Eduted");
 		
 			// use Yii's response format to encode output as JSON
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
 			// read your posted model attributes
-				$model = new ComponentAttributeModel();
-				$model->load(Yii::$app->request->post());
-				$collector->loadModel($model->attributeId,$model->value);
+				$collectors = new ModelCollection( [], [ 'query' => $component->getComponentAttributes() ] ); 
+				//$model = new ComponentAttributeModel();
+				//$model->load(Yii::$app->request->post());
+				$collectors->loadModel(9, ['value' => 'new test']);
+				//$collectors->loadModel($model->attributeId,['title'=>$model->value]);
+				$collectors->saveModel(9);
 				
-			if ($collector->saveModel($model->attributeId)) {
+			/*if ($collectors->saveModel($model->attributeId)) {
 				
 				return ['output'=>$model->attributeId, 'message'=>$model->value];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {
 				return ['output'=>$model->attributeId, 'message'=>'4321'];
-			}
+			}*/
     }
         return $this->renderAjax('view',[
 			'component'=>$component,

@@ -36,6 +36,8 @@ class ComponentAttribute extends ActiveRecord implements Sortable
     {
         return [
             [['component_id', 'component_template_attribute_id', 'value_id', 'cid'], 'integer'],
+            [['value'], 'safe'],
+           
             [['component_id'], 'exist', 'skipOnError' => true, 'targetClass' => Component::className(), 'targetAttribute' => ['component_id' => 'id']],
             [['component_template_attribute_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentTemplateAttribute::className(), 'targetAttribute' => ['component_template_attribute_id' => 'id']],
         ];
