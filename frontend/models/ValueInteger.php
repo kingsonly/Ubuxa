@@ -27,7 +27,7 @@ class ValueInteger extends ValueARModel implements ValueInterface, Sortable
     public function rules()
     {
         return [
-            [['value'], 'integer'],
+            [['value', 'value1'],  'safe'],
         ];
     }
 
@@ -97,6 +97,15 @@ class ValueInteger extends ValueARModel implements ValueInterface, Sortable
 	 *  @details if the $value provided by the user is empty or not an integer, sets _usefulValue to null 
 	 */
 	public function setValue($value)
+	{
+		if (empty($value) || !is_integer($value) ) {
+			Yii::warning("Setting an unnaceptable value. Must be intege. {$value} was given. Setting to null.");
+			$this->_usefulValue = null;
+		} else {
+			$this->_usefulValue = $value;
+		}
+	}
+	public function setValue1($value)
 	{
 		if (empty($value) || !is_integer($value) ) {
 			Yii::warning("Setting an unnaceptable value. Must be intege. {$value} was given. Setting to null.");

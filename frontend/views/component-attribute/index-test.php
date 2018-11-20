@@ -18,30 +18,14 @@ $this->params['breadcrumbs'][] = $this->title;
     
 	<p>
 	<? $count = count($models); ?>
-	
 	<?= "Count: {$count} \n UsesQuery: {$usesQuery} </br> " ?>
-	<?php $i=0; foreach($models as $model) {
-		echo "({Name: {$model['id']} \n"; 
-		echo "Value: {$model['title']} \n"; 
-		echo "This Model: {$models[$i]['title']} )} </br>"; 
-		//var_dump($model->getComponentAttribute()[0]['value']);
-		foreach($model->getComponentAttribute() as $key => $componentDetails){
-			echo $componentDetails['value'].'<br>';
-			echo'<pre>';
-			var_dump($componentDetails);
-			echo'</pre>';
-			
-		}
-	
+	<?php $i=1; foreach($models as $model) {
+		echo "({Name: {$model['name']} \n"; 
+		echo "Value: {$model['value']} AND index {$i} \n"; 
+		echo "This Model: {$models[$i]['name']} )} </br>"; 
 		$i++;
+		echo "<b> Revised! {$revised[1]['value']} </b></br>";
 	}?>
 	</p>
 
 </div>
-<?
-//var_dump($usesQuery);
-//var_dump($query);
-?>
-
-usesQuery
-query
