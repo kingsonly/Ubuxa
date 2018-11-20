@@ -260,7 +260,7 @@ label {
                 <div class="input-box">
 
                   <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling'])?> 
-                  <span class="unit">.ubuxa.com</span>
+                  <span class="unit">.ubuxa.net</span>
                 </div>
 
                 <?php
@@ -286,7 +286,7 @@ label {
 
             </div>
                     <div>
-                    <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
+                    <?= Html::submitButton('Get Started <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
                     </div>
 
             <?php ActiveForm::end(); ?>
