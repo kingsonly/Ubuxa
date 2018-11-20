@@ -24,6 +24,7 @@ class <?= $className ?> extends Migration
 	/***
 	 *  a suffix to add to database name (Yii Application Component ID) for  different (special) migration controllers
 	 *  to determine the context of the migration. (really just for test = _test suffix)
+	 *  this variable is changed from the controller/config - it is usually not necessary to change it here. 
 	 */
 	public $db_suffix = '';
 	
@@ -32,7 +33,7 @@ class <?= $className ?> extends Migration
 	 */
 	public function init()
     {
-		//if changing the database connection, the next 3 lines need to be uncommented. Works with SpecialMigration controller only.
+		//if changing the database connection, the next line needs to be uncommented. Works with SpecialMigration controller only.
         //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; . 
         parent::init();
     }

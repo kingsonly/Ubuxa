@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m181031_121458_alter_remark_timestamp
+ * Class m181119_035154_add_delete_to_corporation
  */
-class m181031_121458_alter_remark_timestamp extends Migration
+class m181119_035154_add_delete_to_corporation extends Migration
 {
 	
 	/***
@@ -24,10 +24,13 @@ class m181031_121458_alter_remark_timestamp extends Migration
         //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; . 
         parent::init();
     }
-	
+
+    /**
+     * {@inheritdoc}
+     */
     public function safeUp()
     {
-        $this->alterColumn('{{%remark}}', 'remark_date', $this->timestamp('CURRENT_TIMESTAMP'));
+		$this->addColumn('{{%corporation}}', 'deleted', $this->boolean()->after('notes') );
     }
 
     /**
@@ -35,7 +38,7 @@ class m181031_121458_alter_remark_timestamp extends Migration
      */
     public function safeDown()
     {
-        echo "m181031_121458_alter_remark_timestamp cannot be reverted.\n";
+        echo "m181119_035154_add_delete_to_corporation cannot be reverted. This is a temporary stopgap\n";
 
         return false;
     }
@@ -49,7 +52,7 @@ class m181031_121458_alter_remark_timestamp extends Migration
 
     public function down()
     {
-        echo "m181031_121458_alter_remark_timestamp cannot be reverted.\n";
+        echo "m181119_035154_add_delete_to_corporation cannot be reverted.\n";
 
         return false;
     }

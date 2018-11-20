@@ -592,8 +592,7 @@ INSERT INTO `tm_corporation` (`id`, `name`, `short_name`, `entity_id`, `notes`, 
 (2, 'FBM Hudson Italiana', 'FBMI', 98, '', NULL),
 (3, 'Kaduna Refining and Petrochemical Co. Ltd', 'KD', 99, '', NULL),
 (4, 'Azbil Yamatake Europe /nv', 'AZBY', 100, 'Tax number: BE0474687910', NULL),
-(5, 'Standard Chartered Bank Nigeria', 'SCBN', 101, 'This is the Nigerian bank - Obinna Abara account officer  OLD:0000002503 NEW: 0002618322', NULL),
-(6, 'Vega Instruments (SA) Pty Ltd ', 'VEGAS', 102, 'Reg No: 1997/012720/07 - Vat Reg No: 45440168723', NULL);
+(5, 'Vega Instruments (SA) Pty Ltd ', 'VEGAS', 102, 'Reg No: 1997/012720/07 - Vat Reg No: 45440168723', NULL);
 
 -- --------------------------------------------------------
 
@@ -6209,12 +6208,12 @@ INSERT INTO `tm_supplier` (`id`, `corporation_id`, `supplier_type`, `notes`, `la
 DROP TABLE IF EXISTS `tm_task`;
 CREATE TABLE IF NOT EXISTS `tm_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) NOT NULL,
-  `details` varchar(255) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `assigned_to` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `create_date` datetime NOT NULL,
+  `title` varchar(50),
+  `details` varchar(255),
+  `owner` int(11),
+  `assigned_to` int(11),
+  `status_id` int(11),
+  `create_date` datetime,
   `due_date` datetime NOT NULL,
   `last_updated` datetime NOT NULL,
   `deleted` int(1) NOT NULL,

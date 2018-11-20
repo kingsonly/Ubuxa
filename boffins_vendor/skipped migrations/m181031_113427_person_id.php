@@ -5,13 +5,13 @@ use yii\db\Migration;
 /**
  * Class m181031_113427_person_id
  */
-class m181031_113427_person_id extends Migration
+class m181031_113427_user_id extends Migration
 {
 	
 	
     public function safeUp()
     {
-        $this->addColumn("{{%remark}}", 'person_id', $this->integer(11)->defaultValue(0)->after('text') );
+        $this->addColumn("{{%remark}}", 'user_id', $this->integer(11)->defaultValue(0)->after('text') );
     }
 
     /**
@@ -19,7 +19,7 @@ class m181031_113427_person_id extends Migration
      */
     public function safeDown()
     {
-        echo "m181031_113427_person_id cannot be reverted.\n";
+        echo "m181031_113427_user_id cannot be reverted.\n";
 
         return false;
     }
