@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-use boffins_vendor\classes\models\{ValueARModel, ValueInterface, Sortable};
+use boffins_vendor\classes\models\{ValueARModel, ValueInterface, Sortable, KnownClass};
 
 /**
  * This is the model class for table "{{%value_known_class}}".
@@ -52,7 +52,11 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 	 */
 	public function stringValue() : string
 	{
-		return $this->getValue();
+		if ( $this->getValue() instanceof KnownClass ) {//$this->_usefulValue is defined in parent class.
+			return $this->_usefulValue->nameString;
+		}
+		Yii::warning("This value type works with objects that are truly 'known classes'. Implement the interface KnownClass on the object");
+		return json_encode($this->_usefulValue) ;
 	}
 	
 	/***
@@ -90,9 +94,9 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 		
 		if (!$this->isNewRecord && !empty($this->query)) {
 			$knownNameSpace = $this->value;
+			Yii::trace("The known name space of this value is {$knownNameSpace} " . __METHOD__ );
 			try {
-				Yii::warning("Value - {$knownNameSpace}");
-				$valueObject = $knownNameSpace::find([$this->query])->asArray();;
+				$valueObject = $knownNameSpace::find()->where($this->query)->one();;
 			} catch(Exception $e) {
 				Yii::warning("An exception occured! " . $e->getMessage() . "\n" );
 			}

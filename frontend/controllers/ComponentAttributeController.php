@@ -57,13 +57,20 @@ class ComponentAttributeController extends Controller
 		$data3 = $data2->models;
 		$data4 = count($data3);
 		
-		$data2->loadModel(0, ['name' => "New Name Here"] );
+		Yii::trace("Attempting to load and save a model");
+		$data2->loadModel(1, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(1); //just supply the key.
+		$data4 = $data2->models;
+		
+		$revised = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
+		$revised2 = $revised->models;
 		
 
         return $this->render('index-test', [
-            'models' => $data3,
+            'models' => $data4,
 			'usesQuery' => $data2->usesQuery(),
 			'query' => $data2->query,
+			'revised' => $revised2,
         ]);
     }
 
