@@ -8,6 +8,7 @@ use frontend\models\Component;
 use frontend\models\FolderComponent;
 use frontend\models\Folder;
 use boffins_vendor\classes\ModelCollection;
+use frontend\models\ComponentAttributeModel;
 
 class ComponentController extends Controller
 {
@@ -49,18 +50,70 @@ class ComponentController extends Controller
 		$folderModel = new Folder();
 		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
-		$data2 = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
-		$data3 = $data2->models;
-		$data4 = count($data3);
-		
-		return $this->renderAjax('listview',['content'=>$data3]);
+		$collector = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
+		$modelData = $collector->models;
+
+		return $this->renderAjax('listview',['content'=>$modelData]);
     }
 	
 
     public function actionView($id)
     {
-		$component = Component::findOne($id);
-        return $this->renderAjax('view',['component'=>$component]);
+		/*$componentModel = new Component();
+		$component = $componentModel->find()->where(['id'=>$id]);
+		$collector = new ModelCollection( [], [ 'query' => $component ] );
+		$modelData = $collector->models;*/
+		$componentModel = new Component();
+		$query = $componentModel->find()->where(['id'=>$id]);
+		$component = $query->one();
+		$collector = new ModelCollection( [], [ 'query' => $query ] ); //using the relation
+		$modelData = $collector->models;
+			if (isset($_POST['hasEditable'])) {
+		
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+				$collector->loadModel($model->attributeId,$model->value);
+				
+			if ($collector->saveModel($model->attributeId)) {
+				
+				return ['output'=>$model->attributeId, 'message'=>$model->value];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>$model->attributeId, 'message'=>'4321'];
+			}
+    }
+        return $this->renderAjax('view',[
+			'component'=>$component,
+			'content'=>$modelData,
+		]);
+    }
+	
+	public function actionUpdate($id)
+    {
+		
+		if (isset($_POST['hasEditable'])) {
+			$component = Component::find()->where(['id'=>id]);
+			$collector = new ModelCollection( [], [ 'query' => $component ] );
+			$modelData = $collector->models;
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+			if ($model->load(Yii::$app->request->post())) {
+				
+				return ['output'=>'', 'message'=>''];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>'', 'message'=>''];
+			}
+    }
+        return $this->renderAjax('view',['component'=>$modelData]);
     }
 
 }

@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\models\Sortable;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%component_attribute}}".
@@ -18,7 +19,7 @@ use boffins_vendor\classes\models\Sortable;
  * @property Component $component
  * @property ComponentTemplateAttribute $componentTemplateAttribute
  */
-class ComponentAttribute extends BoffinsArRootModel implements Sortable
+class ComponentAttribute extends ActiveRecord implements Sortable
 {
     /**
      * {@inheritdoc}

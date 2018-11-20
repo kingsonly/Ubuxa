@@ -24,14 +24,28 @@ use frontend\models\ComponentAttributeModel
 
 				<? $model = new ComponentAttributeModel();
 					$model->attributeId = 'yes';
-					$model->value = '';
+					$model->value = 1;
 
 					?>
-					
-					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+					<?
+					foreach($content as $key => $value){
+						//var_dump($value->getComponentAttribute());
+						echo $value->title;
+						$i = 1;
+						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
+							${'model'.$i} = new ComponentAttributeModel();
+							${'model'.$i}->attributeId = $value->id;
+							${'model'.$i}->value = $attributeValule['value'] ;
+							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'editableArea'=>'component','attributues'=>[
 					['modelAttribute'=>'value'],
 					
-					]]); ?>
+					]]);
+							$i++;
+						}
+					}
+					
+					?>
+					
 					
 					
 				</div>

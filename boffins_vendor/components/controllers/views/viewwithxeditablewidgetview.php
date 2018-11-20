@@ -77,6 +77,37 @@ text-overflow: ellipsis;
 
 <?
 foreach($attributues as $v){
+	if($editableArea == 'component'){
+			if(!isset($v['xeditable'])){
+		?>
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'sm',
+			'options'=>['placeholder'=>'Enter title...'],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+	<?
+	}else{
+				
+			}
+		
+	}else{
 	if(!isset($v['xeditable'])){
 		?>
 <div>
@@ -119,7 +150,7 @@ foreach($attributues as $v){
 	<?
 	}elseif($v['xeditable'] == 'datetime'){
 			?>
-<div>
+		<div>
 <?
 			echo Editable::widget([
 				'model'=>$model,
@@ -202,7 +233,7 @@ foreach($attributues as $v){
 	<?
 		}
 	}
-		
+	}	
 }
 
 

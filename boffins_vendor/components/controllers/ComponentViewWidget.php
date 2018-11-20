@@ -56,6 +56,7 @@ use frontend\models\Component;
 
 class ComponentViewWidget extends Widget{
 	public $model; //Component Model.
+	public $content; //Component Model.
 	
 	 
 	public function init()
@@ -69,6 +70,7 @@ class ComponentViewWidget extends Widget{
 		
 		return $this->render('componentviewwidgetview',[
 			'model' => $this->model,
+			'content' => $this->content,
 			
 		]);
 	}

@@ -139,7 +139,7 @@ class SiteController extends BoffinsBaseController {
        
     }
 
-    public function actionLogin() 
+    public function actionLogin($id=0) 
 	{	
 		if (!Yii::$app->user->isGuest) {
 			return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
@@ -156,6 +156,18 @@ class SiteController extends BoffinsBaseController {
 		$model = new LoginForm();
 		$this->layout = 'loginlayout';
 		$authenticated = false;
+		if($id === 0){
+			$accountName = 'your account';
+		}else{
+			$costomerCompanyName = Customer::findOne($id);
+			if($costomerCompanyName->entityName == 'individual'){
+				$accountName = $costomerCompanyName->entity->surname.'s account';
+			}else{
+				$accountName = $costomerCompanyName->entity->corporation->name.' account';
+			}
+			
+		}
+		
 		if ( isset(Yii::$app->session['authenticateNewDevice']) 
 			&& Yii::$app->session['authenticateNewDevice'] === true ) {
 			$model->scenario = $model::SCENARIO_LOGIN_NEW_DEVICE;
@@ -199,6 +211,7 @@ class SiteController extends BoffinsBaseController {
 			} else {
 				return $this->render('login', [
 					'model' => $model,
+					'accountName' => $accountName,
 				]);			
 			}
 		}
