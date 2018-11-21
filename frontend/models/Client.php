@@ -4,6 +4,10 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use frontend\models\Corporation;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
+
 /**
  * This is the model class for table "{{%tm_client}}".
  *
@@ -87,7 +91,7 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     }
     
     
-    public static function getAllClientId()
+    public static function get_all_clientid()
 	{
         return Client::find()->asArray()->indexBy('id')->all();
          
@@ -103,10 +107,6 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	public function getShortName() {
 		return $this->corporation->shortName;
 	}
-
-    public function getNotes() {
-        return $this->corporation->notes;
-    }
 	
 	public function getNameString() {
 		return $this->corporation->NameString;
