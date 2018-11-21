@@ -18,6 +18,9 @@ class Plan extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    Const BETA = 1;
+
     public static function tableName()
     {
         return '{{%plan}}';

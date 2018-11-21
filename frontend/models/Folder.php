@@ -175,7 +175,6 @@ class Folder extends FolderARModel
     public function printTree($trees) {
 
         foreach ($trees as $tree) {
-
             printf("<ul class='first-list' id='menu-folders%d'>
                         <li class='second-list' id='menu-folders%d'><a href='#'' class='list-link%d'><i class='fa fa-folder iconzz'></i>%s</a></li>
                     </ul>", $tree['id'], $tree['id'], $tree['id'], $tree['title']);

@@ -1,5 +1,4 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
@@ -8,10 +7,8 @@ use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 use yii\widgets\Pjax;
 use frontend\assets\AppAsset;
 AppAsset::register($this);
-
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Remark */
-
 ?>
 <style type="text/css">
    
@@ -24,13 +21,11 @@ AppAsset::register($this);
    /*box-shadow: 0 5px 8px 0 rgba(0,0,0,.4);*/
    padding: 10px;
 }
-
 .toolbar {
    width: 100%;
    margin: 0 auto 10px;
    padding-left: 20px;
 }
-
 .remark-btn {
    width: 30px;
    height: 30px;
@@ -44,12 +39,10 @@ AppAsset::register($this);
    cursor: pointer;
    outline: none;
 }
-
 .remark-btn:hover {
    border: 1px solid #a6a6a6;
    color: #777;
 }
-
 #bold,
 #italic,
 #underline {
@@ -62,16 +55,13 @@ AppAsset::register($this);
 #list-ol {
     font-size: 12px;
 }
-
 #underline,
 #align-right {
    margin-right: 17px;
 }
-
 #align-left {
    margin-left: 17px;
 }
-
 #fonts {
    height: 24px;
    font-size: 12px;
@@ -84,16 +74,13 @@ AppAsset::register($this);
    outline: none;
    cursor: pointer;
 }
-
 #fonts option {
    font-size: 15px;
    background: #fafafa;
 }
-
 #fonts {
    width: 140px;
 }
-
 .sp-replacer {
    background: #fcfcfc;
    padding: 1px 2px 1px 3px;
@@ -101,12 +88,10 @@ AppAsset::register($this);
    border-color: #a6a6a6;
    margin-top: -1px;
 }
-
 .sp-replacer:hover {
    border-color: #a6a6a6;
    color: inherit;
 }
-
 .sp-preview {
    width: 15px;
    height: 15px;
@@ -114,13 +99,11 @@ AppAsset::register($this);
    margin-top: 2px;
    margin-right: 3px;
 }
-
 .sp-preview-inner, 
 .sp-alpha-inner, 
 .sp-thumb-inner {
    border-radius: 3px;
 }
-
 .editor {
    position: relative;
    width: 100%;
@@ -150,17 +133,13 @@ AppAsset::register($this);
     -moz-box-sizing: border-box;
     box-sizing: border-box;
  }
-
  .comments-container a {
     color: #03658c;
     text-decoration: none;
  }
-
 .comments-container ul {
     list-style-type: none;
 }
-
-
 /** ====================
  * Lista de Comentarios
  =======================*/
@@ -168,23 +147,19 @@ AppAsset::register($this);
    /* margin: 60px auto 15px;*/
     width: 100%;
 }
-
 .comments-container h1 {
     font-size: 36px;
     color: #283035;
     font-weight: 400;
 }
-
 .comments-container h1 a {
     font-size: 18px;
     font-weight: 700;
 }
-
 .comments-list {
     margin-top: 30px;
     position: relative;
 }
-
 /**
  * Lineas / Detalles
  -----------------------*/
@@ -197,7 +172,6 @@ AppAsset::register($this);
     left: 32px;
     top: 0;
 }
-
 .comments-list:after {
     content: '';
     position: absolute;
@@ -211,7 +185,6 @@ AppAsset::register($this);
     -moz-border-radius: 50%;
     border-radius: 50%;
 }
-
 .reply-list:before, .reply-list:after {display: none;}
 .reply-list li:before {
     content: '';
@@ -222,14 +195,11 @@ AppAsset::register($this);
     top: 25px;
     left: -55px;
 }
-
-
 .comments-list li {
     margin-bottom: 15px;
     display: block;
     position: relative;
 }
-
 .comments-list li:after {
     content: '';
     display: block;
@@ -237,7 +207,6 @@ AppAsset::register($this);
     height: 0;
     width: 0;
 }
-
 .reply-list {
     padding-left: 88px;
     clear: both;
@@ -261,17 +230,14 @@ AppAsset::register($this);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     overflow: hidden;
 }
-
 .comments-list .comment-avatar img {
     width: 100%;
     height: 100%;
 }
-
 .reply-list .comment-avatar {
     width: 50px;
     height: 50px;
 }
-
 .comment-main-level:after {
     content: '';
     width: 0;
@@ -290,7 +256,6 @@ AppAsset::register($this);
     -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
     box-shadow: 0 1px 1px rgba(0,0,0,0.15);
 }
-
 .comments-list .comment-box:before, .comments-list .comment-box:after {
     content: '';
     height: 0;
@@ -303,13 +268,11 @@ AppAsset::register($this);
     top: 8px;
     left: -11px;
 }
-
 .comments-list .comment-box:before {
     border-width: 11px 13px 11px 0;
     border-color: transparent rgba(0,0,0,0.05);
     left: -12px;
 }
-
 .reply-list .comment-box {
     width: 492px;
 }
@@ -322,7 +285,6 @@ AppAsset::register($this);
     -moz-border-radius: 4px 4px 0 0;
     border-radius: 4px 4px 0 0;
 }
-
 .comment-box .comment-head i {
     float: right;
     margin-left: 14px;
@@ -334,11 +296,9 @@ AppAsset::register($this);
     -o-transition: color 0.3s ease;
     transition: color 0.3s ease;
 }
-
 .comment-box .comment-head i:hover {
     color: #03658c;
 }
-
 .comment-box .comment-name {
     color: #283035;
     font-size: 14px;
@@ -346,11 +306,9 @@ AppAsset::register($this);
     float: left;
     margin-right: 10px;
 }
-
 .comment-box .comment-name a {
     color: #283035;
 }
-
 .comment-box .comment-head span {
     float: left;
     color: #999;
@@ -358,7 +316,6 @@ AppAsset::register($this);
     position: relative;
     top: 1px;
 }
-
 .comment-box .comment-content {
     background: #FFF;
     padding: 12px;
@@ -368,7 +325,6 @@ AppAsset::register($this);
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
 }
-
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
 .comment-box .comment-name.by-author:after {
     content: 'autor';
@@ -382,7 +338,6 @@ AppAsset::register($this);
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-
 /** =====================
  * Responsive
  ========================*/
@@ -390,22 +345,17 @@ AppAsset::register($this);
     .comments-container {
         width: 480px;
     }
-
     .comments-list .comment-box {
         width: 390px;
     }
-
     .reply-list .comment-box {
         width: 320px;
-	}
-
+    }
   
   }
-
   #remarkSaveForm{
     display: none;
   }
-
   #remarkReplyForm{
     display: none;
   }
@@ -426,13 +376,11 @@ AppAsset::register($this);
       <!-- Contenedor Principal -->
     
     <div class="comments-container" id="comments-container">
-
         <ul id="comments-list" class="comments-list results">
            
     </div>
     
   </div>
-
   <div id="remark-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
   <div class="row">
     <div class="col-md-12 remark-textfield">
@@ -487,28 +435,21 @@ AppAsset::register($this);
    </div>
    <div class="editor" id="example-1" contenteditable></div>
 </div>
-
     <?php $form = ActiveForm::begin(['id'=>'create-remark', 'validateOnSubmit' => false]); ?>
     <?= $form->field($remarkModel, 'parent_id')->hiddenInput(['id'=>'parent-id','value' => 0])->label(false) ?>
-
     <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
-
     <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
-
     <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
     </div>
-
     <div class="form-group" id="remarkReplyForm">
         <?= Html::submitButton('Reply', ['class' => 'btn btn-success', 'id' => 'remarkReply']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
     <img src="<?= Url::to('@web/images/loader/loader.gif'); ?>" style = "display: none" id="remarkLoader">
   
-
     </div>
   </div>
 </div>
@@ -521,8 +462,6 @@ $remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $remarkJs = <<<JS
-
-
 var issues = [
   { name: "1", content: "stay foolish"},
   { name: "2", content: "stay hungry"},
@@ -539,7 +478,6 @@ $('.editor').atwho({
     insertTpl: '<a href="http://localhost/ubuxa-beta/frontend/web/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
     data: '$remarkUrlMentionFolder'
   })
-
 var mypage = 1;
 var getOwnerId = $('#owner-id').val();
 var getModelName = $('.getModelName').val();
@@ -557,23 +495,19 @@ jQuery(
       })
   }
 );
-
 $('#example-1').keyup(function(){
    if($(this).text().length !=0)
             $('#remarkSave').attr('disabled', false);            
         else
             $('#remarkSave').attr('disabled',true);
   })
-
 $('#create-remark').submit(function(e) { 
            e.preventDefault();
     e.stopImmediatePropagation();
            var remark_value = $('#example-1').html();
            var form = $(this);
-
            var datas = form.serializeArray();
            datas.push({name: '&moredata', value: remark_value});
-
            $('#remarkSave').hide();
            $('#remarkLoader').show();
            $.ajax({
@@ -592,7 +526,6 @@ $('#create-remark').submit(function(e) {
               }
             });  
 });
-
 function mycontent(mypage){
     $('#remark-content-loading').show();
     $.post('$remarkUrl',
@@ -614,8 +547,8 @@ function mycontent(mypage){
         $('#ani_img').hide();
         })
 }
-
 $('.remark-reply').click(function(){
+  $('#remarkSave').hide('slow');
   if($(this).hasClass('reply-clicked')){
     var getRemarkId = $(this).data('id');
     $('.wrapp').slideUp(1000);
@@ -629,17 +562,14 @@ $('.remark-reply').click(function(){
     $('#exampleInputRemark').hide();
     $('.wrapp').slideDown(1000);
     $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
-        $('#remarkReplyForm').show();
+        $('#remarkReplyForm').show('fast');
     });
  
     $('#parent-id').val(getRemarkId);
-
     $(this).addClass('reply-clicked');
     }
  
   })
-
-
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
   $('.wrapp').slideDown(1000);
@@ -649,13 +579,9 @@ $('#exampleInputRemark').click(function(){
   });
   
   })
-
-
-
 $('#bold').on('click', function() {
    document.execCommand('bold', false, null);
 });
-
 $('#linka').on('click', function(e) {
     e.preventDefault();
    document.execCommand('createLink', false, null);
@@ -664,45 +590,36 @@ $('#image').on('click', function(e) {
     e.preventDefault();
    document.execCommand('insertImage', false, null);
 });
-
 $('#italic').on('click', function() {
    document.execCommand('italic', false, null);
 });
-
 $('#underline').on('click', function() {
    document.execCommand('underline', false, null);
 });
-
 $('#align-left').on('click', function() {
    document.execCommand('justifyLeft', false, null);
 });
-
 $('#align-center').on('click', function() {
    document.execCommand('justifyCenter', false, null);
 });
-
 $('#align-right').on('click', function() {
    document.execCommand('justifyRight', false, null);
 });
-
 $('#list-ul').on('click', function() {
    document.execCommand("insertUnorderedList");
 });
-
 $('#list-ol').on('click', function() {
    document.execCommand('insertOrderedList', false, null);
 });
-
 $('#fonts').on('change', function() {
    var font = $(this).val();
    document.execCommand('fontName', false, font);
 });
-
 $('#size').on('change', function() {
    var size = $(this).val();
    $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
-
+$('[data-toggle="tooltip-reply"]').tooltip();
 JS;
  
 $this->registerJs($remarkJs);

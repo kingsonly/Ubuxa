@@ -73,13 +73,13 @@ use frontend\models\Onboarding;
 		<div class="folder-header">
 			<?php if(!$onboardingExists){ ?>
                 <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of folders and find out useful tips.
                     <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
                   </p>
                 </div>
             <?php }else if($onboardingExists && $onboarding->folder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
               <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of folders and find out useful tips.
                     <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
                   </p>
                 </div>
@@ -143,6 +143,7 @@ $(function() {
           title: "Folder Title",            
           content: "You can edit your folder title by clicking on it.",
           placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-folder icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
           onShow: function(){
           	$('#folder-tipz').hide();
           }
@@ -152,12 +153,14 @@ $(function() {
           title: "Folder Description",
           content: "You can edit your folder title by clicking on it.",
           placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-hand-pointer-o icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
         {
           element: "#folder_image",
           title: "Folder Image",
-          content: "You can add image to your folder here.",
+          content: "You can add a folder image here",
           placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-image icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
       ],
     backdrop: true,  

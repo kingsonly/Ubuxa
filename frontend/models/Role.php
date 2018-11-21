@@ -18,6 +18,7 @@ class Role extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    Const ADMIN = 1;
     public static function tableName()
     {
         return '{{%role}}';

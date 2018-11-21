@@ -6,7 +6,8 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use frontend\models\Plan;
 use kartik\date\DatePicker;
-
+use frontend\models\TenantEntity;
+use frontend\models\Customer;
 
 
 /* @var $this yii\web\View */
@@ -212,12 +213,12 @@ label {
             ]); ?>
 
               <div class="form-group">
-                <?php if($customer->entityName == 'person' && $customer->status == 0){ ?>
+                <?php if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){ ?>
 
                   <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
                   <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
-                  <?//= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
+                  <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
 
                 <?php }else{ ?>
                   <?= $form->field($userForm, 'first_name')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
@@ -227,6 +228,7 @@ label {
                   <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
                   <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
+                  <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
                 <?php } ?>
 
             </div>

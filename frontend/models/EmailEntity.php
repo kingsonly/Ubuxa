@@ -41,4 +41,16 @@ class EmailEntity extends \yii\db\ActiveRecord
             'entity_id' => Yii::t('EmailEntity', 'Entity ID'),
         ];
     }
+
+    public function getEntities()
+    {
+        return $this->hasMany(Entity::className(), ['id' => 'entity_id']);
+    }
+
+    public function getEntity()
+    {
+        return $this->hasOne(Entity::className(), ['id' => 'entity_id']);
+    }
+
+
 }

@@ -79,7 +79,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                     toastr.success('Task created');
                     $.pjax.reload({container:"#task-list-refresh"});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-modal-refresh",async: false});
+                    //$.pjax.reload({container:"#task-modal-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

@@ -119,4 +119,9 @@ class Person extends \yii\db\ActiveRecord
 	{
 		return $this->telephone->telephone_number;
 	}
+
+	public function getUser()
+	{
+		return $this->hasOne(UserDb::className(), ['person_id' => 'id']);
+	}
 }

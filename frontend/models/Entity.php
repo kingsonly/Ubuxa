@@ -56,4 +56,9 @@ class Entity extends \yii\db\ActiveRecord
 	
 	const ENTITY_PERSON = 'person';
 	const ENTITY_CORPORATION = 'corporation';
+
+    public function getPerson()
+    {
+        return $this->hasOne(Person::className(), ['entity_id' => 'id']);
+    }
 }

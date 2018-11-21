@@ -240,9 +240,7 @@ $img = $model->folder_image;
     <li class="has-children">
 	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
 	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?>
-	            <?php if(!empty($subfolders->printTree($checks))){ ?>
 	            	<i class="fa fa-chevron-down iconz-down"></i>
-	        	<?php }?>
 	        </label>
 	            
 	            		<? $subfolders->printTree($checks); ?>

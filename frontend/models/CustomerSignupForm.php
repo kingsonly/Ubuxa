@@ -84,7 +84,7 @@ class CustomerSignupForm extends Model
             $customer->plan_id = $this->plan_id;
             $customer->billing_date = $this->billing_date;
             $customer->entity_id = $this->entity_id;
-            $customer->status = 0;
+            $customer->has_admin = 0;
             $customer->cid = $this->plan_id.rand(10, 10000); //dummy cid
             
 

@@ -42,8 +42,11 @@ use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Onboarding;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+use frontend\models\Plan;
+use frontend\models\Role;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -100,11 +103,14 @@ class SiteController extends BoffinsBaseController {
 		$reminder = new Reminder();
 		$label = new label();
         $taskLabel = new TaskLabel();
+        $userId = Yii::$app->user->identity->id;
 		$taskAssignedUser = new TaskAssignedUser();
+		$onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
         $allUsers = new UserDb;
-        $userId = Yii::$app->user->identity->id;
+        
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -120,6 +126,8 @@ class SiteController extends BoffinsBaseController {
             'folder' => $folder,
             'allUsers' => $allUsers,
             'userId' => $userId,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
 			]);
         } else {
 				
@@ -136,6 +144,8 @@ class SiteController extends BoffinsBaseController {
 	            'folder' => $folder,
 	            'allUsers' => $allUsers,
 	            'userId' => $userId,
+	            'onboardingExists' => $onboardingExists,
+            	'onboarding' => $onboarding,
 				]);
    		 }
        
@@ -217,40 +227,40 @@ class SiteController extends BoffinsBaseController {
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
-       $customer = Customer::find()->where([
-       	'cid' => $cid,
-       	'master_email' =>$email,
-		])->one();
-       //$test = $customer->entity->firstname;
-       //var_dump($test);
-		if(!empty($customer)){
-	        if ($user->load(Yii::$app->request->post())) {
-	        	$user->address = $email;
-	        	$user->cid = $cid;
-	        	$user->basic_role = $role;
-	        	if($customer->entityName == 'person' && $customer->status == 0){
-	        		$user->first_name = $customer->entity->firstname;
-	        		$user->surname = $customer->entity->surname;
-	        	}
-				if($user->save()){
-					if($customer->status == 0){
-						$customer->status = 1;
-						$customer->save();	
-					}
-					$newUser = UserDb::findOne([$user->id]);
-		            if (Yii::$app->user->login($newUser)){
-		                return $this->redirect(['index']);
-		            }
-				} 
+       $customer = Customer::find()->where(['cid' => $cid])->one();
+       $userExists = Email::find()->where(['address' => $email])->exists();
+       if(!$userExists){
+			if(!empty($customer)){
+		        if ($user->load(Yii::$app->request->post())) {
+		        	$user->address = $email;
+		        	$user->cid = $cid;
+		        	$user->basic_role = $role;
+		        	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+		        		$user->first_name = $customer->entity->firstname;
+		        		$user->surname = $customer->entity->surname;
+		        	}
+					if($user->save()){
+						if($customer->has_admin == Customer::NO_ADMIN){
+							$customer->has_admin = Customer::HAS_ADMIN;
+							$customer->save();	
+						}
+						$newUser = UserDb::findOne([$user->id]);
+			            if (Yii::$app->user->login($newUser)){
+			                return $this->redirect(['index']);
+			            }
+					} 
+				} else {
+		            return $this->render('createUser', [
+		            	'customer' => $customer,
+						'userForm' => $user,
+						'action' => ['createUser'],
+					]);
+				}
 			} else {
-	            return $this->render('createUser', [
-	            	'customer' => $customer,
-					'userForm' => $user,
-					'action' => ['createUser'],
-				]);
+				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 			}
-		} else {
-			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		}else {
+			return $this->goHome();
 		}
     }
 
@@ -269,19 +279,20 @@ class SiteController extends BoffinsBaseController {
         	$customerModel = new Customer();
         	
         	if($tenantEntity->save()){
-        		if($tenantEntity->entity_type == 'person'){
+        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
         			if($tenantPerson->load(Yii::$app->request->post())){
         				$tenantPerson->entity_id = $tenantEntity->id;
         				$tenantPerson->create_date = new Expression('NOW()');
         				$tenantPerson->save(false);
         			}
-        		}elseif ($tenantEntity->entity_type == 'corporation') {
+        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
         			if($tenantCorporation->load(Yii::$app->request->post())){
         				$tenantCorporation->entity_id = $tenantEntity->id;
         				$tenantCorporation->create_date = new Expression('NOW()');
         				$tenantCorporation->save(false);
         			}
         		}
+        		$customer->plan_id = Plan::BETA;
         		$customer->entity_id = $tenantEntity->id;
 	        	if($customer->signup($customerModel)){
 	        		$sendEmail = \Yii::$app->mailer->compose()
@@ -290,7 +301,7 @@ class SiteController extends BoffinsBaseController {
 	                ->setSubject('Signup Confirmation')
 	                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
 	                Yii::$app->urlManager->createAbsoluteUrl(
-	                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+	                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => Role::ADMIN]
 	                ))
 	                )->send();
 	        		if($sendEmail){
@@ -342,7 +353,7 @@ class SiteController extends BoffinsBaseController {
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->goHome();
+                //return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
             }
@@ -401,6 +412,27 @@ class SiteController extends BoffinsBaseController {
 	{	
 		$this->layout = 'loginlayout';
         $model = new SignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (User)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (User)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	public function actionAjaxValidateRequestPasswordForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new PasswordResetRequestForm();
 		$formErrors = false;
 		Yii::trace('Begin Ajax Validation (User)');
 		if ( Yii::$app->request->isAjax ) {
