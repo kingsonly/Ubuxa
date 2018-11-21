@@ -4,7 +4,9 @@ namespace frontend\models;
 
 use Yii;
 use UserAgentParser\Provider;
-use yii\db\ActiveRecord;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+
 /**
  * This is the model class for table "{{%device}}".
  *
@@ -16,7 +18,7 @@ use yii\db\ActiveRecord;
  *
  * @property StatusType $status
  */
-class Device extends ActiveRecord
+class Device extends BoffinsArRootModel implements TenantSpecific
 {
 	/* 
 	 * A serialised string indicating browser and operating system (os)

@@ -3,7 +3,8 @@
 namespace frontend\models;
 
 use Yii;
-use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
 
 /**
  * This is the model class for table "{{%supplier}}".
@@ -17,7 +18,7 @@ use boffins_vendor\behaviors\DeleteUpdateBehavior;
  * @property Corporation[] $Corporation
 
  */
-class Supplier extends \yii\db\ActiveRecord
+class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc
@@ -42,13 +43,7 @@ class Supplier extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-	
-	public function behaviors(){
-		 return [
-		"deleteUpdateBehavior2" => DeleteUpdateBehavior::className(),
-			 ];
-	}
-	
+		
     public function attributeLabels()
     {
         return [

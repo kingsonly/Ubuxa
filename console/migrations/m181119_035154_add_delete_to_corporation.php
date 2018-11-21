@@ -1,24 +1,11 @@
 <?php
-/**
- * This view is used by console/controllers/MigrateController.php.
- *
- * The following variables are available in this view:
- */
-/* @var $className string the new migration class name without namespace */
-/* @var $namespace string the new migration class namespace */
-
-echo "<?php\n";
-if (!empty($namespace)) {
-    echo "\nnamespace {$namespace};\n";
-}
-?>
 
 use yii\db\Migration;
 
 /**
- * Class <?= $className . "\n" ?>
+ * Class m181119_035154_add_delete_to_corporation
  */
-class <?= $className ?> extends Migration
+class m181119_035154_add_delete_to_corporation extends Migration
 {
 	
 	/***
@@ -34,7 +21,7 @@ class <?= $className ?> extends Migration
 	public function init()
     {
 		//if changing the database connection, the next line needs to be uncommented. Works with SpecialMigration controller only.
-        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; 
+        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; . 
         parent::init();
     }
 
@@ -43,7 +30,7 @@ class <?= $className ?> extends Migration
      */
     public function safeUp()
     {
-
+		$this->addColumn('{{%corporation}}', 'deleted', $this->boolean()->after('notes') );
     }
 
     /**
@@ -51,9 +38,9 @@ class <?= $className ?> extends Migration
      */
     public function safeDown()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "m181119_035154_add_delete_to_corporation cannot be reverted. This is a temporary stopgap\n";
 
-        return false;
+        //return false;
     }
 
     /*
@@ -65,7 +52,7 @@ class <?= $className ?> extends Migration
 
     public function down()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "m181119_035154_add_delete_to_corporation cannot be reverted.\n";
 
         return false;
     }

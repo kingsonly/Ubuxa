@@ -45,8 +45,6 @@ class Folder extends FolderARModel
 	public  function init()
     {
 		parent::init();
-		
-        
     }
 
     /**

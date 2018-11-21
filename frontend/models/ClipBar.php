@@ -15,7 +15,7 @@ use Yii;
  * @property Clip[] $clips
  * @property ClipBarOwnerType $ownerType
  */
-class ClipBar extends \yii\db\ActiveRecord
+class ClipBar extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * {@inheritdoc}

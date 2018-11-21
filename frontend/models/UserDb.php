@@ -12,7 +12,7 @@ use boffins_vendor\behaviors\DateBehavior;
 use yii\web\User;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
-
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
 
 
 /**
@@ -31,7 +31,7 @@ use boffins_vendor\classes\UserComponent;
   
  * @property Device $device
  */
-class UserDb extends ActiveRecord implements IdentityInterface
+class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface
 {
 	
 	/* 

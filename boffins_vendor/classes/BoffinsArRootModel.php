@@ -14,11 +14,12 @@ use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use boffins_vendor\behaviors\ComponentsBehavior;
 use boffins_vendor\behaviors\ClipOnBehavior;
+use boffins_vendor\behaviors\TenantSpecificBehavior;
 use yii\db\ActiveQuery;
 use boffins_vendor\classes\StandardQuery;
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, ClipperInterface, ClipableInterface};
 use frontend\models\FolderComponent;
 use frontend\models\Clip;
-
 
 
 
@@ -38,23 +39,42 @@ class BoffinsArRootModel extends ActiveRecord
 	 */
 	public $dateAttributes = array( 'last_updated' );
 	
-	
-
-	
 	public function init() 
 	{
-		 $this->on(DeleteUpdateBehavior::EVENT_BEFORE_SOFT_DELETE, [$this, 'beforeSoftDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_AFTER_SOFT_DELETE, [$this, 'afterSoftDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_BEFORE_UNDO_DELETE, [$this, 'beforeUndoDelete']);
-		 $this->on(DeleteUpdateBehavior::EVENT_AFTER_UNDO_DELETE, [$this, 'afterUndoDelete']);
+		if ( in_array( "boffins_vendor\classes\models\TrackDeleteUpdateInterface", class_implements(static::className()) ) ) {
+			Yii::trace("Attaching this");
+			$this->attachBehavior("DeleteUpdateBehavior", [
+					'class' => DeleteUpdateBehavior::className(),
+				]);
+
+			$this->on(DeleteUpdateBehavior::EVENT_BEFORE_SOFT_DELETE, [$this, 'beforeSoftDelete']);
+			$this->on(DeleteUpdateBehavior::EVENT_AFTER_SOFT_DELETE, [$this, 'afterSoftDelete']);
+			$this->on(DeleteUpdateBehavior::EVENT_BEFORE_UNDO_DELETE, [$this, 'beforeUndoDelete']);
+			$this->on(DeleteUpdateBehavior::EVENT_AFTER_UNDO_DELETE, [$this, 'afterUndoDelete']);
+		}			
+		
 		 
-		 
-	}
+		//attach the TenantSpecificBehavior if this model implements it.  
+		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", class_implements(static::class) ) ) { 
+			$this->attachBehavior("TenantSpecificBehavior", [
+					'class' => TenantSpecificBehavior::className(),
+					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
+				]);
+		}
+		
+		if ( $this->usesClipOnBehavior() ) {
+			Yii::warning("But I have attached this " . static::class );
+			$this->attachBehavior("ClipOnBehavior", [
+					'class' => ClipOnBehavior::className(),
+					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
+				]);
+		}
+ 	}
 	
 	/* 
 	 * Final function returns a merged array of the base behaviors and the custom behaviors created by user
 	 * Function cannot be overridden by child classes. Use 'myBehaviors' to assign new behaviors
-	 */
+	 *
 	final public function behaviors() 
 	{
 		return $this->_mergeBehaviours( $this->_baseBehaviors(), $this->myBehaviors() );		
@@ -222,6 +242,7 @@ class BoffinsArRootModel extends ActiveRecord
 	
 	public static function find() 
 	{
+		Yii::trace("Skipped it");
 		return new StandardQuery(get_called_class());
 	}
 	
@@ -254,4 +275,14 @@ class BoffinsArRootModel extends ActiveRecord
 		
     }
 	
+	protected function usesClipOnBehavior($className = '')  //just in case child classes want a variable. 
+	{
+		$result = false;
+		
+		$result = in_array( "boffins_vendor\classes\models\ClipperInterface", class_implements(static::class) ) ? true : $result; 
+		
+		$result = in_array( "boffins_vendor\classes\models\ ClipableInterface", class_implements(static::class) ) ? true : $result; 
+		
+		return $result;
+	}
 }

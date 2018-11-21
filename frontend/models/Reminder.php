@@ -3,6 +3,9 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
+
 
 /**
  * This is the model class for table "{{%reminder}}".
@@ -16,7 +19,7 @@ use Yii;
  *
  * @property TaskReminder[] $taskReminders
  */
-class Reminder extends \yii\db\ActiveRecord
+class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * {@inheritdoc}

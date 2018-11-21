@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
 
 /**
  * This is the model class for table "tm_user_setting".
@@ -13,14 +15,14 @@ use Yii;
  * @property string $language should use ISO languages
  * @property string $date_format also use ISO format?
  */
-class UserSetting extends \yii\db\ActiveRecord
+class UserSetting extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'tm_user_setting';
+        return '{{%user_setting}}';
     }
 
     /**

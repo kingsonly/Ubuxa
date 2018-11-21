@@ -12,7 +12,7 @@ use Yii;
  *
  * @property TmEmailEntity[] $tmEmailEntities
  */
-class Email extends \yii\db\ActiveRecord
+class Email extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc
