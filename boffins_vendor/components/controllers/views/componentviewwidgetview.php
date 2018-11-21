@@ -16,10 +16,8 @@ use frontend\models\ComponentAttributeModel
 }
 	 */
 </style>
-<div class="sponsor" title="Click to flip">
-	<div class="sponsorFlip" style="background:red !important">
 		<div class="">
-			<div class="box" id="invoicecontent">
+			<div class="" id="invoicecontent">
 				<div class="box-body">
 
 				<? $model = new ComponentAttributeModel();
@@ -52,8 +50,6 @@ use frontend\models\ComponentAttributeModel
 				</div>
 			</div>
 		</div> 
-	</div>
+	
 
-
-</div>
 

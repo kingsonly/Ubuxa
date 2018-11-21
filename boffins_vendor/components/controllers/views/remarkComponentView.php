@@ -616,6 +616,7 @@ function mycontent(mypage){
 }
 
 $('.remark-reply').click(function(){
+  $('#remarkSave').hide('slow');
   if($(this).hasClass('reply-clicked')){
     var getRemarkId = $(this).data('id');
     $('.wrapp').slideUp(1000);
@@ -629,7 +630,7 @@ $('.remark-reply').click(function(){
     $('#exampleInputRemark').hide();
     $('.wrapp').slideDown(1000);
     $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
-        $('#remarkReplyForm').show();
+        $('#remarkReplyForm').show('fast');
     });
  
     $('#parent-id').val(getRemarkId);
@@ -702,7 +703,7 @@ $('#size').on('change', function() {
    var size = $(this).val();
    $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
-
+$('[data-toggle="tooltip-reply"]').tooltip();
 JS;
  
 $this->registerJs($remarkJs);

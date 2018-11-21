@@ -3,7 +3,7 @@
 namespace frontend\models;
 
 use Yii;
-
+use boffins_vendor\classes\BoffinsArRootModel;
 /**
  * This is the model class for table "tm_clip_bar".
  *

@@ -236,9 +236,11 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "tapToDismiss": false
 		  			}
 				toastr.success('Folder was created successfully', "", options);
+
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
+
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
 			   $.pjax.reload({container:"#"+"$pjaxId",async: false});	
@@ -303,8 +305,11 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
+				if('$newFolderCreated' === '0' ){
+					location.reload();
+				}
 			   }
-                },
+            },
               
             });
 			

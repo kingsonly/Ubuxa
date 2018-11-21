@@ -82,7 +82,7 @@ class ComponentController extends Controller
 				
 			if ($collectors->saveModel($model->attributeId)) {
 				
-				return ['output'=>$model->value, 'message'=>''];
+				return ['output'=>$model->value, 'message'=>'','test' => $id];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {

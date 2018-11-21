@@ -39,7 +39,7 @@ class ViewWithXeditableWidget extends Widget{
 			'displayImage' => $this->imageDisplayUrl,
 			'xEditableDateId' => $this->xEditableDateId,
 			'editableArea' => $this->editableArea,
-			'editableId' => $this->editableId,
+			'editableId' => !empty($this->editableId)?$this->editableId:'',
 		]);
 	}
 	

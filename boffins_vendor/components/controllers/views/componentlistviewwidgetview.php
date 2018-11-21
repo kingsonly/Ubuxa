@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Folder */
 ?>
 <style>
-	/*
+	
 	#listtable_wrapper .row:first-child{
 		display: none;
 	}
@@ -58,7 +58,7 @@ use yii\widgets\Pjax;
                 padding:20px 5px;
             }
         }
-	*/
+	
 </style>
 <section>
 

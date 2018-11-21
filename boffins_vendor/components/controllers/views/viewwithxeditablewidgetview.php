@@ -84,6 +84,7 @@ text-overflow: ellipsis;
 
 <?
 foreach($attributues as $v){
+	
 	if($editableArea == 'component'){
 			if(!isset($v['xeditable'])){
 		?>
@@ -101,6 +102,7 @@ foreach($attributues as $v){
 			'size'=>'sm',
 			'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -131,6 +133,7 @@ Editable::end();
 			'size'=>'sm',
 			'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -160,6 +163,12 @@ Editable::end();
 			'size'=>'sm',
 			//'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
+		    'pluginEvents' => [
+  
+        "editableSuccess"=>"function(event, val, form, data) { console.log('Successful submission of value ' + val); alert(data.test); $(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.test).addClass('active-component-tr') }",
+        
+    	],
+		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date','id'=>'fakeme']
 				],
@@ -189,6 +198,7 @@ Editable::end();
 			'size'=>'md',
 			'inputType' => Editable::INPUT_TEXTAREA,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -219,6 +229,7 @@ Editable::end();
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'md',
 			'inputType' => Editable::INPUT_MONEY,
+		'containerOptions' => ['id' =>$editableId],
 			//'options'=>['placeholder'=>'Enter title...'],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -251,7 +262,7 @@ Editable::end();
 			'inputType' => Editable::INPUT_DROPDOWN_LIST,
 			'data'=>$data,
 			//'options'=>['placeholder'=>'Enter title...'],
-		'contentOptions' => ['id'=>'testmenow'],
+		'containerOptions' => ['id' =>$editableId],
 		'formOptions' => ['id' => 'wishitemaction' ],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -276,6 +287,7 @@ Editable::end();
 				'asPopover' => true,
 				'size'=>'md',
 				'valueIfNull' => $v['modelAttribute'],
+				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -297,6 +309,7 @@ Editable::end();
 				'asPopover' => true,
 				'size'=>'md',
 				'valueIfNull' => $v['modelAttribute'],
+				'containerOptions' => ['id' =>$editableId],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -319,7 +332,7 @@ Editable::end();
 				'asPopover' => true,
 				'size'=>'md',
 				'valueIfNull' => $v['modelAttribute'],
-				
+				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -341,6 +354,7 @@ Editable::end();
 				'asPopover' => true,
 				'size'=>'md',
 				'valueIfNull' => $v['modelAttribute'],
+				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -377,6 +391,7 @@ Editable::end();
 		?>
 	</div>
 	<?
+	
 	}else{
 		if($v['xeditable'] == 'date'){
 			?>

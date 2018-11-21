@@ -10,7 +10,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\ModelCollection;
 use boffins_vendor\classes\StandardQuery;
-use frontend\models\Folder;
 
 /**
  * ComponentAttributeController implements the CRUD actions for ComponentAttribute model.
@@ -54,18 +53,13 @@ class ComponentAttributeController extends Controller
      */
     public function actionTest()
     {
-		$folderModel = new Folder();
-		$getFolder = $folderModel->find()->where(['id'=>30])->one();
-		$getFolder->externalTemplateId = 5;
-		//return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
-		
-		$data2 = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
+		$data2 = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
 		$data3 = $data2->models;
 		$data4 = count($data3);
 		
 		Yii::trace("Attempting to load and save a model");
-		$data2->loadModel(1, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
-		$data2->saveModel(1); //just supply the key.
+		$data2->loadModel(20, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(20); //just supply the key.
 		$data4 = $data2->models;
 		
 		$revised = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
