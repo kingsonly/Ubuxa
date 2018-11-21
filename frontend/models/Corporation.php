@@ -56,6 +56,8 @@ class Corporation extends \yii\db\ActiveRecord
             'notes' => 'Notes',
         ];
     }
+	
+	
 
     /**
      * @return \yii\db\ActiveQuery

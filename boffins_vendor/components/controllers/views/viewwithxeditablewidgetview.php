@@ -3,7 +3,14 @@ use kartik\editable\Editable;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use kartik\popover\PopoverX;
+use frontend\models\Corporation;
+$customers = Corporation::find()
+    ->joinWith('client')
+    
+    ->all();
+$data=ArrayHelper::map($customers,'id','name');
 ?>
 <style>
 
@@ -92,7 +99,11 @@ foreach($attributues as $v){
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
-			'options'=>['placeholder'=>'Enter title...'],
+			'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
 ]);
 $form = $editable->getForm();
@@ -103,11 +114,250 @@ Editable::end();
 		?>
 	</div>
 	<?
-	}else{
+	}else{?>
+<? if($v['xeditable'] == 'integer'){?>
+
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
 				
-			}
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'sm',
+			'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'short_string'){?>
+
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'sm',
+			//'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date','id'=>'fakeme']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+<?}elseif($v['xeditable'] == 'long_string'){?>
+
+
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_TEXTAREA,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+
+<? }elseif($v['xeditable'] == 'money'){ ?>
+
+
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'known_class'){ ?>
+
+
+<div>
+<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_DROPDOWN_LIST,
+			'data'=>$data,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'contentOptions' => ['id'=>'testmenow'],
+		'formOptions' => ['id' => 'wishitemaction' ],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'variant_object'){ ?>
+
+<div>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }elseif($v['xeditable'] == 'timestamp'){ ?>
+
+<div>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
+				'inputType' => Editable::INPUT_DATE,
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }elseif($v['xeditable'] == 'variant_string'){ ?>
+
+<div>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
+				
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }else{  ?>
+
+<div>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => $v['modelAttribute'],
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+
+<? } ?>
+
+<? } ?>
 		
-	}else{
+	<?}else{
 	if(!isset($v['xeditable'])){
 		?>
 <div>

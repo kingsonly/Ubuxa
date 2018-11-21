@@ -18,6 +18,7 @@ class ViewWithXeditableWidget extends Widget{
 	public $imageDisplayUrl;
 	public $xEditableDateId;
 	public $editableArea;
+	public $editableId;
 	
 	public $attributues = [];
 
@@ -38,6 +39,7 @@ class ViewWithXeditableWidget extends Widget{
 			'displayImage' => $this->imageDisplayUrl,
 			'xEditableDateId' => $this->xEditableDateId,
 			'editableArea' => $this->editableArea,
+			'editableId' => $this->editableId,
 		]);
 	}
 	

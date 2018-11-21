@@ -87,7 +87,7 @@ class Client extends \yii\db\ActiveRecord
     }
     
     
-    public static function get_all_clientid()
+    public static function getAllClientId()
 	{
         return Client::find()->asArray()->indexBy('id')->all();
          

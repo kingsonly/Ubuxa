@@ -34,12 +34,13 @@ use frontend\models\ComponentAttributeModel
 						$i = 1;
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
 							${'model'.$i} = new ComponentAttributeModel();
-							${'model'.$i}->attributeId = $value->id;//$attributeValule['id'] ;
+							${'model'.$i}->attributeId = $attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
-							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'editableArea'=>'component','attributues'=>[
-					['modelAttribute'=>'value'],
+							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','attributues'=>[
+					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],],
 					
 					]]);
+							 
 							$i++;
 						}
 					}

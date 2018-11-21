@@ -76,20 +76,18 @@ class ComponentController extends Controller
 
 			// read your posted model attributes
 				$collectors = new ModelCollection( [], [ 'query' => $component->getComponentAttributes() ] ); 
-				//$model = new ComponentAttributeModel();
-				//$model->load(Yii::$app->request->post());
-				$collectors->loadModel(9, ['value' => 'new test']);
-				//$collectors->loadModel($model->attributeId,['title'=>$model->value]);
-				$collectors->saveModel(9);
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+				$collectors->loadModel($model->attributeId,['value'=>$model->value]);
 				
-			/*if ($collectors->saveModel($model->attributeId)) {
+			if ($collectors->saveModel($model->attributeId)) {
 				
-				return ['output'=>$model->attributeId, 'message'=>$model->value];
+				return ['output'=>$model->value, 'message'=>''];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {
 				return ['output'=>$model->attributeId, 'message'=>'4321'];
-			}*/
+			}
     }
         return $this->renderAjax('view',[
 			'component'=>$component,
