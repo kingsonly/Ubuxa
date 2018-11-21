@@ -22,6 +22,7 @@ use frontend\models\Clip;
 //use app\models\ComponentManager;
 use boffins_vendor\classes\StandardFolderQuery;
 use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 
 
 /**
@@ -29,7 +30,7 @@ use boffins_vendor\classes\BoffinsArRootModel;
  *
  */
 
-class FolderARModel extends BoffinsArRootModel
+class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface
 {
 	
 	
@@ -44,15 +45,7 @@ class FolderARModel extends BoffinsArRootModel
 	public const DEFAULT_AJAX_SUCCESS_STATUS = 1; // when an ajax call is successful return 1
 	
 	public const DEFAULT_AJAX_ERROR_STATUS = 0; // when an ajax call is not successful return 0
-	
-	
-
-	public function init() 
-	{
-		 
-	}
-	
-	
+		
 	
 	public function containsFolderTree($tree=[], $parent) 
 	{

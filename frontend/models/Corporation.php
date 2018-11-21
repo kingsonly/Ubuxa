@@ -3,6 +3,10 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\BoffinsArRootModel;
+
+
 //use app\models\Tmclient;
 
 /**
@@ -22,7 +26,7 @@ use Yii;
  * @property TmPersonCorporation[] $tmPersonCorporations
  * @property TmProductCorporation[] $tmProductCorporations
  */
-class Corporation extends \yii\db\ActiveRecord
+class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc

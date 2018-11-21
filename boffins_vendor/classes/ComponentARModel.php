@@ -22,6 +22,7 @@ use frontend\models\Clip;
 //use app\models\ComponentManager;
 use boffins_vendor\classes\StandardComponentQuery;
 use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 
 
 
@@ -30,7 +31,7 @@ use boffins_vendor\classes\BoffinsArRootModel;
  *
  */
 
-class ComponentARModel extends BoffinsArRootModel
+class ComponentARModel extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface
 {
 	
 	public function init() 

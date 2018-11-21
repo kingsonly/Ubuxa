@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipperInterface, ClipableInterface};
 
 
 /**
@@ -15,7 +16,7 @@ use boffins_vendor\classes\BoffinsArRootModel;
  * @property string $text
  * @property int $cid
  */
-class Remark extends BoffinsArRootModel
+class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, ClipperInterface, ClipableInterface
 {
     /**
      * {@inheritdoc}

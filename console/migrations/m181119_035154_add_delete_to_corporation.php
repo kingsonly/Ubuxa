@@ -40,7 +40,7 @@ class m181119_035154_add_delete_to_corporation extends Migration
     {
         echo "m181119_035154_add_delete_to_corporation cannot be reverted. This is a temporary stopgap\n";
 
-        return false;
+        //return false;
     }
 
     /*

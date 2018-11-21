@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific};
 
 /**
  * This is the model class for table "{{%telephone}}".
@@ -10,7 +12,7 @@ use Yii;
  * @property integer $id
  * @property string $telephone_number
  */
-class Telephone extends \yii\db\ActiveRecord
+class Telephone extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc

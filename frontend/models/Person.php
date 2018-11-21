@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
 
 /**
  * This is the model class for table "{{%person}}".
@@ -15,7 +17,7 @@ use Yii;
  *
  * @property TmPersonCorporation[] $tmPersonCorporations
  */
-class Person extends \yii\db\ActiveRecord
+class Person extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc

@@ -13,9 +13,9 @@ class m181031_114558_new_remark extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn("{{%remark}}", 'deleted', $this->timestamp('CURRENT_TIMESTAMP')->after('cid') );
-        $this->addColumn("{{%remark}}", 'last_updated', $this->timestamp('CURRENT_TIMESTAMP')->after('deleted') );
-        $this->addColumn("{{%remark}}", 'person_id', $this->integer(11)->defaultValue(0)->after('text') );
+        $this->addColumn("{{%remark}}", 'deleted', $this->boolean()->after('text') );
+        $this->addColumn("{{%remark}}", 'last_updated', $this->timestamp('CURRENT_TIMESTAMP')->after('text') );
+        $this->addColumn("{{%remark}}", 'user_id', $this->integer(11)->defaultValue(0)->after('id') );
         $this->dropColumn("{{%remark}}", 'remark_type');
         $this->dropColumn("{{%remark}}", 'project_id');
         $this->dropForeignKey('RemarkFolder',"{{%remark}}",'folder_id');

@@ -14,7 +14,7 @@ use frontend\models\Corporation;
  * @property Corporation $corporation
  * @property Project[] $Projects
  */
-class Client extends \yii\db\ActiveRecord
+class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc
