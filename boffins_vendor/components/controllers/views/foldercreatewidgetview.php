@@ -227,35 +227,39 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "tapToDismiss": false
 		  			}
 				toastr.success('Folder was created successfully', "", options);
+
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");
 				}
 			   //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+				if('$newFolderCreated' === '0' ){
+					location.reload();
+				}
 			   }else{
-			   			options = {
-		  "closeButton": true,
-		  "debug": false,
-		  "newestOnTop": true,
-		  "progressBar": true,
-		  "positionClass": "toast-top-right",
-		  "preventDuplicates": true,
-		  "showDuration": "300",
-		  "hideDuration": "1000",
-		  "timeOut": "5000",
-		  "extendedTimeOut": "1000",
-		  "showEasing": "swing",
-		  "hideEasing": "linear",
-		  "showMethod": "fadeIn",
-		  "hideMethod": "fadeOut",
-		  "tapToDismiss": false
-		  }
-		  if(localStorage.getItem("skipValidation") === 'yes'){
-			localStorage.setItem("skipValidation", "no");
-			}
-		toastr.error('Somthing went wrong', "", options);
-			 //$.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   		options = {
+					  "closeButton": true,
+					  "debug": false,
+					  "newestOnTop": true,
+					  "progressBar": true,
+					  "positionClass": "toast-top-right",
+					  "preventDuplicates": true,
+					  "showDuration": "300",
+					  "hideDuration": "1000",
+					  "timeOut": "5000",
+					  "extendedTimeOut": "1000",
+					  "showEasing": "swing",
+					  "hideEasing": "linear",
+					  "showMethod": "fadeIn",
+					  "hideMethod": "fadeOut",
+					  "tapToDismiss": false
+					  }
+					  if(localStorage.getItem("skipValidation") === 'yes'){
+					  	localStorage.setItem("skipValidation", "no");
+					  }
+				toastr.error('Somthing went wrong', "", options);
+			 	//$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			   }
-                },
+            },
               
             });
 			

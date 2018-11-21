@@ -40,14 +40,14 @@ AppAsset::register($this);
   padding: 0;
 }
 .drag-container {
-  max-width: 1000px;
-  /*margin: 20px auto;*/
+  /*max-width: 1000px;*/
+  margin: 20px;
 }
 .drag-list {
   display: flex;
   align-items: flex-start;
   /* overflow: scroll; */
-  width: 1000px;
+ /* width: 1000px;*/
 }
 
 .drag-column {
@@ -93,7 +93,7 @@ AppAsset::register($this);
   min-height: 50px;
 }
 .drag-item {
-  width: 280px;
+  /*width: 280px;*/
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);

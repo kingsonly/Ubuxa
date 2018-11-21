@@ -225,7 +225,7 @@ use boffins_vendor\components\controllers\MenuWidget;
 			        		<div class=" flip-box-inner">
 				        		<div class="owl-carousel owl-theme flip-box-front rows">
 				        			<?php foreach($folders as $folder){
-				        				$folder_name_logo = Url::to("@web/images/folder_images/". $folder['folder_image']);
+				        				$folder_name_logo = Url::to("@web/". $folder['folder_image']);
 				        				$folderUrl = Url::to(['folder/view', 'id' => $folder['id']]);
 				        			?>
 						        	<div class = 'item folder-items' data-toggle="tooltip-folder" data-placement="bottom" title="<?= $folder['title']; ?>">

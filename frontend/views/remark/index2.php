@@ -15,10 +15,9 @@
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
-                            <h6 class="comment-name by-author"><a href="http://creaticode.com/blog"><?= $remark['fullname']; ?></a></h6>
+                            <h6 class="comment-name by-author"><a href="#"><?= $remark['fullname']; ?></a></h6>
                             <span><?//= $remark['timeElapsedString'];?></span>
-                            <i class="fa fa-reply remark-reply" data-id="<?= $remark['id'];?>" id="<?= $remark['id'];?>"></i>
-                            <i class="fa fa-heart"></i>
+                            <a href="#" data-toggle="tooltip-reply" title="reply message"><i class="fa fa-reply remark-reply" data-id="<?= $remark['id'];?>" id="<?= $remark['id'];?>"></i></a>
                         </div>
                         <div class="comment-content">
                             <?php  echo $remark['text']; ?>
