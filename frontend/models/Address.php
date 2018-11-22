@@ -3,7 +3,8 @@
 namespace frontend\models;
 
 use Yii;
-use boffins_vendor\classes\model\{StandardTenantQuery, TenantSpecific};
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 /**
  * This is the model class for table "{{%tm_address}}".
  *
@@ -15,7 +16,7 @@ use boffins_vendor\classes\model\{StandardTenantQuery, TenantSpecific};
  *
  * @property TmAddressCorporation[] $tmAddressCorporations
  */
-class Address extends \yii\db\ActiveRecord implements TenantSpecific
+class Address extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc

@@ -208,9 +208,9 @@ class ModelCollection extends Collection
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true) 
     {
-        return $this->map( function($model) use ($fields, $expand, $recursive) {
+        return $this->map( function($model) use ($fields, $expand, $recursive) { //inline function
             /** @var $model Arrayable */
-            return $model->toArray($fields, $expand, $recursive); //inline function
+            return $model->toArray($fields, $expand, $recursive); 
         });
     }
     /**
@@ -237,7 +237,7 @@ class ModelCollection extends Collection
 		
 		//if the programmer does not set an index, the items in the model collection should be indexed using the model ID. 
 		if ($this->query->indexBy === null) {
-			$this->query->indexBy('id');
+			$this->query->indexBy('id'); //if there is no 'id', ArrayHelper will use null
 		}
 		
         return $this->query->all();

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "25fdf8abf7de992d6807972db1986c48",
+    "content-hash": "f3dbf4d9230ca4ef086fa2f4fc3353e5",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -149,8 +149,7 @@
                     "jquery-ui.js"
                 ],
                 "bower-asset-ignore": []
-            },
-            "time": "2015-03-13T14:48:12+00:00"
+            }
         },
         {
             "name": "bower-asset/punycode",
@@ -652,12 +651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032"
+                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/d0fc759da07da74bbd13f09ae37bd85cc74d8032",
-                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/b9998af1f26d9fca0df35b4d00f48034a8f8f697",
+                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697",
                 "shasum": ""
             },
             "type": "library",
@@ -697,7 +696,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-11-05T12:38:12+00:00"
+            "time": "2018-11-21 06:48:56"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -894,17 +893,21 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481"
+                "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/71bfaf2450d0b338a35d2818039e1c7637e75481",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/0690e9b119d9116098cbae4f15703c14f9c264b2",
+                "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2",
                 "shasum": ""
+            },
+            "suggest": {
+                "yiisoft/yii2-bootstrap": "for Krajee extensions to work with Bootstrap 3.x version",
+                "yiisoft/yii2-bootstrap4": "for Krajee extensions to work with Bootstrap 4.x version"
             },
             "type": "yii2-extension",
             "extra": {
@@ -938,7 +941,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T07:54:35+00:00"
+            "time": "2018-11-10T11:06:12+00:00"
         },
         {
             "name": "kartik-v/yii2-money",
@@ -1046,7 +1049,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2018-11-05T10:53:30+00:00"
+            "time": "2018-11-05 10:53:30"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -2066,7 +2069,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-11-05T12:31:44+00:00"
+            "time": "2018-11-05 12:31:44"
         },
         {
             "name": "kingsonly/yii2-wiki",
@@ -2108,7 +2111,7 @@
                 "source": "https://github.com/asinfotrack/yii2-wiki",
                 "issues": "https://github.com/asinfotrack/yii2-wiki/issues"
             },
-            "time": "2018-10-16T16:29:23+00:00"
+            "time": "2018-10-16 16:29:23"
         },
         {
             "name": "macrowish/yii2-bootstrap-tour",
@@ -2151,7 +2154,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-08-19T15:37:17+00:00"
+            "time": "2016-08-19 15:37:17"
         },
         {
             "name": "mongosoft/yii2-upload-behavior",
@@ -2669,47 +2672,6 @@
             "time": "2015-05-08T14:09:42+00:00"
         },
         {
-            "name": "npm-asset/jquery-popup-overlay",
-            "version": "1.7.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/jquery-popup-overlay/-/jquery-popup-overlay-1.7.4.tgz",
-                "reference": null,
-                "shasum": "0474750902689d40fb3f6759298622878b42c5b6"
-            },
-            "type": "npm-asset-library",
-            "extra": {
-                "npm-asset-bugs": {
-                    "url": "https://github.com/vast-engineering/jquery-popup-overlay/issues"
-                },
-                "npm-asset-main": "index.js",
-                "npm-asset-directories": [],
-                "npm-asset-repository": {
-                    "type": "git",
-                    "url": "https://github.com/vast-engineering/jquery-popup-overlay.git"
-                },
-                "npm-asset-scripts": {
-                    "test": "echo \"Error: no test specified\" && exit 1"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Vast"
-                }
-            ],
-            "description": "Lightweight modal popup overlay for jquery",
-            "homepage": "https://github.com/vast-engineering/jquery-popup-overlay",
-            "keywords": [
-                "jquery",
-                "modal",
-                "overlay",
-                "popup"
-            ]
-        },
-        {
             "name": "npm-asset/jquery.caret",
             "version": "0.3.1",
             "dist": {
@@ -2717,16 +2679,6 @@
                 "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
                 "reference": null,
                 "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
-            },
-            "require-dev": {
-                "npm-asset/grunt": "~0.4.1",
-                "npm-asset/grunt-cli": ">=1.2.0,<2.0.0",
-                "npm-asset/grunt-contrib-coffee": "~0.6.4",
-                "npm-asset/grunt-contrib-jasmine": "~0.5.1",
-                "npm-asset/grunt-contrib-uglify": "~0.2.0",
-                "npm-asset/grunt-contrib-watch": ">=0.6.1,<0.7.0",
-                "npm-asset/grunt-json-replace": "~0.1.2",
-                "npm-asset/grunt-umd": ">=2.2.1,<3.0.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2752,7 +2704,8 @@
                 "jquery",
                 "offset",
                 "position"
-            ]
+            ],
+            "time": "2016-06-25T06:50:23+00:00"
         },
         {
             "name": "npm-asset/perfect-scrollbar",
@@ -3549,16 +3502,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.11.2",
+            "version": "3.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e"
+                "reference": "9b7a5f837938c38f1131d6042b859144053ac45c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c8e1760a45c4aed201af3b7deee35131bc47fe3e",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/9b7a5f837938c38f1131d6042b859144053ac45c",
+                "reference": "9b7a5f837938c38f1131d6042b859144053ac45c",
                 "shasum": ""
             },
             "require": {
@@ -3599,7 +3552,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-10-08T20:45:21+00:00"
+            "time": "2018-11-11T14:41:22+00:00"
         },
         {
             "name": "psr/http-message",
@@ -5460,7 +5413,7 @@
                 "session",
                 "yii2"
             ],
-            "time": "2018-10-27T23:12:16+00:00"
+            "time": "2018-10-27 23:12:16"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
@@ -6398,7 +6351,8 @@
         "kartik-v/bootstrap-fileinput": 20,
         "kartik-v/yii2-popover-x": 20,
         "kingsonly/yii2-wiki": 20,
-        "yiisoft/yii2-redis": 20
+        "yiisoft/yii2-redis": 20,
+        "kartik-v/yii2-widget-depdrop": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

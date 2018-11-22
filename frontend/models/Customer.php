@@ -15,7 +15,7 @@ use Yii;
  * @property int $plan_id
  * @property string $billing_date
  * @property int $account_number a public account id should be 6 digits (1m) 
- * @property int $status
+ * @property int $has_admin
  *
  * @property Entity $entity
  */
@@ -24,6 +24,9 @@ class Customer extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    Const NO_ADMIN = 0;
+    Const HAS_ADMIN = 1;
+    
     public static function tableName()
     {
         return '{{%customer}}';
@@ -44,7 +47,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['entity_id', 'cid', 'master_email', 'master_doman', 'billing_date', 'account_number'], 'required'],
-            [['entity_id', 'plan_id', 'account_number', 'status'], 'integer'],
+            [['entity_id', 'plan_id', 'account_number', 'has_admin'], 'integer'],
             [['billing_date', 'plan_id'], 'safe'],
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
@@ -67,7 +70,7 @@ class Customer extends \yii\db\ActiveRecord
             'plan_id' => 'Plan ID',
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
-            'status' => 'Status',
+            'has_admin' => 'Has Admin',
         ];
     }
 
@@ -83,8 +86,4 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->entity->entity_type;
     }
-
-   // public function getPersonEntity(){
-       // return $this->hasOne(TenantPerson::className(), ['entity_id' => 'entity_id']);
-//    }
 }

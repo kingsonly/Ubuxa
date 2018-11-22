@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Model;
 use common\models\User;
 use frontend\models\Email;
+use frontend\models\EmailEntity;
 
 /**
  * Password reset request form
@@ -39,17 +40,17 @@ class PasswordResetRequestForm extends Model
     public function sendEmail()
     {
         /* @var $user User */
-        $user = User::find()->joinWith('email')
-    ->where(['address' => $this->address])
-    ->all();
+        $user = Email::find()
+        ->where(['address' => $this->address])
+        ->one();
 
-        if (!$user) {
+        if (!$user->user) {
             return false;
         }
         
-        if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
-            $user->generatePasswordResetToken();
-            if (!$user->save()) {
+        if (!UserDb::isPasswordResetTokenValid($user->user->password_reset_token)) {
+            $user->user->generatePasswordResetToken();
+            if (!$user->user->save()) {
                 return false;
             }
         }
@@ -58,7 +59,7 @@ class PasswordResetRequestForm extends Model
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
-                ['user' => $user]
+                ['user' => $user->user]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
             ->setTo($this->address)

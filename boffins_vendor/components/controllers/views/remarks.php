@@ -4,8 +4,8 @@ use yii\helpers\Url;
 use boffins_vendor\components\controllers\RemarkComponentViewWidget;
 use yii\widgets\Pjax;
 use frontend\models\Onboarding;
-$checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
-$checkUrlParam = $checkUrl[0];
+$checkUrlz = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParamz = $checkUrlz[0];
 ?>
 <style type="text/css">
     .bg-info {
@@ -37,14 +37,14 @@ $checkUrlParam = $checkUrl[0];
 <div class="col-md-8">
     <div class="col-md-12 bg-info">
       	<div class="header">
-          <?php if($checkUrlParam == 'folder'){?>
+          <?php if($checkUrlParamz == 'folder'){?>
             <?php if(!$onboardingExists){ ?>
                 <div class="help-tip" id="remark-tipz">
                   <p class="tip=text">Take a tour of task and find out useful tips.
                     <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
                   </p>
                 </div>
-            <?php }else if($onboardingExists && $onboarding->remark_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
+            <?php }else if($onboardingExists && $onboarding->remark_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
               <div class="help-tip" id="remark-tipz">
                   <p class="tip=text">Take a tour of task and find out useful tips.
                     <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
@@ -52,16 +52,16 @@ $checkUrlParam = $checkUrl[0];
                 </div>
             <?php } ?>
           <?php }?>
-          <?php if($checkUrlParam == 'site'){?>
+          <?php if($checkUrlParamz == 'site'){?>
             <?php if(!$onboardingExists){ ?>
                 <div class="help-tip" id="site-remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="site-remark-tour">Start Tour</button>
                   </p>
                 </div>
-            <?php }else if($onboardingExists && $onboarding->remark_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
+            <?php }else if($onboardingExists && $onboarding->remark_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
               <div class="help-tip" id="site-remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="site-remark-tour">Start Tour</button>
                   </p>
                 </div>
@@ -103,7 +103,7 @@ $(function() {
         {
           element: "#flux",
           title: "Remarks",            
-          content: "Message 1",
+          content: "View all remarks for this folder here.",
           placement: 'left',
           onShow: function(remarkTour){
                 $('#remark-tipz').hide();
@@ -115,13 +115,15 @@ $(function() {
                 $('#remarkSaveForm').show();
                 $('#remarkSave').attr('disabled', true);
                 });
-            }
+            },
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
         {
           element: ".wrapp",
           title: "Add Remarks",
-          content: "Message 3",
+          content: "You can add new remarks here.",
           placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-pencil-square icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
       ],
     backdrop: true,  
@@ -141,42 +143,29 @@ $(function() {
 
 $(function() {
 
-  var remarkTour = new Tour({
-    name: "remarkTour",
+  var siteRemarkTour = new Tour({
+    name: "siteRemarkTour",
     steps: [
         {
           element: "#flux",
           title: "Remarks",            
           content: "You can view all remarks from here, for this folder",
           placement: 'left',
-          onShow: function(remarkTour){
+          onShow: function(siteRemarkTour){
                 $('#remark-tipz').hide();
           },
-          onShown: function(remarkTour) {
-                $('#exampleInputRemark').hide();
-                $('.wrapp').slideDown(1000);
-                $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
-                $('#remarkSaveForm').show();
-                $('#remarkSave').attr('disabled', true);
-                });
-            }
-        },
-        {
-          element: ".wrapp",
-          title: "Add Remarks",
-          content: "Message 3",
-          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
       ],
     backdrop: true,  
     storage: false,
     smartPlacement: true,
-    onEnd: function (remarkTour) {
+    onEnd: function (siteRemarkTour) {
             _RemarkOnboarding();
         },
   });
-  $('#remark-tour').on('click', function(e){
-       remarkTour.start();
+  $('#site-remark-tour').on('click', function(e){
+       siteRemarkTour.start();
        e.preventDefault();
     })
  //remarkTour.init();

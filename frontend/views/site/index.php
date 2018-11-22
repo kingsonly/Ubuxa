@@ -263,10 +263,10 @@ use boffins_vendor\components\controllers\MenuWidget;
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
 	            			
-	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task, 'userId' => $userId]) ?>
+	            			<?= TaskWidget::widget(['task' => $task->dashboardTask, 'taskModel' => $task, 'userId' => $userId, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding]) ?>
 	            	
             		<?php Pjax::end(); ?>
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'userId' => $userId]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'userId' => $userId, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding]) ?>
 
             	</div>
             </section>

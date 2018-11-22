@@ -121,4 +121,9 @@ class Person extends BoffinsArRootModel implements TenantSpecific
 	{
 		return $this->telephone->telephone_number;
 	}
+
+	public function getUser()
+	{
+		return $this->hasOne(UserDb::className(), ['person_id' => 'id']);
+	}
 }

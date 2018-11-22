@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 
 /**
  * This is the model class for table "{{%email}}".
@@ -47,8 +49,17 @@ class Email extends BoffinsArRootModel implements TenantSpecific
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTmEmailEntities()
+    public function getEmailEntities()
     {
         return $this->hasMany(EmailEntity::className(), ['email_id' => 'id']);
+    }
+
+    public function getEmailEntity()
+    {
+        return $this->hasOne(EmailEntity::className(), ['email_id' => 'id']);
+    }
+
+    public function getUser(){
+        return $this->emailEntity->entity->person->user;
     }
 }
