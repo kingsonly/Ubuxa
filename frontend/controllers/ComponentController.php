@@ -82,11 +82,11 @@ class ComponentController extends Controller
 				
 			if ($collectors->saveModel($model->attributeId)) {
 				
-				return ['output'=>$model->value, 'message'=>'','test' => $id];
+				return ['output'=>$model->value, 'message'=>'','component' => $id];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {
-				return ['output'=>$model->attributeId, 'message'=>'4321'];
+				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
 			}
     }
         return $this->renderAjax('view',[

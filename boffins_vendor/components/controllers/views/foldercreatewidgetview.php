@@ -217,7 +217,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		   if(jsonResult.message == 'sent'){
                     
 			   if(jsonResult.area == 'folder'){
-			   alert('folder');
+			   
 			       options = {
 					  "closeButton": true,
 					  "debug": false,
@@ -243,7 +243,8 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
-			   $.pjax.reload({container:"#"+"$pjaxId",async: false});	
+			   $.pjax.reload({container:"#"+"$pjaxId",async: false});
+			   $(document).find('#folder-item-'.jsonResult.output).addClass('blink');
 			   }else{
 			   
 			   		templateId = jsonResult.templateId;

@@ -25,6 +25,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 
     <?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 </head>
 <body class="skin-red hold-transition layout-top-nav">
 	
@@ -64,7 +65,6 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     }
     </style>
     
-<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '../web/images/logo1.png']); ?>
 
 <div class="wrapper">
 

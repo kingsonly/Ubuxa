@@ -17,6 +17,9 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 	padding-right:15px;
 	
 }
+	hr{
+		margin: 0px !important;
+	}
 
 	
 .auth-users {
@@ -28,23 +31,30 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 	}
 	
 	.component-display{
-		height: 600px;
-		background-color: white;
-		margin-bottom: 20px;
+		
+		
 		box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 		padding-left: 15px;
 		padding-right:15px;
-		overflow: hidden;
-		border-top: solid 2px green;
+		
 	}
 	
 	.component-display-wrapper{
-		padding-top:5px;
+		/*background:linear-gradient(#ffffff,#ffffff,#fcfcfc,#F0F0F0,#fafafa);*/
+		background:linear-gradient(#ffffff, #fcfcfc,#fafafa);
 		display: none;
+		min-height: 300px;
+		max-height: 600px;
+		width: 100%;
+		overflow: scroll;
+		margin-bottom: 20px;
 	}
 	
 	.margin-bottom{
 		margin-bottom: 20px;
+	}
+	.comps .owl-nav{
+		margin: 0px !important;
 	}
 
 </style>
@@ -65,8 +75,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 		
 			<div class="col-xs-7 col-sm-10 component-carousel ">
 		
-			<div class="">
-				<div class="">
+			
 				
 					<?= FolderCarouselWidget::widget([
 							'folderModel' => $model, 
@@ -83,13 +92,12 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 								
 							]
 						]) ?>
-				</div>
-				</div>
+				
 			
 		</div>
 	</div></div>
 </div>
 
 <div class="component-display-wrapper">
-	<div class="col-sm-12 col-xs-12 component-display">test</div>
+	<div class="col-sm-12 col-xs-12 component-display"></div>
 </div>

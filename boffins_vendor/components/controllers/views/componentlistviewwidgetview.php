@@ -22,7 +22,6 @@ use yii\widgets\Pjax;
 	}
 	
 	#listtable tr{
-		background: #fff;
 		position: relative;
 		box-shadow: inset 0 -1px 0 0 rgba(100,121,143,0.122);
 		
@@ -31,9 +30,10 @@ use yii\widgets\Pjax;
 		box-shadow: inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0,0 1px 2px 0 rgba(6, 81, 18, 1),0 1px 3px 1px rgba(60,64,67,.15) !important;
 		z-index:1;
 	}
-	#listtable tr:hover{
+	#listtable .component-table-tr:hover{
 		box-shadow: inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0,0 1px 2px 0 rgba(63, 81, 181, 1),0 1px 3px 1px rgba(60,64,67,.15);
 		z-index:2;
+		cursor: pointer;
 		
 	}
 
@@ -42,22 +42,9 @@ use yii\widgets\Pjax;
             font-size:30px;
         }
         /*Table Style One*/
-        .table .table-header{
-            background:#FEC107;
-            color:#333;
-        }
-        .table .table-header .cell{
-            padding:20px;
-        }
-        @media screen and (max-width: 640px){
-            table {
-                overflow-x: auto;
-                display: block;
-            }
-            .table .table-header .cell{
-                padding:20px 5px;
-            }
-        }
+        
+        
+     
 	
 </style>
 <section>
@@ -91,7 +78,7 @@ use yii\widgets\Pjax;
 					<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
                     <td><?= empty($componentDetails['value'])?$componentDetails['name'].' is empty':$componentDetails['value'];?>
 						
-						<?= empty($componentDetails['type'])?$componentDetails['type'].' is empty':$componentDetails['type'];?>
+						
 						
 						</td>
                     

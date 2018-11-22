@@ -105,6 +105,11 @@ class SettingsComponent extends Component
 		return '<img  style="height: 40px;width: 40px;margin:3px 5px 3px 25px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
 	} 
 	
+	public function boffinsFavIcon()
+	{
+		return Url::to("@web/images/ubuxamenu.png");
+	} 
+	
 	public function boffinsDefaultLogo()
 	{
 		return 'images/6uCHTvn3GkT_UYxbI4Fl8DklnwGQw00N.png';

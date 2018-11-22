@@ -13,13 +13,29 @@ $customers = Corporation::find()
 $data=ArrayHelper::map($customers,'id','name');
 ?>
 <style>
+	#view-content h4{
+		font-size: 1em;
+		line-height: 24px;
+		letter-spacing: -0.003em;
+		text-transform: capitalize;
+		margin: 0px !important;
 
+	}
 	.kv-editable-input{
 		width: 100% !important;
 	}
 	.xinput:hover{
 		background:#ccc;
 		padding: 0px !important;
+	}
+	
+	.xinput-component:hover{
+		background:rgb(235, 236, 240);
+		padding: 2px !important;
+		font-style: italic;
+		border-radius: 5px;
+		text-align: center !important;
+		border-radius: 5px;
 	}
 	.xinput{
 		
@@ -41,6 +57,17 @@ $data=ArrayHelper::map($customers,'id','name');
 		overflow: hidden;
 		display: inline-block;
 		white-space: nowrap;
+	}
+	
+	.xinput-component{
+		background: none;
+		border:none;
+		text-align: left !important;
+		width: 100%;
+		color:rgb(9, 30, 66);
+		min-height: 35px;
+		font-size: 16px;
+		
 	}
 	.ellipsis{
 text-overflow: ellipsis;
@@ -89,7 +116,7 @@ foreach($attributues as $v){
 			if(!isset($v['xeditable'])){
 		?>
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= $attributeName;?></h5>
 <?
 				
 				
@@ -98,8 +125,32 @@ foreach($attributues as $v){
     'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'sm',
+			'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 			'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
@@ -120,7 +171,7 @@ Editable::end();
 <? if($v['xeditable'] == 'integer'){?>
 
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= $attributeName;?></h5>
 <?
 				
 				
@@ -129,10 +180,34 @@ Editable::end();
     'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
-			'size'=>'sm',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
 			'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -150,29 +225,48 @@ Editable::end();
 <? }elseif($v['xeditable'] == 'short_string'){?>
 
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h4><?= $attributeName;?></h4>
 <?
 				
 				
 				
 	$editable = Editable::begin([
-    'model'=>$model,
+    		'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
-			'size'=>'sm',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
 			//'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
 		    'pluginEvents' => [
-  
-        "editableSuccess"=>"function(event, val, form, data) { console.log('Successful submission of value ' + val); alert(data.test); $(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.test).addClass('active-component-tr') }",
-        
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
 					'options'=>['placeholder'=>'From date','id'=>'fakeme']
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -185,7 +279,7 @@ Editable::end();
 
 
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= $attributeName;?></h5>
 <?
 				
 				
@@ -194,11 +288,35 @@ Editable::end();
     'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
 			'inputType' => Editable::INPUT_TEXTAREA,
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -217,7 +335,7 @@ Editable::end();
 
 
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= $attributeName;?></h5>
 <?
 				
 				
@@ -226,10 +344,34 @@ Editable::end();
     'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
 			'inputType' => Editable::INPUT_MONEY,
 		'containerOptions' => ['id' =>$editableId],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 			//'options'=>['placeholder'=>'Enter title...'],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -248,7 +390,7 @@ Editable::end();
 
 
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= $attributeName;?></h5>
 <?
 				
 				
@@ -257,11 +399,35 @@ Editable::end();
     'model'=>$model,
 			'attribute'=>$v['modelAttribute'],
 			'asPopover' => false,
-			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
 			'inputType' => Editable::INPUT_DROPDOWN_LIST,
 			'data'=>$data,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 		'containerOptions' => ['id' =>$editableId],
 		'formOptions' => ['id' => 'wishitemaction' ],
 		'options'=>[
@@ -280,17 +446,42 @@ Editable::end();
 <? }elseif($v['xeditable'] == 'variant_object'){ ?>
 
 <div>
+	<h5><?= $attributeName;?></h5>
 <?
 			$editable = Editable::begin([
 				'model'=>$model,
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
-				'valueIfNull' => $v['modelAttribute'],
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
 				$form = $editable->getForm();
@@ -302,18 +493,43 @@ Editable::end();
 <? }elseif($v['xeditable'] == 'timestamp'){ ?>
 
 <div>
+	<h5><?= $attributeName;?></h5>
 <?
 			$editable = Editable::begin([
 				'model'=>$model,
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
-				'valueIfNull' => $v['modelAttribute'],
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
 				$form = $editable->getForm();
@@ -325,14 +541,39 @@ Editable::end();
 <? }elseif($v['xeditable'] == 'variant_string'){ ?>
 
 <div>
+	<h5><?= $attributeName;?></h5>
 <?
 			$editable = Editable::begin([
 				'model'=>$model,
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
-				'valueIfNull' => $v['modelAttribute'],
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -347,14 +588,39 @@ Editable::end();
 <? }else{  ?>
 
 <div>
+	<h5><?= $attributeName;?></h5>
 <?
 			$editable = Editable::begin([
 				'model'=>$model,
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
-				'valueIfNull' => $v['modelAttribute'],
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -509,6 +775,13 @@ $xeditableBoffins = <<<XeditableBoffins
   
 $(".xinput").mouseover(function() {
     $(this).removeClass("ellipsis");
+	$(this).attr("title", $(this).text());
+    $(this).attr("data-toggle", "tooltip");
+    $(this).attr("data-placement", "bottom");
+    
+});
+
+$(".xinput-component").mouseover(function() {
 	$(this).attr("title", $(this).text());
     $(this).attr("data-toggle", "tooltip");
     $(this).attr("data-placement", "bottom");

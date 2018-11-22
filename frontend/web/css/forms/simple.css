@@ -62,3 +62,13 @@ label {
 
 .scrollit { height:400px; overflow-y:scroll; background:lightgray; }
 
+.blink{
+		
+		animation: blink 1s linear 5;
+	}
+	
+@keyframes blink{
+0%{background: #000;}
+50%{opacity: .5;}
+100%{opacity: 1;}
+}
