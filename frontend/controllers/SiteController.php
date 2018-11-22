@@ -378,4 +378,9 @@ class SiteController extends BoffinsBaseController {
         }
     }
 
+    public function actionNewpage()
+    {
+    	return $this->render('newpage');
+    }
+
 }

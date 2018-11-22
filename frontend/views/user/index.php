@@ -219,6 +219,27 @@ td{
           </div>
         </div>
 </div>
+<div class="supplier-index" id="supplier-index">
+  <div class="wrap-corp">
+    <span>sort by:</span>
+    <span class="sortby-text">
+      <input type="text" name="" id="supplier-search">
+    </span>
+  </div>
+  <? foreach($dataProvider as $data){ ?>
+  <div class="content-row">
+    <div class="contents">
+      <span class="corporation-img" style="background: url('<?= Url::to('@web/images/users/default-user.png'); ?>') no-repeat center center; background-size: cover;"></span>
+      <span class="corporation-text">
+        <span class="corporation-title"><?= $data->fullname; ?></span>
+        <span class="corporation-description"><?= $supplier['notes']; ?></span>
+        <span class="corporation-users">2 members</span>
+      </span>
+    </div>
+  </div>
+  <? } ?>
+</div>
+
 <?php 
 $clientIndexJs = <<<JS
 
