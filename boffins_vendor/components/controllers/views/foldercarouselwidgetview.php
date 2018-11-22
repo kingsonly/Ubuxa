@@ -35,6 +35,7 @@ hr{
 	justify-content: center;
 	justify-content: space-around;
 }
+	
 
 .folder-item{
 	line-height: 150px;
@@ -193,6 +194,8 @@ text-overflow: ellipsis;
 } 
 .component-list{
 	list-style: none;
+	cursor: pointer;
+	
 	}
 	.component-holder{
 	
@@ -207,7 +210,7 @@ text-overflow: ellipsis;
 		border-bottom: solid 3px red;
 		padding-bottom: 9px !important;
 		text-decoration: none;
-		list-style: disc !important;
+		/*list-style: disc !important;*/
 	}
 	#carousles button .fa{
 		color: green !important;

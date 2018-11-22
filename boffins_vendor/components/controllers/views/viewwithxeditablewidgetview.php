@@ -241,7 +241,7 @@ Editable::end();
 		    'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {
-			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+			 			$('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
 						options = {
 					  'closeButton': true,
 					  'debug': false,

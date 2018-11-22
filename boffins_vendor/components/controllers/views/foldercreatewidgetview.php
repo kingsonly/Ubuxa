@@ -162,6 +162,7 @@ if(isset($_GET['id'])){
 <?php 
 $url = Url::to(['folder/check-if-folder-name-exist']);
 $js = <<<JSS
+
  $(document).on('click','#ok',function(){
  localStorage.setItem("skipValidation", "yes");
  	formId = $(this).data('formid');
