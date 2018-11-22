@@ -281,7 +281,7 @@ class BoffinsArRootModel extends ActiveRecord
 		
 		$result = in_array( "boffins_vendor\classes\models\ClipperInterface", class_implements(static::class) ) ? true : $result; 
 		
-		$result = in_array( "boffins_vendor\classes\models\ ClipableInterface", class_implements(static::class) ) ? true : $result; 
+		$result = in_array( "boffins_vendor\classes\models\ClipableInterface", class_implements(static::class) ) ? true : $result; 
 		
 		return $result;
 	}

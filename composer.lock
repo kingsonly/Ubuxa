@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a4f6faa59a2a8df9bafcf4fc35a23df",
+    "content-hash": "25fdf8abf7de992d6807972db1986c48",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2672,6 +2672,47 @@
             "time": "2015-05-08T14:09:42+00:00"
         },
         {
+            "name": "npm-asset/jquery-popup-overlay",
+            "version": "1.7.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery-popup-overlay/-/jquery-popup-overlay-1.7.4.tgz",
+                "reference": null,
+                "shasum": "0474750902689d40fb3f6759298622878b42c5b6"
+            },
+            "type": "npm-asset-library",
+            "extra": {
+                "npm-asset-bugs": {
+                    "url": "https://github.com/vast-engineering/jquery-popup-overlay/issues"
+                },
+                "npm-asset-main": "index.js",
+                "npm-asset-directories": [],
+                "npm-asset-repository": {
+                    "type": "git",
+                    "url": "https://github.com/vast-engineering/jquery-popup-overlay.git"
+                },
+                "npm-asset-scripts": {
+                    "test": "echo \"Error: no test specified\" && exit 1"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vast"
+                }
+            ],
+            "description": "Lightweight modal popup overlay for jquery",
+            "homepage": "https://github.com/vast-engineering/jquery-popup-overlay",
+            "keywords": [
+                "jquery",
+                "modal",
+                "overlay",
+                "popup"
+            ]
+        },
+        {
             "name": "npm-asset/jquery.caret",
             "version": "0.3.1",
             "dist": {
@@ -2679,6 +2720,16 @@
                 "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
                 "reference": null,
                 "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
+            },
+            "require-dev": {
+                "npm-asset/grunt": "~0.4.1",
+                "npm-asset/grunt-cli": ">=1.2.0,<2.0.0",
+                "npm-asset/grunt-contrib-coffee": "~0.6.4",
+                "npm-asset/grunt-contrib-jasmine": "~0.5.1",
+                "npm-asset/grunt-contrib-uglify": "~0.2.0",
+                "npm-asset/grunt-contrib-watch": ">=0.6.1,<0.7.0",
+                "npm-asset/grunt-json-replace": "~0.1.2",
+                "npm-asset/grunt-umd": ">=2.2.1,<3.0.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2704,8 +2755,7 @@
                 "jquery",
                 "offset",
                 "position"
-            ],
-            "time": "2016-06-25T06:50:23+00:00"
+            ]
         },
         {
             "name": "npm-asset/perfect-scrollbar",

@@ -126,7 +126,6 @@ class FolderController extends Controller
         }
     }
 		
-
         return $this->render('view', [
             'model' => $model,
 			'task' => $task,

@@ -160,20 +160,8 @@ fieldset{
   -o-transform: scale(1, 1);
   transform: scale(1, 1);
 }
-.form-wrapper .button_prev{
-	background-color: #3498db;
-    display: inline-block;
-    padding: 8px 30px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 14px !important;
-    font-family: 'Open Sans', sans-serif !important;
-    position: absolute;
-    left: 20px;
-    bottom: 20px;
-}
 
-.form-wrapper .button, .form-wrapper .supplier-submit, .form-wrapper .submit{
+.form-wrapper .button, .form-wrapper .submit{
   background-color: #3498db;
   display: inline-block;
   padding: 8px 30px;
@@ -475,11 +463,11 @@ option {
 	background:#fff !important;
 }
 </style>
-<div class="form form-suppliers">
+<div class="form">
       
       <ul class="tab-group">
-        <li class="tab active tabler tab-header"><a href="#signup">Create new</a></li>
-        <li class="tab tab-header tabla"><a href="#login" class="existing">Use existing</a></li>
+        <li class="tab active"><a href="#signup">Create new</a></li>
+        <li class="tab"><a href="#login" class="existing">Use existing</a></li>
       </ul>
       
       <div class="tab-content">
@@ -513,7 +501,7 @@ option {
             <?= $form->field($telephoneModel, 'telephone_number')->textInput(['maxlength' => true, 'placeholder' => "Supplier Telephone"])->label(false); ?>
         <?= $form->field($emailModel, 'address')->textInput(['maxlength' => true,'placeholder' => "Supplier email address"])->label(false);?>
         <?= $form->field($addressModel, 'address_line')->textInput(['maxlength' => true,'placeholder' => "Supplier address line"])->label(false);?>
-          <div class="button_prev">Previous</div>
+        
           <div class="button">Next</div>
         </fieldset>
         <fieldset class="section">
@@ -527,7 +515,6 @@ option {
              'url' => Url::to(['/client/subcat'])
          ]
       ]); ?>
-      	  <div class="button_prev">Previous</div>
           <?= Html::submitButton('Finish', ['class' => 'btn btn-success supplier-submit']) ?>
         </fieldset>
         <fieldset class="section">
@@ -570,6 +557,7 @@ option {
 $supplierUrlSave = Url::to(['supplier/create']);
 $supplierUrlExisting = Url::to(['supplier/create','src' => 'existing']);
 $clientFormJs = <<<JS
+
 $(document).ready(function(){
   $(".form-wrapper .button").click(function(){
     var button = $(this);
@@ -587,14 +575,6 @@ $(document).ready(function(){
       $(document).find(".form-wrapper .section").first().addClass("is-active");
       $(document).find(".steps li").first().addClass("is-active");
     }
-  });
-  $(".form-wrapper .button_prev").click(function(){
-    var button = $(this);
-    var currentSection = button.parents(".section");
-    var currentSectionIndex = currentSection.index();
-    var headerSection = $('.steps li').eq(currentSectionIndex);
-    currentSection.removeClass("is-active").prev().addClass("is-active");
-    headerSection.removeClass("is-active").prev().addClass("is-active");
   });
 });
 
@@ -614,8 +594,9 @@ $('.supplier-form').submit(function(e){
 
     e.preventDefault(); // avoid to execute the actual submit of the form.
 	})
-	$('.form-suppliers').find('input, textarea').on('keyup blur focus', function (e) {
 
+	$('.form').find('input, textarea').on('keyup blur focus', function (e) {
+  
   	  var \$this = $(this),
       label = \$this.prev('label');
 
@@ -642,7 +623,9 @@ $('.supplier-form').submit(function(e){
     }
 
 });
-$(document).on('click','.tab a',function (e) {
+
+$('.tab a').on('click', function (e) {
+  
   e.preventDefault();
 
   if($(this).hasClass('existing')){
@@ -694,6 +677,6 @@ $(function() {
 });
 JS;
  
-$this->registerJs($clientFormJs);
+$this->registerJs($clientFormJs, View::POS_END);
 ?>
 

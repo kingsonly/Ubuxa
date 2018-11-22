@@ -212,11 +212,9 @@ Main Components
       <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders<i class="fa fa-chevron-down iconz-down"></i></label>
 
           <ul class="first-list">
-            <li class="has-children">
               <?php if (isset($this->blocks['subfolders'])){ ?>
                   <?= $this->blocks['subfolders'] ?>
               <?php } ?>           
-            </li>      
           </ul>
     </li>
   </ul>
