@@ -12,7 +12,6 @@ Main Components
 .cd-accordss-menu {
     width: 100%;
     max-width: 360px;
-    background: #3F51B5;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -43,7 +42,6 @@ Main Components
 .cd-accordss-menu .accord-label, .cd-accordss-menu a {
   display: block;
   padding: 18px 18px 18px 64px;
-  background: #3F51B5;
   color: #ffffff;
   font-size: 1.6rem;
 }
@@ -179,6 +177,10 @@ Main Components
 }
 .settings-container{
   overflow: scroll;
+  visibility: hidden;
+  width:300px;
+  min-height:1px;
+  background:#fff;
 }
 .settings-text{
     font-size: 36px;
@@ -213,7 +215,8 @@ Main Components
   transition: all 0.4s ease;
 }
 .tab-wrap {
-  width: 95%;
+  width: 90%;
+  margin-left: 30px;
   position: relative;
   display: flex;
   box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
@@ -258,6 +261,7 @@ input[type="radio"][name="tabs"]:nth-of-type(4):checked ~ .slide {
 input[type="radio"][name="tabs"]:first-of-type:checked ~ .slide {
   left: 0;
 }
+
 .settings-tabz {
   cursor: pointer;
   color: #000;
@@ -349,7 +353,7 @@ input[type="radio"][name="tabs"]:first-of-type:checked ~ .slide {
     <li class="has-children">
 
       <input type="checkbox" name="group-4" class="accord-input" id="group-4">
-      <label class="accord-label" for="group-4"><i class="fa fa-cog iconz iconz"></i>Settings<i class="fa fa-chevron-down iconz-down"></i></label>
+      <label class="accord-label" for="group-4"><i class="fa fa-cog iconz iconz"></i>Settings<i class="fa fa-chevron-right iconz-down"></i></label>
 
           <ul class="first-list">
             <li class="has-children">
@@ -365,7 +369,6 @@ input[type="radio"][name="tabs"]:first-of-type:checked ~ .slide {
 
 <?php
 $settingsUrl = 'index.php?r=settings%2Fdefault';
-$createSettings = Url::to(['settings/create']);
 
 $accordss = <<<JS
 $(document).ready(function(){
@@ -375,7 +378,6 @@ $(document).ready(function(){
         $('.sett-content').html(data);
      }
     });
-
   var accordsssMenu = $('.cd-accordss-menu');
   if( accordsssMenu.length > 0 ) {
     
@@ -472,30 +474,6 @@ $(document).ready(function(){
 Tabs.init();
 
 });
-
-$('#settings-date').on('submit', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-           var form = $(this);
-            if(form.find('#settings-date').length) {
-                return false;
-            }
-            $.ajax({
-                url: '$settingsUrl',
-                type: 'POST',
-                data: form.serialize(),
-                success: function(response) {
-                    console.log('completed');
-                },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-            });
-            return true;    
-});
-$('#date-buttonz').on('click', function(){
-  alert(1234);
-  })
 
 JS;
 $this->registerJs($accordss);

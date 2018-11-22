@@ -18,12 +18,12 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         
-        'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
+        //'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
         'owlcarousel/owl.carousel.min.js',
     ];
     public $depends = [
-       // 'yii\web\YiiAsset',
-        //'yii\bootstrap\BootstrapAsset',
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
         '\frontend\assets\DragulaAsset',
         '\frontend\assets\CaretAsset',
         '\frontend\assets\AtMentionAsset',

@@ -8,7 +8,7 @@ use boffins_vendor\components\controllers\CreateReminderWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
-//use boffins_vendor\components\controllers\DeleteCardWidget;
+use boffins_vendor\components\controllers\DeleteTaskWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
@@ -20,7 +20,8 @@ use yii\helpers\ArrayHelper;
 
 AppAsset::register($this);
 
-
+$checkUrls = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParams = $checkUrls[0];
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -419,9 +420,10 @@ a.addTaskButton.active {
                       $time = $values->reminderTime;
                       $timers = explode(",",$time);
                       $check = date("Y-m-d H:i:s");
+                      $timeNow = strtotime($check);
                       $closest = $values->closestReminder($timers, $check);
                       $reminders = date('M j, g:i a', strtotime($closest));
-                        if(!empty($time) && $reminders >= $check){ ?>
+                        if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
                             <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
@@ -451,12 +453,14 @@ a.addTaskButton.active {
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       </div>
-                      <div class="dropdown testdrop">
-                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
-                        <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
-                            <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
+                      <?php if($checkUrlParams == 'folder'){?>
+                        <div class="dropdown testdrop">
+                          <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
+                          <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
+                              <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
+                          </div>
                         </div>
-                      </div>
+                      <?php }?>
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -466,7 +470,7 @@ a.addTaskButton.active {
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trash icons" aria-hidden="true" data-toggle="tooltip" title="Delete task"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         
+                         <?= DeleteTaskWidget::widget(['id' => $count,'taskid' => $values->id]) ?>
                         </div>
                       </div>
                       </div>
@@ -475,15 +479,17 @@ a.addTaskButton.active {
             <?php $count2++;}}}?>
         
             </ul>
-            <a class="add-card" href="#">
-              <span class="cardTask">
-                <span class="glyphicon glyphicon-plus"></span>
-                <span class="add-title"> Add Card </span>
-              </span>
-            </a>
-            <div class="card-add" id="add-new-cardz">
-                <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
-            </div>
+            <?php if($checkUrlParams == 'folder'){?>
+              <a class="add-card" href="#">
+                <span class="cardTask">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  <span class="add-title"> Add Task </span>
+                </span>
+              </a>
+              <div class="card-add" id="add-new-cardz">
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
+              </div>
+            <?php }?>
         </li>
         <?php $count++;} ?>
     </ul> 

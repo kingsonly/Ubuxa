@@ -97,6 +97,7 @@ class SignupForm extends Model
     private function _getNewEntity() {
         $_entityAR = new Entity;
         $_entityAR->entity_type = Entity::ENTITY_PERSON;
+        $_entityAR->cid = $this->cid;
         return $_entityAR->save(false) ? $_entityAR: trigger_error('Could not create a new Entity for unknown reason', E_USER_NOTICE);
     }
     
@@ -174,6 +175,7 @@ class SignupForm extends Model
         $transaction = Yii::$app->db->beginTransaction();
         $_entityAR = new Entity;
         $_entityAR->entity_type = Entity::ENTITY_PERSON;
+        $_entityAR->cid = $this->cid;
         $processFails = $_entityAR->save(false) ? false : true;
         
         if ($processFails) {

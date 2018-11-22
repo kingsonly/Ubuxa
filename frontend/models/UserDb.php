@@ -84,8 +84,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         return [
             [['username','password', 'cid'], 'required'],
             [['password'], 'string', 'min' => 6],
-            [['password_repeat'], 'required'],
-            [['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
+            //[['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
             [['basic_role','image'], 'safe'],
 
             //[['username', 'password'], 'string', 'max' => 255],
@@ -103,7 +102,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
             'fullname' => 'Full Name',
             'basic_role' => 'Standard Role',
             'password' => 'Password',
-            'password_repeat' => 'Password Repeat',
+            //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
         ];
@@ -221,7 +220,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
      */
     public function setPassword($pw) //not run as password is a table column so it is set directly not through get/setters. Use before validate
     {
-        $this->password = Yii::$app->security->generatePasswordHash($pw);
+        $this->password = $pw;//Yii::$app->security->generatePasswordHash($pw); // i dont think the setPassword method should encript, as to the fact that a seperate method instantly encripts the password; 
     }
 	
 	/*
@@ -237,12 +236,16 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	 */
 	public function beforeSave($insert)  
 	{
-		if ($this->isNewRecord) {
-			$this->salt = Yii::$app->security->generateRandomString();
-			$this->password = Yii::$app->security->generatePasswordHash($this->password);
-		} elseif ( !empty($this->dirtyAttributes['password']) ) {
-			$this->password = Yii::$app->security->generatePasswordHash($this->password);
-		}
+		//if($this->isNewRecord or !empty($this->dirtyAttributes['password'])){
+			if ($this->isNewRecord) {
+				$this->salt = Yii::$app->security->generateRandomString();
+				$this->password = Yii::$app->security->generatePasswordHash($this->password);
+			} elseif ( !empty($this->dirtyAttributes['password']) ) {
+				$this->password = Yii::$app->security->generatePasswordHash($this->password);
+			}
+
+		//}
+		
 		return true;
 	}
 	
@@ -532,9 +535,37 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return !empty($user);
 	}
 
-	
-	
-	
+	public static function isPasswordResetTokenValid($token)
+    {
+        if (empty($token)) {
+            return false;
+        }
 
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
+        return $timestamp + $expire >= time();
+    }
+
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+	
+	public static function findByPasswordResetToken($token)
+    {
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
+        }
+
+        return static::findOne([
+            'password_reset_token' => $token,
+            //'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+    }
 	
 }

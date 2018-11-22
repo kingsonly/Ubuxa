@@ -73,6 +73,42 @@ class TaskController extends Controller
         }
     }
 
+    public function actionIndex2()
+    {   
+        $perpage = 10;
+        $task = new Task();
+
+        if(isset($_GET['src'])){
+            if(Yii::$app->request->post('page')){
+                $numpage = Yii::$app->request->post('page');
+                $ownerid = Yii::$app->request->post('ownerId');
+                $modelName = Yii::$app->request->post('modelName');
+                $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
+                $offset = (($numpage-1) * $perpage);
+                
+                
+                //if url is site index get all the remarks
+                if($DashboardUrlParam == 'site'){
+                     $tasks = Task::find()->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
+                    
+                     return $this->renderAjax('sitetasks', [
+                         'tasks' => $tasks,
+                         'task' => $task,
+                     ]);
+                } else {
+                     
+                     $tasks = $task->specificClips($ownerid,1,$offset,$perpage,'task');
+                     
+                     return $this->renderAjax('index2', [
+                         'tasks' => $tasks,
+                         'task' => $task,
+                     ]);
+                }
+                
+            } 
+        }
+    }
+
     /**
      * Displays a single Task model.
      * @param integer $id
@@ -268,12 +304,22 @@ class TaskController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    /** public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    } */
+
+    public function actionDelete()
+    {
+        if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['task_id'];
+            $model = $this->findModel($id)->delete();
+        }
     }
+
 
     /**
      * Finds the Task model based on its primary key value.

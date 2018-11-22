@@ -94,7 +94,7 @@ class ClipOnBehavior extends Behavior
 		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;// Change this fetch from the db 
 		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
 		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->where(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
-		$findClip = $clip->find()->where(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
+		$findClip = Clip::find()->where(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
 		// delete clip 
 		if($findClip->delete()){
 			// check is deletedt clip has a bar 

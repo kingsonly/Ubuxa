@@ -11,82 +11,48 @@ use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 
 ?>
-<style type="text/css">
-table{
-  width:100%;
-  table-layout: fixed;
-}
-.tbl-header{
-  background-color: rgba(255,255,255,0.3);
- }
-.tbl-content{
-  height:300px;
-  overflow-x:auto;
-  margin-top: 0px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-th{
-  padding: 20px 15px;
-  text-align: left;
-  font-weight: 500;
-  font-size: 12px;
-  color: #666;
-  text-transform: uppercase;
-}
-td{
-  padding: 15px;
-  text-align: left;
-  vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #666;
-  border-bottom: solid 1px rgba(255,255,255,0.1);
-}
-.close-arrow{
-	cursor: pointer;
-}
 
-
-/* demo styles */
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-
-</style>
 <div class="side_menu side-drop">
 
-    	<div class="client-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
+    	<div class="client-containers" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
     		<div class="row client-content" style="display: none">
     			<div class="col-sm-12">
-    				<div class="col-md-10" style="height: 100px"></div>
+    				<div class="col-md-10" style=""></div>
     				<div class="col-md-2" style="padding-top:20px">
-    					<i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
+    					<i class="fa fa-arrow-left fa-2x close-arrow" style=""></i>
     				</div>
     			</div>
     			<div>
+    				<section style="margin: 50px">
+			 			 <div class="tbl-header client_template">
+			 			 	<img class="supplierLoader" src="<?= Url::to('@web/images/loader/spinner.gif'); ?>" style = "display: none;margin-left:230px;margin-top:150px" id="remarkLoader">
+			  			 </div>
+					</section>
+    			</div>
+    		</div>
+    	</div>
+
+    	<div class="settings-container">
+    		<div class="row settings-content" style="display: none">
+    			<div class="col-sm-12">
+    				<div class="col-md-10">
+    					<span class="settings-text">Settings</span>
+    				</div>
+    				<div class="col-md-2" style="padding-top:20px">
+    					<i class="fa fa-arrow-left fa-2x close-arrow"></i>
+    				</div>
+    			</div>
+    			<div class="sett-content">
     				
     			</div>
     		</div>
     	</div>
 
-    	<div class="settings-container" style="visibility: hidden;width:300px;min-height:1px;background:#fff;">
-        <div class="row settings-content" style="display: none">
-          <div class="col-sm-12">
-            <div class="col-md-10"><span class="settings-text">Settings</span></div>
-            <div class="col-md-2" style="padding-top:20px">
-              <i class="fa fa-arrow-left fa-2x close-arrow" style="height: 100px"></i>
-            </div>
-          </div>
-          <div class="sett-content">
-           
-          </div>
-        </div>
-      </div>
-
 	<div class="burger_box">
 		<div class="menu-icon-container">
 			<a href="#" class="menu-icon js-menu_toggle closed">
 				<span class="menu-icon_box">
-					<img src="images/ubuxalogo.png" class="ubuxalogo"/>
+					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
 				</span>
 			</a>
 		</div>
@@ -138,7 +104,7 @@ td{
     	<ul class="list_load">
     		<?= SettingsAccordionWidget::widget();?>
 
-			<li class="list_item menu-settings"><a class="menu-list" href="<?= Url::to(['site/logout'])?>"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</a></li>
+			<a class="menu-list" href="<?= Url::to(['site/logout'])?>"><li class="list_item menu-settings"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</li></a>
 			
 		</ul>
     </div>

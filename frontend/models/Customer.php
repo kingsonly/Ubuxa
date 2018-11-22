@@ -3,28 +3,30 @@
 namespace frontend\models;
 
 use Yii;
-use yii\base\Model;
-use common\models\User;
-
 
 /**
  * This is the model class for table "{{%customer}}".
  *
  * @property int $id
+ * @property int $entity_id
  * @property string $cid a value to programmatically generate
  * @property string $master_email
  * @property string $master_doman
  * @property int $plan_id
  * @property string $billing_date
  * @property int $account_number a public account id should be 6 digits (1m) 
+ * @property int $has_admin
+ *
+ * @property Entity $entity
  */
 class Customer extends \yii\db\ActiveRecord
 {
-    
-
     /**
      * {@inheritdoc}
      */
+    Const NO_ADMIN = 0;
+    Const HAS_ADMIN = 1;
+    
     public static function tableName()
     {
         return '{{%customer}}';
@@ -44,14 +46,13 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cid', 'master_email', 'master_doman', 'plan_id', 'billing_date', 'account_number'], 'required'],
-            [['plan_id', 'account_number'], 'integer'],
-            [['billing_date'], 'safe'],
+            [['entity_id', 'cid', 'master_email', 'master_doman', 'billing_date', 'account_number'], 'required'],
+            [['entity_id', 'plan_id', 'account_number', 'has_admin'], 'integer'],
+            [['billing_date', 'plan_id'], 'safe'],
             [['cid'], 'string', 'max' => 20],
             [['master_email', 'master_doman'], 'string', 'max' => 255],
-            [['master_email'], 'email'],
-            ['master_email', 'unique', 'message' => 'This email address has already been taken.'],
             [['cid'], 'unique'],
+            [['entity_id'], 'exist', 'skipOnError' => true, 'targetClass' => TenantEntity::className(), 'targetAttribute' => ['entity_id' => 'id']],
         ];
     }
 
@@ -62,14 +63,27 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'entity_id' => 'Entity ID',
             'cid' => 'Cid',
-            'master_email' => 'Master Email',
-            'master_doman' => 'Master Doman',
+            'master_email' => 'Email',
+            'master_doman' => 'Domain Name',
             'plan_id' => 'Plan ID',
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
+            'has_admin' => 'Has Admin',
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntity()
+    {
+        return $this->hasOne(TenantEntity::className(), ['id' => 'entity_id']);
+    }
 
+    public function getEntityName()
+    {
+        return $this->entity->entity_type;
+    }
 }

@@ -52,6 +52,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
     const TASK_ASSIGNED_STATUS = 1;
 
     const TASK_NOT_ASSIGNED_STATUS = 0;
+
     
     public static function tableName()
     {
@@ -64,7 +65,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
     public function rules()
     {
         return [
-            [['title','owner','status_id', 'create_date'], 'required'],
+            [['owner','status_id', 'create_date'], 'required'],
             [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
             [['create_date', 'due_date', 'last_updated','ownerId','title'], 'safe'],
             [['title'], 'string', 'max' => 50],

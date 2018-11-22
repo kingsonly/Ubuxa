@@ -108,9 +108,8 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
           "tapToDismiss": false
           }
           //alert(jsonResult);
-        //toastr.error('Somthing went wrong', "", options);
-             $.pjax.reload({container:"#task-list-refresh",async: false});
-            $.pjax.reload({container:"#task-modal-refresh",async: false});
+        toastr.success('Reminder set');
+             $.pjax.reload({container:"#task-list-refresh"});
              $.pjax.reload({container:"#kanban-refresh",async: false});
             }
             }).fail(function(){

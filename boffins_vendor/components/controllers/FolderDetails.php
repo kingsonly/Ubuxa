@@ -18,11 +18,16 @@ class FolderDetails extends Widget
 	public $model;
 	public $imageUrl;
 	public $folderDetailsImage;
+    public $onboarding;
+    public $onboardingExists;
+    public $userId;
+
 
     public function run()
     {
          // Register AssetBundle
-        return $this->render('folderdetails',['model'=>$this->model,'imageUrl'=>$this->imageUrl,'folderDetailsImage'=>$this->folderDetailsImage]);
+        return $this->render('folderdetails',['model'=>$this->model,'imageUrl'=>$this->imageUrl,'folderDetailsImage'=>$this->folderDetailsImage, 'onboarding' => $this->onboarding,
+            'onboardingExists' => $this->onboardingExists,'userId' => $this->userId,]);
     }
 }
 ?>

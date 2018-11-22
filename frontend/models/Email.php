@@ -47,8 +47,17 @@ class Email extends BoffinsArRootModel implements TenantSpecific
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTmEmailEntities()
+    public function getEmailEntities()
     {
         return $this->hasMany(EmailEntity::className(), ['email_id' => 'id']);
+    }
+
+    public function getEmailEntity()
+    {
+        return $this->hasOne(EmailEntity::className(), ['email_id' => 'id']);
+    }
+
+    public function getUser(){
+        return $this->emailEntity->entity->person->user;
     }
 }

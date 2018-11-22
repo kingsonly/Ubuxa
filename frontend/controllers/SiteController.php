@@ -14,10 +14,12 @@ use yii\helpers\Json;
 use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
-//use frontend\controllers\ForbiddenHttpException;
+use yii\web\ForbiddenHttpException;
 
 //models
 use frontend\models\SignupForm;
+use frontend\models\PasswordResetRequestForm;
+use frontend\models\ResetPasswordForm;
 use frontend\models\Email;
 use frontend\models\Address;
 use frontend\models\Telephone;
@@ -33,12 +35,18 @@ use frontend\models\Customer;
 use frontend\models\InviteUsersForm;
 use frontend\models\Task;
 use frontend\models\Remark;
+use frontend\models\TenantEntity;
+use frontend\models\TenantCorporation;
+use frontend\models\TenantPerson;
 use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Onboarding;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+use frontend\models\Plan;
+use frontend\models\Role;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -95,9 +103,14 @@ class SiteController extends BoffinsBaseController {
 		$reminder = new Reminder();
 		$label = new label();
         $taskLabel = new TaskLabel();
+        $userId = Yii::$app->user->identity->id;
 		$taskAssignedUser = new TaskAssignedUser();
+		$onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 		$cid = Yii::$app->user->identity->cid;
         $users = UserDb::find()->where(['cid' => $cid])->all();
+        $allUsers = new UserDb;
+        
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -110,6 +123,11 @@ class SiteController extends BoffinsBaseController {
 			'users' => $users,
 			'label' => $label,
             'taskLabel' => $taskLabel,
+            'folder' => $folder,
+            'allUsers' => $allUsers,
+            'userId' => $userId,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
 			]);
         } else {
 				
@@ -123,6 +141,11 @@ class SiteController extends BoffinsBaseController {
 				'users' => $users,
 				'label' => $label,
 	            'taskLabel' => $taskLabel,
+	            'folder' => $folder,
+	            'allUsers' => $allUsers,
+	            'userId' => $userId,
+	            'onboardingExists' => $onboardingExists,
+            	'onboarding' => $onboarding,
 				]);
    		 }
        
@@ -204,64 +227,98 @@ class SiteController extends BoffinsBaseController {
     {
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
-       $customer = Customer::find()->where([
-       	'cid' => $cid,
-       	'status' => 0,
-		])->one();
-		
-		if(!empty($customer)){
-	        if ($user->load(Yii::$app->request->post())) {
-	        	$user->address = $email;
-	        	$user->cid = $cid;
-	        	$user->basic_role = $role;
-				if($user->save()){
-					$customer->status = 1;
-					$customer->save();
-					return $this->redirect(['index']);
-				} 
+       $customer = Customer::find()->where(['cid' => $cid])->one();
+       $userExists = Email::find()->where(['address' => $email])->exists();
+       if(!$userExists){
+			if(!empty($customer)){
+		        if ($user->load(Yii::$app->request->post())) {
+		        	$user->address = $email;
+		        	$user->cid = $cid;
+		        	$user->basic_role = $role;
+		        	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+		        		$user->first_name = $customer->entity->firstname;
+		        		$user->surname = $customer->entity->surname;
+		        	}
+					if($user->save()){
+						if($customer->has_admin == Customer::NO_ADMIN){
+							$customer->has_admin = Customer::HAS_ADMIN;
+							$customer->save();	
+						}
+						$newUser = UserDb::findOne([$user->id]);
+			            if (Yii::$app->user->login($newUser)){
+			                return $this->redirect(['index']);
+			            }
+					} 
+				} else {
+		            return $this->render('createUser', [
+		            	'customer' => $customer,
+						'userForm' => $user,
+						'action' => ['createUser'],
+					]);
+				}
 			} else {
-	            return $this->render('createUser', [
-					'userForm' => $user,
-					'action' => ['createUser'],
-				]);
+				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 			}
-		} else {
-			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		}else {
+			return $this->goHome();
 		}
     }
 
-    public function actionCustomersignup($plan_id)
+    public function actionCustomersignup()
     {
 		$this->layout = 'loginlayout';
        $customer = new CustomerSignupForm;
+       $tenantEntity = new TenantEntity();
+       $tenantCorporation = new TenantCorporation();
+       $tenantPerson = new TenantPerson();
 		
-        //yii\helpers\VarDumper::dump(Yii::$app->request->post());
-        if ($customer->load(Yii::$app->request->post())) {
+        if ($customer->load(Yii::$app->request->post()) && $tenantEntity->load(Yii::$app->request->post())) {
         	$email = $customer->master_email;
         	$date = strtotime("+7 day");
         	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
-        	if($customer->signup($customerModel)){
-        		$sendEmail = \Yii::$app->mailer->compose()
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-                ->setSubject('Signup Confirmation')
-                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
-                Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-                ))
-                )->send();
-        		if($sendEmail){
-        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
-                } else{
-                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-            	}
-        	}
+        	
+        	if($tenantEntity->save()){
+        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
+        			if($tenantPerson->load(Yii::$app->request->post())){
+        				$tenantPerson->entity_id = $tenantEntity->id;
+        				$tenantPerson->create_date = new Expression('NOW()');
+        				$tenantPerson->save(false);
+        			}
+        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
+        			if($tenantCorporation->load(Yii::$app->request->post())){
+        				$tenantCorporation->entity_id = $tenantEntity->id;
+        				$tenantCorporation->create_date = new Expression('NOW()');
+        				$tenantCorporation->save(false);
+        			}
+        		}
+        		$customer->plan_id = Plan::BETA;
+        		$customer->entity_id = $tenantEntity->id;
+	        	if($customer->signup($customerModel)){
+	        		$sendEmail = \Yii::$app->mailer->compose()
+	                ->setTo($email)
+	                ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+	                ->setSubject('Signup Confirmation')
+	                ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+	                Yii::$app->urlManager->createAbsoluteUrl(
+	                ['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => Role::ADMIN]
+	                ))
+	                )->send();
+	        		if($sendEmail){
+	        			 Yii::$app->getSession()->setFlash('success','Check Your email!');
+	                } else{
+	                    Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+	            	}
+	        	}
+	        }
 		}else {
-            return $this->render('createCustomer', [
-				'customerForm' => $customer,
-				'action' => ['createCustomer'],
-			]);
+	            return $this->render('createCustomer', [
+					'customerForm' => $customer,
+					'tenantEntity' => $tenantEntity,
+					'tenantPerson' => $tenantPerson,
+					'tenantCorporation' => $tenantCorporation,
+					'action' => ['createCustomer'],
+				]);
 		}
     }
 
@@ -283,10 +340,51 @@ class SiteController extends BoffinsBaseController {
 	    			echo "Email cannot be empty";
 	    		} 
 	    }else{
-	    		return $this->render('inviteusers', [
+	    		return $this->renderAjax('inviteusers', [
 				'model' => $model,
 			]);
 	    }
+    }
+
+    public function actionRequestPasswordReset()
+    {
+    	$this->layout = 'loginlayout';
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                //return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+            }
+        }
+        return $this->render('requestPasswordResetToken', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+    	$this->layout = 'loginlayout';
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password saved.');
+            return $this->goHome();
+        }
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
     }
 
     public function actionAjaxValidateForm()
@@ -314,6 +412,27 @@ class SiteController extends BoffinsBaseController {
 	{	
 		$this->layout = 'loginlayout';
         $model = new SignupForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (User)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (User)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
+	public function actionAjaxValidateRequestPasswordForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new PasswordResetRequestForm();
 		$formErrors = false;
 		Yii::trace('Begin Ajax Validation (User)');
 		if ( Yii::$app->request->isAjax ) {

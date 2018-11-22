@@ -12,6 +12,7 @@ use frontend\models\StatusType;
 use frontend\models\Reminder;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+use frontend\models\Onboarding;
 use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
 use frontend\models\Component;
@@ -103,8 +104,11 @@ class FolderController extends Controller
         $taskLabel = new TaskLabel();
         $taskAssignedUser = new TaskAssignedUser();
         $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
         $users = $model->users;
 		$componentCreateUrl = Url::to(['component/create']);
+        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -128,7 +132,7 @@ class FolderController extends Controller
 		
         return $this->render('view', [
             'model' => $model,
-			'task' => $task,
+            'task' => $task,
             'taskModel' => $task,
 			'remarkModel' => $remark,
 		    'taskStatus' => $taskStatus,
@@ -137,9 +141,12 @@ class FolderController extends Controller
             'taskLabel' => $taskLabel,
             'taskAssignedUser' => $taskAssignedUser,
             'users' => $users,
+            'userId' => $userId,
             'id' => $id,
             'componentCreateUrl' => $componentCreateUrl,
             'componentModel' => $componentModel,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
         ]);
     }
 	

@@ -40,8 +40,8 @@ ul.tabs li a {
 	font-size: 18px;
 	text-align: center;	
 	text-decoration: none;
-	color: #ffffff;
-	background: #582f2f;
+	color: #000;
+	background: #dce6ed;
 	-webkit-box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
 	   -moz-box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
 	        box-shadow: 1px 9px 25px 2px rgba(0,0,0,0.4);
@@ -77,8 +77,7 @@ ul.tabs li a:hover {
 ul.tabs li a.active {
 	margin: 30px 0 0 0;
 	padding: 10px 0 10px 0;
-	background: #3F51B5;
-	color: #6edeef;
+	color: #000;
 	/*color: #ff6831;*/
 	z-index: 4;
 	outline: none;
@@ -130,12 +129,12 @@ a,
 		padding-left: 30px;
 	}
 	.side_menu {
-		background-color: #3F51B5;
 		height: 100vh;
 		left: -300px;
 		position: fixed;
 		top: 0;
 		min-width: 300px;
+		background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
 		
 	}
 	.side-drop{
@@ -307,7 +306,6 @@ a,
 	.side-images{
         width:65px;
         height:65px;
-        border: 1px solid rgb(7, 71, 166);;
         background-repeat: no-repeat;
  		background-size: cover;
         border-radius: 50%;
@@ -334,7 +332,7 @@ a,
     .first-name {
     	color: #fff;
     	font-family: calibri;
-    	font-size: 18px;
+    	font-size: 21px;
     	text-transform: capitalize;
     }
     .menu-settings{
@@ -351,7 +349,6 @@ a,
 	    border-radius: 3px;
 	    padding-bottom: 15px;
 	    padding-top: 15px;
-	    background: #3F51B5;
 	}
 	.menu-list{
 		color: #fff;

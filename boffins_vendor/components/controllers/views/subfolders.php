@@ -5,6 +5,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use boffins_vendor\components\controllers\SearchFormWidget;
 use yii\widgets\Pjax;
+use frontend\models\Onboarding;
 ?>
 
 <style type="text/css">
@@ -47,6 +48,58 @@ use yii\widgets\Pjax;
 	.subheader{
 		margin-bottom: 20px;
 	}
+	.subfolder-tips{
+		right: 2px !important;
+	}
+ .popover {
+	 max-width: 375px;
+}
+ .popover .fa {
+	 color: #545e83;
+	 padding-top: 5px;
+}
+.icon-tour{
+	color: #545e83 !important;
+}
+ .popover-content {
+	 padding: 5px 0;
+}
+}
+ .hca-tooltip--left-nav {
+	 position: absolute;
+	 background-color: #fff;
+	 border-radius: 6px;
+	 border: 1px solid #efefef;
+	 left: 78px;
+	 top: 60px;
+	 padding: 10px 10px 15px 15px;
+	 font-size: 1em;
+	 width: 340px;
+	 box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	 color: #000;
+	 z-index: 1000;
+	 text-decoration: none;
+}
+ .hca-tooltip--left-nav .hca-tooltip--okay-btn {
+	 padding: 12px 20px;
+	 line-height: 15px;
+	 background-color: #408DDD;
+	 border: none;
+	 color: #fff;
+}
+ .hca-tooltip--left-nav .hca-border-circle--40 {
+	 width: 40px;
+	 height: 40px;
+	 margin-top: 10px;
+	 border-radius: 50%;
+	 font-size: .8em;
+	 color: #F07C8B;
+	 line-height: 38px;
+	 text-align: center;
+	 background: #fff;
+	 border: 1px solid #F07C8B;
+}
+ 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <?php Pjax::begin(['id'=>'create-folder-refresh']); ?>
@@ -60,6 +113,19 @@ use yii\widgets\Pjax;
 			<div class="col-sm-9 col-xs-9 form-widget" >
 				<?= SearchFormWidget::widget();?>
 			</div>
+			<?php if(!$onboardingExists){ ?>
+                <div class="help-tip" id="subfolder-tips">
+                  <p class="tip=text">Take a tour of subfolders and find out useful tips.
+                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php }else if($onboardingExists && $onboarding->subfolder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
+              <div class="help-tip" id="subfolder-tips">
+                  <p class="tip=text">Take a tour of subfolders and find out useful tips.
+                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
+                  </p>
+                </div>
+            <?php } ?>
 		</div>
 		<? if(!empty($displayModel)){?>
 		<div class="col-xs-5 col-sm-2 sub-second">
@@ -84,7 +150,79 @@ use yii\widgets\Pjax;
 	</div>
 </div>
 
+<?
+$subfoldersOnboarding = Url::to(['onboarding/subfoldersonboarding']);
+$subfolders = <<<subfolders
 
+function _SubfoldersOnboarding(){
+          $.ajax({
+              url: '$subfoldersOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+
+$(function() {
+
+  var subfolderTour = new Tour({
+    name: "subfolderTour",
+    steps: [
+        {
+          element: ".subfolder-container",
+          title: "Subfolders",            
+          content: "Find all subfolders for this folder here.",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-folder-open icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+          onShow: function(subfolderTour){
+          	$('#subfolder-tips').hide();
+          },
+        },
+        {
+          element: "#folder-image",
+          title: "Create subfolders",
+          content: "You can create new subfolders for this folder here.",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-plus-square icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+        },
+        {
+          element: "#search_submit",
+          title: "Folder Image",
+          content: "You can add image to your folder here.",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-search icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          onShown: function(subfolderTour){
+            $(".tour-backdrop").appendTo("#wrap");
+            $(".tour-step-background").appendTo("#wrap");
+            $(".tour-step-background").css("left", "0px");
+            },
+        },
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,
+    onEnd: function (subfolderTour) {
+            _SubfoldersOnboarding();
+        },
+  });
+  $('#subfolders-tour').on('click', function(e){
+       subfolderTour.start();
+       e.preventDefault();
+    })
+
+});
+
+subfolders;
+ 
+$this->registerJs($subfolders);
+?>
 	
 <?php Pjax::end(); ?>
 

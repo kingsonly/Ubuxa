@@ -179,11 +179,11 @@ $img = $model->folder_image;
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget() ?>
+                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model,'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders]) ?>
+   						 	<?= FolderDetails::widget(['model' => $model,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+   						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>
         </div>
@@ -201,10 +201,10 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id]) ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId]) ?>
             		<?php Pjax::end(); ?>
 
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'] ]) ?>
+            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
             	</div>
             </section>
         </div>
@@ -219,6 +219,12 @@ $img = $model->folder_image;
     <? $this->endBlock();?>
     
   <? $this->beginBlock('subfolders')?>
+  <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders
+  	<?php if(!empty($model->subFolders)){ ?>
+  		<i class="fa fa-chevron-down iconz-down"></i>
+  	<?php }?>
+  </label>
+          <ul class="first-list">
   	<?php 
 		$results=ArrayHelper::toArray($model->dashboardItems ,[
 			'frontend\models\Folder'=>[
@@ -230,18 +236,21 @@ $img = $model->folder_image;
         foreach ($model->subFolders as $subfolders) {
         $checks = $subfolders->buildTree($results, $subfolders->id);
         $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
-    ?>		<li class="has-children">
+    ?>		
+    <li class="has-children">
 	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
-	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?><i class="fa fa-chevron-down iconz-down"></i></label>
+	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?>
+	            	<i class="fa fa-chevron-down iconz-down"></i>
+	        </label>
 	            
 	            		<? $subfolders->printTree($checks); ?>
             </li>
            
         <?php $num++; }?>
+        </ul>
   <? $this->endBlock();?>
+
   </section>
-
-
 <? 
     Modal::begin([
         'header' =>'<h1 id="headers"></h1>',
@@ -257,124 +266,7 @@ $img = $model->folder_image;
 <?php 
 $indexJs = <<<JS
 localStorage.setItem("skipValidation", "");
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
-  $(function() {
 
-  var tour = new Tour({
-    steps: [
-        {
-          element: ".taskz-listz",
-          title: "Title1",            
-          content: "Message 1"
-        },
-        {
-          element: "#addTask",
-          title: "Title2",
-          content: "Message 2",
-        },
-        {
-          element: ".side_menu",
-          title: "Title3",
-          content: "Message 3",
-          onShow: function(tour) {
-          	$('.side_menu').removeClass('side-drop');
-    		$('.list_load, .list_item').stop();
-			$(this).removeClass('closed').addClass('opened');
-
-			$('.side_menu').css({ 'left':'0px' });
-
-			var count = $('.list_item').length;
-			$('.list_load').slideDown( (count*.6)*100 );
-			$('.list_item').each(function(i){
-				var thisLI = $(this);
-				timeOut = 100*i;
-				setTimeout(function(){
-					thisLI.css({
-						'opacity':'1',
-						'margin-left':'0'
-					});
-				},100*i);
-			});
-		    }
-        },
-        {
-          element: ".open-board",
-          title: "Title4",
-          content: "Message 4",
-          onShow: function(tour){
-          	$('.side_menu').addClass('side-drop');
-          	},
-          onShown: function(tour){
-          	$(".tour-backdrop").appendTo("#content");
-		    $(".tour-step-background").appendTo("#content");
-		    $(".tour-step-background").css("left", "0px");
-          	},
-        },
-        {
-          element: ".drag-container",
-          title: "Task board",
-          content: "This is your task board.",
-          placement: "bottom",
-          onShow: function(tour){
-          	$('#mySidenav').css({'width':'100%'});
-          	},
-          onShown: function(tour){
-          	$(".tour-backdrop").appendTo(".view-task-board");
-		    $(".tour-step-background").appendTo(".view-task-board");
-		    $(".tour-step-background").css("left", "0px");
-          	},
-        },
-        {
-          element: ".drag-item:first",
-          title: "Title 6",
-          content: "Message 6",
-          onShown: function(tour){
-          	$(".tour-backdrop").appendTo(".drag-container");
-		    $(".tour-step-background").appendTo(".drag-container");
-		    $(".tour-step-background").css("left", "0px");
-          	},
-        },
-        {
-          element: ".add-card:first",
-          title: "Title 7",
-          content: "Message 7",
-          onShown: function(tour){
-          	$(".tour-backdrop").appendTo(".drag-column:first");
-		    $(".tour-step-background").appendTo(".drag-container");
-		    $(".tour-step-background").css("left", "0px");
-          	},
-        },
-        
-      ],
-    backdrop: true,  
-    storage: true,
-    smartPlacement: true,    
-    onEnd: function (tour) {
-    	$('.side_menu').addClass('side-drop');
-        $('#mySidenav').css({'width':'0'})
-  		$('.list_load, .list_item').stop();
-	$(this).removeClass('opened').addClass('closed');
-
-	$('.side_menu').css({ 'left':'-300px' });
-
-	var count = $('.list_item').length;
-	$('.list_item').css({
-		'opacity':'0',
-		'margin-left':'-20px'
-	});
-	$('.list_load').slideUp(300);
-  		},
-  });
- tour.init();
- tour.start(true);
-
-});
 
 JS;
  
