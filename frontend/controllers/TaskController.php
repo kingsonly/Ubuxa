@@ -241,8 +241,7 @@ class TaskController extends Controller
     }
 
     public function actionKanban()
-    {
-        
+    {   
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();   
             $id =  $data['id'];

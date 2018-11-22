@@ -201,6 +201,12 @@ Main Components
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
+.has-other{
+  background: #444359;
+}
+.iconz-down{
+  cursor: pointer;
+}
 </style>
 
   <ul class="cd-accordion-menu animated">

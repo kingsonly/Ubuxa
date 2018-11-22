@@ -63,7 +63,7 @@ $(document).ready(function () {
 
 });
 
-/* $(document).on('click',function (e) {
+$(document).on('click',function (e) {
   side_menu = $('.side_menu');
   if (!side_menu.is(e.target) 
       && side_menu.has(e.target).length === 0){
@@ -74,7 +74,7 @@ $(document).ready(function () {
     }
 	
   }
-}); */
+});
 
 //var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());

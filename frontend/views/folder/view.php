@@ -32,9 +32,13 @@ $img = $model->folder_image;
 .row.content {
 	 height: 1500px;
 }
+#content{
+	overflow: scroll;
+}
  .onboardnav {
 	 background-color: #f1f1f1;
 	 height: 100%;
+}
 }
  footer {
 	 background-color: #555;
@@ -226,24 +230,20 @@ $img = $model->folder_image;
   </label>
           <ul class="first-list">
   	<?php 
-		$results=ArrayHelper::toArray($model->dashboardItems ,[
-			'frontend\models\Folder'=>[
-			    'id',
-			    'parent_id',
-			    'title',                   
-			 ]]);
     	$num = 1;
         foreach ($model->subFolders as $subfolders) {
-        $checks = $subfolders->buildTree($results, $subfolders->id);
         $folderUrl = Url::to(['folder/view', 'id' => $subfolders->id]);
+        $menuId = $subfolders->id;
     ?>		
     <li class="has-children">
-	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>">
-	            <label class="accord-label" for="sub-group-<?=$num; ?>" id="menu-folders<?=$subfolders->id.'-'.$num ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?>
-	            	<i class="fa fa-chevron-down iconz-down"></i>
-	        </label>
-	            
-	            		<? $subfolders->printTree($checks); ?>
+	         	<input type="checkbox" class="accord-input" name ="sub-group-<?=$num; ?>" id="sub-group-<?=$num; ?>"> 
+	            <label class="accord-label menu-check toggled" for="sub-group-<?=$num; ?>" data-menuId="<?=$menuId;?>" id="menu-folders<?=$menuId ?>"><i class="fa fa-folder iconz"></i><?= $subfolders->title ?>
+			            <?php if(!empty($subfolders->subFolders)){ ?>
+			            	<i class="fa fa-chevron-down iconz-down"></i>
+			            <?php }?>
+	            	<input type="hidden" value="false" name="">
+	        	</label>	            
+	            <span id="folder-content-loading" style="text-align: center; display: none; color:#ccc"> loading...</span>
             </li>
            
         <?php $num++; }?>
@@ -264,8 +264,48 @@ $img = $model->folder_image;
     Modal::end();
 ?>
 <?php 
+$menuFolderId = $id;
+$subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $indexJs = <<<JS
 localStorage.setItem("skipValidation", "");
+
+var mymenu = 1;
+$(document).on('click', '.menu-check', function(){
+	var getInput = $(this).find('input').val();
+	
+	if(getInput == 'true'){
+		return false;
+	} else {
+		$(this).addClass('clicked');
+		var getThis = $(this);
+		var menuIds;
+		menuIds = $(this).attr('data-menuId');
+  		mymenu++;
+  		mymenus(mymenu, menuIds, getThis);
+  		$(this).find('input').val('true');
+
+	}
+});
+function mymenus(mymenu, menuIds, getThis){
+    $('#folder-content-loading').show();
+    $.post('$subfoldersUrl',
+    {
+      page:mymenu,
+      id: menuIds,
+    },
+    function(data){
+        if(data.trim().length == 0){
+            $('#folder-content-loading').text('finished');
+            getThis.removeClass('clicked');
+        }
+        $('#folder-content-loading').hide();
+        if ($.trim(data)){
+	        $('.clicked').after(data);
+	        getThis.removeClass('clicked');
+	        getThis.nextAll().css('padding-left','30px');
+        }
+        })
+}
 
 
 JS;
