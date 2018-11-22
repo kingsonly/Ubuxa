@@ -2,10 +2,8 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\bootstrap\Alert;
-use boffins_vendor\components\controllers\Menu;
-use yii\bootstrap\Modal;
-use yii\jui\Draggable;
+
+
 
 
 /* @var $this yii\web\View */
@@ -15,6 +13,7 @@ use yii\jui\Draggable;
 
 ?>
 <style>
+	/*
 .floatright{
 	float: right;
 }
@@ -38,27 +37,12 @@ use yii\jui\Draggable;
 	margin-top: 22px;
 	min-height: 600px;
 }
+	*/
 </style>
-<?php $this->beginBlock('folderview'); ?>
 
-	<small>Select </small>
-   
-<?php $this->endBlock(); ?>
-
-<?php $this->beginBlock('folderSidebar'); ?>
-	<?//= Menu::widget(); ?>
-<?php $this->endBlock(); ?>
 
 <section class="content">
 	
-	<div class="row">
-		<div class="col-lg-12">
-			<?= Alert::widget([
-				   'options' => ['class' => 'alert-info','id'=>'flash'],
-				   'body' => Yii::$app->session->getFlash('created_successfully'),
-					 ]);?>
-		</div>
-	</div>
 	
   
       <div class="row">
@@ -78,17 +62,6 @@ use yii\jui\Draggable;
 		  </div>
     </div>
 </section>
-<? 
-Modal::begin([
-	'header' =>'<h1 id="headers"></h1>',
-	'id' => 'dashboard',
-	'size' => 'modal-md',  
-]);
-?>
-<div id="formcontent"></div>
-<?
-	Modal::end();
-?>
 
 <?php 
 

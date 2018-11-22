@@ -107,10 +107,6 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	public function getShortName() {
 		return $this->corporation->shortName;
 	}
-
-    public function getNotes() {
-        return $this->corporation->notes;
-    }
 	
 	public function getNameString() {
 		return $this->corporation->NameString;

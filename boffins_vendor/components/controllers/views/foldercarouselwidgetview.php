@@ -339,7 +339,7 @@ $(".folder-text").mouseout(function() {
     }, 'slow');
 });
 
-$('.component-list').on('click',function(){
+$('.component-list').off().on('click',function(){
 	$('.component-list').removeClass('active-component');
 	data = $(this).data('url');
 	$(this).addClass('active-component');

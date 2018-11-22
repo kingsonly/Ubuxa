@@ -170,7 +170,13 @@ class ModelCollection extends Collection
 		Yii::trace("Saving this model {$key} ");
 		$models = $this->getModels();
 		$model = $models[$key];
-		$model->save($runValidation, $attributeNames);
+		
+		if($model->save($runValidation, $attributeNames)){
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
     /**
      * https://github.com/yiisoft/yii2/issues/10806#issuecomment-242119472

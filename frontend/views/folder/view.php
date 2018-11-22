@@ -173,13 +173,13 @@ $img = $model->folder_image;
 
 
 <section>
-	
+	<?= Yii::$app->getUrlManager()->getBaseUrl();?>
     <div class="container-fluid">
         <div class="row">
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
+                  	<?//= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
    						 	<?= FolderDetails::widget(['model' => $model,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
@@ -201,10 +201,12 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId]) ?>
+
+            				<?//= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId]) ?>
             		<?php Pjax::end(); ?>
 
-            		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
+            		<?//= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
+
             	</div>
             </section>
         </div>
@@ -213,7 +215,7 @@ $img = $model->folder_image;
     <? $this->beginBlock('kanban')?>
     	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
 		    <div class="view-task-board">
-		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
+		    	<?//= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
@@ -264,9 +266,9 @@ $img = $model->folder_image;
     Modal::end();
 ?>
 <?php 
+$viewUrl = Url::to(['component/view']);
 $indexJs = <<<JS
 localStorage.setItem("skipValidation", "");
-
 
 JS;
  

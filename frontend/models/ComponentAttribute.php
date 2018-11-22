@@ -24,7 +24,7 @@ use boffins_vendor\classes\models\Sortable;
  * @property array  valueMeta - meta data of the value object 
  * @property mixed[probably int|string] the sort field which can be used to sort this attribute
  */
-class ComponentAttribute extends BoffinsArRootModel implements Sortable
+class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 {
     /**
      * {@inheritdoc}
@@ -189,5 +189,10 @@ class ComponentAttribute extends BoffinsArRootModel implements Sortable
 			}
 		}
 		return parent::beforeSave($insert);
+	}
+	
+	public function getType()
+	{
+		return $this->componentTemplateAttribute->componentAttributeType->type;
 	}
 }

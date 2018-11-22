@@ -40,12 +40,12 @@ class ComponentTemplateAttribute extends BoffinsArRootModel
     public function rules()
     {
         return [
-            [['component_template_id', 'attribute_type_id', 'name', 'cid'], 'required'],
+            [['component_template_id', 'attribute_type_id', 'name'], 'safe'],
             [['component_template_id', 'attribute_type_id', 'show_in_grid', 'sort_order', 'cid'], 'integer'],
             [['name'], 'string', 'max' => 55],
             [['format'], 'string', 'max' => 255],
-            [['component_template_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentTemplate::className(), 'targetAttribute' => ['component_template_id' => 'id']],
-            [['attribute_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentAttributeType::className(), 'targetAttribute' => ['attribute_type_id' => 'id']],
+            //[['component_template_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentTemplate::className(), 'targetAttribute' => ['component_template_id' => 'id']],
+            //[['attribute_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentAttributeType::className(), 'targetAttribute' => ['attribute_type_id' => 'id']],
         ];
     }
 

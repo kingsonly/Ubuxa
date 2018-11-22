@@ -112,13 +112,13 @@ $("#"+"$jsEventTriger"+"-icon").click(function(e){
 	 $iconJs
 });
 
-$("."+"$jsEventTriger"+"-component").click(function(e){
+$("."+"$jsEventTriger"+"-component").click(function(){
 	$( ".$jsEventTriger-new-content" ).hide();
 	//$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
 	$( ".create-new-$jsEventTriger" ).find('#component-component_template_id').val($(this).data('templateid'));
 	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
 	$( ".create-new-$jsEventTriger" ).addClass('display');
-     e.stopPropagation();
+     
 });
 
 

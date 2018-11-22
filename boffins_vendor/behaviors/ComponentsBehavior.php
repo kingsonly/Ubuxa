@@ -54,15 +54,20 @@ class ComponentsBehavior extends Behavior
 		// create empty values
 		$templateId = $this->owner->component_template_id;
 		foreach($this->getAllComponentTemplateAttributes($templateId) as $templateAttributeKey => $templateAttributeValue){
-			$type = $templateAttributeValue->attributeType->type; //string type of the template attribute
+			$type = $templateAttributeValue->componentAttributeType->type; //string type of the template attribute
 			$templateAttributeId = $templateAttributeValue->id;//component template id
-			$this->createEmptyValue($templateAttributeValue->attributeType->type,$componentId,$templateAttributeId);
+			$this->createEmptyValue($type,$componentId,$templateAttributeId);
 		}
 		
-		if($componentManager->save()){
+		if($componentManager->save(false)){
 			// once the author role has been saved, the system should go ahead to save other users
 			foreach($this->getFolderUsers() as $v){
-					$this->linkUserToComponent($v->id,$componentId,'user')->save();// save at each loop
+				if($v->id === yii::$app->user->identity->id){
+					continue;
+				} else{
+					$this->linkUserToComponent($v->id,$componentId,'user')->save(false);// save at each loop
+				}
+					
 			}
 		}
 

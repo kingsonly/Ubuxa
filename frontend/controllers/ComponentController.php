@@ -7,6 +7,8 @@ use yii\db\Expression;
 use frontend\models\Component;
 use frontend\models\FolderComponent;
 use frontend\models\Folder;
+use boffins_vendor\classes\ModelCollection;
+use frontend\models\ComponentAttributeModel;
 
 class ComponentController extends Controller
 {
@@ -21,13 +23,13 @@ class ComponentController extends Controller
 			if($model->save(false)){
 				$folderComponentModel->component_id = $model->id;
 				if($folderComponentModel->save(false)){
-					return ['output'=>$model->id, 'message'=>'sent'];
+					return ['output'=>$model->id, 'message'=>'sent','area'=>'component','templateId'=>$model->component_template_id];
 				}
             	
 			}
             
         }
-		return ['output'=>1, 'message'=>'not sent'];
+		return ['output'=>1, 'message'=>'not sent','area'=>'component','templateId'=>'0'];
        
     }
 
@@ -48,13 +50,72 @@ class ComponentController extends Controller
 		$folderModel = new Folder();
 		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
-		return $this->renderAjax('listview',['content'=>$getFolder->componentTemplateAsComponents]);
+		$collector = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
+		$modelData = $collector->models;
+
+		return $this->renderAjax('listview',['content'=>$modelData]);
     }
+	
 
     public function actionView($id)
     {
-		$component = Component::findOne($id);
-        return $this->renderAjax('view',['component'=>$component]);
+		/*$componentModel = new Component();
+		$component = $componentModel->find()->where(['id'=>$id]);
+		$collector = new ModelCollection( [], [ 'query' => $component ] );
+		$modelData = $collector->models;*/
+		$componentModel = new Component();
+		$query = $componentModel->find()->where(['id'=>$id]);
+		$component = $query->one();
+		$collector = new ModelCollection( [], [ 'query' => $query ] ); //using the relation
+		$modelData = $collector->models;
+			if (isset($_POST['hasEditable'])) {
+				Yii::trace("hash Eduted");
+		
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+				$collectors = new ModelCollection( [], [ 'query' => $component->getComponentAttributes() ] ); 
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+				$collectors->loadModel($model->attributeId,['value'=>$model->value]);
+				
+			if ($collectors->saveModel($model->attributeId)) {
+				
+				return ['output'=>$model->value, 'message'=>'','component' => $id];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
+			}
+    }
+        return $this->renderAjax('view',[
+			'component'=>$component,
+			'content'=>$modelData,
+		]);
+    }
+	
+	public function actionUpdate($id)
+    {
+		
+		if (isset($_POST['hasEditable'])) {
+			$component = Component::find()->where(['id'=>id]);
+			$collector = new ModelCollection( [], [ 'query' => $component ] );
+			$modelData = $collector->models;
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+			if ($model->load(Yii::$app->request->post())) {
+				
+				return ['output'=>'', 'message'=>''];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>'', 'message'=>''];
+			}
+    }
+        return $this->renderAjax('view',['component'=>$modelData]);
     }
 
 }

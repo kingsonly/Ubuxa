@@ -60,6 +60,8 @@ class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDel
             'notes' => 'Notes',
         ];
     }
+	
+	
 
     /**
      * @return \yii\db\ActiveQuery
@@ -125,7 +127,7 @@ class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDel
         return $this->hasMany(ProductCorporation::className(), ['supplier_id' => 'id']);
         
     }
-    //Added by kingsley of buffins 
+    //Added by kingsley of boffins 
     public static function getclientname($id)
     {
 		$compid=Client::get_clientid($id) ;

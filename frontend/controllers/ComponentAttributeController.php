@@ -58,8 +58,8 @@ class ComponentAttributeController extends Controller
 		$data4 = count($data3);
 		
 		Yii::trace("Attempting to load and save a model");
-		$data2->loadModel(1, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
-		$data2->saveModel(1); //just supply the key.
+		$data2->loadModel(20, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(20); //just supply the key.
 		$data4 = $data2->models;
 		
 		$revised = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
