@@ -30,7 +30,7 @@ $boardUrl = Url::to(['task/index']);
     }
 
     .box-content-task {
-        height: 230px;
+        height: 245px;
         border-bottom: 1px solid #ccc;
         padding-top: 8px;
         overflow: auto;
