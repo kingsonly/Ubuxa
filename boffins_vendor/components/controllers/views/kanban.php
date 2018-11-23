@@ -565,7 +565,7 @@ $.fn.closest_descendent = function(filter) {
             el.classList.remove('is-moved');
         }, 600);
     }, 100);
-   
+    
     //alert(el.parent().attr('class'));
 });
 
@@ -578,7 +578,8 @@ function _UpdateTask(status, contain){
                   status_id: contain, 
                 },
               success: function(res, sec){
-                $.pjax.reload({container:"#task-list-refresh",async: false});
+                
+
                    console.log('Completed');
               },
               error: function(res, sec){

@@ -23,6 +23,7 @@
     display: block;
     transition: 0.3s;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .sidenav .closebtn:hover{
@@ -75,10 +76,12 @@ $viewBoard = <<<JS
 
 
     $('.board-open').click(function(){
+        $.pjax.reload({container:"#kanban-refresh",async: false});
         $('#mySidenav').css({'width':'100%'})
     });
 
     $('.closebtn').click(function(){
+        $.pjax.reload({container:"#task-list-refresh",async: false});
         $('#mySidenav').css({'width':'0'})
     });
 
