@@ -176,7 +176,7 @@ Main Components
     top: 16px;
     left: 12px;
     font-size: 18px;
-    color: #595959 !important;
+    color: #fff !important;
     -webkit-transition: all 0.4s ease;
     -o-transition: all 0.4s ease;
     transition: all 0.4s ease;
@@ -187,7 +187,7 @@ Main Components
     font-size: 16px;
     position: absolute;
     top: 16px;
-    color: #595959 !important;
+    color: #fff !important;
     transition: all 0.4s ease;
 }
 .iconzz {
