@@ -246,7 +246,7 @@ class SiteController extends BoffinsBaseController {
 						}
 						$newUser = UserDb::findOne([$user->id]);
 			            if (Yii::$app->user->login($newUser)){
-			                return $this->redirect(['index']);
+			                return $this->redirect(['folder/index']);
 			            }
 					} 
 				} else {
