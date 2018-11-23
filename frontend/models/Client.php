@@ -4,6 +4,10 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
+use frontend\models\Corporation;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
+
 /**
  * This is the model class for table "{{%tm_client}}".
  *
@@ -13,7 +17,7 @@ use boffins_vendor\behaviors\DeleteUpdateBehavior;
  * @property Corporation $corporation
  * @property Project[] $Projects
  */
-class Client extends \yii\db\ActiveRecord
+class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc
@@ -103,10 +107,6 @@ class Client extends \yii\db\ActiveRecord
 	public function getShortName() {
 		return $this->corporation->shortName;
 	}
-
-    public function getNotes() {
-        return $this->corporation->notes;
-    }
 	
 	public function getNameString() {
 		return $this->corporation->NameString;

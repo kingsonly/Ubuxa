@@ -1,8 +1,9 @@
 <?php
 
-namespace app\models;
+namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\models\KnownClass;
 
 /**
  * This is the model class for table "{{%currency}}".
@@ -16,7 +17,7 @@ use Yii;
  * @property string $subunit_text
  *
  */
-class Currency extends \yii\db\ActiveRecord
+class Currency extends \yii\db\ActiveRecord implements KnownClass
 {
     /**
      * @inheritdoc
@@ -57,9 +58,25 @@ class Currency extends \yii\db\ActiveRecord
             'subunit_text' => 'Subunit Text',
         ];
     }
-	
+	/**
+	 *  @brief returns a string which acts as an identifier for the currency. 
+	 *  
+	 *  @return string 
+	 */
 	public function getcurrencyString() 
 	{
 		return $this->country . " (" . $this->currency_code . ") - " . $this->symbol;
+	}
+	
+	/**
+	 *  @brief returns a string which acts as an identifier for the currency. 
+	 *  
+	 *  @return string 
+	 *  
+	 *  @details implementation needed for KnownClass interface. 
+	 */
+	public function getNameString() : string
+	{
+		return $this->getCurrencyString();
 	}
 }

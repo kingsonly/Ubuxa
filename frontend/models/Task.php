@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface, ClipperInterface};
 
 /**
  * This is the model class for table "{{%task}}".
@@ -28,7 +29,7 @@ use boffins_vendor\classes\BoffinsArRootModel;
  * @property TaskStatus $status
  * @property TaskReminder[] $taskReminders
  */
-class Task extends BoffinsArRootModel
+class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface, ClipperInterface 
 {
     /***
      * accessible value linked to the database id of "completed" in status_type under task group.. 

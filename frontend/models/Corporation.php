@@ -3,6 +3,10 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\BoffinsArRootModel;
+
+
 //use app\models\Tmclient;
 
 /**
@@ -22,7 +26,7 @@ use Yii;
  * @property TmPersonCorporation[] $tmPersonCorporations
  * @property TmProductCorporation[] $tmProductCorporations
  */
-class Corporation extends \yii\db\ActiveRecord
+class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * @inheritdoc
@@ -56,6 +60,8 @@ class Corporation extends \yii\db\ActiveRecord
             'notes' => 'Notes',
         ];
     }
+	
+	
 
     /**
      * @return \yii\db\ActiveQuery
@@ -121,7 +127,7 @@ class Corporation extends \yii\db\ActiveRecord
         return $this->hasMany(ProductCorporation::className(), ['supplier_id' => 'id']);
         
     }
-    //Added by kingsley of buffins 
+    //Added by kingsley of boffins 
     public static function getclientname($id)
     {
 		$compid=Client::get_clientid($id) ;

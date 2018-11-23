@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 
 /**
  * This is the model class for table "{{%email}}".
@@ -12,7 +14,7 @@ use Yii;
  *
  * @property TmEmailEntity[] $tmEmailEntities
  */
-class Email extends \yii\db\ActiveRecord
+class Email extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc

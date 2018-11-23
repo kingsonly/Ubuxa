@@ -35,7 +35,7 @@ class ComponentManager extends \yii\db\ActiveRecord
             [['role'], 'string'],
             [['component_id', 'user_id'], 'unique', 'targetAttribute' => ['component_id', 'user_id']],
             [['component_id'], 'exist', 'skipOnError' => true, 'targetClass' => Component::className(), 'targetAttribute' => ['component_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserDb::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -64,6 +64,6 @@ class ComponentManager extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
     }
 }

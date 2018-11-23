@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use frontend\models\Role;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 
 ?>
@@ -31,6 +32,9 @@ use yii\helpers\ArrayHelper;
     margin-right: 80px;
     float: right;
 	}
+  .client_template{
+    background-image:linear-gradient(#fff,#ccc);
+  }
 </style>
 
 <div class="">
@@ -60,7 +64,7 @@ use yii\helpers\ArrayHelper;
 $addUsers = $form->field($model, 'email[]')->textInput(['autofocus' => true, 'class' => 'form-control name_list' ]);
 $addRoles = Html::button('Add more', ['class' => 'btn btn-success', 'name' => 'add', 'id' => 'add']); 
 
-
+$inviteUrl = Url::to(['site/inviteusers']);
 
 $js = <<<JS
 
@@ -84,8 +88,10 @@ $(document).ready(function(){
               $(this).closest('.dynamics').remove(); 
       		} 
       });  
-    $('#submit').click(function(){            
-        $.ajax({  
+    $('#submit').click(function(){  
+    var getform = $('#add_email').serialize();
+        $.ajax({ 
+            url:'$inviteUrl', 
 		    method:"POST",  
             data:$('#add_email').serialize(),
             type:'json',
@@ -94,7 +100,6 @@ $(document).ready(function(){
          	  	i=1;
                	$('.dynamic-added').remove();
                 $('#add_email')[0].reset();
-    			alert(data);
             }  
         });  
       });

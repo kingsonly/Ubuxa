@@ -11,7 +11,7 @@ use Yii;
  * @property resource $value
  * @property string $type for images and raw binaries - avoid use unless essential
  */
-class ValueVariantObject extends \boffins_vendor\classes\BoffinsArRootModel
+class ValueVariantObject extends \boffins_vendor\classes\models\ValueARModel
 {
     /**
      * {@inheritdoc}

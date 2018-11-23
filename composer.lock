@@ -149,8 +149,7 @@
                     "jquery-ui.js"
                 ],
                 "bower-asset-ignore": []
-            },
-            "time": "2015-03-13T14:48:12+00:00"
+            }
         },
         {
             "name": "bower-asset/punycode",
@@ -652,12 +651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032"
+                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/d0fc759da07da74bbd13f09ae37bd85cc74d8032",
-                "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/b9998af1f26d9fca0df35b4d00f48034a8f8f697",
+                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697",
                 "shasum": ""
             },
             "type": "library",
@@ -697,7 +696,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-11-05T12:38:12+00:00"
+            "time": "2018-11-21 06:48:56"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
@@ -894,17 +893,21 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481"
+                "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/71bfaf2450d0b338a35d2818039e1c7637e75481",
-                "reference": "71bfaf2450d0b338a35d2818039e1c7637e75481",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/0690e9b119d9116098cbae4f15703c14f9c264b2",
+                "reference": "0690e9b119d9116098cbae4f15703c14f9c264b2",
                 "shasum": ""
+            },
+            "suggest": {
+                "yiisoft/yii2-bootstrap": "for Krajee extensions to work with Bootstrap 3.x version",
+                "yiisoft/yii2-bootstrap4": "for Krajee extensions to work with Bootstrap 4.x version"
             },
             "type": "yii2-extension",
             "extra": {
@@ -938,7 +941,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-10-09T07:54:35+00:00"
+            "time": "2018-11-10T11:06:12+00:00"
         },
         {
             "name": "kartik-v/yii2-money",
@@ -1046,7 +1049,7 @@
                 "popover",
                 "popover-x"
             ],
-            "time": "2018-11-05T10:53:30+00:00"
+            "time": "2018-11-05 10:53:30"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",
@@ -2066,7 +2069,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2018-11-05T12:31:44+00:00"
+            "time": "2018-11-05 12:31:44"
         },
         {
             "name": "kingsonly/yii2-wiki",
@@ -2108,7 +2111,7 @@
                 "source": "https://github.com/asinfotrack/yii2-wiki",
                 "issues": "https://github.com/asinfotrack/yii2-wiki/issues"
             },
-            "time": "2018-10-16T16:29:23+00:00"
+            "time": "2018-10-16 16:29:23"
         },
         {
             "name": "macrowish/yii2-bootstrap-tour",
@@ -2151,7 +2154,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-08-19T15:37:17+00:00"
+            "time": "2016-08-19 15:37:17"
         },
         {
             "name": "mongosoft/yii2-upload-behavior",
@@ -2383,8 +2386,7 @@
                 }
             ],
             "description": "Creates a true array based on `arraylike`, starting at `startIndex`.",
-            "homepage": "https://github.com/bevacqua/atoa#readme",
-            "time": "2015-07-02T15:12:19+00:00"
+            "homepage": "https://github.com/bevacqua/atoa#readme"
         },
         {
             "name": "npm-asset/contra",
@@ -2398,6 +2400,15 @@
             "require": {
                 "npm-asset/atoa": "1.0.0",
                 "npm-asset/ticky": "1.0.1"
+            },
+            "require-dev": {
+                "npm-asset/assert": "~1.1.0",
+                "npm-asset/browserify": "10.2.4",
+                "npm-asset/jshint": "~2.4.1",
+                "npm-asset/jshint-stylish": "~0.1.5",
+                "npm-asset/jshint-tap": "0.0.1",
+                "npm-asset/mocha": "~1.17.0",
+                "npm-asset/uglify-js": "2.4.23"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2439,8 +2450,7 @@
                 "generator",
                 "promises",
                 "q"
-            ],
-            "time": "2016-05-20T17:01:34+00:00"
+            ]
         },
         {
             "name": "npm-asset/crossvent",
@@ -2453,6 +2463,23 @@
             },
             "require": {
                 "npm-asset/custom-event": "1.0.0"
+            },
+            "require-dev": {
+                "npm-asset/browserify": ">=4.1.3,<5.0.0",
+                "npm-asset/contra": ">=1.6.10,<2.0.0",
+                "npm-asset/gulp": ">=3.6.2,<4.0.0",
+                "npm-asset/gulp-bump": "~0.1.0",
+                "npm-asset/gulp-clean": "~0.2.3",
+                "npm-asset/gulp-git": "~0.2.0",
+                "npm-asset/gulp-header": ">=1.0.2,<2.0.0",
+                "npm-asset/gulp-rename": "~0.2.2",
+                "npm-asset/gulp-size": "~0.1.1",
+                "npm-asset/gulp-streamify": "0.0.5",
+                "npm-asset/gulp-uglify": "~0.1.0",
+                "npm-asset/gzip-size": ">=1.0.0,<2.0.0",
+                "npm-asset/jquery": ">=1.11.1,<2.0.0",
+                "npm-asset/pretty-bytes": ">=1.0.1,<2.0.0",
+                "npm-asset/vinyl-source-stream": ">=0.1.1,<0.2.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2478,8 +2505,7 @@
                 }
             ],
             "description": "Cross-platform browser event handling",
-            "homepage": "https://github.com/bevacqua/crossvent",
-            "time": "2015-08-25T00:19:47+00:00"
+            "homepage": "https://github.com/bevacqua/crossvent"
         },
         {
             "name": "npm-asset/custom-event",
@@ -2489,6 +2515,9 @@
                 "url": "https://registry.npmjs.org/custom-event/-/custom-event-1.0.0.tgz",
                 "reference": null,
                 "shasum": "2e4628be19dc4b214b5c02630c5971e811618062"
+            },
+            "require-dev": {
+                "npm-asset/zuul": "~1.16.3"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2524,8 +2553,7 @@
                 "customevent",
                 "dom",
                 "event"
-            ],
-            "time": "2015-01-07T22:33:23+00:00"
+            ]
         },
         {
             "name": "npm-asset/dragula",
@@ -2539,6 +2567,23 @@
             "require": {
                 "npm-asset/contra": "1.9.4",
                 "npm-asset/crossvent": "1.5.4"
+            },
+            "require-dev": {
+                "npm-asset/bower": "1.5.2",
+                "npm-asset/browserify": "11.0.0",
+                "npm-asset/clean-css": "3.3.6",
+                "npm-asset/electron-prebuilt": "0.30.1",
+                "npm-asset/hihat": "1.2.1",
+                "npm-asset/jshint": "2.8.0",
+                "npm-asset/jshint-stylish": "2.0.1",
+                "npm-asset/nib": "1.1.0",
+                "npm-asset/phantomjs": "2.1.3",
+                "npm-asset/stylus": "0.52.0",
+                "npm-asset/tap-dev-tool": "1.3.0",
+                "npm-asset/tape": "4.0.1",
+                "npm-asset/tape-run": ">=2.1.3,<3.0.0",
+                "npm-asset/uglify-js": "2.4.24",
+                "npm-asset/watchify": "3.3.0"
             },
             "type": "npm-asset-library",
             "extra": {
@@ -2578,8 +2623,7 @@
                 }
             ],
             "description": "Drag and drop so simple it hurts",
-            "homepage": "https://github.com/bevacqua/dragula",
-            "time": "2016-09-12T12:35:26+00:00"
+            "homepage": "https://github.com/bevacqua/dragula"
         },
         {
             "name": "npm-asset/easy-pie-chart",
@@ -2752,8 +2796,7 @@
                 }
             ],
             "description": "Run a callback as soon as possible",
-            "homepage": "https://github.com/bevacqua/ticky#readme",
-            "time": "2016-05-20T16:56:23+00:00"
+            "homepage": "https://github.com/bevacqua/ticky#readme"
         },
         {
             "name": "phar-io/manifest",
@@ -3459,16 +3502,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.11.2",
+            "version": "3.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e"
+                "reference": "9b7a5f837938c38f1131d6042b859144053ac45c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c8e1760a45c4aed201af3b7deee35131bc47fe3e",
-                "reference": "c8e1760a45c4aed201af3b7deee35131bc47fe3e",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/9b7a5f837938c38f1131d6042b859144053ac45c",
+                "reference": "9b7a5f837938c38f1131d6042b859144053ac45c",
                 "shasum": ""
             },
             "require": {
@@ -3509,7 +3552,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-10-08T20:45:21+00:00"
+            "time": "2018-11-11T14:41:22+00:00"
         },
         {
             "name": "psr/http-message",
@@ -5370,7 +5413,7 @@
                 "session",
                 "yii2"
             ],
-            "time": "2018-10-27T23:12:16+00:00"
+            "time": "2018-10-27 23:12:16"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",

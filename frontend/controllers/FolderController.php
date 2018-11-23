@@ -171,7 +171,7 @@ class FolderController extends Controller
 		$userModel = new UserDb();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
-			  $test = 0;
+			  
 			 foreach($inviteUsersModel->users as $value){
 				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
 				 $test = $getUserId['id'];
@@ -180,7 +180,7 @@ class FolderController extends Controller
 					'folderId' => $id,
 				]));
 			 }
-            return ['output'=>$id, 'message'=> $test];
+            return ['output'=>$id, 'message'=> 0];
         }
 	}
 
@@ -200,7 +200,7 @@ class FolderController extends Controller
 			}
 			
 			if($model->save()){
-            	return ['output'=>$model->id, 'message'=>'sent'];
+            	return ['output'=>$model->id, 'message'=>'sent','area'=>'folder','templateId'=>'0'];
 			}
             
         }

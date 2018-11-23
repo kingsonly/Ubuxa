@@ -592,8 +592,7 @@ INSERT INTO `tm_corporation` (`id`, `name`, `short_name`, `entity_id`, `notes`, 
 (2, 'FBM Hudson Italiana', 'FBMI', 98, '', NULL),
 (3, 'Kaduna Refining and Petrochemical Co. Ltd', 'KD', 99, '', NULL),
 (4, 'Azbil Yamatake Europe /nv', 'AZBY', 100, 'Tax number: BE0474687910', NULL),
-(5, 'Standard Chartered Bank Nigeria', 'SCBN', 101, 'This is the Nigerian bank - Obinna Abara account officer  OLD:0000002503 NEW: 0002618322', NULL),
-(6, 'Vega Instruments (SA) Pty Ltd ', 'VEGAS', 102, 'Reg No: 1997/012720/07 - Vat Reg No: 45440168723', NULL);
+(5, 'Vega Instruments (SA) Pty Ltd ', 'VEGAS', 102, 'Reg No: 1997/012720/07 - Vat Reg No: 45440168723', NULL);
 
 -- --------------------------------------------------------
 
@@ -6209,12 +6208,12 @@ INSERT INTO `tm_supplier` (`id`, `corporation_id`, `supplier_type`, `notes`, `la
 DROP TABLE IF EXISTS `tm_task`;
 CREATE TABLE IF NOT EXISTS `tm_task` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(50) NOT NULL,
-  `details` varchar(255) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `assigned_to` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `create_date` datetime NOT NULL,
+  `title` varchar(50),
+  `details` varchar(255),
+  `owner` int(11),
+  `assigned_to` int(11),
+  `status_id` int(11),
+  `create_date` datetime,
   `due_date` datetime NOT NULL,
   `last_updated` datetime NOT NULL,
   `deleted` int(1) NOT NULL,
@@ -6338,10 +6337,10 @@ CREATE TABLE IF NOT EXISTS `tm_user` (
 --
 
 INSERT INTO `tm_user` (`id`, `person_id`, `basic_role`, `username`, `password`, `salt`, `authKey`, `last_login`, `last_updated`, `deleted`, `cid`) VALUES
-(24, 2, 1, 'admin', '$2y$13$C0AmXXsce9pIJEbsq67rJ.LG6.um9bVYOqMwOK4aUCeproz8v3JYu', '2X6zOUK7d', NULL, '2018-09-05 04:32:18', '0000-00-00', 0, NULL),
-(31, 3, 2, 'demo2', '$2y$13$Mu7HMKy4HWywBbmGimt3Ke5ChkMeUHphJQJrMQ3qMQPf0U0JmBl3W', 'QjZDJqf2I', NULL, NULL, '2017-10-06', NULL, NULL),
-(33, 48, 3, 'guest', '$2y$13$bALWS4jJCxPAJK3NuAQ7Q.ohjx5n5rWt0AIywhcpi7xSp31ovrQNe', 'ER4E6YMDQ', NULL, '2018-05-25 06:51:23', '0000-00-00', NULL, NULL),
-(34, 49, 3, 'gabriel', '$2y$13$pzpLjehLmW6K6cZ8Cqu/EOfSTc9N2fGP3eZrZ5oQMz5tFNzdk17aa', 'ncwKNqfYp', NULL, '2017-11-24 17:17:16', '0000-00-00', NULL, NULL);
+(24, 2, 1, 'admin', '$2y$13$C0AmXXsce9pIJEbsq67rJ.LG6.um9bVYOqMwOK4aUCeproz8v3JYu', '2X6zOUK7d', NULL, '2018-09-05 04:32:18', '0000-00-00', 0, 33),
+(31, 3, 2, 'demo2', '$2y$13$Mu7HMKy4HWywBbmGimt3Ke5ChkMeUHphJQJrMQ3qMQPf0U0JmBl3W', 'QjZDJqf2I', NULL, NULL, '2017-10-06', 1, 33),
+(33, 48, 3, 'guest', '$2y$13$bALWS4jJCxPAJK3NuAQ7Q.ohjx5n5rWt0AIywhcpi7xSp31ovrQNe', 'ER4E6YMDQ', NULL, '2018-05-25 06:51:23', '0000-00-00', 0, 33),
+(34, 49, 3, 'gabriel', '$2y$13$pzpLjehLmW6K6cZ8Cqu/EOfSTc9N2fGP3eZrZ5oQMz5tFNzdk17aa', 'ncwKNqfYp', NULL, '2017-11-24 17:17:16', '0000-00-00', 0, 33);
 
 -- --------------------------------------------------------
 

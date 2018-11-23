@@ -3,6 +3,11 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\ComponentARModel;
+use boffins_vendor\classes\ModelCollection;
+use boffins_vendor\classes\StandardQuery;
+use yii\db\ActiveQuery;
+
 
 /**
  * This is the model class for table "tm_component".
@@ -41,14 +46,23 @@ use Yii;
  * @property ReceivedpurchaseorderComponent[] $receivedpurchaseorderComponents
  * @property Receivedpurchaseorder[] $receivedpurchaseorderReferences
  */
-class Component extends \yii\db\ActiveRecord
+class Component extends ComponentARModel
 {
     /**
      * {@inheritdoc}
      */
+	public $folderId; // Holds the value of the corrent folder to be used in behaviour
+	public $componentAttribute;
+	 
+	//public attributeCollection = new ModelCollection([], ['query' => $this->getComponentAttributes() ]);
+	public function init(){
+		parent::init();
+		//$this->componentAttribute = 
+	}
+	
     public static function tableName()
     {
-        return 'tm_component';
+        return '{{%component}}';
     }
 
     /**
@@ -58,7 +72,7 @@ class Component extends \yii\db\ActiveRecord
     {
         return [
             [['component_template_id', 'deleted', 'cid'], 'integer'],
-            [['created_at', 'last_updated'], 'safe'],
+            [['created_at', 'last_updated','folderId'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['component_template_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentTemplate::className(), 'targetAttribute' => ['component_template_id' => 'id']],
         ];
@@ -73,6 +87,7 @@ class Component extends \yii\db\ActiveRecord
             'id' => 'ID',
             'component_template_id' => 'Component Template ID',
             'title' => 'Title',
+            'folderId' => 'Folder',
             'created_at' => 'Created At',
             'last_updated' => 'Last Updated',
             'deleted' => 'Deleted',
@@ -87,6 +102,13 @@ class Component extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ComponentTemplate::className(), ['id' => 'component_template_id']);
     }
+	
+	public function getComponentAttribute()
+    {
+        return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->where(['component_id' => $this->id]) ] );
+    }
+	
+
 
     /**
      * @return \yii\db\ActiveQuery

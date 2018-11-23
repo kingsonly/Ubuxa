@@ -35,6 +35,7 @@ hr{
 	justify-content: center;
 	justify-content: space-around;
 }
+	
 
 .folder-item{
 	line-height: 150px;
@@ -193,6 +194,8 @@ text-overflow: ellipsis;
 } 
 .component-list{
 	list-style: none;
+	cursor: pointer;
+	
 	}
 	.component-holder{
 	
@@ -207,7 +210,7 @@ text-overflow: ellipsis;
 		border-bottom: solid 3px red;
 		padding-bottom: 9px !important;
 		text-decoration: none;
-		list-style: disc !important;
+		/*list-style: disc !important;*/
 	}
 	#carousles button .fa{
 		color: green !important;
@@ -229,7 +232,7 @@ text-overflow: ellipsis;
 			 <? if($displayType == 'component'){?>
 			 <div class="component-holder">
 				 <? $componentsObject = $folder;// making its easy for developers to relate to .?>
-				 <li class="component-list " data-url = "<?= Url::to(['component/index','folder'=>$folderId,'component' => $componentsObject->id])?>">
+				 <li class="component-list one-time-template-click-<?= $componentsObject->id;?>" data-url = "<?= Url::to(['component/index','folder'=>$folderId,'component' => $componentsObject->id])?>">
 					 <?= $componentsObject->name ?>
 				 </li>
 			 </div>
@@ -339,7 +342,7 @@ $(".folder-text").mouseout(function() {
     }, 'slow');
 });
 
-$('.component-list').on('click',function(){
+$('.component-list').off().on('click',function(){
 	$('.component-list').removeClass('active-component');
 	data = $(this).data('url');
 	$(this).addClass('active-component');

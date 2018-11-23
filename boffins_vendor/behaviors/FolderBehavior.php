@@ -80,7 +80,7 @@ class FolderBehavior extends Behavior
 	{
 		$model = new UserDb();
 		$getAllAdmin  = $model->find()
-			->select(['id'])->where(['in','basic_role',self::BASIC_ADMIN_ROLES])->all();
+			->select(['id'])->where(['in','basic_role',self::BASIC_ADMIN_ROLES])->andWhere(['cid' => yii::$app->user->identity->cid])->all();
 		return $getAllAdmin;
 	}
 	

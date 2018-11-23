@@ -1,25 +1,4 @@
-<style>
-.floatright{
-	float: right;
-	margin-right: 10px;
-}
-.foldernote{
-	line-height: 24px;
-	text-underline-position: alphabetic;
-	margin-top: 10px;
 
-}
-.projecturl{
-	 cursor: pointer;
- }
-
-.box{
-	border: none;
-	font-family: candara;
-}
-#createinvoice{
-	margin: 10px 10px;
-}
 </style>
 <?php
 use yii\helpers\Html;
@@ -30,65 +9,131 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Folder */
 ?>
-<div class="row">
-	<div class="col-xs-12">
-		<div class="box">
-			<div class="folder-index">
-				<h1> 
-					
-				</h1>
+<style>
+	
+	#listtable_wrapper .row:first-child{
+		display: none;
+	}
+	#listtable{
+	table-layout: fixed;
+	width: 100%;
+	border-spacing: 0;
+	padding: 0;
+	}
+	
+	#listtable tr{
+		position: relative;
+		box-shadow: inset 0 -1px 0 0 rgba(100,121,143,0.122);
+		
+	}
+	.active-component-tr{
+		box-shadow: inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0,0 1px 2px 0 rgba(6, 81, 18, 1),0 1px 3px 1px rgba(60,64,67,.15) !important;
+		z-index:1;
+	}
+	#listtable .component-table-tr:hover{
+		box-shadow: inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0,0 1px 2px 0 rgba(63, 81, 181, 1),0 1px 3px 1px rgba(60,64,67,.15);
+		z-index:2;
+		cursor: pointer;
+		
+	}
 
-				<div class="box-body">
-					<h3></h3>
-					
-						<?php Pjax::begin(['id' => 'listviewtablereload']) ?>
-					<table id="listviewtable" class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>SN</th>
-								
-							</tr>
+	
+	h1{
+            font-size:30px;
+        }
+        /*Table Style One*/
+        
+        
+     
+	
+</style>
+<section>
 
-						</thead>
-						<tbody>
-							<?php $sn=1; foreach($content as $k=>$v){ ?>
-								<tr class="<?=  <?if($sn === 1 && $hoverEffect == 'true'){echo 'activelist';} ?>" data-url="" title="">
-									<td class="">
-										<?= $sn;  ?>
-									</td>
-									
-									<td class="">
-										<?= $v->$value;  ?>
-									</td>
-									<? } ?>
+            <table id="listtable" class="table">
+				<thead>
+                <tr class="table-header">
+					<th class="cell">Title</th>
+					<? $attributeNameHolder = []; if(!empty($content)){?>
+						<? $i=1;foreach($content as $key => $value){?>
+						<? if($i === 1){ ?>
+							<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+								<? array_push($attributeNameHolder,$componentDetails['name']);?>
+                    			
+                    		<? };?>
+						<? }?>
+							
+						<? $i++; }?>
+					<?}?>
+                    
+                    <? foreach($attributeNameHolder as $valueHEader){;?>
+						<th class="cell"><?= $valueHEader; ?></th>
+                    <? };?>
+                </tr>
+				</thead>
+	
+				<tbody>
+					<? foreach($content as $key => $value){?>
+					<tr  class="component-table-tr one-time-component-click<?= $value['id'];?>" data-componentid="<?= $value['id'];?>">
+                    <td><?= $value['title'];?></td>
+					<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+                    <td><?= empty($componentDetails['value'])?$componentDetails['name'].' is empty':$componentDetails['value'];?>
+						
+						
+						
+						</td>
+                    
+                    <? };?>
+                	</tr>
+					<? };?>
+                
+				</tbody>
+                
+            </table>
+        
 
-								</tr>
-							<?php $sn++; }?>
-						</tbody>
-						<tfoot>
-							<tr>
-								<th>SN</th>
-								
-							</tr>
-						</tfoot>
-					</table>
-				</div>
+</section>
+<?
+$viewUrl = Url::to(['component/view']);
+$listViewJs = <<<listViewJs
 
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<script>
-$("#listviewtable").DataTable({
+$("#listtable").DataTable({
 	"aaSorting": [],
 	"responsive": "true",
 	"pagingType": "simple",
 });
-</script>
+$('#listtable_wrapper').hover(function(){
+	$('#listtable_wrapper .row:first-child').show();
+},function(e){
+	if($(document).find('#listtable_wrapper .input-sm').hasClass('keep-search-bar')){
+		alert(1234);
+	}else{
+		$('#listtable_wrapper .row:first-child').hide();
+	}
+	
+})
 
-<?php Pjax::end() ?>
+$(document).on('click','.input-sm',function(){
+	$(this).addClass('keep-search-bar');
+})
+
+$(document).off().on('click','.component-table-tr',function(e){
+	clickedElement = $(this);
+	getComponentId = clickedElement.data('componentid');
+	$(document).find('.component-table-tr').removeClass('active-component-tr')
+	clickedElement.addClass('active-component-tr');
+	$("#listView").removeClass('col-xs-12');
+	$("#view-content").removeClass('col-xs-5');
+	$("#view-content").addClass('col-xs-4').show();
+	$("#listView").addClass('col-xs-8').find('#listtable').css('table-layout','auto');
+	$("#view").load('$viewUrl&id='+getComponentId);
+	
+})
+
+listViewJs;
+ 
+$this->registerJs($listViewJs);
+?>
+
 
 
 

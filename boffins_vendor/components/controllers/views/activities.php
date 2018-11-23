@@ -21,7 +21,11 @@
 	padding-top: 10px;
 }
 .box-content-activities {
-	height: 50px;	
+	height: 50px;
+	padding-top: 10px;
+	font-style: italic;
+    font-weight: bold;
+    font-size: 15px;	
 }
 .green-border {
 	border-bottom: 5px solid green;
@@ -51,7 +55,7 @@
 		<div class="col-sm-10 col-xs-8 folderdetlss ">
 			<div class="active-info">
 				<div class="act-header">New Activity</div>
-				<div class="box-content-activities">Hello World!</div>
+				<div class="box-content-activities">Coming Soon...</div>
 			</div>
 			<div class="green-border"></div>
 		</div>
@@ -59,7 +63,7 @@
 		<div class="col-sm-2 col-xs-4 activedetls">
 			<div class="info-1">
 				<div class="box-content-active">
-					<h1 style="margin:0; text-align:center;color:red;">4</h1>
+					<h1 style="margin:0; text-align:center;color:red;">0</h1>
 					<div class="active-text"> New Activity</div>
 				</div>
 			</div>

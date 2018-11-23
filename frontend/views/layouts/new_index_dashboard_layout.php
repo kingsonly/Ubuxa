@@ -12,7 +12,7 @@ use app\assets\NewIndexDashboardAsset;
 IndexDashboardAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
-<? Yii::$app->language  = Yii::$app->settingscomponent->buffinsUsersLanguage();?>
+<? Yii::$app->language  = Yii::$app->settingscomponent->boffinsUsersLanguage();?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" ng-app="app">
 <head>

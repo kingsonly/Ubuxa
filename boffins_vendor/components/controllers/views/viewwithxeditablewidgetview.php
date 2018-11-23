@@ -3,16 +3,39 @@ use kartik\editable\Editable;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use kartik\popover\PopoverX;
+use frontend\models\Corporation;
+$customers = Corporation::find()
+    ->joinWith('client')
+    
+    ->all();
+$data=ArrayHelper::map($customers,'id','name');
 ?>
 <style>
+	#view-content h4{
+		font-size: 1em;
+		line-height: 24px;
+		letter-spacing: -0.003em;
+		text-transform: capitalize;
+		margin: 0px !important;
 
+	}
 	.kv-editable-input{
 		width: 100% !important;
 	}
 	.xinput:hover{
 		background:#ccc;
 		padding: 0px !important;
+	}
+	
+	.xinput-component:hover{
+		background:rgb(235, 236, 240);
+		padding: 2px !important;
+		font-style: italic;
+		border-radius: 5px;
+		text-align: center !important;
+		border-radius: 5px;
 	}
 	.xinput{
 		
@@ -34,6 +57,17 @@ use kartik\popover\PopoverX;
 		overflow: hidden;
 		display: inline-block;
 		white-space: nowrap;
+	}
+	
+	.xinput-component{
+		background: none;
+		border:none;
+		text-align: left !important;
+		width: 100%;
+		color:rgb(9, 30, 66);
+		min-height: 35px;
+		font-size: 16px;
+		
 	}
 	.ellipsis{
 text-overflow: ellipsis;
@@ -77,6 +111,533 @@ text-overflow: ellipsis;
 
 <?
 foreach($attributues as $v){
+	
+	if($editableArea == 'component'){
+			if(!isset($v['xeditable'])){
+		?>
+<div>
+<h5><?= $attributeName;?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'sm',
+			'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+			'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'containerOptions' => ['id' =>$editableId],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+	<?
+	}else{?>
+<? if($v['xeditable'] == 'integer'){?>
+
+<div>
+<h5><?= $attributeName;?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+		'containerOptions' => ['id' =>$editableId],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'short_string'){?>
+
+<div>
+<h4><?= $attributeName;?></h4>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    		'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
+			//'inputType' => Editable::INPUT_MONEY,
+			//'options'=>['placeholder'=>'Enter title...'],
+		    'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+		'containerOptions' => ['id' =>$editableId],
+		'options'=>[
+					'options'=>['placeholder'=>'From date','id'=>'fakeme']
+				],
+			'editableValueOptions'=>['class'=>'xinput-component']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+<?}elseif($v['xeditable'] == 'long_string'){?>
+
+
+<div>
+<h5><?= $attributeName;?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_TEXTAREA,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'containerOptions' => ['id' =>$editableId],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+
+<? }elseif($v['xeditable'] == 'money'){ ?>
+
+
+<div>
+<h5><?= $attributeName;?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_MONEY,
+		'containerOptions' => ['id' =>$editableId],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+			//'options'=>['placeholder'=>'Enter title...'],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'known_class'){ ?>
+
+
+<div>
+<h5><?= $attributeName;?></h5>
+<?
+				
+				
+				
+	$editable = Editable::begin([
+    'model'=>$model,
+			'attribute'=>$v['modelAttribute'],
+			'asPopover' => false,
+			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+			'size'=>'md',
+			'inputType' => Editable::INPUT_DROPDOWN_LIST,
+			'data'=>$data,
+			//'options'=>['placeholder'=>'Enter title...'],
+		'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+		'containerOptions' => ['id' =>$editableId],
+		'formOptions' => ['id' => 'wishitemaction' ],
+		'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+			'editableValueOptions'=>['class'=>'xinput ellipsis']
+]);
+$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+Editable::end();
+	
+		?>
+	</div>
+
+<? }elseif($v['xeditable'] == 'variant_object'){ ?>
+
+<div>
+	<h5><?= $attributeName;?></h5>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+				'containerOptions' => ['id' =>$editableId],
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }elseif($v['xeditable'] == 'timestamp'){ ?>
+
+<div>
+	<h5><?= $attributeName;?></h5>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+				'containerOptions' => ['id' =>$editableId],
+				'inputType' => Editable::INPUT_DATE,
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }elseif($v['xeditable'] == 'variant_string'){ ?>
+
+<div>
+	<h5><?= $attributeName;?></h5>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+				'containerOptions' => ['id' =>$editableId],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+<? }else{  ?>
+
+<div>
+	<h5><?= $attributeName;?></h5>
+<?
+			$editable = Editable::begin([
+				'model'=>$model,
+				'attribute'=>$v['modelAttribute'],
+				'asPopover' => true,
+				'size'=>'md',
+				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+				'containerOptions' => ['id' =>$editableId],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+			 			$(document).find('#listView').load($('.active-component').data('url')).find('.one-time-component-click'+data.component).delay( 800 ).addClass('active-component-tr');
+						options = {
+					  'closeButton': true,
+					  'debug': false,
+					  'newestOnTop': true,
+					  'progressBar': true,
+					  'positionClass': 'toast-top-right',
+					  'preventDuplicates': true,
+					  'showDuration': '300',
+					  'hideDuration': '1000',
+					  'timeOut': '5000',
+					  'extendedTimeOut': '1000',
+					  'showEasing': 'swing',
+					  'hideEasing': 'linear',
+					  'showMethod': 'fadeIn',
+					  'hideMethod': 'fadeOut',
+					  'tapToDismiss': false
+		  			}
+				toastr.success('Change made is successfull', '', options);
+			 		}",
+    	],
+				'options'=>[
+					'options'=>['placeholder'=>'From date']
+				],
+				'editableValueOptions'=>['class'=>'well well-sm']
+			]);
+				$form = $editable->getForm();
+// use a hidden input to understand if form is submitted via POST
+ echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+			Editable::end();
+			?>
+	</div>
+
+<? } ?>
+
+<? } ?>
+		
+	<?}else{
 	if(!isset($v['xeditable'])){
 		?>
 <div>
@@ -96,6 +657,7 @@ foreach($attributues as $v){
 		?>
 	</div>
 	<?
+	
 	}else{
 		if($v['xeditable'] == 'date'){
 			?>
@@ -119,7 +681,7 @@ foreach($attributues as $v){
 	<?
 	}elseif($v['xeditable'] == 'datetime'){
 			?>
-<div>
+		<div>
 <?
 			echo Editable::widget([
 				'model'=>$model,
@@ -202,7 +764,7 @@ foreach($attributues as $v){
 	<?
 		}
 	}
-		
+	}	
 }
 
 
@@ -213,6 +775,13 @@ $xeditableBoffins = <<<XeditableBoffins
   
 $(".xinput").mouseover(function() {
     $(this).removeClass("ellipsis");
+	$(this).attr("title", $(this).text());
+    $(this).attr("data-toggle", "tooltip");
+    $(this).attr("data-placement", "bottom");
+    
+});
+
+$(".xinput-component").mouseover(function() {
 	$(this).attr("title", $(this).text());
     $(this).attr("data-toggle", "tooltip");
     $(this).attr("data-placement", "bottom");

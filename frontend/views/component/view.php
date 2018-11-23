@@ -1,9 +1,12 @@
 <?php
+use boffins_vendor\components\controllers\ComponentViewWidget;
 /* @var $this yii\web\View */
-?>
-<h1>component/view</h1>
+/* @var $model app\models\Payment */
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+?>
+
+<?= ComponentViewWidget::widget([
+									'model'=>$component,
+									'content'=>$content,
+									
+								]); ?>

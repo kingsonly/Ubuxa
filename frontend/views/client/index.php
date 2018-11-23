@@ -11,180 +11,177 @@ $this->title = 'Clients';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style type="text/css">
-    table{
-  width:100%;
-  table-layout: fixed;
-}
-.tbl-header{
-  background-color: rgba(255,255,255,0.3);
- }
-.tbl-contents{
-  min-height:300px;
-  margin-top: 0px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-td{
-  padding: 15px;
-  text-align: left;
-  vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #666;
-  border-bottom: solid 1px rgba(255,255,255,0.1);
-}
-.close-arrow{
-    cursor: pointer;
-}
-
-.client-info-block{
-    min-height: 60px;
-    position: relative;
-}
-.user-avatar {
-    border-radius: 50%;
-    display: block;
-    float: left;
-    height: 100px;
-    margin-right: 11px;
-    width: 100px;
-
-}
-.company-name{
+  .client-index{
+    background-image: linear-gradient(#fff, #ccc);
+  }
+  .list-action, .list-logo, .list-name, .list-email{
     display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 2px;
-    overflow: hidden;
-    padding-right: 21px;
-    position: relative;
-    white-space: nowrap;
+    font-family: calibri;
+  }
+  .list-container{
     width: 100%;
-}
-.company-name-id{
-    padding-top: 10px;
-    padding-left: 24px;
-}
-.table-headers{
-    display: none;
-    background: #3c8dbc;
-    padding: 20px 15px;
-    text-align: left;
-    font-weight: 500;
+    background-image: linear-gradient('#fff',"#ccc");
+  }
+  .list-action{
+    width: 10%;
+    text-align: center
+  }
+  .list-logo{
+    width: 5%;
+  }
+  .list-name{
+    width: 55%;
+    display: block;
+      overflow: hidden;
+      padding-left: 11px;
+  }
+  .list-email{
+    width: 29.2%;
+  }
+  .list-item-row{
+    border:1px solid #ccc;
+    padding: 20px 0px;
+  }
+  .logo-image{
+    background: #fff;
+    background-size: cover;
+      border: 0;
+      vertical-align: top;
+      height: 48px;
+      width: 48px;
+      border-radius: 25px;
+      position: absolute;
+      left: 100px;
+      top: 8px;
+  }
+  .email-corp{
+    font-size:15px;
+  }
+  .content-row{
+    display: table-row;
+  }
+  .contents{
+    display: table-cell;
+      padding: 24px 10px 26px 63px;
+      overflow: hidden;
+      vertical-align: top;
+      width: 100%;
+      position: relative;
+      box-sizing: border-box;
+      border-bottom: 1px solid #ecedef;
+  }
+
+  .corporation-img{
+    background: #fff;
+    border: 0;
+      vertical-align: top;
+      height: 48px;
+      width: 48px;
+      border-radius: 25px;
+      position: absolute;
+      left: 10px;
+      top: 24px;
+  }
+  .corporation-text{
+    display: block;
+      overflow: hidden;
+      padding-left: 11px;
+  }
+  .corporation-title{
+    font-weight: 600;
+      display: block;
+      font-size: 16px;
+      padding-left: 2px;
+      margin-bottom: 8px;
+      zoom: 1;
+      word-wrap: break-word;
+  }
+  .corporation-description{
+    display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 13px;
+      width:400px;
+      color: #777;
+      padding-left: 2px;
+      white-space: nowrap;
+      margin-bottom: 8px;
+      zoom: 1;
+  }
+  .corporation-users{
+    color: #888;
+      font-size: 13px;
+      padding-left: 2px;
+  }
+  .wrap-corp{
+    border-bottom: 3px solid #eef2f4;
+    position: relative;
+    margin: -5px 0 0;
+    padding-top: 0;
+    padding-left: 20px;
+    height: 37px;
+    color: #38404a;
+    vertical-align: top;
     font-size: 12px;
-    color: #fff !important;
+    font-weight: normal;
     text-transform: uppercase;
-}
-.table-rows{
-    border-bottom: 1px solid #ccc;
-}
-
-
-/* demo styles */
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  .sortby-text{
+    height: 27px;
+    border-bottom: 1px solid #ecedef;
+    color: #38404a;
+    vertical-align: top;
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
 </style>
-<div class="client-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<div style="display:none">
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'corporation_id',
-            [
-                'label' => 'Name',
-                'value' => 'name'
-            ],
-            'last_updated',
-            'deleted',
-            'cid',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
-    <div style="background:#fff;padding: 10px">
-          <div class="tbl-header">
-            <table cellpadding="0" cellspacing="0" border="0">
-              <thead class="table-headers">
-                <tr>
-                  <th>Company Name</th>
-                  <th>Short Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div class="tbl-contents">
-            <table cellpadding="0" cellspacing="0" border="0">
-              <tbody>
-                <? foreach($clients as $client){?>
-                    <tr class="table-rows">
-                      <td>
-                        <div class="row">
-                          <div class="client-info-block col-md-12">
-                            <div class=" col-md-2">
-                              <div class="user-avatar user-default-avatar" style="background: url('<?= Url::to('@web/images/company/logo/company2.png'); ?>') no-repeat center center; background-size: cover;"></div>
-                              </div>
-                              <div class="col-md-10">
-                                <div class="company-name">
-                                    <div class="company-name-id" style="text-transform: uppercase;">
-                                        <?= $client['name']; ?>
-                                    </div>
-                                    
-                                </div>
-                                <div class="company-name">
-                                    <div class="company-name-id">
-                                        <?= $client['notes']; ?>
-                                    </div>
-                                    
-                                </div>
-                                <div class="company-name">
-                                    <div class="company-name-id">
-                                        <button class="btn btn-primary"><?= $client['shortName']; ?></button>
-                                    </div>
-                                    
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                    </td>
-                    <td style="text-align: center;font-size: 20px">
-                        <div class="dropdown">
-                             <a class="btn btn-default dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             <i class="fa fa-align-justify" style="padding-right: 5px"></i>More
-                             </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                 <a class="dropdown-item" href="#">Action</a>
-                                 <a class="dropdown-item" href="#">Another action</a>
-                                 <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                    </tr>
-                <? } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div class="client-index" id="client-index">
+  <div class="wrap-corp">
+    <span>sort by:</span>
+    <span class="sortby-text">
+      <input type="text" name="" id="client-search">
+    </span>
+  </div>
+  <? foreach($clients as $client){ ?>
+  <div class="content-row">
+    <div class="contents">
+      <span class="corporation-img" style="background: url('<?= Url::to('@web/images/company/logo/company2.png'); ?>') no-repeat center center; background-size: cover;"></span>
+      <span class="corporation-text">
+        <span class="corporation-title"><?= $client['name']; ?></span>
+        <span class="corporation-description"><?= $client['notes']; ?></span>
+        <span class="corporation-users">2 members</span>
+      </span>
+    </div>
+  </div>
+  <? } ?>
 </div>
 <?php 
-$clientIndexJs = <<<JS
+$clientJs = <<<JS
 
-$('.table-rows').mouseenter(function(){
-        $(this).css('background','#ccc');
-    }).mouseleave(function(){
-            $(this).css('background','transparent');
-        })
+
+$(document).on('keyup','#client-search', function(){
+  // Declare variables
+    var input, filter, ul, li, a, i;
+    input = document.getElementById('client-search');
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("client-index");
+    li = ul.getElementsByClassName('content-row');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByClassName("corporation-title")[0];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+})
+
 JS;
  
-$this->registerJs($clientIndexJs);
+$this->registerJs($clientJs);
 ?>

@@ -3,6 +3,9 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
+
 
 /**
  * This is the model class for table "tm_clip".
@@ -15,7 +18,7 @@ use Yii;
  * @property ClipBar $bar
  * @property ClipOwnerType $ownerType
  */
-class Clip extends \yii\db\ActiveRecord
+class Clip extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * {@inheritdoc}
