@@ -270,6 +270,8 @@ $viewUrl = Url::to(['component/view']);
 $indexJs = <<<JS
 localStorage.setItem("skipValidation", "");
 
+
+
 JS;
  
 $this->registerJs($indexJs);

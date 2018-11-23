@@ -1,7 +1,9 @@
 <?php
 use boffins_vendor\components\controllers\DisplayLinkedComponents;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
-use frontend\models\ComponentAttributeModel 
+use frontend\models\ComponentAttributeModel;
+use yii\helpers\Url; 
+use boffins_vendor\components\controllers\FolderUsersWidget;
 	
 		
 /* @var $this yii\web\View */
@@ -28,12 +30,15 @@ use frontend\models\ComponentAttributeModel
 						$model = new ComponentAttributeModel();
 						$model->attributeId = $value->id ;
 						$model->value = $value->title ;
+     					 
 						
 						echo ViewWithXeditableWidget::widget(['model'=>$model,'attributeName' => 'Element title','editableId' =>'modelid-'.$model->attributeId,'editableArea'=>'component','attributues'=>[
 					['modelAttribute'=>'value','xeditable' => 'short_string',],
 					
 					]]);
 						$i = 1;
+						
+						echo FolderUsersWidget::widget(['attributues'=>$users,'addUsersUrl'=>Url::to(['component/add-users','id' => $componentId]),'type' => 'component','listOfUsers' => $listOfUsers]);
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
 							${'model'.$i} = new ComponentAttributeModel();
 							${'model'.$i}->attributeId = $attributeValule['id'] ;

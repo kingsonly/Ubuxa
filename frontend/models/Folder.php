@@ -113,9 +113,20 @@ class Folder extends FolderARModel
     /**
      * @return \yii\db\ActiveQuery
      */
+	
     public function getUsers()
     {
         return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
+    }
+	
+	public function getFolderUsers()
+	{
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
+    }
+	
+	public function getFolderManager()
+    {
+		return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
     }
 
     /**
@@ -145,7 +156,7 @@ class Folder extends FolderARModel
 	public function getSubFolders()
     {
         return $this->hasMany($this::className(), ['parent_id' => 'id'])->orderBy([
-			'last_updated' => SORT_DESC
+			'id' => SORT_DESC
 		]);
     }
 	
@@ -199,10 +210,7 @@ class Folder extends FolderARModel
 		 return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->select(['id','username','profile_image'])->via('folderManagerInheritance');
 	 }
 	
-	public function getFolderUsers()
-	{
-         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
-    }
+	
 
     public function getPerson()
     {
@@ -226,10 +234,7 @@ class Folder extends FolderARModel
 		}
     }
 	
-	public function getFolderManager()
-    {
-		return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
-    }
+	
 	
 	public function getFolderManagerFilter()
     {
