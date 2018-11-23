@@ -7,223 +7,142 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Suppliers';
+$this->title = 'users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style type="text/css">
-    table{
-  width:100%;
-  table-layout: fixed;
-}
-.tbl-header{
-  background-color: rgba(255,255,255,0.3);
- }
-.tbl-contents{
-  min-height:300px;
-  margin-top: 50px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-td{
-  padding: 15px;
-  text-align: left;
-  vertical-align:middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #666;
-  border-bottom: solid 1px rgba(255,255,255,0.1);
-}
-.close-arrow{
-    cursor: pointer;
-}
-
-.client-info-block{
-    min-height: 60px;
-    position: relative;
-}
-.user-avatars {
-    border-radius: 50%;
-    display: block;
-    float: left;
-    height: 50px;
-    /*margin-right: 11px;*/
-    width: 50px;
-
-}
-.company-name{
+  .user-index{
+    background-image: linear-gradient(#fff, #ccc);
+  }
+  .list-action, .list-logo, .list-name, .list-email{
     display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 2px;
-    overflow: hidden;
-    padding-right: 21px;
-    position: relative;
-    white-space: nowrap;
+    font-family: calibri;
+  }
+  .list-container{
     width: 100%;
-}
-.company-name-id{
-    padding-top: 10px;
-    padding-left: 24px;
-}
-.table-headers{
-    background: #3c8dbc;
-    padding: 20px 15px;
-    text-align: left;
-    font-weight: 500;
+    background-image: linear-gradient('#fff',"#ccc");
+  }
+  .list-action{
+    width: 10%;
+    text-align: center
+  }
+  .list-logo{
+    width: 5%;
+  }
+  .list-name{
+    width: 55%;
+    display: block;
+      overflow: hidden;
+      padding-left: 11px;
+  }
+  .list-email{
+    width: 29.2%;
+  }
+  .list-item-row{
+    border:1px solid #ccc;
+    padding: 20px 0px;
+  }
+  .logo-image{
+    background: #fff;
+    background-size: cover;
+      border: 0;
+      vertical-align: top;
+      height: 48px;
+      width: 48px;
+      border-radius: 25px;
+      position: absolute;
+      left: 100px;
+      top: 8px;
+  }
+  .email-corp{
+    font-size:15px;
+  }
+  .content-row{
+    display: table-row;
+  }
+  .contents{
+    display: table-cell;
+      padding: 24px 10px 26px 63px;
+      overflow: hidden;
+      vertical-align: top;
+      width: 100%;
+      position: relative;
+      box-sizing: border-box;
+      border-bottom: 1px solid #ecedef;
+  }
+
+  .corporation-img{
+    background: #fff;
+    border: 0;
+      vertical-align: top;
+      height: 48px;
+      width: 48px;
+      border-radius: 25px;
+      position: absolute;
+      left: 10px;
+      top: 24px;
+  }
+  .corporation-text{
+    display: block;
+      overflow: hidden;
+      padding-left: 11px;
+  }
+  .corporation-title{
+    font-weight: 600;
+      display: block;
+      font-size: 16px;
+      padding-left: 2px;
+      margin-bottom: 8px;
+      zoom: 1;
+      word-wrap: break-word;
+  }
+  .corporation-description{
+    display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 13px;
+      width:400px;
+      color: #777;
+      padding-left: 2px;
+      white-space: nowrap;
+      margin-bottom: 8px;
+      zoom: 1;
+  }
+  .corporation-users{
+    color: #888;
+      font-size: 13px;
+      padding-left: 2px;
+  }
+  .wrap-corp{
+    border-bottom: 3px solid #eef2f4;
+    position: relative;
+    margin: -5px 0 0;
+    padding-top: 0;
+    padding-left: 20px;
+    height: 37px;
+    color: #38404a;
+    vertical-align: top;
     font-size: 12px;
-    color: #fff !important;
+    font-weight: normal;
     text-transform: uppercase;
-}
-.table-rows td{
-    border-bottom: 1px solid #ccc;
-}
-.th-table{
-    display: none;
-    position: fixed;
-    background: #367fa9;
-    width: 491px;
-    z-index: 1;
-    /* top: 0; */
-    padding: 20px 15px;
-    text-align: left;
-    font-weight: bold;
-    font-size: 16px;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  .sortby-text{
+    height: 27px;
+    border-bottom: 1px solid #ecedef;
+    color: #38404a;
+    vertical-align: top;
     font-size: 12px;
-    color: #fff;
+    font-weight: normal;
     text-transform: uppercase;
-}
-.img-corps{
-    height: 50px;
-    width: 50px;
-   /* padding-left: 17px;*/
-    border-radius: 50%;
-}
-.active-users:before{
-	background-color: #baed21;
-    border-radius: 50%;
-    content: '';
-    height: 9px;
-    left: 4px;
-    top: 9px;
-    position: absolute;
-    width: 9px;
-}
-.employ-head{
-    padding: 5px;
-    background: #ccc;
-    border-radius:3px;
-}
-.head-left{
-	padding-left: 27px;
-    font-size: 18px;
-    font-family: calibri;
-    color: #666;
-    font-weight: bold;
-}
-.head-center{
-    font-size: 18px;
-    font-family: calibri;
-    cursor: pointer;
-}
-
-
-/* demo styles */
-
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
 </style>
-<div class="client-index">
-    <div style="background:#fff;padding: 10px;height:600px;overflow-y:scroll;padding-top:0px">
-          <div class="tbl-header">
-            <table cellpadding="0" cellspacing="0" border="0">
-              <thead class="table-headers">
-                <tr>
-                  <th class="th-table">Employees</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div class="col-md-12">
-          	<div class="row employ-head">
-          		<div class="col-md-4 head-left">Employees</div>
-          		<div class="col-md-2">
-          			<div class="">
-          				<span class="active-users head-center">Active</span>
-          			</div>
-          		</div>
-          		<div class="col-md-6">
-          			<div class="bx24-top-bar-search-wrap employee-search-wrap">
-						<form method="GET" name="FILTER_company_search_adv" action="/company/">
-						<input type="hidden" name="show_user" value="active">
-						<input type="hidden" name="current_filter" value="adv">
-						<input class="bx24-top-bar-search" type="text" id="user-search" name="company_search_FIO" value="">
-						<input type="hidden" name="set_filter_company_search" value="Y">
-						<div class="btn btn-default ">
-							<span class="fa fa-search" id="button-search-user"></span>
-						</div> 
-						
-						</form>
-					</div>
-				</div>
-          	</div>
-          </div>
-          <div class="tbl-contents">
-            <table cellpadding="0" cellspacing="0" border="0">
-              <tbody id="table-body">
-                <? foreach($dataProvider as $data){?>
-                    <tr class="table-rows" id="table-rows">
-                      <td>
-                        <div class="row">
-                          <div class="client-info-block col-md-12">
-                            <div class="img-corps col-md-2">
-                              <div class="user-avatars user-default-avatar" style="background: url('<?= Url::to('@web/images/users/default-user.png'); ?>') no-repeat center center; background-size: cover;"></div>
-                              </div>
-                              <div class="col-md-10" style="padding:0px">
-                                <div class="company-name">
-                                    <div class="company-name-id" style="text-transform: uppercase;">
-                                        <?= $data->fullname; ?>
-                                    </div>
-                                    
-                                </div>
-                                <div class="company-name">
-                                    <div class="company-name-id">
-                                        <?//= $supplier['notes']; ?>
-                                    </div>
-                                    
-                                </div>
-                                <div class="company-name">
-                                    <div class="company-name-id">
-                                        <button class="btn btn-primary"><?= $data->role->name; ?></button>
-                                    </div>
-                                    
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                    </td>
-                    <td style="text-align: center;font-size: 20px">
-                        <div class="dropdown">
-                             <a class="btn btn-default dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             <i class="fa fa-align-justify" style="padding-right: 5px"></i>More
-                             </a>
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                 <a class="dropdown-item" href="#">Action</a>
-                                 <a class="dropdown-item" href="#">Another action</a>
-                                 <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </td>
-                    </tr>
-                <? } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-</div>
-<div class="supplier-index" id="supplier-index">
+<div class="user-index" id="user-index">
   <div class="wrap-corp">
     <span>sort by:</span>
     <span class="sortby-text">
-      <input type="text" name="" id="supplier-search">
+      <input type="text" name="" id="user-search">
     </span>
   </div>
   <? foreach($dataProvider as $data){ ?>
@@ -232,7 +151,7 @@ td{
       <span class="corporation-img" style="background: url('<?= Url::to('@web/images/users/default-user.png'); ?>') no-repeat center center; background-size: cover;"></span>
       <span class="corporation-text">
         <span class="corporation-title"><?= $data->fullname; ?></span>
-        <span class="corporation-description"><?= $supplier['notes']; ?></span>
+        <span class="corporation-description"><?= $data->role->name; ?></span>
         <span class="corporation-users">2 members</span>
       </span>
     </div>
@@ -241,24 +160,20 @@ td{
 </div>
 
 <?php 
-$clientIndexJs = <<<JS
+$userJs = <<<JS
 
-$('.table-rows').mouseenter(function(){
-        $(this).css('background','#ccc');
-    }).mouseleave(function(){
-            $(this).css('background','transparent');
-        })
+
 $(document).on('keyup','#user-search', function(){
-	// Declare variables
+  // Declare variables
     var input, filter, ul, li, a, i;
     input = document.getElementById('user-search');
     filter = input.value.toUpperCase();
-    ul = document.getElementById("table-body");
-    li = ul.getElementsByTagName('tr');
+    ul = document.getElementById("user-index");
+    li = ul.getElementsByClassName('content-row');
 
     // Loop through all list items, and hide those who don't match the search query
     for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByClassName("company-name-id")[0];
+        a = li[i].getElementsByClassName("corporation-title")[0];
         if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
         } else {
@@ -266,8 +181,9 @@ $(document).on('keyup','#user-search', function(){
         }
     }
 })
+
 JS;
  
-$this->registerJs($clientIndexJs);
+$this->registerJs($userJs);
 ?>
 
