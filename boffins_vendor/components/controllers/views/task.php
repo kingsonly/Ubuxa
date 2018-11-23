@@ -212,7 +212,9 @@ $boardUrl = Url::to(['task/index']);
   animation: fadeIn 0.3s ease-in-out;
 
 }
-
+#task-list-loader{
+  display: none;
+}
 .help-tip p{
   display: none;
   text-align: left;
@@ -373,6 +375,7 @@ $boardUrl = Url::to(['task/index']);
                      
                       <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     
+                    
                     <?php ActiveForm::end(); ?>
                   <?php }?>
                 </div> 
@@ -431,7 +434,7 @@ function _UpdateStatus(checkedId){
           });
 }
 
-$('#create-task').on('beforeSubmit', function(e) { 
+$('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
            e.preventDefault();
@@ -474,13 +477,7 @@ $('#addTask').bind("keyup keypress", function(e) {
   }
 });
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
   $(function() {
 
   var taskTour = new Tour({

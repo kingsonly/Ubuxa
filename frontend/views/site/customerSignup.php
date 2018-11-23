@@ -286,7 +286,7 @@ label {
 
             </div>
                     <div>
-                    <?= Html::submitButton('Get Started <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
+                    <?= Html::submitButton('Get Started <img id="loader" src="<?= Yii::$app->settingscomponent->boffinsLoaderImage(); ?>"/>',['class' => 'btn-signup']) ?>
                     </div>
 
             <?php ActiveForm::end(); ?>
@@ -342,7 +342,8 @@ $('#customerForm').on('beforeSubmit', function (e) {
         success: function (data) {
             inTest();
         },
-        error: function () {
+        error: function (data) {
+            console.log(data);
             alert("Something went wrong");
         },
         beforeSend: function(){
@@ -360,8 +361,8 @@ $('#customerForm').on('beforeSubmit', function (e) {
 $(document).ready(function () {
     $(".form-signup").toggleClass("form-signup-left");
     $(".frame").toggleClass("frame-long");
-    var val = getURLParameter('plan_id');
-    $('#customersignupform-plan_id').val(val); 
+    //var val = getURLParameter('plan_id');
+    //$('#customersignupform-plan_id').val(val); 
 });
 
 

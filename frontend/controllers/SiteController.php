@@ -48,6 +48,7 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
+use frontend\models\UserSetting;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -308,7 +309,8 @@ class SiteController extends BoffinsBaseController {
         	$date = strtotime("+7 day");
         	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
-        	
+        	$transaction = Yii::$app->db->beginTransaction();
+            try {
         	if($tenantEntity->save()){
         		if($tenantEntity->entity_type == 'person'){
         			if($tenantPerson->load(Yii::$app->request->post())){
@@ -325,7 +327,7 @@ class SiteController extends BoffinsBaseController {
         		}
         		$customer->entity_id = $tenantEntity->id;
 	        	if($customer->signup($customerModel)){
-					$settings->cid = 33;
+					$settings->cid = $customer->cid;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)
@@ -344,6 +346,10 @@ class SiteController extends BoffinsBaseController {
 					}
 	        	}
 	        }
+	    }catch (\Exception $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
 		}else {
 	            return $this->render('createCustomer', [
 					'customerForm' => $customer,

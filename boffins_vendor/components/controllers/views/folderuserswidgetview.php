@@ -243,8 +243,8 @@ transition: margin-top 0.1s ease-out 0s;
 	</div>
 <?php 
 $userJs = <<<JS
-$('.select2-selection__choice__remove').on('click', function(e){
-	e.preventDefault();
+$(document).on('click','.select2-selection__choice__remove', function(e){
+	e.stopPropagation();
 })
 	$('.images').mouseenter(function(){
     $(this).css({
