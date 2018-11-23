@@ -340,6 +340,7 @@ $('#customerForm').on('beforeSubmit', function (e) {
         type: form.attr("method"),
         data: formData,
         success: function (data) {
+          console.log(data);
             inTest();
         },
         error: function (data) {
@@ -353,8 +354,6 @@ $('#customerForm').on('beforeSubmit', function (e) {
     });
 
     return false;
-    
-    
     
 });
 

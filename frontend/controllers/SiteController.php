@@ -309,8 +309,7 @@ class SiteController extends BoffinsBaseController {
         	$date = strtotime("+7 day");
         	$customer->billing_date = date('Y-m-d', $date);
         	$customerModel = new Customer();
-        	$transaction = Yii::$app->db->beginTransaction();
-            try {
+        	
         	if($tenantEntity->save()){
         		if($tenantEntity->entity_type == 'person'){
         			if($tenantPerson->load(Yii::$app->request->post())){
@@ -346,10 +345,6 @@ class SiteController extends BoffinsBaseController {
 					}
 	        	}
 	        }
-	    }catch (\Exception $e) {
-                $transaction->rollBack();
-                throw $e;
-            }
 		}else {
 	            return $this->render('createCustomer', [
 					'customerForm' => $customer,
