@@ -274,11 +274,15 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					if(localStorage.getItem("skipValidation") === 'yes'){
 						localStorage.setItem("skipValidation", "no");
 					}
+					
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
 				   $.pjax.reload({container:"#"+"component-pjax",async: false});
 				   $('.one-time-template-click-'+templateId).trigger('click');
 				   $('.one-time-component-click'+componentId).trigger('click');
+				   if('$newFolderCreated' === '0' ){
+					location.reload();
+				   }
 				   
 			   }
 			   }else{
@@ -307,9 +311,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
-				if('$newFolderCreated' === '0' ){
-					location.reload();
-				}
+				
 			   }
             },
               

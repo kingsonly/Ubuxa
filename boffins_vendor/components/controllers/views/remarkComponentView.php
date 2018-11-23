@@ -470,7 +470,7 @@ var issues = [
 ];
 $('.editor').atwho({
     at: "@",
-    insertTpl: '<a href="https://example.com" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${name}</a>',
+    insertTpl: '<a href="#" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${name}</a>',
     data:'$remarkUrlMention'
 }).atwho({
     at: "#", 
