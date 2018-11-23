@@ -176,6 +176,25 @@ transition: margin-top 0.1s ease-out 0s;
     .images:hover{
         cursor: pointer;
     }
+    .select2-container--krajee .select2-selection--multiple .select2-search--inline .select2-search__field{
+    	width: 100% !important;
+    	padding-right: 100px !important;
+    	border: 1px solid #ccc;
+    	border-radius: 10px;
+    }
+    .select2-selection__choice{
+    	margin-bottom: 6px;
+    }
+    .select2-selection__choice__remove{
+    	margin: 0px 0 0 3px !important;
+    	cursor: pointer;
+    }
+    .select2-selection__choice{
+    	margin-bottom: 8px !important;
+    }
+    .select2-selection__clear{
+    	top: -2.6rem !important;
+    }
     
 	</style>
 <div class="folderusers">
@@ -224,7 +243,9 @@ transition: margin-top 0.1s ease-out 0s;
 	</div>
 <?php 
 $userJs = <<<JS
-
+$('.select2-selection__choice__remove').on('click', function(e){
+	e.preventDefault();
+})
 	$('.images').mouseenter(function(){
     $(this).css({
         'height':'40px',

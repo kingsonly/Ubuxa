@@ -50,6 +50,7 @@
 	z-index: 1;
 	border-bottom: 1px solid #BBB;
 	cursor: text;
+	margin-top: -10px;
 }
 
 /* end search input design*/
@@ -65,7 +66,7 @@ input[type="button"] {
 	text-indent: -10000px;
 	border: none;
 	position: absolute;
-	top: 0;
+	top: -6px;
 	right: 0;
 
 	cursor: pointer;

@@ -18,12 +18,13 @@ class BaseQuery extends ActiveQuery
     {
         parent::init();
 		
+        $tableName = $this->modelClass::tableName();
 		if ( in_array( "boffins_vendor\classes\models\TrackDeleteUpdateInterface", $this->getModelImplementations() ) ) {
-			$this->andWhere(['or', ['deleted' => 0], ['deleted' => NULL] ]);
+			$this->andWhere(['or', ["{$tableName}.deleted" => 0], ["{$tableName}.deleted" => NULL] ]);
 		}
 		
 		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", $this->getModelImplementations() ) && $this->_cid !== false ) {
-			$this->andWhere([ 'or', ['cid' => $this->getTenantID()], ['cid' => NULL] ]);
+			$this->andWhere([ 'or', ["{$tableName}.cid" => $this->getTenantID()], ["{$tableName}.cid" => NULL] ]);
 		}
     }
 	

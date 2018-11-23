@@ -32,6 +32,9 @@ use yii\helpers\Url;
     margin-right: 80px;
     float: right;
 	}
+  .client_template{
+    background-image:linear-gradient(#fff,#ccc);
+  }
 </style>
 
 <div class="">

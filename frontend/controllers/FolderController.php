@@ -319,4 +319,20 @@ class FolderController extends Controller
 			//}
 		} 
 	}
+
+    public function actionMenusubfolders()
+    {   
+        $model = new Folder();
+        if(isset($_GET['src'])){
+            if(Yii::$app->request->post('page')){
+                $id = Yii::$app->request->post('id');
+                $getsubfolders = $model->findOne($id);
+                $subfolders = $getsubfolders->subFolders;
+                    
+                return $this->renderAjax('menusubfolders', [
+                        'subfolders' => $subfolders,
+                ]);
+            } 
+        }
+    }
 }

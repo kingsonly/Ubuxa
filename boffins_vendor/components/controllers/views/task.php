@@ -30,7 +30,7 @@ $boardUrl = Url::to(['task/index']);
     }
 
     .box-content-task {
-        height: 230px;
+        height: 245px;
         border-bottom: 1px solid #ccc;
         padding-top: 8px;
         overflow: auto;
@@ -271,7 +271,7 @@ $boardUrl = Url::to(['task/index']);
 
 </style>
 
-	 <div class="col-md-4">
+	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
             <?php if($checkUrlParam == 'folder'){?>
@@ -423,7 +423,6 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
-                $.pjax.reload({container:"#kanban-refresh",async: false});
                    console.log('Status updated');
               },
               error: function(res, sec){
