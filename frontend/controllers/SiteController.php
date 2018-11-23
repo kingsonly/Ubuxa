@@ -48,6 +48,7 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
+use frontend\models\UserSetting;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
