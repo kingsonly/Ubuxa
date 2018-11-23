@@ -137,6 +137,7 @@ class TenantSpecificBehavior extends Behavior
 	 */
 	protected function retrieveTenantID()
 	{
+		//if user is a guest there is no need to retrieve tenant id and this function is also trigered when users are trying to create a new account .
 		if (!Yii::$app->user->isGuest) {
 			if ( !empty($this->tenantID) ) {
 				Yii::trace("Or first place");
