@@ -269,7 +269,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "hideMethod": "fadeOut",
 					  "tapToDismiss": false
 		  			}
-					
+					$.pjax.reload({container:"#"+"component-pjax",async: false});
 					toastr.success('Element was created successfully', "", options);
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
@@ -277,9 +277,10 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
-				   $.pjax.reload({container:"#"+"component-pjax",async: false});
 				   $('.one-time-template-click-'+templateId).trigger('click');
-				   $('.one-time-component-click'+componentId).trigger('click');
+				   alert('.one-time-component-click'+componentId);
+				   $(document).find('.one-time-component-click'+componentId).trigger('click');
+				   
 				   
 			   }
 			   }else{
