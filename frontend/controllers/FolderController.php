@@ -79,7 +79,7 @@ class FolderController extends Controller
 			
 
 		}
-		if(!empty($folder)){
+		if(empty($folder)){
             return $this->render('empty_index');
         } else {
             return $this->render('index', [
