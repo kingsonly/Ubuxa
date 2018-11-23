@@ -55,7 +55,8 @@ class BoffinsArRootModel extends ActiveRecord
 		
 		 
 		//attach the TenantSpecificBehavior if this model implements it.  
-		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", class_implements(static::class) ) ) { 
+		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", class_implements(static::class) ) ) {
+			Yii::trace("Attaching TenantSpecificBehavior " . static::class );
 			$this->attachBehavior("TenantSpecificBehavior", [
 					'class' => TenantSpecificBehavior::className(),
 					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
@@ -63,7 +64,7 @@ class BoffinsArRootModel extends ActiveRecord
 		}
 		
 		if ( $this->usesClipOnBehavior() ) {
-			Yii::warning("But I have attached this " . static::class );
+			Yii::trace("Attaching ClipOnBehavior " . static::class );
 			$this->attachBehavior("ClipOnBehavior", [
 					'class' => ClipOnBehavior::className(),
 					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
