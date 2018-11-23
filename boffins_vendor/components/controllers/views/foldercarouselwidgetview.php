@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
+$loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 ?>
 <style>
 .private{
@@ -343,12 +344,15 @@ $(".folder-text").mouseout(function() {
 });
 
 $('.component-list').off().on('click',function(){
+
+ $('.component-display-wrapper').show()
 	$('.component-list').removeClass('active-component');
 	data = $(this).data('url');
 	$(this).addClass('active-component');
 	$('.comps').removeClass('margin-bottom');
-	$('.component-display').load(data);
-	$('.component-display-wrapper').show()
+	$('.component-display').html('<div style="width:100%;height:150px;margin-top:5%;text-align:center">$loader</div>');
+	$('.component-display').delay( 800 ).load(data);
+	
 	
 })
 

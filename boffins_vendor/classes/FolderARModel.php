@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use boffins_vendor\behaviors\ComponentsBehavior;
+use boffins_vendor\behaviors\FolderBehavior;
 use yii\db\ActiveQuery;
 use boffins_vendor\classes\StandardQuery;
 use models\FolderComponent;
@@ -45,7 +46,14 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 	public const DEFAULT_AJAX_SUCCESS_STATUS = 1; // when an ajax call is successful return 1
 	
 	public const DEFAULT_AJAX_ERROR_STATUS = 0; // when an ajax call is not successful return 0
-		
+	
+	public function init(){
+		parent::init();
+		$this->attachBehavior("FolderBehavior", [
+					'class' => FolderBehavior::className(),
+					
+				]);
+	}
 	
 	public function containsFolderTree($tree=[], $parent) 
 	{

@@ -121,22 +121,16 @@ class Component extends ComponentARModel
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getComponentComponents()
-    {
-        return $this->hasMany(ComponentComponent::className(), ['component_id' => 'id']);
-    }
+    
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getComponentComponents0()
-    {
-        return $this->hasMany(ComponentComponent::className(), ['linked_component' => 'id']);
-    }
+    
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+     
     public function getComponentManagers()
     {
         return $this->hasMany(ComponentManager::className(), ['component_id' => 'id']);
@@ -144,11 +138,24 @@ class Component extends ComponentARModel
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+     
     public function getUsers()
     {
         return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('tm_component_manager', ['component_id' => 'id']);
+    }*/
+	
+	public function getComponentManager()
+    {
+		return $this->hasMany(ComponentManager::className(), ['component_id' => 'id']);
     }
+	
+	public function getComponentUsers()
+	{
+         return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('componentManager');
+    }
+	
+	
+
 
     /**
      * @return \yii\db\ActiveQuery

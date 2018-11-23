@@ -47,11 +47,10 @@ use yii\helpers\Url;
   
       <div class="row">
           
-		  <div class="col-xs-12" id="listView">
-			  <img class="loadergif" src="images/loader.gif"  />
-			
+		  	<div class="col-xs-12" id="listView">
+					  
 		  </div>
-		  
+			  
 		  <div id="view-content" class="col-xs-5" style="display:none" >
 			  
 			  <div id="viewcontainer">

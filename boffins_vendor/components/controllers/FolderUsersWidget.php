@@ -22,6 +22,10 @@ class FolderUsersWidget extends Widget{
 	public $attributues = [];
 	public $removeButtons;
 	public $id;
+	public $listOfUsers; // this are users that would show on the drop down ;
+	public $addUsersUrl;//  this is a url which would be used to add users.
+	public $type;//  could be folder remarks,component, as the case may be 
+	
 	
 
 	public function init()
@@ -36,6 +40,9 @@ class FolderUsersWidget extends Widget{
 			'attributues' => $this->attributues,
 			'removeButtons' => $this->removeButtons,
 			'id' => $this->id,
+			'listOfUsers' => $this->listOfUsers,
+			'addUsersUrl' => $this->addUsersUrl,
+			'type' => $this->type,
 		]);
 	}
 	

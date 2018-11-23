@@ -8,5 +8,9 @@ use boffins_vendor\components\controllers\ComponentViewWidget;
 <?= ComponentViewWidget::widget([
 									'model'=>$component,
 									'content'=>$content,
+									'users'=>$users,
+									'listOfUsers'=>$fuser,
 									
-								]); ?>
+								]); 
+
+?>
