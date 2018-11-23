@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -42,9 +43,11 @@ use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Onboarding;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
-use frontend\models\UserSetting;
+use frontend\models\Plan;
+use frontend\models\Role;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -105,6 +108,8 @@ class SiteController extends BoffinsBaseController {
         $users = UserDb::find()->where(['cid' => $cid])->all();
         $allUsers = new UserDb;
         $userId = Yii::$app->user->identity->id;
+        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -120,6 +125,8 @@ class SiteController extends BoffinsBaseController {
             'folder' => $folder,
             'allUsers' => $allUsers,
             'userId' => $userId,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
 			]);
         } else {
 				
@@ -136,6 +143,8 @@ class SiteController extends BoffinsBaseController {
 	            'folder' => $folder,
 	            'allUsers' => $allUsers,
 	            'userId' => $userId,
+	            'onboardingExists' => $onboardingExists,
+            	'onboarding' => $onboarding,
 				]);
    		 }
        
