@@ -137,16 +137,16 @@ class TenantSpecificBehavior extends Behavior
 	 */
 	protected function retrieveTenantID()
 	{
-		if ( !empty($this->tenantID) ) {
-			Yii::trace("Or first place");
-			return $this->tenantID;
+		if ( !empty($this->tenantID) ) { 
+			Yii::trace("Or first place"); 
+			return $this->tenantID; 
 		}
 		
-		if ( $this->tenantID === null && Yii::$app->has('user') && ! (Yii::$app->user->identity->cid === null) ) {
+		if ( $this->tenantID === null && Yii::$app->has('user') && ! (Yii::$app->user->identity->cid === null) ) {  
 			Yii::trace("Retrieving it here?" . Yii::$app->user->identity->cid );
 			$this->tenantID = Yii::$app->user->identity->cid;
 			return $this->tenantID;
-		}
+		} 
 		
 		Yii::warning("Can't get a tenant id from user component");
 		return false;
