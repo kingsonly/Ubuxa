@@ -242,9 +242,9 @@ class SiteController extends BoffinsBaseController {
 
   public function actionSignup($email,$cid,$role)
     {
-		if (!Yii::$app->user->isGuest) {
+		/*if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
-        }
+        }*/
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
        $customer = Customer::find()->where(['cid' => $cid])->one();
@@ -286,9 +286,9 @@ class SiteController extends BoffinsBaseController {
 
     public function actionCustomersignup()
     {
-		if (!Yii::$app->user->isGuest) {
+		/*if (!Yii::$app->user->isGuest) {
            return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
-        }
+        }*/
 		
 		$this->layout = 'loginlayout';
 
@@ -326,7 +326,7 @@ class SiteController extends BoffinsBaseController {
         		}
         		$customer->entity_id = $tenantEntity->id;
 	        	if($customer->signup($customerModel)){
-					$settings->cid = 33;
+					$settings->cid = $customer->cid;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)
