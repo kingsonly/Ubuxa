@@ -76,7 +76,6 @@ $viewBoard = <<<JS
 
 
     $('.board-open').click(function(){
-        $.pjax.reload({container:"#kanban-refresh",async: false});
         $('#mySidenav').css({'width':'100%'})
     });
 

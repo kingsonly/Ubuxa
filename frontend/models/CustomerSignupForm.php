@@ -88,7 +88,7 @@ class CustomerSignupForm extends Model
             $customer->cid = $this->plan_id.rand(10, 10000); //dummy cid
             
 
-            return $customer->save(false);
+            return $customer->save();
                 
     }
 

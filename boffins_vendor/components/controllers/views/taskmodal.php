@@ -230,7 +230,7 @@ use frontend\models\Reminder;
                             <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                         </a> 
                             <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
-                                    <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
+                                    <?//= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
                             </div>
                 </span> -->
             </div>
@@ -249,7 +249,7 @@ use frontend\models\Reminder;
                         <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
                     </a> 
                     <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
-                        <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
+                        <?//= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
                     </div>
                 </span> -->
             </div>  

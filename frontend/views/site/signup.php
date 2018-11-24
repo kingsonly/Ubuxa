@@ -16,6 +16,7 @@ use frontend\models\Customer;
 ?>
 <style>
 #loader{
+height: 35px;
 display: none;
 }
   html, body * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
@@ -233,7 +234,7 @@ label {
 
             </div>
                     <div>
-                    <?= Html::submitButton('Signup <img id="loader" src="images/45.gif"/>',['class' => 'btn-signup']) ?>
+                    <?= Html::submitButton('Signup <img id="loader" src="images/ubuxaloader.gif"/>',['class' => 'btn-signup']) ?>
                     </div>
 
             <?php ActiveForm::end(); ?>
