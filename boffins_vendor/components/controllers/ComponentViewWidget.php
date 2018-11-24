@@ -57,6 +57,9 @@ use frontend\models\Component;
 class ComponentViewWidget extends Widget{
 	public $model; //Component Model.
 	public $content; //Component Model.
+	public $users; //Component Model.
+	public $componentId; //Component Model.
+	public $listOfUsers; //Component Model.
 	
 	 
 	public function init()
@@ -71,6 +74,9 @@ class ComponentViewWidget extends Widget{
 		return $this->render('componentviewwidgetview',[
 			'model' => $this->model,
 			'content' => $this->content,
+			'users' => $this->users,
+			'componentId' => $this->componentId,
+			'listOfUsers' => $this->listOfUsers,
 			
 		]);
 	}

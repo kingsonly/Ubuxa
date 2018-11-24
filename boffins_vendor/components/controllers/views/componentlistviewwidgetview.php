@@ -8,6 +8,7 @@ use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Folder */
+$loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 ?>
 <style>
 	
@@ -114,10 +115,12 @@ $('#listtable_wrapper').hover(function(){
 
 $(document).on('click','.input-sm',function(){
 	$(this).addClass('keep-search-bar');
+	
 })
 
-$(document).off().on('click','.component-table-tr',function(e){
+$('.component-table-tr').off().on('click',function(e){
 	clickedElement = $(this);
+	$("#view").html('<div style="width:100%;height:150px;margin-top:5%;text-align:center">$loader</div>');
 	getComponentId = clickedElement.data('componentid');
 	$(document).find('.component-table-tr').removeClass('active-component-tr')
 	clickedElement.addClass('active-component-tr');
@@ -126,7 +129,6 @@ $(document).off().on('click','.component-table-tr',function(e){
 	$("#view-content").addClass('col-xs-4').show();
 	$("#listView").addClass('col-xs-8').find('#listtable').css('table-layout','auto');
 	$("#view").load('$viewUrl&id='+getComponentId);
-	
 })
 
 listViewJs;

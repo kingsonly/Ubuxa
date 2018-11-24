@@ -34,9 +34,12 @@ use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDel
 class ComponentARModel extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface
 {
 	
-	public function init() 
-	{
-		 
+	public function init(){
+		parent::init();
+		$this->attachBehavior("ComponentsBehavior", [
+					'class' => ComponentsBehavior::className(),
+					
+				]);
 	}
 	
 	

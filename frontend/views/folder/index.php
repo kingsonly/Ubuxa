@@ -302,7 +302,10 @@ text-overflow: ellipsis;
 	}
 	e.stopPropagation();';
 		?>
-   
+   <?php 
+
+$checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
+   ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12">

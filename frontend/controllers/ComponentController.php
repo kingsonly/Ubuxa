@@ -63,6 +63,10 @@ class ComponentController extends Controller
 		$component = $componentModel->find()->where(['id'=>$id]);
 		$collector = new ModelCollection( [], [ 'query' => $component ] );
 		$modelData = $collector->models;*/
+		$folder = new Folder();
+		$getting = $folder->find()->where(['id' => 30])->one();
+		$getti = $getting->folderUsers;
+		
 		$componentModel = new Component();
 		$query = $componentModel->find()->where(['id'=>$id]);
 		$component = $query->one();
@@ -92,6 +96,8 @@ class ComponentController extends Controller
         return $this->renderAjax('view',[
 			'component'=>$component,
 			'content'=>$modelData,
+			'users'=>$component->componentUsers,
+			'fuser'=>$component->componentUsers,
 		]);
     }
 	

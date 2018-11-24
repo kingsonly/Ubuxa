@@ -18,7 +18,7 @@ use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, C
  * @property ClipBar $bar
  * @property ClipOwnerType $ownerType
  */
-class Clip extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
+class Clip extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * {@inheritdoc}

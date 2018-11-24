@@ -15,7 +15,7 @@ use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
  * @property string $language should use ISO languages
  * @property string $date_format also use ISO format?
  */
-class UserSetting extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
+class UserSetting extends BoffinsArRootModel implements TenantSpecific
 {
     /**
      * @inheritdoc

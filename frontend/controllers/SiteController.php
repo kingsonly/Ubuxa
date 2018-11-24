@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -42,8 +43,11 @@ use frontend\models\StatusType;
 use frontend\models\UserDb;
 use frontend\models\Reminder;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Onboarding;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
+use frontend\models\Plan;
+use frontend\models\Role;
 use frontend\models\UserSetting;
 
 //Base Class
@@ -105,6 +109,8 @@ class SiteController extends BoffinsBaseController {
         $users = UserDb::find()->where(['cid' => $cid])->all();
         $allUsers = new UserDb;
         $userId = Yii::$app->user->identity->id;
+        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 
         if(empty($dashboardFolders)){
         	return $this->render('empty_index',[
@@ -120,6 +126,8 @@ class SiteController extends BoffinsBaseController {
             'folder' => $folder,
             'allUsers' => $allUsers,
             'userId' => $userId,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
 			]);
         } else {
 				
@@ -136,6 +144,8 @@ class SiteController extends BoffinsBaseController {
 	            'folder' => $folder,
 	            'allUsers' => $allUsers,
 	            'userId' => $userId,
+	            'onboardingExists' => $onboardingExists,
+            	'onboarding' => $onboarding,
 				]);
    		 }
        
@@ -236,41 +246,41 @@ class SiteController extends BoffinsBaseController {
             return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
         }
 		$this->layout = 'loginlayout';
-       	$user = new SignupForm;
-       	$customer = Customer::find()->where([
-       	'cid' => $cid,
-       	'master_email' =>$email,
-		])->one();
-       //$test = $customer->entity->firstname;
-       //var_dump($test);
-		if(!empty($customer)){
-	        if ($user->load(Yii::$app->request->post())) {
-	        	$user->address = $email;
-	        	$user->cid = $cid;
-	        	$user->basic_role = $role;
-	        	if($customer->entityName == 'person' && $customer->status == 0){
-	        		$user->first_name = $customer->entity->firstname;
-	        		$user->surname = $customer->entity->surname;
-	        	}
-				if($user->save()){
-					if($customer->status == 0){
-						$customer->status = 1;
-						$customer->save();	
-					}
-					$newUser = UserDb::findOne([$user->id]);
-		            if (Yii::$app->user->login($newUser)){
-		                return $this->redirect(['index']);
-		            }
-				} 
+       $user = new SignupForm;
+       $customer = Customer::find()->where(['cid' => $cid])->one();
+       $userExists = Email::find()->where(['address' => $email])->exists();
+       if(!$userExists){
+			if(!empty($customer)){
+		        if ($user->load(Yii::$app->request->post())) {
+		        	$user->address = $email;
+		        	$user->cid = $cid;
+		        	$user->basic_role = $role;
+		        	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+		        		$user->first_name = $customer->entity->firstname;
+		        		$user->surname = $customer->entity->surname;
+		        	}
+					if($user->save()){
+						if($customer->has_admin == Customer::NO_ADMIN){
+							$customer->has_admin = Customer::HAS_ADMIN;
+							$customer->save();	
+						}
+						$newUser = UserDb::findOne([$user->id]);
+			            if (Yii::$app->user->login($newUser)){
+			                return $this->redirect(['folder/index']);
+			            }
+					} 
+				} else {
+		            return $this->render('createUser', [
+		            	'customer' => $customer,
+						'userForm' => $user,
+						'action' => ['createUser'],
+					]);
+				}
 			} else {
-	            return $this->render('createUser', [
-	            	'customer' => $customer,
-					'userForm' => $user,
-					'action' => ['createUser'],
-				]);
+				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 			}
-		} else {
-			throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		}else {
+			return $this->goHome();
 		}
     }
 

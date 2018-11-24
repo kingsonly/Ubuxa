@@ -10,6 +10,8 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 
+$checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
+
 ?>
 
 <div class="side_menu side-drop">
@@ -73,19 +75,21 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
   
   <ul class="tabs group">
     <li><a class="active" href="#/one"> One</a></li>
-    <li><a href="#/two">Two</a></li>
-    <li><a href="#/three">Three</a></li>
+   <!-- <li><a href="#/two">Two</a></li> -->
+    <li><a href="#/three">Two</a></li>
   </ul>
   
   <div id="content">
     <div id="one">
     	<ul class="list_load">
-    		<a class="menu-list" href="<?= Url::to(['site/index'])?>"><li class="list_item menu-settings"><i class="fa fa-home iconz" aria-hidden="true"></i></i>Dashboard</li></a>
+    		<!-- <a class="menu-list" href="<?//= Url::to(['site/index'])?>"><li class="list_item menu-settings"><i class="fa fa-home iconz" aria-hidden="true"></i></i>Dashboard</li></a> -->
     		<a class="menu-list" href="<?= Url::to(['folder/index'])?>"><li class="list_item menu-settings"><i class="fa fa-folder iconz" aria-hidden="true"></i>Folder Vault</li></a>
     		<?php if (isset($this->blocks['subfolders'])){ ?>
-			 	<?= MenuAccordionWidget::widget();?>
+			 	<?//= MenuAccordionWidget::widget();?>
 			 <?php } ?> 
-            <li class="list_item"><?= ViewBoardWidget::widget();?></li>
+             <?php if($checkSiteUrl != 'folder/index'){ ?>
+                <li class="list_item"><?= ViewBoardWidget::widget();?></li>
+             <?php }?>
 		</ul>
     </div>
 <?php if (isset($this->blocks['sidebar'])){ ?>
@@ -95,14 +99,14 @@ use boffins_vendor\components\controllers\ContactsAccordionWidget;
     	<ul class="list_load">
     		<!-- <li class="list_item"><a href="#">List Item 01</a></li> -->
 			<?= ClientsAccordionWidget::widget();?>
-			<?= SuppliersAccordionWidget::widget();?>
-			<?= UsersAccordionWidget::widget();?>
-			<?= ContactsAccordionWidget::widget();?>
+			<?//= SuppliersAccordionWidget::widget();?>
+			<?//= UsersAccordionWidget::widget();?>
+			<?//= ContactsAccordionWidget::widget();?>
     	</ul>
     </div>
     <div id="three">
     	<ul class="list_load">
-    		<?= SettingsAccordionWidget::widget();?>
+    		<?//= SettingsAccordionWidget::widget();?>
 
 			<a class="menu-list" href="<?= Url::to(['site/logout'])?>"><li class="list_item menu-settings"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</li></a>
 			

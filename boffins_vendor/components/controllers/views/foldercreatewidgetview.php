@@ -22,6 +22,7 @@ use frontend\models\Folder;
 		
 	}
 	
+	
 	#form-contnent span{
 		flex:1;
 		
@@ -237,7 +238,6 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "tapToDismiss": false
 		  			}
 				toastr.success('Folder was created successfully', "", options);
-
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
@@ -245,7 +245,8 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
 			   $.pjax.reload({container:"#"+"$pjaxId",async: false});
-			   $(document).find('#folder-item-'.jsonResult.output).addClass('blink');
+			   $(document).find('#folder-item-'+jsonResult.output).addClass('blink');
+			   
 			   }else{
 			   
 			   		templateId = jsonResult.templateId;
@@ -268,7 +269,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "hideMethod": "fadeOut",
 					  "tapToDismiss": false
 		  			}
-					
+					$.pjax.reload({container:"#"+"component-pjax",async: false});
 					toastr.success('Element was created successfully', "", options);
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
@@ -276,9 +277,10 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
-				   $.pjax.reload({container:"#"+"component-pjax",async: false});
-				   $('.one-time-template-click-'+templateId).trigger('click');
-				   $('.one-time-component-click'+componentId).trigger('click');
+				   //$('.one-time-template-click-'+templateId).trigger('click');
+				   alert(componentId);
+				   $(document).find('.one-time-component-click'+componentId).trigger('click');
+				   
 				   
 			   }
 			   }else{

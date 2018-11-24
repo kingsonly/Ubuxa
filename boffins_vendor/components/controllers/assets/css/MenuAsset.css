@@ -14,7 +14,8 @@ ul.tabs {
 }
 ul.tabs li {	
 	float: left;
-	width: 100px;
+	/* width: 100px; removed for beta launch */
+	width: 50%;
 
   
 }

@@ -32,9 +32,6 @@ $img = $model->folder_image;
 .row.content {
 	 height: 1500px;
 }
-#content{
-	overflow: scroll;
-}
  .onboardnav {
 	 background-color: #f1f1f1;
 	 height: 100%;

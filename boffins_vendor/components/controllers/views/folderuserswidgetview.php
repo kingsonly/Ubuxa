@@ -6,8 +6,60 @@ use yii\web\JsExpression;
 use frontend\models\InviteUsers;
 use yii\widgets\ActiveForm;
 $userModel = new InviteUsers();
-$url = Url::to(['folder/users']);
-$url2 = Url::to(['folder/add-users','id' => $id]);
+
+
+if($type ===  'component'){
+	
+	$url = [];
+	if(!empty($listOfUsers)){
+		foreach($listOfUsers as $key => $value){
+			$url[$value->id] = $value->username;
+		}
+	}
+	$url2 = $addUsersUrl;
+	$option = [
+    'allowClear' => true,
+	'tags' => true,
+     'tokenSeparators' => [',', ' '],
+  
+    'language' => [
+        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+    ],
+];
+	
+	$pluginSettings = [
+		'data' =>$url,
+     // set the initial display text
+    'options' => ['placeholder' => 'Search for a user ...', 'multiple' => true,'id' => !empty($type)?$type.'user':'folderUser'],
+'pluginOptions' => $option,
+];
+} else {
+	$url = Url::to(['folder/users']);
+	$url2 = Url::to(['folder/add-users','id' => $id]);
+	$option = [
+    'allowClear' => true,
+	'tags' => true,
+     'tokenSeparators' => [',', ' '],
+    'minimumInputLength' => 3,
+    'language' => [
+        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+    ],
+    'ajax' => [
+        'url' => $url,
+        'dataType' => 'json',
+        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+    ],
+    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+    'templateResult' => new JsExpression('function(user) { return user.surname + user.first_name ; }'),
+    'templateSelection' => new JsExpression('function (user) { return user.surname +" " + user.first_name ;}'),
+		
+];
+	$pluginSettings = [
+     // set the initial display text
+    'options' => ['placeholder' => 'Search for a user ...', 'multiple' => true,'id' => !empty($type)?$type.'user':'folderUser'],
+'pluginOptions' => $option,
+];
+}
 ?>
 <style>
 	.img-circular{
@@ -124,6 +176,25 @@ transition: margin-top 0.1s ease-out 0s;
     .images:hover{
         cursor: pointer;
     }
+    .select2-container--krajee .select2-selection--multiple .select2-search--inline .select2-search__field{
+    	width: 100% !important;
+    	padding-right: 100px !important;
+    	border: 1px solid #ccc;
+    	border-radius: 10px;
+    }
+    .select2-selection__choice{
+    	margin-bottom: 6px;
+    }
+    .select2-selection__choice__remove{
+    	margin: 0px 0 0 3px !important;
+    	cursor: pointer;
+    }
+    .select2-selection__choice{
+    	margin-bottom: 8px !important;
+    }
+    .select2-selection__clear{
+    	top: -2.6rem !important;
+    }
     
 	</style>
 <div class="folderusers">
@@ -139,27 +210,7 @@ transition: margin-top 0.1s ease-out 0s;
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
 							<li id="" class="">
 	<?$form = ActiveForm::begin(['action'=>Url::to(['folder/add-users']),'id' => 'add-new-user']); ?>
-	<?= $form->field($userModel, 'users[]')->widget(Select2::classname(), [
-     // set the initial display text
-    'options' => ['placeholder' => 'Search for a user ...', 'multiple' => true],
-'pluginOptions' => [
-    'allowClear' => true,
-	'tags' => true,
-     'tokenSeparators' => [',', ' '],
-    'minimumInputLength' => 3,
-    'language' => [
-        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-    ],
-    'ajax' => [
-        'url' => $url,
-        'dataType' => 'json',
-        'data' => new JsExpression('function(params) { return {q:params.term}; }')
-    ],
-    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-    'templateResult' => new JsExpression('function(user) { return user.surname + user.first_name ; }'),
-    'templateSelection' => new JsExpression('function (user) { return user.surname +" " + user.first_name ;}'),
-],
-]);
+	<?= $form->field($userModel, 'users[]')->widget(Select2::classname(),$pluginSettings );
 	?>
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -173,8 +224,11 @@ transition: margin-top 0.1s ease-out 0s;
 	
 	
 	<div class="user-image">
-	<?php $count= count($attributues); ?>
-<?php foreach($attributues as $users){ 
+	<?php $count= !empty($attributues)?count($attributues):0; ?>
+
+<?php 
+		if(!empty($attributues)){
+		foreach($attributues as $users){ 
 	$image = !empty($users["image"])?$users["image"]:'default-user.png';
 	$count--;
 	?>
@@ -183,13 +237,15 @@ transition: margin-top 0.1s ease-out 0s;
 		
 	
 	
-	<? }; ?>
+	<? };} ?>
 	
 	</div>
 	</div>
 <?php 
 $userJs = <<<JS
-
+$('.select2-selection__choice__remove').on('click', function(e){
+	e.preventDefault();
+})
 	$('.images').mouseenter(function(){
     $(this).css({
         'height':'40px',
