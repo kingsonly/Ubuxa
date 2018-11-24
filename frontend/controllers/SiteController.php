@@ -325,8 +325,8 @@ class SiteController extends BoffinsBaseController {
         			}
         		}
         		$customer->entity_id = $tenantEntity->id;
-	        	if($customer->signup($customerModel)){
-	        		$settings->cid = $customer->cid;
+	        	if($newCustomer = $customer->signup($customerModel)){
+	        		$settings->cid = (int)$newCustomer;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)

@@ -153,6 +153,9 @@ class TenantSpecificBehavior extends Behavior
 			Yii::warning("Can't get a tenant id from user component");
 			return false;
 			//or throw an exception here?
+		}else{
+			//generate new  cid which would serve the relationship between a new customer and creating a new settings 
+			
 		}
 		return true;
 	}
