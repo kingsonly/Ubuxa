@@ -80,10 +80,14 @@ class FolderController extends Controller
 			
 
 		}
-		
-        return $this->render('index', [
+		if(empty($folder)){
+            return $this->render('empty_index');
+        } else {
+            return $this->render('index', [
             'folders' => $seperateFolders,
-        ]);
+            ]);
+        }
+        
     }
 
     /**
@@ -181,6 +185,7 @@ class FolderController extends Controller
 				 Yii::$app->queue->push(new FolderUsersQueue([
 					'userId' => $getUserId['id'],
 					'folderId' => $id,
+					'type' => 'folder',
 				]));
 			 }
             return ['output'=>$id, 'message'=> 0];

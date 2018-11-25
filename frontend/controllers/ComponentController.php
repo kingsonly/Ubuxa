@@ -5,10 +5,14 @@ use yii;
 use yii\web\Controller;
 use yii\db\Expression;
 use frontend\models\Component;
+use frontend\models\ComponentAttribute;
 use frontend\models\FolderComponent;
 use frontend\models\Folder;
 use boffins_vendor\classes\ModelCollection;
 use frontend\models\ComponentAttributeModel;
+use frontend\models\InviteUsers;
+use frontend\models\UserDb;
+use boffins_vendor\queue\FolderUsersQueue;
 
 class ComponentController extends Controller
 {
@@ -120,8 +124,77 @@ class ComponentController extends Controller
 			else {
 				return ['output'=>'', 'message'=>''];
 			}
-    }
+    	}
         return $this->renderAjax('view',['component'=>$modelData]);
     }
+	
+	public function actionAddUsers($id) {
+		$inviteUsersModel = new InviteUsers();
+		$userModel = new UserDb();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
+			  
+			 foreach($inviteUsersModel->users as $value){
+				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
+				 $test = $getUserId['id'];
+				 Yii::$app->queue->push(new FolderUsersQueue([
+					'userId' => $getUserId['id'],
+					'componentId' => $id,
+					'type' => 'component',
+				]));
+			 }
+            return ['output'=>$id, 'message'=> 0];
+        }
+	}
+	public function actionUpdateTitle($id) 
+	{
+		if (isset($_POST['hasEditable'])) {
+			Yii::trace("hash Eduted");
+			$componentModel = new Component();
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->where(['id'=>$id]) ] ); 
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+				$collectors->loadModel($model->attributeId,['title'=>$model->value]);
+				
+			if ($collectors->saveModel($model->attributeId)) {
+				
+				return ['output'=>$model->value, 'message'=>'','component' => $id];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
+			}
+		}
+	}
+	
+	public function actionUpdateValue($id) 
+	{
+		if (isset($_POST['hasEditable'])) {
+			Yii::trace("hash Eduted");
+			$componentModel = new ComponentAttribute();
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->where(['id'=>$id]) ] ); 
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+				$collectors->loadModel($model->attributeId,['value'=>$model->value]);
+				
+			if ($collectors->saveModel($model->attributeId)) {
+				
+				return ['output'=>$model->value, 'message'=>'','component' => $id];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
+			}
+		}
+	}
+
 
 }

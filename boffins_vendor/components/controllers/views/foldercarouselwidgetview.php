@@ -274,7 +274,7 @@ text-overflow: ellipsis;
           </div>
          <?}else{?>
 			<? if($displayType == 'component'){?>
-			Click on the Create Button to Add A new component to folder 
+			Click on the Create Button to Add A new element to folder 
 			<? }else{?>
 			<div>
 				<?= CreateButtonWidget::widget(['buttonType' => 'text','htmlAttributes'=>['class'=>$htmlAttributes]]);?> 

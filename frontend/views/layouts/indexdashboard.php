@@ -62,7 +62,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     }
     </style>
     
-<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => '../web/images/logo1.png']); ?>
+
 
 <div class="wrapper">
 

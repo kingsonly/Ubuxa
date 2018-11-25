@@ -154,8 +154,10 @@ class SiteController extends BoffinsBaseController {
     public function actionLogin($id=0) 
 	{	
 		if (!Yii::$app->user->isGuest) {
-			return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+			return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
+		
+		
 		
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
@@ -168,17 +170,29 @@ class SiteController extends BoffinsBaseController {
 		$model = new LoginForm();
 		$this->layout = 'loginlayout';
 		$authenticated = false;
-		if($id === 0){
-			$accountName = 'your account';
-		}else{
-			$costomerCompanyName = Customer::findOne($id);
-			if($costomerCompanyName->entityName == 'individual'){
-				$accountName = $costomerCompanyName->entity->surname.'s account';
+		
+		//var_dump(Url::base());
+		if (strpos(Url::base(true), '.') !== false) {
+			
+			$seperateUrl = explode(Url::base(true),'.');
+			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
+			if(!empty($costomerCompanyName)){
+				if($costomerCompanyName->entityName == 'individual'){
+					$accountName = $costomerCompanyName->entity->surname.'s account';
+				}else{
+					$accountName = $costomerCompanyName->entity->corporation->name.' account';
+				}
 			}else{
-				$accountName = $costomerCompanyName->entity->corporation->name.' account';
+				// redirect to url not on system page 
+				return $this->render('nodomainname', [
+					'domainName' => $seperateUrl[0],
+				]);		
 			}
 			
+		}else{
+			$accountName = 'your account';
 		}
+		
 		
 		if ( isset(Yii::$app->session['authenticateNewDevice']) 
 			&& Yii::$app->session['authenticateNewDevice'] === true ) {
@@ -229,7 +243,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
-			$landingPage = ['site/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
+			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
     }
@@ -243,7 +257,7 @@ class SiteController extends BoffinsBaseController {
   public function actionSignup($email,$cid,$role)
     {
 		if (!Yii::$app->user->isGuest) {
-            //return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+            return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -287,7 +301,7 @@ class SiteController extends BoffinsBaseController {
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
-          // return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+           return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		
 		$this->layout = 'loginlayout';

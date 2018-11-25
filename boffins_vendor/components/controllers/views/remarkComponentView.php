@@ -470,7 +470,7 @@ var issues = [
 ];
 $('.editor').atwho({
     at: "@",
-    insertTpl: '<a href="https://example.com" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${name}</a>',
+    insertTpl: '<a href="#" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${name}</a>',
     data:'$remarkUrlMention'
 }).atwho({
     at: "#", 
@@ -573,7 +573,11 @@ $('.remark-reply').click(function(){
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
   $('.wrapp').slideDown(1000);
+  var div = $('#example-1');
   $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
+    setTimeout(function() {
+       div.focus();
+    }, 0);
     $('#remarkSaveForm').show();
     $('#remarkSave').attr('disabled', true);
   });
