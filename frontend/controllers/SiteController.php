@@ -257,7 +257,7 @@ class SiteController extends BoffinsBaseController {
   public function actionSignup($email,$cid,$role)
     {
 		if (!Yii::$app->user->isGuest) {
-            return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
+            //return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -301,7 +301,7 @@ class SiteController extends BoffinsBaseController {
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
-           return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
+           //return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		
 		$this->layout = 'loginlayout';

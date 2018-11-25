@@ -75,9 +75,9 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			<div class="wrap">
   
   <ul class="tabs group">
-    <li><a class="active" href="#/one"> One</a></li>
+    <li><a class="active" href="#/one">General</a></li>
    <!-- <li><a href="#/two">Two</a></li> -->
-    <li><a href="#/three">Two</a></li>
+    <li><a href="#/three">Settings</a></li>
   </ul>
   
   <div id="content">

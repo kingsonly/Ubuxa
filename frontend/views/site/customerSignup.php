@@ -25,7 +25,7 @@ display: none;
   }
 .container {
   width: 100%;
-  padding-bottom: 100px;
+  padding-top: 30px;
 }
 
 .frame {

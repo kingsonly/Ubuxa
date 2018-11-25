@@ -271,10 +271,10 @@ $('#userForm').on('beforeSubmit', function (e) {
         type: form.attr("method"),
         data: formData,
         success: function (data) {
-            
+            console.log(data);
         },
-        error: function () {
-            //alert("Something went wrong");
+        error: function (data) {
+            console.log(data);
         },
         beforeSend: function(){
             $("#loader").show()
