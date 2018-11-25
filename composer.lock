@@ -651,12 +651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697"
+                "reference": "80f5bb33a098a2de41ee993a42bf13e7f1c2d999"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/b9998af1f26d9fca0df35b4d00f48034a8f8f697",
-                "reference": "b9998af1f26d9fca0df35b4d00f48034a8f8f697",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/80f5bb33a098a2de41ee993a42bf13e7f1c2d999",
+                "reference": "80f5bb33a098a2de41ee993a42bf13e7f1c2d999",
                 "shasum": ""
             },
             "type": "library",
@@ -696,7 +696,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2018-11-21 06:48:56"
+            "time": "2018-11-22 14:35:40"
         },
         {
             "name": "kartik-v/bootstrap-popover-x",
