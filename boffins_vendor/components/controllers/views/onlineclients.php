@@ -71,7 +71,7 @@
                         echo 0;
                       } ?>
                       </div>
-                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Task Assigned</div>
+                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks</div>
 
                     </div>
                     <div class="col-sm-4 col-xs-4 box-clients-count1" style="text-align:center">

@@ -298,7 +298,7 @@ use frontend\models\Reminder;
   
     <div class ="timestamp">
         <div class="createDate">
-            <span>Created <?= Yii::$app->formatter->format($model->create_date, 'relativeTime') ?></span>
+            <span>Created <?= $model->timeElapsedString;?></span>
         </div>
     <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == $model::TASK_COMPLETED){ ?>
         <div>

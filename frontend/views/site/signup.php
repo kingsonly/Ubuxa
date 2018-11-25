@@ -199,13 +199,25 @@ label {
   background-color: #1059FF;
   margin-left: 25%;
 }
+  .signup-logo{
+    height: 46px;
+    width: 140px;
+    margin: 3px 5px 3px 25px;
+    position: absolute;
+    right: 17px;
+    top: -5px;
+  }
+  .links{
+    position: relative;
+  }
 
 </style>
 <div class="container">
     <div class="frame">
         <div class="nav">
-          <ul class"links">
+          <ul class="links">
             <li class="signup-active"><a class="btn">Sign Up</a></li>
+            <img class="signup-logo" src="/ubuxabeta/frontend/web/images/ubuxa.png">
           </ul>
         </div>
         <div ng-app ng-init="checked = false">
