@@ -277,10 +277,12 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
-				   //$('.one-time-template-click-'+templateId).trigger('click');
-				   alert(componentId);
-				   $(document).find('.one-time-component-click'+componentId).trigger('click');
+				   console.log('got to create first triger')
+				   $('.one-time-template-click-'+templateId).trigger('click');
+				   console.log('got to create second triger')
 				   
+				   $(document).find('.one-time-component-click'+componentId).trigger('click');
+				   console.log('got to create last triger')
 				   
 			   }
 			   }else{

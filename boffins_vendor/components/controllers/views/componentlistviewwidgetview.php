@@ -118,7 +118,8 @@ $(document).on('click','.input-sm',function(){
 	
 })
 
-$('.component-table-tr').off().on('click',function(e){
+// note adding .off() would break the rest of the js on the page  
+$('body').off().on('click','.component-table-tr',function(e){
 	clickedElement = $(this);
 	$("#view").html('<div style="width:100%;height:150px;margin-top:5%;text-align:center">$loader</div>');
 	getComponentId = clickedElement.data('componentid');

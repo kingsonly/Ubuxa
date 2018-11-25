@@ -62,7 +62,7 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 <div class="col-sm comps margin-bottom">
     <div class="auth-users">
 		
-    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id])?>	
+    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder'])?>	
     </div>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">

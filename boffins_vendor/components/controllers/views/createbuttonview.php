@@ -75,7 +75,7 @@ $jsEventTriger = $htmlAttributes['class'];
 
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 		<? foreach($componentTemplate as $componentList){?>
-		<li id="<?= $jsEventTriger.$componentList->id;?>-component" data-templateid="<?= $componentList->id; ?>" class="<?= $jsEventTriger;?>-component">Create <?= $componentList->name;?></li>
+		<li id="<?= $jsEventTriger.$componentList->id;?>-component" data-templateid="<?= $componentList->id; ?>"data-templatestring="Create <?= $componentList->name; ?>" class="<?= $jsEventTriger;?>-component">Create <?= $componentList->name;?></li>
 		
 		<?}?>
 
@@ -116,6 +116,7 @@ $("."+"$jsEventTriger"+"-component").click(function(){
 	$( ".$jsEventTriger-new-content" ).hide();
 	//$( ".create-new-$jsEventTriger" ).delay( 100 ).fadeIn( 400 );
 	$( ".create-new-$jsEventTriger" ).find('#component-component_template_id').val($(this).data('templateid'));
+	$( ".create-new-$jsEventTriger" ).find('#create-new-create-component-form-title').attr('placeholder',$(this).data('templatestring'));
 	$( ".create-new-$jsEventTriger" ).removeClass('display-non');
 	$( ".create-new-$jsEventTriger" ).addClass('display');
      

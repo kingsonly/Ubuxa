@@ -518,11 +518,11 @@ var stickyHeaders = (function() {
 })();
 
 $(function() {
-    stickyHeaders.load($(".followMeBar"), $(window));
+    stickyHeaders.load($(".followMeBa"), $(window));
 });
 
 $(function() {
-  $('.feedify').feedify();
+  //$('.feedify').feedify();
 });	
 JS;
  

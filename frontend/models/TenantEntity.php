@@ -64,6 +64,10 @@ class TenantEntity extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TenantCorporation::className(), ['entity_id' => 'id']);
     }
+	public function getCorporation()
+    {
+        return $this->hasOne(TenantCorporation::className(), ['entity_id' => 'id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
