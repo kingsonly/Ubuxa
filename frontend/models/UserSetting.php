@@ -31,7 +31,7 @@ class UserSetting extends BoffinsArRootModel implements TenantSpecific
     public function rules()
     {
         return [
-            [['logo', 'theme', 'language', 'date_format','cid'], 'required'],
+            [['logo', 'theme', 'language', 'date_format'], 'required'],
             [['id'], 'integer'],
             [['logo', 'theme', 'language', 'date_format'], 'string', 'max' => 255],
         ];

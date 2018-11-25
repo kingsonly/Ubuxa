@@ -252,8 +252,7 @@ $img = $model->folder_image;
     Modal::begin([
         'header' =>'<h1 id="headers"></h1>',
         'id' => 'boardContent',
-        'size' => 'modal-md',
-        //'backdrop' => false,  
+        'size' => 'modal-md', 
     ]);
 ?>
 <div id="viewcontent"></div>
@@ -303,6 +302,57 @@ function mymenus(mymenu, menuIds, getThis){
         }
         })
 }
+/*
+$(function() {
+
+  var folderTour = new Tour({
+    name: "folderTour",
+    steps: [
+        {
+          element: ".folderdetls",
+          title: "Folder Details",            
+          content: "You can view your folder details here",
+          placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+        steps: [
+        {
+          element: ".subfolder-container",
+          title: "Sub-folders",            
+          content: "View subfolders for this folder here, you also create new folders from here",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+        {
+          element: ".taskz-listz",
+          title: "Task management",            
+          content: "You can create, manage and view all task from here",
+          placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+        {
+          element: "#flux",
+          title: "Remarks",            
+          content: "You can view all remarks from here, for this folder",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+      ],
+    backdrop: true,  
+    storage: false,
+    smartPlacement: true,
+    onEnd: function (siteRemarkTour) {
+            _RemarkOnboarding();
+        },
+  });
+  $('#site-remark-tour').on('click', function(e){
+       siteRemarkTour.start();
+       e.preventDefault();
+    })
+ //remarkTour.init();
+
+});
+*/
 
 
 JS;

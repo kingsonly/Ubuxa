@@ -194,7 +194,12 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	{
 		return $this->person->personstring;
 	}
-	
+
+	public function getFirstName() 
+	{
+		return $this->person->first_name;
+	}
+
 	/***
      * @inheritdoc
      */
