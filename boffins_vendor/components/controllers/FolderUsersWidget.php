@@ -27,7 +27,8 @@ class FolderUsersWidget extends Widget{
 	public $type;//  could be folder remarks,component, as the case may be 
 	
 	
-
+	
+	
 	public function init()
 	{
 		parent::init();
@@ -43,6 +44,7 @@ class FolderUsersWidget extends Widget{
 			'listOfUsers' => $this->listOfUsers,
 			'addUsersUrl' => $this->addUsersUrl,
 			'type' => $this->type,
+			
 		]);
 	}
 	

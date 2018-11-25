@@ -13,13 +13,23 @@ class FolderUsersQueue extends BaseObject implements \yii\queue\JobInterface
 	public $userId;
 	public $folderId;
 	public $smart;
+	public $type;
+	public $componentId;
 	
     public function execute($queue){
-        $this->addNewUser();
+		if($this->type == 'folder'){
+			$this->addFolderNewUser();
+		}elseif($this->type == 'component'){
+			$this->addComponentNewUser();
+		}else{
+			$this->addFolderNewUser();
+		}
+        
+        
 		
     }
 	
-	public function addNewUser($userId = '', $folderId = '')
+	public function addFolderNewUser($userId = '', $folderId = '')
 	{
 		
 		if (empty($userId) || empty($folderId) ) {
@@ -34,7 +44,26 @@ class FolderUsersQueue extends BaseObject implements \yii\queue\JobInterface
 			
 		if($folderManagerModel->save(false)){
 			
-			$this->reQueueEachChildFolder();
+			//$this->reQueueEachChildFolder();
+		}
+	}
+	
+	public function addComponentNewUser($userId = '', $componentId = '')
+	{
+		
+		if (empty($userId) || empty($componentId) ) {
+			$userId = $this->userId;
+			$componentId = $this->componentId;
+		}
+		$componentManagerModel = new ComponentManager();
+		$componentManagerModel->user_id = $this->userId;
+		$componentManagerModel->component_id = $this->componentId;
+		$componentManagerModel->role = 'user';
+		
+			
+		if($componentManagerModel->save(false)){
+			
+			return true;
 		}
 	}
 	
@@ -50,6 +79,7 @@ class FolderUsersQueue extends BaseObject implements \yii\queue\JobInterface
 				 $queue->push(new FolderUsersQueue([
 					'userId' => $this->userId,
 					'folderId' => $folder->id,
+					'type' => 'folder',
 				]));
 				}
 			}
