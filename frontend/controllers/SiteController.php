@@ -306,10 +306,10 @@ class SiteController extends BoffinsBaseController {
 		
 		$this->layout = 'loginlayout';
 
-       $customer = new CustomerSignupForm;
-       $tenantEntity = new TenantEntity();
-       $tenantCorporation = new TenantCorporation();
-       $tenantPerson = new TenantPerson();
+       	$customer = new CustomerSignupForm;
+       	$tenantEntity = new TenantEntity();
+       	$tenantCorporation = new TenantCorporation();
+       	$tenantPerson = new TenantPerson();
 		$settings = new UserSetting();
 		
 		$settings->logo = Yii::$app->settingscomponent-> boffinsDefaultLogo();
@@ -339,8 +339,8 @@ class SiteController extends BoffinsBaseController {
         			}
         		}
         		$customer->entity_id = $tenantEntity->id;
-	        	if($newCustomer = $customer->signup($customerModel)){
-	        		$settings->cid = (int)$newCustomer;
+	        	if($customer->signup($customerModel)){
+	        		$settings->cid = $customerModel->cid;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)
