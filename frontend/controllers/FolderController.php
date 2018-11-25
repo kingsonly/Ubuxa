@@ -80,10 +80,14 @@ class FolderController extends Controller
 			
 
 		}
-		
-        return $this->render('index', [
+		if(empty($folder)){
+            return $this->render('empty_index');
+        } else {
+            return $this->render('index', [
             'folders' => $seperateFolders,
-        ]);
+            ]);
+        }
+        
     }
 
     /**
