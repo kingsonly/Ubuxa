@@ -426,10 +426,10 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
-                   console.log('Status updated');
+                    $.pjax.reload({container:"#kanban-refresh",async: false});
               },
               error: function(res, sec){
-                  console.log('Something went wrong');
+                  //console.log(' went wrong');
               }
           });
 }

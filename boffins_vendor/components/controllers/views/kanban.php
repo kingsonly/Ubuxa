@@ -423,7 +423,6 @@ a.addTaskButton.active {
                       $timeNow = strtotime($check);
                       $closest = $values->closestReminder($timers, $check);
                       $reminders = date('M j, g:i a', strtotime($closest));
-                      echo $reminders;
                         if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>

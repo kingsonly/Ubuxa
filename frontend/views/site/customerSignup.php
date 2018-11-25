@@ -20,7 +20,9 @@ display: none;
   html, body * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
 
 
-
+ .links{
+    position: relative;
+  }
 .container {
   width: 100%;
   padding-bottom: 100px;
@@ -90,7 +92,6 @@ display: none;
 }
 
 li {
-  padding-left: 10px;
   font-size: 18px;
   display: inline;
   text-align: left;
@@ -241,12 +242,21 @@ label {
   .confirm-text{
     font-size: 23px;
   }
+  .signup-logo{
+    height: 46px;
+    width: 140px;
+    margin: 3px 5px 3px 25px;
+    position: absolute;
+    right: 17px;
+    top: -5px;
+  }
 </style>
 <div class="container">
     <div class="frame">
         <div class="nav">
-          <ul class"links">
+          <ul class="links">
             <li class="signup-active"><a class="btn">Get Started </a></li>
+            <img class="signup-logo" src="/ubuxabeta/frontend/web/images/ubuxa.png">
           </ul>
         </div>
         <div ng-app ng-init="checked = false">
