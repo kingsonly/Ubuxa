@@ -15,7 +15,8 @@ use frontend\models\UserFeedback;
 
 $feedback = new UserFeedback();
 
-Yii::$app->settingscomponent->boffinsUsersAsset()
+Yii::$app->settingscomponent->boffinsUsersAsset();
+$waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
 ?>
 <?php $this->beginPage() ?>
 <? Yii::$app->language  = Yii::$app->settingscomponent->boffinsUsersLanguage();?>
@@ -28,11 +29,36 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     <title>
 
     <?= Html::encode($this->title) ?></title>
+	<style>
+		.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(<?= $waitToLoad; ?>) center no-repeat #fff;
+}
+		
+		
+		.images ul li img {
+	width: 400px;
+	height: 266px;
+}
+.images ul li {
+	display: inline-block;
+}
+	</style>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
+	
 </head>
 <body class="skin-red hold-transition layout-top-nav">
-	
+
+	<div class="se-pre-con"></div>
+
 <?php $this->beginBody() ?>
 <?php
     if(isset(Yii::$app->user->identity->person_id)) {
@@ -80,7 +106,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
         <div class="navbar-header">
           
 			 
-			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/folder/index'],['class' => 'img-circle']) ?>
 
           
         </div>
@@ -119,7 +145,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 		 <div class="col-lg-12">
 			<?= Alert::widget([
 				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => '<a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
+				   'body' => yii::$app->user->identity->fullName.'<a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
 					 ]);?>
 		</div>
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
@@ -145,5 +171,6 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 
 <?php $this->endBody() ?>
 </body>
+	
 </html>
 <?php $this->endPage() ?>

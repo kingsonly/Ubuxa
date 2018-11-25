@@ -264,6 +264,7 @@ $img = $model->folder_image;
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $indexJs = <<<JS
+
 localStorage.setItem("skipValidation", "");
 
 var mymenu = 1;
