@@ -241,9 +241,6 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
-				if('$newFolderCreated' === '0' ){
-					location.reload();
-				   }
 
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
@@ -272,21 +269,20 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					  "hideMethod": "fadeOut",
 					  "tapToDismiss": false
 		  			}
-					
+					$.pjax.reload({container:"#"+"component-pjax",async: false});
 					toastr.success('Element was created successfully', "", options);
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
 						localStorage.setItem("skipValidation", "no");
 					}
-					
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
-				   $.pjax.reload({container:"#"+"component-pjax",async: false});
+				   console.log('got to create first triger')
 				   $('.one-time-template-click-'+templateId).trigger('click');
-				   $('.one-time-component-click'+componentId).trigger('click');
-				   if('$newFolderCreated' === '0' ){
-					location.reload();
-				   }
+				   console.log('got to create second triger')
+				   
+				   $(document).find('.one-time-component-click'+componentId).trigger('click');
+				   console.log('got to create last triger')
 				   
 			   }
 			   }else{
@@ -315,7 +311,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
-				
+				if('$newFolderCreated' === '0' ){
+					location.reload();
+				}
 			   }
             },
               

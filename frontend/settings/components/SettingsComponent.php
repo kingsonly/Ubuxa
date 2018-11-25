@@ -112,7 +112,7 @@ class SettingsComponent extends Component
 	
 	public function boffinsDefaultLogo()
 	{
-		return 'images/6uCHTvn3GkT_UYxbI4Fl8DklnwGQw00N.png';
+		return 'images/ubuxa.png';
 	} 
 	
 	public function boffinsDefaultLanguage()

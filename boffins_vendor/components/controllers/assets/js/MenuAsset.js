@@ -63,9 +63,9 @@ $(document).ready(function () {
 
 });
 
-$(document).on('click',function (e) {
+/* $(document).on('click',function (e) {
   side_menu = $('.side_menu');
-  var id = (document).find('#kanban-refresh');
+  var id = $(document).find('#kanban-refresh');
   if(e.target.id == "kanban-refresh"){
           e.stopPropagation();
   }
@@ -78,7 +78,7 @@ $(document).on('click',function (e) {
     }
 	
   }
-});
+}); */
 
 //var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());

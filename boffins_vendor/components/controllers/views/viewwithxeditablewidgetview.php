@@ -127,6 +127,7 @@ foreach($attributues as $v){
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'sm',
+			'formOptions' => ['action'=>$modelUrl],
 			'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {
@@ -182,6 +183,7 @@ Editable::end();
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
+		'formOptions' => ['action'=>$modelUrl],
 			'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
 		'pluginEvents' => [
@@ -238,6 +240,7 @@ Editable::end();
 			'size'=>'md',
 			//'inputType' => Editable::INPUT_MONEY,
 			//'options'=>['placeholder'=>'Enter title...'],
+			'formOptions' => ['action'=>$modelUrl],
 		    'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {
@@ -290,6 +293,7 @@ Editable::end();
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
+		'formOptions' => ['action'=>$modelUrl],
 			'inputType' => Editable::INPUT_TEXTAREA,
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
@@ -346,6 +350,7 @@ Editable::end();
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
+		'formOptions' => ['action'=>$modelUrl],
 			'inputType' => Editable::INPUT_MONEY,
 		'containerOptions' => ['id' =>$editableId],
 		'pluginEvents' => [
@@ -404,6 +409,7 @@ Editable::end();
 			'inputType' => Editable::INPUT_DROPDOWN_LIST,
 			'data'=>$data,
 			//'options'=>['placeholder'=>'Enter title...'],
+		'formOptions' => ['action'=>$modelUrl],
 		'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {
@@ -429,7 +435,7 @@ Editable::end();
 			 		}",
     	],
 		'containerOptions' => ['id' =>$editableId],
-		'formOptions' => ['id' => 'wishitemaction' ],
+		'formOptions' => ['id' => 'wishitemaction','action'=>Url::to(['']) ],
 		'options'=>[
 					'options'=>['placeholder'=>'From date']
 				],
@@ -454,6 +460,7 @@ Editable::end();
 				'asPopover' => true,
 				'size'=>'md',
 				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
+				'formOptions' => ['action'=>$modelUrl],
 				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
 					'options'=>['placeholder'=>'From date']
@@ -500,6 +507,7 @@ Editable::end();
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
+				'formOptions' => ['action'=>$modelUrl],
 				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
 				'inputType' => Editable::INPUT_DATE,
@@ -548,6 +556,7 @@ Editable::end();
 				'attribute'=>$v['modelAttribute'],
 				'asPopover' => true,
 				'size'=>'md',
+				'formOptions' => ['action'=>$modelUrl],
 				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
 				'pluginEvents' => [
@@ -597,6 +606,7 @@ Editable::end();
 				'size'=>'md',
 				'valueIfNull' => '<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 				'containerOptions' => ['id' =>$editableId],
+				'formOptions' => ['action'=>$modelUrl],
 				'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {

@@ -9,14 +9,13 @@ $userModel = new InviteUsers();
 
 
 if($type ===  'component'){
-	
 	$url = [];
 	if(!empty($listOfUsers)){
 		foreach($listOfUsers as $key => $value){
 			$url[$value->id] = $value->username;
 		}
 	}
-	$url2 = $addUsersUrl;
+	$url2 = Url::to(['component/add-users','id' => $id]);;
 	$option = [
     'allowClear' => true,
 	'tags' => true,
@@ -34,6 +33,7 @@ if($type ===  'component'){
 'pluginOptions' => $option,
 ];
 } else {
+	
 	$url = Url::to(['folder/users']);
 	$url2 = Url::to(['folder/add-users','id' => $id]);
 	$option = [
@@ -197,11 +197,18 @@ transition: margin-top 0.1s ease-out 0s;
     }
     
 	</style>
+<? if($type == 'component' ){?>
+<div id="invitenewuser">
+		<span>AUTHORIZED USERS</span>
+	</div>
+<? }?>
 <div class="folderusers">
 	<? if($removeButtons !== false){?>
+	<? if($type != 'component' ){?>
 	<div id="invitenewuser">
 		<span>AUTHORIZED USERS</span>
 	</div>
+	<? }?>
 	
 	<div class="dropdown">
 		<span id="plus-button" class="dropdown-toggle" id="dropdownMenuButtons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>
@@ -209,7 +216,7 @@ transition: margin-top 0.1s ease-out 0s;
 	
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
 							<li id="" class="">
-	<?$form = ActiveForm::begin(['action'=>Url::to(['folder/add-users']),'id' => 'add-new-user']); ?>
+	<?$form = ActiveForm::begin(['id' => $type.'add-new-user'.$id]); ?>
 	<?= $form->field($userModel, 'users[]')->widget(Select2::classname(),$pluginSettings );
 	?>
     <div class="form-group">
@@ -242,9 +249,10 @@ transition: margin-top 0.1s ease-out 0s;
 	</div>
 	</div>
 <?php 
+
 $userJs = <<<JS
-$('.select2-selection__choice__remove').on('click', function(e){
-	e.preventDefault();
+$(document).on('click','.select2-selection__choice__remove', function(e){
+	e.stopPropagation();
 })
 	$('.images').mouseenter(function(){
     $(this).css({
@@ -268,7 +276,7 @@ $('.select2-selection__choice__remove').on('click', function(e){
 	
 	
 	
-	$('body').on('beforeSubmit', '#add-new-user', function () {
+	$('body').on('beforeSubmit', '#'+'$type'+'add-new-user'+'$id', function () {
      var form = $(this);
      // return false if form still have some validation errors
      if (form.find('.has-error').length) {

@@ -30,20 +30,20 @@ use boffins_vendor\components\controllers\FolderUsersWidget;
 						$model = new ComponentAttributeModel();
 						$model->attributeId = $value->id ;
 						$model->value = $value->title ;
-     					 
 						
-						echo ViewWithXeditableWidget::widget(['model'=>$model,'attributeName' => 'Element title','editableId' =>'modelid-'.$model->attributeId,'editableArea'=>'component','attributues'=>[
+						echo ViewWithXeditableWidget::widget(['model'=>$model,'attributeName' => 'Element title','editableId' =>'modelid-'.$model->attributeId,'editableArea'=>'component','modelUrl' =>Url::to(['component/update-title','id' => $model->attributeId]),'attributues'=>[
 					['modelAttribute'=>'value','xeditable' => 'short_string',],
 					
 					]]);
 						$i = 1;
 						
-						echo FolderUsersWidget::widget(['attributues'=>$users,'addUsersUrl'=>Url::to(['component/add-users','id' => $componentId]),'type' => 'component','listOfUsers' => $listOfUsers]);
+						echo FolderUsersWidget::widget(['attributues'=>$users,'id'=>$value->id,'type' => 'component','listOfUsers' => $listOfUsers]);
+						
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
 							${'model'.$i} = new ComponentAttributeModel();
 							${'model'.$i}->attributeId = $attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
-							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','attributues'=>[
+							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' =>Url::to(['component/update-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
 					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],],
 					
 					]]);

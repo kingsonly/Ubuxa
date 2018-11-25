@@ -182,6 +182,7 @@ class FolderController extends Controller
 				 Yii::$app->queue->push(new FolderUsersQueue([
 					'userId' => $getUserId['id'],
 					'folderId' => $id,
+					'type' => 'folder',
 				]));
 			 }
             return ['output'=>$id, 'message'=> 0];

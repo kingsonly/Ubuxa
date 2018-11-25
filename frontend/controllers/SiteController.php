@@ -48,6 +48,7 @@ use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
+use frontend\models\UserSetting;
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -242,7 +243,7 @@ class SiteController extends BoffinsBaseController {
   public function actionSignup($email,$cid,$role)
     {
 		if (!Yii::$app->user->isGuest) {
-            return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+            //return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
         }
 		$this->layout = 'loginlayout';
        $user = new SignupForm;
@@ -286,7 +287,7 @@ class SiteController extends BoffinsBaseController {
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
-           return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
+          // return Yii::$app->getResponse()->redirect(Url::to(['site/index']));
         }
 		
 		$this->layout = 'loginlayout';
@@ -324,8 +325,8 @@ class SiteController extends BoffinsBaseController {
         			}
         		}
         		$customer->entity_id = $tenantEntity->id;
-	        	if($customer->signup($customerModel)){
-					$settings->cid = 33;
+	        	if($newCustomer = $customer->signup($customerModel)){
+	        		$settings->cid = (int)$newCustomer;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)
