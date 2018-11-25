@@ -10,7 +10,25 @@
 }
 
 .feedback-button {
-  background-color: #3d1951;
+  background-color: #00a65a;
+  border: 0px;
+  padding: 10px;
+  border-radius: 3px;
+  margin: 0px;
+  text-align: left;
+  font-size: 16px;
+  font-family: Raleway, Helvetica, Arial;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: white;
+  text-decoration: none !important;
+  position: absolute;
+  right: 60px;
+  top: 5px;
+}
+.feedback-submit {
+  background-color: #00a65a;
   border: 0px;
   padding: 10px;
   border-radius: 3px;
@@ -33,7 +51,7 @@
 
 .feedback-form-widget {
   width: 400px;
-  border-top: 3px solid #3d1951;
+  border-top: 3px solid #00a65a;
   margin: 0px auto;
   padding: 20px;
   background-color: #ffffff;
@@ -66,7 +84,7 @@
 }
 
 .feedback-input {
-     border: 1px solid #3d1951;
+     border: 1px solid #00a65a;
     font-family: Raleway,sans-serif;
     -webkit-font-feature-settings: "lnum";
     font-feature-settings: "lnum";
@@ -93,13 +111,16 @@
 .feedback-contain{
 	text-align: center;
   position: absolute;
-  z-index: 1;
+  z-index: 9999;
   margin-top: 35px;
+  right: 50px;
+  top: 5px;
 }
 #feed-loader{
   display: none;
-      height: 25px;
+  height: 25px;
 }
+
 
 </style>
 <div class="feedback-contain">
@@ -116,7 +137,7 @@
 	          <label class="feedback-label">Feedback </label>
             <?= $form->field($feedback, 'user_comment')->textarea(['maxlength' => true, 'class' => 'feedback-textarea']) ?>
 	        </div>
-          <?= Html::submitButton('Submit Feedback <img id="feed-loader" src="images/ubuxaloader.gif"/>',['class' => 'feedback-button']) ?>
+          <?= Html::submitButton('Submit Feedback <img id="feed-loader" src="images/ubuxaloader.gif"/>',['class' => 'feedback-submit']) ?>
         <?php ActiveForm::end(); ?>
 	</div>
 </div>

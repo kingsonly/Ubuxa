@@ -80,7 +80,9 @@ $viewBoard = <<<JS
     });
 
     $('.closebtn').click(function(){
-        $.pjax.reload({container:"#task-list-refresh",async: false});
+        setTimeout(function(){
+            $.pjax.reload({container:"#task-list-refresh",async: false});
+            }, 550);
         $('#mySidenav').css({'width':'0'})
     });
 

@@ -9,6 +9,7 @@ use kartik\date\DatePicker;
 use frontend\models\TenantEntity;
 use frontend\models\Customer;
 
+$this->title = Yii::t('Signup', 'Sign Up');
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */

@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use frontend\models\Plan;
 use kartik\date\DatePicker;
 
-
+$this->title = Yii::t('Get Started', 'Get Started');
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */
 /* @var $form yii\widgets\ActiveForm */

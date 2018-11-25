@@ -291,7 +291,7 @@ class SiteController extends BoffinsBaseController {
         }
 		
 		$this->layout = 'loginlayout';
-
+		$customerModel = new Customer();
        	$customer = new CustomerSignupForm;
        	$tenantEntity = new TenantEntity();
        	$tenantCorporation = new TenantCorporation();
@@ -308,16 +308,16 @@ class SiteController extends BoffinsBaseController {
         	$email = $customer->master_email;
         	$date = strtotime("+7 day");
         	$customer->billing_date = date('Y-m-d', $date);
-        	$customerModel = new Customer();
+        	
         	
         	if($tenantEntity->save()){
-        		if($tenantEntity->entity_type == 'person'){
+        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
         			if($tenantPerson->load(Yii::$app->request->post())){
         				$tenantPerson->entity_id = $tenantEntity->id;
         				$tenantPerson->create_date = new Expression('NOW()');
         				$tenantPerson->save(false);
         			}
-        		}elseif ($tenantEntity->entity_type == 'corporation') {
+        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
         			if($tenantCorporation->load(Yii::$app->request->post())){
         				$tenantCorporation->entity_id = $tenantEntity->id;
         				$tenantCorporation->create_date = new Expression('NOW()');
@@ -326,7 +326,7 @@ class SiteController extends BoffinsBaseController {
         		}
         		$customer->entity_id = $tenantEntity->id;
 	        	if($customer->signup($customerModel)){
-	        		$settings->cid = $customerModel->cid;
+	        		$settings->tenantID = (int)$customerModel->cid;
 					if($settings->save()){
 						$sendEmail = \Yii::$app->mailer->compose()
 						->setTo($email)

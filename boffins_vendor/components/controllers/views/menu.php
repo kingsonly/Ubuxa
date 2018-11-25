@@ -69,6 +69,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
 				<div><a class="profile-link" href="#">Edit profile</a></div>
+
 			</div>
 		</div>
 			<div class="wrap">
