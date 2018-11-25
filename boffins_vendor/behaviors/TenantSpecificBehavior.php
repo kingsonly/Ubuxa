@@ -137,6 +137,7 @@ class TenantSpecificBehavior extends Behavior
 	 */
 	protected function retrieveTenantID()
 	{
+		//if user is a guest there is no need to retrieve tenant id and this function is also trigered when users are trying to create a new account .
 		if (!Yii::$app->user->isGuest) {
 			if ( !empty($this->tenantID) ) {
 				Yii::trace("Or first place");
@@ -152,6 +153,9 @@ class TenantSpecificBehavior extends Behavior
 			Yii::warning("Can't get a tenant id from user component");
 			return false;
 			//or throw an exception here?
+		}else{
+			//generate new  cid which would serve the relationship between a new customer and creating a new settings 
+			
 		}
 		return true;
 	}

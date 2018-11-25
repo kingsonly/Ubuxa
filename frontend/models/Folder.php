@@ -95,7 +95,9 @@ class Folder extends FolderARModel
     }
 	public function getComponentTemplateAsComponents()
     {
-        return $this->hasMany(Component::className(), ['id' => 'component_id',])->andWhere(['component_template_id' => $this->externalTemplateId])->viaTable('tm_folder_component', ['folder_id' => 'id']);
+        return $this->hasMany(Component::className(), ['id' => 'component_id',])->andWhere(['component_template_id' => $this->externalTemplateId])->viaTable('tm_folder_component', ['folder_id' => 'id'])->orderBy([
+			'id' => SORT_DESC
+		]);
     }
 	
 	public function getFolderComponentTemplate(){

@@ -10,6 +10,10 @@ use yii\bootstrap\Alert;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
+use boffins_vendor\components\controllers\FeedbackWidget;
+use frontend\models\UserFeedback;
+
+$feedback = new UserFeedback();
 
 Yii::$app->settingscomponent->boffinsUsersAsset()
 ?>
@@ -36,11 +40,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     }
 ?>
     <style>
-	
-	/****
-	 * What is the meaning of this???
-	 * WHY IS THERE INLINE CSS IN A LAYOUT??? WHAT HAPPENED TO ADDING IT TO A STYLESHEET???
-	 */ 
+
     .fa{color:#dd4b39 !important;}
         .iconimage {
             background: url('../web/images/logo1.jpg') no-repeat ;
@@ -62,6 +62,12 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 		}
 		#refresh{
       cursor: pointer;
+    }
+    .content{
+      position: relative;
+    }
+    .feedback-button{
+      text-decoration: none;
     }
     </style>
     
@@ -113,9 +119,10 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 		 <div class="col-lg-12">
 			<?= Alert::widget([
 				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => 'test<button class="btn btn-success">Feedback</button>',
+				   'body' => '<a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
 					 ]);?>
 		</div>
+        <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
     </section>
