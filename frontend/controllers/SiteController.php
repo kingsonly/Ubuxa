@@ -260,9 +260,10 @@ class SiteController extends BoffinsBaseController {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		$this->layout = 'loginlayout';
-       $user = new SignupForm;
+       $user = new SignupForm();
        $customer = Customer::find()->where(['cid' => $cid])->one();
        $userExists = Email::find()->where(['address' => $email])->exists();
+       
        if(!$userExists){
 			if(!empty($customer)){
 		        if ($user->load(Yii::$app->request->post())) {
@@ -273,6 +274,7 @@ class SiteController extends BoffinsBaseController {
 		        		$user->first_name = $customer->entity->firstname;
 		        		$user->surname = $customer->entity->surname;
 		        	}
+		        	//$user->_userAR->tenantID = $cid;
 					if($user->save()){
 						if($customer->has_admin == Customer::NO_ADMIN){
 							$customer->has_admin = Customer::HAS_ADMIN;
