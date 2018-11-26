@@ -348,7 +348,7 @@ class SiteController extends BoffinsBaseController {
 						->setTo($email)
 						->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
 						->setSubject('Signup Confirmation')
-						->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+						->setTextBody("Hello, click this link to get started.".\yii\helpers\Html::a('Confirm',
 						Yii::$app->urlManager->createAbsoluteUrl(
 						['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
 						))
@@ -379,7 +379,6 @@ class SiteController extends BoffinsBaseController {
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
 	    		$emails = $model->email;
-	    		//var_dump($emails);
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');

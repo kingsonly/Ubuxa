@@ -48,4 +48,10 @@ return [
     52 => [
         'admin',
     ],
+    53 => [
+        'data_entry',
+    ],
+    54 => [
+        'data_entry',
+    ],
 ];
