@@ -4,6 +4,10 @@
  * Description:
  *      This is a demo file used only for the main dashboard (index.html)
  **/
+$(window).on('load', function () {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");
+	});
 
 function dueDateCountDown(id,datess)
 {	

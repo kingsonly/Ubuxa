@@ -78,6 +78,9 @@ use frontend\models\Folder;
 		display: block;
 		border-radius: 4px;
 		padding-top: 6px;
+		<? if($creationType == 'component'){?>
+			padding-left: 6px;
+		<? }?>
 	}
 </style>
 <?

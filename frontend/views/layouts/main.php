@@ -15,7 +15,8 @@ use frontend\models\UserFeedback;
 
 $feedback = new UserFeedback();
 
-Yii::$app->settingscomponent->boffinsUsersAsset()
+Yii::$app->settingscomponent->boffinsUsersAsset();
+$waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
 ?>
 <?php $this->beginPage() ?>
 <? Yii::$app->language  = Yii::$app->settingscomponent->boffinsUsersLanguage();?>
@@ -29,10 +30,36 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     <title>
 
     <?= Html::encode($this->title) ?></title>
+	<style>
+		.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(<?= $waitToLoad; ?>) center no-repeat #fff;
+}
+		
+		
+		.images ul li img {
+	width: 400px;
+	height: 266px;
+}
+.images ul li {
+	display: inline-block;
+}
+	</style>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
+	
 </head>
 <body class="skin-red hold-transition layout-top-nav">
+
+	<div class="se-pre-con"></div>
+
 <?php $this->beginBody() ?>
 <?php
     if(isset(Yii::$app->user->identity->person_id)) {
@@ -92,7 +119,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
         <div class="navbar-header">
           
 			 
-			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/site/index'],['class' => 'img-circle']) ?>
+			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/folder/index'],['class' => 'img-circle']) ?>
 
           
         </div>
@@ -160,5 +187,6 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 <script type="text/javascript">var MouseStats_Commands=MouseStats_Commands?MouseStats_Commands:[]; (function(){function b(){if(void 0==document.getElementById("__mstrkscpt")){var a=document.createElement("script");a.type="text/javascript";a.id="__mstrkscpt";a.src=("https:"==document.location.protocol?"https://ssl":"http://www2")+".mousestats.com/js/5/6/5671434762617532649.js?"+Math.floor((new Date).getTime()/6E5);a.async=!0;a.defer=!0;(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}}window.attachEvent?window.attachEvent("onload",b):window.addEventListener("load", b,!1);"complete"===document.readyState&&b()})(); </script>
 <!--  MouseStats:End  -->
 </body>
+	
 </html>
 <?php $this->endPage() ?>
