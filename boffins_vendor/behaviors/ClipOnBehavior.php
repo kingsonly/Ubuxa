@@ -222,7 +222,9 @@ class ClipOnBehavior extends Behavior
 		$clipBarModel = new ClipBar(); // instanciate clip bar 
 		
 		$getClassName = $this->_getShortClassName($this->owner) == 'Folder'?'folder':'component'; // determine owner class name and make them lower case and in terms of component convert their names to components , note this code would be reviewed and this comment would be changed, as such as long as this comment is here, this this code is yet to be reviewed .
-		
+		if($this->_getShortClassName($this->owner) == 'Task' or $this->_getShortClassName($this->owner) == 'Remark'){
+			return false;
+		}
 		$searchOwnerTypeId = $ownerTypeModel->find()->select(['id'])->where(['owner_type' => $getClassName])->one();// get the id of the ownertype eg folder component etc
 		
 		$clipBarModel->owner_id = $this->owner->id; // assign clipBarModel->owner_id with the owner id
