@@ -85,6 +85,7 @@ function _RemarkOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  
                 },
               success: function(res, sec){
                    console.log('Status updated');

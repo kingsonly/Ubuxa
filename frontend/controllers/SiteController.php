@@ -342,7 +342,10 @@ class SiteController extends BoffinsBaseController {
 	        	if($customer->signup($customerModel)){
 	        		$settings->tenantID = (int)$customerModel->cid;
 					if($settings->save()){
+						$registrationLink = \yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
+						/*
 						$sendEmail = \Yii::$app->mailer->compose()
+						
 						->setTo($email)
 						->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
 						->setSubject('Signup Confirmation')
@@ -351,7 +354,8 @@ class SiteController extends BoffinsBaseController {
 						['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
 						))
 						)->send();
-						if($sendEmail){
+						*/
+						if($customerModel->sendEmail($email,$registrationLink)){
 							 Yii::$app->getSession()->setFlash('success','Check Your email!');
 						} else{
 							Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');

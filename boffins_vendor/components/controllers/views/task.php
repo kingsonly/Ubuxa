@@ -372,6 +372,7 @@ $boardUrl = Url::to(['task/index']);
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
   					 
   					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                      
                       <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
                     

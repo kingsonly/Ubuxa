@@ -440,6 +440,7 @@ AppAsset::register($this);
     <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
     <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
+    <?= $form->field($remarkModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>

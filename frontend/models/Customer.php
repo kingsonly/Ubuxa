@@ -86,4 +86,17 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->entity->entity_type;
     }
+	
+	public function sendEmail($newCustomerEmail,$registrationLink)
+    {
+        return Yii::$app->mailer->compose(['html' => 'newcustomer'],
+                [
+                    //'body'  => $this->body,
+                    'link'  => $registrationLink,
+                ])
+            ->setTo($newCustomerEmail)
+            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setSubject('Thanks for joining Ubuxa')
+            ->send();
+    }
 }

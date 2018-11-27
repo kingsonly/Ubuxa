@@ -22,6 +22,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
      * {@inheritdoc}
      */
 	public const DEFAULT_PARENT_ID = 0;
+	public $fromWhere; 
     public static function tableName()
     {
         return '{{%remark}}';
@@ -34,7 +35,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         return [
             [['parent_id', 'cid', 'person_id'], 'integer'],
-            [['remark_date','last_updated','text', 'ownerId'], 'safe'],
+            [['remark_date','last_updated','text', 'ownerId','fromWhere'], 'safe'],
             [['text'], 'string', 'max' => 255],
         ];
     }

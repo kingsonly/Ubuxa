@@ -33,6 +33,7 @@ class BoffinsArRootModel extends ActiveRecord
 	public $defaltBehaviour;
 	
 	public $ownerId;
+	public $fromWhere;
 	
 	/*
 	 * @array or string to list date values in the ARModel/Child class
