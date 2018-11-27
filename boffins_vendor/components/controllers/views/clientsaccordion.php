@@ -200,15 +200,20 @@ Main Components
   transition: all 0.4s ease;
 }
 li.has-clients-children.client-child {
-    background: #444359;
+    background: #ccc;
     padding: 10px;
-    color: #fff;
+    /*color: #fff;*/
     cursor: pointer;
     border-bottom: 1px solid #fff;
-    padding:42px;
+    padding-left:42px;
 }
 .child-name{
   padding-left:10px;
+  font-size:13px;
+  font-family: calibri;
+}
+.faicon{
+  color:#6eb36e !important;
 }
 </style>
 
@@ -220,10 +225,10 @@ li.has-clients-children.client-child {
 
           <ul class="first-list">
             <li class="has-clients-children client-child client-first-child">
-              <i class="fa fa-eye" style="color:#fff"> </i><span class="child-name">View Client</span>      
+              <i class="fa fa-eye faicon" style="color:#fff"> </i><span class="child-name">View Client</span>      
             </li>
             <li class="has-clients-children client-child client-last-child">
-              <i class="fa fa-plus" style="color:#fff"></i><span class="child-name">Create Client</span>   
+              <i class="fa fa-plus faicon" style="color:#fff"></i><span class="child-name">Create Client</span>   
             </li>      
           </ul>
     </li>

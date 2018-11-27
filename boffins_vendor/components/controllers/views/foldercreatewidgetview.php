@@ -244,6 +244,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
+				if('$newFolderCreated' === '0' ){
+					location.reload();
+				}
 
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
@@ -277,6 +280,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
 						localStorage.setItem("skipValidation", "no");
+					}
+					if('$newFolderCreated' === '0' ){
+					location.reload();
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
@@ -314,9 +320,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
-				if('$newFolderCreated' === '0' ){
-					location.reload();
-				}
+				
 			   }
             },
               

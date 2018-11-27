@@ -353,8 +353,9 @@ $('#customerForm').on('beforeSubmit', function (e) {
         success: function (data) {
             inTest();
         },
-        error: function () {
+        error: function (data) {
             alert("Something went wrong");
+            console.log(data)
         },
         beforeSend: function(){
             $("#loader").show()
