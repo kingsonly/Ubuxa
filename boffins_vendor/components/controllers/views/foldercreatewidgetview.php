@@ -165,6 +165,7 @@ if(isset($_GET['id'])){
 
 <?php 
 $url = Url::to(['folder/check-if-folder-name-exist']);
+$baseUrl = Url::base(true);
 $js = <<<JSS
 
  $(document).on('click','#ok',function(){
@@ -244,6 +245,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
+				if('$newFolderCreated' === '0' ){
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
+				}
 
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
@@ -277,6 +281,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
 						localStorage.setItem("skipValidation", "no");
+					}
+					if('$newFolderCreated' === '0' ){
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
@@ -314,9 +321,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
-				if('$newFolderCreated' === '0' ){
-					location.reload();
-				}
+				
 			   }
             },
               

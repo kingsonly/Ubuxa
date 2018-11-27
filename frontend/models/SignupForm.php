@@ -32,7 +32,9 @@ class SignupForm extends Model
     public $state_id;
     public $country_id;
     //public $code;
-    public $cid;
+    private $_cid;
+
+    public $cid; //hacking things
 
     public $isNewRecord = false; //to mimic AR
     
@@ -106,6 +108,7 @@ class SignupForm extends Model
         $this->isNewRecord = true;
         $this->_personAR = new Person;
         $this->_userAR = new UserDb;
+
         //$this->_telephoneAR = new Telephone;
         $this->_emailAR = new Email;
         //$this->_addressAR = new Address;
@@ -176,7 +179,9 @@ class SignupForm extends Model
         $_entityAR = new Entity;
         $_entityAR->entity_type = Entity::ENTITY_PERSON;
         $_entityAR->cid = $this->cid;
+        //$_entityAR->tenantID = $this->cid;
         $processFails = $_entityAR->save(false) ? false : true;
+        
         
         if ($processFails) {
             $transaction->rollBack();
@@ -214,6 +219,7 @@ class SignupForm extends Model
         
         //process emails
         $this->_emailAR->setAttributes($this->getAttributes(), true);
+        $this->_emailAR->tenantID = $this->cid;
         if ( !$processFails && $this->_emailAR->save(false) ) {
             $emailEntity = new EmailEntity;         
             $emailEntity->email_id = $this->_emailAR->id;
@@ -226,6 +232,7 @@ class SignupForm extends Model
         }
         //process person
         $this->_personAR->setAttributes($this->getAttributes(), true);
+        $this->_personAR->tenantID = $this->cid;
         $this->_personAR->entity_id = $entity_id;           
         $processFails = $this->_personAR->save(false) ? $processFails && true : true;
         
@@ -236,6 +243,7 @@ class SignupForm extends Model
             //process users
             $transaction->commit();
             $this->_userAR->person_id = $this->_personAR->id;
+            $this->_userAR->tenantID = $this->cid;
             $this->_userAR->setAttributes($this->getAttributes(), true);
         }
         
@@ -362,8 +370,22 @@ class SignupForm extends Model
         deferred.push(messages.push('test'));
 JS;
     }
-    
 }
+    public function getCid() 
+    {
+        return $this->_cid;
+    }
+
+    public function setCid($value)
+    {
+        $this->_userAR->tenantID = $value;
+        $this->_emailAR->tenantID = $value;
+        $this->_personAR->tenantID = $value;
+        $this->_entityAR->tenantID = $value;
+    }
+
+    
+
     
 }
 

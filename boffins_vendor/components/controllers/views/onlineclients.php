@@ -1,8 +1,8 @@
 <style type="text/css">
    .infos{
-      background-color: #fff;
+      /*background-color: #fff;
       box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-      padding: 10px;
+      padding: 10px;*/
     }
     
     .box-clients{
@@ -33,6 +33,11 @@
    .client-active{
       background-color: #fff;
    }
+   .infos-sub{
+    background:#fff;
+    box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+    padding: 10px;
+   }
 </style>
 <?php
   $siteUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
@@ -42,6 +47,7 @@
   <div class="row">
     <?php if($siteUrlParam == 'folder'){?>
 						    	<div class="infos col-sm-12 col-xs-12">
+                    <div class="infos-sub col-md-12">
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
                         <em class="fa fa-xl fa-users color-teal" style="font-size: 2em; color:#1ebfae !important"></em>
                         <div class="active-client" style="font-size: 2em;">
@@ -93,10 +99,11 @@
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Task Completed</div>
                     </div>
-                      
+                      </div>
                   </div>
       <?php }else if($siteUrlParam == 'site'){?>
                   <div class="infos col-sm-12 col-xs-12">
+                    <div class="infos-sub col-md-12">
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
                         <em class="fa fa-xl fa-users color-teal" style="font-size: 2em; color:#1ebfae !important"></em>
                         <div class="active-client" style="font-size: 2em;">
@@ -132,8 +139,9 @@
                       </div>
                       <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks</div>
                     </div>
-                      
+                     </div> 
                   </div>
       <?php }?>
-  </div>
+  
+</div>
 </div>
