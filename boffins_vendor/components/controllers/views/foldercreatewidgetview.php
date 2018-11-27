@@ -165,6 +165,7 @@ if(isset($_GET['id'])){
 
 <?php 
 $url = Url::to(['folder/check-if-folder-name-exist']);
+$baseUrl = Url::base(true);
 $js = <<<JSS
 
  $(document).on('click','#ok',function(){
@@ -245,7 +246,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					localStorage.setItem("skipValidation", "no");	
 				}
 				if('$newFolderCreated' === '0' ){
-					location.reload();
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
 				}
 
 				$(document).find('#$formId').show();
@@ -282,7 +283,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 						localStorage.setItem("skipValidation", "no");
 					}
 					if('$newFolderCreated' === '0' ){
-					location.reload();
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
