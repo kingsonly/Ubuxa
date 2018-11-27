@@ -40,13 +40,13 @@ $checkUrlParamz = $checkUrlz[0];
           <?php if($checkUrlParamz == 'folder'){?>
             <?php if(!$onboardingExists){ ?>
                 <div class="help-tip" id="remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
                   </p>
                 </div>
             <?php }else if($onboardingExists && $onboarding->remark_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
               <div class="help-tip" id="remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
+                  <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
                   </p>
                 </div>

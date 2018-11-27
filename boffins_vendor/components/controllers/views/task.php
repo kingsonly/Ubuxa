@@ -164,6 +164,19 @@ $boardUrl = Url::to(['task/index']);
     padding: 6px;
     width: 60px;
     transition: all 0.2s;
+} 
+#taskButton {
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    background: #ededed;
+    border-radius: 3px;
+    padding: 6px;
+    width: 60px;
+    transition: all 0.2s;
 }
  .embed-submit-field #taskButton:hover {
    background-color: #37c88d;
@@ -213,6 +226,9 @@ $boardUrl = Url::to(['task/index']);
 
 }
 #task-list-loader{
+  display: none;
+}
+#loading-task{
   display: none;
 }
 .help-tip p{
@@ -372,9 +388,10 @@ $boardUrl = Url::to(['task/index']);
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
   					 
   					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-                     
+                    <span class="for-task-loader">
                       <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
-                    
+                      <span id="loading-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+                    </span>
                     
                     <?php ActiveForm::end(); ?>
                   <?php }?>
@@ -437,6 +454,8 @@ function _UpdateStatus(checkedId){
 $('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
+           $('#taskButton').hide();
+           $('#loading-task').show();
            e.preventDefault();
             if(form.find('.has-error').length) {
                 return false;

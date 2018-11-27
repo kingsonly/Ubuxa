@@ -54,4 +54,7 @@ return [
     54 => [
         'data_entry',
     ],
+    55 => [
+        'admin',
+    ],
 ];

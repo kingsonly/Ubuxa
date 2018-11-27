@@ -49,14 +49,19 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     			</div>
     		</div>
     	</div>
-
 	<div class="burger_box">
 		<div class="menu-icon-container">
+
 			<a href="#" class="menu-icon js-menu_toggle closed">
 				<span class="menu-icon_box">
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
 				</span>
 			</a>
+            <div class="beacon-wrapper">
+              <span class="signal beacon--epicentre"></span>
+              <span class="signal signal--wave"></span>
+              <span class="signal signal--wave signal--delay"></span>
+            </div>
 		</div>
 	</div>
 	<div class="container sider">

@@ -244,10 +244,10 @@ label {
   }
   .signup-logo{
     height: 46px;
-    width: 140px;
+    width: 137px;
     margin: 3px 5px 3px 25px;
     position: absolute;
-    right: 17px;
+    right: 55px;
     top: -5px;
   }
 </style>
@@ -256,7 +256,7 @@ label {
         <div class="nav">
           <ul class="links">
             <li class="signup-active"><a class="btn">Get Started </a></li>
-            <img class="signup-logo" src="/ubuxabeta/frontend/web/images/ubuxa.png">
+            <span class="signup-logo"><?= Yii::$app->settingscomponent->boffinsLogo(); ?></span>
           </ul>
         </div>
         <div ng-app ng-init="checked = false">
