@@ -376,7 +376,7 @@ a,
   display: block;
   border-radius: 50%;
   -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0);
+   transform: translate3d(0, 0, 0);
 }
 
 .beacon--epicentre {
@@ -393,7 +393,7 @@ a,
   height: 70px;
   border: 1px solid rgba(74, 180, 240, 0.12);
   opacity: 0;
-  background-color: rgba(74, 180, 240, 0.14);
+  background-color: rgba(20, 106, 154, 0.24);
   -webkit-animation-name: signal;
           animation-name: signal;
   -webkit-animation-duration: 2s;
