@@ -545,11 +545,9 @@ $.fn.closest_descendent = function(filter) {
         $.each(items, function(key, item) {
           result.push($(item).data('filename'));
         });
-        _UpdateTask(status, contain);
+        //_UpdateTask(status, contain);
         //console.log(contain, status);
         var check = $('#'+el.id).closest_descendent('li[data-filename]');
-        //console.log(check);
-
 })
 .on('dragend', function(el) {
     
