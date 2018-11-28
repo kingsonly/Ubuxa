@@ -37,7 +37,6 @@ class m181031_121458_alter_remark_timestamp extends Migration
     {
         echo "m181031_121458_alter_remark_timestamp cannot be reverted.\n";
 
-        return false;
     }
 
     /*

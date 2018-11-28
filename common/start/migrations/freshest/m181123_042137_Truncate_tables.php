@@ -1,24 +1,11 @@
 <?php
-/**
- * This view is used by console/controllers/MigrateController.php.
- *
- * The following variables are available in this view:
- */
-/* @var $className string the new migration class name without namespace */
-/* @var $namespace string the new migration class namespace */
-
-echo "<?php\n";
-if (!empty($namespace)) {
-    echo "\nnamespace {$namespace};\n";
-}
-?>
 
 use yii\db\Migration;
 
 /**
- * Class <?= $className . "\n" ?>
+ * Class m181123_042137_Truncate_tables
  */
-class <?= $className ?> extends Migration
+class m181123_042137_Truncate_tables extends Migration
 {
 	
 	/***
@@ -51,7 +38,7 @@ class <?= $className ?> extends Migration
      */
     public function safeDown()
     {
-        echo "<?= $className ?> should not be reverted. Reverting for development only.\n";
+        echo "m181123_042137_Truncate_tables should not be reverted. Reverting for development only.\n";
 
         //return false;
     }
@@ -65,7 +52,7 @@ class <?= $className ?> extends Migration
 
     public function down()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "m181123_042137_Truncate_tables cannot be reverted.\n";
 
         return false;
     }

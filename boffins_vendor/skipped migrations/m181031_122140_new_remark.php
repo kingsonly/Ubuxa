@@ -11,6 +11,17 @@ class m181031_122140_new_remark extends Migration
 	
     public function safeUp()
     {
+	 	$this->execute("DROP TABLE IF EXISTS {{%remark}}");  
+		
+		//create new remark table
+		$this->createTable("{{%remark}}", [
+										'id' => $this->primaryKey(11),
+										'user_id' => $this->integer(11),
+										'last_updated' => $this->timestamp('CURRENT_TIMESTAMP'),
+										'remark_date' => $this->timestampt('CURRENT_TIMESTAMP')
+																	->comment('The date the remark was made'),
+							]);
+
         $this->addColumn("{{%remark}}", 'deleted', $this->integer(11)->defaultValue()->after('cid') );
         $this->addColumn("{{%remark}}", 'last_updated', $this->integer(11)->defaultValue()->after('deleted') );
         $this->addColumn("{{%remark}}", 'person_id', $this->integer(11)->defaultValue(0)->after('text') );

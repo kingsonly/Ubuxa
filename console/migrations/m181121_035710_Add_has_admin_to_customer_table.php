@@ -1,24 +1,11 @@
 <?php
-/**
- * This view is used by console/controllers/MigrateController.php.
- *
- * The following variables are available in this view:
- */
-/* @var $className string the new migration class name without namespace */
-/* @var $namespace string the new migration class namespace */
-
-echo "<?php\n";
-if (!empty($namespace)) {
-    echo "\nnamespace {$namespace};\n";
-}
-?>
 
 use yii\db\Migration;
 
 /**
- * Class <?= $className . "\n" ?>
+ * Class m181121_035710_Add_has_admin_to_customer_table
  */
-class <?= $className ?> extends Migration
+class m181121_035710_Add_has_admin_to_customer_table extends Migration
 {
 	
 	/***
@@ -34,7 +21,7 @@ class <?= $className ?> extends Migration
 	public function init()
     {
 		//if changing the database connection, the next line needs to be uncommented. Works with SpecialMigration controller only.
-        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; 
+        $this->db = 'db_tenant' . $this->db_suffix; 
         parent::init();
     }
 
@@ -43,7 +30,7 @@ class <?= $className ?> extends Migration
      */
     public function safeUp()
     {
-
+        $this->addColumn('{{%customer}}', 'has_admin', $this->integer(11)->after('account_number')->defaultValue(0) );
     }
 
     /**
@@ -51,9 +38,9 @@ class <?= $className ?> extends Migration
      */
     public function safeDown()
     {
-        echo "<?= $className ?> should not be reverted. Reverting for development only.\n";
+        echo "m181121_035710_Add_has_admin_to_customer_table should not be reverted. Reverting for development only.\n";
 
-        //return false;
+		$this->dropColumn("{{%customer}}", 'has_admin');
     }
 
     /*
@@ -65,7 +52,7 @@ class <?= $className ?> extends Migration
 
     public function down()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "m181121_035710_Add_has_admin_to_customer_table cannot be reverted.\n";
 
         return false;
     }
