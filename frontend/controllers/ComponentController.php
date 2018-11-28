@@ -40,7 +40,7 @@ class ComponentController extends Controller
     public function actionIndex($folder,$component)
     {
 		$folderModel = new Folder();
-		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
+		$getFolder = $folderModel->find()->andWhere(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
         return $this->renderAjax('index',[
 			'folderId'=>$folder,
@@ -52,27 +52,27 @@ class ComponentController extends Controller
     public function actionListview($folder,$component)
     {
 		$folderModel = new Folder();
-		$getFolder = $folderModel->find()->where(['id'=>$folder])->one();
+		$getFolder = $folderModel->find()->andWhere(['id'=>$folder])->one();
 		$getFolder->externalTemplateId = $component;
 		$collector = new ModelCollection( [], [ 'query' => $getFolder->getComponentTemplateAsComponents() ] );
 		$modelData = $collector->models;
 
-		return $this->renderAjax('listview',['content'=>$modelData]);
+		return $this->renderAjax('listview',['folder' => $folder,'content'=>$modelData]);
     }
 	
 
-    public function actionView($id)
+    public function actionView($id,$folderId)
     {
 		/*$componentModel = new Component();
-		$component = $componentModel->find()->where(['id'=>$id]);
+		$component = $componentModel->find()->andWhere(['id'=>$id]);
 		$collector = new ModelCollection( [], [ 'query' => $component ] );
 		$modelData = $collector->models;*/
 		$folder = new Folder();
-		$getting = $folder->find()->where(['id' => 30])->one();
-		$getti = $getting->folderUsers;
+		$getCurrentFolder = $folder->find()->andWhere(['id' => $folderId])->one();
+		$getFolderUsers = $getCurrentFolder->folderUsers;
 		
 		$componentModel = new Component();
-		$query = $componentModel->find()->where(['id'=>$id]);
+		$query = $componentModel->find()->andWhere(['id'=>$id]);
 		$component = $query->one();
 		$collector = new ModelCollection( [], [ 'query' => $query ] ); //using the relation
 		$modelData = $collector->models;
@@ -101,7 +101,7 @@ class ComponentController extends Controller
 			'component'=>$component,
 			'content'=>$modelData,
 			'users'=>$component->componentUsers,
-			'fuser'=>$component->componentUsers,
+			'fuser'=>$getFolderUsers,
 		]);
     }
 	
@@ -109,7 +109,7 @@ class ComponentController extends Controller
     {
 		
 		if (isset($_POST['hasEditable'])) {
-			$component = Component::find()->where(['id'=>id]);
+			$component = Component::find()->andWhere(['id'=>id]);
 			$collector = new ModelCollection( [], [ 'query' => $component ] );
 			$modelData = $collector->models;
 			// use Yii's response format to encode output as JSON
@@ -135,7 +135,7 @@ class ComponentController extends Controller
 		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
 			  
 			 foreach($inviteUsersModel->users as $value){
-				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
+				 $getUserId = $userModel->find()->select(['id'])->andWhere(['person_id' => $value])->one();
 				 $test = $getUserId['id'];
 				 Yii::$app->queue->push(new FolderUsersQueue([
 					'userId' => $getUserId['id'],
@@ -155,7 +155,7 @@ class ComponentController extends Controller
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
 			// read your posted model attributes
-				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->where(['id'=>$id]) ] ); 
+				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->andWhere(['id'=>$id]) ] ); 
 				$model = new ComponentAttributeModel();
 				$model->load(Yii::$app->request->post());
 				$collectors->loadModel($model->attributeId,['title'=>$model->value]);
@@ -180,7 +180,7 @@ class ComponentController extends Controller
 			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
 			// read your posted model attributes
-				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->where(['id'=>$id]) ] ); 
+				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->andWhere(['id'=>$id]) ] ); 
 				$model = new ComponentAttributeModel();
 				$model->load(Yii::$app->request->post());
 				$collectors->loadModel($model->attributeId,['value'=>$model->value]);

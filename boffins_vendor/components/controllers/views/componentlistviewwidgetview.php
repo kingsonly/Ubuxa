@@ -94,7 +94,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 
 </section>
 <?
-$viewUrl = Url::to(['component/view']);
+$viewUrl = Url::to(['component/view','folderId' => $folderId]);
 $listViewJs = <<<listViewJs
 
 $("#listtable").DataTable({

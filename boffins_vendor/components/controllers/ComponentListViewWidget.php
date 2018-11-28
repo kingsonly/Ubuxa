@@ -48,6 +48,7 @@ class ComponentListViewWidget extends Widget{
 	public $content; // content to be looped in the display
 	public $hoverEffect;  // an atribute that adds a hover effect to the widget view 
 	public $action; // View and update action links are sent to this attribute.
+	public $folderId; // holds the current folder id.
 	 
 	public function init()
 	{
@@ -62,6 +63,7 @@ class ComponentListViewWidget extends Widget{
 			'attributes' => $this->attributes,
 			'content' => $this->content,
 			'hoverEffect' => $this->hoverEffect,
+			'folderId' => $this->folderId,
 			
 			
 		]);
