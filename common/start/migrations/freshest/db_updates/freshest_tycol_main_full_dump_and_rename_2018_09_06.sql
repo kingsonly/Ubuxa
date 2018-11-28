@@ -20,13 +20,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8*/;
 
 --
--- Database: `premux_test`
+-- Database: `premux_main`
 --
-DROP DATABASE IF EXISTS `tycol_main_test`;
-DROP DATABASE IF EXISTS `tycol_test`;
-DROP DATABASE IF EXISTS `premux_test`;
-CREATE DATABASE IF NOT EXISTS `premux_test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `premux_test`;
+DROP DATABASE IF EXISTS `tycol_main`;
+DROP DATABASE IF EXISTS `premux_main_testing`;
+CREATE DATABASE IF NOT EXISTS `premux_main_testing` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `premux_main_testing`;
 
 -- --------------------------------------------------------
 
@@ -75,21 +74,7 @@ CREATE TABLE IF NOT EXISTS `tm_address` (
   `code` varchar(255) DEFAULT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_address`
---
-
-INSERT INTO `tm_address` (`id`, `address_line`, `state`, `country`, `state_id`, `country_id`, `code`, `cid`) VALUES
-(1, 'Add 1', NULL, NULL, NULL, NULL, '1', NULL),
-(2, 'Add 1', NULL, NULL, NULL, NULL, '1', NULL),
-(3, 'Alesa Eleme', NULL, NULL, NULL, NULL, 'PO BOX 921', NULL),
-(4, 'Via Valtrighe 5, 24030 Terno d\'Isola (BG)', NULL, NULL, NULL, NULL, '20122', NULL),
-(5, 'KM 16 Kachia Road, P.M.B. 2252', NULL, NULL, NULL, NULL, '1', NULL),
-(6, 'Bosdellestraat 120/2, 1933 Zaventem', NULL, NULL, NULL, NULL, '1', NULL),
-(7, 'Office: Wuse 2', NULL, NULL, NULL, NULL, '1', NULL),
-(8, 'P O Box 692, Wilgeheuwols 1736 RSA, 1493 Maliship Street, Laserpark', NULL, NULL, NULL, NULL, '1', NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,19 +93,6 @@ CREATE TABLE IF NOT EXISTS `tm_address_entity` (
   KEY `corporation_id` (`entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `tm_address_entity`
---
-
-INSERT INTO `tm_address_entity` (`address_id`, `entity_id`) VALUES
-(1, 95),
-(2, 96),
-(3, 97),
-(4, 98),
-(5, 99),
-(6, 100),
-(7, 101),
-(8, 102);
 
 -- --------------------------------------------------------
 
@@ -227,15 +199,7 @@ CREATE TABLE IF NOT EXISTS `tm_client` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `corporation_id_2` (`corporation_id`),
   KEY `corporation_id` (`corporation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_client`
---
-
-INSERT INTO `tm_client` (`id`, `corporation_id`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 1, '0000-00-00', 0, NULL),
-(2, 3, '0000-00-00', 0, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -254,195 +218,8 @@ CREATE TABLE IF NOT EXISTS `tm_component` (
   `junction_foreign_key` varchar(255) DEFAULT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=205 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_component`
---
-
-INSERT INTO `tm_component` (`id`, `component_type`, `component_classname`, `component_junction`, `junction_foreign_key`, `cid`) VALUES
-(3, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(5, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(6, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(7, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(8, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(9, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(10, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(11, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(12, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(13, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(14, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(15, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(16, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(18, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(19, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(20, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(21, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(22, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(24, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(25, 'received_purchase_order', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(26, 'received_purchase_order', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(27, 'received_purchase_order', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(41, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(48, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(49, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(50, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(51, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(52, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(53, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(54, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(55, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(56, 'correspondence', 'app\\models\\Correspondence', 'app\\models\\CorrespondenceComponent', 'correspondence_id', NULL),
-(57, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(58, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(59, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(60, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(61, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(62, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(63, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(64, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(65, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(66, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(67, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(68, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(69, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(70, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(71, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(72, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(73, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(74, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(75, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(76, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(77, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(78, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(79, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(80, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(81, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(82, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(83, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(84, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(85, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(86, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(87, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(88, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(89, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(90, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(91, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(92, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(93, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(94, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(95, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(96, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(97, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(98, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(99, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(100, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(101, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(102, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(103, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(104, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(105, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(106, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(107, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(108, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(109, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(110, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(111, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(112, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(113, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(114, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(115, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(116, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(117, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(118, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(119, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(120, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(121, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(122, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(123, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(124, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(125, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(126, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(127, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(128, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(129, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(130, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(131, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(132, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(133, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(134, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(135, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(136, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(137, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(138, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(139, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(140, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(141, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(142, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(143, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(144, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(145, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(146, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(147, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(148, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(149, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(150, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(151, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(152, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(153, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(154, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(155, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(156, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(157, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(158, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(159, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(160, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(161, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(162, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(163, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(164, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(165, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(166, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(167, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(168, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(169, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(170, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(171, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(172, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(173, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(174, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(175, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(176, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(177, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(178, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(179, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(180, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(181, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(182, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(183, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(184, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(185, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(186, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(187, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(188, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(189, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(190, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(191, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(192, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(193, 'order', 'app\\models\\Order', 'app\\models\\OrderComponent', 'order_id', NULL),
-(194, 'correspondence', 'app\\models\\Correspondence', 'app\\models\\CorrespondenceComponent', 'correspondence_id', NULL),
-(195, 'invoice', 'app\\models\\Invoice', 'app\\models\\InvoiceComponent', 'invoice_id', NULL),
-(196, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(197, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(198, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(199, '', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(200, 'project', 'app\\models\\Project', 'app\\models\\ProjectComponent', 'project_id', NULL),
-(201, '', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(202, '', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(203, '', 'app\\models\\Receivedpurchaseorder', 'app\\models\\ReceivedpurchaseorderComponent', 'receivedpurchaseorder_reference', NULL),
-(204, 'payment', 'app\\models\\Payment', 'app\\models\\PaymentComponent', 'payment_id', NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_component_manager`
@@ -461,32 +238,6 @@ CREATE TABLE IF NOT EXISTS `tm_component_manager` (
   KEY `ReverseUC` (`user_id`,`component_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_component_manager`
---
-
-INSERT INTO `tm_component_manager` (`component_id`, `user_id`, `role`) VALUES
-(24, 24, 'user'),
-(100, 24, 'user'),
-(114, 24, 'user'),
-(128, 24, 'user'),
-(129, 33, 'user'),
-(130, 24, 'user'),
-(131, 24, 'user'),
-(148, 24, 'user'),
-(193, 24, 'user'),
-(194, 24, 'user'),
-(195, 24, 'user'),
-(196, 24, 'user'),
-(197, 24, 'user'),
-(198, 24, 'user'),
-(199, 24, 'user'),
-(200, 24, 'user'),
-(202, 24, 'user'),
-(203, 24, 'user'),
-(204, 24, 'user');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_component_task`
@@ -582,21 +333,8 @@ CREATE TABLE IF NOT EXISTS `tm_corporation` (
   `notes` varchar(255) DEFAULT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_corporation`
---
-
-INSERT INTO `tm_corporation` (`id`, `name`, `short_name`, `entity_id`, `notes`, `cid`) VALUES
-(1, 'Port Harcourt Refining Company', 'PH', 97, '', NULL),
-(2, 'FBM Hudson Italiana', 'FBMI', 98, '', NULL),
-(3, 'Kaduna Refining and Petrochemical Co. Ltd', 'KD', 99, '', NULL),
-(4, 'Azbil Yamatake Europe /nv', 'AZBY', 100, 'Tax number: BE0474687910', NULL),
-(5, 'Standard Chartered Bank Nigeria', 'SCBN', 101, 'This is the Nigerian bank - Obinna Abara account officer  OLD:0000002503 NEW: 0002618322', NULL),
-(6, 'Vega Instruments (SA) Pty Ltd ', 'VEGAS', 102, 'Reg No: 1997/012720/07 - Vat Reg No: 45440168723', NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_correspondence`
@@ -623,17 +361,8 @@ CREATE TABLE IF NOT EXISTS `tm_correspondence` (
   `deleted` int(1) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_correspondence`
---
-
-INSERT INTO `tm_correspondence` (`id`, `tyc_ref`, `component_id`, `particular_reference`, `parent_id`, `title_description`, `content`, `corresponding_entity`, `specific_corresponding_entity`, `drafting_entity`, `authorising_entity`, `create_date`, `notes`, `last_updated`, `deleted`, `cid`) VALUES
-(1, '1', 56, 'TYC/1400/03/SCB ', NULL, 'Instruction to close old account and credit new', 0x506c6561736520636c6f7365206f7572204e61697261206163636f756e74207769746820796f75203030303030303235303320776869636820686173206e6f74206265656e20616374697665206f7220757361626c652e0d0a4f6e63652074686973206163636f756e7420697320636c6f7365642c20706c6561736520637265646974206f7572206e65772c20616374697665204e61697261206163636f756e74203030323631383332322077697468207468652066756c6c0d0a62616c616e6365206f66207468652070726576696f757320696e616374697665206163636f756e742e0d0a596f752077696c6c20726563616c6c2074686174207765206465706f7369746564204e312c3030302c30303020696e746f2074686174206163636f756e742075706f6e20746865206f70656e696e67206f66207468650d0a303030303030323530332e0d0a5468616e6b20796f7520666f7220796f757220757375616c20756e6465727374616e64696e672e, 97, 2, 24, 24, '2017-11-17 15:07:37', '', '2017-11-17 09:07:37', 0, NULL),
-(2, '', 194, 'A Pat Reg', 1, 'A correspondence', 0x536f6d6520636f6e74656e74, 97, 1, 24, 24, '2018-08-16 05:26:19', '', '2018-08-16 05:26:19', 0, NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_correspondence_component`
@@ -1095,26 +824,8 @@ CREATE TABLE IF NOT EXISTS `tm_device` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `authKey` (`authKey`),
   KEY `Status` (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_device`
---
-
-INSERT INTO `tm_device` (`id`, `device_serial`, `authKey`, `status_id`, `last_used`, `valid_to`, `cid`) VALUES
-(39, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', 'N6mh2bV6bw06kF-5FbEscHrfUHNdZ770y3aQk8i30Js2jAuHT2qfY3kp_Guln-LCoJOWcN', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(40, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:3:\"Mac\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";i:12;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:5:\"10.12\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"br', 'Ms1xUYG-z8r2XYZAeT5TUBKd1roy5qi2c52zlS6XE0C54_0PpwFYXqVrEftItW9M0fVEQI', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(41, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:6:\"Chrome\";s:7:\"version\";a:5:{s:5:\"major\";i:61;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"61.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Blink\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"brand', 'xkg5is1XveJLyW4Iw4aeSdTE9nHbKUvWr1gi1yidKbZZQKWGqSGRg4bBY_QvTvTYt9Az2N', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(42, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', 'xT3zokqmIR4PeLKncp1Ob39PlY-iiWA8XLNEAjqksbVhDkj75Yka4lnwzfEaJsXSSffDOM', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(43, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', 'v7VJaV4Y0hxLWRy94grldt213hhxMfUar6viinA9A_sN2HY5PhUtYiOMe9exyCwnzZSfI_', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(44, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', 'Jgqz5uiLAPhTDou7SltXCyxFegdQEb1Jg8xEJnmd7rbaBF_0IVPHYVmo2xPlvqQqjvzSV0', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(45, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:6:\"Chrome\";s:7:\"version\";a:5:{s:5:\"major\";i:61;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"61.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Blink\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:8;s:5:\"minor\";i:1;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:3:\"8.1\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bra', 'oWPC7wyUDC2eZf1FxyQnZ5IzpN_bOrsJyVT0jGsyeu_SoOf1hXVKUvff_l0LK6XZ5ThGj2', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(46, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:56;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"56.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', 'Vtt9aVpZGcN1YdZ5OtQpOwGrO27tU5w38Su6VyopKlaXbwh5eVqLkBIhuQOZElKDzMekjQ', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(47, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:59;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"59.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:3:\"Mac\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";i:12;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:5:\"10.12\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"br', 'Lnd6KPTpDjUUynAoFSTyWff0Bh4dhNp2DDfT_5bpP7pdGl9-3mhn7it-ljV7QsXkLvGwye', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(48, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:59;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"59.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:3:\"Mac\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";i:12;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:5:\"10.12\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"br', 'iJlMosIHxdxKPD5AKk6has9ySkFktReJK6EeY_BNBK8nzuVdpe09xvTmaMkVTn5oExe8K1', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL),
-(49, 'a:5:{s:7:\"browser\";a:2:{s:4:\"name\";s:7:\"Firefox\";s:7:\"version\";a:5:{s:5:\"major\";i:61;s:5:\"minor\";i:0;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:4:\"61.0\";}}s:15:\"renderingEngine\";a:2:{s:4:\"name\";s:5:\"Gecko\";s:7:\"version\";a:5:{s:5:\"major\";N;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";N;}}s:15:\"operatingSystem\";a:2:{s:4:\"name\";s:7:\"Windows\";s:7:\"version\";a:5:{s:5:\"major\";i:10;s:5:\"minor\";N;s:5:\"patch\";N;s:5:\"alias\";N;s:8:\"complete\";s:2:\"10\";}}s:6:\"device\";a:5:{s:5:\"model\";N;s:5:\"bran', '5_fp2gn7f-BO3sHTDdy6nnjiae7zX2l9Z7Z7Y8wgdRS-jEZ_4aDnhQKlCY74eLTLHouJEg', NULL, '0000-00-00 00:00:00', '2037-06-30 00:00:00', NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_device_access_token`
@@ -1133,28 +844,6 @@ CREATE TABLE IF NOT EXISTS `tm_device_access_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `tm_device_access_token`
---
-
-INSERT INTO `tm_device_access_token` (`token`, `valid_to`, `device_string`, `user_id`) VALUES
-('54A83ZFF', '2017-10-28 05:33:20', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('566YOD6Z', '2017-10-28 05:43:29', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('9RIE6AOK', '2017-10-28 05:45:38', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('AP3CHL3H', '2017-10-27 06:14:14', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('DMMC75DF', '2017-11-18 10:46:42', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 34),
-('DRSZHRQX', '2017-10-27 16:45:50', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 24),
-('GH3H9YCW', '2017-10-28 05:37:35', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('JEEZ5QY8', '2017-10-27 16:33:01', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 24),
-('NDKH7MIG', '2017-10-28 05:38:32', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24),
-('O73V424J', '2017-10-27 16:58:09', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 24),
-('RTMI2KGT', '2017-10-27 10:23:26', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 24),
-('VGXV2H6X', '2017-10-27 16:38:58', 'a:2:{i:0;s:6:\"Chrome\";i:1;s:7:\"Windows\";}', 24),
-('W2AZZLDA', '2017-11-01 13:10:41', 'a:2:{i:0;s:13:\"Mobile Safari\";i:1;s:3:\"iOS\";}', 24),
-('ZP7CR45B', '2017-10-28 05:32:11', 'a:2:{i:0;s:7:\"Firefox\";i:1;s:7:\"Windows\";}', 24);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tm_email`
 --
 -- Creation: Sep 06, 2018 at 07:32 AM
@@ -1166,25 +855,8 @@ CREATE TABLE IF NOT EXISTS `tm_email` (
   `address` varchar(255) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_email`
---
-
-INSERT INTO `tm_email` (`id`, `address`, `cid`) VALUES
-(1, 'kokoshaggy@yahoo.coom', NULL),
-(2, 'n.onike@tycol.net', NULL),
-(3, 'a.okechukwu@tycol.net', NULL),
-(4, 'a.a.okechukwu@gmail.com', NULL),
-(5, 'Procurement.Phrc@nnpcgroup.com', NULL),
-(6, 'info@fbmhudson.com', NULL),
-(7, 'krpc@nnpcgrou.com', NULL),
-(8, 'info@eu.azbil.com', NULL),
-(9, 'obinna.abara@sc.com', NULL),
-(10, 'info.za@vega.com', NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_email_entity`
@@ -1201,23 +873,6 @@ CREATE TABLE IF NOT EXISTS `tm_email_entity` (
   KEY `tm_email_entity_ibfk_2` (`entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
---
--- Dumping data for table `tm_email_entity`
---
-
-INSERT INTO `tm_email_entity` (`email_id`, `entity_id`) VALUES
-(1, 95),
-(2, 96),
-(3, 95),
-(4, 2),
-(5, 97),
-(6, 98),
-(7, 99),
-(8, 100),
-(9, 101),
-(10, 102);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_entity`
@@ -1231,26 +886,8 @@ CREATE TABLE IF NOT EXISTS `tm_entity` (
   `entity_type` enum('person','corporation','','') NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8 COMMENT='Connects to Persons and Corporate to allow payments from/to ';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Connects to Persons and Corporate to allow payments from/to ';
 
---
--- Dumping data for table `tm_entity`
---
-
-INSERT INTO `tm_entity` (`id`, `entity_type`, `cid`) VALUES
-(1, 'person', NULL),
-(2, 'person', NULL),
-(3, 'person', NULL),
-(95, 'person', NULL),
-(96, 'person', NULL),
-(97, 'corporation', NULL),
-(98, 'corporation', NULL),
-(99, 'corporation', NULL),
-(100, 'corporation', NULL),
-(101, 'corporation', NULL),
-(102, 'corporation', NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_e_document`
@@ -1305,28 +942,7 @@ CREATE TABLE IF NOT EXISTS `tm_folder` (
   `deleted` int(1) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
---
--- Dumping data for table `tm_folder`
---
-
-INSERT INTO `tm_folder` (`id`, `parent_id`, `title`, `description`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 0, '', 'Standard Chartered Bank', '0000-00-00', 0, NULL),
-(2, 0, '', 'Yamatake Control Valves', '0000-00-00', 0, NULL),
-(3, 0, '', 'FBM Fan Shaft', '0000-00-00', 0, NULL),
-(4, 0, '', 'TUBE BANKS - UNIT 10 & 13 ; UNIT 11 & 29', '0000-00-00', 0, NULL),
-(5, 0, '', 'Supply of Air Fin Cooler Tube Banks', '0000-00-00', 0, NULL),
-(6, 0, '', 'Various Spare Parts for Rehabilitation', '0000-00-00', 0, NULL),
-(7, 0, '', 'Various Tubes for Air Fin Cooler Bundles', '0000-00-00', 0, NULL),
-(8, 0, '', 'PURCHASE OF COMPLETE BANK OF STEAM SURFACE CONDENSER', '0000-00-00', 0, NULL),
-(9, 0, '', 'TUBE BUNDLES', '0000-00-00', 0, NULL),
-(10, 0, '', 'TUBE BANKS AND PARTS', '0000-00-00', 0, NULL),
-(11, 0, '', '2000 Heat Exchanger Tubes', '0000-00-00', 0, NULL),
-(12, 0, '', 'John Zink Hamworthy', '0000-00-00', 0, NULL),
-(13, 0, '', 'TUBE BUNDLES', '0000-00-00', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 --
 -- Table structure for table `tm_folder_component`
@@ -1343,36 +959,6 @@ CREATE TABLE IF NOT EXISTS `tm_folder_component` (
   KEY `ComponentFolder` (`folder_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `tm_folder_component`
---
-
-INSERT INTO `tm_folder_component` (`folder_id`, `component_id`) VALUES
-(1, 56),
-(1, 204),
-(2, 16),
-(2, 26),
-(2, 128),
-(3, 41),
-(4, 53),
-(4, 54),
-(5, 22),
-(5, 24),
-(6, 55),
-(7, 3),
-(7, 5),
-(8, 7),
-(8, 8),
-(8, 9),
-(8, 10),
-(8, 11),
-(8, 12),
-(8, 13),
-(8, 14),
-(10, 19),
-(13, 6);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_folder_manager`
@@ -1409,16 +995,6 @@ CREATE TABLE IF NOT EXISTS `tm_folder_task` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `tm_folder_task`
---
-
-INSERT INTO `tm_folder_task` (`folder_id`, `task_id`) VALUES
-(2, 1),
-(6, 3);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tm_invoice`
 --
 -- Creation: Sep 06, 2018 at 07:32 AM
@@ -1441,22 +1017,7 @@ CREATE TABLE IF NOT EXISTS `tm_invoice` (
   KEY `currency_id` (`currency_id`),
   KEY `receivedpurchaseorder_id` (`receivedpurchaseorder_id`),
   KEY `Invoice Component` (`component_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_invoice`
---
-
-INSERT INTO `tm_invoice` (`id`, `component_id`, `invoice_reference`, `receivedpurchaseorder_id`, `description`, `amount`, `currency_id`, `creation_date`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 5, '100001960', 'Quotation', 'FBM Quote to Tycol', '276180.0000', 38, '2017-11-06', '2017-11-03 00:00:00', 0, NULL),
-(2, 18, '370629', 'Quotation', 'PROFORMA INVOICE ', '946900.0000', 59, '2017-11-06', '2017-11-06 00:00:00', 0, NULL),
-(3, 24, '350130R1B', 'Quotation', 'PROFORMA INVOICE ', '2744400.0000', 59, '2017-11-06', '2017-11-07 00:00:00', 0, NULL),
-(4, 129, 'for a payment made on a folder', 'Quotation', 'tfyguhij', '12345.0000', 10, '0000-00-00', '2018-05-25 09:46:43', 0, NULL),
-(5, 130, '4554kk', 'Quotation', 'ctfvygbuhnijmk,l.;ctfvygbhnjmk,l.;', '5655.0000', 38, '0000-00-00', '2018-08-13 04:49:30', 0, NULL),
-(6, 131, '253565', 'Quotation', 'dcfvgbhnjmk', '99555.0000', 38, '0000-00-00', '2018-08-12 14:18:44', 0, NULL),
-(7, 195, '2535651d', 'Quotation', 'Just a test', '5656.0000', 2, NULL, '2018-08-16 13:49:12', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_invoice_component`
@@ -1474,15 +1035,6 @@ CREATE TABLE IF NOT EXISTS `tm_invoice_component` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `tm_invoice_component`
---
-
-INSERT INTO `tm_invoice_component` (`invoice_id`, `component_id`) VALUES
-(4, 6);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tm_migration`
 --
 -- Creation: Sep 03, 2018 at 04:43 AM
@@ -1494,13 +1046,6 @@ CREATE TABLE IF NOT EXISTS `tm_migration` (
   `apply_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_migration`
---
-
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_order`
@@ -1530,22 +1075,6 @@ CREATE TABLE IF NOT EXISTS `tm_order` (
   KEY `manufacturer_ref` (`supplier_ref`),
   KEY `Order Components` (`component_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_order`
---
-
-INSERT INTO `tm_order` (`order_number`, `folder_id`, `component_id`, `supplier_id`, `supplier_ref`, `order_value`, `order_currency`, `issue_date`, `supplier_completion_date`, `order_status`, `order_file`, `last_updated`, `deleted`, `cid`) VALUES
-(120, NULL, 92, 4, '664965/1.0', '1216646.0000', 2, '0000-00-00', '0000-00-00', '9', '', '2018-08-15 16:54:19', 0, NULL),
-(121, NULL, 96, 4, '664965/1.0', '216646.0000', 2, '2014-12-02', '2014-10-28', '9', '', '2017-11-29 16:25:49', 0, NULL),
-(122, NULL, 100, 4, '664965/1.0', '216646.0000', 2, '2014-12-02', '2014-10-28', '9', '', '2017-11-29 16:27:15', 0, NULL),
-(123, NULL, 114, 1, '664965/1.0', '22323.0000', 2, '2017-12-02', '2017-11-15', '9', '', '2017-11-29 16:28:09', 0, NULL),
-(143, NULL, 52, 2, 'Q2015230', '35178.5000', 38, '0000-00-00', '0000-00-00', '13', '', '0000-00-00 00:00:00', 0, NULL),
-(188, NULL, 148, 1, 'A Supplier Refe', '245656.0000', 2, '0000-00-00', '0000-00-00', '10', '', '2018-08-15 16:53:30', 0, NULL),
-(555, '1', 128, 2, 'just a test2', '5565.0000', 2, '0000-00-00', '0000-00-00', '12', '', '2018-08-15 11:12:09', 0, NULL),
-(2132, NULL, 193, 1, 'A Supplier Refer', '23546.0000', 2, '2018-09-01', '2018-08-25', '9', '', '2018-08-15 17:00:42', 0, NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_order_component`
@@ -1586,16 +1115,7 @@ CREATE TABLE IF NOT EXISTS `tm_payment` (
   KEY `source_id` (`payment_source_id`),
   KEY `currency_id` (`currency_id`),
   KEY `PaymentComponent` (`component_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_payment`
---
-
-INSERT INTO `tm_payment` (`id`, `component_id`, `receiver_corporation_id`, `payment_source_id`, `value`, `currency_id`, `payment_date`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 204, 2, 0, '455.0000', 17, '2018-09-02 06:46:12', '2018-09-02', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_payment_component`
@@ -1611,15 +1131,6 @@ CREATE TABLE IF NOT EXISTS `tm_payment_component` (
   KEY `PaymentComponents` (`component_id`),
   KEY `ComponentPayments` (`payment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_payment_component`
---
-
-INSERT INTO `tm_payment_component` (`payment_id`, `component_id`) VALUES
-(1, 14);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_payment_source`
@@ -1654,20 +1165,7 @@ CREATE TABLE IF NOT EXISTS `tm_person` (
   `create_date` datetime NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_person`
---
-
-INSERT INTO `tm_person` (`id`, `first_name`, `surname`, `dob`, `entity_id`, `create_date`, `cid`) VALUES
-(1, 'Demonstration', 'Demo', '2017-06-05 00:00:00', 1, '2017-06-05 00:00:00', NULL),
-(2, 'Ayke A', 'Okechukwu', '2017-09-05 00:00:00', 2, '0000-00-00 00:00:00', NULL),
-(3, 'Ayke A', 'Okechukwu', '0000-00-00 00:00:00', 3, '0000-00-00 00:00:00', NULL),
-(48, 'guest', 'guesst', '0000-00-00 00:00:00', 95, '0000-00-00 00:00:00', NULL),
-(49, 'Gabriel Nnameka', 'Onike', '0000-00-00 00:00:00', 96, '0000-00-00 00:00:00', NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_person_corporation`
@@ -1763,39 +1261,7 @@ CREATE TABLE IF NOT EXISTS `tm_project` (
   KEY `Client` (`client_id`),
   KEY `Supplier` (`supplier_id`),
   KEY `component_id` (`component_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_project`
---
-
-INSERT INTO `tm_project` (`project_id`, `component_id`, `pro_description`, `client_id`, `supplier_id`, `client_reference`, `manufacturer_ref`, `project_status`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 3, 'Various Tubes for Air Fin Coolers', 1, 1, 'Not Available', '100001960.', '5', '2017-11-21', 0, NULL),
-(2, 6, 'PURCHASE OF TUBE BUNDLES FOR 11E01A', 1, 1, 'LSC 172/463/2016', '371028', '1', '2017-11-06', 0, NULL),
-(3, 7, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(4, 8, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(5, 9, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(6, 10, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(7, 11, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(8, 12, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(9, 13, 'COMPLETE BANK 16A03 ', 1, 1, 'FSC 019/463/2017', '370629', '5', '0000-00-00', 1, NULL),
-(10, 14, 'PURCHASE OF COMPLETE BANK OF STEAM SURFACE CONDENSER', 1, 1, 'FSC 019/463/2017', '370629', '1', '2017-11-06', 0, NULL),
-(11, 15, 'Control Valves for 16-FV-050/051M, 70-FV-0491/0492, 11-FV-011 & 22-FV-006', 2, 2, 'PROC/10020299/S', 'Q205230 ', '19', '0000-00-00', 1, NULL),
-(12, 16, 'Control Valves for 16-FV-040', 2, 2, 'PROC/10020299/SS', 'Q2015230', '20', '2017-11-06', 0, NULL),
-(13, 19, 'TUBE BANK AND PARTS', 1, 1, 'FSC 043/502/2017', 'N/A', '1', '2017-11-06', 0, NULL),
-(14, 20, 'Supply of Air Fin Cooler Tube Banks', 1, 1, 'KRPC/MD/REH-15/044-050', '360130R1B', '5', '0000-00-00', 0, NULL),
-(15, 21, 'Supply of Air Fin Cooler Tube Banks', 1, 1, 'KRPC/MD/REH-15/044-050', '360130R1B', '5', '0000-00-00', 0, NULL),
-(16, 22, 'Supply of Air Fin Cooler Tube Banks', 1, 1, 'KRPC/MD/REH-15/044-050', '360130R1B', '5', '2017-11-07', 0, NULL),
-(17, 41, 'Fan Shaft Replacement', 1, 1, 'Absent', '116903', '20', '2017-11-09', 0, NULL),
-(18, 53, '1604/59/PH  (ZUPING)', 1, 1, 'NPHR/REHAB/0728/2015', '350130R1A', '5', '2017-11-15', 0, NULL),
-(19, 54, '1604/60/PH  (TRANSGLOBAL))', 1, 1, 'NPHR/REHAB/0747/2015', '350130R1A', '5', '2017-11-15', 0, NULL),
-(20, 55, 'Various Spare Parts for Rehabilitation', 2, 1, 'KRPC/MD/043', ' 100001579 & 100001584', '1', '2017-11-16', 0, NULL),
-(21, 196, 'dtfyguhijokpl', 1, 1, 'dcfhvgjbknlm', 'dcgfhjbk', '1', '2018-08-29', 0, NULL),
-(22, 197, 'dtfyguhijokpl', 2, 1, 'NEWdcfhvgjbknlm', 'dcgfhjbk', '1', '2018-08-29', 0, NULL),
-(23, 198, 'dtfyguhijokpl', 1, 1, 'NEWdcfhvgjbknlmk', 'dcgfhjbk', '1', '2018-09-02', 0, NULL),
-(24, 200, 'dtfyguhijokpl', 1, 1, 'NEWdcfhvgjbknlm', 'dcgfhjbk', '1', '2018-09-02', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_project_component`
@@ -1809,18 +1275,6 @@ CREATE TABLE IF NOT EXISTS `tm_project_component` (
   `component_id` int(11) NOT NULL,
   PRIMARY KEY (`project_id`,`component_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
---
--- Dumping data for table `tm_project_component`
---
-
-INSERT INTO `tm_project_component` (`project_id`, `component_id`) VALUES
-(2, 129),
-(10, 204),
-(14, 21),
-(15, 20);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_receivedpurchaseorder`
@@ -1848,18 +1302,6 @@ CREATE TABLE IF NOT EXISTS `tm_receivedpurchaseorder` (
   KEY `client_id` (`client_id`,`supplier_id`),
   KEY `RPO Component` (`component_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_receivedpurchaseorder`
---
-
-INSERT INTO `tm_receivedpurchaseorder` (`receivedpurchaseorder_reference`, `component_id`, `receivedpurchaseorder_type`, `description`, `client_id`, `order_value`, `order_currency`, `supplier_id`, `issue_date`, `receivedpurchaseorder_duedate`, `final_delivery_date`, `last_updated`, `deleted`, `cid`) VALUES
-('4500044431', 26, 'Local Purchase Order', '200103716 Valve (Control)', 2, '132890000.0000', 87, 2, '2017-06-29', '2017-07-14', '2016-12-20', '2017-11-08 08:27:30', 0, NULL),
-('jvgcfgvhjbknm', 199, '', 'fvgbhnj', 1, '32323.0000', 10, 1, '2018-09-28', '2018-09-28', '2018-09-29', '2018-09-02 06:25:46', 0, NULL),
-('jvgcfgvhjbknmll', 203, '', 'nm,.', 1, '544545.0000', 15, 1, '2018-09-14', '2018-09-16', '2018-09-30', '2018-09-02 06:44:01', 0, NULL),
-('jvgcfgvhjbknmllk', 202, '', 'm,.', 1, '21212.0000', 14, 1, '2018-09-29', '2018-09-21', '2018-09-22', '2018-09-02 06:36:42', 0, NULL);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_receivedpurchaseorder_component`
@@ -1910,20 +1352,7 @@ CREATE TABLE IF NOT EXISTS `tm_remark` (
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `folder_id` (`folder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_remark`
---
-
-INSERT INTO `tm_remark` (`id`, `folder_id`, `project_id`, `remark_type`, `remark_date`, `text`, `cid`) VALUES
-(1, 3, '17', 'invoice', '2017-11-13 09:32:13', 'Testing invoice remarks\r\n', NULL),
-(2, 4, '18', 'project', '2017-11-21 04:52:04', 'Project B ', NULL),
-(3, 4, '19', '', '2017-11-21 04:53:23', 'Project A', NULL),
-(4, 4, '19', '', '2017-11-21 04:53:47', 'Project A', NULL),
-(5, 4, '19', 'project', '2017-11-21 04:54:14', 'Project A\r\n', NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_reminder`
@@ -1940,18 +1369,7 @@ CREATE TABLE IF NOT EXISTS `tm_reminder` (
   `deleted` int(1) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_reminder`
---
-
-INSERT INTO `tm_reminder` (`id`, `reminder_time`, `notes`, `last_updated`, `deleted`, `cid`) VALUES
-(1, '2017-11-07 15:35:00', 'CALL AYLAR FOR UPDATE ', '2017-11-06 09:39:43', 0, NULL),
-(2, '2017-11-07 15:35:00', 'CALL AYLAR FOR UPDATE ', '2017-11-06 09:39:44', 0, NULL),
-(3, '2017-11-17 09:20:00', 'CONFIRM FILE STATUS', '2017-11-16 09:46:27', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_role`
@@ -6187,19 +5605,7 @@ CREATE TABLE IF NOT EXISTS `tm_supplier` (
   `deleted` int(1) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_supplier`
---
-
-INSERT INTO `tm_supplier` (`id`, `corporation_id`, `supplier_type`, `notes`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 2, NULL, NULL, '0000-00-00', 0, NULL),
-(2, 4, NULL, NULL, '0000-00-00', 0, NULL),
-(3, 5, NULL, NULL, '0000-00-00', 0, NULL),
-(4, 6, NULL, NULL, '0000-00-00', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_task`
@@ -6224,17 +5630,7 @@ CREATE TABLE IF NOT EXISTS `tm_task` (
   KEY `OwnerUser` (`owner`),
   KEY `AssignedToUser` (`assigned_to`),
   KEY `TaskStatus` (`status_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_task`
---
-
-INSERT INTO `tm_task` (`id`, `title`, `details`, `owner`, `assigned_to`, `status_id`, `create_date`, `due_date`, `last_updated`, `deleted`, `cid`) VALUES
-(1, 'Complete components for folder.', 'On your table', 24, 24, 21, '2017-11-09 11:37:50', '2017-11-13 13:35:00', '2017-11-09 11:37:50', 0, NULL),
-(3, 'CONFIRM STATUS OF FILE ', 'CONFIRM STATUS OF FILE ', 34, 34, 21, '2017-11-16 09:47:32', '2017-11-17 09:25:00', '2017-11-16 09:47:32', 0, NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_task_reminder`
@@ -6264,23 +5660,7 @@ CREATE TABLE IF NOT EXISTS `tm_telephone` (
   `telephone_number` varchar(18) NOT NULL,
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_telephone`
---
-
-INSERT INTO `tm_telephone` (`id`, `telephone_number`, `cid`) VALUES
-(1, '1', NULL),
-(2, '08055692645', NULL),
-(3, '084 777848', NULL),
-(4, '+39 035 4941 111', NULL),
-(5, '+2349096385316', NULL),
-(6, '+3227850710', NULL),
-(7, '08184570538', NULL),
-(8, '+27117953249', NULL);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_telephone_entity`
@@ -6294,22 +5674,6 @@ CREATE TABLE IF NOT EXISTS `tm_telephone_entity` (
   `entity_id` int(11) NOT NULL,
   PRIMARY KEY (`telephone_id`,`entity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
---
--- Dumping data for table `tm_telephone_entity`
---
-
-INSERT INTO `tm_telephone_entity` (`telephone_id`, `entity_id`) VALUES
-(1, 95),
-(2, 96),
-(3, 97),
-(4, 98),
-(5, 99),
-(6, 100),
-(7, 101),
-(8, 102);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_user`
@@ -6332,19 +5696,7 @@ CREATE TABLE IF NOT EXISTS `tm_user` (
   `cid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `Role` (`basic_role`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_user`
---
-
-INSERT INTO `tm_user` (`id`, `person_id`, `basic_role`, `username`, `password`, `salt`, `authKey`, `last_login`, `last_updated`, `deleted`, `cid`) VALUES
-(24, 2, 1, 'admin', '$2y$13$C0AmXXsce9pIJEbsq67rJ.LG6.um9bVYOqMwOK4aUCeproz8v3JYu', '2X6zOUK7d', NULL, '2018-09-05 04:32:18', '0000-00-00', 0, 33),
-(31, 3, 2, 'demo2', '$2y$13$Mu7HMKy4HWywBbmGimt3Ke5ChkMeUHphJQJrMQ3qMQPf0U0JmBl3W', 'QjZDJqf2I', NULL, NULL, '2017-10-06', 1, 33),
-(33, 48, 3, 'guest', '$2y$13$bALWS4jJCxPAJK3NuAQ7Q.ohjx5n5rWt0AIywhcpi7xSp31ovrQNe', 'ER4E6YMDQ', NULL, '2018-05-25 06:51:23', '0000-00-00', 0, 33),
-(34, 49, 3, 'gabriel', '$2y$13$pzpLjehLmW6K6cZ8Cqu/EOfSTc9N2fGP3eZrZ5oQMz5tFNzdk17aa', 'ncwKNqfYp', NULL, '2017-11-24 17:17:16', '0000-00-00', 0, 33);
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `tm_user_device`
@@ -6358,25 +5710,6 @@ CREATE TABLE IF NOT EXISTS `tm_user_device` (
   `device_id` int(11) NOT NULL,
   UNIQUE KEY `user_id` (`user_id`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_user_device`
---
-
-INSERT INTO `tm_user_device` (`user_id`, `device_id`) VALUES
-(24, 39),
-(24, 41),
-(24, 42),
-(24, 43),
-(24, 44),
-(24, 46),
-(24, 49),
-(33, 40),
-(33, 47),
-(33, 48),
-(34, 45);
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `tm_user_route_access`
@@ -6410,19 +5743,6 @@ CREATE TABLE IF NOT EXISTS `tm_user_setting` (
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `tm_user_setting`
---
-
-INSERT INTO `tm_user_setting` (`id`, `logo`, `theme`, `language`, `date_format`, `tm_user_setting_id`) VALUES
-(24, 'images/6uCHTvn3GkT_UYxbI4Fl8DklnwGQw00N.png', 'StandardFormsAsset', 'de', 'MMMM d  yyyy ! (HH:mm:ss)', 0),
-(33, 'images/6uCHTvn3GkT_UYxbI4Fl8DklnwGQw00N.png', 'StandardFormsAsset', 'de', 'MMMM d  yyyy ! (HH:mm:ss)', 0);
-
---
--- Constraints for dumped tables
---
-
 --
 -- Constraints for table `tm_asset_attribute`
 --

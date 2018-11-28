@@ -27,7 +27,7 @@ class SettingsComponent extends Component
 	private function companySettings()
 	{
 		$model = new Settings();
-		$companySettings = $model->find()->where(['cid' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
+		$companySettings = $model->find()->andWhere(['cid' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
 		return $companySettings;
 	}
 	

@@ -14,6 +14,8 @@ use boffins_vendor\classes\models\{ValueARModel, ValueInterface, Sortable, Known
  */
 class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 {
+	const KNOWN_CLASS_INTERFACE_NAME = 'boffins_vendor\classes\models\KnownClass';
+	
     /**
      * {@inheritdoc}
      */
@@ -28,7 +30,7 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
     public function rules()
     {
         return [
-            [['value', 'query'], 'string', 'max' => 255],
+            [['value', 'query'], 'safe'],
         ];
     }
 
@@ -52,6 +54,10 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 	 */
 	public function stringValue() : string
 	{
+		if ( empty($this->getValue()) ) {
+			Yii::warning("This value is empty");
+			return '';
+		}
 		if ( $this->getValue() instanceof KnownClass ) {//$this->_usefulValue is defined in parent class.
 			return $this->_usefulValue->nameString;
 		}
@@ -60,23 +66,12 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 	}
 	
 	/***
-	 *  @brief Required. See Interface ValueInterface.
-	 *  
-	 *  @param [in] Optional. $externalFormat a valid format in which you want the string returned 
-	 *  @param [in] Optional. $paramsToInject parameters to inject into a  the string to modify it. 
-	 *  @return string. The formatted String
-	 *  
-	 *  @details If $format is not provided, then this should immediately return the getValue() function to return the 
-	 *  unformatted string. 
+	 *  @brief Required. FUNCTION NOT IMPLEMENTED. 
 	 */
 	public function formattedStringValue($externalFormat = '', $paramsToInject = []) : string
 	{
-		if ( empty($format) || !is_array($format) || !array_key_exists('separator', $format) ) {
-			Yii::warning("Requesting a formatted string value but no format provided or format not an array, or has no separator" . __METHOD__ );
-			return $this->stringValue();
-		}
-		
-		return number_format($this->value, NULL, NULL, $format['separator'] );
+		Yii::warning("Sorry, formattedStringValue is not implemented in ValueKnownClass!" . __METHOD__ );
+		return $this->stringValue();
 	}
 	
 	/***
@@ -92,16 +87,30 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 			return $this->_usefulValue;	
 		}
 		
+		$knownNameSpace = $this->value;
+		$valueObject = null;
+		
+		if ( ! class_exists($knownNameSpace) ) {
+			Yii::error("The value stored is not a class " . (string)$knownNameSpace );
+			return null;
+		}
+		
+		if ( ! in_array( SELF::KNOWN_CLASS_INTERFACE_NAME, class_implements($knownNameSpace) ) )  {
+			Yii::error("The value stored is not a known class");
+			return null;
+		}
+		
 		if (!$this->isNewRecord && !empty($this->query)) {
-			$knownNameSpace = $this->value;
+			
 			Yii::trace("The known name space of this value is {$knownNameSpace} " . __METHOD__ );
 			try {
 				$valueObject = $knownNameSpace::find()->where($this->query)->one();;
 			} catch(Exception $e) {
-				Yii::warning("An exception occured! " . $e->getMessage() . "\n" );
+				Yii::warning("An exception occured! " . $e->getMessage() . __METHOD__ . "\n" );
 			}
 		}
-		$this->_usefulValue = $valueObject;
+		
+		$this->_usefulValue = empty($valueObject) ? null : $valueObject;
 		return $this->_usefulValue;
 	}
 	
@@ -114,17 +123,50 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 	 */
 	public function setValue($value)
 	{
+		Yii::trace("Setting the value in vkc");
 		if (empty($value) || !is_array($value)) {
-			$errorVal = empty($value) ? 'NULL' : $value;
+			$errorVal = empty($value) ? 'NULL' : gettype($value);
 			Yii::warning("Setting an unnaceptable value. Must be an array. {$errorVal} was given. Setting to null.");
 			$this->_usefulValue = null;
 		} else {
-			//to be implemented later 
-			Yii::warning('Set Value for Known Class needs to be fully implemented');
-			//$this->_usefulValue = $value;
+			if ( !array_key_exists('namespace', $value) && !array_key_exists('condition', $value) ) {
+				Yii::warning("To ammend a ValueKnownClass, please provide a condition and/or a new knownclass namespace");
+				return;
+			}
+			Yii::trace("Array Keys exist");
+			if ( ! empty($value['namespace']) ) {
+				$nameSpace = $value['namespace'];
+				if ( ! class_exists($nameSpace) ) {
+					Yii::warning("You cannot set this namespace as it is not a valid class. " . (string)$nameSpace );
+				} elseif ( ! in_array( SELF::KNOWN_CLASS_INTERFACE_NAME, class_implements($nameSpace) ) )  {
+					Yii::warning("You cannot set this namespace as it is not a valid KnownClass. " . (string)$nameSpace );
+				} else {
+					Yii::trace("Is this actually setting namespace");
+					$this->setAttribute('value', $value['namespace']);
+				}
+			}
+			
+			if ( ! empty($value['condition']) ) {
+				if ( !is_string($value['condition']) ) {
+					Yii::error("You cannot set this condition as it is not a string.");
+				} elseif ( strpos($value['condition'], "=") !== false && strpos($value['condition'], "=") > 0 ) {
+					//only passes if = is in the string AND it is in position 1 or more (there should be something on
+					//the left side of the condition)
+					Yii::trace("Is this actually setting condition");
+					$this->setAttribute('query', $value['condition']);
+				} else {
+					Yii::warning("Please double check your condition string as it does not pass basic validation: {$value['condition']}");
+				}
+			}
 		}
+		Yii::trace("New Values {$this->value} and {$this->query} ");
 	}
 	
+	
+	protected function resetValue()
+	{
+		$this->getValue();
+	}
 	/***
 	 *  @brief returns a value/field on which the class instance can be compared against another.
 	 *  use the first 10 characters of the string to sort (highly unlikely you will encounter sorting scenarios in whihc

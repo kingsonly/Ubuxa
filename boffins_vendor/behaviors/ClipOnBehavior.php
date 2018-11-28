@@ -93,9 +93,9 @@ class ClipOnBehavior extends Behavior
 		$ownerId = $this->owner->id;// owners id 
 		$ownerType = $this->_getShortClassName($this->owner) ;// get class name eg remaks
 		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;// Change this fetch from the db 
-		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
-		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->where(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
-		$findClip = Clip::find()->where(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
+		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
+		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->andWhere(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
+		$findClip = Clip::find()->andWhere(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
 		// delete clip 
 		if($findClip->delete()){
 			// check is deletedt clip has a bar 
@@ -122,9 +122,9 @@ class ClipOnBehavior extends Behavior
 		
 		//$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2; // validate if owner is a folder or a component or something else 
 		
-		$getClipBarcount = $clipBarModel->find()->where(['owner_id' => $ownerId])->count(); // check to see if specified element has a clipbar *** which would be used for checkig in the below if clause ******
+		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->count(); // check to see if specified element has a clipbar *** which would be used for checkig in the below if clause ******
 		
-		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();
+		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();
 		// if the bar exist then get all its clips 
 		if($getClipBarcount  !== '0'){
 			if(!empty($getClipBar->clips)){
@@ -173,7 +173,7 @@ class ClipOnBehavior extends Behavior
 	{
 		$clipParentClass = ucwords($clipType); // convert classname to string with first figure capital to match the model class name naming style
 		$clipTypeModel = '\\frontend\\models\\'.$clipParentClass;// Add class namespace for models
-		$getClipDetails = $clipTypeModel::find()->where(['id' => $clipId])->one(); // fetch clips details 
+		$getClipDetails = $clipTypeModel::find()->andWhere(['id' => $clipId])->one(); // fetch clips details 
 		return $getClipDetails; //return an object of the clip depending on the type
 	}
 
@@ -182,8 +182,8 @@ class ClipOnBehavior extends Behavior
 		$clipBarModel = new ClipBar(); // clipbar instance 
 		$ownerId = $this->owner->id; // owners id usually the folder id
 		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2; // to be changed once component is done , holds static value depending if owner class is a folder or a component
-		$getClipBarcount = $clipBarModel->find()->where(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->count();// used to make sure a clip exist 
-		$getClipBar = $clipBarModel->find()->where(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // get clip bar id which would be used to fetch all clips associated to the bar 
+		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->count();// used to make sure a clip exist 
+		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // get clip bar id which would be used to fetch all clips associated to the bar 
 		
 		/**** if bar exist run the below set of code to complete the circle ***********
 		***** and eventually fetch all clips ******************************************/
@@ -208,9 +208,9 @@ class ClipOnBehavior extends Behavior
 		$clipTypeModel = '\\frontend\\models\\'.$clipParentClass; // Add class namespace for models
 		// remarks has a parent column as such not all remarks are root remarks , some remarks are replies as such that need to be factored 
 		if($clipType == 'remark'){
-			$getClipDetails = $clipTypeModel::find()->where(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->andWhere(['parent_id' => $clipTypeModel::DEFAULT_PARENT_ID ])->all();
+			$getClipDetails = $clipTypeModel::find()->andWhere(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->andWhere(['parent_id' => $clipTypeModel::DEFAULT_PARENT_ID ])->all();
 		}else{
-			$getClipDetails = $clipTypeModel::find()->where(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->all();
+			$getClipDetails = $clipTypeModel::find()->andWhere(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->all();
 		}
 		return $getClipDetails;//return an object of the clip depending on the type
 		
@@ -222,10 +222,12 @@ class ClipOnBehavior extends Behavior
 		$clipBarModel = new ClipBar(); // instanciate clip bar 
 		
 		$getClassName = $this->_getShortClassName($this->owner) == 'Folder'?'folder':'component'; // determine owner class name and make them lower case and in terms of component convert their names to components , note this code would be reviewed and this comment would be changed, as such as long as this comment is here, this this code is yet to be reviewed .
+
 		if($this->_getShortClassName($this->owner) == 'Task' or $this->_getShortClassName($this->owner) == 'Remark'){
 			return false;
 		}
-		$searchOwnerTypeId = $ownerTypeModel->find()->select(['id'])->where(['owner_type' => $getClassName])->one();// get the id of the ownertype eg folder component etc
+		$searchOwnerTypeId = $ownerTypeModel->find()->select(['id'])->andWhere(['owner_type' => $getClassName])->one();// get the id of the ownertype eg folder component etc
+
 		
 		$clipBarModel->owner_id = $this->owner->id; // assign clipBarModel->owner_id with the owner id
 		$clipBarModel->owner_type_id = $searchOwnerTypeId->id; // determine if its a folder or a component etc options could be more than just folder or components 
@@ -245,10 +247,12 @@ class ClipOnBehavior extends Behavior
 			//$clipBarModel  = new ClipBar(); // instatnciate clip bar model 
 			$clipModel  = new Clip(); //instanciate clip model
 			$getClassName = $this->_getShortClassName($this->owner); // convert class name to string and strip out name space 
+
 			$ownerTypeId = $this->owner->fromWhere == 'folder'?1:2;
-			$getOwnerTypeId = ClipOwnerType::find()->select(['id'])->where(['owner_type' => $getClassName])->one();// get just the id of ClipOwnerType model
+			$getOwnerTypeId = ClipOwnerType::find()->select(['id'])->andWhere(['owner_type' => $getClassName])->one();// get just the id of ClipOwnerType model
 			
-			$getClipBarId = ClipBar::find()->select(['id'])->where(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task 
+			$getClipBarId = ClipBar::find()->select(['id'])->andWhere(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task 
+
 			$clipModel->owner_id = $this->owner->id; // assign owner id to clip 
 			$clipModel->bar_id = $getClipBarId->id; // assign bar  id to clip 
 			$clipModel->owner_type_id = $getOwnerTypeId->id; // assign owner type id to clip 

@@ -23,8 +23,8 @@ class BaseQuery extends ActiveQuery
 			$this->andWhere(['or', ["{$tableName}.deleted" => 0], ["{$tableName}.deleted" => NULL] ]);
 		}
 		
-		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", $this->getModelImplementations() ) && $this->_cid !== false ) {
-			$this->andWhere([ 'or', ["{$tableName}.cid" => $this->getTenantID()], ["{$tableName}.cid" => NULL] ]);
+		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", $this->getModelImplementations() ) && !empty($this->getTenantID()) ) {
+			$this->andWhere([ 'or', ["{$tableName}.cid" => $this->_cid], ["{$tableName}.cid" => NULL] ]);
 		}
     }
 	
@@ -38,7 +38,7 @@ class BaseQuery extends ActiveQuery
 	
 	protected function getTenantID()
 	{
-		$this->_cid = Yii::$app->has('user') ? Yii::$app->user->identity->cid : false; 	//in console applications, you should simply add user 
+		$this->_cid = Yii::$app->has('user') && !empty(Yii::$app->user->identity->cid) ? Yii::$app->user->identity->cid : false; 	//in console applications, you should simply add user 
 		return $this->_cid;																//to the component list of the application 
 	}
 } 

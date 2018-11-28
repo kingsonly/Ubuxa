@@ -97,10 +97,13 @@ class ValueShortString extends ValueARModel implements ValueInterface, Sortable
 	 */
 	public function setValue($value)
 	{
-		if (empty($value)) {
+		if ( $value === null || !is_scalar($value) ) {
+			$errVal = $value === null ? 'NULL' : gettype($value);
+			Yii::warning("Setting an unnaceptable value. Must be a string, {$errVal} given. Setting to null.");
 			$this->_usefulValue = null;
 		} else {
 			$this->_usefulValue = $value;
+			$this->setAttribute('value', $value);
 		}
 	}
 	

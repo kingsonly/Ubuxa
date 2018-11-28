@@ -4,7 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
-use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
 
 /**
  * This is the model class for table "{{%supplier}}".
@@ -18,7 +18,7 @@ use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
  * @property Corporation[] $Corporation
 
  */
-class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
+class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, KnownClass
 {
     /**
      * @inheritdoc
@@ -90,7 +90,7 @@ class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDelete
 		return $this->corporation->shortName;
 	}
 	
-	public function getNameString() 
+	public function getNameString() : string
 	{
 		return $this->corporation->NameString;
 	}

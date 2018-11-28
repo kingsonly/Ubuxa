@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\models\{KnownClass};
 
 /**
  * This is the model class for table "{{%country}}".
@@ -14,7 +15,7 @@ use Yii;
  *
  * @property State[] $states
  */
-class Country extends \yii\db\ActiveRecord
+class Country extends \yii\db\ActiveRecord implements KnownClass
 {
     /**
      * {@inheritdoc}
@@ -57,4 +58,14 @@ class Country extends \yii\db\ActiveRecord
     {
         return $this->hasMany(State::className(), ['country_id' => 'id']);
     }
+	
+	/**
+	 *  @brief needed to implement KnownClass
+	 *  
+	 *  @return string that describes an instance
+	 */
+	public function getNameString() : string
+	{
+		return "(+{$this->phonecode}) {$this->name} - {$this->sortname}";
+	}
 }

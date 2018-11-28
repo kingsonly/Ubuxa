@@ -104,6 +104,7 @@ class ValueMoney extends ValueARModel implements ValueInterface, Sortable
 			$this->_usefulValue = null;
 		} else {
 			$this->_usefulValue = $value;
+			$this->setAttribute('value', $value);
 		}
 	}
 	

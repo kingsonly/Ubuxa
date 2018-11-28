@@ -12,7 +12,7 @@ use boffins_vendor\behaviors\DateBehavior;
 use yii\web\User;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
-use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
 
 
 /**
@@ -31,7 +31,7 @@ use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDel
   
  * @property Device $device
  */
-class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface
+class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface, KnownClass
 {
 	
 	/* 
@@ -68,13 +68,10 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     /***
      * @inheritdoc
      */
-    
-	
 	public static function tableName()
     {
         return '{{%user}}';
     } 
-	
 	
     /**
      * @inheritdoc
@@ -108,14 +105,6 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         ];
     }
 
-	/***
-	 * Overriding standard find by using StandardQuery ActiveQuery class 
-	 */
-	public static function find() 
-	{
-		return new StandardQuery(get_called_class());
-	}
-	
     /**
      * @inheritdoc
      */
@@ -572,5 +561,10 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         $this->password_reset_token = null;
     }
+	
+	public function getNameString() : string
+	{
+		return $this->person->nameString;
+	}
 	
 }

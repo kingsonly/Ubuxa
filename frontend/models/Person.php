@@ -4,7 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
-use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
 
 /**
  * This is the model class for table "{{%person}}".
@@ -17,7 +17,7 @@ use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface};
  *
  * @property TmPersonCorporation[] $tmPersonCorporations
  */
-class Person extends BoffinsArRootModel implements TenantSpecific
+class Person extends BoffinsArRootModel implements TenantSpecific, KnownClass
 {
     /**
      * @inheritdoc
@@ -125,5 +125,10 @@ class Person extends BoffinsArRootModel implements TenantSpecific
 	public function getUser()
 	{
 		return $this->hasOne(UserDb::className(), ['person_id' => 'id']);
+	}
+	
+	public function getNameString() : string
+	{
+		return $this->first_name . " " . $this->surname;
 	}
 }

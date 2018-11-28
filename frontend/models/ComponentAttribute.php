@@ -18,7 +18,7 @@ use boffins_vendor\classes\models\Sortable;
  * @property Component $component
  * @property ComponentTemplateAttribute $componentTemplateAttribute
  * @property string Name - the name of this attribute derived from its ComponentTemplateAttribute
- * @property valueObject - protected property of the object. Properties of the object are accessed via other properties below
+ * @property valueInstance - protected property of the object. Properties of the object are accessed via other properties below
  * 
  * @property string value - the public value of the value object of this attribute - read/write
  * @property array  valueMeta - meta data of the value object 
@@ -41,7 +41,7 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
     {
         return [
             [['component_id', 'component_template_attribute_id', 'value_id', 'cid'], 'integer'],
-            [['value'], 'safe'], //essential to be able to have the valueObject attributed delegated to this AR. 
+            [['value'], 'safe'], //essential to be able to have the valueInstance attributed delegated to this AR. 
             [['component_id'], 'exist', 'skipOnError' => true, 'targetClass' => Component::className(), 'targetAttribute' => ['component_id' => 'id']],
             [['component_template_attribute_id'], 'exist', 'skipOnError' => true, 'targetClass' => ComponentTemplateAttribute::className(), 'targetAttribute' => ['component_template_attribute_id' => 'id']],
         ];
@@ -86,30 +86,31 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 	 *  @details retrieves the valueClassName from the attribute Template (componentTemplateAttribute relation)
 	 *  and then uses value_id to retrieve the actual relation
 	 */
-	protected function getValueObject()
+	protected function getValueInstance()
 	{
 		$valueClassName = $this->componentTemplateAttribute->valueClassName;
+		Yii::trace("The return is $valueClassName");
 		return $this->hasOne($valueClassName::className(), ['id' => 'value_id']);
 	}
 	
 	/***
-	 *  @brief property to retrieve a value of the member valueObject (an instance of an external ActiveRecord)
-	 *  this function is forwarded to the valueObject
+	 *  @brief property to retrieve a value of the member valueInstance (an instance of an external ActiveRecord)
+	 *  this function is forwarded to the valueInstance
 	 *  
-	 *  @return the string value (the public value) of the valueObject
+	 *  @return the string value (the public value) of the valueInstance
 	 */
 	public function getValue()
 	{
-		if (empty($this->valueObject)) {
+		if (empty($this->valueInstance)) {
 			Yii::warning("Trying to get a public value for value object but the object is empty!");
 			return '';
 		}
-		return $this->valueObject->stringValue();
+		return $this->valueInstance->stringValue();
 	}
 	
 	/***
-	 *  @brief property to set a value to the valueObject (an instance of an external ActiveRecord)
-	 *  this is forwarded to the valueObject
+	 *  @brief property to set a value to the valueInstance (an instance of an external ActiveRecord)
+	 *  this is forwarded to the valueInstance
 	 *  
 	 *  @param [in] $value a new value to be set
 	 *  @return VOID
@@ -117,13 +118,13 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 	public function setValue($value)
 	{
 		Yii::trace("Setting the value for my value object");
-		$this->valueObject->value = $value;
+		$this->valueInstance->value = $value;
 	}
 
 	/***
 	 *  @brief gets the sort field of a given value field 
 	 *  
-	 *  @return a field in the valueObject which you can use to sort this attribute among it's peers.
+	 *  @return a field in the valueInstance which you can use to sort this attribute among it's peers.
 	 *  
 	 *  @details This is a rough implementation. This should be built upon to extend functionality 
 	 *  to allow extremely dynamic scenarios. 
@@ -175,18 +176,17 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 	 */
 	public function beforeSave($insert)
 	{
+		Yii::trace("Starting beforeSave of ComponentAttribute.");
 		if ( !$insert ) {
-			if ( !empty( $this->valueObject->getDirtyAttributes(['value']) ) ) {
-				Yii::trace("Trying to save the value " . __METHOD__ );
-				$response = $this->valueObject->save();
-				$msg = $response ? Yii::t('component', 'value_saved') : Yii::t('component', 'value_not_saved');
-				if ($response) {
-					Yii::trace("$msg" . __METHOD__);
-					return parent::beforeSave($insert);
-				}
-				Yii::warning("$msg" . __METHOD__);
-				return false;
+			Yii::trace("Trying to save the value " . __METHOD__ );
+			$response = $this->valueInstance->save();
+			$msg = $response ? Yii::t('component', 'value_saved') : Yii::t('component', 'value_not_saved');
+			if ($response) {
+				Yii::trace("$msg " . __METHOD__);
+				return parent::beforeSave($insert);
 			}
+			Yii::warning("$msg " . __METHOD__);
+			return false;
 		}
 		return parent::beforeSave($insert);
 	}

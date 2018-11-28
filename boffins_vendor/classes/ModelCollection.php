@@ -51,7 +51,7 @@ class ModelCollection extends Collection
 																//note that models can return [] after query but is not null
 			$this->_items = $this->queryAll(); //items are already empty so setItems won't throw an exception
 			$c = count($this->_items);
-			Yii::trace("Query All is run and {$c} ");
+			Yii::trace("ModelCollection was populated via query which returned {$c} items.");
         }
         return parent::getData();
     }
@@ -165,17 +165,12 @@ class ModelCollection extends Collection
         return $this;
     }
 	
-	public function saveModel($key, $runValidation = false, $attributeNames = null)
+	public function saveModel($key, $runValidation = false, $attributeNames = null) 
 	{
 		Yii::trace("Saving this model {$key} ");
 		$models = $this->getModels();
 		$model = $models[$key];
-		
-		if($model->save($runValidation, $attributeNames)){
-			return true;
-		}else{
-			return false;
-		}
+		return $model->save($runValidation, $attributeNames);
 		
 	}
     /**
