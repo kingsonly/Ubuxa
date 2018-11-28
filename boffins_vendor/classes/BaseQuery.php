@@ -38,7 +38,7 @@ class BaseQuery extends ActiveQuery
 	
 	protected function getTenantID()
 	{
-		$this->_cid = Yii::$app->has('user') ? Yii::$app->user->identity->cid : false; 	//in console applications, you should simply add user 
+		$this->_cid = Yii::$app->has('user') && !empty(Yii::$app->user->identity->cid) ? Yii::$app->user->identity->cid : false; 	//in console applications, you should simply add user 
 		return $this->_cid;																//to the component list of the application 
 	}
 } 
