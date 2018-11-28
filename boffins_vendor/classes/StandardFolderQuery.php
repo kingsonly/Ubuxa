@@ -19,7 +19,7 @@ class StandardFolderQuery extends BaseQuery
 		//if ( $modelClass->hasMethod(managerTable) ) {
 			$managerTable = "{{%folder_manager}}";
 			$this->join('INNER JOIN', $managerTable, "{$managerTable}.{$managerForeignKey} = {$managerColumn}");
-			$this->andOnCondition(['user_id' => Yii::$app->user->identity->id,'cid' => Yii::$app->user->identity->cid]);
+			$this->andOnCondition(['user_id' => Yii::$app->user->identity->id]);
 		//}
 		
 		
