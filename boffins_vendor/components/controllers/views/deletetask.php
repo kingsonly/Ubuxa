@@ -8,8 +8,21 @@ use yii\helpers\Url;
 /* @var $model frontend\models\Reminder */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<span>Are you sure you want to delete this task?</span>
-<?= Html::button('Delete', ['class' => 'btn btn-success delete-task', 'name' => 'add', 'id' => 'delete-task'.$id, 'data-taskid' => $taskid]) ?>
+<style>
+  .loading-delete-task{
+    display: none;
+    float: left;
+  }
+</style>
+<div>
+  <span>
+    Are you sure you want to delete this task?
+  </span>
+</div>
+<span class="for-task-loader">
+  <?= Html::button('Delete', ['class' => 'btn btn-success delete-task', 'name' => 'add', 'id' => 'delete-task'.$id, 'data-taskid' => $taskid]) ?>
+   <span class="loading-delete-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+</span>
 
 
 <?php
@@ -20,6 +33,8 @@ $(".delete-task").on('click',function(e) {
     var taskid;
     taskid = $(this).data('taskid');
     console.log(taskid)
+    $('.delete-task').hide();
+    $('.loading-delete-task').show();
     _deleteTask(taskid);        
 });
 

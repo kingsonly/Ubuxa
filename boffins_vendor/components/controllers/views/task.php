@@ -12,6 +12,7 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
+//$modalwait = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
 ?>
 <style type="text/css">
     .bg-info {
@@ -165,18 +166,17 @@ $boardUrl = Url::to(['task/index']);
     width: 60px;
     transition: all 0.2s;
 } 
-#taskButton {
+#loading-task {
     position: absolute;
     right: 3px;
-    top: 3px;
+    top: -3px;
     -webkit-appearance: none;
     -moz-appearance: none;
     border: none;
-    background: #ededed;
-    border-radius: 3px;
     padding: 6px;
     width: 60px;
     transition: all 0.2s;
+    display: none;
 }
  .embed-submit-field #taskButton:hover {
    background-color: #37c88d;
@@ -226,9 +226,6 @@ $boardUrl = Url::to(['task/index']);
 
 }
 #task-list-loader{
-  display: none;
-}
-#loading-task{
   display: none;
 }
 .help-tip p{
@@ -286,7 +283,15 @@ $boardUrl = Url::to(['task/index']);
   0% { opacity:0; }
   100% { opacity:100%; }
 }
-
+.for-modal-loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 50%;
+  height: 50%;
+  z-index: 9999;
+  background: url(<?//= $modalwait; ?>) center no-repeat #fff;
+}
 </style>
 
 	 <div class="col-md-4" id="for-pjax">
@@ -404,7 +409,7 @@ $boardUrl = Url::to(['task/index']);
     </div>
 </div>
 
-
+<!-- <div class="for-modal-loader"></div> -->
 
 
 

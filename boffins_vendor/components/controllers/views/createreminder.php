@@ -12,6 +12,12 @@ $taskremnider = new TaskReminder();
 /* @var $model frontend\models\Reminder */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+  .loading-add-rem{
+    display: none;
+    float: left;
+  }
+</style>
 
 <div class="reminder-form">
 
@@ -30,6 +36,7 @@ $taskremnider = new TaskReminder();
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success save-rem']) ?>
+        <span class="loading-add-rem"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -53,15 +60,11 @@ function _CreateReminder(task){
                   console.log('Something went wrong');
               }
           });
-
-
-
-
-
 }
 
 $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
-    
+   $('.save-rem').hide();
+    $('.loading-add-rem').show(); 
    thiss = $(this);
           $.post('$reminderUrl',thiss.serialize())
             .always(function(result){

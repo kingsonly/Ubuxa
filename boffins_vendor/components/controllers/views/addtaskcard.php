@@ -29,6 +29,11 @@ use yii\widgets\ActiveForm;
  #cardButton {
     padding: 5px
  }
+ .loading-kanban-task{
+    padding: 5px;
+    float: left;
+    display: none;
+ }
  .close-add {
     height: 32px;
     font-size: 16px;
@@ -47,7 +52,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
 	<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
-    <span class="glyphicon glyphicon-remove close-add"></span> 
+ 
+    <span class="for-task-loader">
+        <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
+        <span class="glyphicon glyphicon-remove close-add"></span>
+        <span class="loading-kanban-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+    </span>
+
 <?php ActiveForm::end(); ?>
 
 <?php
@@ -69,6 +80,9 @@ $(document).ready(function(){
 $('#create-task-card$statusid').on('beforeSubmit', function(e) {
         e.preventDefault(); 
            var form = $(this);
+           $('.cardButton').hide();
+           $('.close-add').hide();
+           $('.loading-kanban-task').show();
             if(form.find('#create-task-card$statusid').length) {
                 return false;
             }
