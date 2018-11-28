@@ -30,8 +30,7 @@ use yii\widgets\ActiveForm;
     padding: 5px
  }
  .loading-kanban-task{
-    padding: 5px;
-    float: left;
+    
     display: none;
  }
  .close-add {
@@ -51,7 +50,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
 	<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
-    <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
  
     <span class="for-task-loader">
         <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
@@ -81,8 +79,9 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
         e.preventDefault(); 
            var form = $(this);
            $('.cardButton').hide();
-           $('.close-add').hide();
-           $('.loading-kanban-task').show();
+           form.find('.close-add').hide();
+		   form.find('.loading-kanban-task').show();
+           
             if(form.find('#create-task-card$statusid').length) {
                 return false;
             }
