@@ -48,11 +48,11 @@ class RemarkController extends Controller
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
-                $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
+                $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
                 if($DashboardUrlParam == 'site'){
-                     $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
+                     $remarks = Remark::find()->andWhere(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
 					
                      return $this->renderAjax('siteremarks', [
 						 'remarks' => $remarks,
