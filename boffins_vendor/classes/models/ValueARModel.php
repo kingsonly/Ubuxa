@@ -26,4 +26,15 @@ class ValueARModel extends BoffinsARRootModel
 	{
 		return new ActiveQuery(get_called_class());	
 	}
+	
+	public function __set($name, $value)
+    {
+        $setter = 'set' . $name;
+        if (method_exists($this, $setter)) {
+            $this->$setter($value);
+        } else {
+            parent::__set($name, $value);
+        }
+    }
+
 }
