@@ -65,7 +65,7 @@ use yii\helpers\Url;
 <?php 
 
 	$urlListView = Url::to(['component/listview','folder'=>$folderId,'component' => $templateId]);
-	$urlView = Url::to(['component/view','id'=>$componentId->id,'folderId' => $folderId]);
+	
 	
 $js3 = <<<JS
 
@@ -77,7 +77,7 @@ $('table').tablesorter({
 		});
 
 $("#listView").load('$urlListView');
-$("#view").load('$urlView',{var2:1});
+
 
 
 

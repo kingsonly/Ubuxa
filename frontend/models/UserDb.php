@@ -567,4 +567,10 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return $this->person->nameString;
 	}
 	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->find()->all(),'id','nameString');
+    }
+	
 }

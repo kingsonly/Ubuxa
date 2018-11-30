@@ -57,7 +57,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 					<? $attributeNameHolder = []; if(!empty($content)){?>
 						<? $i=1;foreach($content as $key => $value){?>
 						<? if($i === 1){ ?>
-							<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+							<? foreach($value->getComponentAttributeShowInGrid() as $key => $componentDetails){?>
 								<? array_push($attributeNameHolder,$componentDetails['name']);?>
                     			
                     		<? };?>
@@ -76,7 +76,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 					<? foreach($content as $key => $value){?>
 					<tr  class="component-table-tr one-time-component-click<?= $value['id'];?>" data-componentid="<?= $value['id'];?>">
                     <td><?= $value['title'];?></td>
-					<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+					<? foreach($value->getComponentAttributeShowInGrid() as $key => $componentDetails){?>
                     <td><?= empty($componentDetails['value'])?$componentDetails['name'].' is empty':$componentDetails['value'];?>
 						
 						

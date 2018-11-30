@@ -130,7 +130,7 @@ class SettingsComponent extends Component
 	
 	public function boffinsFavIcon()
 	{
-		return Url::to("@web/images/ubuxamenu.png");
+		return Url::to("@web/images/ubuxa-logo-blue.png");
 	} 
 	
 	public function boffinsDefaultLogo()

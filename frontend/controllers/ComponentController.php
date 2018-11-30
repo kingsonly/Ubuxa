@@ -90,7 +90,7 @@ class ComponentController extends Controller
 				
 			if ($collectors->saveModel($model->attributeId)) {
 				
-				return ['output'=>$model->value, 'message'=>'','component' => $id];
+				return ['output'=>'', 'message'=>'','component' => $id];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {
@@ -146,6 +146,8 @@ class ComponentController extends Controller
             return ['output'=>$id, 'message'=> 0];
         }
 	}
+	
+	
 	public function actionUpdateTitle($id) 
 	{
 		if (isset($_POST['hasEditable'])) {
@@ -188,6 +190,32 @@ class ComponentController extends Controller
 			if ($collectors->saveModel($model->attributeId)) {
 				
 				return ['output'=>$model->value, 'message'=>'','component' => $id];
+			}
+			// else if nothing to do always return an empty JSON encoded output
+			else {
+				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
+			}
+		}
+	}
+	
+	public function actionUpdateKnownClassValue($id) 
+	{
+		if (isset($_POST['hasEditable'])) {
+			Yii::trace("hash Eduted");
+			$componentModel = new ComponentAttribute();
+			// use Yii's response format to encode output as JSON
+			\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+			// read your posted model attributes
+				$collectors = new ModelCollection( [], [ 'query' => $componentModel->find()->andWhere(['id'=>$id]) ] ); 
+				$model = new ComponentAttributeModel();
+				$model->load(Yii::$app->request->post());
+			
+				$collectors->loadModel($model->attributeId,['value'=>['condition' => 'id='.$model->value]]);
+				
+			if ($collectors->saveModel($model->attributeId)) {
+				
+				return ['output'=>'', 'message'=>'','component' => $id];
 			}
 			// else if nothing to do always return an empty JSON encoded output
 			else {

@@ -75,7 +75,16 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
      */
     public function getComponentTemplateAttribute()
     {
-        return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id']);
+        return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id'])->orderBy([
+			'sort_order' => SORT_ASC
+		]);
+    }
+	
+	public function getComponentTemplateAttributeShowInGrid()
+    {
+        return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id'])->andWhere(['show_in_grid'=>0])->orderBy([
+			'sort_order' => SORT_ASC
+		]);
     }
 	
 	/**
@@ -194,5 +203,10 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 	public function getType()
 	{
 		return $this->componentTemplateAttribute->componentAttributeType->type;
+	}
+	
+	public function getTypeName()
+	{
+		return $this->componentTemplateAttribute->componentAttributeType->name;
 	}
 }
