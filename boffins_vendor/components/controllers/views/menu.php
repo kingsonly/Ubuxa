@@ -54,6 +54,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 
 			<a href="#" class="menu-icon js-menu_toggle closed">
 				<span class="menu-icon_box">
+                    <i class="fa fa-plus fa-2x menu-plus" style="color: #fff !important;" aria-hidden="true"></i>
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
 				</span>
 			</a>

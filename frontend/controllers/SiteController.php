@@ -512,4 +512,9 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 
+    public function actionProfile()
+    {	
+    	return $this->render('profile');
+    }
+
 }

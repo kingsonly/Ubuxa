@@ -99,6 +99,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
             'fullname' => 'Full Name',
             'basic_role' => 'Standard Role',
             'password' => 'Password',
+            'dob' => 'Date of Birth',
             //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
@@ -176,6 +177,11 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         return $this->hasOne(Role::className(), ['id' => 'basic_role']);
     }
+
+    public function getRoleName()
+    {
+        return $this->role->name;
+    }
 	/***
 	 *
 	 */
@@ -187,6 +193,16 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	public function getFirstName() 
 	{
 		return $this->person->first_name;
+	}
+
+	public function getSurname() 
+	{
+		return $this->person->surname;
+	}
+
+	public function getDob() 
+	{
+		return $this->person->dob;
 	}
 
 	/***

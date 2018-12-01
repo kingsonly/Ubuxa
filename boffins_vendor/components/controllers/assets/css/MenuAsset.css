@@ -443,4 +443,13 @@ a,
 .u--dib {
   display: inline-block;
 }
+.menu-plus{
+	padding-left: 2px;
+    padding-top: 1px;
+}
+.ubuxalogo{
+	display: none;
+}
+
+
 	
