@@ -17,6 +17,7 @@ use boffins_vendor\components\controllers\OnlineClients;
 use kartik\popover\PopoverX;
 use yii\web\View;
 use frontend\assets\AppAsset;
+use frontend\models\Onboarding;
 
 
 $this->title = Yii::t('dashboard', 'dashboard_title');
@@ -248,6 +249,7 @@ $img = $model->folder_image;
   <? $this->endBlock();?>
 
   </section>
+
 <? 
     Modal::begin([
         'header' =>'<h1 id="headers"></h1>',
@@ -262,6 +264,7 @@ $img = $model->folder_image;
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
+$mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
 
 localStorage.setItem("skipValidation", "");
@@ -304,7 +307,22 @@ function mymenus(mymenu, menuIds, getThis){
         })
 }
 
-$(function() {
+function _MainOnboarding(){
+          $.ajax({
+              url: '$mainOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+function defaultOnboarding() {
 
   var folderTour = new Tour({
     name: "folderTour",
@@ -349,15 +367,23 @@ $(function() {
     storage: false,
     smartPlacement: true,
     onEnd: function (folderTour) {
-            //_RemarkOnboarding();
+            _MainOnboarding();
         },
   });
  folderTour.init();
  folderTour.start();
-});
-
+};
 
 JS;
  
 $this->registerJs($indexJs);
 ?>
+
+<?php if(!$onboardingExists){ ?>
+	<?php
+$script = <<< JS
+    defaultOnboarding();
+JS;
+$this->registerJs($script);
+	?>
+<?php }?>

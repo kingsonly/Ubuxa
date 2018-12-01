@@ -297,34 +297,28 @@ $boardUrl = Url::to(['task/index']);
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
-            <?php if($checkUrlParam == 'folder'){?>
-              <?php if(!$onboardingExists){ ?>
-                  <div class="help-tip" id="task-tipz">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+            <?php if($checkUrlParam == 'folder'){
+              $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+              $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+            ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                 <div class="help-tip" id="task-tipz">
                     <p class="tip=text">Take a tour of task and find out useful tips.
                       <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
                     </p>
                   </div>
               <?php } ?>
-            <?php }else if($checkUrlParam == 'site'){?>
-              <?php if(!$onboardingExists){ ?>
+            <?php }else if($checkUrlParam == 'site'){
+                $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+                $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+              ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                   <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
-                <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php } ?>
+                      <p class="tip=text">Take a tour of task and find out useful tips.
+                        <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
+                      </p>
+                    </div>
+                <?php } ?>
             <?php }?>
                 <span>TASKS</span>
                  

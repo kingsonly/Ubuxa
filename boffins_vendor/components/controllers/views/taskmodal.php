@@ -25,14 +25,7 @@ use frontend\models\Reminder;
     margin-left: 10px !important;
     margin-right: 10px !important;
 }
-.task-label-class{
-    margin-left: 10px !important;
-    margin-right: 10px !important; 
-}
-.reminder-form {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
-}
+
 
 .timestamp {
     color: #707070;

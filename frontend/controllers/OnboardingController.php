@@ -117,17 +117,18 @@ class OnboardingController extends Controller
             $onboarding = new Onboarding();
             $exists = $onboarding->find()->where(['user_id' => $id])->exists();
             if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id])->one();
+                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
                 $userid = $onboardingModel->id;
                 $updateModel = $this->findModel($userid);
-                $updateModel->task_status = Onboarding::ONBOARDING_COMPLETED;
+                $updateModel->status = Onboarding::ONBOARDING_COUNT;
                 $updateModel->save();  
             }else{
-                $onboarding->task_status = Onboarding::ONBOARDING_COMPLETED;
+                $onboarding->group_id = Onboarding::TASK_ONBOARDING;
                 $onboarding->user_id = $id;
+                $onboarding->status = 1;
                 $onboarding->save();
             }
-        } 
+        }
     }
 
     public function actionRemarkonboarding()
@@ -136,19 +137,20 @@ class OnboardingController extends Controller
             $data = Yii::$app->request->post();   
             $id =  $data['user_id'];
             $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id])->exists();
+            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
             if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id])->one();
+                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
                 $userid = $onboardingModel->id;
                 $updateModel = $this->findModel($userid);
-                $updateModel->remark_status = Onboarding::ONBOARDING_COMPLETED;
+                $updateModel->status = Onboarding::ONBOARDING_COUNT;
                 $updateModel->save();  
             }else{
-                $onboarding->remark_status = Onboarding::ONBOARDING_COMPLETED;
+                $onboarding->group_id = Onboarding::REMARK_ONBOARDING;
                 $onboarding->user_id = $id;
+                $onboarding->status = 1;
                 $onboarding->save();
             }
-        } 
+        }
     }
 
     public function actionFolderdetailsonboarding()
@@ -157,19 +159,20 @@ class OnboardingController extends Controller
             $data = Yii::$app->request->post();   
             $id =  $data['user_id'];
             $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id])->exists();
+            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::FOLDER_ONBOARDING])->exists();
             if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id])->one();
+                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::FOLDER_ONBOARDING])->one();
                 $userid = $onboardingModel->id;
                 $updateModel = $this->findModel($userid);
-                $updateModel->folder_status = Onboarding::ONBOARDING_COMPLETED;
+                $updateModel->status = Onboarding::ONBOARDING_COUNT;
                 $updateModel->save();  
             }else{
-                $onboarding->folder_status = Onboarding::ONBOARDING_COMPLETED;
+                $onboarding->group_id = Onboarding::FOLDER_ONBOARDING;
                 $onboarding->user_id = $id;
+                $onboarding->status = 1;
                 $onboarding->save();
             }
-        } 
+        }
     }
 
     public function actionSubfoldersonboarding()
@@ -178,19 +181,33 @@ class OnboardingController extends Controller
             $data = Yii::$app->request->post();   
             $id =  $data['user_id'];
             $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id])->exists();
+            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();
             if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id])->one();
+                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->one();
                 $userid = $onboardingModel->id;
                 $updateModel = $this->findModel($userid);
-                $updateModel->subfolder_status = Onboarding::ONBOARDING_COMPLETED;
+                $updateModel->status = Onboarding::ONBOARDING_COUNT;
                 $updateModel->save();  
             }else{
-                $onboarding->subfolder_status = Onboarding::ONBOARDING_COMPLETED;
+                $onboarding->group_id = Onboarding::SUBFOLDER_ONBOARDING;
                 $onboarding->user_id = $id;
+                $onboarding->status = 1;
                 $onboarding->save();
             }
-        } 
+        }
+    }
+
+    public function actionMainonboarding()
+    {
+       if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['user_id'];
+            $onboarding = new Onboarding(); 
+            $onboarding->group_id = Onboarding::MAIN_ONBOARDING;
+            $onboarding->user_id = $id;
+            $onboarding->status = 1;
+            $onboarding->save();
+        }
     }
 
     /**
