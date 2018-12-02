@@ -176,19 +176,21 @@ class SiteController extends BoffinsBaseController {
 			
 			$seperateUrl = explode(Url::base(true),'.');
 			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
-			if(!empty($costomerCompanyName)){
-				if($costomerCompanyName->entityName == 'individual'){
-					$accountName = $costomerCompanyName->entity->surname.'s account';
+			if(count($seperateUrl > 2)){
+				if(!empty($costomerCompanyName)){
+					if($costomerCompanyName->entityName == 'individual'){
+						$accountName = $costomerCompanyName->entity->surname.'s account';
+					}else{
+						$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					}
 				}else{
-					$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					// redirect to url not on system page 
+					return $this->render('nodomainname', [
+						'domainName' => $seperateUrl[0],
+					]);		
 				}
-			}else{
-				// redirect to url not on system page 
-				return $this->render('nodomainname', [
-					'domainName' => $seperateUrl[0],
-				]);		
 			}
-			
+			$accountName = 'your account';
 		}else{
 			$accountName = 'your account';
 		}
