@@ -67,7 +67,7 @@ $checkUrlParamz = $checkUrlz[0];
                 </div>
             <?php } ?>
           <?php }?>
-            <span>REMARKS</span>
+            <span>Comments</span>
         </div>
         <?php Pjax::begin(['id'=>'remark-refresh']); ?>
 	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $parentOwnerId, 'remarks'=> $remarks, 'modelName'=> $modelName]); ?></div>
