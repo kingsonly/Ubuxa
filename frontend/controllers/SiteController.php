@@ -176,7 +176,7 @@ class SiteController extends BoffinsBaseController {
 			
 			$seperateUrl = explode(Url::base(true),'.');
 			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
-			if(count($seperateUrl > 2)){
+			if(count($seperateUrl) > 2){
 				if(!empty($costomerCompanyName)){
 					if($costomerCompanyName->entityName == 'individual'){
 						$accountName = $costomerCompanyName->entity->surname.'s account';
