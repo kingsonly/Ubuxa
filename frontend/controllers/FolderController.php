@@ -24,7 +24,7 @@ use yii\filters\VerbFilter;
 use yii\db\Expression;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
-use console\queue\FolderUsersQueue;
+use boffins_vendor\queue\FolderUsersQueue;
 
 /**
  * FolderController implements the CRUD actions for Folder model.
