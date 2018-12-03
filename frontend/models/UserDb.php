@@ -73,8 +73,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	public static function tableName()
     {
         return '{{%user}}';
-    } 
-	
+    }
 	
     /**
      * @inheritdoc
@@ -84,8 +83,9 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         return [
             [['username','password', 'cid'], 'required'],
             [['password'], 'string', 'min' => 6],
+            //[['profile_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
             //[['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
-            [['basic_role','image'], 'safe'],
+            [['basic_role', 'tester', 'profile_image'], 'safe'],
 
             //[['username', 'password'], 'string', 'max' => 255],
             //['username', 'validateUsername'],
@@ -103,6 +103,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
             'basic_role' => 'Standard Role',
             'password' => 'Password',
             'dob' => 'Date of Birth',
+            'profile_image' => 'Profile Image',
             //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
@@ -243,6 +244,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         $this->password = $pw;//Yii::$app->security->generatePasswordHash($pw); // i dont think the setPassword method should encript, as to the fact that a seperate method instantly encripts the password; 
     }
+
 	
 	/*
      * Obtain authKey from the device.  - better to use getAuthKey

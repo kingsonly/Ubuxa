@@ -68,7 +68,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 	<div class="container sider">
 		<div class="top-sidebar">
 			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
-				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('images/users/'.yii::$app->user->identity->profile_image); ?>')"></div>
+				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to(yii::$app->user->identity->profile_image); ?>')"></div>
 			<?php }else{?>
 				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
 			<?php }?>
