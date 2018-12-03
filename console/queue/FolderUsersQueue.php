@@ -1,5 +1,5 @@
 <?
-namespace boffins_vendor\queue;
+namespace console\queue;
 use frontend\models\UserDb;
 use frontend\models\FolderManager;
 use console\models\ConsoleFolder;
