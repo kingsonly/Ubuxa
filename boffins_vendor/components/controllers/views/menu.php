@@ -9,6 +9,7 @@ use boffins_vendor\components\controllers\ClientsAccordionWidget;
 use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
+use boffins_vendor\components\controllers\UserProfileWidget;
 
 $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 
@@ -49,6 +50,21 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     			</div>
     		</div>
     	</div>
+        <div class="profile-container">
+            <div class="row profile-content" style="display: none">
+                <div class="col-sm-12">
+                    <div class="col-md-10">
+                        <span class="settings-text">Profile</span>
+                    </div>
+                    <div class="col-md-2" style="padding-top:20px">
+                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+                    </div>
+                </div>
+                <div class="profile-content">
+                    
+                </div>
+            </div>
+        </div>
 	<div class="burger_box">
 		<div class="menu-icon-container">
 
@@ -74,7 +90,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			<?php }?>
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
-				<div><a class="profile-link" href="#">Edit profile</a></div>
+				<?= UserProfileWidget::widget();?>
 
 			</div>
 		</div>

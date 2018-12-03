@@ -97,14 +97,13 @@ class UserController extends Controller
                 $model->profile_image = $filePath;
             }
             $model->save(false);
-            return $this->redirect(['view', 'id' => $model->id]);
-                         
+            //return $this->redirect(['view', 'id' => $model->id]);
         }
 
 
 
             // Check if there is an Editable ajax request
-        /*if (isset($_POST['hasEditable'])) {
+        if (isset($_POST['hasEditable'])) {
             // use Yii's response format to encode output as JSON
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
@@ -123,24 +122,8 @@ class UserController extends Controller
             else {
                 return ['output'=>'', 'message'=>''];
             }
-
-            if ($model->load(Yii::$app->request->post())) {
-                // read or convert your posted information
-                
-                $model->save(false);
-                // return JSON encoded output in the below format
-                return ['output'=>'', 'message'=>''];
-                
-                // alternatively you can return a validation error
-                // return ['output'=>'', 'message'=>'Validation error'];
-            }
-            // else if nothing to do always return an empty JSON encoded output
-            else {
-                return ['output'=>'', 'message'=>''];
-            }
-        }*/
-
-            return $this->render('update', [
+        }
+            return $this->renderAjax('update', [
                 'model' => $model,
                 'person' => $person,
             ]);
