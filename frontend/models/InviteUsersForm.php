@@ -67,7 +67,7 @@ class InviteUsersForm extends Model
 			Yii::$app->mailer->compose(['html' => 'inviteusers'],
                 [
                     //'body'  => $this->body,
-                    'link'  => Url::to(['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]),
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'ubuxa.net'.Url::to(['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]),
                 ])
             ->setTo($newCustomerEmail)
             ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])

@@ -158,7 +158,6 @@ class SiteController extends BoffinsBaseController {
         }
 		
 		
-		
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
 			Yii::$app->session->close();
@@ -346,7 +345,7 @@ class SiteController extends BoffinsBaseController {
 	        	if($customer->signup($customerModel)){
 	        		$settings->tenantID = (int)$customerModel->cid;
 					if($settings->save()){
-						$registrationLink = \yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
+						$registrationLink = 'http://'.$customer->master_doman.'ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
 						/*
 						$sendEmail = \Yii::$app->mailer->compose()
 						
