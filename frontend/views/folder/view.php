@@ -20,7 +20,7 @@ use frontend\assets\AppAsset;
 use frontend\models\Onboarding;
 
 
-$this->title = Yii::t('dashboard', 'dashboard_title');
+$this->title = 'Folder Dashboard';
 
 
 use boffins_vendor\components\controllers\MenuWidget;
@@ -184,7 +184,8 @@ $img = $model->folder_image;
                   	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+							
+   						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>

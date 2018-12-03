@@ -36,6 +36,7 @@ class Folder extends FolderARModel
 	public $privateFolder;
 	public $upload_file;
 	public $externalTemplateId;
+	const ROLEAUTHOR = 'author';
 	
     public static function tableName()
     {
@@ -129,6 +130,12 @@ class Folder extends FolderARModel
 	public function getFolderManager()
     {
 		return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+    }
+	
+	public function getFolderManagerByRole()
+    {
+		
+		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['role' => self::ROLEAUTHOR]);
     }
 
     /**

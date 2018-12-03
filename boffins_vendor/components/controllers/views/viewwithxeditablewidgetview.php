@@ -654,7 +654,7 @@ Editable::end();
 	if(!isset($v['xeditable'])){
 		?>
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= ucfirst($editableArea) .' '. $model->attributeLabels()[$v['modelAttribute']];?></h5>
 <?
 		$editable = Editable::begin([
 			'model'=>$model,
@@ -663,7 +663,7 @@ Editable::end();
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
-			'editableValueOptions'=>['class'=>'xinput-component']
+			'editableValueOptions'=>['class'=>'xinput-component xinput']
 			
 		]);
 		Editable::end();
@@ -832,7 +832,7 @@ function xeditableSuccessCallback(){
 		$("#folder_image").load(' #folder_image');
 
 		toastr.success('Image was Changed', "", options);
-		//$.pjax.reload({container:"#folder-details-refresh",async: false});
+		$.pjax.reload({container:"#folder-details-refresh",async: false});
 }
 
 $(".xinput").mouseout(function() {

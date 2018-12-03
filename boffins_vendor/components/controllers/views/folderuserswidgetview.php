@@ -5,6 +5,7 @@ use kartik\select2\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use frontend\models\InviteUsers;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 $userModel = new InviteUsers();
 
 
@@ -229,7 +230,7 @@ transition: margin-top 0.1s ease-out 0s;
                         </div>
 	<? }?>
 	
-	
+	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
 	<div class="user-image">
 	<?php $count= !empty($attributues)?count($attributues):0; ?>
 
@@ -247,6 +248,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? };} ?>
 	
 	</div>
+	<?php Pjax::end(); ?>
 	</div>
 <?php 
 
@@ -306,6 +308,7 @@ $(document).on('click','.select2-selection__choice__remove', function(e){
 		  "tapToDismiss": false
 		  }
 			toastr.success('User has been added to this folder', "", options);
+			$.pjax.reload({container:"#user_prefix"+"$pjaxId",async: false});
           }
      });
      return false;

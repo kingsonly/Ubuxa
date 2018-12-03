@@ -82,12 +82,12 @@ use frontend\models\Onboarding;
 	            	</p>
 	            </div>
 	        <?php } ?>
-			<span>FOLDER DETAILS</span>
+			<span>Author: <span><?= $author?></span></span>
 		</div>
 		<div class="col-sm-7 col-xs-7 box-folders">
 			<div class="folder-side">
 				<div class="box-content-folder">
-					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+					<?= ViewWithXeditableWidget::widget(['model'=>$model,'editableArea'=>'folder','attributues'=>[
 					['modelAttribute'=>'title'],
 					['modelAttribute'=>'description']
 					]]); ?>
