@@ -36,7 +36,7 @@ class InviteUsersForm extends Model
      * @param string $email the target email address
      * @return bool whether the email was sent
      */
-    public function sendEmail($email)
+    public function sendEmailOld($email)
     {
         $cid = Yii::$app->user->identity->cid;
         $tests = $this->email;
@@ -54,6 +54,26 @@ class InviteUsersForm extends Model
         }
         
         return $sendTest;
+    }
+	
+	// this is a better way to send an email
+	public function sendEmail($newCustomerEmail)
+    {
+		
+		$cid = Yii::$app->user->identity->cid;
+        $tests = $this->email;
+		foreach ($tests as $test) {
+			Yii::$app->mailer->compose(['html' => 'inviteusers'],
+                [
+                    //'body'  => $this->body,
+                    'link'  => Url::to(['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]),
+                ])
+            ->setTo($newCustomerEmail)
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('Ubuxa Invite')
+            ->send();
+		}
+        
     }
 
 }
