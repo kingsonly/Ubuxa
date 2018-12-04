@@ -686,7 +686,7 @@ Editable::end();
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
 					'options'=>['placeholder'=>'Enter date']
-				]
+				],
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
 			Editable::end();
@@ -706,7 +706,7 @@ Editable::end();
 				'size'=>'md',
 				'options'=>[
         			'options'=>['placeholder'=>'From date','id' => 'x-editable-date'.$xEditableDateId,]
-    			]
+    			],
 				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
 			]);
 			?>
