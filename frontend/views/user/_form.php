@@ -1,45 +1,20 @@
 <?php
-
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
-use frontend\models\Role;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
+
+
 /* @var $this yii\web\View */
-/* @var $model frontend\models\UserDb */
+/* @var $model app\models\Tmuser */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
 <style>
-input.hidden {
-    position: absolute;
-    left: -9999px;
-}
 
-#profile-image1 {
-    cursor: pointer;
-  
-     width: 100px;
-    height: 100px;
-  border:2px solid #03b1ce ;}
-  .title{ font-size:14px; font-weight:500;}
-   .bot-border{ border-bottom:1px #f8f8f8 solid;  margin:5px 0  5px 0}  
-   body {
-  background: whitesmoke;
-  font-family: 'Open Sans', sans-serif;
-}
-h1 {
-  font-size: 20px;
-  text-align: center;
-  margin: 20px 0 20px;
-}
-h1 small {
-  display: block;
-  font-size: 15px;
-  padding-top: 8px;
-  color: gray;
-}
 .avatar-upload {
   position: relative;
   max-width: 205px;
@@ -82,6 +57,32 @@ h1 small {
   text-align: center;
   margin: auto;
 }
+.photoEdit:before{
+  color: #757575;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+}
+.photoEdit{
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    margin-bottom: 0;
+    border-radius: 100%;
+    background: #FFFFFF;
+    border: 1px solid transparent;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    font-weight: normal;
+    transition: all 0.2s ease-in-out;
+}
+.photoEdit:hover{
+  background: #f1f1f1;
+  border-color: #d6d6d6;
+}
 .avatar-upload .avatar-preview {
   width: 192px;
   height: 192px;
@@ -98,70 +99,106 @@ h1 small {
   background-repeat: no-repeat;
   background-position: center;
 }
+.progress-button {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 1px;
+  outline: none;
+  border: none;
+  background: #628dd7;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 1.2em;
+  line-height: 2;
+  box-shadow: none;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+  display: block;
+  margin: auto;
 
+}
+
+.progress-button:hover {
+  border-radius: 16px 1px;
+}
+
+.progress-button .content {
+  position: relative;
+}
+
+.progress-button .progress-load{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #29529a;
+  transform: translateX(-100%);
+  transition: transform .2s ease;
+}
+
+.progress-button.photo-loading .progress-load {
+  transform: translateX(0%);
+  transition: transform 2s cubic-bezier(0.59, 0.01, 0.41, 0.99);
+}
+.bot-border{
+	padding-left: 15px;
+}
+.box-body{
+	box-shadow: -1px 3px 20px -2px rgba(0,0,0,0.1);
+}
+.profile_name{
+	color: #00b1b1;
+	text-transform: capitalize;	
+}
+.profile_role{
+	text-transform: capitalize;
+}
+.close-arrow{
+	cursor: pointer;
+}
 </style>
 
-<div class="user-db-form">
 
-    <?php $form = ActiveForm::begin(['id' => 'profile-form']); ?>
 
-    <?= $form->field($person, 'first_name')->textInput() ?>
-
-    <?= $form->field($person, 'surname')->textInput() ?>
-
-    <?= $form->field($model, 'roleName')->textInput() ?>
-
-    <?= $form->field($model, 'email')->textInput() ?>
-
-    <?= $form->field($model, 'dob')->widget(DatePicker::classname(), [
-							'options' => ['placeholder' => 'Select Date Of Birth ...','id' => 'datepicker'],
-							 'pluginOptions' => [
-								 'format' => 'dd/mm/yyyy',
-								 'todayHighlight' => true
-									],
-								]) 
-	?>
-
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success profileButton']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
-
-<div class="container">
 	<div class="row">
-		 <h2>Your Profile</h2>
         
-        
-       <div class="col-md-7 ">
+    <div class="col-sm-12">
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-2" style="padding-top:20px">
+            <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+        </div>
+    </div>    
+    <div class="col-md-12">
 
 <div class="panel panel-default">
-  <div class="panel-heading">  <h4>User Profile</h4></div>
    <div class="panel-body">
        
     <div class="box box-info">
         
             <div class="box-body">
+            	<?php $form = ActiveForm::begin(['enableAjaxValidation' => false,'id' => 'userform', 'options' => ['enctype' => 'multipart/form-data']]); ?>
+	
+					<div class="avatar-upload">
+				        <div class="avatar-edit">
 
-    <div class="avatar-upload">
-        <div class="avatar-edit">
-            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
-            <label for="imageUpload"></label>
-        </div>
-        <div class="avatar-preview">
-            <div id="imagePreview" style="background-image: url(http://i.pravatar.cc/500?img=7);">
-            </div>
-        </div>
-    </div>
+				            <?= $form->field($model, 'profile_image')->fileInput(['id' => 'imageUpload'])->label('<i class="fa fa-pencil photoEdit" aria-hidden="true"></i>'); ?>
+				            
+				        </div>
+				        <div class="avatar-preview">
+				            <div id="imagePreview" style="background-image: url(<?= $model->profile_image; ?>);">
+				            </div>
+				        </div>
+				    </div>
+						<?= Html::submitButton('<span class="progress-load"></span>
+  						<span class="content">Upload</span>',['class' => 'progress-button']) ?>
+				<?php ActiveForm::end(); ?>
             <div class="col-sm-6">
-            <h4 style="color:#00b1b1;"><?= yii::$app->user->identity->fullName; ?></h4></span>
-              <span><p><?= $model->roleName; ?></p></span>            
+	            <h4 class="profile_name"><?= yii::$app->user->identity->fullName; ?></h4></span>
+	              <span><p class="profile_role"><?= $model->roleName; ?></p></span>            
             </div>
             <div class="clearfix"></div>
             <hr style="margin:5px 0 5px 0;">
@@ -175,25 +212,20 @@ h1 small {
 		                        ['modelAttribute'=>'surname'],
 		                        ]]); ?></div>
 	</div>
+	<hr style="margin:5px 0 5px 0;">
 
+	<div class="col-sm-12 col-xs-12">Date Of Birth: <?= ViewWithXeditableWidget::widget(['model'=>$person,'attributues'=>[
+	                                ['modelAttribute'=>'dob','xeditable' => 'datetime'],
+	                                ]]); ?>                           
+	</div>
+	
+	<hr style="margin:5px 0 5px 0;">
+	<div class="col-sm-6">Username:</div>
+	<div class="col-md-6"><?=$model->username; ?></div>
 
-<div class="col-sm-5 col-xs-6 title">Date Of Birth:</div><div class="col-sm-7"><?= ViewWithXeditableWidget::widget(['model'=>$person,'attributues'=>[
-                                ['modelAttribute'=>'dob','xeditable' => 'datetime'],
-                                ]]); ?></div>
-
-  <div class="clearfix"></div>
-<div class="bot-border"></div>
-
-<div class="col-sm-5 col-xs-6 title">Username:</div><div class="col-sm-7"><?=$model->username; ?></div>
-
- <div class="clearfix"></div>
-<div class="bot-border"></div>
-
-<div class="col-sm-5 col-xs-6 title">Email:</div><div class="col-sm-7"><?= $model->email; ?></div>
+	<div class="col-md-6">Email:</div>
+	<div class="col-md-6"><?= $model->email; ?></div>
       
-
- <div class="clearfix"></div>
-<div class="bot-border"></div>
 
             <!-- /.box-body -->
           </div>
@@ -206,10 +238,76 @@ h1 small {
     </div>
 </div>         
    </div>
-</div>
 
-<?php 
+<?php
+$uploadUrl = Url::to(['user/update']);
 $profile = <<<JS
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+            $('#imagePreview').hide();
+            $('#imagePreview').fadeIn(650);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#imageUpload").change(function() {
+    readURL(this);
+});
+$(document).ready(function(){
+    $('.progress-button').hide();   
+});
+$('.progress-button').click(function() {
+  $(this).toggleClass('photo-loading');
+});
+$('.photoEdit').click(function(){
+	$('.progress-button').show();
+});
+
+$('#userform').on('beforeSubmit', function (e) {
+	e.preventDefault();
+	e.stopImmediatePropagation();
+	var form = $(this);
+	var formData = new FormData(form[0]);
+   $.ajax({
+        url: '$uploadUrl',     
+        data: formData,                         
+        type: 'post',
+        success: function(res){
+        	$.pjax.reload({container:"#kanban-refresh",async: false});
+        	$.pjax.reload({container:"#for-profile-refresh",async: false});
+        	$.pjax.reload({container:"#profile-refresh",async: false});
+        	$.pjax.reload({container:"#remark-refresh",async: false});
+        	setTimeout(function(){
+        	 $('.progress-button').hide();
+        	 $('.progress-button').removeClass('photo-loading'); 
+        	 }, 2000);
+        },
+        error: function(res){
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+     });
+    return false;
+
+});
+
+$('.close-arrow').click(function(){
+     $('.profile-container').css({
+       'width':'300px',
+       'min-height':'1px',
+       'visibility':'hidden'
+      });
+      $('.profile-content').hide();
+      setTimeout(function() { 
+        $('.sider').show('slow');
+    }, 900);
+      
+	});
+
 
 JS;
 $this->registerJs($profile);

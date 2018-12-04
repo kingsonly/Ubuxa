@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for UserDb model.
@@ -87,14 +88,64 @@ class UserController extends Controller
         $model = $this->findModel($id);
         $person = $model->person;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save() && $person->load(Yii::$app->request->post()) && $person->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->profile_image = UploadedFile::getInstance($model, 'profile_image');
+            if(!empty($model->profile_image)){
+                $fileName = $model->username.rand(1, 4000) . '.' . $model->profile_image->extension;
+                $filePath = 'images/users/'.$fileName;
+                $model->profile_image->saveAs($filePath);
+                $model->profile_image = $filePath;
+            }
+            $model->save(false);
+            //return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
-            'model' => $model,
-            'person' => $person,
-        ]);
+
+
+            // Check if there is an Editable ajax request
+        if (isset($_POST['hasEditable'])) {
+            // use Yii's response format to encode output as JSON
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            // read your posted model attributes
+            if ($person->load(Yii::$app->request->post())) {
+                // read or convert your posted information
+                
+                $person->save(false);
+                // return JSON encoded output in the below format
+                return ['output'=>'', 'message'=>''];
+                
+                // alternatively you can return a validation error
+                // return ['output'=>'', 'message'=>'Validation error'];
+            }
+            // else if nothing to do always return an empty JSON encoded output
+            else {
+                return ['output'=>'', 'message'=>''];
+            }
+        }
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'person' => $person,
+            ]);
+    }
+
+    public function actionUpload()
+    {
+        $id = Yii::$app->user->identity->id;
+        $username = Yii::$app->user->identity->username;
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post(), '')) {
+            $model->profile_image = UploadedFile::getInstanceByName('profile_image');
+            if(!empty($model->profile_image)){
+                $fileName = $model->username.rand(1, 4000) . '.' . $model->profile_image->extension;
+                $filePath = 'uploads/'.$fileName;
+                $model->profile_image = $filePath;
+                $model->profile_image->saveAs($filePath);
+            }else{
+                $model->profile_image = 'test';
+            }
+        }
     }
 
     /**
