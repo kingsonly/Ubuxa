@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 use boffins_vendor\classes\StandardQuery;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
