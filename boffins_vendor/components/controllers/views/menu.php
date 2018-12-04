@@ -79,9 +79,9 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     <?php Pjax::begin(['id'=>'profile-refresh']); ?>
 		<div class="top-sidebar">
     			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
-    				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to(yii::$app->user->identity->profile_image); ?>')"></div>
+    				<div class="side-images" style="position: relative;background-position: center;z-index:1000;background-image:url('<?= Url::to(yii::$app->user->identity->profile_image); ?>')"></div>
     			<?php }else{?>
-    				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
+    				<div class="side-images" style="position: relative;background-position: center;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
     			<?php }?>
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>

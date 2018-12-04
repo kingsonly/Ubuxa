@@ -85,6 +85,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
             if(form.find('#create-task-card$statusid').length) {
                 return false;
             }
+            setTimeout(function(){
             $.ajax({
                 url: '$taskUrl',
                 type: 'POST',
@@ -99,7 +100,8 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                   console.log('Something went wrong');
               }
             });
-        return true;    
+            }, 5);
+        return false;    
 });
 
 $(".cardInput").keydown(function(e){
