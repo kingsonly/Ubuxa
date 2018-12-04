@@ -23,14 +23,16 @@ use yii\helpers\Url;
 $profileUrlz = Url::to(['user/update']);
 $profileUser = <<<JS
 
-$(document).ready(function(){
-	$('.progress-button').hide(); 
-  $.ajax({
+$('.container').on('click', '.profile-link',function(){
+	$.ajax({
     url: '$profileUrlz',
     success: function(data) {
         $('.profile-content').html(data);
      }
     });
+});
+
+$(document).ready(function(){ 
 
 $('.set-profile').click(function(){
      $('.profile-container').css({
@@ -44,18 +46,7 @@ $('.set-profile').click(function(){
       $('.profile-content').show('slow');
   })
 
-  $('.close-arrow').click(function(){
-     $('.profile-container').css({
-       'width':'300px',
-       'min-height':'1px',
-       'visibility':'hidden'
-      });
-      $('.profile-content').hide();
-      setTimeout(function() { 
-        $('.sider').show('slow');
-    }, 900);
-      
-	});
+  
   });
 JS;
 $this->registerJs($profileUser);

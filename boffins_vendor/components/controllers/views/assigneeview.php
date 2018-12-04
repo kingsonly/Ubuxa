@@ -204,7 +204,7 @@ function _AddUser(user,taskid){
                   task_id: taskid, 
                 },
               success: function(res, sec){
-                    toastr.success('Completed');
+                    toastr.success('Task assigned');
                     $.pjax.reload({container:"#task-list-refresh"});
                     $.pjax.reload({container:"#kanban-refresh",async: false});
                     //$.pjax.reload({container:"#task-modal-refresh",async: false});

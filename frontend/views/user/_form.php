@@ -156,14 +156,23 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 .profile_role{
 	text-transform: capitalize;
 }
+.close-arrow{
+	cursor: pointer;
+}
 </style>
 
 
 
 	<div class="row">
         
-        
-       <div class="col-md-12 ">
+    <div class="col-sm-12">
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-2" style="padding-top:20px">
+            <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+        </div>
+    </div>    
+    <div class="col-md-12">
 
 <div class="panel panel-default">
    <div class="panel-body">
@@ -233,7 +242,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 <?php
 $uploadUrl = Url::to(['user/update']);
 $profile = <<<JS
-	function readURL(input) {
+function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -281,6 +290,19 @@ $('#userform').on('beforeSubmit', function (e) {
     return false;
 
 });
+
+$('.close-arrow').click(function(){
+     $('.profile-container').css({
+       'width':'300px',
+       'min-height':'1px',
+       'visibility':'hidden'
+      });
+      $('.profile-content').hide();
+      setTimeout(function() { 
+        $('.sider').show('slow');
+    }, 900);
+      
+	});
 
 
 JS;

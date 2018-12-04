@@ -384,7 +384,7 @@ $boardUrl = Url::to(['task/index']);
 					       <?php if($checkUrlParam == 'folder'){?>
                     <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
-                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
+                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Add a task"])->label(false) ?>
   					 
   					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
 					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>

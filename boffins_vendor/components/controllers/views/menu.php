@@ -52,14 +52,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     	</div>
         <div class="profile-container">
             <div class="row profile-content" style="display: none">
-                <div class="col-sm-12">
-                    <div class="col-md-10">
-                        <span class="settings-text">Profile</span>
-                    </div>
-                    <div class="col-md-2" style="padding-top:20px">
-                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
-                    </div>
-                </div>
+                
                 <div class="profile-content">
                     
                 </div>
