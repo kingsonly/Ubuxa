@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use boffins_vendor\classes\BoffinsArRootModel;
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
 
 /**
  * This is the model class for table "tm_component_template".
@@ -17,7 +19,7 @@ use Yii;
  * @property Component[] $components
  * @property ComponentTemplateAttribute[] $componentTemplateAttributes
  */
-class ComponentTemplate extends \yii\db\ActiveRecord
+class ComponentTemplate extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
 {
     /**
      * {@inheritdoc}
@@ -33,7 +35,7 @@ class ComponentTemplate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'last_update'], 'safe'],
+            [['created_at', 'last_updated'], 'safe'],
             [['deleted', 'cid'], 'integer'],
             [['name'], 'string', 'max' => 55],
         ];
@@ -48,7 +50,7 @@ class ComponentTemplate extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'created_at' => 'Created At',
-            'last_update' => 'Last Update',
+            'last_updated' => 'Last Update',
             'deleted' => 'Deleted',
             'cid' => 'Cid',
         ];
