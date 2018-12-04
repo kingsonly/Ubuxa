@@ -457,10 +457,11 @@ AppAsset::register($this);
 <?php 
 $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkUrlSave = Url::to(['remark/create']);
-$remarkUrlMention = Url::to(['remark/mention']);
+$remarkUrlMention = Url::to(['remark/mention','id'=>$parentOwnerId]);
 $remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
+$baseUrl=Url::base(true);
 $remarkJs = <<<JS
 var issues = [
   { name: "1", content: "stay foolish"},
@@ -475,7 +476,7 @@ $('.editor').atwho({
 }).atwho({
     at: "#", 
     displayTpl: '<li><small>\${content}</small></li>',
-    insertTpl: '<a href="http://localhost/ubuxa-beta/frontend/web/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
+    insertTpl: '<a href="$baseUrl/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
     data: '$remarkUrlMentionFolder'
   })
 var mypage = 1;
