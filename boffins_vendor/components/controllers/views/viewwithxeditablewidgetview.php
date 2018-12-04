@@ -685,8 +685,8 @@ Editable::end();
 				'valueIfNull' => $v['modelAttribute'],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
-					'placeholder'=>'Enter date'
-				],
+					'options'=>['placeholder'=>'Enter date']
+				]
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
 			Editable::end();
@@ -704,9 +704,9 @@ Editable::end();
 				'asPopover' => false,
 				'header' => 'Due Date',
 				'size'=>'md',
-				'options'=>['id' => 'x-editable-date'.$xEditableDateId,
-					'placeholder'=>'Enter date'
-				],
+				'options'=>[
+        			'options'=>['placeholder'=>'From date','id' => 'x-editable-date'.$xEditableDateId,]
+    			]
 				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
 			]);
 			?>
