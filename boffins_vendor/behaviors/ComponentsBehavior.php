@@ -100,7 +100,7 @@ class ComponentsBehavior extends Behavior
 	private function createEmptyValue($type,$componentId,$templateAttributeId,$typeName)
 	{
 		// this is is just a hack for now 
-		if($this->convertAttributeType($type) == 'knownclass'){
+		if($type == 'known_class'){
 			$model = 'frontend\models\ValueKnownClass';
 		}else{
 			$model = 'frontend\models\Value'.$this->convertAttributeType($type);
