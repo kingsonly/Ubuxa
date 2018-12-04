@@ -145,13 +145,14 @@ class RemarkController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionMention(){
-        $users = new Person();
-        $getUsers = $users->find()->all();
+    public function actionMention($id){
+        $owner = $id;
+        $users = new Folder();
+        $getUsers = $users->find()->andWhere(['id' => $owner])->one();
         $name = array();
         $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers as $user) {
-            $name[] = $user['first_name'].' '.$user['surname'];
+        foreach ($getUsers->folderUsers as $user) {
+            $name[] = $user->fullname;
         }
        return json_encode($name);
     }
