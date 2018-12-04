@@ -151,7 +151,7 @@ foreach($attributues as $v){
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
 ]);
@@ -178,8 +178,8 @@ Editable::end();
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
-		'formOptions' => ['action'=>$modelUrl],
-			'inputType' => Editable::INPUT_MONEY,
+		'formOptions' => ['action'=>$modelUrl,],
+			'inputType' => 'input',
 			//'options'=>['placeholder'=>'Enter title...'],
 		'pluginEvents' => [
 				"editableSuccess"=>"
@@ -207,9 +207,10 @@ Editable::end();
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'type'=>'number','placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
+		
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -262,7 +263,7 @@ Editable::end();
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
@@ -317,7 +318,7 @@ Editable::end();
 			 		}",
     	],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
@@ -374,7 +375,7 @@ Editable::end();
     	],
 			//'options'=>['placeholder'=>'Enter title...'],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
@@ -440,7 +441,7 @@ Editable::end();
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
@@ -466,7 +467,7 @@ Editable::end();
 				'formOptions' => ['action'=>$modelUrl],
 				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'pluginEvents' => [
 				"editableSuccess"=>"
@@ -515,7 +516,7 @@ Editable::end();
 				'containerOptions' => ['id' =>$editableId],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'pluginEvents' => [
 				"editableSuccess"=>"
@@ -587,7 +588,7 @@ Editable::end();
 			 		}",
     	],
 				'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
@@ -635,7 +636,7 @@ Editable::end();
 			 		}",
     	],
 				'options'=>[
-					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
@@ -684,7 +685,7 @@ Editable::end();
 				'valueIfNull' => $v['modelAttribute'],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter date'
 				],
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
@@ -704,7 +705,7 @@ Editable::end();
 				'header' => 'Due Date',
 				'size'=>'md',
 				'options'=>['id' => 'x-editable-date'.$xEditableDateId,
-					'options'=>['placeholder'=>'Enter date']
+					'placeholder'=>'Enter date'
 				],
 				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
 			]);

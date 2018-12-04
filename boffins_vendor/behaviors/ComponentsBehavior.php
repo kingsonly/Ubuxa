@@ -108,15 +108,18 @@ class ComponentsBehavior extends Behavior
 		
 		$valueModel = new $model();//init the value model.
 		Yii::trace("this is a ".$type);
-		if($type === 'known_class'){
-			if($typeName == 'user'){
-				$knownClassModel =  "frontend\\models\\".ucwords($typeName).'Db';
+		if($type == 'known_class'){
+			if($typeName == 'User'){
+				Yii::trace("this is a ".$typeName);
+				$addDbToType = $typeName.'Db';
+				$knownClassModel =  "frontend\\models\\".ucwords($addDbToType);
 				$valueModel->value = ['nameSpace' =>$knownClassModel];
 				Yii::trace("this is a ".$knownClassModel);
 			}else{
+				Yii::trace("this is a ".$typeName);
 				$knownClassModel =  "frontend\\models\\".ucwords($typeName);
 				$valueModel->value = ['nameSpace' =>$knownClassModel];
-				Yii::trace("this is a ".$knownClassModel);
+				Yii::trace("this is a a ".$knownClassModel);
 			}
 		}else{
 			$valueModel->value = ''; // pass an empty value to model property.

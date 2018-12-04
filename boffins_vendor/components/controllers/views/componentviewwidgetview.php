@@ -43,10 +43,11 @@ use boffins_vendor\components\controllers\FolderUsersWidget;
 							${'model'.$i} = new ComponentAttributeModel();
 							${'model'.$i}->attributeId = $attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
-							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' => $attributeValule['type'] != 'known_class'?Url::to(['component/update-value','id' => ${'model'.$i}->attributeId]):Url::to(['component/update-known-class-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
+							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' => $attributeValule['type'] != 'known_class'?Url::to(['component/update-value','id' => ${'model'.$i}->attributeId]):attributeValue['type'] == 'Number'?Url::to(['component/update-integer-value','id' => ${'model'.$i}->attributeId]):Url::to(['component/update-known-class-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
 					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],'typeName' => $attributeValule['typeName']],
 					
 					]]);
+								
 							 
 							$i++;
 						}
