@@ -141,7 +141,9 @@ class ComponentsBehavior extends Behavior
 	}
 	
 	private function convertAttributeType($type){
-    	return str_replace('_', '', ucwords($type));// convert attribute type to have model partern eg FolderManager etc  
+    	//return str_replace('_', '', ucwords($type),'_');// convert attribute type to have model partern eg FolderManager etc  
+    	return str_replace('_', '', ucwords($type,'_'));// convert attribute type to have model partern eg FolderManager etc  
+		
 	}
 	
 	
