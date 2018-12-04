@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use frontend\models\Remark;
 use frontend\models\Person;
 use frontend\models\Folder;
+use frontend\models\UserDb;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -48,6 +49,7 @@ class RemarkController extends Controller
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
+                $users = new UserDb();
                 $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
@@ -55,14 +57,16 @@ class RemarkController extends Controller
                      $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
 					
                      return $this->renderAjax('siteremarks', [
-						 'remarks' => $remarks,
+                         'remarks' => $remarks,
+						 'users' => $users,
 						 'remarkReply' => $remarkReply,
                      ]);
                 } else {
                      
                      $remarks = $remarkss->specificClips($ownerid,1,$offset,$perpage,'remark');
                      return $this->renderAjax('index2', [
-						 'remarks' => $remarks,
+                         'remarks' => $remarks,
+						 'users' => $users,
 						 'remarkReply' => $remarkReply,
 					 ]);
                 }
@@ -92,7 +96,7 @@ class RemarkController extends Controller
     public function actionCreate()
     {
         $model = new Remark();
-        $commenterId = Yii::$app->user->identity->person_id;
+        $commenterId = Yii::$app->user->identity->id;
         $model->person_id = $commenterId;
         if(!empty(Yii::$app->request->post('&moredata'))){
             $model->text = Yii::$app->request->post('&moredata');

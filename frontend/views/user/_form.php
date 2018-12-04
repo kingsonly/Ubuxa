@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
-
+$profileImage = !empty($model["profile_image"])?$model["profile_image"]:'images/users/default-user.png';
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */
@@ -189,7 +189,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 				            
 				        </div>
 				        <div class="avatar-preview">
-				            <div id="imagePreview" style="background-image: url(<?= $model->profile_image; ?>);">
+				            <div id="imagePreview" style="background-image: url(<?= $profileImage ?>);">
 				            </div>
 				        </div>
 				    </div>

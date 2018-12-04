@@ -2,10 +2,12 @@
 	use yii\helpers\Url;
 ?>
 <?php	
-    $remarkImage = !empty(yii::$app->user->identity->profile_image)?yii::$app->user->identity->profile_image:'images/users/default-user.png';
+    
     if(!empty($remarks)){
         foreach ($remarks as $key => $remark) {
-    
+        $testers = $users->find()->where(['id' => $remark->person_id])->one();
+        $remarkImage = !empty($testers["profile_image"])?$testers["profile_image"]:'images/users/default-user.png';
+
     ?>
            
 			<li class="welll">
