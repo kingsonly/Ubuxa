@@ -236,7 +236,7 @@ transition: margin-top 0.1s ease-out 0s;
 <?php 
 		if(!empty($attributues)){
 		foreach($attributues as $users){ 
-	$image = !empty($users["profile_image"])?$users["profile_image"]:'default-user.png';
+	$image = !empty($users["profile_image"])?$users["profile_image"]:'images/users/default-user.png';
 	$count--;
 	?>
 		
