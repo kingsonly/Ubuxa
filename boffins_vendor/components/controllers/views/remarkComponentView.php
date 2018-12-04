@@ -229,6 +229,7 @@ AppAsset::register($this);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     overflow: hidden;
+    border-radius: 50%;
 }
 .comments-list .comment-avatar img {
     width: 100%;
@@ -327,7 +328,7 @@ AppAsset::register($this);
 }
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
 .comment-box .comment-name.by-author:after {
-    content: 'autor';
+    content: 'author';
     background: #03658c;
     color: #FFF;
     font-size: 12px;
@@ -386,8 +387,8 @@ AppAsset::register($this);
     <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
-    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
-    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
   </div>
   </form>
   <div class="wrapp">

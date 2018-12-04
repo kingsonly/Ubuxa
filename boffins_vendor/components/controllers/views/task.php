@@ -150,7 +150,7 @@ $boardUrl = Url::to(['task/index']);
    position: relative;
 }
  #addTask {
-   width: 100%;
+   width: 80%;
    padding: 9px;
 }
  #taskButton {

@@ -276,6 +276,10 @@ $('#userform').on('beforeSubmit', function (e) {
         data: formData,                         
         type: 'post',
         success: function(res){
+        	$.pjax.reload({container:"#kanban-refresh",async: false});
+        	$.pjax.reload({container:"#for-profile-refresh",async: false});
+        	$.pjax.reload({container:"#profile-refresh",async: false});
+        	$.pjax.reload({container:"#remark-refresh",async: false});
         	setTimeout(function(){
         	 $('.progress-button').hide();
         	 $('.progress-button').removeClass('photo-loading'); 
