@@ -128,6 +128,8 @@ class ComponentController extends Controller
         return $this->renderAjax('view',['component'=>$modelData]);
     }
 	
+	/*
+	To be used once queue is fixed 
 	public function actionAddUsers($id) {
 		$inviteUsersModel = new InviteUsers();
 		$userModel = new UserDb();
@@ -142,6 +144,22 @@ class ComponentController extends Controller
 					'componentId' => $id,
 					'type' => 'component',
 				]));
+			 }
+            return ['output'=>$id, 'message'=> 0];
+        }
+	} */
+	
+	
+	public function actionAddUsers($id) {
+		$inviteUsersModel = new InviteUsers();
+		$userModel = new UserDb();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
+			  
+			 foreach($inviteUsersModel->users as $value){
+				 $getUserId = $userModel->find()->select(['id'])->andWhere(['person_id' => $value])->one();
+				 $test = $getUserId['id'];
+				 $this->addComponentNewUser($getUserId['id'], $id);
 			 }
             return ['output'=>$id, 'message'=> 0];
         }
@@ -221,6 +239,22 @@ class ComponentController extends Controller
 			else {
 				return ['output'=>$model->attributeId, 'message'=>'4321', 'component-id' => ''];
 			}
+		}
+	}
+	
+	
+	public function addComponentNewUser($userId = '', $componentId = '')
+	{
+		
+		$componentManagerModel = new ComponentManager();
+		$componentManagerModel->user_id = $userId;
+		$componentManagerModel->component_id = $componentId;
+		$componentManagerModel->role = 'user';
+		
+			
+		if($componentManagerModel->save(false)){
+			return true;
+			
 		}
 	}
 

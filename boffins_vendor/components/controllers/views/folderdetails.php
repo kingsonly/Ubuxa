@@ -82,7 +82,7 @@ use frontend\models\Onboarding;
 	            	</p>
 	            </div>
 	        <?php } ?>
-			<span>Author: <span><?= $author?></span></span>
+			<span>Created by: <span><?= $author?></span></span>
 		</div>
 		<div class="col-sm-7 col-xs-7 box-folders">
 			<div class="folder-side">

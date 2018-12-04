@@ -347,6 +347,7 @@ class FolderController extends Controller
 		
 			
 		if($folderManagerModel->save(false)){
+			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
 			return true;
 			
 		}
