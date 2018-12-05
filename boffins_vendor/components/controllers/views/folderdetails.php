@@ -71,19 +71,17 @@ use frontend\models\Onboarding;
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">
-			<?php if(!$onboardingExists){ ?>
-                <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of folders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->folder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
-              <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of folders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php } ?>
+			<?php 
+				$foldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->exists();
+                $getFolders = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->one();
+			?>
+	        <?php if(!$foldersExists || $getFolders->status < Onboarding::ONBOARDING_COUNT ){ ?>
+	            <div class="help-tip" id="folder-tipz">
+	            	<p class="tip=text">Take a tour of folders and find out useful tips.
+	            		<button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
+	            	</p>
+	            </div>
+	        <?php } ?>
 			<span>FOLDER DETAILS</span>
 		</div>
 		<div class="col-sm-7 col-xs-7 box-folders">

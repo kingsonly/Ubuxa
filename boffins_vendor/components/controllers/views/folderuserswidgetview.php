@@ -236,11 +236,11 @@ transition: margin-top 0.1s ease-out 0s;
 <?php 
 		if(!empty($attributues)){
 		foreach($attributues as $users){ 
-	$image = !empty($users["image"])?$users["image"]:'default-user.png';
+	$image = !empty($users["profile_image"])?$users["profile_image"]:'images/users/default-user.png';
 	$count--;
 	?>
 		
-		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
+		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		
 	
 	

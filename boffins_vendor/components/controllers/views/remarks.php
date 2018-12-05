@@ -37,29 +37,23 @@ $checkUrlParamz = $checkUrlz[0];
 <div class="col-md-8">
     <div class="col-md-12 bg-info">
       	<div class="header">
-          <?php if($checkUrlParamz == 'folder'){?>
-            <?php if(!$onboardingExists){ ?>
-                <div class="help-tip" id="remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
-                    <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->remark_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+          <?php if($checkUrlParamz == 'folder'){
+            $remarksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
+            $getRemarks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
+          ?>
+            <?php if(!$remarksExists || $getRemarks->status < Onboarding::ONBOARDING_COUNT){ ?>
               <div class="help-tip" id="remark-tipz">
-                  <p class="tip=text">Take a tour of task and find out useful tips.
-                    <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
-                  </p>
-                </div>
+                <p class="tip=text">Take a tour of remarks and find out useful tips.
+                  <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
+                </p>
+              </div>
             <?php } ?>
           <?php }?>
-          <?php if($checkUrlParamz == 'site'){?>
-            <?php if(!$onboardingExists){ ?>
-                <div class="help-tip" id="site-remark-tipz">
-                  <p class="tip=text">Take a tour of remarks and find out useful tips.
-                    <button type="button" class="btn btn-success" id="site-remark-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->remark_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+          <?php if($checkUrlParamz == 'site'){
+            $remarksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
+            $getRemarks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
+          ?>
+            <?php if(!$remarksExists || $getRemarks->status < Onboarding::ONBOARDING_COUNT){ ?>
               <div class="help-tip" id="site-remark-tipz">
                   <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="site-remark-tour">Start Tour</button>
@@ -67,7 +61,7 @@ $checkUrlParamz = $checkUrlz[0];
                 </div>
             <?php } ?>
           <?php }?>
-            <span>Comments</span>
+            <span>COMMENTS</span>
         </div>
         <?php Pjax::begin(['id'=>'remark-refresh']); ?>
 	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $parentOwnerId, 'remarks'=> $remarks, 'modelName'=> $modelName]); ?></div>
@@ -85,6 +79,7 @@ function _RemarkOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  
                 },
               success: function(res, sec){
                    console.log('Status updated');

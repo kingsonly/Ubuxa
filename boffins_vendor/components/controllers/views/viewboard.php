@@ -76,6 +76,8 @@ $viewBoard = <<<JS
 
 
     $('.board-open').click(function(){
+        $(this).addClass('board-opened');
+        $(this).removeClass('board-closed');
         $('#mySidenav').css({'width':'100%'})
     });
 
@@ -83,6 +85,8 @@ $viewBoard = <<<JS
         setTimeout(function(){
             $.pjax.reload({container:"#task-list-refresh",async: false});
             }, 550);
+        $('.board-open').removeClass('board-opened');
+        $('.board-open').addClass('board-closed');
         $('#mySidenav').css({'width':'0'})
     });
 

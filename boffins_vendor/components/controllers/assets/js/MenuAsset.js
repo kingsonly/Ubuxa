@@ -2,9 +2,11 @@ function closeMenu(data){
    // e.preventDefault(); 
 	$('.list_load, .list_item').stop();
 	data.removeClass('closed').addClass('opened');
-
+	$('.board-open').addClass('board-closed');
 	$('.side_menu').css({ 'left':'0px' });
-
+	$('.beacon-wrapper').hide();
+	$(".ubuxalogo").show();
+    $(".menu-plus").hide();
 	var count = $('.list_item').length;
 	$('.list_load').slideDown( (count*.6)*100 );
 	$('.list_item').each(function(i){
@@ -22,7 +24,8 @@ function closeMenu(data){
 function openMenu(data){
     $('.list_load, .list_item').stop();
 	data.removeClass('opened').addClass('closed');
-
+	$(".ubuxalogo").hide();
+    $(".menu-plus").show();
 	$('.side_menu').css({ 'left':'-300px' });
 
 	var count = $('.list_item').length;
@@ -31,6 +34,7 @@ function openMenu(data){
 		'margin-left':'-20px'
 	});
 	$('.list_load').slideUp(300);
+	$('.beacon-wrapper').show();
 }
 
 $(document).on('click','.js-menu_toggle.closed',function(e){
@@ -65,20 +69,21 @@ $(document).ready(function () {
 
 $(document).on('click',function (e) {
   side_menu = $('.side_menu');
-  var id = (document).find('#kanban-refresh');
+  /* var id = (document).find('#kanban-refresh');
   if(e.target.id == "kanban-refresh"){
           e.stopPropagation();
-  }
+  } */
   if (!side_menu.is(e.target) 
       && side_menu.has(e.target).length === 0){
-    if($('.js-menu_toggle.opened')[0]){
+    if($('.js-menu_toggle.opened')[0] && $('.board-open').hasClass('board-closed')){
         $('.js-menu_toggle.opened').trigger('click');
     } else {
         //do nothing
     }
 	
   }
-}); 
+});
+
 
 //var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());

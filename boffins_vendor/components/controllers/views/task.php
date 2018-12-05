@@ -12,6 +12,7 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
+//$modalwait = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
 ?>
 <style type="text/css">
     .bg-info {
@@ -149,7 +150,7 @@ $boardUrl = Url::to(['task/index']);
    position: relative;
 }
  #addTask {
-   width: 100%;
+   width: 80%;
    padding: 9px;
 }
  #taskButton {
@@ -164,6 +165,18 @@ $boardUrl = Url::to(['task/index']);
     padding: 6px;
     width: 60px;
     transition: all 0.2s;
+} 
+#loading-task {
+    position: absolute;
+    right: 3px;
+    top: -3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    padding: 6px;
+    width: 60px;
+    transition: all 0.2s;
+    display: none;
 }
  .embed-submit-field #taskButton:hover {
    background-color: #37c88d;
@@ -270,40 +283,42 @@ $boardUrl = Url::to(['task/index']);
   0% { opacity:0; }
   100% { opacity:100%; }
 }
-
+.for-modal-loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 50%;
+  height: 50%;
+  z-index: 9999;
+  background: url(<?//= $modalwait; ?>) center no-repeat #fff;
+}
 </style>
 
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
-            <?php if($checkUrlParam == 'folder'){?>
-              <?php if(!$onboardingExists){ ?>
-                  <div class="help-tip" id="task-tipz">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+            <?php if($checkUrlParam == 'folder'){
+              $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+              $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+            ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                 <div class="help-tip" id="task-tipz">
                     <p class="tip=text">Take a tour of task and find out useful tips.
                       <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
                     </p>
                   </div>
               <?php } ?>
-            <?php }else if($checkUrlParam == 'site'){?>
-              <?php if(!$onboardingExists){ ?>
+            <?php }else if($checkUrlParam == 'site'){
+                $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+                $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+              ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                   <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
-                <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php } ?>
+                      <p class="tip=text">Take a tour of task and find out useful tips.
+                        <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
+                      </p>
+                    </div>
+                <?php } ?>
             <?php }?>
                 <span>TASKS</span>
                  
@@ -369,12 +384,16 @@ $boardUrl = Url::to(['task/index']);
 					       <?php if($checkUrlParam == 'folder'){?>
                     <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
 					 
-                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
+                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Add a task"])->label(false) ?>
   					 
   					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-                     
-                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                     
+                    <span class="for-task-loader">
+
+                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                      <span id="loading-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+                    </span>
                     
                     <?php ActiveForm::end(); ?>
                   <?php }?>
@@ -384,7 +403,7 @@ $boardUrl = Url::to(['task/index']);
     </div>
 </div>
 
-
+<!-- <div class="for-modal-loader"></div> -->
 
 
 
@@ -434,17 +453,22 @@ function _UpdateStatus(checkedId){
           });
 }
 
+
 $('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
+           $('#taskButton').hide();
+           $("#loading-task").show();
            e.preventDefault();
             if(form.find('.has-error').length) {
                 return false;
             }
+            setTimeout(function(){
             $.ajax({
                 url: '$createUrl',
                 type: 'POST',
                 data: form.serialize(),
+                async: true,
                 success: function(response) { 
                     console.log('completed');
                     toastr.success('Task created');
@@ -455,7 +479,9 @@ $('#create-task').on('beforeSubmit', function(e) {
               error: function(res, sec){
                   console.log('Something went wrong');
               }
-            });    
+            });
+            }, 5);
+            return false;    
 });
 
 $("#addTask").bind("keyup change", function() {

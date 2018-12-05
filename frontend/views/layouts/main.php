@@ -99,6 +99,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     #flas{
       position: relative;
       padding: 16px;
+      display: none;
     }
     .alert-text{
       color: #000;
@@ -158,7 +159,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 		 <div class="col-lg-12">
 			<?= Alert::widget([
 				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>,you are running on beta.</div><a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
+				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
 					 ]);?>
 		</div>
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
@@ -186,6 +187,14 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
   <!--  MouseStats:Begin  -->
 <script type="text/javascript">var MouseStats_Commands=MouseStats_Commands?MouseStats_Commands:[]; (function(){function b(){if(void 0==document.getElementById("__mstrkscpt")){var a=document.createElement("script");a.type="text/javascript";a.id="__mstrkscpt";a.src=("https:"==document.location.protocol?"https://ssl":"http://www2")+".mousestats.com/js/5/6/5671434762617532649.js?"+Math.floor((new Date).getTime()/6E5);a.async=!0;a.defer=!0;(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}}window.attachEvent?window.attachEvent("onload",b):window.addEventListener("load", b,!1);"complete"===document.readyState&&b()})(); </script>
 <!--  MouseStats:End  -->
+<?php
+$flash = <<<JS
+  setTimeout(function(){ 
+      $('#flas').fadeIn('slow');
+   }, 10000);
+JS;
+$this->registerJs($flash);
+?>
 </body>
 	
 </html>

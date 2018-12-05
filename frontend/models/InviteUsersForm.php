@@ -45,9 +45,9 @@ class InviteUsersForm extends Model
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
             ->setSubject("Ubuxa Invite")
-            ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+            ->setTextBody("Hello, you have been invited to join an ubuxa's workspace.Click join to confirm".\yii\helpers\Html::a('JOIN',
                 Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/invite','email'=> $test,'cid'=>$cid,'role' => $this->role]
+                ['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]
                 ))
                 )
             ->send();
