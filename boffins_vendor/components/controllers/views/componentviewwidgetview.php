@@ -59,13 +59,30 @@ use boffins_vendor\components\controllers\RemarksWidget;
 						echo FolderUsersWidget::widget(['attributues'=>$users,'id'=>$value->id,'type' => 'component','listOfUsers' => $listOfUsers]);
 						
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
+							echo $attributeValule['type'];
 							${'model'.$i} = new ComponentAttributeModel();
 							${'model'.$i}->attributeId = $attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
-							echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' => $attributeValule['type'] != 'known_class'?Url::to(['component/update-value','id' => ${'model'.$i}->attributeId]):$attributeValule['type'] == 'Number'?Url::to(['component/update-integer-value','id' => ${'model'.$i}->attributeId]):Url::to(['component/update-known-class-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
+							
+							if( $attributeValule['type'] == 'integer'){
+									echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' => Url::to(['component/update-integer-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
 					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],'typeName' => $attributeValule['typeName']],
 					
 					]]);
+							}elseif($attributeValule['type'] == 'known_class'){
+									echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' =>Url::to(['component/update-known-class-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
+					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],'typeName' => $attributeValule['typeName']],
+					
+					]]);
+								
+							}else{
+									echo ViewWithXeditableWidget::widget(['model'=>${"model".$i},'attributeName' => $attributeValule['name'],'editableId' =>'modelid-'.${'model'.$i}->attributeId,'editableArea'=>'component','modelUrl' => Url::to(['component/update-value','id' => ${'model'.$i}->attributeId]),'attributues'=>[
+					['modelAttribute'=>'value','xeditable' => $attributeValule['type'],'typeName' => $attributeValule['typeName']],
+					
+					]]);
+								
+							}
+						
 								
 							 
 							$i++;
@@ -82,7 +99,7 @@ use boffins_vendor\components\controllers\RemarksWidget;
 <? $component = Component::findOne($id); 
 	
 ?>
-<?= RemarksWidget::widget(['remarkModel' => $remark, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $component->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
+<?// RemarksWidget::widget(['remarkModel' => $remark, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $component->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
 	
 
 
