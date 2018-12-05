@@ -7,7 +7,7 @@ use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 
-
+$profileImage = !empty($model["profile_image"])?$model["profile_image"]:'images/users/default-user.png';
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Tmuser */
@@ -189,7 +189,7 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 				            
 				        </div>
 				        <div class="avatar-preview">
-				            <div id="imagePreview" style="background-image: url(<?= $model->profile_image; ?>);">
+				            <div id="imagePreview" style="background-image: url(<?= $profileImage ?>);">
 				            </div>
 				        </div>
 				    </div>
@@ -213,11 +213,12 @@ use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 		                        ]]); ?></div>
 	</div>
 	<hr style="margin:5px 0 5px 0;">
-
-	<div class="col-sm-12 col-xs-12">Date Of Birth: <?= ViewWithXeditableWidget::widget(['model'=>$person,'attributues'=>[
+<!--
+	<div class="col-sm-12 col-xs-12">Date Of Birth: <?/*= ViewWithXeditableWidget::widget(['model'=>$person,'attributues'=>[
 	                                ['modelAttribute'=>'dob','xeditable' => 'datetime'],
-	                                ]]); ?>                           
+	                                ]]); */?>                           
 	</div>
+-->
 	
 	<hr style="margin:5px 0 5px 0;">
 	<div class="col-sm-6">Username:</div>
@@ -276,6 +277,7 @@ $('#userform').on('beforeSubmit', function (e) {
         data: formData,                         
         type: 'post',
         success: function(res){
+          toastr.success('Profile image changed');
         	$.pjax.reload({container:"#kanban-refresh",async: false});
         	$.pjax.reload({container:"#for-profile-refresh",async: false});
         	$.pjax.reload({container:"#profile-refresh",async: false});

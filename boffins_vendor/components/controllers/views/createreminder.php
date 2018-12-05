@@ -66,58 +66,18 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
    $('.save-rem').hide();
     $('.loading-add-rem').show(); 
    thiss = $(this);
+   setTimeout(function(){
           $.post('$reminderUrl',thiss.serialize())
             .always(function(result){
-            jsonResult = result;
-           if(jsonResult.message == 'sent'){
-                    options = {
-                      "closeButton": true,
-                      "debug": false,
-                      "newestOnTop": true,
-                      "progressBar": true,
-                      "positionClass": "toast-top-right",
-                      "preventDuplicates": true,
-                      "showDuration": "300",
-                      "hideDuration": "1000",
-                      "timeOut": "5000",
-                      "extendedTimeOut": "1000",
-                      "showEasing": "swing",
-                      "hideEasing": "linear",
-                      "showMethod": "fadeIn",
-                      "hideMethod": "fadeOut",
-                      "tapToDismiss": false
-                    }
-                //toastr.success('Folder was created successfully', "", options);
-                $.pjax.reload({container:"#task-list-refresh",async: false});
-                $.pjax.reload({container:"#kanban-refresh",async: false});
-                //$.pjax.reload({container:"#task-modal-refresh",async: false});
-
-            }else{
-                    options = {
-          "closeButton": true,
-          "debug": false,
-          "newestOnTop": true,
-          "progressBar": true,
-          "positionClass": "toast-top-right",
-          "preventDuplicates": true,
-          "showDuration": "300",
-          "hideDuration": "1000",
-          "timeOut": "5000",
-          "extendedTimeOut": "1000",
-          "showEasing": "swing",
-          "hideEasing": "linear",
-          "showMethod": "fadeIn",
-          "hideMethod": "fadeOut",
-          "tapToDismiss": false
-          }
-          //alert(jsonResult);
-        toastr.success('Reminder set');
+            toastr.success('Reminder set');
              $.pjax.reload({container:"#task-list-refresh"});
              $.pjax.reload({container:"#kanban-refresh",async: false});
-            }
+            
             }).fail(function(){
             console.log('Server Error');
             });
+    }, 5);
+    return false;
 });
 
 Reminder;

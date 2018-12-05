@@ -453,19 +453,22 @@ function _UpdateStatus(checkedId){
           });
 }
 
+
 $('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
            $('#taskButton').hide();
-           $('#loading-task').show();
+           $("#loading-task").show();
            e.preventDefault();
             if(form.find('.has-error').length) {
                 return false;
             }
+            setTimeout(function(){
             $.ajax({
                 url: '$createUrl',
                 type: 'POST',
                 data: form.serialize(),
+                async: true,
                 success: function(response) { 
                     console.log('completed');
                     toastr.success('Task created');
@@ -476,7 +479,9 @@ $('#create-task').on('beforeSubmit', function(e) {
               error: function(res, sec){
                   console.log('Something went wrong');
               }
-            });    
+            });
+            }, 5);
+            return false;    
 });
 
 $("#addTask").bind("keyup change", function() {

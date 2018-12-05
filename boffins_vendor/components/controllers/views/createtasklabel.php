@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
 <?php
 $labelUrl = Url::to(['label/create']);
 $assignee = <<<JS
-$('.task-label-class').on('submit', function(e) {
+$('.task-label-class').on('beforeSubmit', function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
             $('.labelButton').hide();
@@ -36,20 +36,22 @@ $('.task-label-class').on('submit', function(e) {
             if(form.find('#activeLabel').length) {
                 return false;
             }
-            $.ajax({
-                url: '$labelUrl',
-                type: 'POST',
-                data: form.serialize(),
-                success: function(response) {
-                    toastr.success('Label added');
-                    $.pjax.reload({container:"#task-list-refresh"});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
-                },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-            });
-            return true;    
+            setTimeout(function(){
+                $.ajax({
+                    url: '$labelUrl',
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        toastr.success('Label added');
+                        $.pjax.reload({container:"#task-list-refresh"});
+                        $.pjax.reload({container:"#kanban-refresh",async: false});
+                    },
+                  error: function(res, sec){
+                      console.log('Something went wrong');
+                  }
+                });
+            }, 5);
+            return false;    
         });
 
 

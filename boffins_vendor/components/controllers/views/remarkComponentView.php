@@ -229,7 +229,6 @@ AppAsset::register($this);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     overflow: hidden;
-    border-radius: 50%;
 }
 .comments-list .comment-avatar img {
     width: 100%;
@@ -387,8 +386,8 @@ AppAsset::register($this);
     <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
-    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
-    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comments">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comment">
   </div>
   </form>
   <div class="wrapp">
@@ -441,7 +440,6 @@ AppAsset::register($this);
     <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
     <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
-    <?= $form->field($remarkModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
