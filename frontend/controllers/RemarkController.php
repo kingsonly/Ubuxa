@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use frontend\models\Remark;
 use frontend\models\Person;
+use frontend\models\UserDb;
 use frontend\models\Folder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -92,8 +93,10 @@ class RemarkController extends Controller
     public function actionCreate()
     {
         $model = new Remark();
-        $commenterId = Yii::$app->user->identity->person_id;
-        $model->person_id = $commenterId;
+        $commenterUserId = Yii::$app->user->identity->id;
+        $commenterPersonId = Yii::$app->user->identity->person_id;
+        $model->user_id = $commenterUserId;
+        $model->person_id = $commenterPersonId;
         if(!empty(Yii::$app->request->post('&moredata'))){
             $model->text = Yii::$app->request->post('&moredata');
         } else {

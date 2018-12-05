@@ -327,7 +327,7 @@ AppAsset::register($this);
 }
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
 .comment-box .comment-name.by-author:after {
-    content: 'autor';
+    content: 'author';
     background: #03658c;
     color: #FFF;
     font-size: 12px;
@@ -386,8 +386,8 @@ AppAsset::register($this);
     <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
-    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
-    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comments">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comment">
   </div>
   </form>
   <div class="wrapp">
