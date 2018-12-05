@@ -164,6 +164,7 @@ transition: margin-top 0.1s ease-out 0s;
         border: 1px solid #fff;
         background-repeat: no-repeat;
  		background-size: cover;
+ 		background-position: center;
         border-radius: 50%;
         display: inline-block;
         margin-left: -8px;
