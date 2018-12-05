@@ -12,7 +12,7 @@
 			<li class="welll">
                 <div class="comment-main-level">
                     <!-- Avatar -->
-                    <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/' . $image); ?>" alt=""></div>
+                    <div class="comment-avatar"><img src="<?= Url::to('@web/' . $image); ?>" alt=""></div>
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
@@ -34,7 +34,7 @@
                 <ul class="comments-list reply-list">
                          <li>
                         <!-- Avatar -->
-                        <div class="comment-avatar"><img src="<?= Url::to('@web/images/users/' . $imageReply ); ?>" alt=""></div>
+                        <div class="comment-avatar"><img src="<?= Url::to('@web/' . $imageReply ); ?>" alt=""></div>
                         <!-- Contenedor del Comentario -->
                         <div class="comment-box">
                             <div class="comment-head">
