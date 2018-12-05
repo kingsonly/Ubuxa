@@ -375,7 +375,7 @@ Editable::end();
     	],
 			//'options'=>['placeholder'=>'Enter title...'],
 		'options'=>[
-					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
+					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);

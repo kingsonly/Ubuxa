@@ -246,7 +246,7 @@ text-overflow: ellipsis;
 			 ?>
 			 <div class="folder-content col-sm-12">
 				 <a href="<?= $url;?>" data-pjax="0">
-			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'filled' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
+			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'empty' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
