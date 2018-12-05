@@ -106,7 +106,7 @@ $('#listtable_wrapper').hover(function(){
 	$('#listtable_wrapper .row:first-child').show();
 },function(e){
 	if($(document).find('#listtable_wrapper .input-sm').hasClass('keep-search-bar')){
-		alert(1234);
+		
 	}else{
 		$('#listtable_wrapper .row:first-child').hide();
 	}

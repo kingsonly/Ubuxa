@@ -59,7 +59,7 @@ use boffins_vendor\components\controllers\RemarksWidget;
 						echo FolderUsersWidget::widget(['attributues'=>$users,'id'=>$value->id,'type' => 'component','listOfUsers' => $listOfUsers]);
 						
 						foreach($value->getComponentAttribute() as $attributeKey => $attributeValule){
-							echo $attributeValule['type'];
+							
 							${'model'.$i} = new ComponentAttributeModel();
 							${'model'.$i}->attributeId = $attributeValule['id'] ;
 							${'model'.$i}->value = $attributeValule['value'] ;
