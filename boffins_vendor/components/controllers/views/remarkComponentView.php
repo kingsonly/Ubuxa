@@ -229,7 +229,6 @@ AppAsset::register($this);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     overflow: hidden;
-    border-radius: 50%;
 }
 .comments-list .comment-avatar img {
     width: 100%;
@@ -387,8 +386,8 @@ AppAsset::register($this);
     <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
-    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
-    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter a comment">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comments">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comment">
   </div>
   </form>
   <div class="wrapp">
@@ -441,7 +440,6 @@ AppAsset::register($this);
     <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
     <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
-    <?= $form->field($remarkModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
@@ -459,10 +457,11 @@ AppAsset::register($this);
 <?php 
 $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkUrlSave = Url::to(['remark/create']);
-$remarkUrlMention = Url::to(['remark/mention']);
+$remarkUrlMention = Url::to(['remark/mention','id'=>$parentOwnerId]);
 $remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
+$baseUrl=Url::base(true);
 $remarkJs = <<<JS
 var issues = [
   { name: "1", content: "stay foolish"},
@@ -477,7 +476,7 @@ $('.editor').atwho({
 }).atwho({
     at: "#", 
     displayTpl: '<li><small>\${content}</small></li>',
-    insertTpl: '<a href="http://localhost/ubuxa-beta/frontend/web/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
+    insertTpl: '<a href="$baseUrl/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
     data: '$remarkUrlMentionFolder'
   })
 var mypage = 1;

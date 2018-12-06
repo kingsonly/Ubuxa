@@ -57,13 +57,38 @@ class ComponentAttributeController extends Controller
 		$data3 = $data2->models;
 		$data4 = count($data3);
 		
-		Yii::trace("Attempting to load and save a model");
-		$data2->loadModel(20, ['value' => "123"] ); //first parameter is the key, second parameter is the value. 
-		$data2->saveModel(20); //just supply the key.
+		Yii::trace("Attempting to load and save a model 20");
+		//this is how to set a ValueInteger. 
+		$data2->loadModel(1, ['value' => 5655 ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(1);
+		
+		//this is how to set a ValueShortString. 
+		$data2->loadModel(5, ['value' => "this is a short string" ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(5);
+		
+		//this is how to set a ValueLongString. 
+		$data2->loadModel(3, ['value' => "this is a long string" ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(3);
+		
+		//this is how to set a ValueKnownClass. Remeber that the namespace you provide MUST implement "KnownClass"
+		$data2->loadModel(15, ['value' => array('condition' => 'id=2', 'namespace'=>'frontend\models\Supplier') ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(15);
+		
+		$data2->loadModel(20, ['value' => array('condition' => 'id = 31', 'namespace'=>'frontend\models\Country') ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(20);
+		
+		//this is how to set a ValueMoney
+		$data2->loadModel(11, ['value' => 15325.4 ] ); //first parameter is the key, second parameter is the value. 
+		$data2->saveModel(11);
+		
+		Yii::trace("Did it work? " . (string)$data2->saveModel(1) ); //just supply the key.
 		$data4 = $data2->models;
 		
 		$revised = new ModelCollection( [], [ 'query' => ComponentAttribute::find() ] );
 		$revised2 = $revised->models;
+		
+		//$test = \frontend\models\ComponentTemplateAttribute::getValueClassName();
+		//$test->getValueClassName();
 		
 
         return $this->render('index-test', [

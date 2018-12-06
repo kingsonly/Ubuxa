@@ -158,7 +158,6 @@ class SiteController extends BoffinsBaseController {
         }
 		
 		
-		
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
 			Yii::$app->session->close();
@@ -176,19 +175,21 @@ class SiteController extends BoffinsBaseController {
 			
 			$seperateUrl = explode(Url::base(true),'.');
 			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
-			if(!empty($costomerCompanyName)){
-				if($costomerCompanyName->entityName == 'individual'){
-					$accountName = $costomerCompanyName->entity->surname.'s account';
+			if(count($seperateUrl) > 2){
+				if(!empty($costomerCompanyName)){
+					if($costomerCompanyName->entityName == 'individual'){
+						$accountName = $costomerCompanyName->entity->surname.'s account';
+					}else{
+						$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					}
 				}else{
-					$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					// redirect to url not on system page 
+					return $this->render('nodomainname', [
+						'domainName' => $seperateUrl[0],
+					]);		
 				}
-			}else{
-				// redirect to url not on system page 
-				return $this->render('nodomainname', [
-					'domainName' => $seperateUrl[0],
-				]);		
 			}
-			
+			$accountName = 'your account';
 		}else{
 			$accountName = 'your account';
 		}
@@ -344,7 +345,7 @@ class SiteController extends BoffinsBaseController {
 	        	if($customer->signup($customerModel)){
 	        		$settings->tenantID = (int)$customerModel->cid;
 					if($settings->save()){
-						$registrationLink = \yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
+						$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
 						/*
 						$sendEmail = \Yii::$app->mailer->compose()
 						
@@ -393,7 +394,7 @@ class SiteController extends BoffinsBaseController {
 	    			echo "Email cannot be empty";
 	    		} 
 	    }else{
-	    		return $this->renderAjax('inviteusers', [
+	    		return $this->renderAjax('inviteUsers', [
 				'model' => $model,
 			]);
 	    }

@@ -129,31 +129,32 @@ class TenantSpecificBehavior extends Behavior
 	/**
 	 *  @brief retrieves a tenant id in this priority. 
 	 *  
-	 *  @return mixed - false|int|string(if tenant id structure changes in the future.)
-	 *  
 	 *  @details prefers a tenant id provided to the behaviour. 
 	 *  failing that, will try to retrieve it from the  app user compoent's identity. 
 	 *  if those two fail, then triggers a warning and returns false
+	 *  
+	 *  NOTE: if you need a tenant ID in a scenario in which you cannot obtain it from the user component, supply it to the 
+	 *  behavior! by providing a value for $tenantID. 
+	 *  In other scenarios, you need to explain a use case in which you both need a TenantSpecific model but you do not have 
+	 *  a tenant ID to provide??? This implies a design error.
+	 *  
+	 *  @return mixed - false|int|string(if tenant id structure changes in the future.)
 	 */
 	protected function retrieveTenantID()
 	{
-		//if user is a guest there is no need to retrieve tenant id and this function is also trigered when users are trying to create a new account .
-		
-		if ( !empty($this->tenantID) ) {
-			Yii::trace("Or first place");
-			return $this->tenantID;
+		if ( !empty($this->tenantID) ) { 
+			Yii::trace("Using a tenant ID supplied by programmer"); 
+			return $this->tenantID; 
 		}
-
-		if ( $this->tenantID === null && Yii::$app->has('user') && ! (Yii::$app->user->identity->cid === null) ) {
+		
+		if ( $this->tenantID === null && Yii::$app->has('user') && ! (Yii::$app->user->identity->cid === null) ) {  
 			Yii::trace("Retrieving it here?" . Yii::$app->user->identity->cid );
 			$this->tenantID = Yii::$app->user->identity->cid;
 			return $this->tenantID;
-		}
-
+		} 
+		
 		Yii::warning("Can't get a tenant id from user component");
 		return false;
 		//or throw an exception here?
-		
-		
 	}
 }

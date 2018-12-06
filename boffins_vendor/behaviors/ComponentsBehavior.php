@@ -55,8 +55,9 @@ class ComponentsBehavior extends Behavior
 		$templateId = $this->owner->component_template_id;
 		foreach($this->getAllComponentTemplateAttributes($templateId) as $templateAttributeKey => $templateAttributeValue){
 			$type = $templateAttributeValue->componentAttributeType->type; //string type of the template attribute
+			$typeName = $templateAttributeValue->componentAttributeType->name; //string type of the template attribute
 			$templateAttributeId = $templateAttributeValue->id;//component template id
-			$this->createEmptyValue($type,$componentId,$templateAttributeId);
+			$this->createEmptyValue($type,$componentId,$templateAttributeId,$typeName);
 		}
 		
 		if($componentManager->save(false)){
@@ -96,11 +97,34 @@ class ComponentsBehavior extends Behavior
 		return $templateAttributeId;// return all template and their relationships .
 	}
 	
-	private function createEmptyValue($type,$componentId,$templateAttributeId)
+	private function createEmptyValue($type,$componentId,$templateAttributeId,$typeName)
 	{
-		$model = 'frontend\models\Value'.$this->convertAttributeType($type);
+		// this is is just a hack for now 
+		if($type == 'known_class'){
+			$model = 'frontend\models\ValueKnownClass';
+		}else{
+			$model = 'frontend\models\Value'.$this->convertAttributeType($type);
+		}
+		
 		$valueModel = new $model();//init the value model.
-		$valueModel->value = ''; // pass an empty value to model property.
+		Yii::trace("this is a ".$type);
+		if($type == 'known_class'){
+			if($typeName == 'User'){
+				Yii::trace("this is a ".$typeName);
+				$addDbToType = $typeName.'Db';
+				$knownClassModel =  "frontend\\models\\".ucwords($addDbToType);
+				$valueModel->value = ['nameSpace' =>$knownClassModel];
+				Yii::trace("this is a ".$knownClassModel);
+			}else{
+				Yii::trace("this is a ".$typeName);
+				$knownClassModel =  "frontend\\models\\".ucwords($typeName);
+				$valueModel->value = ['nameSpace' =>$knownClassModel];
+				Yii::trace("this is a a ".$knownClassModel);
+			}
+		}else{
+			$valueModel->value = ''; // pass an empty value to model property.
+		}
+		
 		if($valueModel->save(false)){ //save model.
 			$valueId = $valueModel->id; // retrive model value id after saving.
 			$cid = yii::$app->user->identity->cid;
@@ -120,7 +144,9 @@ class ComponentsBehavior extends Behavior
 	}
 	
 	private function convertAttributeType($type){
-    	return str_replace('_', '', ucwords($type));// convert attribute type to have model partern eg FolderManager etc  
+    	//return str_replace('_', '', ucwords($type),'_');// convert attribute type to have model partern eg FolderManager etc  
+    	return str_replace('_', '', ucwords($type,'_'));// convert attribute type to have model partern eg FolderManager etc  
+		
 	}
 	
 	

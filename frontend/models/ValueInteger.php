@@ -27,7 +27,7 @@ class ValueInteger extends ValueARModel implements ValueInterface, Sortable
     public function rules()
     {
         return [
-            [['value', 'value1'],  'safe'],
+            [['value'],  'safe'],
         ];
     }
 
@@ -98,23 +98,16 @@ class ValueInteger extends ValueARModel implements ValueInterface, Sortable
 	 */
 	public function setValue($value)
 	{
-		if (empty($value) || !is_integer($value) ) {
-			Yii::warning("Setting an unnaceptable value. Must be intege. {$value} was given. Setting to null.");
+		if ($value === null || !is_integer($value) ) {
+			$type = gettype($value);
+			Yii::warning("Setting an unnaceptable value. Must be intege. {$type} was given. Setting to null.");
 			$this->_usefulValue = null;
 		} else {
 			$this->_usefulValue = $value;
+			$this->setAttribute('value', $value);
 		}
 	}
-	public function setValue1($value)
-	{
-		if (empty($value) || !is_integer($value) ) {
-			Yii::warning("Setting an unnaceptable value. Must be intege. {$value} was given. Setting to null.");
-			$this->_usefulValue = null;
-		} else {
-			$this->_usefulValue = $value;
-		}
-	}
-	
+
 	/***
 	 *  @brief returns a value/field on which the class instance can be compared against another.
 	 *  use the first 10 characters of the string to sort (highly unlikely you will encounter sorting scenarios in whihc

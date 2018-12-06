@@ -5,12 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\popover\PopoverX;
-use frontend\models\Corporation;
-$customers = Corporation::find()
-    ->joinWith('client')
-    
-    ->all();
-$data=ArrayHelper::map($customers,'id','name');
+
 ?>
 <style>
 	#view-content h4{
@@ -156,7 +151,7 @@ foreach($attributues as $v){
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput ellipsis']
 ]);
@@ -183,8 +178,8 @@ Editable::end();
 			'asPopover' => false,
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $attributeName.' )</em>',
 			'size'=>'md',
-		'formOptions' => ['action'=>$modelUrl],
-			'inputType' => Editable::INPUT_MONEY,
+		'formOptions' => ['action'=>$modelUrl,],
+			'inputType' => 'input',
 			//'options'=>['placeholder'=>'Enter title...'],
 		'pluginEvents' => [
 				"editableSuccess"=>"
@@ -212,9 +207,10 @@ Editable::end();
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'type'=>'number','placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
+		
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -267,7 +263,7 @@ Editable::end();
     	],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
-					'options'=>['placeholder'=>'From date','id'=>'fakeme']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
@@ -322,9 +318,9 @@ Editable::end();
 			 		}",
     	],
 		'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -379,9 +375,9 @@ Editable::end();
     	],
 			//'options'=>['placeholder'=>'Enter title...'],
 		'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'options'=>['placeholder'=>'Enter Value','id'=>'editableId'.$editableId]
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -397,8 +393,15 @@ Editable::end();
 <div>
 <h5><?= $attributeName;?></h5>
 <?
-				
-				
+	if($v['typeName'] == 'User'){
+		$knownClassModel =  "frontend\\models\\".$v['typeName'].'Db';
+		$knownClassInit = new $knownClassModel;
+		$data = $knownClassInit->dropDownListData;
+	}else{
+		$knownClassModel =  "frontend\\models\\".$v['typeName'];
+		$knownClassInit = new $knownClassModel;
+		$data = $knownClassInit->dropDownListData;
+	}	
 				
 	$editable = Editable::begin([
     'model'=>$model,
@@ -409,7 +412,9 @@ Editable::end();
 			'inputType' => Editable::INPUT_DROPDOWN_LIST,
 			'data'=>$data,
 			//'options'=>['placeholder'=>'Enter title...'],
-		'formOptions' => ['action'=>$modelUrl],
+		'formOptions' => ['id' => 'wishitemaction','action'=>$modelUrl],
+		'displayValueConfig' => $data,
+		   // $testArray['displayValueConfig'],
 		'pluginEvents' => [
 				"editableSuccess"=>"
 					function(event, val, form, data) {
@@ -435,11 +440,10 @@ Editable::end();
 			 		}",
     	],
 		'containerOptions' => ['id' =>$editableId],
-		'formOptions' => ['id' => 'wishitemaction','action'=>Url::to(['']) ],
 		'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component']
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -463,7 +467,7 @@ Editable::end();
 				'formOptions' => ['action'=>$modelUrl],
 				'containerOptions' => ['id' =>$editableId],
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'pluginEvents' => [
 				"editableSuccess"=>"
@@ -489,7 +493,7 @@ Editable::end();
 				toastr.success('Change made is successfull', '', options);
 			 		}",
     	],
-				'editableValueOptions'=>['class'=>'well well-sm']
+				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -512,7 +516,7 @@ Editable::end();
 				'containerOptions' => ['id' =>$editableId],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
 				'pluginEvents' => [
 				"editableSuccess"=>"
@@ -538,7 +542,7 @@ Editable::end();
 				toastr.success('Change made is successfull', '', options);
 			 		}",
     	],
-				'editableValueOptions'=>['class'=>'well well-sm']
+				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -584,9 +588,9 @@ Editable::end();
 			 		}",
     	],
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-				'editableValueOptions'=>['class'=>'well well-sm']
+				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -632,9 +636,9 @@ Editable::end();
 			 		}",
     	],
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'placeholder'=>'Enter Value','id'=>'editableId'.$editableId
 				],
-				'editableValueOptions'=>['class'=>'well well-sm']
+				'editableValueOptions'=>['class'=>'xinput-component']
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
@@ -651,7 +655,7 @@ Editable::end();
 	if(!isset($v['xeditable'])){
 		?>
 <div>
-<h5><?= $model->attributeLabels()[$v['modelAttribute']];?></h5>
+<h5><?= ucfirst($editableArea) .' '. $model->attributeLabels()[$v['modelAttribute']];?></h5>
 <?
 		$editable = Editable::begin([
 			'model'=>$model,
@@ -660,7 +664,7 @@ Editable::end();
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
-			'editableValueOptions'=>['class'=>'xinput ellipsis']
+			'editableValueOptions'=>['class'=>'xinput-component xinput']
 			
 		]);
 		Editable::end();
@@ -681,7 +685,7 @@ Editable::end();
 				'valueIfNull' => $v['modelAttribute'],
 				'inputType' => Editable::INPUT_DATE,
 				'options'=>[
-					'options'=>['placeholder'=>'From date']
+					'options'=>['placeholder'=>'Enter date']
 				],
 				'editableValueOptions'=>['class'=>'well well-sm']
 			]);
@@ -700,9 +704,9 @@ Editable::end();
 				'asPopover' => false,
 				'header' => 'Due Date',
 				'size'=>'md',
-				'options'=>['id' => 'x-editable-date'.$xEditableDateId,
-					'options'=>['placeholder'=>'Enter date']
-				],
+				'options'=>[
+        			'options'=>['placeholder'=>'From date','id' => 'x-editable-date'.$xEditableDateId,]
+    			],
 				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
 			]);
 			?>
@@ -829,7 +833,7 @@ function xeditableSuccessCallback(){
 		$("#folder_image").load(' #folder_image');
 
 		toastr.success('Image was Changed', "", options);
-		//$.pjax.reload({container:"#folder-details-refresh",async: false});
+		$.pjax.reload({container:"#folder-details-refresh",async: false});
 }
 
 $(".xinput").mouseout(function() {

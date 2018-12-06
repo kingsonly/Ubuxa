@@ -181,7 +181,7 @@ class SupplierController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $cat_id = $parents[0];
-                $out = $state::find()->select(['id','name'])->where(['country_id' => $cat_id])->all(); 
+                $out = $state::find()->select(['id','name'])->andWhere(['country_id' => $cat_id])->all(); 
                 // the getSubCatList function will query the database based on the
                 // cat_id and return an array like below:
                 // [

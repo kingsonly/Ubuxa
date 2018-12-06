@@ -51,9 +51,9 @@ class <?= $className ?> extends Migration
      */
     public function safeDown()
     {
-        echo "<?= $className ?> cannot be reverted.\n";
+        echo "<?= $className ?> should not be reverted. Reverting for development only.\n";
 
-        return false;
+        //return false;
     }
 
     /*

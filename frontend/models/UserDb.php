@@ -6,13 +6,14 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 use boffins_vendor\classes\StandardQuery;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use yii\web\User;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
-use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
 
 
 /**
@@ -31,7 +32,7 @@ use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDel
   
  * @property Device $device
  */
-class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface
+class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface, KnownClass
 {
 	
 	/* 
@@ -68,12 +69,10 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     /***
      * @inheritdoc
      */
-    
-	
 	public static function tableName()
     {
         return '{{%user}}';
-    }
+    } 
 	
     /**
      * @inheritdoc
@@ -83,9 +82,8 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         return [
             [['username','password', 'cid'], 'required'],
             [['password'], 'string', 'min' => 6],
-            //[['profile_image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
             //[['password_repeat'], 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match" ],
-            [['basic_role', 'tester', 'profile_image'], 'safe'],
+            [['basic_role','image'], 'safe'],
 
             //[['username', 'password'], 'string', 'max' => 255],
             //['username', 'validateUsername'],
@@ -103,21 +101,12 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
             'basic_role' => 'Standard Role',
             'password' => 'Password',
             'dob' => 'Date of Birth',
-            'profile_image' => 'Profile Image',
             //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
         ];
     }
 
-	/***
-	 * Overriding standard find by using StandardQuery ActiveQuery class 
-	 */
-	public static function find() 
-	{
-		return new StandardQuery(get_called_class());
-	}
-	
     /**
      * @inheritdoc
      */
@@ -244,7 +233,6 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         $this->password = $pw;//Yii::$app->security->generatePasswordHash($pw); // i dont think the setPassword method should encript, as to the fact that a seperate method instantly encripts the password; 
     }
-
 	
 	/*
      * Obtain authKey from the device.  - better to use getAuthKey
@@ -590,5 +578,21 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         $this->password_reset_token = null;
     }
+	
+	public function getNameString() : string
+	{
+		return $this->person->nameString;
+	}
+	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->find()->all(),'id','nameString');
+    }
+	
+	public function getMasterDomain(){
+		$masterDomain = Customer::find()->andWhere(['cid' => yii::$app->user->identity->cid])->all();
+		return $masterDomain->master_doman;
+	}
 	
 }

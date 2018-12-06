@@ -44,7 +44,7 @@ class FolderUsersQueue extends BaseObject implements \yii\queue\JobInterface
 			
 		if($folderManagerModel->save(false)){
 			
-			//$this->reQueueEachChildFolder();
+			$this->reQueueEachChildFolder();
 		}
 	}
 	

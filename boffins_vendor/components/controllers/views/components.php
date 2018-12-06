@@ -62,9 +62,10 @@ use yii\widgets\Pjax;
 
 <div class="col-sm comps margin-bottom">
     <div class="auth-users">
+
 		<?php Pjax::begin(['id'=>'for-profile-refresh']); ?>
-    		<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder'])?>	
-    	<?php Pjax::end(); ?>
+    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder','pjaxId' => $id])?>	
+		<?php Pjax::end(); ?>
     </div>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">

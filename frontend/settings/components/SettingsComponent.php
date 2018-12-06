@@ -27,7 +27,7 @@ class SettingsComponent extends Component
 	private function companySettings()
 	{
 		$model = new Settings();
-		$companySettings = $model->find()->where(['cid' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
+		$companySettings = $model->find()->andWhere(['cid' => !empty(\Yii::$app->user->identity->cid)?\Yii::$app->user->identity->cid:0 ])->one();
 		return $companySettings;
 	}
 	
@@ -130,7 +130,7 @@ class SettingsComponent extends Component
 	
 	public function boffinsFavIcon()
 	{
-		return Url::to("@web/images/ubuxamenu.png");
+		return Url::to("@web/images/ubuxa-logo-blue.png");
 	} 
 	
 	public function boffinsDefaultLogo()
