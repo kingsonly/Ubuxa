@@ -281,7 +281,7 @@ html, body {
 	
        <div class="row">
        		<div class="col-md-12" style="height:500px;">
-            <button class="btn btn-default" style="display:none">Logout</button>
+            <button class="btn btn-default" style="">Logout</button>
        			<table style="width:100%;height: 100%">
        					<tr style="">
        						<td style=""></td>

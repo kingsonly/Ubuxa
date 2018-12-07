@@ -50,6 +50,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 .images ul li {
 	display: inline-block;
 }
+
 	</style>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
@@ -100,6 +101,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
       position: relative;
       padding: 16px;
       display: none;
+      box-shadow: -8px 8px 25px -2px rgba(0, 0, 0, 0.1);
     }
     .alert-text{
       color: #000;
@@ -109,7 +111,16 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
       font-weight: 600;
       text-transform: capitalize;
     }
-
+.alert-info{
+  background-color: #d9edf7 !important;
+  border:0px !important;
+}
+.feedback-button{
+  background-color:#3c8dbc !important;
+}
+.alert-text{
+  text-align: left !important;
+}
     </style>
     
 
@@ -159,8 +170,8 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
      <section class="content">
 		 <div class="col-lg-12">
 			<?= Alert::widget([
-				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>,you are running on beta.</div><a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
+				   'options' => ['class' => 'alert-info btn btn-primary','id'=>'flas'],
+				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button btn btn-primary" id="open-feedback-form">Feedback</a>',
 
 					 ]);?>
 		</div>
