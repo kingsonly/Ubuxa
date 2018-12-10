@@ -5,7 +5,7 @@ namespace frontend\tests\functional;
 use frontend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 
-class LoginCest
+class LoginCest extends \frontend\tests\FunctionalTester
 {
      /**
       * Load fixtures before db transaction begin
@@ -38,10 +38,11 @@ class LoginCest
     }
 
     
-    public function checkValidLogin(FunctionalTester $I)
+    public function checkValidLogin($userName = NULL, $password = NULL)
     {
-        $I->fillField('#loginform-username','admin');
-        $I->fillField('#loginform-password','admin');
+        $I = $this;
+        $I->fillField('#loginform-username','$userName');
+        $I->fillField('#loginform-password','$password');
         $I->click('Login');
         $I->dontSeeLink('Login');
         $I->dontSeeLink('Signup');
