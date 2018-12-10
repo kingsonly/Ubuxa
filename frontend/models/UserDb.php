@@ -591,7 +591,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     }
 	
 	public function getMasterDomain(){
-		$masterDomain = Customer::find()->andWhere(['cid' => yii::$app->user->identity->cid])->all();
+		$masterDomain = Customer::find()->andWhere(['cid' => yii::$app->user->identity->cid])->one();
 		return $masterDomain->master_doman;
 	}
 	

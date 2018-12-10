@@ -38,8 +38,8 @@ class FolderCest{
    public function createFolder(FunctionalTester $I)
    {	
     	$I->amOnRoute('folder/index');
-    	$I->click('.plus');
-    	$I->fillField('name', 'New folder');
+    	//$I->click('.plus');
+    	//$I->fillField('name', 'New folder');
     	
    }
 }

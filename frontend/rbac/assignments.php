@@ -60,4 +60,10 @@ return [
     57 => [
         'admin',
     ],
+    58 => [
+        'admin',
+    ],
+    59 => [
+        'administrator',
+    ],
 ];
