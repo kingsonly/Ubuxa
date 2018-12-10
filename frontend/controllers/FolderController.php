@@ -116,7 +116,8 @@ class FolderController extends Controller
         $users = $model->users;
 		$componentCreateUrl = Url::to(['component/create']);
         $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
-        $onboarding = Onboarding::findOne(['user_id' => $userId]);
+        $onboarding = Onboarding::find()->andWhere(['user_id' => $userId])->one();
+        
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

@@ -445,7 +445,9 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                  setTimeout(function(){
                     $.pjax.reload({container:"#kanban-refresh",async: false});
+                  }, 900);
               },
               error: function(res, sec){
                   //console.log(' went wrong');
