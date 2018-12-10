@@ -16,10 +16,7 @@ use boffins_vendor\components\controllers\RemarksWidget;
 
         
 		$remark = new Remark();
-       
-        
-       
-        
+ 
         $userId = Yii::$app->user->identity->id;
         
 		$componentCreateUrl = Url::to(['component/create']);
@@ -99,7 +96,7 @@ use boffins_vendor\components\controllers\RemarksWidget;
 <? $component = Component::findOne($id); 
 	
 ?>
-<?// RemarksWidget::widget(['remarkModel' => $remark, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $component->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
+<?//= RemarksWidget::widget(['remarkModel' => $remark, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $component->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId,'location' => 'component']) ?>
 	
 
 

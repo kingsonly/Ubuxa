@@ -135,7 +135,7 @@ $(document).click(function(){
 	//$('.create-new-folder').hide();
 	$('.create-new-folder').addClass('display-non');
 	$('.create-new-folder').removeClass('display');
-    $('.folder-new-content').show()
+    $('.folder-new-content').show();
 });
 
 
