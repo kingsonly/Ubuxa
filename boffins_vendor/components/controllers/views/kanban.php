@@ -575,7 +575,8 @@ $.fn.closest_descendent = function(filter) {
 function _UpdateTask(status, contain){
           $.ajax({
               url: '$saveUrl',
-              type: 'POST', 
+              type: 'POST',
+              async: false, 
               data: {
                   id: status,
                   status_id: contain, 

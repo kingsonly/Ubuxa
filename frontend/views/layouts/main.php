@@ -160,7 +160,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 		 <div class="col-lg-12">
 			<?= Alert::widget([
 				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>,you are running on beta.</div><a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
+				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
 
 					 ]);?>
 		</div>

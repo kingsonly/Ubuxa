@@ -41,7 +41,8 @@ $(".delete-task").on('click',function(e) {
 function _deleteTask(taskid){
         $.ajax({
               url: '$deleteTaskUrl',
-              type: 'POST', 
+              type: 'POST',
+              async: false,
               data: {
                   task_id: taskid, 
                 },
