@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					]);?>
 				<?php endif ?>
 				
-            <p class="login-box-msg">Sign into  <?= $accountName;?></p>
+            <p class="login-box-msg">Sign into  <?//= $accountName;?></p>
         <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
      'enableAjaxValidation' => false,]); ?>
 
