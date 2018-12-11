@@ -1,45 +1,39 @@
-<?php 
+<?php
 namespace frontend\tests\functional;
-
 use frontend\tests\FunctionalTester;
-use common\fixtures\UserFixture;
+//use frontend\tests\functional\BaseUserTester;
 
-
-class FolderCest{
-
-	public function _fixtures()
-	{
-	    return [
-	        'user' => [
-	            'class' => UserFixture::className(),
-	            'dataFile' => codecept_data_dir() . 'login_data.php'
-	        ]
-	    ];
-	}
-
-	protected function formParams($login, $password)
-    {
-        return [
-            'LoginForm[username]' => $login,
-            'LoginForm[password]' => $password,
-        ];
+class FolderCest 
+{
+    public function _before(FunctionalTester $I)
+    {   
+        $I->amOnRoute('site/login');
+        $admin = \frontend\models\UserDb::findByUsername('guest');
+        $I->amLoggedInAs($admin);
+        $I->amOnPage('folder/index');
     }
 
-	public function checkValidLogin(FunctionalTester $I)
-    {	
-    	$I->amOnPage('site/login');
-        $I->submitForm('#login-form', $this->formParams('flash', 'password'));
-        $I->dontSeeLink('Login');
-        $I->dontSeeLink('Signup');
+    // tests
+    public function createFolder(FunctionalTester $I) {
+        $I->seeInCurrentUrl('folder%2Findex');
+        $I->click('#plus');
+        $I->fillField('#create-new-create-widget-id-title','Public folder');
+        $I->click('Create');
+        
     }
 
+    public function createPrivateFolder(FunctionalTester $I) {
+        $I->seeInCurrentUrl('folder%2Findex');
+        $I->click('#plus');
+        $I->click('#sss');
+        $I->selectOption('#sss', 'Private');
+        $I->seeInField("#sss", 'Private');
+        $I->fillField('#create-new-create-widget-id-title','Private folder');
+        $I->click('Create');
+    } 
 
 
-   public function createFolder(FunctionalTester $I)
-   {	
-    	$I->amOnRoute('folder/index');
-    	//$I->click('.plus');
-    	//$I->fillField('name', 'New folder');
-    	
-   }
+
 }
+
+

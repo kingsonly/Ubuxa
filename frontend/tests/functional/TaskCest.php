@@ -7,29 +7,18 @@ class TaskCest
 {
     public function _before(FunctionalTester $I)
     {
-        
-    }
-
-    public function _after(FunctionalTester $I)
-    {
-    }
-
-    private function executeLogin(FunctionalTester $I){
-        $I->amOnPage('site/login');
-        $I->seeInCurrentUrl('site/login');
-        $I->fillField('#loginform-username', 'guest');
-        $I->fillField('#loginform-password', 'guest##99');
-        $I->click('Login');
-        $I->wait(500);
-        return $I;
+        $admin = \frontend\models\UserDb::findByUsername('guest');
+        $I->amLoggedInAs($admin);
     }
 
     // tests
-    public function login(FunctionalTester $I) {
-        $I = $this->executeLogin($I);
-
-        $I->seeInCurrentUrl('/folder');
-    }
+    public function createFolder(FunctionalTester $I) {
+        $I->amOnPage('folder/index');
+        $I->seeInCurrentUrl('folder%2Findex');
+        $I->click('#plus');
+        $I->fillField('#create-new-create-widget-id-title','New folder');
+        $I->click('Create');
+    } 
 
 }
 

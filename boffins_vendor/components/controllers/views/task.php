@@ -493,6 +493,9 @@ $("#addTask").bind("keyup change", function() {
     } else {
         $("#taskButton").hide();
     }
+    if(value && value.length > 49){
+      toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
+    }
 });
 
 $('#addTask').bind("keyup keypress", function(e) {
