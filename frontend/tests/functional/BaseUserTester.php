@@ -26,7 +26,7 @@ class BaseUserTester extends \frontend\tests\FunctionalTester
 		$I->fillField('#loginform-username', $userName);
         $I->fillField('#loginform-password', $password);
         $I->click('Login');
-		$I->wait(500);
+		//$I->wait(500);
         return $I;
     }
 
