@@ -364,7 +364,9 @@ a.addTaskButton.active {
     color: #fff;
     border-radius: 2px;
 }
-
+.task-titles{
+  font-family: calibri;
+}
 
 </style>
 
@@ -399,7 +401,7 @@ a.addTaskButton.active {
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
-                        <span><?= $values->title; ?></span>
+                        <span class="task-titles"><?= $values->title; ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
@@ -573,7 +575,8 @@ $.fn.closest_descendent = function(filter) {
 function _UpdateTask(status, contain){
           $.ajax({
               url: '$saveUrl',
-              type: 'POST', 
+              type: 'POST',
+              async: false, 
               data: {
                   id: status,
                   status_id: contain, 

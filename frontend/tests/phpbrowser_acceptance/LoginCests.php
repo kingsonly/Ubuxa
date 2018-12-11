@@ -4,7 +4,7 @@ namespace frontend\tests\basic_acceptance;
 use frontend\tests\BasicAcceptanceTester;
 use yii\helpers\Url;
 
-class LoginCest
+class LoginCests
 {
     public function checkLoginPage(\frontend\tests\BasicAcceptanceTester $I)
     {

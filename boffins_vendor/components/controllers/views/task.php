@@ -445,7 +445,9 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                  setTimeout(function(){
                     $.pjax.reload({container:"#kanban-refresh",async: false});
+                  }, 900);
               },
               error: function(res, sec){
                   //console.log(' went wrong');
@@ -490,6 +492,9 @@ $("#addTask").bind("keyup change", function() {
         $("#taskButton").show();
     } else {
         $("#taskButton").hide();
+    }
+    if(value && value.length > 49){
+      toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
     }
 });
 
