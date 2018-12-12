@@ -13,15 +13,11 @@ use boffins_vendor\components\controllers\RemarksWidget;
 /* @var $this yii\web\View */
 /* @var $model app\models\Payment */
 
-
-        
-		$remark = new Remark();
- 
-        $userId = Yii::$app->user->identity->id;
-        
-		$componentCreateUrl = Url::to(['component/create']);
-        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
-        $onboarding = Onboarding::findOne(['user_id' => $userId]);
+$remark = new Remark();
+$userId = Yii::$app->user->identity->id;
+$componentCreateUrl = Url::to(['component/create']);
+$onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+$onboarding = Onboarding::findOne(['user_id' => $userId]);
 ?>
 <style>
 	/*
