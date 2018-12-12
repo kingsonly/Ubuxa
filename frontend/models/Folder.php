@@ -37,7 +37,6 @@ class Folder extends FolderARModel
 	public $upload_file;
 	public $externalTemplateId;
 	const ROLEAUTHOR = 'author';
-	
     public static function tableName()
     {
         return 'tm_folder';

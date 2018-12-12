@@ -6,7 +6,6 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
