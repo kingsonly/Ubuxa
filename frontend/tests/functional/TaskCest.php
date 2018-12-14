@@ -1,6 +1,7 @@
 <?php
 namespace frontend\tests\functional;
 use frontend\tests\FunctionalTester;
+use \Codeception\Util\Locator;
 //use frontend\tests\functional\BaseUserTester;
 
 class TaskCest 
@@ -17,8 +18,17 @@ class TaskCest
     }
 
     // tests
+    public function goToKanban(FunctionalTester $I){
+         $I->amOnRoute('folder/view', ['id' => 15]);
+         $I->seeInCurrentUrl('folder%2Fview');
+         $I->seeElement('.menu-icon');
+         $I->click('.menu-icon');
+         $I->seeElement('.open-board');
+         $I->click('.open-board');
+         $I->see('add loader image');
+    }
     
-    public function tryToTest(FunctionalTester $I)
+    public function createTask(FunctionalTester $I)
     {
          $I->amOnPage('folder/index');
          $I->seeInCurrentUrl('folder%2Findex');
@@ -32,16 +42,52 @@ class TaskCest
         
     }
 
-    public function testCompleted(FunctionalTester $I)
+    public function checkTaskCompleted(FunctionalTester $I)
     {
-         $I->amOnPage('folder/index');
-         $I->seeInCurrentUrl('folder%2Findex');
-         $I->see('test folder');
-         $I->click('test folder');
-         $I->see('.todo_listt21');
+         $this->createTask($I);
+         $I->seeElement('.todo_listt6');
+         $I->click('.todo_listt6');
+         $I->amOnRoute('folder/view', ['id' => 15]);
+         $I->dontSeeElement('.checked6');
          /*$I->amOnRoute('folder/view', ['id' => 15]);
          $I->seeInCurrentUrl('folder%2Fview');
          $I->see('#todo-list24','checked');*/
         
     }
+
+    
+    public function createTaskOnKanban(FunctionalTester $I)
+    {
+         $this->goToKanban($I);
+         $I->seeElement('.add-card');
+         $I->click('.add-card');
+         $I->seeElement('.cardInput');
+         $I->fillField('.cardInput','Kanban Task');
+         $I->click('Add Task','button');
+         $this->goToKanban($I);
+         $I->see('Kanban Task');
+
+    }
+
+    public function deleteTaskOnKanban(FunctionalTester $I)
+    {
+         $this->createTaskOnKanban($I);
+         $I->click( '.fa-trash' );
+         $I->click( '#delete-task1' );
+         $this->goToKanban($I);
+         $I->dontSee('Kanban Task');
+
+    }
+
+    public function createTaskLabelOnKanban(FunctionalTester $I)
+    {
+         $this->goToKanban($I);
+         $I->click( '.fa-tags' );
+         $I->fillField( '#testing-11', 'urgent test');
+         $I->click( '#checkb11');
+         $this->goToKanban($I);
+         $I->see('urgent test');
+    }
+
+
 }

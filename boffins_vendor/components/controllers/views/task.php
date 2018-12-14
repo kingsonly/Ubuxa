@@ -352,9 +352,9 @@ $boardUrl = Url::to(['task/index']);
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo_listt<?= $value->status_id; ?> todo__state " data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
+        <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
     <?php }else { ?>
-        <input class=" todo_listt<?= $value->status_id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
+        <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
     
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">

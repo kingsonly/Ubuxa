@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 </style>
 <?php Pjax::begin(['id'=>'label-refresh']); ?>
 <?php 
-    $form = ActiveForm::begin(['id' => 'activeLabel'.$taskid.$labelId,'options' => ['class' => 'task-label-class']]); ?>
+    $form = ActiveForm::begin(['action'=>Url::to(['label/create']), 'id' => 'activeLabel'.$taskid.$labelId,'options' => ['class' => 'task-label-class']]); ?>
     <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id.$labelId, 'placeholder' => "Add label"]) ?>
     <?= $form->field($taskLabel, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $taskid])->label(false); ?>
     <?= Html::submitButton('Save', ['class' => 'btn btn-success labelButton', 'id'=>'checkb'.$id.$labelId, 'data-id' => $id]) ?>
