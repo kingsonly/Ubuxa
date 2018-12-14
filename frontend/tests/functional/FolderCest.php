@@ -8,7 +8,7 @@ class FolderCest
 {
     public function _before(FunctionalTester $I)
     {   
-        $admin = \frontend\models\UserDb::findByUsername('guest');
+        $admin = \frontend\models\UserDb::findByUsername('admin');
         $I->amLoggedInAs($admin);
     }
 
@@ -69,15 +69,16 @@ class FolderCest
     {
          $I->amOnPage('folder/index');
          $I->seeInCurrentUrl('folder%2Findex');
-         $I->see('test folder');
-         $I->click('test folder');
-         $I->see('Create folder');
+         $I->click('#plus');
+         $I->fillField('#create-new-create-widget-id-title','New folder');
+         $I->click('Create');
+         $I->amOnPage('folder/index');
+         $I->click('New folder');
          $I->click('.folder-text');
          $I->fillField('#create-new-test-title','Subfolder');
          $I->click('Create');
          $I->amOnPage('folder/index');
-         $I->see('test folder');
-         $I->click('test folder');
+         $I->click('New folder');
          $I->see('Subfolder');
     }
 
