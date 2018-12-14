@@ -62,9 +62,11 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 
 <?php $this->beginBody() ?>
 <?php
-    if(isset(Yii::$app->user->identity->person_id)) {
-		define("USERID", Yii::$app->user->identity->person_id);
+  if(isset(Yii::$app->user->identity->person_id)) {
+    if(!defined('USERID')){
+  		define("USERID", Yii::$app->user->identity->person_id);
     }
+  }
 ?>
     <style>
 
