@@ -27,8 +27,30 @@ $onboarding = Onboarding::findOne(['user_id' => $userId]);
 	min-height: 600px;
 }
 	 */
+	.position-absolute{
+		position: absolute;
+		right: 0;
+	}
+	.display-none{
+		display: none;
+	}
+	
+	.position-absolute .fa{
+		cursor: pointer;
+	}
+	.adjust-font{
+		font-size-adjust: 0.8;
+	}
 </style>
 		<div class="">
+			<div style="width:100%">
+				<span class="position-absolute">
+					<i class="fa fa-expand"></i>
+					<i class="fa fa-window-minimize display-none"></i>
+					<i class="fa fa-remove"></i>
+				</span>
+			
+			</div>
 			<div class="" id="invoicecontent">
 				<div class="box-body">
 
@@ -96,3 +118,34 @@ $onboarding = Onboarding::findOne(['user_id' => $userId]);
 	
 
 
+
+<?
+$jsComponentView = <<<JS
+$(document).find('.position-absolute .fa-expand').click(function(){
+	$(document).find('#view-content').removeClass('col-xs-4').addClass('col-xs-12 adjust-font');
+	$(document).find('#listView').hide();
+	$(this).hide();
+	$('.position-absolute .fa-window-minimize').show();
+	 
+})
+
+$(document).find('.position-absolute .fa-window-minimize').on('click',function(){
+
+	$(document).find('#view-content').removeClass('col-xs-12 adjust-font').addClass('col-xs-4');
+	$(document).find('#listView').show();
+	$(this).hide();
+	$('.position-absolute .fa-expand').show();
+	 
+})
+
+$(document).find('.position-absolute .fa-remove').on('click',function(){
+
+	$(document).find('#view-content').hide().removeClass('adjust-font');
+	$(document).find('#listView').show().addClass('col-xs-12').removeClass('col-xs-8');
+	 
+})
+
+JS;
+ 
+$this->registerJs($jsComponentView);
+?>

@@ -47,7 +47,7 @@ use yii\helpers\Url;
 	                    	'class' => 'form-control name_list' ]) ?> </td>
 	                    	<td>
 	                    		<?= $form->field($model, 'role')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form-control'] ]) ?>
-	                    				<i class="fa fa-remove"></i>
+	                    				
 	                    	</td>
 	                    	<td> <?= Html::button('Add more', ['class' => 'btn btn-success', 'name' => 'add', 
 	                    	'id' => 'add']) ?> </td> 
@@ -88,7 +88,7 @@ $(document).ready(function(){
               $(this).closest('.dynamics').remove(); 
       		} 
       });  
-    $('#submit').click(function(){  
+    $('#add_email').on('beforeSubmit', function(e) {   
     var getform = $('#add_email').serialize();
         $.ajax({ 
             url:'$inviteUrl', 
@@ -97,9 +97,20 @@ $(document).ready(function(){
             type:'json',
             success:function(data)  
             {
-         	  	i=1;
+			if(data == 1){
+				i=1;
                	$('.dynamic-added').remove();
                 $('#add_email')[0].reset();
+				$('.close-arrow').trigger('click');
+				toastr.success('Element was created successfully', "", options);
+			}else{
+				i=1;
+               	$('.dynamic-added').remove();
+                $('#add_email')[0].reset();
+				$('.close-arrow').trigger('click');
+				toastr.error('something went wrong. ');
+			}
+         	  	
             }  
         });  
       });

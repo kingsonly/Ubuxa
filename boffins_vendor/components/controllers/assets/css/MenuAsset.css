@@ -154,7 +154,7 @@ a,
 	}
 	.burger_box a.menu-icon {
 		position: absolute;
-	    background-color: #3F51B5;
+	    background-color: #264787;
 	    cursor: pointer;
 	    height: 50px;
 	    padding: 0;
@@ -168,7 +168,7 @@ a,
 	@media screen and (max-width: 400px) {
     .burger_box a.menu-icon {
 	    position: absolute;
-	    background-color: #3F51B5;
+	    background-color: #264787;
 	    padding: 0;
 	    margin: 0;
 	    bottom: 40px;
