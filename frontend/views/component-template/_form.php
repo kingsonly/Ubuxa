@@ -65,6 +65,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             </div>
                             <div class="col-sm-6">
                                 <?= $form->field($attributeModel, "[{$i}]attribute_type_id")->dropDownList($attributeType, ['prompt'=> 'select type', 'options' => ['class' => 'form_input'] ]) ?>
+								
+								<?= $form->field($attributeModel, "[{$i}]show_in_grid")->checkbox(['value' => 1]); ?>
                             </div>
 							
                         </div><!-- .row -->

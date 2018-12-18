@@ -62,18 +62,19 @@ class InviteUsersForm extends Model
     {
 		
 		$cid = Yii::$app->user->identity->cid;
-        $tests = $this->email;
-		foreach ($tests as $test) {
+        $emails = $this->email;
+		foreach ($emails as $email) {
 			Yii::$app->mailer->compose(['html' => 'inviteusers'],
                 [
                     //'body'  => $this->body,
-                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'ubuxa.net'.Url::to(['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]),
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','email'=> $email,'cid'=>$cid,'role' => $this->role]),
                 ])
-            ->setTo($newCustomerEmail)
+            ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
             ->setSubject('Ubuxa Invite')
             ->send();
 		}
+		return true;
         
     }
 

@@ -35,6 +35,9 @@ use yii\helpers\Url;
   .client_template{
     background-image:linear-gradient(#fff,#ccc);
   }
+	#loading-folder-div-invite-users{
+		display: none;
+	}
 </style>
 
 <div class="">
@@ -54,7 +57,8 @@ use yii\helpers\Url;
 	                    </tr>
 	                  </table> 
 	        <div class="form-group">
-			<?= Html::submitButton('Send Invitation', ['class'=> 'btn btn-primary invite-btn', 'id' => 'submit', 'name' => 'submit']); ?>
+			<?= Html::submitButton('Send Invitation', ['class'=> 'btn btn-primary invite-btn', 'id' => 'submit-users-invite', 'name' => 'submit']); ?>
+				<div id="loading-folder-div-invite-users" class="invite-btn"> <?= Yii::$app->settingscomponent->boffinsLoaderImage(); ?></div>
 		</div>
 		<?php ActiveForm::end(); ?>
 	</div>
@@ -95,22 +99,29 @@ $(document).ready(function(){
 		    method:"POST",  
             data:$('#add_email').serialize(),
             type:'json',
+			beforeSend: function(msg){
+        		$('#submit-users-invite').hide();
+        		$('#loading-folder-div-invite-users').show();
+				},
             success:function(data)  
             {
 			if(data == 1){
 				i=1;
+				
                	$('.dynamic-added').remove();
                 $('#add_email')[0].reset();
 				$('.close-arrow').trigger('click');
-				toastr.success('Element was created successfully', "", options);
+				toastr.success('Invitation has been sent to all users.');
 			}else{
 				i=1;
+				alert(123)
                	$('.dynamic-added').remove();
                 $('#add_email')[0].reset();
 				$('.close-arrow').trigger('click');
 				toastr.error('something went wrong. ');
 			}
-         	  	
+         	$('#submit-users-invite').show();
+        	$('#loading-folder-div-invite-users').hide();	
             }  
         });  
       });

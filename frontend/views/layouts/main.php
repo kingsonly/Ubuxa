@@ -43,7 +43,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 }
 		
 		
-		.images ul li img {
+.images ul li img {
 	width: 400px;
 	height: 266px;
 }
