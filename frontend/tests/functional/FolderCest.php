@@ -1,14 +1,16 @@
 <?php
 namespace frontend\tests\functional;
 use frontend\tests\FunctionalTester;
+use frontend\tests\_support\Step\Functional\FolderTester;
 use Yii;
 //use frontend\tests\functional\BaseUserTester;
 
 class FolderCest 
 {
+
     public function _before(FunctionalTester $I)
     {   
-        $admin = \frontend\models\UserDb::findByUsername('guest');
+        $admin = \frontend\models\UserDb::findByUsername('admin');
         $I->amLoggedInAs($admin);
     }
 
@@ -63,34 +65,29 @@ class FolderCest
         $I->click('Create');
         $I->amOnPage('folder/index');
         $I->dontSee('.folder-text');
-    } 
+    }
 
-    public function createSubfolder(FunctionalTester $I) 
-    {
-         $I->amOnPage('folder/index');
-         $I->seeInCurrentUrl('folder%2Findex');
-         $I->see('test folder');
-         $I->click('test folder');
-         $I->see('Create folder');
-         $I->click('.folder-text');
-         $I->fillField('#create-new-test-title','Subfolder');
-         $I->click('Create');
-         $I->amOnPage('folder/index');
-         $I->see('test folder');
-         $I->click('test folder');
-         $I->see('Subfolder');
+    public function createSubfolder(FolderTester $I) 
+    {   
+        $I->haveFolder();
+        $I->click('.folder-text');
+        $I->fillField('#create-new-test-title','Subfolder');
+        $I->click('Create');
+        $I->refreshFolder();
+        $I->see('Subfolder');
     }
 
     /* public function addUsers(FunctionalTester $I) 
-    {
-         $I->amOnPage('folder/index');
-         $I->seeInCurrentUrl('folder%2Findex');
-         $I->see('test folder');
-         $I->click('test folder');
-         $I->click('.dropdown');
-         //$I->click('.select2-search__field');
-         $I->fillField('.select2-search__field','akye');
-         //$I->see('OkechukwuAyke A');
+    {    
+        $I->haveFolder();
+        $I->amOnPage('folder/index');
+        $I->seeInCurrentUrl('folder%2Findex');
+        $I->see('test folder');
+        $I->click('test folder');
+        $I->click('.dropdown');
+        $I->click('.select2-search__field');
+        $I->fillField('.select2-search__field','akye');
+        $I->see('OkechukwuAyke A');
     } */
 
 }
