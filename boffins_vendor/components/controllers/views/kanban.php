@@ -71,7 +71,7 @@ $checkUrlParams = $checkUrls[0];
   text-transform: uppercase;
   font-weight: 600;
 }
-.drag-column-on-hold .drag-column-header, .drag-column-on-hold .is-moved, .drag-column-on-hold .drag-options {
+.drag-column-on-hold .drag-column-header,  .drag-column-on-hold .drag-options {
   background: #98afc5;
 }
 .drag-column-in-progress .drag-column-header, .drag-column-in-progress .is-moved, .drag-column-in-progress .drag-options {
@@ -105,8 +105,8 @@ $checkUrlParams = $checkUrls[0];
   position: relative;
 }
 .drag-item.is-moving {
-  transform: scale(1.5);
-  background: rgba(0, 0, 0, 0.8);
+  /*transform: scale(1.5);*/
+  /*background: rgba(0, 0, 0, 0.8);*/
   cursor: -webkit-grabbing; 
   cursor: grabbing;
 }
