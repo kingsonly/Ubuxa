@@ -77,17 +77,14 @@ class FolderCest
         $I->see('Subfolder');
     }
 
-    /* public function addUsers(FunctionalTester $I) 
+    public function addUsers(FolderTester $I) 
     {    
         $I->haveFolder();
-        $I->amOnPage('folder/index');
-        $I->seeInCurrentUrl('folder%2Findex');
-        $I->see('test folder');
-        $I->click('test folder');
-        $I->click('.dropdown');
-        $I->click('.select2-search__field');
-        $I->fillField('.select2-search__field','akye');
-        $I->see('OkechukwuAyke A');
-    } */
+        $I->click('.glyphicon-plus-sign');
+        //$I->seeElement('.select2-search__field');
+        //$I->click('.select2-search__field');
+        //$I->fillField('.select2-search__field','akye');
+        //$I->see('OkechukwuAyke A');
+    }
 
 }
