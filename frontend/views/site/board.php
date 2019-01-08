@@ -1,324 +1,310 @@
 <?php
 	use frontend\assets\AppAsset;
+  use yii\helpers\Html;
+  use yii\widgets\ActiveForm;
+  use yii\helpers\Url;
 	AppAsset::register($this);
 ?>
 <style>
-	ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.drag-container {
-  max-width: 1000px;
-  margin: 20px auto;
-}
-.drag-list {
-  display: flex;
-  align-items: flex-start;
-}
-@media (max-width: 690px) {
-  .drag-list {
-    display: block;
-  }
-}
-.drag-column {
-  flex: 1;
-  margin: 0 10px;
-  position: relative;
-  background: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  border-radius: 4px;
-}
-@media (max-width: 690px) {
-  .drag-column {
-    margin-bottom: 30px;
-  }
-}
-.drag-column h2 {
-  font-size: 1.2rem;
-  margin: 0;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.drag-column-on-hold .drag-column-header, .drag-column-on-hold .is-moved, .drag-column-on-hold .drag-options {
-  background: #fb7d44;
-}
-.drag-column-in-progress .drag-column-header, .drag-column-in-progress .is-moved, .drag-column-in-progress .drag-options {
-  background: #2a92bf;
-}
-.drag-column-needs-review .drag-column-header, .drag-column-needs-review .is-moved, .drag-column-needs-review .drag-options {
-  background: #f4ce46;
-}
-.drag-column-approved .drag-column-header, .drag-column-approved .is-moved, .drag-column-approved .drag-options {
-  background: #00b961;
-}
-.drag-column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-}
-.drag-inner-list {
-  min-height: 50px;
-}
-.drag-item {
-  margin: 10px;
-  height: 100px;
-  background: #FAFAFA;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  cursor: -webkit-grab;
-  cursor: grab;
-  border-radius: 7px;
-  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-  position: relative;
-}
-.drag-item.is-moving {
-  transform: scale(1.5);
-  background: rgba(0, 0, 0, 0.8);
-  cursor: -webkit-grabbing; 
-  cursor: grabbing;
-}
-.drag-header-more {
-  cursor: pointer;
 
+
+#dropzone { margin-bottom: 3rem; }
+
+.dropzone { border: 2px dashed #0087F7; border-radius: 5px; background: white; visibility: hidden; }
+.dropzone .dz-message { font-weight: 400; }
+.dropzone .dz-message .note { font-size: 0.8em; font-weight: 200; display: block; margin-top: 1.4rem; }
+
+.dropzone-main { height: 100%; font-family: Roboto, "Open Sans", sans-serif; font-size: 20px; font-weight: 300; line-height: 1.4rem; color: #646C7F; text-rendering: optimizeLegibility; }
+@media (max-width: 600px) { html, body { font-size: 18px; } }
+@media (max-width: 400px) { html, body { font-size: 16px; } }
+
+.dropzone-main{ max-width: 720px; margin-left: auto; margin-right: auto; }
+
+.dropzone, .dropzone * {
+    box-sizing: border-box;
 }
-.drag-options {
-  position: absolute;
-  top: 44px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+.dropzone {
+    min-height: 150px;
+    border: 2px dashed #0087F7;
+    background: white;
+    padding: 54px 54px;
 }
-.drag-options.active {
-  transform: translateX(0);
-  opacity: 1;
-  z-index: 99;
+.dropzone.dz-clickable {
+    cursor: pointer;
 }
-.drag-options-label {
-  display: block;
-  margin: 0 0 5px 0;
+.dropzone.dz-clickable * {
+    cursor: default;
 }
-.drag-options-label input {
-  opacity: 0.6;
+.dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+    cursor: pointer;
 }
-.drag-options-label span {
-  display: inline-block;
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-left: 5px;
+.dropzone.dz-started .dz-message {
+    display: none;
 }
-/* Dragula CSS  */
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  list-style-type: none;
+.dropzone.dz-drag-hover {
+    border-style: solid;
 }
-.gu-hide {
-  display: none !important;
+.dropzone.dz-drag-hover .dz-message {
+    opacity: 0.5;
 }
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
+.dropzone .dz-message {
+    text-align: center;
+    margin: 2em 0;
 }
-.gu-transit {
-  opacity: 0.2;
+.dropzone .dz-preview {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 16px;
+    min-height: 100px;
 }
-/* Demo info */
-.task-head {
-  text-align: center;
+.dropzone .dz-preview:hover {
+    z-index: 1000;
 }
-.bottom-content {
-	display: none;
-	position: absolute;
+.dropzone .dz-preview:hover .dz-details {
+    opacity: 1;
+}
+.dropzone .dz-preview.dz-file-preview .dz-image {
+    border-radius: 20px;
+    background: #999;
+    background: linear-gradient(to bottom, #eee, #ddd);
+}
+.dropzone .dz-preview.dz-file-preview .dz-details {
+    opacity: 1;
+}
+.dropzone .dz-preview.dz-image-preview {
+    background: white;
+}
+.dropzone .dz-preview.dz-image-preview .dz-details {
+    -webkit-transition: opacity 0.2s linear;
+    -moz-transition: opacity 0.2s linear;
+    -ms-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+.dropzone .dz-preview .dz-remove {
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+}
+.dropzone .dz-preview .dz-remove:hover {
+    text-decoration: underline;
+}
+.dropzone .dz-preview:hover .dz-details {
+    opacity: 1;
+}
+.dropzone .dz-preview .dz-details {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    font-size: 13px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 2em 1em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.9);
+    line-height: 150%;
+}
+.dropzone .dz-preview .dz-details .dz-size {
+    margin-bottom: 1em;
+    font-size: 16px;
+}
+.dropzone .dz-preview .dz-details .dz-filename {
+    white-space: nowrap;
+}
+.dropzone .dz-preview .dz-details .dz-filename:hover span {
+    border: 1px solid rgba(200, 200, 200, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.dropzone .dz-preview .dz-details .dz-filename:not(:hover) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dropzone .dz-preview .dz-details .dz-filename:not(:hover) span {
+    border: 1px solid transparent;
+}
+.dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0 0.4em;
+    border-radius: 3px;
+}
+.dropzone .dz-preview:hover .dz-image img {
+    -webkit-transform: scale(1.05, 1.05);
+    -moz-transform: scale(1.05, 1.05);
+    -ms-transform: scale(1.05, 1.05);
+    -o-transform: scale(1.05, 1.05);
+    transform: scale(1.05, 1.05);
+    -webkit-filter: blur(8px);
+    filter: blur(8px);
+}
+.dropzone .dz-preview .dz-image {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
+.dropzone .dz-preview .dz-image img {
+    display: block;
+}
+.dropzone .dz-preview.dz-success .dz-success-mark {
+    -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -moz-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -ms-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -o-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.dropzone .dz-preview.dz-error .dz-error-mark {
+    opacity: 1;
+    -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -moz-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -ms-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -o-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.dropzone .dz-preview .dz-success-mark, .dropzone .dz-preview .dz-error-mark {
+    pointer-events: none;
+    opacity: 0;
+    z-index: 500;
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    margin-left: -27px;
+    margin-top: -27px;
+}
+.dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {
+    display: block;
+    width: 54px;
+    height: 54px;
+}
+.dropzone .dz-preview.dz-processing .dz-progress {
+    opacity: 1;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+.dropzone .dz-preview.dz-complete .dz-progress {
+    opacity: 0;
+    -webkit-transition: opacity 0.4s ease-in;
+    -moz-transition: opacity 0.4s ease-in;
+    -ms-transition: opacity 0.4s ease-in;
+    -o-transition: opacity 0.4s ease-in;
+    transition: opacity 0.4s ease-in;
+}
+.dropzone .dz-preview:not(.dz-processing) .dz-progress {
+    -webkit-animation: pulse 6s ease infinite;
+    -moz-animation: pulse 6s ease infinite;
+    -ms-animation: pulse 6s ease infinite;
+    -o-animation: pulse 6s ease infinite;
+    animation: pulse 6s ease infinite;
+}
+.dropzone .dz-preview .dz-progress {
+    opacity: 1;
+    z-index: 1000;
+    pointer-events: none;
+    position: absolute;
+    height: 16px;
+    left: 50%;
+    top: 50%;
+    margin-top: -8px;
+    width: 80px;
+    margin-left: -40px;
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-transform: scale(1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.dropzone .dz-preview .dz-progress .dz-upload {
+    background: #333;
+    background: linear-gradient(to bottom, #666, #444);
+    position: absolute;
+    top: 0;
+    left: 0;
     bottom: 0;
-    left: 5px;
+    width: 0;
+    -webkit-transition: width 300ms ease-in-out;
+    -moz-transition: width 300ms ease-in-out;
+    -ms-transition: width 300ms ease-in-out;
+    -o-transition: width 300ms ease-in-out;
+    transition: width 300ms ease-in-out;
 }
-
-.drag-item:hover .bottom-content{
+.dropzone .dz-preview.dz-error .dz-error-message {
     display: block;
 }
-
-.icons {
-	width: 43px;
+.dropzone .dz-preview.dz-error:hover .dz-error-message {
+    opacity: 1;
+    pointer-events: auto;
 }
-
-.modal-content {
-	background-color: #ebeef0 !important;
+.dropzone .dz-preview .dz-error-message {
+    pointer-events: none;
+    z-index: 1000;
+    position: absolute;
+    display: block;
+    display: none;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+    font-size: 13px;
+    top: 130px;
+    left: -10px;
+    width: 140px;
+    background: #be2626;
+    background: linear-gradient(to bottom, #be2626, #a92222);
+    padding: 0.5em 1.2em;
+    color: white;
 }
-
+.dropzone .dz-preview .dz-error-message:after {
+    content:'';
+    position: absolute;
+    top: -6px;
+    left: 64px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #be2626;
+}
 </style>
+<main class="dropzone-main">
+    <section>
+        <div id="dropzone">
+            <form action="http://www.torrentplease.com/dropzone.php" class="dropzone dz-clickable" id="demo-upload">
+                <div class="dz-message">Drop files here or click to upload.
+                    <br> <span class="note">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
 
-<section class="task-head">
-	<h1>Task Board</h1>
-</section>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
 
-<div class="drag-container">
-	<ul class="drag-list">
-		<li class="drag-column drag-column-on-hold">
-			<span class="drag-column-header">
-				<h2>TO DO</h2>
-				<svg class="drag-header-more" data-target="options1" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-				
-			<div class="drag-options" id="options1"></div>
-			
-			<ul class="drag-inner-list" id="1">
-				<li class="drag-item">
-					<div class="bottom-content">
-						<a href='#'><i class="fa fa-bell icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-tags icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
-					</div>
-				</li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-in-progress">
-			<span class="drag-column-header">
-				<h2>In Progress</h2>
-				<svg class="drag-header-more" data-target="options2" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options2"></div>
-			<ul class="drag-inner-list" id="2">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-needs-review">
-			<span class="drag-column-header">
-				<h2>ON HOLD</h2>
-				<svg data-target="options3" class="drag-header-more" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options3"></div>
-			<ul class="drag-inner-list" id="3">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-approved">
-			<span class="drag-column-header">
-				<h2>DONE</h2>
-				<svg data-target="options4" class="drag-header-more" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options4"></div>
-			<ul class="drag-inner-list" id="4">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-	</ul>
-</div>
+<?
+$dropzone = <<<JS
+/* lastTarget is set first on dragenter, then
+   compared with during dragleave. */
+var lastTarget = null;
 
-<?php 
-$board = <<<JS
-
-    dragula([
-    document.getElementById('1'),
-    document.getElementById('2'),
-    document.getElementById('3'),
-    document.getElementById('4'),
-    document.getElementById('5')
-])
-
-.on('drag', function(el) {
-    
-    // add 'is-moving' class to element being dragged
-    el.classList.add('is-moving');
-    console.log('moving');
-})
-
-
-
-
-
-.on('dragend', function(el) {
-    
-    // remove 'is-moving' class from element after dragging has stopped
-    el.classList.remove('is-moving');
-    console.log("done!");
-    
-    // add the 'is-moved' class for 600ms then remove it
-    window.setTimeout(function() {
-        el.classList.add('is-moved');
-        window.setTimeout(function() {
-            el.classList.remove('is-moved');
-        }, 600);
-    }, 100);
+window.addEventListener("dragenter", function(e)
+{
+    lastTarget = e.target; // cache the last target here
+    // unhide our dropzone overlay
+    document.querySelector(".dropzone").style.visibility = "visible";
+    document.querySelector(".dropzone").style.opacity = 1;
 });
 
-
-var createOptions = (function() {
-    var dragOptions = document.querySelectorAll('.drag-options');
-    
-    // these strings are used for the checkbox labels
-    var options = ['Research', 'Strategy', 'Inspiration', 'Execution'];
-    
-    // create the checkbox and labels here, just to keep the html clean. append the <label> to '.drag-options'
-    function create() {
-        for (var i = 0; i < dragOptions.length; i++) {
-
-            options.forEach(function(item) {
-                var checkbox = document.createElement('input');
-                var label = document.createElement('label');
-                var span = document.createElement('span');
-                checkbox.setAttribute('type', 'checkbox');
-                span.innerHTML = item;
-                label.appendChild(span);
-                label.insertBefore(checkbox, label.firstChild);
-                label.classList.add('drag-options-label');
-                dragOptions[i].appendChild(label);
-            });
-
-        }
-    }
-    
-    return {
-        create: create
-    }
-    
-    
-}());
-
-var showOptions = (function () {
-    
-    // the 3 dot icon
-    var more = document.querySelectorAll('.drag-header-more');
-    
-    function show() {
-        // show 'drag-options' div when the more icon is clicked
-        var target = this.getAttribute('data-target');
-        var options = document.getElementById(target);
-        options.classList.toggle('active');
-    }
-    
-    
-    function init() {
-        for (i = 0; i < more.length; i++) {
-            more[i].addEventListener('click', show, false);
-        }
-    }
-    
-    return {
-        init: init
-    }
-}());
-
-createOptions.create();
-showOptions.init();
-
 JS;
- 
-$this->registerJs($board);
+$this->registerJs($dropzone);
 ?>

@@ -81,8 +81,7 @@ class FolderCest
     {    
         $I->haveFolder();
         $I->click('.glyphicon-plus-sign');
-        //$I->seeElement('.select2-search__field');
-        //$I->click('.select2-search__field');
+        $I->fillField('search','akye');
         //$I->fillField('.select2-search__field','akye');
         //$I->see('OkechukwuAyke A');
     }
