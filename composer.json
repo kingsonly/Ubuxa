@@ -54,7 +54,8 @@
 		"wbraganca/yii2-dynamicform": "*",
         "kartik-v/yii2-widget-depdrop": "@dev",
         "codeception/verify": "*",
-        "linslin/yii2-curl": "*"
+        "linslin/yii2-curl": "*",
+        "google/apiclient": "^2.0"
 
     }, 
     "require-dev": {
