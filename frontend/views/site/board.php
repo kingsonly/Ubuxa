@@ -1,31 +1,48 @@
 <?php
-	use frontend\assets\AppAsset;
+  use frontend\assets\AppAsset;
   use yii\helpers\Html;
   use yii\widgets\ActiveForm;
   use yii\helpers\Url;
-	AppAsset::register($this);
+  use yii\base\view;
+  AppAsset::register($this);
+  $profileUrlz = Url::to(['user/update']);
 ?>
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
 <style>
 
 
-#dropzone { margin-bottom: 3rem; }
-
-.dropzone { border: 2px dashed #0087F7; border-radius: 5px; background: white; visibility: hidden; }
+.dummy{visibility: hidden;}
+.dropzone { 
+  /*border: 2px dashed #0087F7;*/ 
+  border-radius: 5px; 
+  background: white;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1); 
+}
+.dropzone-main{
+  position: absolute;
+  top: 0;
+}
 .dropzone .dz-message { font-weight: 400; }
+.doc-message{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .dropzone .dz-message .note { font-size: 0.8em; font-weight: 200; display: block; margin-top: 1.4rem; }
 
 .dropzone-main { height: 100%; font-family: Roboto, "Open Sans", sans-serif; font-size: 20px; font-weight: 300; line-height: 1.4rem; color: #646C7F; text-rendering: optimizeLegibility; }
 @media (max-width: 600px) { html, body { font-size: 18px; } }
 @media (max-width: 400px) { html, body { font-size: 16px; } }
 
-.dropzone-main{ max-width: 720px; margin-left: auto; margin-right: auto; }
+.dropzone-main{ max-width: 565px; margin-left: auto; margin-right: auto; }
 
 .dropzone, .dropzone * {
     box-sizing: border-box;
 }
 .dropzone {
-    min-height: 150px;
-    border: 2px dashed #0087F7;
+    min-height: 400px;
+    /*border: 2px dashed #0087F7;*/
     background: white;
     padding: 54px 54px;
 }
@@ -277,32 +294,67 @@
     border-right: 6px solid transparent;
     border-bottom: 6px solid #be2626;
 }
+.doc-icons{
+  font-size: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 <main class="dropzone-main">
-    <section>
         <div id="dropzone">
-            <form action="http://www.torrentplease.com/dropzone.php" class="dropzone dz-clickable" id="demo-upload">
-                <div class="dz-message">Drop files here or click to upload.
-                    <br> <span class="note">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
-
-                </div>
-            </form>
+              <?php $form = ActiveForm::begin(['id' => 'dropupload', 'options' => ['class'=>'dropzone dz-clickable dummy']]); ?>
+                <span class="dz-message doc-message">
+                  Drop files here or click to upload.
+                </span>
+                <div class="dz-message"><i class="fa fa-paperclip doc-icons" aria-hidden="true"></i></div>
+              <?php ActiveForm::end(); ?>
         </div>
-    </section>
 </main>
 
 <?
+$doctype = Url::to('@web/images/edocuments');
 $dropzone = <<<JS
+Dropzone.autoDiscover = false;
 /* lastTarget is set first on dragenter, then
    compared with during dragleave. */
 var lastTarget = null;
 
-window.addEventListener("dragenter", function(e)
+
+$('#dropzone').bind("dragenter", function(e)
 {
     lastTarget = e.target; // cache the last target here
-    // unhide our dropzone overlay
-    document.querySelector(".dropzone").style.visibility = "visible";
-    document.querySelector(".dropzone").style.opacity = 1;
+    $(".dropzone").removeClass("dummy");
+}).bind("dragleave", function (e) {
+    e.preventDefault();
+    if (e.target === document || e.target === lastTarget) {
+        return false;
+    }
+    $(".dropzone").addClass("dummy");
+}).bind("dragover", function (e) {
+    e.preventDefault();
+}).bind("drop", function (e) {
+    e.preventDefault();
+    $(".dropzone").removeClass("dummy");
+});
+
+var dropzone = new Dropzone('#dropupload', {
+  paramName: "file", // The name that will be used to transfer the file
+  maxFilesize: 256, // MB
+  addRemoveLinks: true,
+  accept: function(file, done) {
+    var ext = file.name.split('.').pop();
+    if (ext == "pdf") {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/pdf.png");
+    } else if (ext.indexOf("docx") != -1) {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/word.png");
+    } else if (ext.indexOf("xls") != -1) {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/excel.png");
+    }else{
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/file.png");
+    }
+    done();
+  }
 });
 
 JS;

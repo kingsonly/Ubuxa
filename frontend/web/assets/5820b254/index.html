@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dragster: Better HTML5 drag events</title>
+    <meta name="description" content="HTML5 drag events suck. Dragster fixes them.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      /* Base */
+      * {
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        -o-mox-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-family: sans-serif;
+        height: 100%;
+      }
+
+      body {
+        background-color: #eee;
+        color: #222;
+        font-size: 16px;
+        height: 100%;
+        line-height: 1.5em;
+        margin: 0;
+        min-width: 768px;
+      }
+
+      p {
+        margin: 0 0 1em;
+      }
+
+      a {
+        color: #ff4844;
+      }
+
+      /* Modules */
+      .demo {
+        border-bottom: 1px solid #ddd;
+        overflow: hidden;
+        padding: 60px;
+        position: relative;
+      }
+
+      .download {
+        border-bottom: 1px solid #ddd;
+        padding: 60px;
+        text-align: center;
+      }
+
+      .download code {
+        background: #161719;
+        border-radius: 5px;
+        color: #fff;
+        display: inline-block;
+        padding: 10px;
+      }
+
+      .draggable {
+        background: #ddd;
+        border-radius: 5px;
+        box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        cursor: move;
+        margin: 0 auto 20px;
+        padding: 40px 0;
+        text-align: center;
+        width: 20%;
+      }
+
+      .draggable.is-dragging {
+        color: #ff4844;
+      }
+
+      .dropzone,
+      .dropzone--dragster {
+        background: #fcfcfc;
+        border: 1px solid #e3e3e3;
+        float: left;
+        padding: 30px;
+        text-align: center;
+        width: 35%;
+      }
+      .dropzone--dragster {
+        float: right;
+      }
+      
+      .dropzone__title {
+        margin: 0 0 20px;
+      }
+
+      .footer {
+        padding: 60px;
+        text-align: center;
+      }
+
+      .header {
+        border-bottom: 1px solid #ddd;
+        padding: 60px 0;
+      }
+
+      .logo {
+        margin: 0 auto 1.5em;
+      }
+      .logo img {
+        display: block;
+        margin: 0 auto;
+        width: 300px;
+      }
+
+      .results {
+        height: 200px;
+        margin: 0 auto;
+        overflow: hidden;
+        width: 20%;
+      }
+      .results__events > code {
+        display: block;
+        font-size: 0.75em;
+        position: relative;
+      }
+      .results__events > code:first-child {
+        font-weight: bold;
+      }
+
+      .slogan {
+        color: #696B73;
+        margin: 0 auto 1em;
+        max-width: 750px;
+        text-align: center;
+      }
+
+      .slogan:first-of-type {
+        margin: 0 auto 2em;
+      }
+
+      .slogan:last-child {
+        margin-bottom: 0;
+      }
+
+      .slogan > code {
+        background: #161719;
+        border-radius: 5px;
+        color: #fff;
+        display: inline-block;
+        font-size: 14px;
+        line-height: 17px;
+        margin: 0 2px;
+        padding: 2px 5px;
+      }
+
+      /* State */
+      .is-over {
+        background: #d6ebce !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="logo">
+        <img src="demo_assets/logo.svg" alt="Dragster" />
+      </h1>
+
+      <p class="slogan">
+        HTML5 <code>dragenter</code> &amp; <code>dragleave</code> events <a href="http://www.quirksmode.org/blog/archives/2009/09/the_html5_drag.html">suck</a>.
+      </p>
+
+      <p class="slogan">
+        Dragster fires custom events that behave more like <code>mouseenter</code> or <code>mouseleave</code> (or CSS's <code>:hover</code>) that make it easier to deal with complex dropzones with child elements.
+      </p>
+    </header>
+    <section class="demo">
+      <p class="slogan">
+        Give it a try! The dropzone on the left is listening HTML5's events and the dropzone on the right is listening for Dragster's.
+      </p>
+
+      <div class="dropzone" id="dropzone-crap">
+        <h2 class="dropzone__title">No Dragster</h2>
+        <p>This is a complex dropzone with child elements.</p>
+        <p><small>You might have hints telling your users to</small></p>
+        <p><strong>Drop a file here!</strong></p>
+        <p><small>or a backup file input:</small></p>
+        <p><input type="file" placeholder="Choose a file"></p>
+      </div>
+
+
+      <div class="dropzone--dragster" id="dropzone-good">
+        <h2 class="dropzone__title">Dragster!</h2>
+        <p>This is a complex dropzone with child elements.</p>
+        <p><small>You might have hints telling your users to</small></p>
+        <p><strong>Drop a file here!</strong></p>
+        <p><small>or a backup file input:</small></p>
+        <p><input type="file" placeholder="Choose a file"></p>
+      </div>
+
+      <div class="draggable" id="draggable" draggable="true">
+        <strong>Drag me!</strong>
+      </div>
+
+      <div class="results">
+        <strong>Events fired:</strong>
+        <div class="results__events" id="events">
+          <small>Do some dragging to see events&hellip;</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="download">
+      <p>
+        <code>bower install dragster</code>
+      </p>
+
+      <p>or</p>
+
+      <a href="https://github.com/bensmithett/dragster">Download &amp; docs on GitHub</a>
+    </section>
+
+    <section class="footer">
+      Made on an ageing couch by <a href="http://bensmithett.com">Ben Smithett</a>.
+      Design by <a href="http://damir.com.au/">Damir Kotorić</a>.
+    </section>
+
+    <script src="lib/dragster.js"></script>
+    <script>
+      var events = document.getElementById( "events" );
+
+      // Dragsterize one of the dropzones
+      new Dragster( document.getElementById( "dropzone-good") );
+
+      // Add some listeners for crappy HTML5 events to non-Dragster dropzone
+      document.getElementById( "dropzone-crap" ).addEventListener( "dragenter", function (e) {
+        events.innerHTML = "<code style='padding-left: " + offset() + "px;'>dragenter</code>" + events.innerHTML;
+        e.target.classList.add("is-over");
+      }, false );
+
+      document.getElementById( "dropzone-crap" ).addEventListener( "dragleave", function (e) {
+        events.innerHTML = "<code style='padding-left: " + offset() + "px;'>dragleave</code>" + events.innerHTML;
+        e.target.classList.remove("is-over");
+      }, false );
+
+      // Add listeners for Dragster events to the good dropzone
+      document.getElementById( "dropzone-good" ).addEventListener( "dragster:enter", function (e) {
+        events.innerHTML = "<code style='padding-left: " + offset() + "px;'>dragster:enter</code>" + events.innerHTML;
+        e.target.classList.add("is-over");
+      }, false );
+
+      document.getElementById( "dropzone-good" ).addEventListener( "dragster:leave", function (e) {
+        events.innerHTML = "<code style='padding-left: " + offset() + "px;'>dragster:leave</code>" + events.innerHTML;
+        e.target.classList.remove("is-over");
+      }, false );
+
+
+      // Extra demo stuff
+      function offset () {
+        return Math.round(Math.random() * 30);
+      };
+
+      document.getElementById("draggable").addEventListener( "dragstart", function (e) {
+        e.dataTransfer.setData('text/plain', '')
+        e.target.classList.add("is-dragging");
+      }, false );
+
+      document.getElementById("draggable").addEventListener( "dragend", function (e) {
+        e.target.classList.remove("is-dragging");
+      }, false );
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-17358351-5', 'bensmithett.github.io');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
