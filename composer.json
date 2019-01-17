@@ -54,8 +54,7 @@
 		"wbraganca/yii2-dynamicform": "*",
         "kartik-v/yii2-widget-depdrop": "@dev",
         "codeception/verify": "*",
-        "google/apiclient": "^2.0"
-
+        "enyo/dropzone": "^5.5"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

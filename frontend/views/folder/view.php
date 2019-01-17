@@ -178,7 +178,7 @@ $img = $model->folder_image;
 <section>
     <div class="container-fluid">
         <div class="row">
-        	<?= EdocumentWidget::widget(['docsize'=>1120,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder']);?>
+        	<?= EdocumentWidget::widget(['docsize'=>1120,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>

@@ -181,6 +181,98 @@ use frontend\models\Reminder;
 .multi-reminder {
     min-width: 160px;
 }
+
+/*-- For document view--*/
+.show-list{
+  -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.document-wrapper{
+  width:100%;
+  margin:30px auto 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.list-type{
+  text-align:right;
+  padding:10px;
+  margin-bottom:10px;
+  background-color:#5DBA9D;
+}
+
+.list-type a{
+  font-size:20px;
+  color:#FFFFFF;
+  width:40px;
+  height:40px;
+  line-height:40px;
+  margin-left:10px;
+  text-align:center;
+  display:inline-block;
+}
+
+.list-type a:hover, .list-mode .list-type a.hide-list:hover{
+  background-color:#11956c;
+}
+
+.list-type a.hide-list{
+  background-color:#11956c;
+}
+
+.list-mode .list-type a.hide-list{
+  background-color:#5DBA9D;
+}
+
+.list-mode .list-type a.show-list{
+  background-color:#11956c;
+}
+
+.doc-container:after{
+  content:"";
+  clear:both;
+  display:table;
+}
+
+.doc-container{
+  padding:10px 0 10px 10px;
+}
+
+.document-wrapper .doc-box{
+  float:left;
+  width:100%;
+  height:100px;
+  margin:0 10px 10px 0;
+  background-color:#CCCCCC;
+  -webkit-transition:all 1.0s ease;
+  -moz-transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  transition:all 1.0s ease;
+}
+
+.doc-box .doc-box-inner{
+  float:left;
+  width:50%;
+  height:80px;
+  background-color:red;
+  -webkit-transition:all 1.0s ease;
+  -moz-transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  margin: 10px 0 10px 10px;
+}
+
+.document-wrapper.list-mode .doc-container{
+  padding-right:10px;
+}
+
+.document-wrapper.list-mode .doc-box{
+  width:100%;
+}
 </style>
 
     <div class="task-view">
@@ -266,7 +358,7 @@ use frontend\models\Reminder;
                         ]]); ?>
            </div>
     </div>
-    <?= EdocumentWidget::widget(['docsize'=>565,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task']);?>
+    <?= EdocumentWidget::widget(['docsize'=>565,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
@@ -291,7 +383,20 @@ use frontend\models\Reminder;
             </div>
         </div>
     <?php }?>
-    <?= var_dump($edocument);?>
+    <h3>Attachments</h3>
+    <div class="document-wrapper">
+        <div class="doc-container">
+            <div class="doc-box">
+                <div class="doc-box-inner">Test</div>
+            </div>
+            <div class="doc-box">Hello</div>
+            <div class="doc-box"></div>
+            <div class="doc-box"></div>
+            <div class="doc-box"></div>
+            <div class="doc-box"></div>
+            <div class="doc-box"></div>
+        </div>
+    </div>
   
     <div class ="timestamp">
         <div class="createDate">
@@ -304,3 +409,10 @@ use frontend\models\Reminder;
     <?php } ?>
     </div>
 </div>
+
+<?
+$taskmodal = <<<JS
+
+JS;
+$this->registerJs($taskmodal);
+?>
