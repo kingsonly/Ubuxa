@@ -18,6 +18,8 @@ class EdocumentWidget extends Widget
     public $reference;
     public $referenceID;
     public $location;
+    public $iconPadding;
+    public $tasklist;
    
 
     public function init()
@@ -36,6 +38,8 @@ class EdocumentWidget extends Widget
             'textPadding' => $this->textPadding,
             'reference' => $this->reference,
             'referenceID' => $this->referenceID,
+            'iconPadding' => $this->iconPadding,
+            'tasklist' => $this->tasklist,
             'model' => new Edocument(),
             'location' => !empty($this->location)?$this->location:'task',
         	]);

@@ -357,7 +357,7 @@ $boardUrl = Url::to(['task/index']);
     <?php }else { ?>
         <input class=" todo_listt<?= $value->status_id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
-    <?= EdocumentWidget::widget(['docsize'=>268,'target'=>'tasklist'.$value->id, 'textPadding'=>5,'referenceID'=>$value->id,'reference'=>'task']);?>
+    <?= EdocumentWidget::widget(['docsize'=>268,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>

@@ -6,9 +6,9 @@ use yii\web\View;
 
 class DropzoneAsset extends AssetBundle
 {
-	public $sourcePath="@vendor/dropzone";
+	public $sourcePath="@vendor/enyo/dropzone";
 	public $baseUrl = '@web';
 	public $js=[
-		'dropzone.js',
+		'dist/dropzone.js',
 	];
 }
