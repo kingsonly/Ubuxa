@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use boffins_vendor\components\controllers\TaskViewWidget;
+use boffins_vendor\components\controllers\EdocumentWidget;
 use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use yii\web\View;
@@ -356,7 +357,7 @@ $boardUrl = Url::to(['task/index']);
     <?php }else { ?>
         <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
-    
+    <?= EdocumentWidget::widget(['docsize'=>268,'target'=>'tasklist'.$value->id, 'textPadding'=>5,'referenceID'=>$value->id,'reference'=>'task']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>

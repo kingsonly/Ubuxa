@@ -16,6 +16,7 @@ use frontend\models\TaskReminder;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
+use frontend\models\Edocument;
 
 
 
@@ -125,6 +126,7 @@ class TaskController extends Controller
         $label = new label();
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
+        $edocument = Edocument::find()->where(['reference'=>'task','reference_id'=>$id])->all();
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -155,6 +157,7 @@ class TaskController extends Controller
             'label' => $label,
             'taskLabel' => $taskLabel,
             'reminder' => $reminder,
+            'edocument' => $edocument,
         ]);
     }
 

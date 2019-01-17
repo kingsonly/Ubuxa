@@ -14,6 +14,7 @@ use boffins_vendor\components\controllers\FolderDetails;
 use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
+use boffins_vendor\components\controllers\EdocumentWidget;
 use kartik\popover\PopoverX;
 use yii\web\View;
 use frontend\assets\AppAsset;
@@ -175,9 +176,9 @@ $img = $model->folder_image;
 
 
 <section>
-	
     <div class="container-fluid">
         <div class="row">
+        	<?= EdocumentWidget::widget(['docsize'=>1120,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder']);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
