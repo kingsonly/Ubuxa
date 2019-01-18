@@ -38,7 +38,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             [['reference_id', 'file_location'], 'required'],
             [['reference_id', 'deleted', 'cid'], 'integer'],
             [['file_location'], 'string'],
-            [['last_updated', 'fromWhere'], 'safe'],
+            [['last_updated', 'fromWhere','ownerId'], 'safe'],
             [['reference'], 'string', 'max' => 25],
         ];
     }

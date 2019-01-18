@@ -244,7 +244,9 @@ class ClipOnBehavior extends Behavior
 	
 	private function createClipOn()
 	{
+		Yii::trace("b4 owners id = ".$this->owner->id);
 		if(!empty($this->owner->ownerId)){
+			Yii::trace("after owners id");
 			//$clipOwnerTypeModel = new ClipOwnerType(); // instatnciate ClipOwnerType model
 			//$clipBarModel  = new ClipBar(); // instatnciate clip bar model 
 			$clipModel  = new Clip(); //instanciate clip model
