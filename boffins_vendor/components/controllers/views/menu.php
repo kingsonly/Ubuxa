@@ -11,6 +11,7 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 use boffins_vendor\components\controllers\UserProfileWidget;
+use boffins_vendor\components\controllers\ViewCalendarWidget;
 
 $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 
@@ -108,6 +109,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 <?php } ?> 
              <?php if($checkSiteUrl != 'folder/index'){ ?>
                 <li class="list_item"><?= ViewBoardWidget::widget();?></li>
+                <li class="list_item"><?= ViewCalendarWidget::widget();?></li>
              <?php }?>
 		</ul>
     </div>

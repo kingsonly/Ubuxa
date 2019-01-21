@@ -38,7 +38,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
 	 * What is the meaning of this???
 	 * WHY IS THERE INLINE CSS IN A LAYOUT??? WHAT HAPPENED TO ADDING IT TO A STYLESHEET???
 	 */ 
-    .fa{color:#dd4b39 !important;}
+   
         .iconimage {
             background: url('../web/images/logo1.jpg') no-repeat ;
             background-size: 100% 100%;

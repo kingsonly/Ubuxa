@@ -388,7 +388,6 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 	
 	
 
-
 	
 </div>
 
@@ -447,6 +446,7 @@ var accordion = (function(){
 
 $(document).ready(function(){
   accordion.init({ speed: 300, oneOpen: false });
+  
 });
 
 
