@@ -269,6 +269,7 @@ $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
 
+
 localStorage.setItem("skipValidation", "");
 
 var mymenu = 1;
@@ -375,7 +376,6 @@ function defaultOnboarding() {
  folderTour.init();
  folderTour.start();
 };
-
 JS;
  
 $this->registerJs($indexJs);

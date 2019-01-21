@@ -16,7 +16,8 @@ use frontend\models\TaskReminder;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
-use frontend\models\Edocument;
+use frontend\models\TaskGroup;
+use frontend\models\TaskColor;
 
 
 
@@ -204,19 +205,66 @@ class TaskController extends Controller
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
+        $model->title = 'g g h';
+        
+
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
-                $model->completion_time = NULL;
-                $model->in_progress_time = NULL;
-                $model->due_date = NULL;
-                $model->save();
+                if(!empty(Yii::$app->request->post('field'))){
+                
+                    $model->title = Yii::$app->request->post('field');
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = NULL;
+                    $model->due_date = NULL;
+                    $model->status_id = 1;
+                    
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = $model->id;
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                        return $model->id;
+                        
+                    }
+                } elseif(!empty(Yii::$app->request->post('taskgroupid'))){
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = NULL;
+                    $model->due_date = NULL;
+                    $model->status_id = 1;
+                    
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = Yii::$app->request->post('taskgroupid');
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                        return 1;
+                        
+                    }
+
+                } else {
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = NULL;
+                    $model->due_date = NULL;
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = $model->id;
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                    }
+                }
+                
             }else{
-                $model->save();
+                if($model->save()){
+                    $taskGroupModel = new TaskGroup();
+                    $taskGroupModel->task_group_id = $model->id;
+                    $taskGroupModel->task_child_id = $model->id;
+                    $taskGroupModel->save();
+                }
             }
             
-            $model = new Task();
+            
         }
-
+            return 4;
         return $this->renderAjax('dashboardcreate', [
             'reminder' => $reminder,
             'model' => $model,
@@ -312,6 +360,7 @@ class TaskController extends Controller
 
         return $this->redirect(['index']);
     } */
+    
 
     public function actionDelete()
     {
@@ -322,6 +371,7 @@ class TaskController extends Controller
         }
     }
 
+    
 
     /**
      * Finds the Task model based on its primary key value.

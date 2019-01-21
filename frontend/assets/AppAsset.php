@@ -15,6 +15,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
         'owlcarousel/assets/owl.carousel.min.css',
         'owlcarousel/assets/owl.theme.carousel.min.css',
+
     ];
     public $js = [
         
@@ -29,5 +30,6 @@ class AppAsset extends AssetBundle
         '\frontend\assets\AtMentionAsset',
         '\frontend\assets\BootstrapTour',
         '\frontend\assets\DropzoneAsset',
+        '\frontend\assets\CalendarAsset',
     ];
 }

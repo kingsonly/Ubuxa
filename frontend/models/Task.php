@@ -68,7 +68,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
             [['owner','status_id', 'create_date'], 'required'],
             [['owner', 'status_id', 'deleted', 'cid'], 'integer'],
             [['create_date', 'due_date', 'last_updated','ownerId','title','fromWhere'], 'safe'],
-            [['title'], 'string', 'max' => 50],
+            [['title'], 'string', 'max' => 255],
             [['details'], 'string', 'max' => 255],
             
             [['owner'], 'exist', 'skipOnError' => true, 'targetClass' => UserDb::className(), 'targetAttribute' => ['owner' => 'id']],
@@ -265,6 +265,18 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         //$timeTaken = $endTime - $startTime;
 
         return $this->formatInterval($timeTaken);
+    }
+    public function getTaskGroup()
+    {
+        return $this->hasOne(TaskGroup::className(), ['task_group_id' => 'id']);
+    }
+    public function getTaskChild()
+    {
+        return $this->hasOne(Task::className(), ['id' => 'task_child_id']);
+    }
+    public function getTaskColor()
+    {
+        return $this->hasOne(TaskColor::className(), ['task_group_id' => 'id']);
     }
 
     public function getTimeElapsedString($full = false) {

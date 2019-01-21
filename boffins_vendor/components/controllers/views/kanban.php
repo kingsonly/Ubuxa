@@ -10,6 +10,7 @@ use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
 use boffins_vendor\components\controllers\DeleteTaskWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
+use boffins_vendor\components\controllers\EdocumentWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
@@ -43,6 +44,7 @@ $checkUrlParams = $checkUrls[0];
 .drag-container {
   /*max-width: 1000px;*/
   margin: 20px;
+  height: 100vh;
 }
 .drag-list {
   display: flex;
@@ -91,7 +93,9 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 3px;
 }
 .drag-inner-list {
-  min-height: 50px;
+    min-height: 30px;
+    max-height: 80vh;
+    overflow: scroll;
 }
 .drag-item {
   /*width: 280px;*/
@@ -164,9 +168,7 @@ $checkUrlParams = $checkUrls[0];
   opacity: 0.2;
 }
 /* Demo info */
-.task-head {
-  text-align: center;
-}
+
 
 .bottom-content {
     visibility: hidden;
@@ -352,8 +354,6 @@ a.addTaskButton.active {
   border-bottom: 1px solid #337ab7;
 }
 .card-add {
-  padding-left: 10px;
-  padding-right: 10px;
   padding-bottom: 7px;
   display: none;
 }
@@ -367,19 +367,27 @@ a.addTaskButton.active {
 .task-titles{
   font-family: calibri;
 }
-
+.new-cardz{
+      /* width: 280px; */
+    margin: 10px;
+    /* background: #FAFAFA; */
+    /* transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); */
+    cursor: -webkit-grab;
+    /* cursor: grab; */
+    border-radius: 2px;
+    /* box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1); */
+    position: relative;
+}
 </style>
 
 <?php Pjax::begin(['id'=>'asign-refresh']); ?>
-<section class="task-head">
-    <h1>Task Board</h1>
-
-</section>
 <div class="drag-container">
     <ul class="drag-list" id="kanban-board">
         <?php
         $count = 1; 
-        foreach($taskStatus as $key => $value){ ?>
+        foreach($taskStatus as $key => $value){ 
+          $statusId = $value->id;
+          ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
@@ -399,6 +407,7 @@ a.addTaskButton.active {
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
+                  <?= EdocumentWidget::widget(['docsize'=>280,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10]);?>
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
                         <span class="task-titles"><?= $values->title; ?></span>
@@ -479,18 +488,18 @@ a.addTaskButton.active {
                     </div>
                 </li>
             <?php $count2++;}}}?>
-        
+            <div class="new-cardz card-add new-task<?=$statusId;?>" id="add-new-cardz">
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
+              </div>
             </ul>
             <?php if($checkUrlParams == 'folder'){?>
-              <a class="add-card" href="#">
+              <a class="add-card new-task<?=$statusId;?>" href="#">
                 <span class="cardTask">
                   <span class="glyphicon glyphicon-plus"></span>
                   <span class="add-title"> Add Task </span>
                 </span>
               </a>
-              <div class="card-add" id="add-new-cardz">
-                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
-              </div>
+              
             <?php }?>
         </li>
         <?php $count++;} ?>
@@ -527,7 +536,7 @@ $.fn.closest_descendent = function(filter) {
     document.getElementById('2'),
     document.getElementById('3'),
     document.getElementById('4'),
-    document.getElementById('5')
+    document.getElementById('5'),
 ])
 
 .on('drag', function(el) {
@@ -701,9 +710,11 @@ $(document).click(function (e) {
 $(document).ready(
     function(){
         $(".add-card").click(function (e) {
-            e.preventDefault();
-            $(this).hide();
-            $(this).next('div.card-add').show("slow");
+          e.preventDefault();
+          $(".drag-inner-list").scrollTop();
+          var x = this.classList[1];
+          $(this).hide();
+          $('div.'+x).show("slow");
         });
         $(".close-add").click(function (e) {
             e.preventDefault();
