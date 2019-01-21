@@ -5,7 +5,6 @@
   use yii\helpers\Url;
   use yii\base\view;
   AppAsset::register($this);
-  $profileUrlz = Url::to(['user/update']);
 ?>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 

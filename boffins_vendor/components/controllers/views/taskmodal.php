@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
@@ -11,7 +12,7 @@ use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
-
+use yii\bootstrap\Modal;
 
 ?>
 
@@ -192,7 +193,6 @@ use frontend\models\Reminder;
 
 .document-wrapper{
   width:100%;
-  margin:30px auto 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -239,31 +239,35 @@ use frontend\models\Reminder;
 }
 
 .doc-container{
-  padding:10px 0 10px 10px;
+  /*padding:10px 0 10px 10px;*/
 }
 
 .document-wrapper .doc-box{
   float:left;
-  width:100%;
+  width:273px;
   height:100px;
   margin:0 10px 10px 0;
-  background-color:#CCCCCC;
+  background-color:#fff;
+  border-radius: 20px;
+  -webkit-transition:all 1.0s ease;
+  -moz-transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+}
+
+.doc-box .doc-box-inner{
+  float:left;
+  width:25%;
+  height:80px;
   -webkit-transition:all 1.0s ease;
   -moz-transition:all 1.0s ease;
   transition:all 1.0s ease;
   transition:all 1.0s ease;
 }
 
-.doc-box .doc-box-inner{
-  float:left;
-  width:50%;
-  height:80px;
-  background-color:red;
-  -webkit-transition:all 1.0s ease;
-  -moz-transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  margin: 10px 0 10px 10px;
+.doc-info{
+  margin: 15px 0px 0px 135px;
 }
 
 .document-wrapper.list-mode .doc-container{
@@ -272,6 +276,28 @@ use frontend\models\Reminder;
 
 .document-wrapper.list-mode .doc-box{
   width:100%;
+}
+.doc-img{
+    background-position: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    height: 100px;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    width: 120px;
+}
+.download-doc{
+    cursor: pointer;
+}
+.doc-date{
+    font-family: calibri;
+    color: #707070;
+    font-size: 13px;
+}
+.file_basename{
+    font-size: 13px;
 }
 </style>
 
@@ -383,19 +409,34 @@ use frontend\models\Reminder;
             </div>
         </div>
     <?php }?>
-    <h3>Attachments</h3>
+    <h4>Attachments</h4>
     <div class="document-wrapper">
-        <div class="doc-container">
-            <div class="doc-box">
-                <div class="doc-box-inner">Test</div>
-            </div>
-            <div class="doc-box">Hello</div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-        </div>
+    
+    <div class="doc-container">
+    <?php if(!empty($edocument)){
+        foreach ($edocument as $key => $value) { ?>
+                <div class="doc-box">
+                    <div class="doc-box-inner">
+                        <?php
+                            $filename = $value->file_location;
+                            $filepath = Url::to('@web/'.$filename);
+                            $value->fileExtension($filename);
+                        ?>
+                    </div>
+                    <div class="doc-info">
+                        <a href="<?= $filepath;?>" download><i class="fa fa-download download-doc" aria-hidden="true"></i></a>
+                        <div><span class="file_basename"><?=basename($value->file_location);?></span></div>
+                        <div>
+                            <span class="doc-date">Added <?=$value->timeElapsedString;?></span>
+                        </div>
+                    </div>
+                </div>
+            
+        
+    <?php }}else{ ?>
+        <a>Add attachemnt</a>
+    <?php }?>
+    </div>
     </div>
   
     <div class ="timestamp">
@@ -410,9 +451,33 @@ use frontend\models\Reminder;
     </div>
 </div>
 
+<? 
+    Modal::begin([
+        'header' => '<h4>Destination</h4>',
+        'id' => 'modelx',
+        'size' => 'modal-lg', 
+    ]);
+?>
+<div id="modelContentx"></div>
+<?
+    Modal::end();
+?>
+
 <?
 $taskmodal = <<<JS
+$('.show-list').click(function(){
+  $('.document-wrapper').addClass('list-mode');
+});
 
+$('.hide-list').click(function(){
+  $('.document-wrapper').removeClass('list-mode');
+});
+
+$('.doc-img').click(function(){
+        $('.modal').modal('show')
+            .find('.kv-zoom-body')
+            .load($(this).attr('value'));
+});
 JS;
 $this->registerJs($taskmodal);
 ?>

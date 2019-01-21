@@ -85,7 +85,6 @@ class EdocumentController extends Controller
         $uploadPath = 'images/edocuments/';
         $cid = Yii::$app->user->identity->cid;
         $userId = Yii::$app->user->identity->id;
-
         if (isset($_FILES[$fileName])) {
             $cidDir = $uploadPath. $cid;
             $userDir = $cidDir.'/'.$userId;
