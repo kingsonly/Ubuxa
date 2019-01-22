@@ -242,7 +242,7 @@ transition: margin-top 0.1s ease-out 0s;
 	$count--;
 	?>
 		
-		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		
 	
 	

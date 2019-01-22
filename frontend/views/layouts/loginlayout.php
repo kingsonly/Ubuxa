@@ -38,5 +38,24 @@ LoginAsset::register($this);
 
 <?php $this->endBody() ?>
 </body>
+<script src='//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js'></script>
+
+<script>
+var socket = io.connect('//127.0.0.1:3000');
+
+socket.on('connect', function () {
+    console.log('connected');
+	console.log('A user connected');
+	socket.on('message', function(data){
+		
+	});
+    
+
+    socket.on('disconnect', function () {
+        console.log('disconnected');
+		
+    });
+});
+</script>
 </html>
 <?php $this->endPage() ?>

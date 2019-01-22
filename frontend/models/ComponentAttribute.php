@@ -29,6 +29,7 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
     /**
      * {@inheritdoc}
      */
+	const SHOW_IN_GRID = 1;
     public static function tableName()
     {
         return '{{%component_attribute}}';
@@ -82,7 +83,7 @@ class ComponentAttribute extends \yii\db\ActiveRecord implements Sortable
 	
 	public function getComponentTemplateAttributeShowInGrid()
     {
-        return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id'])->andWhere(['show_in_grid'=>0])->orderBy([
+        return $this->hasOne(ComponentTemplateAttribute::className(), ['id' => 'component_template_attribute_id'])->andWhere(['show_in_grid'=>self::SHOW_IN_GRID])->orderBy([
 			'sort_order' => SORT_ASC
 		]);
     }

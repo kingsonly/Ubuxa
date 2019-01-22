@@ -50,7 +50,9 @@ use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
 use frontend\models\UserSetting;
+use linslin\yii2\curl;
 use google\apiclient;
+
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
@@ -247,6 +249,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
+			$this->PostExample();
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -390,8 +393,12 @@ class SiteController extends BoffinsBaseController {
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
+			
+							return 1;
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+						
+							return 0;
 	    				}
 	    		} else {
 	    			echo "Email cannot be empty";
@@ -514,6 +521,21 @@ class SiteController extends BoffinsBaseController {
     public function actionNewpage()
     {
     	return $this->render('newpage');
+    }
+	
+	public function PostExample()
+    {
+        //Init curl
+        $curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'email' => 'guest'
+                )
+            ))
+            ->post('127.0.0.1:5000/user/api/v1/login');
     }
 
 }
