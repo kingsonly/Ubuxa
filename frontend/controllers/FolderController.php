@@ -18,6 +18,7 @@ use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
 use frontend\models\UserFeedback;
 use frontend\models\Component;
+use frontend\models\Edocument;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -117,6 +118,7 @@ class FolderController extends Controller
 		$componentCreateUrl = Url::to(['component/create']);
         $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
         $onboarding = Onboarding::find()->andWhere(['user_id' => $userId])->one();
+        $edocument = Edocument::find()->where(['reference'=>'folder','reference_id'=>$id])->all();
         
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
@@ -157,6 +159,7 @@ class FolderController extends Controller
             'componentModel' => $componentModel,
             'onboardingExists' => $onboardingExists,
             'onboarding' => $onboarding,
+            'edocument' => $edocument,
         ]);
     }
 	

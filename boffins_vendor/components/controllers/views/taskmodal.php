@@ -410,34 +410,34 @@ use yii\bootstrap\Modal;
         </div>
     <?php }?>
     <h4>Attachments</h4>
-    <div class="document-wrapper">
     
-    <div class="doc-container">
-    <?php if(!empty($edocument)){
-        foreach ($edocument as $key => $value) { ?>
-                <div class="doc-box">
-                    <div class="doc-box-inner">
-                        <?php
-                            $filename = $value->file_location;
-                            $filepath = Url::to('@web/'.$filename);
-                            $value->fileExtension($filename);
-                        ?>
-                    </div>
-                    <div class="doc-info">
-                        <a href="<?= $filepath;?>" download><i class="fa fa-download download-doc" aria-hidden="true"></i></a>
-                        <div><span class="file_basename"><?=basename($value->file_location);?></span></div>
-                        <div>
-                            <span class="doc-date">Added <?=$value->timeElapsedString;?></span>
+    <?php if(!empty($edocument)){?>
+        <div class="document-wrapper">
+            <div class="doc-container">
+                <?php foreach ($edocument as $key => $value) { ?>
+                    <div class="doc-box">
+                        <div class="doc-box-inner">
+                            <?php
+                                $filename = $value->file_location;
+                                $filepath = Url::to('@web/'.$filename);
+                                $value->fileExtension($filename);
+                            ?>
+                        </div>
+                        <div class="doc-info">
+                            <a href="<?= $filepath;?>" download><i class="fa fa-download download-doc" aria-hidden="true"></i></a>
+                            <div><span class="file_basename"><?=basename($value->file_location);?></span></div>
+                            <div>
+                                <span class="doc-date">Added <?=$value->timeElapsedString;?></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            
-        
-    <?php }}else{ ?>
+                <?php } ?>
+            </div>
+        </div>
+    <?php }else{ ?>
         <a>Add attachemnt</a>
     <?php }?>
-    </div>
-    </div>
+    
   
     <div class ="timestamp">
         <div class="createDate">

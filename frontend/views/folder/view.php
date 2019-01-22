@@ -15,6 +15,7 @@ use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
 use boffins_vendor\components\controllers\EdocumentWidget;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use kartik\popover\PopoverX;
 use yii\web\View;
 use frontend\assets\AppAsset;
@@ -221,7 +222,11 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-    
+
+    <? $this->beginBlock('edocument')?>
+      <?= ViewEdocumentWidget::widget(['edocument'=>$edocument]) ?>
+    <? $this->endBlock();?>
+
   <? $this->beginBlock('subfolders')?>
   <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders
   	<?php if(!empty($model->subFolders)){ ?>
