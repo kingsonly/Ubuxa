@@ -66,4 +66,10 @@ return [
     59 => [
         'administrator',
     ],
+    31 => [
+        'manager',
+    ],
+    34 => [
+        'administrator',
+    ],
 ];

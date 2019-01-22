@@ -180,8 +180,10 @@ class ClipOnBehavior extends Behavior
 	private function getAllClips()
 	{
 		$clipBarModel = new ClipBar(); // clipbar instance 
-		$ownerId = $this->owner->id; // owners id usually the folder id
-		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2; // to be changed once component is done , holds static value depending if owner class is a folder or a component
+		$ownerId = $this->owner->id; // owners id usually the folder id but could also be a task or a any thing that can be cliped to eg a clipbar
+		$ownerClassName= $this->_getShortClassName($this->owner); // holds a string value of the actuall class name
+		$getOwnerType = ClipBarOwnerType::find()->where(['owner_type'=>$ownerClassName])->one()
+		$ownerTypeId = $getOwnerType->id; //returns the id which is gotten from the clip bar owner type search
 		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->count();// used to make sure a clip exist 
 		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // get clip bar id which would be used to fetch all clips associated to the bar 
 		
