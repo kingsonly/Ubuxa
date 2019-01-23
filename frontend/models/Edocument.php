@@ -39,7 +39,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             [['reference_id', 'file_location'], 'required'],
             [['reference_id', 'deleted', 'cid'], 'integer'],
             [['file_location'], 'string'],
-            [['last_updated', 'fromWhere','ownerId'], 'safe'],
+            [['last_updated', 'fromWhere'], 'safe'],
             [['reference'], 'string', 'max' => 25],
         ];
     }
@@ -63,31 +63,30 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     public function fileExtension($filename)
     {
         $docpath = Url::to('@web/'.$filename);
-        $test = Url::to(['folder/index']);
         $doctype = Url::to('@web/images/edocuments');
-        $gview = 'https://docs.google.com/gview?url=';
+        $gview = 'http://view.officeapps.live.com/op/view.aspx?src=';
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         switch($ext) {
              case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$docpath.');"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$docpath.');"></a>';
             break;
             case 'zip': case 'rar': case 'tar':
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';
             break;
             case 'doc': case 'docx':
-                echo '<a class="doc-img" value="'.$test.'" target="_blank" style="background-image: url('.$doctype.'/word.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/word.png");"></a>';
             break;
             case 'pdf': case 'PDF':
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/pdf.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/pdf.png");"></a>';
             break;
             case 'xls': case 'xlsx':
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/excel.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/excel.png");"></a>';
             break;
             case 'ppt': case 'pptx':
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/powerpoint.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/powerpoint.png");"></a>';
             break;
             default:
-                echo '<a class="doc-img" href="'.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
+                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
         
         }
     }

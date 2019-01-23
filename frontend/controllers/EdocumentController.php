@@ -117,6 +117,7 @@ class EdocumentController extends Controller
                     $model->reference_id = $referenceID;
                     $model->last_updated = new Expression('NOW()');
                     $model->cid = $cid;
+                    $model->fromWhere = $reference;
 					$model->ownerId = $referenceID;
 					$model->fromWhere = $reference;
                     $model->save();
@@ -135,6 +136,8 @@ class EdocumentController extends Controller
                     $model->reference_id = $referenceID;
                     $model->last_updated = new Expression('NOW()');
                     $model->cid = $cid;
+                    $model->fromWhere = $reference;
+                    $model->ownerId = $referenceID;
                     $model->save();
                 }            
             }

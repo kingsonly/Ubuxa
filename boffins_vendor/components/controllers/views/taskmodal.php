@@ -299,6 +299,9 @@ use yii\bootstrap\Modal;
 .file_basename{
     font-size: 13px;
 }
+.btn-toggleheader, .btn-fullscreen, .btn-borderless, .glyphicon-triangle-right, .glyphicon-triangle-left {
+    display: none !important;
+}
 </style>
 
     <div class="task-view">
@@ -451,17 +454,7 @@ use yii\bootstrap\Modal;
     </div>
 </div>
 
-<? 
-    Modal::begin([
-        'header' => '<h4>Destination</h4>',
-        'id' => 'modelx',
-        'size' => 'modal-lg', 
-    ]);
-?>
-<div id="modelContentx"></div>
-<?
-    Modal::end();
-?>
+
 
 <?
 $taskmodal = <<<JS
@@ -474,9 +467,10 @@ $('.hide-list').click(function(){
 });
 
 $('.doc-img').click(function(){
+    var value = $(this).attr('value')
         $('.modal').modal('show')
             .find('.kv-zoom-body')
-            .load($(this).attr('value'));
+            .html('<iframe src="'+value+'" height="100%" width="100%"></iframe>');
 });
 JS;
 $this->registerJs($taskmodal);

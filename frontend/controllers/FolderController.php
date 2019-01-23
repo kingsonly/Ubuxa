@@ -86,7 +86,7 @@ class FolderController extends Controller
 		if(empty($folder)){
             return $this->render('empty_index');
         } else {
-            return $this->renderAjax('index', [
+            return $this->render('index', [
             'folders' => $seperateFolders,
             ]);
         }

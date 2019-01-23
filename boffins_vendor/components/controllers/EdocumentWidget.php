@@ -41,7 +41,7 @@ class EdocumentWidget extends Widget
             'iconPadding' => $this->iconPadding,
             'tasklist' => $this->tasklist,
             'model' => new Edocument(),
-            'location' => !empty($this->location)?$this->location:'task',
+            //'location' => !empty($this->location)?$this->location:'task',
         	]);
     }
 }

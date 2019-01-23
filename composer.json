@@ -57,9 +57,7 @@
         "enyo/dropzone": "^5.5",
         "moment/moment": "*",
         "fullcalendar/fullcalendar": "*",
-        "linslin/yii2-curl": "*",
-        "google/apiclient": "^2.0",
-        "enyo/dropzone": "^5.5"
+        "linslin/yii2-curl": "*"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
