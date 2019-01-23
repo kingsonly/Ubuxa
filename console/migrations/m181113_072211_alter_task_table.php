@@ -29,7 +29,7 @@ class m181113_072211_alter_task_table extends Migration
     {
         echo "m181113_072211_alter_task_table cannot be reverted.\n";
 
-        return false;
+        //return false;
     }
 
     /*
