@@ -54,6 +54,7 @@ use linslin\yii2\curl;
 use google\apiclient;
 
 
+
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
@@ -249,7 +250,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
-			$this->PostExample();
+			$this->PostExample(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -523,7 +524,7 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 	
-	public function PostExample()
+	public function PostExample($username)
     {
         //Init curl
         $curl = new curl\Curl();
@@ -532,10 +533,17 @@ class SiteController extends BoffinsBaseController {
         $response = $curl->setOption(
                 CURLOPT_POSTFIELDS, 
                 http_build_query(array(
-                    'email' => 'guest'
+                    'email' => $username
                 )
             ))
-            ->post('127.0.0.1:5000/user/api/v1/login');
+            ->post('127.0.0.1:4000/api');
     }
+	
+	public function actionUpdateSocketUserStack(){
+		$session = Yii::$app->session;
+		$socketusers = $_REQUEST['activitiesArray'];
+		$session->set('socketUsers', $socketusers);
+		
+	}
 
 }

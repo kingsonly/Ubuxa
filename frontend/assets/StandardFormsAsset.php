@@ -68,6 +68,7 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.tablesorter.min.js',
 		'js/jquery.tablesorter.widgets.min.js',
 		'js/addons/pager/jquery.tablesorter.pager.js',
+		'//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js',
 		'js/chat-client-script.js',
 		
 		///'js/dragables.js'
