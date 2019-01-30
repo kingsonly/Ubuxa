@@ -59,6 +59,11 @@
 
 
 <div id="mySidenav" class="sidenav">
+    <div id="edoc-full" class="edoc-overlay">
+        <a href="javascript:void(0)" class="edoc-closebtn">&times;</a>
+        <div class="edoc-overlay-content">
+        </div>
+    </div>
   <div class="close-kanban">
     <a class="closebtn">&times;</a>
       <?php if (isset($this->blocks['kanban'])){ ?>

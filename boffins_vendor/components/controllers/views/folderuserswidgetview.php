@@ -87,7 +87,7 @@ transition: margin-top 0.1s ease-out 0s;
 	.folderusers{
 		display: flex;
 		flex: 1;
-		height: 47px;
+		height: 43px;
 		width: 100%;
 	}
 	.user-container{

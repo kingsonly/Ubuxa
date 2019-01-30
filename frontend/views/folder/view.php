@@ -179,7 +179,7 @@ $img = $model->folder_image;
 <section>
     <div class="container-fluid">
         <div class="row">
-        	<?= EdocumentWidget::widget(['docsize'=>1120,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
+        	<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
@@ -224,7 +224,7 @@ $img = $model->folder_image;
     <? $this->endBlock();?>
 
     <? $this->beginBlock('edocument')?>
-      <?= ViewEdocumentWidget::widget(['edocument'=>$edocument]) ?>
+      <?= ViewEdocumentWidget::widget(['edocument'=>$edocument,'searchMargin' =>100]) ?>
     <? $this->endBlock();?>
 
   <? $this->beginBlock('subfolders')?>
@@ -264,7 +264,8 @@ $img = $model->folder_image;
         'size' => 'modal-md', 
     ]);
 ?>
-<div id="viewcontent"></div>
+<div id="viewcontent">
+</div>
 <?
     Modal::end();
 ?>

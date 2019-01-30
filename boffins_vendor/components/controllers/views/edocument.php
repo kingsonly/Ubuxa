@@ -318,10 +318,9 @@
 }
 </style>
 
-<main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>px">
+<main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>%">
         <div class="dropzones" id="dynamic-drop<?=$target;?>">
               <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
-              <?//= $form->field($model, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                 <span class="dz-message doc-message" style="padding-top: <?=$textPadding;?>px">
                   Drop files here.
                 </span>
@@ -343,7 +342,6 @@ var lastTarget = null;
     $('#dropzone-main$target').on("dragenter", function(e)
     {
         lastTarget = e.target; // cache the last target here
-
         if($('.menu-icon').hasClass('closed')){
             $(".dropzone$target").removeClass("dummy");
             $('#dropzone-mainfolder').addClass('folderDoc');
@@ -360,6 +358,7 @@ var lastTarget = null;
         if (e.target === document || e.target === lastTarget) {
             return false;
         }
+        $('#dropzone-mainfolder').removeClass("add-zindex");
         $(".dropzone$target").addClass("dummy");
     }).bind("dragover", function (e) {
         e.preventDefault();
@@ -367,8 +366,11 @@ var lastTarget = null;
         e.preventDefault();
         $(".dropzone$target").addClass("dummy");
     });
-
+var counter = 0;
 $(document).on('dragenter', function(e){
+    lastTarget = e.target;
+    //console.log(lastTarget);
+    counter++;
     $('.dropzone-main').removeClass("remove-zindex");
     $('.dropzone-main').addClass("add-zindex");
     if(($('#dropzone-mainfolder').hasClass('hideFolderDoc')) && ($('.menu-icon').hasClass('closed'))){
@@ -376,12 +378,16 @@ $(document).on('dragenter', function(e){
         $('.hidetasklist').removeClass('hideFolderDoc');
         $('.hidetasklist').addClass('folderDoc');
     }
-}).bind('dragover', function(){
+}).bind('dragover', function(e){
+    e.preventDefault();
     $('.dropzone-main').removeClass("add-zindex");
     $('.dropzone-main').addClass("remove-zindex");
 }).bind('dragleave', function(e){
-    if($('#dropzone-mainfolder').hasClass('add-zindex')){
-        $('.dropzone-mainfolder').removeClass("add-zindex");
+    counter--;
+    if(counter == 0){
+        if($('#dropzone-mainfolder').hasClass('add-zindex')){
+            //$('#dropzone-mainfolder').removeClass("add-zindex");
+        }
     }
 })
 
@@ -391,13 +397,13 @@ var dropzone = new Dropzone('#dropupload$target', {
      $(".dropzone$target").addClass("dummy");
      $('.dropzone-main').addClass("remove-zindex");
      $('.dropzone-main').removeClass("add-zindex");
-     toastr.success('File uploaded successfully');
     });
     this.on("complete", function(file) {
         this.removeFile(file);
     });
     this.on("success", function(file, response) {
         console.log(response);
+        toastr.success('File uploaded successfully');
     });
     this.on('error', function(file, response) {
         toastr.error(response);

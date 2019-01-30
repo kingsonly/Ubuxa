@@ -128,7 +128,7 @@ class TaskController extends Controller
         $label = new label();
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
-        $edocument = Edocument::find()->where(['reference'=>'task','reference_id'=>$id])->all();
+        $edocument = $model->clipOn['edocument'];
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {

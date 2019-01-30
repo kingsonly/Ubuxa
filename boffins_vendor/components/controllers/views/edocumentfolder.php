@@ -205,18 +205,20 @@ Main Components
     margin-right: 15px;
     margin-left: 35px;
 }
-
+.edocument-text{
+  font-size: 25px;
+}
 </style>
 
   <ul class="cd-edoc-accord-menu folder-animated">
     <li class="has-edoc-children">
 
       <input type="checkbox" name="edoc-100" class="accord-input" id="edoc-100">
-      <label class="accord-label edoc-label" for="edoc-100"><i class="fa fa-file iconz" aria-hidden="true"></i>Edocuemnts</label>
+      <label class="accord-label edoc-label" for="edoc-100"><i class="fa fa-file-text-o iconz" aria-hidden="true"></i>Documents</label>
         <ul class="first-list">
             <li class="has-children">
               <div id="edoc-test">
-                
+               
               </div>
             </li>      
           </ul>
@@ -233,6 +235,19 @@ $edocaccord = <<<JS
         $('.edoc-content').html(data);
      }
 })*/
+
+function expand() {
+  $(".search-document").toggleClass("close");
+  $(".input-search").toggleClass("square");
+  if ($('.search-document').hasClass('close')) {
+    $('.input-search').focus();
+  } else {
+    $('.input-search').blur();
+  }
+}
+$('.search-document').on('click', expand);
+
+
 
 $(document).ready(function(){
   var edocaccordsMenu = $('.cd-edoc-accord-menu');
@@ -253,11 +268,12 @@ $(document).ready(function(){
     $('.folder-animated').click(function(){
      $('.edocument-container').css({
        'visibility':'visible',
-       '-webkit-transition':'width 2s',
-       'transition':'width 2s, height 2s',
+       '-webkit-transition':'width 1s',
+       'transition':'width 1s, height 1s',
        'width':'600px',
        'min-height':'100%',
        'overflow': 'scroll',
+       'background-color': 'rgba(253, 253, 253, 0.9)',
       });
       $('.sider').hide('slow');
       

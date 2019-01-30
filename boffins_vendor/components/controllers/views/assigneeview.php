@@ -126,7 +126,7 @@ lH = li Header
 
 <div class="X" id="cover<?=$taskid.$assigneeId; ?>">
   <div class="asignee-head"><span class="span-header">Assignees</span></div>
-<input type="search" id="iS<?= $taskid.$assigneeId ?>" onkeyup="fS()" placeholder="Search names..." class="search-field">
+<input type="search" id="iS<?= $taskid.$assigneeId ?>"  placeholder="Search names..." class="search-field">
 <div class="bott">
 <ul id="list-body" class="list-bodytest ghpd">
     <?php 
@@ -173,24 +173,14 @@ $(".assign-input").change(function(event) {
     _AddUser(user, taskid);        
 });
 
-function fS() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementsByClassName('search-field')[0];
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("list-body");
-    li = ul.getElementsByTagName('li');
-
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-            
-        }
-    }
-}
-
+$(document).ready(function(){
+  $(".search-field").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#list-body li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
 
 function _AddUser(user,taskid){
           $.ajax({

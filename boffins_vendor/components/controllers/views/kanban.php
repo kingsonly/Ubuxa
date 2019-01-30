@@ -44,7 +44,6 @@ $checkUrlParams = $checkUrls[0];
 .drag-container {
   /*max-width: 1000px;*/
   margin: 20px;
-  height: 100vh;
 }
 .drag-list {
   display: flex;
@@ -93,9 +92,7 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 3px;
 }
 .drag-inner-list {
-    min-height: 30px;
-    max-height: 80vh;
-    overflow: scroll;
+  min-height: 50px;
 }
 .drag-item {
   /*width: 280px;*/
@@ -168,7 +165,9 @@ $checkUrlParams = $checkUrls[0];
   opacity: 0.2;
 }
 /* Demo info */
-
+.task-head {
+  text-align: center;
+}
 
 .bottom-content {
     visibility: hidden;
@@ -272,9 +271,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 10px;
+  padding-left: 5px;
     border-right-width: 1px;
-    padding-right: 10px;
+    padding-right: 5px;
     width: 272px;
     cursor: pointer;
 }
@@ -302,12 +301,13 @@ a.addTaskButton.active {
 }
 .label-task {
     background: #3B5998;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
     color: #fff;
     border-radius: 3px;
     padding-top: 1px;
     padding-bottom: 1px;
+    font-size: 13px;
 }
 .assigndrop{
   width:340px;
@@ -354,6 +354,8 @@ a.addTaskButton.active {
   border-bottom: 1px solid #337ab7;
 }
 .card-add {
+  padding-left: 10px;
+  padding-right: 10px;
   padding-bottom: 7px;
   display: none;
 }
@@ -367,16 +369,18 @@ a.addTaskButton.active {
 .task-titles{
   font-family: calibri;
 }
-.new-cardz{
-      /* width: 280px; */
-    margin: 10px;
-    /* background: #FAFAFA; */
-    /* transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); */
-    cursor: -webkit-grab;
-    /* cursor: grab; */
-    border-radius: 2px;
-    /* box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1); */
-    position: relative;
+.edoc-count{
+  position: absolute;
+  right: 10px;
+  font-size: 13px;
+  color: #6b808c;
+  top: 3px;
+}
+.edocuments-board{
+  position: relative;
+}
+.assignedto{
+  margin-left: 5px;
 }
 </style>
 
@@ -385,9 +389,7 @@ a.addTaskButton.active {
     <ul class="drag-list" id="kanban-board">
         <?php
         $count = 1; 
-        foreach($taskStatus as $key => $value){ 
-          $statusId = $value->id;
-          ?>
+        foreach($taskStatus as $key => $value){ ?>
         <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
@@ -407,7 +409,7 @@ a.addTaskButton.active {
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
-                  <?= EdocumentWidget::widget(['docsize'=>280,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10]);?>
+                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10]);?>
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
                         <span class="task-titles"><?= $values->title; ?></span>
@@ -415,18 +417,30 @@ a.addTaskButton.active {
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
                         <div class="user-image">
-                         
                          <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
                       </div>
                     <?php }?>
+                    <div class="edocuments-board">
+                      <?php
+                        $edocuments = $values->clipOn['edocument'];
+                        if(!empty($edocuments)){?>
+                            <span class="edoc-count" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                              <? 
+                                $edocs = count($edocuments); 
+                                echo $edocs;
+                              ?>
+                              <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+                            </span>
+                      <?php }?>
                       <?php if(!empty($values->labelNames)){ ?>
-                        <div class="task-label-title">
+                        <div class="task-label-title" style="width: <?= !empty($edocuments) ? '90' : '100';?>%">
                           <span class="label-task" id="label<?=$values->id.$count?>">
-                          <?= $values->labelNames; ?>
-                        </span>
+                            <?= $values->labelNames; ?>
+                          </span>
                         </div>
                       <?php } ?>
+                    </div>
                       <?php 
                       $time = $values->reminderTime;
                       $timers = explode(",",$time);
@@ -437,7 +451,7 @@ a.addTaskButton.active {
                         if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
-                            <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
+                            <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Reminder">
                               <?= $reminders; ?>
                             </span>
                           </div>
@@ -488,18 +502,18 @@ a.addTaskButton.active {
                     </div>
                 </li>
             <?php $count2++;}}}?>
-            <div class="new-cardz card-add new-task<?=$statusId;?>" id="add-new-cardz">
-                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
-              </div>
+        
             </ul>
             <?php if($checkUrlParams == 'folder'){?>
-              <a class="add-card new-task<?=$statusId;?>" href="#">
+              <a class="add-card" href="#">
                 <span class="cardTask">
                   <span class="glyphicon glyphicon-plus"></span>
                   <span class="add-title"> Add Task </span>
                 </span>
               </a>
-              
+              <div class="card-add" id="add-new-cardz">
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
+              </div>
             <?php }?>
         </li>
         <?php $count++;} ?>
@@ -536,7 +550,7 @@ $.fn.closest_descendent = function(filter) {
     document.getElementById('2'),
     document.getElementById('3'),
     document.getElementById('4'),
-    document.getElementById('5'),
+    document.getElementById('5')
 ])
 
 .on('drag', function(el) {
@@ -710,11 +724,9 @@ $(document).click(function (e) {
 $(document).ready(
     function(){
         $(".add-card").click(function (e) {
-          e.preventDefault();
-          $(".drag-inner-list").scrollTop();
-          var x = this.classList[1];
-          $(this).hide();
-          $('div.'+x).show("slow");
+            e.preventDefault();
+            $(this).hide();
+            $(this).next('div.card-add').show("slow");
         });
         $(".close-add").click(function (e) {
             e.preventDefault();
@@ -727,4 +739,3 @@ JS;
  
 $this->registerJs($board);
 ?>
-

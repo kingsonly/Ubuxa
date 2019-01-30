@@ -59,7 +59,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
         <div class="edocument-container">
             <div class="row edocument-content" style="display: none">
                 <div class="col-sm-12">
-                    <div class="col-md-10">
+                    <div class="col-md-10" style="padding-top:15px;">
                         <span class="edocument-text">Edocument</span>
                     </div>
                     <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">

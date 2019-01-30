@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\db\Expression;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\models\{ClipableInterface, ClipperInterface};
 /**
@@ -24,6 +25,13 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
      * {@inheritdoc}
      */
     public $fromWhere;
+    /*
+    public $file_location;
+    public $reference;
+    public $reference_id;
+    public $last_updated;
+    public $cid;
+    public $ownerId;*/
 
     public static function tableName()
     {
@@ -60,33 +68,45 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         ];
     }
 
+    public function upload($edocument, $reference, $referenceID, $filePath, $cid)
+    {   
+            $edocument->file_location = $filePath;
+            $edocument->reference = $reference;
+            $edocument->reference_id = $referenceID;
+            $edocument->last_updated = new Expression('NOW()');
+            $edocument->cid = $cid;
+            $edocument->ownerId = $referenceID;
+            $edocument->fromWhere = $reference;
+            $edocument->save();
+    }
+
     public function fileExtension($filename)
     {
         $docpath = Url::to('@web/'.$filename);
         $doctype = Url::to('@web/images/edocuments');
-        $gview = 'http://view.officeapps.live.com/op/view.aspx?src=';
+        $gview = 'https://docs.google.com/viewer?embedded=true&url=';
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         switch($ext) {
              case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$docpath.');"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$docpath.');"></a>';
             break;
             case 'zip': case 'rar': case 'tar':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';
             break;
             case 'doc': case 'docx':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/word.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/word.png");"></a>';
             break;
             case 'pdf': case 'PDF':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/pdf.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/pdf.png");"></a>';
             break;
             case 'xls': case 'xlsx':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/excel.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/excel.png");"></a>';
             break;
             case 'ppt': case 'pptx':
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/powerpoint.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/powerpoint.png");"></a>';
             break;
             default:
-                echo '<a class="doc-img" value="'.$gview.$docpath.'" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
         
         }
     }
@@ -118,5 +138,22 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
 
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
+    }
+
+    public function checkFileName($path, $file){
+        $name =  $file->basename;
+        $ext =  $file->extension;
+        $filename = $file->name;
+
+        $filePath = $path.'/'.$filename;
+        $newname = $filename;
+        $counter = 1;
+        while (file_exists($filePath)) {
+               $newname = $name .'('. $counter . ').' . $ext;
+               $filePath = $path.'/'.$newname;
+               $counter++;
+         }
+         $newFilePath = $path . '/' . $newname;
+         return $newFilePath;
     }
 }

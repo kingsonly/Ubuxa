@@ -8,6 +8,7 @@ use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\EdocumentWidget;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use yii\helpers\ArrayHelper;
@@ -299,8 +300,11 @@ use yii\bootstrap\Modal;
 .file_basename{
     font-size: 13px;
 }
-.btn-toggleheader, .btn-fullscreen, .btn-borderless, .glyphicon-triangle-right, .glyphicon-triangle-left {
-    display: none !important;
+#boardContent{
+  overflow: scroll !important;
+}
+.download-documents:hover{
+    color: black;
 }
 </style>
 
@@ -387,7 +391,7 @@ use yii\bootstrap\Modal;
                         ]]); ?>
            </div>
     </div>
-    <?= EdocumentWidget::widget(['docsize'=>565,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
+    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
@@ -415,28 +419,7 @@ use yii\bootstrap\Modal;
     <h4>Attachments</h4>
     
     <?php if(!empty($edocument)){?>
-        <div class="document-wrapper">
-            <div class="doc-container">
-                <?php foreach ($edocument as $key => $value) { ?>
-                    <div class="doc-box">
-                        <div class="doc-box-inner">
-                            <?php
-                                $filename = $value->file_location;
-                                $filepath = Url::to('@web/'.$filename);
-                                $value->fileExtension($filename);
-                            ?>
-                        </div>
-                        <div class="doc-info">
-                            <a href="<?= $filepath;?>" download><i class="fa fa-download download-doc" aria-hidden="true"></i></a>
-                            <div><span class="file_basename"><?=basename($value->file_location);?></span></div>
-                            <div>
-                                <span class="doc-date">Added <?=$value->timeElapsedString;?></span>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
-            </div>
-        </div>
+        <?= ViewEdocumentWidget::widget(['edocument' => $edocument]);?>
     <?php }else{ ?>
         <a>Add attachemnt</a>
     <?php }?>
@@ -458,20 +441,7 @@ use yii\bootstrap\Modal;
 
 <?
 $taskmodal = <<<JS
-$('.show-list').click(function(){
-  $('.document-wrapper').addClass('list-mode');
-});
 
-$('.hide-list').click(function(){
-  $('.document-wrapper').removeClass('list-mode');
-});
-
-$('.doc-img').click(function(){
-    var value = $(this).attr('value')
-        $('.modal').modal('show')
-            .find('.kv-zoom-body')
-            .html('<iframe src="'+value+'" height="100%" width="100%"></iframe>');
-});
 JS;
 $this->registerJs($taskmodal);
 ?>

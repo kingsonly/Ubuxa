@@ -100,45 +100,17 @@ class EdocumentController extends Controller
             $data = Yii::$app->request->post();
             $reference =  $data['reference'];
             $referenceID =  $data['referenceID'];
-            $cnt = 1;
             if (file_exists($dir) && is_dir($dir)) {
-                $filePath = $dir . '/' . $file->name;
-                /*while (file_exists($filePath)) {
-                    $filename =  $file->basename . $cnt . '.' .$file->extension; 
-                    $cnt++;
-                    break;
-                }*/
-                //echo \yii\helpers\Json::encode($filename);
-                //return;
-                //$fileDir = $dir . '/' . $file->name;
-                if ($file->saveAs($filePath)) {
-                    $model->file_location = $filePath;
-                    $model->reference = $reference;
-                    $model->reference_id = $referenceID;
-                    $model->last_updated = new Expression('NOW()');
-                    $model->cid = $cid;
-                    $model->fromWhere = $reference;
-					$model->ownerId = $referenceID;
-					$model->fromWhere = $reference;
-                    $model->save();
+                $filePath = $model->checkFileName($dir, $file);
+                if ($file->saveAs($filePath)){
+                    $model->upload($model, $reference, $referenceID, $filePath, $cid);
                 }
             }else{
                 FileHelper::createDirectory($dir, $mode = 0775, $recursive = true);
                 $filePath = $dir . '/' . $file->name;
-                /*while (file_exists($filePath)) {
-                    $filename =  $file->basename . $cnt . '.' .$file->extension; 
-                    $cnt++;
-                }
-                $fileDir = $dir . '/' . $file->name;*/
+                
                 if ($file->saveAs($filePath)) {
-                    $model->file_location = $filePath;
-                    $model->reference = $reference;
-                    $model->reference_id = $referenceID;
-                    $model->last_updated = new Expression('NOW()');
-                    $model->cid = $cid;
-                    $model->fromWhere = $reference;
-                    $model->ownerId = $referenceID;
-                    $model->save();
+                    $model->upload($model, $reference, $referenceID, $filePath, $cid);
                 }            
             }
         }
@@ -173,11 +145,13 @@ class EdocumentController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['id'];
+            $model = $this->findModel($id)->delete();
+        }
     }
 
     /**
