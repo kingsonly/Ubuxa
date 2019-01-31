@@ -272,7 +272,6 @@ $(document).ready(function(){
        'transition':'width 1s, height 1s',
        'width':'600px',
        'min-height':'100%',
-       'overflow': 'scroll',
        'background-color': 'rgba(253, 253, 253, 0.9)',
       });
       $('.sider').hide('slow');

@@ -223,9 +223,11 @@ $img = $model->folder_image;
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
 
-    <? $this->beginBlock('edocument')?>
-      <?= ViewEdocumentWidget::widget(['edocument'=>$edocument,'searchMargin' =>100]) ?>
-    <? $this->endBlock();?>
+      <? $this->beginBlock('edocument')?>
+      <?php Pjax::begin(['id'=>'folder-edoc']); ?>
+        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument]) ?>
+      <?php Pjax::end(); ?>
+      <? $this->endBlock();?>
 
   <? $this->beginBlock('subfolders')?>
   <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders

@@ -294,6 +294,13 @@ $boardUrl = Url::to(['task/index']);
   z-index: 9999;
   background: url(<?//= $modalwait; ?>) center no-repeat #fff;
 }
+.edoc-list{
+    position: absolute;
+    right: 10px;
+    font-size: 13px;
+    color: #6b808c;
+    top: 14px;
+}
 </style>
 
 	 <div class="col-md-4" id="for-pjax">
@@ -368,7 +375,17 @@ $boardUrl = Url::to(['task/index']);
 
     <div class="todo__text">
         <span><?= $value->title; ?></span>
-        
+        <?php
+          $edocLists = $value->clipOn['edocument'];
+          if(!empty($edocLists)){?>
+              <span class="edoc-list" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                <? 
+                  $edoc = count($edocLists); 
+                  echo $edoc;
+                ?>
+                <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+              </span>
+        <?php }?>
     </div>
     
   </label>
@@ -630,13 +647,7 @@ $('#addTask').bind("keyup keypress", function(e) {
 
 });
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
   $(function() {
 
   var siteTaskTour = new Tour({

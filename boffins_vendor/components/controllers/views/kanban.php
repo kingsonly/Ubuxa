@@ -530,6 +530,14 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
 });
 
+$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
+
 $.fn.closest_descendent = function(filter) {
     var found = $(),
         currentSet = this; // Current place

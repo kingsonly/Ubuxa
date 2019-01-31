@@ -416,10 +416,11 @@ use yii\bootstrap\Modal;
             </div>
         </div>
     <?php }?>
-    <h4>Attachments</h4>
-    
     <?php if(!empty($edocument)){?>
+    <h4>Attachments</h4>
+    <?php Pjax::begin(['id'=>'task-edoc']); ?>
         <?= ViewEdocumentWidget::widget(['edocument' => $edocument]);?>
+    <?php Pjax::end(); ?>
     <?php }else{ ?>
         <a>Add attachemnt</a>
     <?php }?>

@@ -68,6 +68,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         ];
     }
 
+    //file upload method
     public function upload($edocument, $reference, $referenceID, $filePath, $cid)
     {   
             $edocument->file_location = $filePath;
@@ -80,14 +81,14 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             $edocument->save();
     }
 
-    public function fileExtension($filename)
+    public function fileExtension($filePath)
     {
-        $docpath = Url::to('@web/'.$filename);
+        $docpath = Url::to('@web/'.$filePath);
         $doctype = Url::to('@web/images/edocuments');
-        $gview = 'https://docs.google.com/viewer?embedded=true&url=';
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        $ext = pathinfo($filePath, PATHINFO_EXTENSION); //get file extension
+        /* check file extension to determine the file thumbnail */
         switch($ext) {
-             case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
+            case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
                 echo '<a class="doc-img" target="_blank" style="background-image: url('.$docpath.');"></a>';
             break;
             case 'zip': case 'rar': case 'tar':
@@ -141,19 +142,20 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     }
 
     public function checkFileName($path, $file){
-        $name =  $file->basename;
-        $ext =  $file->extension;
-        $filename = $file->name;
+        $name =  $file->basename; //get file basename
+        $ext =  $file->extension; //get file extension
+        $filename = $file->name; //get file name
 
         $filePath = $path.'/'.$filename;
-        $newname = $filename;
+        $newname = $filename; 
         $counter = 1;
+        //check if filepath already exists and append a number to the file name
         while (file_exists($filePath)) {
-               $newname = $name .'('. $counter . ').' . $ext;
+               $newname = $name .'_'. $counter . '.' . $ext; //add counter to filename
                $filePath = $path.'/'.$newname;
                $counter++;
          }
-         $newFilePath = $path . '/' . $newname;
+         $newFilePath = $path . '/' . $newname; 
          return $newFilePath;
     }
 }

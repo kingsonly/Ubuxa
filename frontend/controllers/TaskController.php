@@ -206,7 +206,6 @@ class TaskController extends Controller
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
-        $model->title = 'g g h';
         
 
         if ($model->load(Yii::$app->request->post())) {

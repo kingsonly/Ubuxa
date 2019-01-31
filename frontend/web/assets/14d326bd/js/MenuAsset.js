@@ -75,8 +75,11 @@ $(document).on('click',function (e) {
   } */
   if (!side_menu.is(e.target) 
       && side_menu.has(e.target).length === 0){
-    if($('.js-menu_toggle.opened')[0] && $('.board-open').hasClass('board-closed')){
+    if($('.js-menu_toggle.opened')[0] && $('.board-open').hasClass('board-closed') && (!$('.file-zoom-dialog').hasClass('in'))){
         $('.js-menu_toggle.opened').trigger('click');
+        $('.edocument-container').css({'width': '300px', 'visibility': 'hidden', 'min-height':'1px'});
+        $('.sider').show();
+        $('.edocument-content').hide();
     } else {
         //do nothing
     }

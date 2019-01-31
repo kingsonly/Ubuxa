@@ -3,6 +3,7 @@
     use yii\helpers\Url;
     use yii\widgets\Pjax;
     use yii\bootstrap\Modal;
+    use boffins_vendor\components\controllers\ViewEdocumentWidget;
 ?>
 
 <style>
@@ -97,6 +98,8 @@
   padding-right:10px;
 }
 
+.dropzone .dz-preview .dz-progress .dz-upload { background: #32A336;  }
+
 .document-wrapper.list-mode .doc-box{
   width:100%;
 }
@@ -170,7 +173,7 @@
 }
 .confirm-doc-delete{
   background-color: #eb5a46;
-  box-shadow: 0 1px 0 0 #b04632;
+  /*box-shadow: 0 1px 0 0 #b04632;*/
   border: none;
   width: 100%;
 }
@@ -183,19 +186,29 @@
 .btn-toggleheader, .btn-fullscreen, .btn-borderless, .glyphicon-triangle-right, .glyphicon-triangle-left {
     display: none !important;
 }
+#loading-edoc{
+  position: absolute;
+  left: 40%;
+  top: 27px;
+  display: none;
+}
+.for-edoc-loader{
+  position: relative;
+}
 </style>
   <div class="document-wrapper">
     <div class="doc-container">
         <div style="margin-top:<?= !empty($searchMargin) ? $searchMargin : 0;?>px">
+      <!-- loop through edocuments -->
       <?php foreach ($edocument as $key => $value) {
-        $filename = $value->file_location;
-        $filepath = Url::to('@web/'.$filename);
+        $filename = $value->file_location; //get file location
+        $filepath = Url::to('@web/'.$filename); //set file path
         $gview = 'https://docs.google.com/viewer?embedded=true&url=';
       ?>
         <div class="doc-box" value="<?=$gview.$filepath;?>">
           <div class="doc-box-inner">
             <?php
-              $value->fileExtension($filename);
+              $value->fileExtension($filename);//show file thumbnail image based on extension
             ?>
           </div>
           <div class="doc-info">
@@ -204,15 +217,15 @@
             </a>
             <div id="basename-container">
               <span class="file_basename">
-                <?=basename($value->file_location);?>
+                <?=basename($value->file_location); //get basename of file?> 
               </span>
             </div>
             <div>
-              <span class="doc-date">Added <?=$value->timeElapsedString;?></span>
+              <span class="doc-date">Added <?=$value->timeElapsedString; //show how long ago the file was uploaded?></span>
             </div>
             <div class="dropdown">
             <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu edoc-drop" aria-labelledby="dropdownMenuButton">
               <div class="delete-header-holder">
                 <span class="delete-header">
                   Confirm Delete
@@ -220,9 +233,12 @@
                   <a href="#" class="close-dropdown">X</a>
               </div>
               <div class="text-delete">
-                <div>
+                <div class="for-edoc-loader">
                   <p>Are you sure you want to delete this document?</p>
-                  <?= Html::button('Delete', ['class' => 'btn btn-success confirm-doc-delete', 'name' => 'add', 'id' => 'delete-edoc'.$value->id, 'data-docid' => $value->id]) ?>
+                  <span>
+                    <?= Html::button('Delete', ['class' => 'btn btn-success confirm-doc-delete', 'name' => 'add', 'id' => 'delete-edoc'.$value->id, 'data-docid' => $value->id]) ?>
+                    <span id="loading-edoc"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -235,26 +251,34 @@
   </div>
 
 <?
-$deleteEdocument = Url::to(['edocument/delete']);
+$deleteEdocument = Url::to(['edocument/delete']); //path for delete action
 $list = <<<JS
+//useful function to find nested parents of DOM
+jQuery.fn.getParent = function(num) {
+    var last = this[0];
+    for (var i = 0; i < num; i++) {
+        last = last.parentNode;
+    }
+    return jQuery(last);
+};
 
 $('.show-list').click(function(){
-  $('.document-wrapper').addClass('list-mode');
+  $('.document-wrapper').addClass('list-mode'); //unused
 });
 
 $('.hide-list').click(function(){
-  $('.document-wrapper').removeClass('list-mode');
+  $('.document-wrapper').removeClass('list-mode'); //unused
 });
 
+//on click of element show document preview
 $('.doc-box').click(function(e){
-  //if(e.target !== e.currentTarget) return;
-  //$(this).children(".doc-info").toggle();
     var value = $(this).attr('value')
         $('#kvFileinputModal').modal('show')
             .find('.kv-zoom-body')
             .html('<iframe class="document-preview" src="'+value+'" height="100%" width="100%"></iframe>');
 });
 
+//for deleting documents
 $(".delete-document").on('click',function(e) {
     e.stopPropagation();
     $(this).next('.dropdown-menu').toggle();
@@ -262,16 +286,21 @@ $(".delete-document").on('click',function(e) {
 });
 
 $(document).click(function(){
-  //$(".dropdown-menu").hide();
+  $(".edoc-drop").hide();
 });
 
+//for deleting documents
 $(".confirm-doc-delete").on('click', function(e){
   e.stopPropagation();
+  //e.preventDefault();
   var edocId;
   edocId = $(this).data('docid');
   console.log(edocId)
-  //$('.loading-delete-task').show();
-  _deleteEdocument(edocId);  
+  $(this).hide();
+  var getThis;
+  getThis = $(this);
+  $(this).next().show();
+  _deleteEdocument(edocId,getThis) ;  
 })
 
 $('.close-dropdown').on('click', function(e){
@@ -286,24 +315,30 @@ $('.download-documents').click(function(event){
     event.stopPropagation();
 });
 
-function _deleteEdocument(edocId){
-  $.ajax({
-        url: '$deleteEdocument',
-        type: 'POST',
-        async: false,
-        data: {
-            id: edocId, 
+//ajax call to delete a document
+function _deleteEdocument(edocId, getThis){
+  setTimeout(function(){
+    $.ajax({
+          url: '$deleteEdocument',
+          type: 'POST',
+          async: false,
+          data: {
+              id: edocId, 
+            },
+          success: function(res, sec){
+            toastr.success('Document Deleted');
+            $.pjax.reload({container:"#kanban-refresh",async: false});
+            $.pjax.reload({container:"#task-list-refresh",async: false});
+            $(".edoc-drop").hide();
+            getThis.getParent(7).hide();
+            getThis.show();
+            getThis.next().hide();
           },
-        success: function(res, sec){
-          toastr.success('Document Deleted');
-          $.pjax.reload({container:"#kanban-refresh",async: false});
-          //$.pjax.reload({container:"#task-modal",async: false});
-          $(".dropdown-menu").hide();
-        },
-        error: function(res, sec){
-            console.log('Something went wrong');
-        }
-  });
+          error: function(res, sec){
+              console.log('Something went wrong');
+          }
+    });
+  }, 50);
 }
 
 JS;
