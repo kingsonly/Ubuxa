@@ -746,6 +746,7 @@ $(document).ready(function(){
                 var getDate = date.format()+' '+time;
                 $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
                // update remove after drop status
+                setTimeout(function(){ 
                 $.post('$DropUrl',
                 {
                   id:getId,
@@ -756,9 +757,11 @@ $(document).ready(function(){
                   console.log(data);
                 }
                 )
+                },500)
                 // is the "remove after drop" checkbox checked?
                 if ($('#drop-remove').is(':checked')) {
                   // if so, remove the element from the "Draggable Events" list
+                setTimeout(function(){ 
                 $.post('$updateDropUrl',
                 {
                   id:getId
@@ -768,7 +771,7 @@ $(document).ready(function(){
                    elements.remove();
                 }
                 )
-                  
+                },500)  
                 }
             },
             dayClick: function(date, jsEvent, view) {
