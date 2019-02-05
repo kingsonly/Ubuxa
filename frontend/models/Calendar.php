@@ -23,6 +23,13 @@ class Calendar extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    const TASK_NOT_DELETED = 0; //TASK THAT HAVE NOT BEEN DELETED STATUS
+    const REMOVE_AFTER_DROP_STATUS = 1; //UPDATE REMOVE AFTER DROP STATUS WITH 1
+    const TASK_GROUP_CHECKED = 1; //value of task group when checked
+    const TASK_GROUP_NOT_CHECKED = 0; //value of task group when not checked
+    const GOOGLE_CALENDAR = 1; //value of status when calendar type is google calendar
+    const UBUXA_CALENDAR = 0; //value of status when calendar type is ubuxa calendar
+
     public static function tableName()
     {
         return '{{%calendar}}';
@@ -36,9 +43,7 @@ class Calendar extends \yii\db\ActiveRecord
         return [
             [['last_id', 'type'], 'required'],
             [['last_id','user_id', 'deleted', 'cid'], 'integer'],
-            [['last_updated'], 'safe'],
-            [['last_id'], 'exist', 'skipOnError' => true, 'targetClass' => Event::className(), 'targetAttribute' => ['last_id' => 'id']],
-            [['last_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::className(), 'targetAttribute' => ['last_id' => 'id']],
+            [['last_updated'], 'safe']
         ];
     }
 
@@ -58,19 +63,5 @@ class Calendar extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLast()
-    {
-        return $this->hasOne(Event::className(), ['id' => 'last_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLast0()
-    {
-        return $this->hasOne(Task::className(), ['id' => 'last_id']);
-    }
+    
 }

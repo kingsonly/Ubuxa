@@ -203,7 +203,6 @@ class TaskController extends Controller
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
-        $model->title = 'g g h';
         
 
         if ($model->load(Yii::$app->request->post())) {
@@ -226,7 +225,7 @@ class TaskController extends Controller
                     }
                 } elseif(!empty(Yii::$app->request->post('taskgroupid'))){
                     $model->completion_time = NULL;
-                    $model->in_progress_time = NULL;
+                    $model->in_progress_time = date('Y-m-d H:i:s');
                     $model->due_date = NULL;
                     $model->status_id = 1;
                     
@@ -235,7 +234,7 @@ class TaskController extends Controller
                         $taskGroupModel->task_group_id = Yii::$app->request->post('taskgroupid');
                         $taskGroupModel->task_child_id = $model->id;
                         $taskGroupModel->save();
-                        return 1;
+                        return json_encode([$model->id,$model->title,$model->in_progress_time]);
                         
                     }
 
@@ -366,6 +365,39 @@ class TaskController extends Controller
             $data = Yii::$app->request->post();   
             $id =  $data['task_id'];
             $model = $this->findModel($id)->delete();
+        }
+    }
+
+    public function actionCalendartaskdelete()
+    {   
+
+        if(Yii::$app->request->post('id')) {
+            $taskId = Yii::$app->request->post('id');
+            $deleteTask = Task::findOne($taskId);
+            $deleteTask->deleted = 1;
+            $deleteTask->save(); 
+        }
+    }
+
+    public function actionUpdatetask()
+    {   
+      if(Yii::$app->request->post('id')) {
+            $taskId = Yii::$app->request->post('id');
+            $updateTask = Task::findOne($taskId);
+            return json_encode([$updateTask->title, $updateTask->in_progress_time]);
+        }  
+    }
+
+    public function actionCalendartaskupdate($id)
+    {
+      $updateTask = Task::findOne($id);
+      $postVariable = Yii::$app->request->post();
+      $Datetime = $postVariable["Task"]["in_progress_time"].':00';
+      $updateTask->in_progress_time = $Datetime;
+      if($updateTask->load(Yii::$app->request->post()) && $updateTask->save()) {
+          return 1;
+        } else {
+            return 0;
         }
     }
 

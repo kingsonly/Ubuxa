@@ -365,7 +365,7 @@ $boardUrl = Url::to(['task/index']);
     </svg>
 
     <div class="todo__text">
-        <span><?= $value->title; ?></span>
+        <span><?= strip_tags($value->title); ?></span>
         
     </div>
     

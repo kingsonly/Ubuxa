@@ -69,40 +69,14 @@
 </div>
 
 <div class="calendar-open">
-    <span class="open-calendar"><i class="fa fa-calendar iconz"></i>View Calendar</span>
+    <a href="<?=Url::to(['calendar/index','id'=>$folderId]);?>"><span class="open-calendar"><i class="fa fa-calendar iconz"></i>View Calendar</span></a>
 </div>
 
 <?
-$calendarUrl = Url::to(['calendar/index']);
 $viewBoard = <<<JS
 
 
-    $('.calendar-open').click(function(){
-        $(this).addClass('calendar-opened');
-        $(this).removeClass('board-closed');
-        $('#mysidenav-calendar-calendar').css({'width':'100%'})
-        $.ajax({
-                url: '$calendarUrl',
-                type: 'POST',
-                success: function(response) {
-                    $('.main-calendar-container').html(response);
-                },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-            });
-    });
-
-    $('.closebtn-calendar').click(function(){
-        setTimeout(function(){
-            $.pjax.reload({container:"#task-list-refresh",async: false});
-            }, 550);
-        $('.calendar-open').removeClass('calendar-opened');
-        $('.calendar-open').addClass('board-closed');
-        $('#mysidenav-calendar-calendar').css({'width':'0'})
-    });
-
-
+   
 JS;
 $this->registerJs($viewBoard);
 ?>

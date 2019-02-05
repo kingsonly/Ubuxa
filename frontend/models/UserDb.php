@@ -594,5 +594,14 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		$masterDomain = Customer::find()->andWhere(['cid' => yii::$app->user->identity->cid])->one();
 		return $masterDomain->master_doman;
 	}
-	
+
+    public function getUserReminders()
+    {
+        return $this->hasMany(CalendarReminder::className(), ['user_id' => 'id']);
+    }
+
+	public function getReminders()
+    {
+        return $this->hasMany(Reminder::className(), ['id' => 'reminder_id'])->via('userReminders');
+    }
 }

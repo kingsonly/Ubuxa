@@ -14,6 +14,7 @@ use boffins_vendor\components\controllers\UserProfileWidget;
 use boffins_vendor\components\controllers\ViewCalendarWidget;
 
 $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
+$checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 
 ?>
 
@@ -109,7 +110,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 <?php } ?> 
              <?php if($checkSiteUrl != 'folder/index'){ ?>
                 <li class="list_item"><?= ViewBoardWidget::widget();?></li>
-                <li class="list_item"><?= ViewCalendarWidget::widget();?></li>
+                <li class="list_item"><?= ViewCalendarWidget::widget(['folderId'=>$checkIdParam]);?></li>
              <?php }?>
 		</ul>
     </div>

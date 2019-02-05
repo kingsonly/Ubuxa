@@ -55,7 +55,8 @@
         "kartik-v/yii2-widget-depdrop": "@dev",
         "codeception/verify": "*",
         "moment/moment": "*",
-        "fullcalendar/fullcalendar": "*"
+        "fullcalendar/fullcalendar": "*",
+        "remodal/remodal": "1.1.1"
 
     }, 
     "require-dev": {
