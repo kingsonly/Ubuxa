@@ -39,13 +39,13 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 
 	protected $_users = [];
 		
-	public const DEFAULT_PRIVATE_FOLDER_STATUS = 0; // by default when a folder is not private its = 0
+	const DEFAULT_PRIVATE_FOLDER_STATUS = 0; // by default when a folder is not private its = 0
 	
-	public const DEFAULT_FOLDER_PARENT_STATUS = 0; // by default when a folder has no parent its  = 0 meaning ints not a child folder
+	const DEFAULT_FOLDER_PARENT_STATUS = 0; // by default when a folder has no parent its  = 0 meaning ints not a child folder
 	
-	public const DEFAULT_AJAX_SUCCESS_STATUS = 1; // when an ajax call is successful return 1
+	const DEFAULT_AJAX_SUCCESS_STATUS = 1; // when an ajax call is successful return 1
 	
-	public const DEFAULT_AJAX_ERROR_STATUS = 0; // when an ajax call is not successful return 0
+	const DEFAULT_AJAX_ERROR_STATUS = 0; // when an ajax call is not successful return 0
 	
 	public function init(){
 		parent::init();

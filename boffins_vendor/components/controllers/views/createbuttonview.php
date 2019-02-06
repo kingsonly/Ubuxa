@@ -127,15 +127,22 @@ $("."+"$jsEventTriger"+"-component").click(function(){
 
 
 
-$(".create-new-folder").click(function(e){
+$(".create-new-$jsEventTriger").click(function(e){
+    e.stopPropagation();
+});
+
+$(".$jsEventTriger-component").click(function(e){
     e.stopPropagation();
 });
 
 $(document).click(function(){
 	//$('.create-new-folder').hide();
-	$('.create-new-folder').addClass('display-non');
-	$('.create-new-folder').removeClass('display');
-    $('.folder-new-content').show()
+	
+	$('.create-new-$jsEventTriger').addClass('display-non');
+	$('.create-new-$jsEventTriger').removeClass('display');
+    $('.$jsEventTriger-new-content').show();
+	
+	
 });
 
 

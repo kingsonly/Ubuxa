@@ -16,6 +16,7 @@ use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
+use yii\base\Exception;
 
 //models
 use frontend\models\SignupForm;
@@ -49,10 +50,15 @@ use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
 use frontend\models\UserSetting;
+use linslin\yii2\curl;
+use google\apiclient;
+
+
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
+set_include_path(Yii::$app->BasePath  . '/vendor/google/apiclient/src');
 
 class SiteController extends BoffinsBaseController {
     public function behaviors()
@@ -244,6 +250,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
+			$this->PostExample(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -387,8 +394,12 @@ class SiteController extends BoffinsBaseController {
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
+			
+							return 1;
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+						
+							return 0;
 	    				}
 	    		} else {
 	    			echo "Email cannot be empty";
@@ -484,9 +495,9 @@ class SiteController extends BoffinsBaseController {
 	}
 
 	public function actionBoard()
-    {
-        return $this->renderAjax('board');
-    }
+	{
+		return $this->renderAjax('board');	
+	}
 
     public function actionTask()
     {
@@ -512,5 +523,27 @@ class SiteController extends BoffinsBaseController {
     {
     	return $this->render('newpage');
     }
+	
+	public function PostExample($username)
+    {
+        //Init curl
+        $curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'email' => $username
+                )
+            ))
+            ->post('127.0.0.1:4000/api');
+    }
+	
+	public function actionUpdateSocketUserStack(){
+		$session = Yii::$app->session;
+		$socketusers = $_REQUEST['activitiesArray'];
+		$session->set('socketUsers', $socketusers);
+		
+	}
 
 }

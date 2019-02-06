@@ -29,6 +29,7 @@ class AppAsset extends AssetBundle
         '\frontend\assets\CaretAsset',
         '\frontend\assets\AtMentionAsset',
         '\frontend\assets\BootstrapTour',
+        '\frontend\assets\DropzoneAsset',
         '\frontend\assets\CalendarAsset',
     ];
 }

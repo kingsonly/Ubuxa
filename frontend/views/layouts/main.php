@@ -43,7 +43,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 }
 		
 		
-		.images ul li img {
+.images ul li img {
 	width: 400px;
 	height: 266px;
 }
@@ -56,7 +56,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav">
+<body class="skin-red hold-transition layout-top-nav" data-username="<?= Yii::$app->user->identity->username;?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" >
 
 	<div class="se-pre-con"></div>
 

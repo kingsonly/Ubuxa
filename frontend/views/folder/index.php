@@ -284,6 +284,9 @@ text-overflow: ellipsis;
 </style>
 
 <?php Pjax::begin(['id'=>'refresh-after-create']); ?>
+<?
+	//var_dump(Yii::$app->session['socketUsers']);
+?>
 <div class="folder-index">
 
 		<? 

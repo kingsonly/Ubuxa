@@ -1,324 +1,151 @@
 <?php
-	use frontend\assets\AppAsset;
-	AppAsset::register($this);
+  use frontend\assets\AppAsset;
+  use yii\helpers\Html;
+  use yii\widgets\ActiveForm;
+  use yii\helpers\Url;
+  use yii\base\view;
+  AppAsset::register($this);
 ?>
 <style>
-	ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.drag-container {
-  max-width: 1000px;
-  margin: 20px auto;
-}
-.drag-list {
-  display: flex;
-  align-items: flex-start;
-}
-@media (max-width: 690px) {
-  .drag-list {
-    display: block;
-  }
-}
-.drag-column {
-  flex: 1;
-  margin: 0 10px;
-  position: relative;
-  background: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  border-radius: 4px;
-}
-@media (max-width: 690px) {
-  .drag-column {
-    margin-bottom: 30px;
-  }
-}
-.drag-column h2 {
-  font-size: 1.2rem;
-  margin: 0;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-.drag-column-on-hold .drag-column-header, .drag-column-on-hold .is-moved, .drag-column-on-hold .drag-options {
-  background: #fb7d44;
-}
-.drag-column-in-progress .drag-column-header, .drag-column-in-progress .is-moved, .drag-column-in-progress .drag-options {
-  background: #2a92bf;
-}
-.drag-column-needs-review .drag-column-header, .drag-column-needs-review .is-moved, .drag-column-needs-review .drag-options {
-  background: #f4ce46;
-}
-.drag-column-approved .drag-column-header, .drag-column-approved .is-moved, .drag-column-approved .drag-options {
-  background: #00b961;
-}
-.drag-column-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-}
-.drag-inner-list {
-  min-height: 50px;
-}
-.drag-item {
-  margin: 10px;
-  height: 100px;
-  background: #FAFAFA;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  cursor: -webkit-grab;
-  cursor: grab;
-  border-radius: 7px;
-  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-  position: relative;
-}
-.drag-item.is-moving {
-  transform: scale(1.5);
-  background: rgba(0, 0, 0, 0.8);
-  cursor: -webkit-grabbing; 
-  cursor: grabbing;
-}
-.drag-header-more {
-  cursor: pointer;
-
-}
-.drag-options {
-  position: absolute;
-  top: 44px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.drag-options.active {
-  transform: translateX(0);
-  opacity: 1;
-  z-index: 99;
-}
-.drag-options-label {
-  display: block;
-  margin: 0 0 5px 0;
-}
-.drag-options-label input {
-  opacity: 0.6;
-}
-.drag-options-label span {
-  display: inline-block;
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-left: 5px;
-}
-/* Dragula CSS  */
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  list-style-type: none;
-}
-.gu-hide {
-  display: none !important;
-}
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-.gu-transit {
-  opacity: 0.2;
-}
-/* Demo info */
-.task-head {
-  text-align: center;
-}
-.bottom-content {
-	display: none;
-	position: absolute;
-    bottom: 0;
-    left: 5px;
+    body {
+    background: rgb(243, 244, 245);
+    height: 100%;
+    color: rgb(100, 108, 127);
+    line-height: 1.4rem;
+    font-family: Roboto, "Open Sans", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
 }
 
-.drag-item:hover .bottom-content{
-    display: block;
-}
+h1 { text-align: center; }
 
-.icons {
-	width: 43px;
+.dropzone {
+    background: white;
+    border-radius: 5px;
+    border: 2px dashed rgb(0, 135, 247);
+    border-image: none;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
-
-.modal-content {
-	background-color: #ebeef0 !important;
-}
-
 </style>
+<h1>DropzoneJS File Upload Demo</h1>
+<SECTION>
+  <DIV id="dropzone">
+    <FORM class="dropzone needsclick" id="demo-upload" action="/upload">
+      <DIV class="dz-message needsclick">    
+        Drop files here or click to upload.<BR>
+        <SPAN class="note needsclick">(This is just a demo dropzone. Selected 
+        files are <STRONG>not</STRONG> actually uploaded.)</SPAN>
+      </DIV>
+    </FORM>
+  </DIV>
+</SECTION>
 
-<section class="task-head">
-	<h1>Task Board</h1>
-</section>
+<br/>
+<hr size="3" noshade color="#F00000">
 
-<div class="drag-container">
-	<ul class="drag-list">
-		<li class="drag-column drag-column-on-hold">
-			<span class="drag-column-header">
-				<h2>TO DO</h2>
-				<svg class="drag-header-more" data-target="options1" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-				
-			<div class="drag-options" id="options1"></div>
-			
-			<ul class="drag-inner-list" id="1">
-				<li class="drag-item">
-					<div class="bottom-content">
-						<a href='#'><i class="fa fa-bell icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-user-plus icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-tags icons" aria-hidden="true"></i></a>
-						<a href='#'><i class="fa fa-trash" aria-hidden="true"></i></a>
-					</div>
-				</li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-in-progress">
-			<span class="drag-column-header">
-				<h2>In Progress</h2>
-				<svg class="drag-header-more" data-target="options2" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options2"></div>
-			<ul class="drag-inner-list" id="2">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-needs-review">
-			<span class="drag-column-header">
-				<h2>ON HOLD</h2>
-				<svg data-target="options3" class="drag-header-more" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options3"></div>
-			<ul class="drag-inner-list" id="3">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-		<li class="drag-column drag-column-approved">
-			<span class="drag-column-header">
-				<h2>DONE</h2>
-				<svg data-target="options4" class="drag-header-more" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg>
-			</span>
-			<div class="drag-options" id="options4"></div>
-			<ul class="drag-inner-list" id="4">
-				<li class="drag-item"></li>
-				<li class="drag-item"></li>
-			</ul>
-		</li>
-	</ul>
+<div style="font-size: 0.8em;">
+<p>If you find this demo useful, please consider <a href="https://www.paypal.me/RobertGravelle/1" target="_blank">donating $1 dollar</a> for a coffee (secure PayPal link) or purchasing one of my songs from <a href="https://ax.itunes.apple.com/WebObjects/MZSearch.woa/wa/search?term=rob%20gravelle" target="_blank">iTunes.com</a> or <a href="http://www.amazon.com/s/ref=ntt_srch_drd_B001ES9TTK?ie=UTF8&field-keywords=Rob%20Gravelle&index=digital-music&search-type=ss" target="_blank">Amazon.com</a> for only 0.99 cents each.</p>
+<p>Rob uses and recommends <a href="http://www.mochahost.com/2425.html" target="_blank">MochaHost</a>, which provides Web Hosting for as low as $1.95 per month, as well as unlimited emails and disk space!</p>
+</div>  
+<DIV id="preview-template" style="display: none;">
+<DIV class="dz-preview dz-file-preview">
+<DIV class="dz-image"><IMG data-dz-thumbnail=""></DIV>
+<DIV class="dz-details">
+<DIV class="dz-size"><SPAN data-dz-size=""></SPAN></DIV>
+<DIV class="dz-filename"><SPAN data-dz-name=""></SPAN></DIV></DIV>
+<DIV class="dz-progress"><SPAN class="dz-upload" 
+data-dz-uploadprogress=""></SPAN></DIV>
+<DIV class="dz-error-message"><SPAN data-dz-errormessage=""></SPAN></DIV>
+<div class="dz-success-mark">
+  <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Check</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+    </g>
+  </svg>
+</div>
+<div class="dz-error-mark">
+  <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+      <title>error</title>
+      <desc>Created with Sketch.</desc>
+      <defs></defs>
+      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+          <g id="Check-+-Oval-2" sketch:type="MSLayerGroup" stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
+              <path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" sketch:type="MSShapeGroup"></path>
+          </g>
+      </g>
+  </svg>
 </div>
 
-<?php 
-$board = <<<JS
+  <?
+$list = <<<JS
+var dropzone = new Dropzone('#demo-upload', {
+  previewTemplate: document.querySelector('#preview-template').innerHTML,
+  parallelUploads: 2,
+  thumbnailHeight: 120,
+  thumbnailWidth: 120,
+  maxFilesize: 3,
+  filesizeBase: 1000,
+  thumbnail: function(file, dataUrl) {
+    if (file.previewElement) {
+      file.previewElement.classList.remove("dz-file-preview");
+      var images = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
+      for (var i = 0; i < images.length; i++) {
+        var thumbnailElement = images[i];
+        thumbnailElement.alt = file.name;
+        thumbnailElement.src = dataUrl;
+      }
+      setTimeout(function() { file.previewElement.classList.add("dz-image-preview"); }, 1);
+    }
+  }
 
-    dragula([
-    document.getElementById('1'),
-    document.getElementById('2'),
-    document.getElementById('3'),
-    document.getElementById('4'),
-    document.getElementById('5')
-])
-
-.on('drag', function(el) {
-    
-    // add 'is-moving' class to element being dragged
-    el.classList.add('is-moving');
-    console.log('moving');
-})
-
-
-
-
-
-.on('dragend', function(el) {
-    
-    // remove 'is-moving' class from element after dragging has stopped
-    el.classList.remove('is-moving');
-    console.log("done!");
-    
-    // add the 'is-moved' class for 600ms then remove it
-    window.setTimeout(function() {
-        el.classList.add('is-moved');
-        window.setTimeout(function() {
-            el.classList.remove('is-moved');
-        }, 600);
-    }, 100);
 });
 
 
-var createOptions = (function() {
-    var dragOptions = document.querySelectorAll('.drag-options');
-    
-    // these strings are used for the checkbox labels
-    var options = ['Research', 'Strategy', 'Inspiration', 'Execution'];
-    
-    // create the checkbox and labels here, just to keep the html clean. append the <label> to '.drag-options'
-    function create() {
-        for (var i = 0; i < dragOptions.length; i++) {
+// Now fake the file upload, since GitHub does not handle file uploads
+// and returns a 404
 
-            options.forEach(function(item) {
-                var checkbox = document.createElement('input');
-                var label = document.createElement('label');
-                var span = document.createElement('span');
-                checkbox.setAttribute('type', 'checkbox');
-                span.innerHTML = item;
-                label.appendChild(span);
-                label.insertBefore(checkbox, label.firstChild);
-                label.classList.add('drag-options-label');
-                dragOptions[i].appendChild(label);
-            });
+var minSteps = 6,
+    maxSteps = 60,
+    timeBetweenSteps = 100,
+    bytesPerStep = 100000;
 
-        }
-    }
-    
-    return {
-        create: create
-    }
-    
-    
-}());
+dropzone.uploadFiles = function(files) {
+  var self = this;
 
-var showOptions = (function () {
-    
-    // the 3 dot icon
-    var more = document.querySelectorAll('.drag-header-more');
-    
-    function show() {
-        // show 'drag-options' div when the more icon is clicked
-        var target = this.getAttribute('data-target');
-        var options = document.getElementById(target);
-        options.classList.toggle('active');
-    }
-    
-    
-    function init() {
-        for (i = 0; i < more.length; i++) {
-            more[i].addEventListener('click', show, false);
-        }
-    }
-    
-    return {
-        init: init
-    }
-}());
+  for (var i = 0; i < files.length; i++) {
 
-createOptions.create();
-showOptions.init();
+    var file = files[i];
+    totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
 
+    for (var step = 0; step < totalSteps; step++) {
+      var duration = timeBetweenSteps * (step + 1);
+      setTimeout(function(file, totalSteps, step) {
+        return function() {
+          file.upload = {
+            progress: 100 * (step + 1) / totalSteps,
+            total: file.size,
+            bytesSent: (step + 1) * file.size / totalSteps
+          };
+
+          self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
+          if (file.upload.progress == 100) {
+            file.status = Dropzone.SUCCESS;
+            self.emit("success", file, 'success', null);
+            self.emit("complete", file);
+            self.processQueue();
+            //document.getElementsByClassName("dz-success-mark").style.opacity = "1";
+          }
+        };
+      }(file, totalSteps, step), duration);
+    }
+  }
+}
 JS;
- 
-$this->registerJs($board);
+$this->registerJs($list);
 ?>

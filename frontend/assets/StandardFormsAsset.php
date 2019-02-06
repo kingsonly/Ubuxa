@@ -23,6 +23,7 @@ class StandardFormsAsset extends AssetBundle
         //'https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css',
         //'css/AdminLTE.min.css',
 		'css/AdminLTE.css',
+		'css/chat.css',
         'css/_all-skins.min.css',
         'css/blue.css',
         'css/morris.css',
@@ -67,6 +68,8 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.tablesorter.min.js',
 		'js/jquery.tablesorter.widgets.min.js',
 		'js/addons/pager/jquery.tablesorter.pager.js',
+		'//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js',
+		'js/chat-client-script.js',
 		
 		///'js/dragables.js'
 		

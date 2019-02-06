@@ -14,6 +14,8 @@ use boffins_vendor\components\controllers\FolderDetails;
 use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
+use boffins_vendor\components\controllers\EdocumentWidget;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use kartik\popover\PopoverX;
 use yii\web\View;
 use frontend\assets\AppAsset;
@@ -167,7 +169,9 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-
+    .just-for-test{
+      background-color: red;
+    }
     
 </style>
 
@@ -175,9 +179,9 @@ $img = $model->folder_image;
 
 
 <section>
-	
     <div class="container-fluid">
         <div class="row">
+        	<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
@@ -220,7 +224,13 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-    
+
+      <? $this->beginBlock('edocument')?>
+      <?php Pjax::begin(['id'=>'folder-edoc']); ?>
+        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
+      <?php Pjax::end(); ?>
+      <? $this->endBlock();?>
+
   <? $this->beginBlock('subfolders')?>
   <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders
   	<?php if(!empty($model->subFolders)){ ?>
@@ -258,7 +268,8 @@ $img = $model->folder_image;
         'size' => 'modal-md', 
     ]);
 ?>
-<div id="viewcontent"></div>
+<div id="viewcontent">
+</div>
 <?
     Modal::end();
 ?>

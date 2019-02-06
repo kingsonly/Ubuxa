@@ -145,13 +145,30 @@ class ComponentTemplateController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+		$attributeType = ArrayHelper::map(ComponentAttributeType::find()->all(), 'id', 'name');
+		$attributeModel = $model->componentTemplateAttributes;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			$oldIDs = ArrayHelper::map($attributeModel, 'id', 'id');
+            $attributeModel = AttrModel::createMultiple(ComponentTemplateAttribute::classname(), $attributeModel);
+            AttrModel::loadMultiple($attributeModel, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($attributeModel, 'id', 'id')));   
+			foreach ($attributeModel as $attribute) {
+                            if($attribute->component_template_id == null){
+								$attribute->component_template_id  = $id;
+							}
+                            if (! ($flag = $attribute->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+			'attributeType' => $attributeType,
+            'attributeModel' => (empty($attributeModel)) ? [new ComponentTemplateAttribute] : $attributeModel
         ]);
     }
 

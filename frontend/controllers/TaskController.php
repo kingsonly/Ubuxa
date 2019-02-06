@@ -18,6 +18,7 @@ use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
 use frontend\models\TaskGroup;
 use frontend\models\TaskColor;
+use frontend\models\Edocument;
 
 
 
@@ -127,6 +128,7 @@ class TaskController extends Controller
         $label = new label();
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
+        $edocument = $model->clipOn['edocument'];
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -157,6 +159,8 @@ class TaskController extends Controller
             'label' => $label,
             'taskLabel' => $taskLabel,
             'reminder' => $reminder,
+            'edocument' => $edocument,
+            'folderId' => $folderId,
         ]);
     }
 

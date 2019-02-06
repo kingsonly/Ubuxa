@@ -54,10 +54,10 @@
 		"wbraganca/yii2-dynamicform": "*",
         "kartik-v/yii2-widget-depdrop": "@dev",
         "codeception/verify": "*",
+        "enyo/dropzone": "^5.5",
         "moment/moment": "*",
         "fullcalendar/fullcalendar": "*",
-        "remodal/remodal": "1.1.1"
-
+        "linslin/yii2-curl": "*"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

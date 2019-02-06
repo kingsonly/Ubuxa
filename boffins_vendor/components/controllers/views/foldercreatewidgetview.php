@@ -142,7 +142,7 @@ if(isset($_GET['id'])){
 		<?= $form->field($folderModel, 'component_template_id')->hiddenInput(['value' => ''])->label(false); ?>
 	<? }?>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$creationType])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true,'id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$creationType])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>
@@ -168,6 +168,12 @@ $url = Url::to(['folder/check-if-folder-name-exist']);
 $baseUrl = Url::base(true);
 $js = <<<JSS
 
+$('#create-new-$formId-title').on('change keyup',function(){
+  var value = $(this).val();
+    if(value && value.length > 39){
+      toastr.info("Maximum characters for folder title reached.");
+    }
+})
  $(document).on('click','#ok',function(){
  localStorage.setItem("skipValidation", "yes");
  	formId = $(this).data('formid');
