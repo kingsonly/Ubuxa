@@ -72,4 +72,7 @@ return [
     34 => [
         'administrator',
     ],
+    36 => [
+        'admin',
+    ],
 ];

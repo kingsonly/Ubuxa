@@ -68,8 +68,12 @@ class StandardFormsAsset extends AssetBundle
 		'js/jquery.tablesorter.min.js',
 		'js/jquery.tablesorter.widgets.min.js',
 		'js/addons/pager/jquery.tablesorter.pager.js',
-		'//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js',
+		'https://cdn.webrtc-experiment.com/socket.io.js',
+		'https://webrtc.github.io/adapter/adapter-latest.js',
+		'js/socketio.js',
 		'js/chat-client-script.js',
+		'js/moment.min.js',
+		'js/jquery.cookie.js',
 		
 		///'js/dragables.js'
 		

@@ -208,6 +208,9 @@ transition: margin-top 0.1s ease-out 0s;
 		<span>AUTHORIZED USERS</span>
 	</div>
 <? }?>
+<div>
+
+</div>
 <div class="folderusers">
 	<? if($removeButtons !== false){?>
 	<? if($type != 'component' ){?>
@@ -252,19 +255,19 @@ transition: margin-top 0.1s ease-out 0s;
 		<?	if (array_key_exists($users->username, $socketUsers)) {
     			if($socketUsers[$users->username] == 'Online'){
 					?>
-					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 				<? }else{ ?>
 <!--					display user who is not online -->
-					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 				<? } ?>
 			<? }else{ ?>
 <!--				// display user never the less-->
-		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		
 			<? }?>
 		
 		<? }else{ ?>
-			<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+			<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		<? } ?>
 		
 		
@@ -336,6 +339,7 @@ $(document).on('click','.select2-selection__choice__remove', function(e){
 		  }
 			toastr.success('User has been added to this folder', "", options);
 			$.pjax.reload({container:"#user_prefix"+"$pjaxId",async: false});
+			
           }
      });
      return false;
