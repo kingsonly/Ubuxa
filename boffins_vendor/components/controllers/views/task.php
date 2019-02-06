@@ -386,6 +386,7 @@ $boardUrl = Url::to(['task/index']);
                 <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
               </span>
         <?php }?>
+        <span><?= strip_tags($value->title); ?></span>
     </div>
     
   </label>

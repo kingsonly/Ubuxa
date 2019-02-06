@@ -107,7 +107,7 @@ text-overflow: ellipsis;
 <?
 foreach($attributues as $v){
 	
-	if($editableArea == 'component'){
+	if($editableArea == 'component' || $editableArea == 'changeurl'){
 			if(!isset($v['xeditable'])){
 		?>
 <div>
@@ -147,7 +147,7 @@ foreach($attributues as $v){
 				toastr.success('Change made is successfull', '', options);
 			 		}",
     	],
-			'inputType' => Editable::INPUT_MONEY,
+			'inputType' => Editable::INPUT_TEXTAREA,
 			//'options'=>['placeholder'=>'Enter title...'],
 		'containerOptions' => ['id' =>$editableId],
 		'options'=>[
@@ -157,7 +157,10 @@ foreach($attributues as $v){
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
+ 
 Editable::end();
 	
 		?>
@@ -214,7 +217,9 @@ Editable::end();
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 Editable::end();
 	
 		?>
@@ -269,7 +274,9 @@ Editable::end();
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 Editable::end();
 	
 		?>
@@ -324,7 +331,9 @@ Editable::end();
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 Editable::end();
 	
 		?>
@@ -381,7 +390,9 @@ Editable::end();
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 Editable::end();
 	
 		?>
@@ -447,7 +458,9 @@ Editable::end();
 ]);
 $form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 Editable::end();
 	
 		?>
@@ -497,7 +510,9 @@ Editable::end();
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 			Editable::end();
 			?>
 	</div>
@@ -546,7 +561,9 @@ Editable::end();
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 			Editable::end();
 			?>
 	</div>
@@ -594,7 +611,9 @@ Editable::end();
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 			Editable::end();
 			?>
 	</div>
@@ -642,7 +661,9 @@ Editable::end();
 			]);
 				$form = $editable->getForm();
 // use a hidden input to understand if form is submitted via POST
- echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+ if($editableArea == 'component'){
+	echo  $form->field($model, 'attributeId')->hiddenInput()->label(false);
+}
 			Editable::end();
 			?>
 	</div>

@@ -12,7 +12,8 @@ class CalendarAsset extends AssetBundle
 		'dist/fullcalendar.css',
     ];
     public $js = [
-		'dist/fullcalendar.js',
+        'dist/fullcalendar.js',
+		'dist/gcal.js',
     ];
     public $depends = [
         '\frontend\assets\MomentAsset',

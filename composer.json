@@ -57,7 +57,9 @@
         "enyo/dropzone": "^5.5",
         "moment/moment": "*",
         "fullcalendar/fullcalendar": "*",
-        "linslin/yii2-curl": "*"
+        "linslin/yii2-curl": "*",
+        "fullcalendar/fullcalendar": "*",
+        "remodal/remodal": "1.1.1"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
