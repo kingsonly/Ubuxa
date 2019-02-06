@@ -11,15 +11,14 @@ use frontend\models\Edocument;
 class EdocumentWidget extends Widget
 {
     public $edocument;
-    public $docsize;
-    public $target;
-    public $attachIcon;
-    public $textPadding;
-    public $reference;
-    public $referenceID;
-    public $location;
-    public $iconPadding;
-    public $tasklist;
+    public $docsize; //set width of widget
+    public $target; //
+    public $attachIcon; //attach widgte icon
+    public $textPadding; //adjust text pading
+    public $reference; //get drop target location
+    public $referenceID; //get drop target location
+    public $iconPadding; //padding for icon
+    public $tasklist; //needed to hide tasklist on board
    
 
     public function init()
@@ -41,7 +40,6 @@ class EdocumentWidget extends Widget
             'iconPadding' => $this->iconPadding,
             'tasklist' => $this->tasklist,
             'model' => new Edocument(),
-            'location' => !empty($this->location)?$this->location:'task',
         	]);
     }
 }

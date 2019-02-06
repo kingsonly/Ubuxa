@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use frontend\models\Onboarding;
+use boffins_vendor\components\controllers\EdocumentWidget;
 ?>
 
 <style type="text/css">
@@ -68,6 +69,7 @@ use frontend\models\Onboarding;
 </style>
 <?php Pjax::begin(['id'=>'folder-details-refresh']); ?>
 <div class="col-md-5 folderdetls" data-foldertitle="<?= $model->title; ?>" data-folderid="<?= $model->id; ?>">
+	<?= EdocumentWidget::widget(['docsize'=>94,'target'=>'folderdetails', 'textPadding'=>60,'referenceID'=>$model->id,'reference'=>'folderDetails','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">

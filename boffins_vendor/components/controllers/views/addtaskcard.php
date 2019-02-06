@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
     cursor: pointer;
  }
 </style>
-<?php $form = ActiveForm::begin(['id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
+<?php $form = ActiveForm::begin(['action'=>Url::to(['task/dashboardcreate']),'id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Add a task", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>

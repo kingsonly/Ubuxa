@@ -5,7 +5,6 @@
   use yii\helpers\Url;
   use yii\base\view;
   AppAsset::register($this);
-  $profileUrlz = Url::to(['user/update']);
 ?>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -245,8 +244,8 @@
     overflow: hidden;
 }
 .dropzonex .dz-preview .dz-progress .dz-upload {
-    background: #333;
-    background: linear-gradient(to bottom, #666, #444);
+    background: #264787;
+    /*background: linear-gradient(to bottom, #666, #444);*/
     position: absolute;
     top: 0;
     left: 0;
@@ -317,42 +316,62 @@
 .hideFolderDoc{
     display: none;
 }
+.nadaaa{
+    pointer-events: none;
+}
 </style>
 
-<main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>px">
-        <div class="dropzones" id="dynamic-drop<?=$target;?>">
+<!-- Main edocument widget -->
+<main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>%">
+        <div class="dropzones <?=!empty($tasklist)?$tasklist:'';?>" id="dynamic-drop<?=$target;?>">
               <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
-              <?//= $form->field($model, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
+              <div class="nadaaa">
                 <span class="dz-message doc-message" style="padding-top: <?=$textPadding;?>px">
                   Drop files here.
                 </span>
+                <!-- show attachment icon -->
                 <?php if($attachIcon === 'yes'){ ?>
                     <div class="dz-message">
                         <i class="fa fa-paperclip doc-icons" aria-hidden="true"></i>
                     </div>
                 <?php }?>
+            </div>
               <?php ActiveForm::end(); ?>
         </div>
 </main>
 
 <?
+$taskUrl = Url::to(['task/view']);
 $doctype = Url::to('@web/images/edocuments');
 $dropzone = <<<JS
+// Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
 
+jQuery.fn.getParent = function(num) {
+    var last = this[0];
+    for (var i = 0; i < num; i++) {
+        last = last.parentNode;
+    }
+    return jQuery(last);
+};
 var lastTarget = null;
  
     $('#dropzone-main$target').on("dragenter", function(e)
     {
         lastTarget = e.target; // cache the last target here
-
-        if($('.menu-icon').hasClass('closed')){
-            $(".dropzone$target").removeClass("dummy");
-            $('#dropzone-mainfolder').addClass('folderDoc');
+        if($(e.target).hasClass('subfolders')){
+            $('#dropzone-mainfolder').css('display', 'none');
+        }
+        //check if menu is open before showing widget
+        if($('.menu-icon').hasClass('closed')){ 
+            $(".dropzone$target").removeClass("dummy"); //make widgte visible on drag enter
+            $('#dropzone-mainfolder').css('display', 'block');
             $('#dropzone-mainhidetasklist').addClass('folderDoc');
         }else{
             $(".dropzone$target").removeClass("dummy");
-            $('#dropzone-mainfolder').removeClass('folderDoc');
-            $('#dropzone-mainfolder').addClass('hideFolderDoc');
+            //$('#dropzone-mainfolder').removeClass('folderDoc');
+            //$('#dropzone-mainfolder').addClass('hideFolderDoc');
+            $('#dropzone-mainfolder').css('display','none');
             $('.hidetasklist').removeClass('folderDoc');
             $('.hidetasklist').addClass('hideFolderDoc');
         }
@@ -361,58 +380,109 @@ var lastTarget = null;
         if (e.target === document || e.target === lastTarget) {
             return false;
         }
-        $(".dropzone$target").addClass("dummy");
+        //$('#dropzone-mainfolder').removeClass("add-zindex"); //remove z-index on drag leave
+        //$('#dropzone-main$target').removeClass("add-zindex"); //remove z-index on drag leave
+        $(".dropzone$target").addClass("dummy"); //hide widget on drag leave
+
+        $(this).addClass("remove-zindex");
+        $(this).removeClass("add-zindex");
+        if($('#dropzone-mainfolder').hasClass('add-zindex')){    
+            $('#dropzone-mainfolder').removeClass("add-zindex");
+            $('#dropzone-mainfolder').addClass("remove-zindex");
+        }
+        if($('.for-kanban').hasClass('add-zindex')){
+            $('.for-kanban').removeClass("add-zindex");
+            $('.for-kanban').addClass("remove-zindex");
+        }
+        
     }).bind("dragover", function (e) {
         e.preventDefault();
     }).bind("drop", function (e) {
         e.preventDefault();
-        $(".dropzone$target").addClass("dummy");
+        $(".dropzone$target").addClass("dummy"); //hide widget on drop
     });
+var counter = 0;
 
 $(document).on('dragenter', function(e){
-    $('.dropzone-main').removeClass("remove-zindex");
-    $('.dropzone-main').addClass("add-zindex");
+    lastTarget = e.target;
+    counter++;
+    $('.dropzone-main').removeClass("remove-zindex"); //make div holding widget visble on window drag enter
+    $('.dropzone-main').addClass("add-zindex"); // add z-index on window drag enter
+    if($('.menu-icon').hasClass('closed')){
+        $('#dropzone-mainfolder').css('display', 'block'); //hide folder drag event if board is opened
+    }
     if(($('#dropzone-mainfolder').hasClass('hideFolderDoc')) && ($('.menu-icon').hasClass('closed'))){
         $('#dropzone-mainfolder').addClass('folderDoc');
         $('.hidetasklist').removeClass('hideFolderDoc');
         $('.hidetasklist').addClass('folderDoc');
     }
-}).bind('dragover', function(){
-    $('.dropzone-main').removeClass("add-zindex");
-    $('.dropzone-main').addClass("remove-zindex");
+}).bind('dragover', function(e){
+    e.preventDefault();
 }).bind('dragleave', function(e){
-    if($('#dropzone-mainfolder').hasClass('add-zindex')){
-        $('.dropzone-mainfolder').removeClass("add-zindex");
-    }
+    if(e.target === lastTarget) {
+        $('.dropzone-main').removeClass("add-zindex");
+        $('.dropzone-main').addClass("remove-zindex");
+        if($('#dropzone-mainfolder').hasClass('add-zindex')){    
+            $('#dropzone-mainfolder').removeClass("add-zindex");
+            $('#dropzone-mainfolder').addClass("remove-zindex");
+        }
+        if($('.for-kanban').hasClass('add-zindex')){
+            $('.for-kanban').removeClass("add-zindex");
+            $('.for-kanban').addClass("remove-zindex");
+        }
+    } 
 })
+
 
 var dropzone = new Dropzone('#dropupload$target', {
   init: function() {
     this.on("queuecomplete", function(file, response) {
-     $(".dropzone$target").addClass("dummy");
+     $(".dropzone$target").addClass("dummy"); //hide widget on complete
      $('.dropzone-main').addClass("remove-zindex");
      $('.dropzone-main').removeClass("add-zindex");
-     toastr.success('File uploaded successfully');
     });
     this.on("complete", function(file) {
-        this.removeFile(file);
+        this.removeFile(file); //remove file thumbanil on complete
     });
     this.on("success", function(file, response) {
         console.log(response);
+        var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
+        var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
+        toastr.success('File uploaded successfully');
+        $.pjax.reload({container:"#kanban-refresh",async: false});
+        $.pjax.reload({container:"#task-list-refresh",async: false});
+        if($('#dropupload$target').hasClass('dropzonetaskboard')){
+            $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+        }
+        if($('#dropupload$target').hasClass('dropzonefolderdetails')){
+            $.pjax.reload({container:"#folder-details-refresh", async:false});
+        }
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+            $.pjax.reload({container:"#folder-edoc", async:false});
+        }
     });
     this.on('error', function(file, response) {
-        toastr.error(response);
+        if(!$('#dropupload$target').hasClass('dropzonefolderdetails')){
+            toastr.error("Something went wrong,try again!");
+        }
     });
     this.on("sending", function(file, xhr, formData) {
-      formData.append("reference", '$reference');
-      formData.append("referenceID", '$referenceID');
+      formData.append("reference", '$reference'); //get reference location
+      formData.append("referenceID", '$referenceID'); //get reference location id
+    });
+    this.on("maxfilesexceeded", function(file){
+        toastr.error("You can only upload one file here");
     });
   },
   paramName: "file", // The name that will be used to transfer the file
-  maxFilesize: 256, // MB
+  maxFilesize: 50, // MB. maximum limit for upload
+  clickable: false,
+  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 10,
   /*addRemoveLinks: true,*/
+  acceptedFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 'image/*' : '',
   accept: function(file, done) {
-    var ext = file.name.split('.').pop();
+    var ext = file.name.split('.').pop(); //get file extension
+    //show thumbnail of file depending on extension
     if (ext == "pdf") {
         $(file.previewElement).find(".dz-image img").attr("src", "$doctype/pdf.png");
     } else if (ext.indexOf("docx") != -1) {

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Edocument;
+use frontend\models\Folder;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -82,61 +83,53 @@ class EdocumentController extends Controller
     {
         $model = new Edocument();
         $fileName = 'file';
-        $uploadPath = 'images/edocuments/';
         $cid = Yii::$app->user->identity->cid;
-        $userId = Yii::$app->user->identity->id;
-
+        $uploadPath = 'images/';
+        $cidPath = 'edocuments/'.$cid; //set path with customer id
+        $userId = Yii::$app->user->identity->id; //get user id
         if (isset($_FILES[$fileName])) {
-            $cidDir = $uploadPath. $cid;
-            $userDir = $cidDir.'/'.$userId;
-            $dir = $userDir.'/'. date('Ymd');
+            $cidDir = $uploadPath. $cidPath; //set a varaible for customer id path
+            $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
+            $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date
+
+            /* check if  directory with customer id path exists, if not create one. In UNIX systems files are seen as directories hence the need to check if !file_exists*/
             if (!file_exists($cidDir) && !is_dir($cidDir)) {
                 FileHelper::createDirectory($cidDir);         
             }
+            //check if  directory with user id path exists, if not create one
             if(file_exists($cidDir) && is_dir($cidDir) && !file_exists($userDir) && !is_dir($userDir)){
                 FileHelper::createDirectory($userDir); 
             }
-            $file = UploadedFile::getInstanceByName($fileName);
+            $file = UploadedFile::getInstanceByName($fileName); //get uploaded instance of file
             
             $data = Yii::$app->request->post();
-            $reference =  $data['reference'];
-            $referenceID =  $data['referenceID'];
-            $cnt = 1;
+            $reference =  $data['reference']; //get the location where the file was dropped
+            $referenceID =  $data['referenceID']; //get the ID of the location where the file was dropped
+
+            //check if the directory with current date exist
             if (file_exists($dir) && is_dir($dir)) {
-                $filePath = $dir . '/' . $file->name;
-                /*while (file_exists($filePath)) {
-                    $filename =  $file->basename . $cnt . '.' .$file->extension; 
-                    $cnt++;
-                    break;
-                }*/
-                //echo \yii\helpers\Json::encode($filename);
-                //return;
-                //$fileDir = $dir . '/' . $file->name;
-                if ($file->saveAs($filePath)) {
-                    $model->file_location = $filePath;
-                    $model->reference = $reference;
-                    $model->reference_id = $referenceID;
-                    $model->last_updated = new Expression('NOW()');
-                    $model->cid = $cid;
-					$model->ownerId = $referenceID;
-					$model->fromWhere = $reference;
-                    $model->save();
+                $filePath = $model->checkFileName($dir, $file); //check if file name exist in that directory and append a number to it, if it does.
+                if ($file->saveAs($filePath)){
+                    if($reference == 'folderDetails'){
+                        $folder = Folder::findOne($referenceID);
+                        $folder->folder_image = $filePath;
+                        $folder->save();
+                    }else{
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    }
                 }
             }else{
-                FileHelper::createDirectory($dir, $mode = 0775, $recursive = true);
+                FileHelper::createDirectory($dir, $mode = 0777, $recursive = true); //create directory with read and write permission
                 $filePath = $dir . '/' . $file->name;
-                /*while (file_exists($filePath)) {
-                    $filename =  $file->basename . $cnt . '.' .$file->extension; 
-                    $cnt++;
-                }
-                $fileDir = $dir . '/' . $file->name;*/
+                
                 if ($file->saveAs($filePath)) {
-                    $model->file_location = $filePath;
-                    $model->reference = $reference;
-                    $model->reference_id = $referenceID;
-                    $model->last_updated = new Expression('NOW()');
-                    $model->cid = $cid;
-                    $model->save();
+                    if($reference == 'folderDetails'){
+                        $folder = Folder::findOne($referenceID);
+                        $folder->folder_image = $filePath;
+                        $folder->save();
+                    }else{
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    }
                 }            
             }
         }
@@ -171,11 +164,15 @@ class EdocumentController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        if(Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $id =  $data['id']; //get id from post
+            $model = $this->findModel($id);
+            unlink($model->file_location); //delete file from folder path
+            $model->delete();
+        }
     }
 
     /**

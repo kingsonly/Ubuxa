@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use yii\helpers\Url;
+use yii\db\Expression;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\models\{ClipableInterface, ClipperInterface};
 /**
@@ -23,6 +25,13 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
      * {@inheritdoc}
      */
     public $fromWhere;
+    /*
+    public $file_location;
+    public $reference;
+    public $reference_id;
+    public $last_updated;
+    public $cid;
+    public $ownerId;*/
 
     public static function tableName()
     {
@@ -38,7 +47,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             [['reference_id', 'file_location'], 'required'],
             [['reference_id', 'deleted', 'cid'], 'integer'],
             [['file_location'], 'string'],
-            [['last_updated', 'fromWhere','ownerId'], 'safe'],
+            [['last_updated', 'fromWhere'], 'safe'],
             [['reference'], 'string', 'max' => 25],
         ];
     }
@@ -57,5 +66,103 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             'deleted' => 'Deleted',
             'cid' => 'Cid',
         ];
+    }
+
+    //file upload method
+    public function upload($edocument, $reference, $referenceID, $filePath, $cid)
+    {   
+            $edocument->file_location = $filePath;
+            $edocument->reference = $reference;
+            $edocument->reference_id = $referenceID;
+            $edocument->last_updated = new Expression('NOW()');
+            $edocument->cid = $cid;
+            $edocument->ownerId = $referenceID;
+            $edocument->fromWhere = $reference;
+            $edocument->save();
+    }
+
+    //get thumbnail image based on extension
+    public function fileExtension($filePath)
+    {
+        $docpath = Url::to('@web/'.$filePath);
+        $doctype = Url::to('@web/images/edocuments');
+        $ext = pathinfo($filePath, PATHINFO_EXTENSION); //get file extension
+        /* check file extension to determine the file thumbnail */
+        switch($ext) {
+            case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$docpath.');"></a>';
+            break;
+            case 'zip': case 'rar': case 'tar':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';
+            break;
+            case 'doc': case 'docx':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/word.png");"></a>';
+            break;
+            case 'pdf': case 'PDF':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/pdf.png");"></a>';
+            break;
+            case 'xls': case 'xlsx':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/excel.png");"></a>';
+            break;
+            case 'ppt': case 'pptx':
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/powerpoint.png");"></a>';
+            break;
+            default:
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
+        
+        }
+    }
+    /**
+    use to get time elapsed, when the document was created. This medthod uses the model last updated to get the date
+    ***Borrowed from remarks model
+    **/
+
+    public function getTimeElapsedString($full = false) {
+        $now = new \DateTime();
+        $ago = new \DateTime($this->last_updated); 
+        $diff = $now->diff($ago);
+
+        $diff->w = floor($diff->d / 7);  
+        $diff->d -= $diff->w * 7;
+
+        //
+        $string = array(
+            'y' => 'year',
+            'm' => 'month',
+            'w' => 'week',
+            'd' => 'day',
+            'h' => 'hour',
+            'i' => 'minute',
+            's' => 'second',
+        );
+        foreach ($string as $k => &$v) {
+            if ($diff->$k) {
+                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            } else {
+                unset($string[$k]);
+            }
+        }
+
+        if (!$full) $string = array_slice($string, 0, 1);
+        return $string ? implode(', ', $string) . ' ago' : 'just now'; 
+    }
+
+    //check if filename already exist and append numbers to it
+    public function checkFileName($path, $file){
+        $name =  $file->basename; //get file basename
+        $ext =  $file->extension; //get file extension
+        $filename = $file->name; //get file name
+
+        $filePath = $path.'/'.$filename;
+        $newname = $filename; 
+        $counter = 1;
+        //check if filepath already exists and append a number to the file name
+        while (file_exists($filePath)) {
+               $newname = $name .'_'. $counter . '.' . $ext; //add counter to filename
+               $filePath = $path.'/'.$newname;
+               $counter++;
+         }
+         $newFilePath = $path . '/' . $newname; 
+         return $newFilePath;
     }
 }

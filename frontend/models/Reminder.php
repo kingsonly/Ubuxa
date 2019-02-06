@@ -24,6 +24,8 @@ class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDelete
     /**
      * {@inheritdoc}
      */
+    const REMINDER_NOT_DELETED = 0 ; //Reminder status value when it is not deleted
+    const REMINDER_DELETED = 1 ; //Reminder status value when it is deleted
     public static function tableName()
     {
         return '{{%reminder}}';
@@ -77,5 +79,10 @@ class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDelete
             ->andWhere(['deleted'=>0]) 
             ->all();
         return $reminderAlert;
+    }
+
+    public function getCalendarreminder()
+    {
+        return $this->hasOne(CalendarReminder::className(), ['reminder_id' => 'id']);
     }
 }

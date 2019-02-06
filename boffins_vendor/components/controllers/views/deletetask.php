@@ -20,7 +20,9 @@ use yii\helpers\Url;
   </span>
 </div>
 <span class="for-task-loader">
+  <?php $form = ActiveForm::begin(['action'=>Url::to(['task/delete'])]); ?>
   <?= Html::button('Delete', ['class' => 'btn btn-success delete-task', 'name' => 'add', 'id' => 'delete-task'.$id, 'data-taskid' => $taskid]) ?>
+  <?php ActiveForm::end(); ?>
    <span class="loading-delete-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
 </span>
 

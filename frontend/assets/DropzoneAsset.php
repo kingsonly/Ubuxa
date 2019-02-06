@@ -11,4 +11,7 @@ class DropzoneAsset extends AssetBundle
 	public $js=[
 		'dist/dropzone.js',
 	];
+	public $css=[
+		'dist/dropzone.css',
+	];
 }

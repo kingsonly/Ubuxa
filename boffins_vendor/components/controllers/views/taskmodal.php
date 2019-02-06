@@ -1,17 +1,19 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\AssigneeViewWidget;
 use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\EdocumentWidget;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
-
+use yii\bootstrap\Modal;
 
 ?>
 
@@ -192,7 +194,6 @@ use frontend\models\Reminder;
 
 .document-wrapper{
   width:100%;
-  margin:30px auto 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -239,31 +240,35 @@ use frontend\models\Reminder;
 }
 
 .doc-container{
-  padding:10px 0 10px 10px;
+  /*padding:10px 0 10px 10px;*/
 }
 
 .document-wrapper .doc-box{
   float:left;
-  width:100%;
+  width:273px;
   height:100px;
   margin:0 10px 10px 0;
-  background-color:#CCCCCC;
+  background-color:#fff;
+  border-radius: 20px;
+  -webkit-transition:all 1.0s ease;
+  -moz-transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  transition:all 1.0s ease;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+}
+
+.doc-box .doc-box-inner{
+  float:left;
+  width:25%;
+  height:80px;
   -webkit-transition:all 1.0s ease;
   -moz-transition:all 1.0s ease;
   transition:all 1.0s ease;
   transition:all 1.0s ease;
 }
 
-.doc-box .doc-box-inner{
-  float:left;
-  width:50%;
-  height:80px;
-  background-color:red;
-  -webkit-transition:all 1.0s ease;
-  -moz-transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  margin: 10px 0 10px 10px;
+.doc-info{
+  margin: 15px 0px 0px 135px;
 }
 
 .document-wrapper.list-mode .doc-container{
@@ -272,6 +277,34 @@ use frontend\models\Reminder;
 
 .document-wrapper.list-mode .doc-box{
   width:100%;
+}
+.doc-img{
+    background-position: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    height: 100px;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    width: 120px;
+}
+.download-doc{
+    cursor: pointer;
+}
+.doc-date{
+    font-family: calibri;
+    color: #707070;
+    font-size: 13px;
+}
+.file_basename{
+    font-size: 13px;
+}
+#boardContent{
+  overflow: scroll !important;
+}
+.download-documents:hover{
+    color: black;
 }
 </style>
 
@@ -358,7 +391,8 @@ use frontend\models\Reminder;
                         ]]); ?>
            </div>
     </div>
-    <?= EdocumentWidget::widget(['docsize'=>565,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
+    <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
@@ -382,21 +416,18 @@ use frontend\models\Reminder;
                     
             </div>
         </div>
-    <?php }?>
-    <h3>Attachments</h3>
-    <div class="document-wrapper" style="display:none;">
-        <div class="doc-container">
-            <div class="doc-box">
-                <div class="doc-box-inner">Test</div>
-            </div>
-            <div class="doc-box">Hello</div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-            <div class="doc-box"></div>
-        </div>
     </div>
+    <?php }?>
+    <?php if(!empty($edocument)){?>
+    <h4>Attachments</h4>
+    <?php Pjax::begin(['id'=>'task-edoc']); ?>
+        <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+        <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
+    <?php Pjax::end(); ?>
+    <?php }else{ ?>
+        <a>Add attachemnt</a>
+    <?php }?>
+    
   
     <div class ="timestamp">
         <div class="createDate">
@@ -409,6 +440,8 @@ use frontend\models\Reminder;
     <?php } ?>
     </div>
 </div>
+
+
 
 <?
 $taskmodal = <<<JS

@@ -11,8 +11,13 @@ use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
 use boffins_vendor\components\controllers\UserProfileWidget;
+use boffins_vendor\components\controllers\ViewCalendarWidget;
+use boffins_vendor\components\controllers\EdocumentFolder;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
+
 
 $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
+$checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 
 ?>
 
@@ -51,6 +56,25 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     			</div>
     		</div>
     	</div>
+
+        <div class="edocument-container">
+            <div class="row edocument-content" style="display: none">
+                <div class="col-sm-12">
+                    <div class="col-md-10" style="padding-top:15px;">
+                        <span class="edocument-text">Edocument</span>
+                    </div>
+                    <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">
+                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+                    </div>
+                </div>
+                <div class="edoc-content">
+                    <?php if (isset($this->blocks['edocument'])){ ?>
+                        <?= $this->blocks['edocument'] ?>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
         <div class="profile-container">
             <div class="row profile-content" style="display: none">
                 
@@ -108,6 +132,8 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 <?php } ?> 
              <?php if($checkSiteUrl != 'folder/index'){ ?>
                 <li class="list_item"><?= ViewBoardWidget::widget();?></li>
+                <li class="list_item"><?= EdocumentFolder::widget();?></li>
+                <li class="list_item"><?= ViewCalendarWidget::widget(['folderId'=>$checkIdParam]);?></li>
              <?php }?>
 		</ul>
     </div>

@@ -16,6 +16,8 @@ use frontend\models\TaskReminder;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\TaskAssignedUser;
+use frontend\models\TaskGroup;
+use frontend\models\TaskColor;
 use frontend\models\Edocument;
 
 
@@ -126,7 +128,7 @@ class TaskController extends Controller
         $label = new label();
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
-        $edocument = Edocument::find()->where(['reference'=>'task','reference_id'=>$id])->all();
+        $edocument = $model->clipOn['edocument'];
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -158,6 +160,7 @@ class TaskController extends Controller
             'taskLabel' => $taskLabel,
             'reminder' => $reminder,
             'edocument' => $edocument,
+            'folderId' => $folderId,
         ]);
     }
 
@@ -204,19 +207,65 @@ class TaskController extends Controller
         $model->create_date=new Expression('NOW()');
         $model->last_updated=new Expression('NOW()');
         $reminder = new Reminder();
+        
+
         if ($model->load(Yii::$app->request->post())) {
             if(empty($model->due_date)){
-                $model->completion_time = NULL;
-                $model->in_progress_time = NULL;
-                $model->due_date = NULL;
-                $model->save();
+                if(!empty(Yii::$app->request->post('field'))){
+                
+                    $model->title = Yii::$app->request->post('field');
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = NULL;
+                    $model->due_date = NULL;
+                    $model->status_id = 1;
+                    
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = $model->id;
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                        return $model->id;
+                        
+                    }
+                } elseif(!empty(Yii::$app->request->post('taskgroupid'))){
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = date('Y-m-d H:i:s');
+                    $model->due_date = NULL;
+                    $model->status_id = 1;
+                    
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = Yii::$app->request->post('taskgroupid');
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                        return json_encode([$model->id,$model->title,$model->in_progress_time]);
+                        
+                    }
+
+                } else {
+                    $model->completion_time = NULL;
+                    $model->in_progress_time = NULL;
+                    $model->due_date = NULL;
+                    if($model->save()){
+                        $taskGroupModel = new TaskGroup();
+                        $taskGroupModel->task_group_id = $model->id;
+                        $taskGroupModel->task_child_id = $model->id;
+                        $taskGroupModel->save();
+                    }
+                }
+                
             }else{
-                $model->save();
+                if($model->save()){
+                    $taskGroupModel = new TaskGroup();
+                    $taskGroupModel->task_group_id = $model->id;
+                    $taskGroupModel->task_child_id = $model->id;
+                    $taskGroupModel->save();
+                }
             }
             
-            $model = new Task();
+            
         }
-
+            return 4;
         return $this->renderAjax('dashboardcreate', [
             'reminder' => $reminder,
             'model' => $model,
@@ -312,6 +361,7 @@ class TaskController extends Controller
 
         return $this->redirect(['index']);
     } */
+    
 
     public function actionDelete()
     {
@@ -322,6 +372,40 @@ class TaskController extends Controller
         }
     }
 
+    public function actionCalendartaskdelete()
+    {   
+
+        if(Yii::$app->request->post('id')) {
+            $taskId = Yii::$app->request->post('id');
+            $deleteTask = Task::findOne($taskId);
+            $deleteTask->deleted = 1;
+            $deleteTask->save(); 
+        }
+    }
+
+    public function actionUpdatetask()
+    {   
+      if(Yii::$app->request->post('id')) {
+            $taskId = Yii::$app->request->post('id');
+            $updateTask = Task::findOne($taskId);
+            return json_encode([$updateTask->title, $updateTask->in_progress_time]);
+        }  
+    }
+
+    public function actionCalendartaskupdate($id)
+    {
+      $updateTask = Task::findOne($id);
+      $postVariable = Yii::$app->request->post();
+      $Datetime = $postVariable["Task"]["in_progress_time"].':00';
+      $updateTask->in_progress_time = $Datetime;
+      if($updateTask->load(Yii::$app->request->post()) && $updateTask->save()) {
+          return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    
 
     /**
      * Finds the Task model based on its primary key value.

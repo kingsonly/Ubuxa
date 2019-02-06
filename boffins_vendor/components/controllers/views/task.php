@@ -36,6 +36,7 @@ $boardUrl = Url::to(['task/index']);
         border-bottom: 1px solid #ccc;
         padding-top: 8px;
         overflow: auto;
+        width: 100%;
     }
 
     .box-input1 {
@@ -293,6 +294,13 @@ $boardUrl = Url::to(['task/index']);
   z-index: 9999;
   background: url(<?//= $modalwait; ?>) center no-repeat #fff;
 }
+.edoc-list{
+    position: absolute;
+    right: 10px;
+    font-size: 13px;
+    color: #6b808c;
+    top: 14px;
+}
 </style>
 
 	 <div class="col-md-4" id="for-pjax">
@@ -353,11 +361,11 @@ $boardUrl = Url::to(['task/index']);
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo_listt<?= $value->status_id; ?> todo__state " data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
+        <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
     <?php }else { ?>
-        <input class=" todo_listt<?= $value->status_id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
+        <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
-    <?= EdocumentWidget::widget(['docsize'=>268,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
+    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>
@@ -366,8 +374,18 @@ $boardUrl = Url::to(['task/index']);
     </svg>
 
     <div class="todo__text">
-        <span><?= $value->title; ?></span>
-        
+        <?php
+          $edocLists = $value->clipOn['edocument'];
+          if(!empty($edocLists)){?>
+              <span class="edoc-list" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                <? 
+                  $edoc = count($edocLists); 
+                  echo $edoc;
+                ?>
+                <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+              </span>
+        <?php }?>
+        <span><?= strip_tags($value->title); ?></span>
     </div>
     
   </label>
@@ -629,13 +647,7 @@ $('#addTask').bind("keyup keypress", function(e) {
 
 });
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
   $(function() {
 
   var siteTaskTour = new Tour({
