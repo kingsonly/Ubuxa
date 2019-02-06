@@ -67,7 +67,7 @@ use frontend\models\Onboarding;
 	}
 </style>
 <?php Pjax::begin(['id'=>'folder-details-refresh']); ?>
-<div class="col-md-5 folderdetls">
+<div class="col-md-5 folderdetls" data-foldertitle="<?= $model->title; ?>" data-folderid="<?= $model->id; ?>">
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">

@@ -384,7 +384,7 @@ use frontend\models\Reminder;
         </div>
     <?php }?>
     <h3>Attachments</h3>
-    <div class="document-wrapper">
+    <div class="document-wrapper" style="display:none;">
         <div class="doc-container">
             <div class="doc-box">
                 <div class="doc-box-inner">Test</div>

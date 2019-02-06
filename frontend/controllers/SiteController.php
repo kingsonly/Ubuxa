@@ -545,5 +545,13 @@ class SiteController extends BoffinsBaseController {
 		$session->set('socketUsers', $socketusers);
 		
 	}
+	
+	public function actionGetChatFolderDetails(){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$folderDetails = Folder::findOne($folderId); // get folder details 
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title];
+		
+	}
 
 }
