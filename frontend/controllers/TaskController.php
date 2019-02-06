@@ -160,6 +160,7 @@ class TaskController extends Controller
             'taskLabel' => $taskLabel,
             'reminder' => $reminder,
             'edocument' => $edocument,
+            'folderId' => $folderId,
         ]);
     }
 

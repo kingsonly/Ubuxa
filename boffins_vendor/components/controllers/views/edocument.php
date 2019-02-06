@@ -316,11 +316,16 @@
 .hideFolderDoc{
     display: none;
 }
+.nadaaa{
+    pointer-events: none;
+}
 </style>
 
+<!-- Main edocument widget -->
 <main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>%">
         <div class="dropzones <?=!empty($tasklist)?$tasklist:'';?>" id="dynamic-drop<?=$target;?>">
               <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
+              <div class="nadaaa">
                 <span class="dz-message doc-message" style="padding-top: <?=$textPadding;?>px">
                   Drop files here.
                 </span>
@@ -330,20 +335,30 @@
                         <i class="fa fa-paperclip doc-icons" aria-hidden="true"></i>
                     </div>
                 <?php }?>
+            </div>
               <?php ActiveForm::end(); ?>
         </div>
 </main>
 
 <?
+$taskUrl = Url::to(['task/view']);
 $doctype = Url::to('@web/images/edocuments');
 $dropzone = <<<JS
+// Firefox 1.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';
 
+jQuery.fn.getParent = function(num) {
+    var last = this[0];
+    for (var i = 0; i < num; i++) {
+        last = last.parentNode;
+    }
+    return jQuery(last);
+};
 var lastTarget = null;
  
     $('#dropzone-main$target').on("dragenter", function(e)
     {
         lastTarget = e.target; // cache the last target here
-        //console.log(lastTarget);
         if($(e.target).hasClass('subfolders')){
             $('#dropzone-mainfolder').css('display', 'none');
         }
@@ -365,19 +380,32 @@ var lastTarget = null;
         if (e.target === document || e.target === lastTarget) {
             return false;
         }
-        $('#dropzone-mainfolder').removeClass("add-zindex"); //remove z-index on drag leave
+        //$('#dropzone-mainfolder').removeClass("add-zindex"); //remove z-index on drag leave
+        //$('#dropzone-main$target').removeClass("add-zindex"); //remove z-index on drag leave
         $(".dropzone$target").addClass("dummy"); //hide widget on drag leave
+
+        $(this).addClass("remove-zindex");
+        $(this).removeClass("add-zindex");
+        if($('#dropzone-mainfolder').hasClass('add-zindex')){    
+            $('#dropzone-mainfolder').removeClass("add-zindex");
+            $('#dropzone-mainfolder').addClass("remove-zindex");
+        }
+        if($('.for-kanban').hasClass('add-zindex')){
+            $('.for-kanban').removeClass("add-zindex");
+            $('.for-kanban').addClass("remove-zindex");
+        }
+        
     }).bind("dragover", function (e) {
         e.preventDefault();
     }).bind("drop", function (e) {
         e.preventDefault();
         $(".dropzone$target").addClass("dummy"); //hide widget on drop
     });
-//var counter = 0;
+var counter = 0;
+
 $(document).on('dragenter', function(e){
     lastTarget = e.target;
-    //console.log(lastTarget);
-    //counter++;
+    counter++;
     $('.dropzone-main').removeClass("remove-zindex"); //make div holding widget visble on window drag enter
     $('.dropzone-main').addClass("add-zindex"); // add z-index on window drag enter
     if($('.menu-icon').hasClass('closed')){
@@ -390,18 +418,21 @@ $(document).on('dragenter', function(e){
     }
 }).bind('dragover', function(e){
     e.preventDefault();
-    $('.dropzone-main').removeClass("add-zindex"); //remove z-index on dragover
-    $('.dropzone-main').addClass("remove-zindex");
 }).bind('dragleave', function(e){
-    //counter--;
-    /*
-    if(counter == 0){
-        
-    }*/
-    if($('#dropzone-mainfolder').hasClass('add-zindex')){
-        //$('#dropzone-mainfolder').removeClass("add-zindex");
-    }
+    if(e.target === lastTarget) {
+        $('.dropzone-main').removeClass("add-zindex");
+        $('.dropzone-main').addClass("remove-zindex");
+        if($('#dropzone-mainfolder').hasClass('add-zindex')){    
+            $('#dropzone-mainfolder').removeClass("add-zindex");
+            $('#dropzone-mainfolder').addClass("remove-zindex");
+        }
+        if($('.for-kanban').hasClass('add-zindex')){
+            $('.for-kanban').removeClass("add-zindex");
+            $('.for-kanban').addClass("remove-zindex");
+        }
+    } 
 })
+
 
 var dropzone = new Dropzone('#dropupload$target', {
   init: function() {
@@ -415,22 +446,40 @@ var dropzone = new Dropzone('#dropupload$target', {
     });
     this.on("success", function(file, response) {
         console.log(response);
+        var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
+        var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');
         $.pjax.reload({container:"#kanban-refresh",async: false});
         $.pjax.reload({container:"#task-list-refresh",async: false});
-        $.pjax.reload({container:"#folder-edoc", async:false});
+        if($('#dropupload$target').hasClass('dropzonetaskboard')){
+            $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+        }
+        if($('#dropupload$target').hasClass('dropzonefolderdetails')){
+            $.pjax.reload({container:"#folder-details-refresh", async:false});
+        }
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+            $.pjax.reload({container:"#folder-edoc", async:false});
+        }
     });
     this.on('error', function(file, response) {
-        toastr.error("Something went wrong,try again!");
+        if(!$('#dropupload$target').hasClass('dropzonefolderdetails')){
+            toastr.error("Something went wrong,try again!");
+        }
     });
     this.on("sending", function(file, xhr, formData) {
       formData.append("reference", '$reference'); //get reference location
       formData.append("referenceID", '$referenceID'); //get reference location id
     });
+    this.on("maxfilesexceeded", function(file){
+        toastr.error("You can only upload one file here");
+    });
   },
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
+  clickable: false,
+  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 10,
   /*addRemoveLinks: true,*/
+  acceptedFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 'image/*' : '',
   accept: function(file, done) {
     var ext = file.name.split('.').pop(); //get file extension
     //show thumbnail of file depending on extension

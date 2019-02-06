@@ -391,6 +391,7 @@ use yii\bootstrap\Modal;
                         ]]); ?>
            </div>
     </div>
+    <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
     <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
@@ -415,11 +416,13 @@ use yii\bootstrap\Modal;
                     
             </div>
         </div>
+    </div>
     <?php }?>
     <?php if(!empty($edocument)){?>
     <h4>Attachments</h4>
     <?php Pjax::begin(['id'=>'task-edoc']); ?>
-        <?= ViewEdocumentWidget::widget(['edocument' => $edocument]);?>
+        <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+        <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
     <?php Pjax::end(); ?>
     <?php }else{ ?>
         <a>Add attachemnt</a>

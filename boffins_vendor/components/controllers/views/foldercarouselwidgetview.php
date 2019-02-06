@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
-use boffins_vendor\components\controllers\EdocumentWidget;
+//use boffins_vendor\components\controllers\EdocumentWidget;
 $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 ?>
 <style>
@@ -248,7 +248,7 @@ text-overflow: ellipsis;
 			 <div class="folder-content col-sm-12">
 				 <a href="<?= $url;?>" data-pjax="0">
 			 	<div id="folder-item-<?php echo $folder['id']; ?>" class="folder-item <?php echo $folder->isEmpty ? 'empty' : 'empty' ?> <?= $folder->folderColors; ?>" data-toggle="tooltip" title="<?= $folder['title']; ?>" data-placement="bottom">
-			 		<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'subfolders'.$folder['id'], 'textPadding'=>17,'referenceID'=>$folder['id'],'reference'=>'folder','iconPadding'=>10, 'tasklist' => 'subfolders']);?>
+			 		<?//= EdocumentWidget::widget(['docsize'=>100,'target'=>'subfolders'.$folder['id'], 'textPadding'=>17,'referenceID'=>$folder['id'],'reference'=>'folder','iconPadding'=>10, 'tasklist' => 'subfolders']);?>
 				</div>
 			 	<div class="folder-text .ellipsis">
 					

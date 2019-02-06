@@ -21,6 +21,12 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.forfolderDocs{
+  height: 475px;
+  overflow: scroll;
+  position: relative;
+  transition: all 0.3s ease;
+}
 
 .list-type{
   text-align:right;
@@ -69,7 +75,7 @@
 .document-wrapper .doc-box{
   float:left;
   width:273px;
-  min-height:100px;
+  height:100%;
   margin:0 10px 10px 0;
   background-color:#fff;
   border-radius: 20px;
@@ -195,15 +201,32 @@
 .for-edoc-loader{
   position: relative;
 }
+.show-docs {
+  display: none;
+  color: #6b808c;
+  width:200px;
+  font-size: 14px;
+}
+
+.show-docs:hover {
+    cursor: pointer;
+}
+
+/* Hide 5th div and all the ones after it */
+.edocs-list div:nth-child(n+5) {
+    display: none;
+}
 </style>
-  <div class="document-wrapper">
-    <div class="doc-container">
-        <div style="margin-top:<?= !empty($searchMargin) ? $searchMargin : 0;?>px">
-      <!-- loop through edocuments -->
-      <?php foreach ($edocument as $key => $value) {
+  <div class="document-wrapper <?= !empty($forFolder) ? $forFolder : '';?>" id="document-wrapper<?=$target;?>">
+    <div class="doc-container" id="doc-container<?=$target;?>">
+        <div class="edocs-list" style="margin-top:<?= !empty($searchMargin) ? $searchMargin : 0;?>px">
+      <?php 
+      $count = 0;
+      foreach ($edocument as $key => $value) {
         $filename = $value->file_location; //get file location
         $filepath = Url::to('@web/'.$filename); //set file path
         $gview = 'https://docs.google.com/viewer?embedded=true&url=';
+        $count++;
       ?>
         <div class="doc-box" value="<?=$gview.$filepath;?>">
           <div class="doc-box-inner">
@@ -223,9 +246,9 @@
             <div>
               <span class="doc-date">Added <?=$value->timeElapsedString; //show how long ago the file was uploaded?></span>
             </div>
-            <div class="dropdown">
-            <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
-            <div class="dropdown-menu edoc-drop" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown" id="edoc-display<?=$value->id?>">
+            <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc<?=$value->id;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
+            <div class="dropdown-menu edoc-drop" id="dropdownMenuButton<?=$value->id;?>" aria-labelledby="dropdownMenuButton">
               <div class="delete-header-holder">
                 <span class="delete-header">
                   Confirm Delete
@@ -246,12 +269,17 @@
           </div>
         </div>
       <?php } ?>
+      <?php if($count > 4){ ?>
+        <div class="show-docs more-docs">View all documents (<?= $count - 4;?>)</div>
+        <div class="show-docs less-docs">Show Less</div>
+      <?php }?>
     </div>
     </div>
   </div>
 
 <?
 $deleteEdocument = Url::to(['edocument/delete']); //path for delete action
+$taskUrl = Url::to(['task/view']);
 $list = <<<JS
 //useful function to find nested parents of DOM
 jQuery.fn.getParent = function(num) {
@@ -261,6 +289,28 @@ jQuery.fn.getParent = function(num) {
     }
     return jQuery(last);
 };
+
+$(document).ready(function() {
+    var threshold = 4;
+
+    if ($("div.edocs-list").children().not(".show-docs").length > threshold) {
+        $(".show-docs.more-docs").css("display", "block");
+    }
+
+
+    $(".show-docs.more-docs").on("click", function() {
+        $(this).parent().children().not(".show-docs").css("display", "block");
+        $(this).parent().find(".show-docs.less-docs").css("display", "block");
+        $(this).hide();
+    });
+
+    $(".show-docs.less-docs").on("click", function() {
+        $(this).parent().children(":nth-child(n+" + (threshold + 1) + ")").not(".show-docs").hide();
+        $(this).parent().find(".show-docs.more-docs").css("display", "block");
+        $(this).hide();
+    });
+
+});
 
 $('.show-list').click(function(){
   $('.document-wrapper').addClass('list-mode'); //unused
@@ -279,14 +329,18 @@ $('.doc-box').click(function(e){
 });
 
 //for deleting documents
-$(".delete-document").on('click',function(e) {
+$(".delete-document").unbind('click').bind('click',function(e) {
+    console.log(123);
     e.stopPropagation();
-    $(this).next('.dropdown-menu').toggle();
-    $(this).next('.dropdown-menu').addClass('delete-opened');
+    $(this).next().toggle();
+    $(this).next().addClass('delete-opened');
 });
 
 $(document).click(function(){
-  $(".edoc-drop").hide();
+  if($('.dropdown-menu').hasClass('delete-opened')){
+    $(".edoc-drop").hide();
+    $('.dropdown-menu').removeClass('delete-opened');
+  }
 });
 
 //for deleting documents
@@ -295,12 +349,14 @@ $(".confirm-doc-delete").on('click', function(e){
   //e.preventDefault();
   var edocId;
   edocId = $(this).data('docid');
-  console.log(edocId)
   $(this).hide();
   var getThis;
   getThis = $(this);
   $(this).next().show();
-  _deleteEdocument(edocId,getThis) ;  
+  var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
+  var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
+  console.log(taskId, folderId);
+  _deleteEdocument(edocId,getThis,taskId,folderId) ;  
 })
 
 $('.close-dropdown').on('click', function(e){
@@ -316,27 +372,29 @@ $('.download-documents').click(function(event){
 });
 
 //ajax call to delete a document
-function _deleteEdocument(edocId, getThis){
+function _deleteEdocument(edocId, getThis,taskId,folderId){
   setTimeout(function(){
     $.ajax({
-          url: '$deleteEdocument',
-          type: 'POST',
-          async: false,
-          data: {
-              id: edocId, 
-            },
-          success: function(res, sec){
-            toastr.success('Document Deleted');
-            $.pjax.reload({container:"#kanban-refresh",async: false});
-            $.pjax.reload({container:"#task-list-refresh",async: false});
-            $(".edoc-drop").hide();
-            getThis.getParent(7).hide();
-            getThis.show();
-            getThis.next().hide();
+        url: '$deleteEdocument',
+        type: 'POST',
+        async: false,
+        data: {
+            id: edocId, 
           },
-          error: function(res, sec){
-              console.log('Something went wrong');
-          }
+        success: function(res, sec){
+          toastr.success('Document Deleted');
+          $.pjax.reload({container:"#kanban-refresh",async: false});
+          $.pjax.reload({container:"#task-list-refresh",async: false});
+          //$.pjax.reload({container:"#folder-edoc",async: false});
+          //$.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+          //$(".edoc-drop").hide();
+          getThis.getParent(7).hide();
+          //getThis.show();
+          //getThis.next().hide();
+        },
+        error: function(res, sec){
+            console.log('Something went wrong');
+        }
     });
   }, 50);
 }

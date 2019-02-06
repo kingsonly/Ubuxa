@@ -169,7 +169,9 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-
+    .just-for-test{
+      background-color: red;
+    }
     
 </style>
 
@@ -225,7 +227,7 @@ $img = $model->folder_image;
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
-        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument]) ?>
+        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
 

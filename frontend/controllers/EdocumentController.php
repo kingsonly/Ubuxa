@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Edocument;
+use frontend\models\Folder;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -91,7 +92,7 @@ class EdocumentController extends Controller
             $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
             $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date
 
-            /* check if  directory with customer id path exists, if not create one. In UNIX systems files are seen as directories hence the need to cheeck if !file_exists*/
+            /* check if  directory with customer id path exists, if not create one. In UNIX systems files are seen as directories hence the need to check if !file_exists*/
             if (!file_exists($cidDir) && !is_dir($cidDir)) {
                 FileHelper::createDirectory($cidDir);         
             }
@@ -109,14 +110,26 @@ class EdocumentController extends Controller
             if (file_exists($dir) && is_dir($dir)) {
                 $filePath = $model->checkFileName($dir, $file); //check if file name exist in that directory and append a number to it, if it does.
                 if ($file->saveAs($filePath)){
-                    $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    if($reference == 'folderDetails'){
+                        $folder = Folder::findOne($referenceID);
+                        $folder->folder_image = $filePath;
+                        $folder->save();
+                    }else{
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    }
                 }
             }else{
                 FileHelper::createDirectory($dir, $mode = 0777, $recursive = true); //create directory with read and write permission
                 $filePath = $dir . '/' . $file->name;
                 
                 if ($file->saveAs($filePath)) {
-                    $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    if($reference == 'folderDetails'){
+                        $folder = Folder::findOne($referenceID);
+                        $folder->folder_image = $filePath;
+                        $folder->save();
+                    }else{
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                    }
                 }            
             }
         }

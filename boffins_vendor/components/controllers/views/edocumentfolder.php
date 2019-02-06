@@ -273,6 +273,7 @@ $(document).ready(function(){
        'width':'600px',
        'min-height':'100%',
        'background-color': 'rgba(253, 253, 253, 0.9)',
+       'overflow': 'scroll',
       });
       $('.sider').hide('slow');
       

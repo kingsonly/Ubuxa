@@ -10,7 +10,9 @@ use yii\helpers\Html;
 class ViewEdocumentWidget extends Widget
 {   
     public $edocument;
-	public $searchMargin;
+    public $searchMargin;
+    public $target;
+	public $forFolder;
 
     public function init()
     {
@@ -23,6 +25,8 @@ class ViewEdocumentWidget extends Widget
         return $this->render('edocumentdisplay',[
             'edocument' => $this->edocument,
             'searchMargin' => $this->searchMargin,
+            'target' => $this->target,
+            'forFolder' => $this->forFolder,
         	]);
     }
 }

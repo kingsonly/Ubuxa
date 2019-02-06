@@ -81,6 +81,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             $edocument->save();
     }
 
+    //get thumbnail image based on extension
     public function fileExtension($filePath)
     {
         $docpath = Url::to('@web/'.$filePath);
@@ -111,15 +112,20 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         
         }
     }
+    /**
+    use to get time elapsed, when the document was created. This medthod uses the model last updated to get the date
+    ***Borrowed from remarks model
+    **/
 
     public function getTimeElapsedString($full = false) {
         $now = new \DateTime();
-        $ago = new \DateTime($this->last_updated);
+        $ago = new \DateTime($this->last_updated); 
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);
+        $diff->w = floor($diff->d / 7);  
         $diff->d -= $diff->w * 7;
 
+        //
         $string = array(
             'y' => 'year',
             'm' => 'month',
@@ -138,9 +144,10 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         }
 
         if (!$full) $string = array_slice($string, 0, 1);
-        return $string ? implode(', ', $string) . ' ago' : 'just now';
+        return $string ? implode(', ', $string) . ' ago' : 'just now'; 
     }
 
+    //check if filename already exist and append numbers to it
     public function checkFileName($path, $file){
         $name =  $file->basename; //get file basename
         $ext =  $file->extension; //get file extension
