@@ -378,8 +378,7 @@ class TaskController extends Controller
         if(Yii::$app->request->post('id')) {
             $taskId = Yii::$app->request->post('id');
             $deleteTask = Task::findOne($taskId);
-            $deleteTask->deleted = 1;
-            $deleteTask->save(); 
+            $deleteTask->delete();
         }
     }
 
