@@ -1,7 +1,3 @@
-
-
-
-
 var arr = []; // List of users
 
 $('<audio id="chatAudio" src="audio/notify.ogg" type="audio/ogg"></audio>').appendTo('body');// sound file used on chat
