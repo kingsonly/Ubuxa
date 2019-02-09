@@ -524,6 +524,21 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 	
+	public function PostExample($username)
+    {
+        //Init curl
+        $curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'email' => $username
+                )
+            ))
+            ->post('127.0.0.1:4000/api');
+    }
+	
 	public function actionUpdateSocketUserStack(){
 		$session = Yii::$app->session;
 		$socketusers = $_REQUEST['activitiesArray'];
