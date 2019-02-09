@@ -30,7 +30,7 @@ class m190206_073658_alter_edocument_table extends Migration
      */
     public function safeUp()
     {
-        $this->renameColumn('{{%edocument}}', 'component_id', 'edocument_id');
+        $this->renameColumn('{{%e_document}}', 'component_id', 'reference_id');
     }
 
     /**
