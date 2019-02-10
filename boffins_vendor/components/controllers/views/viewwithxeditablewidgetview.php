@@ -685,7 +685,16 @@ Editable::end();
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
-			'editableValueOptions'=>['class'=>'xinput-component xinput']
+			'editableValueOptions'=>['class'=>'xinput-component xinput'],
+			'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+						}
+			 		}",
+    	],
 			
 		]);
 		Editable::end();
@@ -742,6 +751,7 @@ Editable::end();
 	    'asPopover' => false,
 	    'inputType' => Editable::INPUT_TEXTAREA,
 	    'attribute'=>$v['modelAttribute'],
+	    'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 	    'header' => 'Notes',
 	    'submitOnEnter' => false,
 	    'options' => [

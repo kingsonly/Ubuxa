@@ -97,7 +97,7 @@
 }
 
 .doc-info{
-  margin: 15px 0px 0px 135px;
+  margin: 19px 0px 0px 135px;
 }
 
 .document-wrapper.list-mode .doc-container{
@@ -216,6 +216,11 @@
 .edocs-list div:nth-child(n+5) {
     display: none;
 }
+#basename-container{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 </style>
   <div class="document-wrapper <?= !empty($forFolder) ? $forFolder : '';?>" id="document-wrapper<?=$target;?>">
     <div class="doc-container" id="doc-container<?=$target;?>">
@@ -226,9 +231,19 @@
         $filename = $value->file_location; //get file location
         $filepath = Url::to('@web/'.$filename); //set file path
         $gview = 'https://docs.google.com/viewer?embedded=true&url=';
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $count++;
       ?>
-        <div class="doc-box" value="<?=$gview.$filepath;?>">
+        <div class="doc-box" value="
+        <?php 
+            switch($ext){
+              case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF': case 'jpeg': case 'JPEG':
+                echo $filepath;
+              break;
+              default:
+                echo $gview.$filepath;
+            }
+        ?>">
           <div class="doc-box-inner">
             <?php
               $value->fileExtension($filename);//show file thumbnail image based on extension
@@ -239,7 +254,7 @@
               <i class="fa fa-download download-doc" aria-hidden="true"></i>
             </a>
             <div id="basename-container">
-              <span class="file_basename">
+              <span class="file_basename" data-toggle="tooltip" title="<?=basename($value->file_location);?>">
                 <?=basename($value->file_location); //get basename of file?> 
               </span>
             </div>
@@ -325,7 +340,7 @@ $('.doc-box').click(function(e){
     var value = $(this).attr('value')
         $('#kvFileinputModal').modal('show')
             .find('.kv-zoom-body')
-            .html('<iframe class="document-preview" src="'+value+'" height="100%" width="100%"></iframe>');
+            .html('<embed class="document-preview" src="'+value+'" height="100%" width="100%">');
 });
 
 //for deleting documents
