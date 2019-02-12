@@ -5,7 +5,7 @@ namespace frontend\tests\functional;
 use frontend\tests\FunctionalTester;
 use common\fixtures\UserFixture;
 
-class LoginCest
+class LoginCest 
 {
      /**
       * Load fixtures before db transaction begin
@@ -26,7 +26,7 @@ class LoginCest
 
     public function _before(FunctionalTester $I)
     {
-        $I->amOnRoute('site/login');
+        
     }
 
     protected function formParams($login, $password)
@@ -37,24 +37,15 @@ class LoginCest
         ];
     }
 
-    public function checkEmpty(FunctionalTester $I)
-    {
-        $I->submitForm('#login-form', $this->formParams('', ''));
-        $I->seeValidationError('Username cannot be blank.');
-        $I->seeValidationError('Password cannot be blank.');
-    }
-
-    public function checkWrongPassword(FunctionalTester $I)
-    {
-        $I->submitForm('#login-form', $this->formParams('admin', 'wrong'));
-        $I->seeValidationError('Incorrect username or password.');
-    }
     
     public function checkValidLogin(FunctionalTester $I)
     {
-        $I->submitForm('#login-form', $this->formParams('erau', 'password_0'));
-        $I->see('Logout (erau)', 'form button[type=submit]');
-        $I->dontSeeLink('Login');
-        $I->dontSeeLink('Signup');
+        $I->amOnRoute('site/login');
+        $I->fillField('#loginform-username','admin');
+        $I->fillField('#loginform-password','admin');
+        $I->click('Login');
+        //$I->see('#w0','Invalid login details');
+        $I->dontSeeLink('Sign up');
+        $I->seeInCurrentUrl('folder');
     }
 }

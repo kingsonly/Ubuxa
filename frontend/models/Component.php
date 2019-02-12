@@ -103,12 +103,16 @@ class Component extends ComponentARModel
         return $this->hasOne(ComponentTemplate::className(), ['id' => 'component_template_id']);
     }
 	
-	public function getComponentAttribute()
+	public function getComponentAttributeShowInGrid()
     {
-        return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->where(['component_id' => $this->id]) ] );
+		return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->joinWith('componentTemplateAttributeShowInGrid')->andWhere(['component_id' => $this->id]) ] );
     }
 	
-
+	public function getComponentAttribute()
+    {
+        return new ModelCollection( [], [ 'query' =>  ComponentAttribute::find()->joinWith('componentTemplateAttribute')->andWhere(['component_id' => $this->id]) ] );
+    }
+	
 
     /**
      * @return \yii\db\ActiveQuery
@@ -309,3 +313,4 @@ class Component extends ComponentARModel
         return $this->hasMany(Receivedpurchaseorder::className(), ['receivedpurchaseorder_reference' => 'receivedpurchaseorder_reference'])->viaTable('tm_receivedpurchaseorder_component', ['component_id' => 'id']);
     }
 }
+

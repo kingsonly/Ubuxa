@@ -13,6 +13,7 @@ class AddCardWidget extends Widget
     public $id;
     public $taskModel;
     public $parentOwnerId;
+    public $location;
     
     public function init()
     {
@@ -27,6 +28,7 @@ class AddCardWidget extends Widget
             'taskModel' => $this->taskModel,
             'id' => $this->id,
             'parentOwnerId' => $this->parentOwnerId,
+            'location' => !empty($this->location)?$this->location:'folder',
         	]);
     }
 }

@@ -327,7 +327,7 @@ AppAsset::register($this);
 }
 .comment-box .comment-name.by-author, .comment-box .comment-name.by-author a {color: #03658c;}
 .comment-box .comment-name.by-author:after {
-    content: 'autor';
+    content: 'author';
     background: #03658c;
     color: #FFF;
     font-size: 12px;
@@ -386,8 +386,8 @@ AppAsset::register($this);
     <div class="col-md-12 remark-textfield">
        <form>
   <div class="form-group">
-    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
-    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter remark">
+    <input type="text" data-modelName="<?= $modelName; ?>" class="form-control" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comments">
+    <input type="hidden" value="<?= $modelName; ?>" class="form-control getModelName" id="exampleInputRemark" aria-describedby="remarkHelp" placeholder="Enter comment">
   </div>
   </form>
   <div class="wrapp">
@@ -422,7 +422,7 @@ AppAsset::register($this);
       <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
       <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
       <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
-      <span class="dropdown">
+      <span class="dropdown" style="display: none">
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
@@ -440,6 +440,7 @@ AppAsset::register($this);
     <?= $form->field($remarkModel, 'remark_date')->hiddenInput()->label(false) ?>
     <?= $form->field($remarkModel, 'ownerId')->hiddenInput(['id'=>'owner-id','value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($remarkModel, 'cid')->hiddenInput()->label(false) ?>
+	<?= $form->field($remarkModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
@@ -457,10 +458,11 @@ AppAsset::register($this);
 <?php 
 $remarkUrl = Url::to(['remark/index','src' => 'ref1']);
 $remarkUrlSave = Url::to(['remark/create']);
-$remarkUrlMention = Url::to(['remark/mention']);
+$remarkUrlMention = Url::to(['remark/mention','id'=>$parentOwnerId]);
 $remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
+$baseUrl=Url::base(true);
 $remarkJs = <<<JS
 var issues = [
   { name: "1", content: "stay foolish"},
@@ -475,7 +477,7 @@ $('.editor').atwho({
 }).atwho({
     at: "#", 
     displayTpl: '<li><small>\${content}</small></li>',
-    insertTpl: '<a href="http://localhost/ubuxa-beta/frontend/web/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
+    insertTpl: '<a href="$baseUrl/index.php?r=folder/view&id=\${name}" data-type="mentionable" data-id="\${id}" data-name="\${name}">\${content}</a>',
     data: '$remarkUrlMentionFolder'
   })
 var mypage = 1;

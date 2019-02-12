@@ -6,7 +6,9 @@ use Yii;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use frontend\models\Corporation;
 use boffins_vendor\classes\BoffinsArRootModel;
-use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface};
+use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, ClipableInterface,KnownClass};
+use yii\helpers\ArrayHelper;
+
 
 /**
  * This is the model class for table "{{%tm_client}}".
@@ -17,7 +19,7 @@ use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, C
  * @property Corporation $corporation
  * @property Project[] $Projects
  */
-class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
+class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface,KnownClass
 {
     /**
      * @inheritdoc
@@ -64,6 +66,18 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         return $this->hasOne(Corporation::className(), ['id' => 'corporation_id']);
     }
+	
+	public function getCorporationClient()
+    {
+		
+        return Client::find()->joinWith('corporation')->all();
+    }
+	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->corporationClient,'id','nameString');
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -81,14 +95,14 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     //Added by kingsley of buffin systems
     public static function get_clientid($id)
 	{
-         $compid=Client::findOne(['id' => $id,]);
-        return $compid->corporation_id;
-    }
+		$compid=Client::findOne(['id' => $id,]);
+		return $compid->corporation_id;
+	}
         
-     public static function get_client_name($id)
-	 {
-         return Corporation::getclientname($id);
-    }
+	public static function get_client_name($id)
+	{
+	 return Corporation::getclientname($id);
+	}
     
     
     public static function get_all_clientid()
@@ -100,15 +114,18 @@ class Client extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	
 	//Added by Anthony
 		
-	public function getName() {
+	public function getName() 
+	{
 		return $this->corporation->name;
 	}
 	
-	public function getShortName() {
+	public function getShortName() 
+	{
 		return $this->corporation->shortName;
 	}
 	
-	public function getNameString() {
+	public function getNameString() : string 
+	{
 		return $this->corporation->NameString;
 	}
 

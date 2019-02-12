@@ -38,6 +38,9 @@ use yii\helpers\Url;
 	min-height: 600px;
 }
 	*/
+	#view-content{
+		box-shadow:  -8px 8px 25px -2px rgba(0, 0, 0, 0.1) !important;
+	}
 </style>
 
 
@@ -51,7 +54,7 @@ use yii\helpers\Url;
 					  
 		  </div>
 			  
-		  <div id="view-content" class="col-xs-5" style="display:none" >
+		  <div id="view-content" class="col-xs-5" style="display:none;" >
 			  
 			  <div id="viewcontainer">
 				  <div id="view">
@@ -65,7 +68,7 @@ use yii\helpers\Url;
 <?php 
 
 	$urlListView = Url::to(['component/listview','folder'=>$folderId,'component' => $templateId]);
-	$urlView = Url::to(['component/view','id'=>$componentId->id]);
+	
 	
 $js3 = <<<JS
 
@@ -77,7 +80,7 @@ $('table').tablesorter({
 		});
 
 $("#listView").load('$urlListView');
-$("#view").load('$urlView',{var2:1});
+
 
 
 

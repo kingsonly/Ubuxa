@@ -22,6 +22,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
      * {@inheritdoc}
      */
 	public const DEFAULT_PARENT_ID = 0;
+	public $fromWhere; // a public attribute only used by clipon behavior
     public static function tableName()
     {
         return '{{%remark}}';
@@ -33,8 +34,8 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     public function rules()
     {
         return [
-            [['parent_id', 'cid', 'person_id'], 'integer'],
-            [['remark_date','last_updated','text', 'ownerId'], 'safe'],
+            [['parent_id', 'cid', 'user_id', 'person_id'], 'integer'],
+            [['remark_date','last_updated','text', 'ownerId','fromWhere'], 'safe'],
             [['text'], 'string', 'max' => 255],
         ];
     }
@@ -58,9 +59,17 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
+    public function getUser()
+    {
+        return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
+    }
     public function getFullname()
     {
         return $this->person->first_name." ".$this->person->surname;
+    }
+    public function getUserImage()
+    {
+        return $this->user->profile_image;
     }
 
     public function getTimeElapsedString($full = false) {

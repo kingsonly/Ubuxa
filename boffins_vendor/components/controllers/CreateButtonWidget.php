@@ -50,7 +50,7 @@ class CreateButtonWidget extends Widget{
 	// fetch all company and default atrribute 
 	private function getComponentTemplate()
 	{
-		return  ComponentTemplate::find()->where(['cid'=>0])->orWhere(['cid' =>yii::$app->user->identity->cid])->all();
+		return  ComponentTemplate::find()->andWhere(['cid'=>0])->orWhere(['cid' =>yii::$app->user->identity->cid])->all();
 	}
 	
 }

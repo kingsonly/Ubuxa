@@ -4,7 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use boffins_vendor\classes\models\KnownClass;
-
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "{{%currency}}".
  *
@@ -79,4 +79,10 @@ class Currency extends \yii\db\ActiveRecord implements KnownClass
 	{
 		return $this->getCurrencyString();
 	}
+	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->find()->all(),'id','nameString');
+    }
 }

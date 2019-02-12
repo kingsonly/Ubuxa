@@ -3,8 +3,9 @@
 namespace frontend\models;
 
 use Yii;
-use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface};
+use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface,KnownClass};
 use boffins_vendor\classes\BoffinsArRootModel;
+
 
 
 //use app\models\Tmclient;
@@ -26,7 +27,7 @@ use boffins_vendor\classes\BoffinsArRootModel;
  * @property TmPersonCorporation[] $tmPersonCorporations
  * @property TmProductCorporation[] $tmProductCorporations
  */
-class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface
+class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface,KnownClass
 {
     /**
      * @inheritdoc
@@ -212,7 +213,7 @@ class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDel
 		return $this->short_name;
 	}
 	
-	public function getNameString() 
+	public function getNameString() : string
 	{
 		return $this->name . " (" . $this->short_name . ")";
 	}
@@ -224,4 +225,6 @@ class Corporation extends BoffinsArRootModel implements TenantSpecific, TrackDel
     		->all();
         return $allCorporation;
 	}
+	
+	
 }

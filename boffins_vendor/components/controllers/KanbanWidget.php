@@ -19,6 +19,7 @@ class KanbanWidget extends Widget{
 	public $folderId;
 	public $label;
 	public $taskLabel;
+	public $edocument;
 
 	public function init()
 	{
@@ -40,6 +41,7 @@ class KanbanWidget extends Widget{
 			'folderId' => $this->folderId,
 			'label' => $this->label,
 			'taskLabel' => $this->taskLabel,
+			'edocument' => $this->edocument,
 		]);
 	}
 	

@@ -43,31 +43,33 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 }
 		
 		
-		.images ul li img {
+.images ul li img {
 	width: 400px;
 	height: 266px;
 }
 .images ul li {
 	display: inline-block;
 }
+
 	</style>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav">
-
+<body class="skin-red hold-transition layout-top-nav" data-username="<?= Yii::$app->user->identity->username;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
+<!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
 	<div class="se-pre-con"></div>
 
 <?php $this->beginBody() ?>
 <?php
-    if(isset(Yii::$app->user->identity->person_id)) {
-		define("USERID", Yii::$app->user->identity->person_id);
+  if(isset(Yii::$app->user->identity->person_id)) {
+    if(!defined('USERID')){
+  		define("USERID", Yii::$app->user->identity->person_id);
     }
+  }
 ?>
     <style>
 
-    .fa{color:#dd4b39 !important;}
         .iconimage {
             background: url('../web/images/logo1.jpg') no-repeat ;
             background-size: 100% 100%;
@@ -95,6 +97,31 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     .feedback-button{
       text-decoration: none;
     }
+
+    #flas{
+      position: relative;
+      padding: 16px;
+      display: none;
+      box-shadow: -8px 8px 25px -2px rgba(0, 0, 0, 0.1);
+    }
+    .alert-text{
+      color: #000;
+      font-size: 15px;
+    }
+    .main-name{
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+.alert-info{
+  background-color: #d9edf7 !important;
+  border:0px !important;
+}
+.feedback-button{
+  background-color:#3c8dbc !important;
+}
+.alert-text{
+  text-align: left !important;
+}
     </style>
     
 
@@ -144,8 +171,9 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
      <section class="content">
 		 <div class="col-lg-12">
 			<?= Alert::widget([
-				   'options' => ['class' => 'alert-info','id'=>'flas'],
-				   'body' => yii::$app->user->identity->fullName.'<a href="#" class="feedback-button" id="open-feedback-form">Feedback</a>',
+				   'options' => ['class' => 'alert-info btn btn-primary','id'=>'flas'],
+				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button btn btn-primary" id="open-feedback-form">Feedback</a>',
+
 					 ]);?>
 		</div>
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
@@ -170,6 +198,18 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 </footer>
 
 <?php $this->endBody() ?>
+
+  <!--  MouseStats:Begin  -->
+<script type="text/javascript">var MouseStats_Commands=MouseStats_Commands?MouseStats_Commands:[]; (function(){function b(){if(void 0==document.getElementById("__mstrkscpt")){var a=document.createElement("script");a.type="text/javascript";a.id="__mstrkscpt";a.src=("https:"==document.location.protocol?"https://ssl":"http://www2")+".mousestats.com/js/5/6/5671434762617532649.js?"+Math.floor((new Date).getTime()/6E5);a.async=!0;a.defer=!0;(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}}window.attachEvent?window.attachEvent("onload",b):window.addEventListener("load", b,!1);"complete"===document.readyState&&b()})(); </script>
+<!--  MouseStats:End  -->
+<?php
+$flash = <<<JS
+  setTimeout(function(){ 
+      $('#flas').fadeIn('slow');
+   }, 10000);
+JS;
+$this->registerJs($flash);
+?>
 </body>
 	
 </html>

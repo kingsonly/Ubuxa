@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 use boffins_vendor\classes\StandardQuery;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
@@ -99,6 +100,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
             'fullname' => 'Full Name',
             'basic_role' => 'Standard Role',
             'password' => 'Password',
+            'dob' => 'Date of Birth',
             //'password_repeat' => 'Repeat Password',
             'salt' => 'Salt',
             'cid' => 'Cid',
@@ -176,6 +178,11 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     {
         return $this->hasOne(Role::className(), ['id' => 'basic_role']);
     }
+
+    public function getRoleName()
+    {
+        return $this->role->name;
+    }
 	/***
 	 *
 	 */
@@ -187,6 +194,16 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	public function getFirstName() 
 	{
 		return $this->person->first_name;
+	}
+
+	public function getSurname() 
+	{
+		return $this->person->surname;
+	}
+
+	public function getDob() 
+	{
+		return $this->person->dob;
 	}
 
 	/***
@@ -567,4 +584,24 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return $this->person->nameString;
 	}
 	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->find()->all(),'id','nameString');
+    }
+	
+	public function getMasterDomain(){
+		$masterDomain = Customer::find()->andWhere(['cid' => yii::$app->user->identity->cid])->one();
+		return !empty($masterDomain)? $masterDomain->master_doman :'';
+	}
+
+    public function getUserReminders()
+    {
+        return $this->hasMany(CalendarReminder::className(), ['user_id' => 'id']);
+    }
+
+	public function getReminders()
+    {
+        return $this->hasMany(Reminder::className(), ['id' => 'reminder_id'])->via('userReminders');
+    }
 }

@@ -29,6 +29,10 @@ use yii\widgets\ActiveForm;
  #cardButton {
     padding: 5px
  }
+ .loading-kanban-task{
+    
+    display: none;
+ }
  .close-add {
     height: 32px;
     font-size: 16px;
@@ -40,13 +44,19 @@ use yii\widgets\ActiveForm;
     cursor: pointer;
  }
 </style>
-<?php $form = ActiveForm::begin(['id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
-    <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Write some task here", 'class' => 'cardInput'])->label(false) ?>
+<?php $form = ActiveForm::begin(['action'=>Url::to(['task/dashboardcreate']),'id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
+    <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Add a task", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
-    <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
-    <span class="glyphicon glyphicon-remove close-add"></span> 
+	<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
+ 
+    <span class="for-task-loader">
+        <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
+        <span class="glyphicon glyphicon-remove close-add"></span>
+        <span class="loading-kanban-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+    </span>
+
 <?php ActiveForm::end(); ?>
 
 <?php
@@ -68,9 +78,14 @@ $(document).ready(function(){
 $('#create-task-card$statusid').on('beforeSubmit', function(e) {
         e.preventDefault(); 
            var form = $(this);
+           $('.cardButton').hide();
+           form.find('.close-add').hide();
+		   form.find('.loading-kanban-task').show();
+           
             if(form.find('#create-task-card$statusid').length) {
                 return false;
             }
+            setTimeout(function(){
             $.ajax({
                 url: '$taskUrl',
                 type: 'POST',
@@ -85,7 +100,8 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                   console.log('Something went wrong');
               }
             });
-        return true;    
+            }, 5);
+        return false;    
 });
 
 $(".cardInput").keydown(function(e){

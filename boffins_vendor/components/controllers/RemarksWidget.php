@@ -15,6 +15,7 @@ class RemarksWidget extends Widget
     public $onboarding;
     public $onboardingExists;
     public $userId;
+    public $location;
 
     public function init()
     {
@@ -33,6 +34,7 @@ class RemarksWidget extends Widget
             'onboardingExists' => $this->onboardingExists,
             'onboardingExists' => $this->onboardingExists,
             'userId' => $this->userId,
+            'location' => !empty($this->location)?$this->location:'folder',
         ]);
     }
 }

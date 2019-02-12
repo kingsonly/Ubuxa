@@ -14,6 +14,7 @@ class RemarkComponentViewWidget extends Widget
 	public $parentOwnerId;
     public $remarks;
 	public $modelName;
+	public $location;
 
     public function init()
     {
@@ -28,6 +29,7 @@ class RemarkComponentViewWidget extends Widget
         	'parentOwnerId' => $this->parentOwnerId,
             'remarks' => $this->remarks,
         	'modelName' => $this->modelName,
+			'location' => !empty($this->location)?$this->location:'folder',
         ]);
     }
 }

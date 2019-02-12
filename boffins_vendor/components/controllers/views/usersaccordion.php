@@ -13,6 +13,7 @@ Main Components
     -moz-border-radius: 4px;
     border-radius: 4px;
     margin-bottom: 0px;
+    padding-left: 0px !important;
 }
 .cd-users-accord-menu .first-list {
   /* by defa.first-listt hide all sub menus */
@@ -116,6 +117,7 @@ Main Components
   /* use label:nth-of-type(n) to fix a bug on safari (<= 8.0.8) with m.first-listtiple adjacent-sibling selectors*/
   /* show children when item is checked */
   display: block;
+  padding-left: 0px !important;
 }
 .cd-users-accord-menu .first-list .accord-label,
 .cd-users-accord-menu .first-list a {
@@ -199,6 +201,7 @@ Main Components
   -o-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
+
 </style>
 
   <ul class="cd-users-accord-menu animated">

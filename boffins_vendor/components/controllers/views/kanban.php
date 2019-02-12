@@ -10,6 +10,7 @@ use boffins_vendor\components\controllers\CreateLabelWidget;
 use boffins_vendor\components\controllers\AddCardWidget;
 use boffins_vendor\components\controllers\DeleteTaskWidget;
 use boffins_vendor\components\controllers\FolderUsersWidget;
+use boffins_vendor\components\controllers\EdocumentWidget;
 use yii\base\view;
 use yii\bootstrap\Modal;
 use kartik\popover\PopoverX;
@@ -71,7 +72,7 @@ $checkUrlParams = $checkUrls[0];
   text-transform: uppercase;
   font-weight: 600;
 }
-.drag-column-on-hold .drag-column-header, .drag-column-on-hold .is-moved, .drag-column-on-hold .drag-options {
+.drag-column-on-hold .drag-column-header,  .drag-column-on-hold .drag-options {
   background: #98afc5;
 }
 .drag-column-in-progress .drag-column-header, .drag-column-in-progress .is-moved, .drag-column-in-progress .drag-options {
@@ -105,8 +106,8 @@ $checkUrlParams = $checkUrls[0];
   position: relative;
 }
 .drag-item.is-moving {
-  transform: scale(1.5);
-  background: rgba(0, 0, 0, 0.8);
+  /*transform: scale(1.5);*/
+  /*background: rgba(0, 0, 0, 0.8);*/
   cursor: -webkit-grabbing; 
   cursor: grabbing;
 }
@@ -270,9 +271,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 10px;
+  padding-left: 5px;
     border-right-width: 1px;
-    padding-right: 10px;
+    padding-right: 5px;
     width: 272px;
     cursor: pointer;
 }
@@ -300,12 +301,13 @@ a.addTaskButton.active {
 }
 .label-task {
     background: #3B5998;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 3px;
+    padding-right: 3px;
     color: #fff;
     border-radius: 3px;
     padding-top: 1px;
     padding-bottom: 1px;
+    font-size: 13px;
 }
 .assigndrop{
   width:340px;
@@ -364,15 +366,25 @@ a.addTaskButton.active {
     color: #fff;
     border-radius: 2px;
 }
-
-
+.task-titles{
+  font-family: calibri;
+}
+.edoc-count{
+  position: absolute;
+  right: 10px;
+  font-size: 13px;
+  color: #6b808c;
+  top: 3px;
+}
+.edocuments-board{
+  position: relative;
+}
+.assignedto{
+  margin-left: 5px;
+}
 </style>
 
 <?php Pjax::begin(['id'=>'asign-refresh']); ?>
-<section class="task-head">
-    <h1>Task Board</h1>
-
-</section>
 <div class="drag-container">
     <ul class="drag-list" id="kanban-board">
         <?php
@@ -397,25 +409,38 @@ a.addTaskButton.active {
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
+                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban']);?>
                   <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title">
-                        <span><?= $values->title; ?></span>
+                        <span class="task-titles"><?= $values->title; ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto">
                         <div class="user-image">
-                         
                          <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
                         </div>
                       </div>
                     <?php }?>
+                    <div class="edocuments-board">
+                      <?php
+                        $edocuments = $values->clipOn['edocument'];
+                        if(!empty($edocuments)){?>
+                            <span class="edoc-count" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                              <? 
+                                $edocs = count($edocuments); 
+                                echo $edocs;
+                              ?>
+                              <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+                            </span>
+                      <?php }?>
                       <?php if(!empty($values->labelNames)){ ?>
-                        <div class="task-label-title">
+                        <div class="task-label-title" style="width: <?= !empty($edocuments) ? '90' : '100';?>%">
                           <span class="label-task" id="label<?=$values->id.$count?>">
-                          <?= $values->labelNames; ?>
-                        </span>
+                            <?= $values->labelNames; ?>
+                          </span>
                         </div>
                       <?php } ?>
+                    </div>
                       <?php 
                       $time = $values->reminderTime;
                       $timers = explode(",",$time);
@@ -426,7 +451,7 @@ a.addTaskButton.active {
                         if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
                         <div class="reminder-time">
                             <i class="fa fa-bell time-icon"></i>
-                            <span class="date-time" ria-hidden="true" data-toggle="tooltip" title="Reminder">
+                            <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Reminder">
                               <?= $reminders; ?>
                             </span>
                           </div>
@@ -505,6 +530,14 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
 });
 
+$(function(){
+    $('.task-test').click(function(){
+        $('#boardContent').modal('show')
+        .find('#viewcontent')
+        .load($(this).attr('value'));
+        });
+  });
+
 $.fn.closest_descendent = function(filter) {
     var found = $(),
         currentSet = this; // Current place
@@ -545,11 +578,12 @@ $.fn.closest_descendent = function(filter) {
         $.each(items, function(key, item) {
           result.push($(item).data('filename'));
         });
-        _UpdateTask(status, contain);
+        
+        setTimeout(function(){
+           _UpdateTask(status, contain); 
+          }, 300);
         //console.log(contain, status);
         var check = $('#'+el.id).closest_descendent('li[data-filename]');
-        //console.log(check);
-
 })
 .on('dragend', function(el) {
     
@@ -572,7 +606,8 @@ $.fn.closest_descendent = function(filter) {
 function _UpdateTask(status, contain){
           $.ajax({
               url: '$saveUrl',
-              type: 'POST', 
+              type: 'POST',
+              async: false, 
               data: {
                   id: status,
                   status_id: contain, 
@@ -712,4 +747,3 @@ JS;
  
 $this->registerJs($board);
 ?>
-

@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use boffins_vendor\components\controllers\ViewWithXeditableWidget;
 use frontend\models\Onboarding;
+use boffins_vendor\components\controllers\EdocumentWidget;
 ?>
 
 <style type="text/css">
@@ -67,29 +68,28 @@ use frontend\models\Onboarding;
 	}
 </style>
 <?php Pjax::begin(['id'=>'folder-details-refresh']); ?>
-<div class="col-md-5 folderdetls">
+<div class="col-md-5 folderdetls" data-foldertitle="<?= $model->title; ?>" data-folderid="<?= $model->id; ?>">
+	<?= EdocumentWidget::widget(['docsize'=>94,'target'=>'folderdetails', 'textPadding'=>60,'referenceID'=>$model->id,'reference'=>'folderDetails','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">
-			<?php if(!$onboardingExists){ ?>
-                <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of folders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->folder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
-              <div class="help-tip" id="folder-tipz">
-                  <p class="tip=text">Take a tour of folders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php } ?>
-			<span>FOLDER DETAILS</span>
+			<?php 
+				$foldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->exists();
+                $getFolders = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->one();
+			?>
+	        <?php if(!$foldersExists || $getFolders->status < Onboarding::ONBOARDING_COUNT ){ ?>
+	            <div class="help-tip" id="folder-tipz">
+	            	<p class="tip=text">Take a tour of folders and find out useful tips.
+	            		<button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
+	            	</p>
+	            </div>
+	        <?php } ?>
+			<span>Created by: <span><?= $author?></span></span>
 		</div>
 		<div class="col-sm-7 col-xs-7 box-folders">
 			<div class="folder-side">
 				<div class="box-content-folder">
-					<?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+					<?= ViewWithXeditableWidget::widget(['model'=>$model,'editableArea'=>'folder','attributues'=>[
 					['modelAttribute'=>'title'],
 					['modelAttribute'=>'description']
 					]]); ?>

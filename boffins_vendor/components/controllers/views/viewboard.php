@@ -2,7 +2,7 @@
 <style>
 
 .sidenav {
-    height: 100%;
+    height: 100vh;
     width: 0;
     position: fixed;
     z-index: 10000;
@@ -12,7 +12,7 @@
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 20px;
-    overflow: scroll;
+    overflow: hidden;
     margin: auto;
 }
 
@@ -76,6 +76,8 @@ $viewBoard = <<<JS
 
 
     $('.board-open').click(function(){
+        $(this).addClass('board-opened');
+        $(this).removeClass('board-closed');
         $('#mySidenav').css({'width':'100%'})
     });
 
@@ -83,6 +85,8 @@ $viewBoard = <<<JS
         setTimeout(function(){
             $.pjax.reload({container:"#task-list-refresh",async: false});
             }, 550);
+        $('.board-open').removeClass('board-opened');
+        $('.board-open').addClass('board-closed');
         $('#mySidenav').css({'width':'0'})
     });
 

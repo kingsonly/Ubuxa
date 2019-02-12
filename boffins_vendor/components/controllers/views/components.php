@@ -4,6 +4,7 @@ use yii\helpers\Url;
 use boffins_vendor\components\controllers\FolderUsersWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use boffins_vendor\components\controllers\FolderCarouselWidget;
+use yii\widgets\Pjax;
 ?>
 <style type="text/css">
 	
@@ -61,8 +62,10 @@ use boffins_vendor\components\controllers\FolderCarouselWidget;
 
 <div class="col-sm comps margin-bottom">
     <div class="auth-users">
-		
-    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder'])?>	
+
+		<?php Pjax::begin(['id'=>'for-profile-refresh']); ?>
+    	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder','pjaxId' => $id])?>	
+		<?php Pjax::end(); ?>
     </div>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">

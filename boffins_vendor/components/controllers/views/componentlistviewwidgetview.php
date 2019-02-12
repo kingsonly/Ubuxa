@@ -57,7 +57,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 					<? $attributeNameHolder = []; if(!empty($content)){?>
 						<? $i=1;foreach($content as $key => $value){?>
 						<? if($i === 1){ ?>
-							<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+							<? foreach($value->getComponentAttributeShowInGrid() as $key => $componentDetails){?>
 								<? array_push($attributeNameHolder,$componentDetails['name']);?>
                     			
                     		<? };?>
@@ -76,7 +76,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 					<? foreach($content as $key => $value){?>
 					<tr  class="component-table-tr one-time-component-click<?= $value['id'];?>" data-componentid="<?= $value['id'];?>">
                     <td><?= $value['title'];?></td>
-					<? foreach($value->getComponentAttribute() as $key => $componentDetails){?>
+					<? foreach($value->getComponentAttributeShowInGrid() as $key => $componentDetails){?>
                     <td><?= empty($componentDetails['value'])?$componentDetails['name'].' is empty':$componentDetails['value'];?>
 						
 						
@@ -94,7 +94,7 @@ $loader = Yii::$app->settingscomponent->boffinsLoaderImage();
 
 </section>
 <?
-$viewUrl = Url::to(['component/view']);
+$viewUrl = Url::to(['component/view','folderId' => $folderId]);
 $listViewJs = <<<listViewJs
 
 $("#listtable").DataTable({
@@ -106,7 +106,7 @@ $('#listtable_wrapper').hover(function(){
 	$('#listtable_wrapper .row:first-child').show();
 },function(e){
 	if($(document).find('#listtable_wrapper .input-sm').hasClass('keep-search-bar')){
-		alert(1234);
+		
 	}else{
 		$('#listtable_wrapper .row:first-child').hide();
 	}

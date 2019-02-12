@@ -36,4 +36,43 @@ return [
     48 => [
         'admin',
     ],
+    49 => [
+        'admin',
+    ],
+    50 => [
+        'admin',
+    ],
+    51 => [
+        'admin',
+    ],
+    52 => [
+        'admin',
+    ],
+    37 => [
+        'admin',
+    ],
+    38 => [
+        'admin',
+    ],
+    56 => [
+        'admin',
+    ],
+    57 => [
+        'admin',
+    ],
+    58 => [
+        'admin',
+    ],
+    59 => [
+        'administrator',
+    ],
+    31 => [
+        'manager',
+    ],
+    34 => [
+        'administrator',
+    ],
+    36 => [
+        'admin',
+    ],
 ];

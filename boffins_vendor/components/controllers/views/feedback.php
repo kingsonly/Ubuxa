@@ -10,16 +10,12 @@
 }
 
 .feedback-button {
-  background-color: #00a65a;
   border: 0px;
-  padding: 10px;
   border-radius: 3px;
-  margin: 0px;
-  text-align: left;
+  margin: 5px;
   font-size: 16px;
   font-family: Raleway, Helvetica, Arial;
   text-transform: uppercase;
-  font-weight: bold;
   letter-spacing: 1px;
   color: white;
   text-decoration: none !important;

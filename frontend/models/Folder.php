@@ -36,7 +36,7 @@ class Folder extends FolderARModel
 	public $privateFolder;
 	public $upload_file;
 	public $externalTemplateId;
-	
+	const ROLEAUTHOR = 'author';
     public static function tableName()
     {
         return 'tm_folder';
@@ -93,6 +93,8 @@ class Folder extends FolderARModel
     {
         return $this->hasMany(Component::className(), ['id' => 'component_id'])->viaTable('tm_folder_component', ['folder_id' => 'id']);
     }
+	
+	
 	public function getComponentTemplateAsComponents()
     {
         return $this->hasMany(Component::className(), ['id' => 'component_id',])->andWhere(['component_template_id' => $this->externalTemplateId])->viaTable('tm_folder_component', ['folder_id' => 'id'])->orderBy([
@@ -129,6 +131,12 @@ class Folder extends FolderARModel
 	public function getFolderManager()
     {
 		return $this->hasMany(FolderManager::className(), ['folder_id' => 'id']);
+    }
+	
+	public function getFolderManagerByRole()
+    {
+		
+		return $this->hasOne(FolderManager::className(), ['folder_id' => 'id'])->andWhere(['role' => self::ROLEAUTHOR]);
     }
 
     /**

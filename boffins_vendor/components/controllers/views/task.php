@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use boffins_vendor\components\controllers\TaskViewWidget;
+use boffins_vendor\components\controllers\EdocumentWidget;
 use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use yii\web\View;
@@ -12,6 +13,7 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
+//$modalwait = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
 ?>
 <style type="text/css">
     .bg-info {
@@ -34,6 +36,7 @@ $boardUrl = Url::to(['task/index']);
         border-bottom: 1px solid #ccc;
         padding-top: 8px;
         overflow: auto;
+        width: 100%;
     }
 
     .box-input1 {
@@ -149,7 +152,7 @@ $boardUrl = Url::to(['task/index']);
    position: relative;
 }
  #addTask {
-   width: 100%;
+   width: 80%;
    padding: 9px;
 }
  #taskButton {
@@ -164,6 +167,18 @@ $boardUrl = Url::to(['task/index']);
     padding: 6px;
     width: 60px;
     transition: all 0.2s;
+} 
+#loading-task {
+    position: absolute;
+    right: 3px;
+    top: -3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: none;
+    padding: 6px;
+    width: 60px;
+    transition: all 0.2s;
+    display: none;
 }
  .embed-submit-field #taskButton:hover {
    background-color: #37c88d;
@@ -270,40 +285,49 @@ $boardUrl = Url::to(['task/index']);
   0% { opacity:0; }
   100% { opacity:100%; }
 }
-
+.for-modal-loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 50%;
+  height: 50%;
+  z-index: 9999;
+  background: url(<?//= $modalwait; ?>) center no-repeat #fff;
+}
+.edoc-list{
+    position: absolute;
+    right: 10px;
+    font-size: 13px;
+    color: #6b808c;
+    top: 14px;
+}
 </style>
 
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
-            <?php if($checkUrlParam == 'folder'){?>
-              <?php if(!$onboardingExists){ ?>
-                  <div class="help-tip" id="task-tipz">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
+            <?php if($checkUrlParam == 'folder'){
+              $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+              $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+            ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                 <div class="help-tip" id="task-tipz">
                     <p class="tip=text">Take a tour of task and find out useful tips.
                       <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
                     </p>
                   </div>
               <?php } ?>
-            <?php }else if($checkUrlParam == 'site'){?>
-              <?php if(!$onboardingExists){ ?>
+            <?php }else if($checkUrlParam == 'site'){
+                $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
+                $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+              ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
                   <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php }else if($onboardingExists && $onboarding->task_status == Onboarding::ONBOARDING_NOT_STARTED){ ?>
-                <div class="help-tip" id="site-tasktour">
-                    <p class="tip=text">Take a tour of task and find out useful tips.
-                      <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
-                    </p>
-                  </div>
-              <?php } ?>
+                      <p class="tip=text">Take a tour of task and find out useful tips.
+                        <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
+                      </p>
+                    </div>
+                <?php } ?>
             <?php }?>
                 <span>TASKS</span>
                  
@@ -337,11 +361,11 @@ $boardUrl = Url::to(['task/index']);
     foreach ($display as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
+        <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
     <?php }else { ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
+        <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
-    
+    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>
@@ -350,8 +374,18 @@ $boardUrl = Url::to(['task/index']);
     </svg>
 
     <div class="todo__text">
-        <span><?= $value->title; ?></span>
-        
+        <?php
+          $edocLists = $value->clipOn['edocument'];
+          if(!empty($edocLists)){?>
+              <span class="edoc-list" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                <? 
+                  $edoc = count($edocLists); 
+                  echo $edoc;
+                ?>
+                <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+              </span>
+        <?php }?>
+        <span><?= strip_tags($value->title); ?></span>
     </div>
     
   </label>
@@ -367,14 +401,18 @@ $boardUrl = Url::to(['task/index']);
             <div class="form-containers">
                  <div class="embed-submit-field">
 					       <?php if($checkUrlParam == 'folder'){?>
-                    <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
+                    <?php $form = ActiveForm::begin(['action'=>Url::to(['task/dashboardcreate']),'id' => 'create-task']); ?>
 					 
-                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
+                      <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Add a task"])->label(false) ?>
   					 
   					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
-                     
-                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                     
+                    <span class="for-task-loader">
+
+                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
+                      <span id="loading-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+                    </span>
                     
                     <?php ActiveForm::end(); ?>
                   <?php }?>
@@ -384,7 +422,7 @@ $boardUrl = Url::to(['task/index']);
     </div>
 </div>
 
-
+<!-- <div class="for-modal-loader"></div> -->
 
 
 
@@ -426,7 +464,9 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                  setTimeout(function(){
                     $.pjax.reload({container:"#kanban-refresh",async: false});
+                  }, 900);
               },
               error: function(res, sec){
                   //console.log(' went wrong');
@@ -434,17 +474,22 @@ function _UpdateStatus(checkedId){
           });
 }
 
+
 $('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
+           $('#taskButton').hide();
+           $("#loading-task").show();
            e.preventDefault();
             if(form.find('.has-error').length) {
                 return false;
             }
+            setTimeout(function(){
             $.ajax({
                 url: '$createUrl',
                 type: 'POST',
                 data: form.serialize(),
+                async: true,
                 success: function(response) { 
                     console.log('completed');
                     toastr.success('Task created');
@@ -455,7 +500,9 @@ $('#create-task').on('beforeSubmit', function(e) {
               error: function(res, sec){
                   console.log('Something went wrong');
               }
-            });    
+            });
+            }, 5);
+            return false;    
 });
 
 $("#addTask").bind("keyup change", function() {
@@ -464,6 +511,9 @@ $("#addTask").bind("keyup change", function() {
         $("#taskButton").show();
     } else {
         $("#taskButton").hide();
+    }
+    if(value && value.length > 49){
+      toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
     }
 });
 
@@ -597,13 +647,7 @@ $('#addTask').bind("keyup keypress", function(e) {
 
 });
 
-$(function(){
-    $('.task-test').click(function(){
-        $('#boardContent').modal('show')
-        .find('#viewcontent')
-        .load($(this).attr('value'));
-        });
-  });
+
   $(function() {
 
   var siteTaskTour = new Tour({

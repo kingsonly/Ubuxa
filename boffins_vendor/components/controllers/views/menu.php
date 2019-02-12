@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use frontend\models\UserDb;
+use yii\widgets\Pjax;
 use boffins_vendor\components\controllers\MenuAccordionWidget;
 use boffins_vendor\components\controllers\ViewBoardWidget;
 use boffins_vendor\components\controllers\SettingsAccordionWidget;
@@ -9,8 +10,14 @@ use boffins_vendor\components\controllers\ClientsAccordionWidget;
 use boffins_vendor\components\controllers\UsersAccordionWidget;
 use boffins_vendor\components\controllers\SuppliersAccordionWidget;
 use boffins_vendor\components\controllers\ContactsAccordionWidget;
+use boffins_vendor\components\controllers\UserProfileWidget;
+use boffins_vendor\components\controllers\ViewCalendarWidget;
+use boffins_vendor\components\controllers\EdocumentFolder;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
+
 
 $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
+$checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 
 ?>
 
@@ -50,34 +57,69 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
     		</div>
     	</div>
 
+        <div class="edocument-container">
+            <div class="row edocument-content" style="display: none">
+                <div class="col-sm-12">
+                    <div class="col-md-10" style="padding-top:15px;">
+                        <span class="edocument-text">Edocument</span>
+                    </div>
+                    <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">
+                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+                    </div>
+                </div>
+                <div class="edoc-content">
+                    <?php if (isset($this->blocks['edocument'])){ ?>
+                        <?= $this->blocks['edocument'] ?>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="row profile-content" style="display: none">
+                
+                <div class="profile-content">
+                    
+                </div>
+            </div>
+        </div>
 	<div class="burger_box">
 		<div class="menu-icon-container">
+
 			<a href="#" class="menu-icon js-menu_toggle closed">
 				<span class="menu-icon_box">
+                    <i class="fa fa-plus fa-2x menu-plus" style="color: #fff !important;" aria-hidden="true"></i>
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
 				</span>
 			</a>
+            <div class="beacon-wrapper">
+              <span class="signal beacon--epicentre"></span>
+              <span class="signal signal--wave"></span>
+              <span class="signal signal--wave signal--delay"></span>
+            </div>
 		</div>
 	</div>
 	<div class="container sider">
+    <?php Pjax::begin(['id'=>'profile-refresh']); ?>
 		<div class="top-sidebar">
-			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
-				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('images/users/'.yii::$app->user->identity->profile_image); ?>')"></div>
-			<?php }else{?>
-				<div class="side-images" style="position: relative;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
-			<?php }?>
+    			<?php if(!empty(yii::$app->user->identity->profile_image)){ ?>
+    				<div class="side-images" style="position: relative;background-position: center;z-index:1000;background-image:url('<?= Url::to(yii::$app->user->identity->profile_image); ?>')"></div>
+    			<?php }else{?>
+    				<div class="side-images" style="position: relative;background-position: center;z-index:1000;background-image:url('<?= Url::to('@web/images/users/default-user.png'); ?>')"></div>
+    			<?php }?>
 			<div class="client-name">
 				<span class="first-name"><?= yii::$app->user->identity->fullName; ?></span>
-				<div><a class="profile-link" href="#">Edit profile</a></div>
-
+				<?= UserProfileWidget::widget();?>
 			</div>
 		</div>
+    <?php Pjax::end(); ?>
+
 			<div class="wrap">
   
   <ul class="tabs group">
-    <li><a class="active" href="#/one"> One</a></li>
+    <li><a class="active" href="#/one">General</a></li>
    <!-- <li><a href="#/two">Two</a></li> -->
-    <li><a href="#/three">Two</a></li>
+    <li><a href="#/three">Settings</a></li>
   </ul>
   
   <div id="content">
@@ -90,6 +132,8 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 <?php } ?> 
              <?php if($checkSiteUrl != 'folder/index'){ ?>
                 <li class="list_item"><?= ViewBoardWidget::widget();?></li>
+                <li class="list_item"><?= EdocumentFolder::widget();?></li>
+                <li class="list_item"><?= ViewCalendarWidget::widget(['folderId'=>$checkIdParam]);?></li>
              <?php }?>
 		</ul>
     </div>

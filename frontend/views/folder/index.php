@@ -6,7 +6,6 @@ use boffins_vendor\components\controllers\FolderCreateWidget;
 use boffins_vendor\components\controllers\CreateButtonWidget;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -285,6 +284,9 @@ text-overflow: ellipsis;
 </style>
 
 <?php Pjax::begin(['id'=>'refresh-after-create']); ?>
+<?
+	//var_dump(Yii::$app->session['socketUsers']);
+?>
 <div class="folder-index">
 
 		<? 
@@ -353,7 +355,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 ?>
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
             <a href="<?= $url;?>" data-pjax="0">
-			 	<div id="folder-item-<?php echo $newactualfolder['id']; ?>" class="folder-item <?php echo $newactualfolder->isEmpty ? 'empty' : 'filled' ?> <?= $newactualfolder->folderColors; ?>" data-toggle="tooltip" title="<?= $newactualfolder['title']; ?>" data-placement="bottom"> 
+			 	<div id="folder-item-<?php echo $newactualfolder['id']; ?>" class="folder-item <?php echo $newactualfolder->isEmpty ? 'empty' : 'empty' ?> <?= $newactualfolder->folderColors; ?>" data-toggle="tooltip" title="<?= $newactualfolder['title']; ?>" data-placement="bottom"> 
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
@@ -388,7 +390,6 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 	
 	
 	
-
 
 	
 </div>
@@ -448,6 +449,7 @@ var accordion = (function(){
 
 $(document).ready(function(){
   accordion.init({ speed: 300, oneOpen: false });
+  
 });
 
 

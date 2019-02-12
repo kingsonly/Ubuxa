@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use frontend\models\Remark;
 use frontend\models\Person;
+use frontend\models\UserDb;
 use frontend\models\Folder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,11 +49,11 @@ class RemarkController extends Controller
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
-                $remarkReply = Remark::find()->where(['<>','parent_id', 0])->orderBy('id DESC')->all();
+                $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
                 if($DashboardUrlParam == 'site'){
-                     $remarks = Remark::find()->where(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
+                     $remarks = Remark::find()->andWhere(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
 					
                      return $this->renderAjax('siteremarks', [
 						 'remarks' => $remarks,
@@ -92,8 +93,10 @@ class RemarkController extends Controller
     public function actionCreate()
     {
         $model = new Remark();
-        $commenterId = Yii::$app->user->identity->person_id;
-        $model->person_id = $commenterId;
+        $commenterUserId = Yii::$app->user->identity->id;
+        $commenterPersonId = Yii::$app->user->identity->person_id;
+        $model->user_id = $commenterUserId;
+        $model->person_id = $commenterPersonId;
         if(!empty(Yii::$app->request->post('&moredata'))){
             $model->text = Yii::$app->request->post('&moredata');
         } else {
@@ -145,13 +148,14 @@ class RemarkController extends Controller
         return $this->redirect(['index']);
     }
 
-    public function actionMention(){
-        $users = new Person();
-        $getUsers = $users->find()->all();
+    public function actionMention($id){
+        $owner = $id;
+        $users = new Folder();
+        $getUsers = $users->find()->andWhere(['id' => $owner])->one();
         $name = array();
         $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers as $user) {
-            $name[] = $user['first_name'].' '.$user['surname'];
+        foreach ($getUsers->folderUsers as $user) {
+            $name[] = $user->fullname;
         }
        return json_encode($name);
     }

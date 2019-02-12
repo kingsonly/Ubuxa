@@ -5,6 +5,7 @@ use kartik\select2\Select2; // or kartik\select2\Select2
 use yii\web\JsExpression;
 use frontend\models\InviteUsers;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 $userModel = new InviteUsers();
 
 
@@ -86,7 +87,7 @@ transition: margin-top 0.1s ease-out 0s;
 	.folderusers{
 		display: flex;
 		flex: 1;
-		height: 47px;
+		height: 43px;
 		width: 100%;
 	}
 	.user-container{
@@ -158,12 +159,13 @@ transition: margin-top 0.1s ease-out 0s;
         position: relative;
         
     }
-    .images{
+    .images-offonline,.images-online{
         width:35px;
         height:35px;
         border: 1px solid #fff;
         background-repeat: no-repeat;
  		background-size: cover;
+ 		background-position: center;
         border-radius: 50%;
         display: inline-block;
         margin-left: -8px;
@@ -172,8 +174,12 @@ transition: margin-top 0.1s ease-out 0s;
         transition: width 0.2s;
         transition: height 0.2s;
     }
+	
+	.images-online{
+		border: 2px solid green !important;
+	}
     
-    .images:hover{
+    .images-offonline:hover,.images-online:hover{
         cursor: pointer;
     }
     .select2-container--krajee .select2-selection--multiple .select2-search--inline .select2-search__field{
@@ -202,6 +208,9 @@ transition: margin-top 0.1s ease-out 0s;
 		<span>AUTHORIZED USERS</span>
 	</div>
 <? }?>
+<div>
+
+</div>
 <div class="folderusers">
 	<? if($removeButtons !== false){?>
 	<? if($type != 'component' ){?>
@@ -229,24 +238,47 @@ transition: margin-top 0.1s ease-out 0s;
                         </div>
 	<? }?>
 	
-	
+	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
 	<div class="user-image">
-	<?php $count= !empty($attributues)?count($attributues):0; ?>
+	<?php $count = !empty($attributues)?count($attributues):0; ?>
 
 <?php 
 		if(!empty($attributues)){
-		foreach($attributues as $users){ 
-	$image = !empty($users["image"])?$users["image"]:'default-user.png';
+			$socketUsers = Yii::$app->session['socketUsers'];
+		foreach($attributues as $users){
+			
+	$image = !empty($users["profile_image"])?$users["profile_image"]:'images/users/default-user.png';
 	$count--;
-	?>
+			?>
+			<? if (!empty($socketUsers)) {?>
 		
-		    <div class="images blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= Url::to('@web/images/users/'.$image); ?>')"></div>
+		<?	if (array_key_exists($users->username, $socketUsers)) {
+    			if($socketUsers[$users->username] == 'Online'){
+					?>
+					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+				<? }else{ ?>
+<!--					display user who is not online -->
+					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+				<? } ?>
+			<? }else{ ?>
+<!--				// display user never the less-->
+		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		
+			<? }?>
+		
+		<? }else{ ?>
+			<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		<? } ?>
+		
+		
+		    
 		
 	
 	
 	<? };} ?>
 	
 	</div>
+	<?php Pjax::end(); ?>
 	</div>
 <?php 
 
@@ -306,6 +338,8 @@ $(document).on('click','.select2-selection__choice__remove', function(e){
 		  "tapToDismiss": false
 		  }
 			toastr.success('User has been added to this folder', "", options);
+			$.pjax.reload({container:"#user_prefix"+"$pjaxId",async: false});
+			
           }
      });
      return false;

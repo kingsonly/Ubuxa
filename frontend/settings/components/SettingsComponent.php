@@ -104,13 +104,13 @@ class SettingsComponent extends Component
 	{
 		if($type == 'image'){
 			if($size == 'sm'){
-				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 25px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
+				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 0px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
 			}elseif($size == 'md'){
 				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 25px" src="'.Url::to("@web/images/loader/loadermd.gif").'" />';
 			}elseif($size == 'lg'){
 				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 25px" src="'.Url::to("@web/images/loader/loaderlg.gif").'" />';
 			}else{
-				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 25px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
+				return '<img  style="height: 40px;width: 40px;margin:0px 5px 0px 0px" src="'.Url::to("@web/images/loader/loader.gif").'" />';
 			}
 		}elseif($type == 'link'){
 			if($size == 'sm'){
@@ -130,7 +130,7 @@ class SettingsComponent extends Component
 	
 	public function boffinsFavIcon()
 	{
-		return Url::to("@web/images/ubuxamenu.png");
+		return Url::to("@web/images/ubuxa-logo-blue.png");
 	} 
 	
 	public function boffinsDefaultLogo()

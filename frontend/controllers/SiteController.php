@@ -16,6 +16,7 @@ use yii\web\Session;
 use yii\helpers\VarDumper;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
+use yii\base\Exception;
 
 //models
 use frontend\models\SignupForm;
@@ -49,10 +50,15 @@ use frontend\models\TaskLabel;
 use frontend\models\Plan;
 use frontend\models\Role;
 use frontend\models\UserSetting;
+use linslin\yii2\curl;
+use google\apiclient;
+
+
 
 //Base Class
 use boffins_vendor\classes\BoffinsBaseController;
 
+set_include_path(Yii::$app->BasePath  . '/vendor/google/apiclient/src');
 
 class SiteController extends BoffinsBaseController {
     public function behaviors()
@@ -158,7 +164,6 @@ class SiteController extends BoffinsBaseController {
         }
 		
 		
-		
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
 			Yii::$app->session->close();
@@ -176,19 +181,21 @@ class SiteController extends BoffinsBaseController {
 			
 			$seperateUrl = explode(Url::base(true),'.');
 			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
-			if(!empty($costomerCompanyName)){
-				if($costomerCompanyName->entityName == 'individual'){
-					$accountName = $costomerCompanyName->entity->surname.'s account';
+			if(count($seperateUrl) > 2){
+				if(!empty($costomerCompanyName)){
+					if($costomerCompanyName->entityName == 'individual'){
+						$accountName = $costomerCompanyName->entity->surname.'s account';
+					}else{
+						$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					}
 				}else{
-					$accountName = $costomerCompanyName->entity->corporation->name.' account';
+					// redirect to url not on system page 
+					return $this->render('nodomainname', [
+						'domainName' => $seperateUrl[0],
+					]);		
 				}
-			}else{
-				// redirect to url not on system page 
-				return $this->render('nodomainname', [
-					'domainName' => $seperateUrl[0],
-				]);		
 			}
-			
+			$accountName = 'your account';
 		}else{
 			$accountName = 'your account';
 		}
@@ -243,6 +250,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
+			$this->PostExample(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -260,9 +268,10 @@ class SiteController extends BoffinsBaseController {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
 		$this->layout = 'loginlayout';
-       $user = new SignupForm;
+       $user = new SignupForm();
        $customer = Customer::find()->where(['cid' => $cid])->one();
        $userExists = Email::find()->where(['address' => $email])->exists();
+       
        if(!$userExists){
 			if(!empty($customer)){
 		        if ($user->load(Yii::$app->request->post())) {
@@ -273,6 +282,7 @@ class SiteController extends BoffinsBaseController {
 		        		$user->first_name = $customer->entity->firstname;
 		        		$user->surname = $customer->entity->surname;
 		        	}
+		        	//$user->_userAR->tenantID = $cid;
 					if($user->save()){
 						if($customer->has_admin == Customer::NO_ADMIN){
 							$customer->has_admin = Customer::HAS_ADMIN;
@@ -342,16 +352,20 @@ class SiteController extends BoffinsBaseController {
 	        	if($customer->signup($customerModel)){
 	        		$settings->tenantID = (int)$customerModel->cid;
 					if($settings->save()){
+						$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
+						/*
 						$sendEmail = \Yii::$app->mailer->compose()
+						
 						->setTo($email)
 						->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
 						->setSubject('Signup Confirmation')
-						->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+						->setTextBody("Hello, click this link to get started.".\yii\helpers\Html::a('Confirm',
 						Yii::$app->urlManager->createAbsoluteUrl(
 						['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
 						))
 						)->send();
-						if($sendEmail){
+						*/
+						if($customerModel->sendEmail($email,$registrationLink)){
 							 Yii::$app->getSession()->setFlash('success','Check Your email!');
 						} else{
 							Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
@@ -377,18 +391,21 @@ class SiteController extends BoffinsBaseController {
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
 	    		$emails = $model->email;
-	    		//var_dump($emails);
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
+			
+							return 1;
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+						
+							return 0;
 	    				}
 	    		} else {
 	    			echo "Email cannot be empty";
 	    		} 
 	    }else{
-	    		return $this->renderAjax('inviteusers', [
+	    		return $this->renderAjax('inviteUsers', [
 				'model' => $model,
 			]);
 	    }
@@ -478,9 +495,9 @@ class SiteController extends BoffinsBaseController {
 	}
 
 	public function actionBoard()
-    {
-        return $this->renderAjax('board');
-    }
+	{
+		return $this->renderAjax('board');	
+	}
 
     public function actionTask()
     {
@@ -506,5 +523,35 @@ class SiteController extends BoffinsBaseController {
     {
     	return $this->render('newpage');
     }
+	
+	public function PostExample($username)
+    {
+        //Init curl
+        $curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'email' => $username
+                )
+            ))
+            ->post('127.0.0.1:4000/api');
+    }
+	
+	public function actionUpdateSocketUserStack(){
+		$session = Yii::$app->session;
+		$socketusers = $_REQUEST['activitiesArray'];
+		$session->set('socketUsers', $socketusers);
+		
+	}
+	
+	public function actionGetChatFolderDetails(){
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$folderDetails = Folder::findOne($folderId); // get folder details 
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title];
+		
+	}
 
 }

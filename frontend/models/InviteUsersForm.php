@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
+use yii\helpers\Url;
 
 
 /**
@@ -36,7 +37,7 @@ class InviteUsersForm extends Model
      * @param string $email the target email address
      * @return bool whether the email was sent
      */
-    public function sendEmail($email)
+    public function sendEmailOld($email)
     {
         $cid = Yii::$app->user->identity->cid;
         $tests = $this->email;
@@ -45,15 +46,36 @@ class InviteUsersForm extends Model
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
             ->setSubject("Ubuxa Invite")
-            ->setTextBody("Click this link ".\yii\helpers\Html::a('confirm',
+            ->setTextBody("Hello, you have been invited to join an ubuxa's workspace.Click join to confirm".\yii\helpers\Html::a('JOIN',
                 Yii::$app->urlManager->createAbsoluteUrl(
-                ['site/invite','email'=> $test,'cid'=>$cid,'role' => $this->role]
+                ['site/signup','email'=> $test,'cid'=>$cid,'role' => $this->role]
                 ))
                 )
             ->send();
         }
         
         return $sendTest;
+    }
+	
+	// this is a better way to send an email
+	public function sendEmail($newCustomerEmail)
+    {
+		
+		$cid = Yii::$app->user->identity->cid;
+        $emails = $this->email;
+		foreach ($emails as $email) {
+			Yii::$app->mailer->compose(['html' => 'inviteusers'],
+                [
+                    //'body'  => $this->body,
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','email'=> $email,'cid'=>$cid,'role' => $this->role]),
+                ])
+            ->setTo($email)
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('Ubuxa Invite')
+            ->send();
+		}
+		return true;
+        
     }
 
 }

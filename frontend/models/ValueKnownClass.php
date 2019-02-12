@@ -104,7 +104,7 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 			
 			Yii::trace("The known name space of this value is {$knownNameSpace} " . __METHOD__ );
 			try {
-				$valueObject = $knownNameSpace::find()->where($this->query)->one();;
+				$valueObject = $knownNameSpace::find()->where($this->query)->one();
 			} catch(Exception $e) {
 				Yii::warning("An exception occured! " . $e->getMessage() . __METHOD__ . "\n" );
 			}
@@ -129,20 +129,20 @@ class ValueKnownClass extends ValueARModel implements ValueInterface, Sortable
 			Yii::warning("Setting an unnaceptable value. Must be an array. {$errorVal} was given. Setting to null.");
 			$this->_usefulValue = null;
 		} else {
-			if ( !array_key_exists('namespace', $value) && !array_key_exists('condition', $value) ) {
+			if ( !array_key_exists('nameSpace', $value) && !array_key_exists('condition', $value) ) {
 				Yii::warning("To ammend a ValueKnownClass, please provide a condition and/or a new knownclass namespace");
 				return;
 			}
 			Yii::trace("Array Keys exist");
-			if ( ! empty($value['namespace']) ) {
-				$nameSpace = $value['namespace'];
+			if ( ! empty($value['nameSpace']) ) {
+				$nameSpace = $value['nameSpace'];
 				if ( ! class_exists($nameSpace) ) {
 					Yii::warning("You cannot set this namespace as it is not a valid class. " . (string)$nameSpace );
 				} elseif ( ! in_array( SELF::KNOWN_CLASS_INTERFACE_NAME, class_implements($nameSpace) ) )  {
 					Yii::warning("You cannot set this namespace as it is not a valid KnownClass. " . (string)$nameSpace );
 				} else {
 					Yii::trace("Is this actually setting namespace");
-					$this->setAttribute('value', $value['namespace']);
+					$this->setAttribute('value', $value['nameSpace']);
 				}
 			}
 			

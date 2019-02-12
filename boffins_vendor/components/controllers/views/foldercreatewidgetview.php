@@ -78,6 +78,9 @@ use frontend\models\Folder;
 		display: block;
 		border-radius: 4px;
 		padding-top: 6px;
+		<? if($creationType == 'component'){?>
+			padding-left: 6px;
+		<? }?>
 	}
 </style>
 <?
@@ -139,7 +142,7 @@ if(isset($_GET['id'])){
 		<?= $form->field($folderModel, 'component_template_id')->hiddenInput(['value' => ''])->label(false); ?>
 	<? }?>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$creationType])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true,'id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$creationType])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>
@@ -162,8 +165,15 @@ if(isset($_GET['id'])){
 
 <?php 
 $url = Url::to(['folder/check-if-folder-name-exist']);
+$baseUrl = Url::base(true);
 $js = <<<JSS
 
+$('#create-new-$formId-title').on('change keyup',function(){
+  var value = $(this).val();
+    if(value && value.length > 39){
+      toastr.info("Maximum characters for folder title reached.");
+    }
+})
  $(document).on('click','#ok',function(){
  localStorage.setItem("skipValidation", "yes");
  	formId = $(this).data('formid');
@@ -241,6 +251,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 				if(localStorage.getItem("skipValidation") === 'yes'){
 					localStorage.setItem("skipValidation", "no");	
 				}
+				if('$newFolderCreated' === '0' ){
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
+				}
 
 				$(document).find('#$formId').show();
 				$(document).find('#loading-folder-div-$formId').hide();
@@ -274,6 +287,9 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 					//alert('component');
 					if(localStorage.getItem("skipValidation") === 'yes'){
 						localStorage.setItem("skipValidation", "no");
+					}
+					if('$newFolderCreated' === '0' ){
+					window.location.replace("$baseUrl?r=folder/view&id="+jsonResult.output);
 					}
 					$(document).find('#$formId').show();
 				   $(document).find('#loading-folder-div-$formId').hide();
@@ -311,9 +327,7 @@ $('#folderform-$formId').on('beforeSubmit', function(e) {
 		toastr.error('Somthing went wrong', "", options);
 		$.pjax.reload({container:"#"+"$pjaxId",async: false});
 			 	
-				if('$newFolderCreated' === '0' ){
-					location.reload();
-				}
+				
 			   }
             },
               

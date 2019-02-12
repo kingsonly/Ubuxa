@@ -113,18 +113,16 @@ use frontend\models\Onboarding;
 			<div class="col-sm-9 col-xs-9 form-widget" >
 				<?= SearchFormWidget::widget();?>
 			</div>
-			<?php if(!$onboardingExists){ ?>
-                <div class="help-tip" id="subfolder-tips">
-                  <p class="tip=text">Take a tour of subfolders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
-                  </p>
-                </div>
-            <?php }else if($onboardingExists && $onboarding->subfolder_status == onboarding::ONBOARDING_NOT_STARTED){ ?>
-              <div class="help-tip" id="subfolder-tips">
-                  <p class="tip=text">Take a tour of subfolders and find out useful tips.
-                    <button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
-                  </p>
-                </div>
+			<?php 
+				$subfoldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();
+                $getSubfolders = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->one();
+			?>
+	        <?php if(!$subfoldersExists || $getSubfolders->status < Onboarding::ONBOARDING_COUNT  ){ ?>
+	            <div class="help-tip" id="subfolder-tips">
+	                <p class="tip=text">Take a tour of subfolders and find out useful tips.
+	                	<button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
+	                </p>
+	            </div>
             <?php } ?>
 		</div>
 		<? if(!empty($displayModel)){?>

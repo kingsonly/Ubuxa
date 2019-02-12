@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\models\{TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "{{%supplier}}".
@@ -67,7 +68,7 @@ class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDelete
      */
 	 
 	//Added by Kingsley 
-    public static function get_all_supplierid()
+    public static function getAllSupplierId()
 	{
         $suppliers = Supplier::find()->asArray()->indexBy('id')->all();        
         return $suppliers;
@@ -79,6 +80,18 @@ class Supplier extends BoffinsArRootModel implements TenantSpecific, TrackDelete
 	{
 		return $this->hasOne(Corporation::className(), ['id' => 'corporation_id'] );
 	}
+	
+	public function getCorporationSupplier()
+    {
+		
+        return Client::find()->joinWith('corporation')->all();
+    }
+	
+	public function getDropDownListData()
+    {
+		
+        return ArrayHelper::map($this->corporationSupplier,'id','nameString');
+    }
 	
 	public function getName() 
 	{

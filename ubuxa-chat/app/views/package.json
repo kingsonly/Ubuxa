@@ -1,0 +1,22 @@
+{
+  "name": "ubuxa-chat",
+  "version": "1.0.0",
+  "description": "Chat for ubuxa",
+  "main": "index.js",
+  "scripts": {
+    "test": "no test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ubuxa"
+  },
+  "keywords": [
+    "ubuxa"
+  ],
+  "author": "epsolun",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.1"
+  }
+}

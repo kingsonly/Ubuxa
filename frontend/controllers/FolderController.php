@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Folder;
+use frontend\models\FolderManager;
 use frontend\models\Person;
 use frontend\models\InviteUsers;
 use frontend\models\Task;
@@ -17,6 +18,7 @@ use frontend\models\TaskAssignedUser;
 use frontend\models\UserDb;
 use frontend\models\UserFeedback;
 use frontend\models\Component;
+use frontend\models\Edocument;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -24,7 +26,8 @@ use yii\filters\VerbFilter;
 use yii\db\Expression;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
-use boffins_vendor\queue\FolderUsersQueue;
+use \boffins_vendor\queue\FolderUsersQueue;
+
 
 /**
  * FolderController implements the CRUD actions for Folder model.
@@ -114,7 +117,9 @@ class FolderController extends Controller
         $users = $model->users;
 		$componentCreateUrl = Url::to(['component/create']);
         $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
-        $onboarding = Onboarding::findOne(['user_id' => $userId]);
+        $onboarding = Onboarding::find()->andWhere(['user_id' => $userId])->one();
+        $edocument = Edocument::find()->where(['reference'=>'folder','reference_id'=>$id])->all();
+        
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -154,6 +159,7 @@ class FolderController extends Controller
             'componentModel' => $componentModel,
             'onboardingExists' => $onboardingExists,
             'onboarding' => $onboarding,
+            'edocument' => $edocument,
         ]);
     }
 	
@@ -181,12 +187,15 @@ class FolderController extends Controller
 			  
 			 foreach($inviteUsersModel->users as $value){
 				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
+				 /*
 				 $test = $getUserId['id'];
 				 Yii::$app->queue->push(new FolderUsersQueue([
 					'userId' => $getUserId['id'],
 					'folderId' => $id,
 					'type' => 'folder',
 				]));
+				 */
+				 $this->addFolderNewUser($getUserId['id'], $id);
 			 }
             return ['output'=>$id, 'message'=> 0];
         }
@@ -309,24 +318,7 @@ class FolderController extends Controller
 		return $folderModel -> subFolders;
 	}
 	
-	private function reQueueEachChildFolder(){
-		//$this->addNewUser(24, 34);
-		
-		if(!empty($this->checkFolderParentRelationship())){
-			
-			
-			//foreach($this->checkFolderParentRelationship() as $folderId){
-				
-				$queue = new Queue();
-				 $queue->push(new FolderUsersQueue([
-					'userId' => 24,
-					'folderId' => 34,
-				]));
-			//$this->addNewUser(24, 34);
-				
-			//}
-		} 
-	}
+
 
     public function actionMenusubfolders()
     {   
@@ -343,4 +335,25 @@ class FolderController extends Controller
             } 
         }
     }
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////// this set of methods would be used to solve a temp problem with que pending on when the issue is resolved 
+	
+
+	
+	public function addFolderNewUser($userId = '', $folderId = '')
+	{
+		
+		$folderModel = Folder::find()->andWhere(['id'=>$folderId])->one();
+		$folderManagerModel = new FolderManager();
+		$folderManagerModel->user_id = $userId;
+		$folderManagerModel->folder_id = $folderId;
+		$folderManagerModel->role = 'user';
+		
+			
+		if($folderManagerModel->save(false)){
+			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
+			return true;
+			
+		}
+	}
 }

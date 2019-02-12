@@ -59,7 +59,7 @@ display: none;
   height: auto;
   margin-top: 30px;
   width: 100%;
-  background: #37474f;
+   background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
   background-size: cover;
   margin-left: auto;
   margin-right: auto;
@@ -201,10 +201,10 @@ label {
 }
   .signup-logo{
     height: 46px;
-    width: 140px;
+    width: 137px;
     margin: 3px 5px 3px 25px;
     position: absolute;
-    right: 17px;
+    right: 55px;
     top: -5px;
   }
   .links{
@@ -217,7 +217,7 @@ label {
         <div class="nav">
           <ul class="links">
             <li class="signup-active"><a class="btn">Sign Up</a></li>
-            <img class="signup-logo" src="/ubuxabeta/frontend/web/images/ubuxa.png">
+            <span class="signup-logo"><?= Yii::$app->settingscomponent->boffinsLogo() ?></span>
           </ul>
         </div>
         <div ng-app ng-init="checked = false">
@@ -271,10 +271,10 @@ $('#userForm').on('beforeSubmit', function (e) {
         type: form.attr("method"),
         data: formData,
         success: function (data) {
-            
+            console.log(data);
         },
-        error: function () {
-            //alert("Something went wrong");
+        error: function (data) {
+            console.log(data);
         },
         beforeSend: function(){
             $("#loader").show()

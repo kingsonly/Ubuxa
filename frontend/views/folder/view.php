@@ -14,12 +14,15 @@ use boffins_vendor\components\controllers\FolderDetails;
 use boffins_vendor\components\controllers\SubFolders;
 use boffins_vendor\components\controllers\ActivitiesWidget;
 use boffins_vendor\components\controllers\OnlineClients;
+use boffins_vendor\components\controllers\EdocumentWidget;
+use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use kartik\popover\PopoverX;
 use yii\web\View;
 use frontend\assets\AppAsset;
+use frontend\models\Onboarding;
 
 
-$this->title = Yii::t('dashboard', 'dashboard_title');
+$this->title = 'Folder Dashboard';
 
 
 use boffins_vendor\components\controllers\MenuWidget;
@@ -166,7 +169,9 @@ $img = $model->folder_image;
     .content-header{
         display:none;
     }
-
+    .just-for-test{
+      background-color: red;
+    }
     
 </style>
 
@@ -174,16 +179,17 @@ $img = $model->folder_image;
 
 
 <section>
-	
     <div class="container-fluid">
         <div class="row">
+        	<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
                   	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
-   						 	<?= FolderDetails::widget(['model' => $model,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+							
+   						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
    						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>
@@ -218,7 +224,13 @@ $img = $model->folder_image;
 		    </div>
 	    <?php Pjax::end(); ?>
     <? $this->endBlock();?>
-    
+
+      <? $this->beginBlock('edocument')?>
+      <?php Pjax::begin(['id'=>'folder-edoc']); ?>
+        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
+      <?php Pjax::end(); ?>
+      <? $this->endBlock();?>
+
   <? $this->beginBlock('subfolders')?>
   <label class="accord-label" for="group-1"><i class="fa fa-folder-open iconz"></i>Subfolders
   	<?php if(!empty($model->subFolders)){ ?>
@@ -248,6 +260,7 @@ $img = $model->folder_image;
   <? $this->endBlock();?>
 
   </section>
+
 <? 
     Modal::begin([
         'header' =>'<h1 id="headers"></h1>',
@@ -255,14 +268,17 @@ $img = $model->folder_image;
         'size' => 'modal-md', 
     ]);
 ?>
-<div id="viewcontent"></div>
+<div id="viewcontent">
+</div>
 <?
     Modal::end();
 ?>
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
+$mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
+
 
 localStorage.setItem("skipValidation", "");
 
@@ -303,8 +319,23 @@ function mymenus(mymenu, menuIds, getThis){
         }
         })
 }
-/*
-$(function() {
+
+function _MainOnboarding(){
+          $.ajax({
+              url: '$mainOnboarding',
+              type: 'POST', 
+              data: {
+                  user_id: $userId,
+                },
+              success: function(res, sec){
+                   console.log('Status updated');
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+function defaultOnboarding() {
 
   var folderTour = new Tour({
     name: "folderTour",
@@ -314,49 +345,57 @@ $(function() {
           title: "Folder Details",            
           content: "You can view your folder details here",
           placement: 'right',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-folder icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
-        steps: [
         {
           element: ".subfolder-container",
           title: "Sub-folders",            
           content: "View subfolders for this folder here, you also create new folders from here",
           placement: 'left',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-folder-open icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
         {
           element: ".taskz-listz",
           title: "Task management",            
           content: "You can create, manage and view all task from here",
           placement: 'right',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-tasks icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
         {
           element: "#flux",
           title: "Remarks",            
           content: "You can view all remarks from here, for this folder",
           placement: 'left',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+        },
+        {
+          element: "#folder-tipz",
+          title: "Tips",            
+          content: "Click on the question mark icon to view more tips",
+          placement: 'left',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
       ],
     backdrop: true,  
     storage: false,
     smartPlacement: true,
-    onEnd: function (siteRemarkTour) {
-            _RemarkOnboarding();
+    onEnd: function (folderTour) {
+            _MainOnboarding();
         },
   });
-  $('#site-remark-tour').on('click', function(e){
-       siteRemarkTour.start();
-       e.preventDefault();
-    })
- //remarkTour.init();
-
-});
-*/
-
-
+ folderTour.init();
+ folderTour.start();
+};
 JS;
  
 $this->registerJs($indexJs);
 ?>
+
+<?php if(!$onboardingExists){ ?>
+	<?php
+$script = <<< JS
+    defaultOnboarding();
+JS;
+$this->registerJs($script);
+	?>
+<?php }?>

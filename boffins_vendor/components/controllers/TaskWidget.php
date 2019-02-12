@@ -17,6 +17,7 @@ class TaskWidget extends Widget
     public $onboarding;
     public $onboardingExists;
     public $userId;
+    public $location;
 	
     public function init()
     {
@@ -27,7 +28,7 @@ class TaskWidget extends Widget
     {
          // Register AssetBundle
         return $this->render('task', [
-            'display' => $this->task,
+            'display' => !empty($this->task)?array_reverse($this->task):$this->task,
         	'tasks' => $this->tasks,
             'taskModel' => $this->taskModel,
             'id' => $this->id,
@@ -35,6 +36,7 @@ class TaskWidget extends Widget
             'onboarding' => $this->onboarding,
             'onboardingExists' => $this->onboardingExists,
             'userId' => $this->userId,
+			'location' => !empty($this->location)?$this->location:'folder',
         	]);
     }
 }
