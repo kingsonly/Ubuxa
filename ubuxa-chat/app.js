@@ -140,14 +140,14 @@ con.query("SELECT * FROM tm_user WHERE username = '"+req.body.email+"' LIMIT 1",
       // res.redirect('/chat');
       console.log(req.session.user.username + 'user loged');
 
-      const todo = {
+      const response = {
         response: result[0]
       }
 
       return res.status(200).send({
         success: 'true',
         message: 'connected',
-        todo
+        response
       })
 
     }
