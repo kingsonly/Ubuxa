@@ -316,6 +316,7 @@ class TaskController extends Controller
     public function actionAssignee()
     {    
         $model = new TaskAssignedUser();
+        $userDb = new UserDb();
         
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();   
@@ -328,24 +329,16 @@ class TaskController extends Controller
             if($exists && $assignee->status == Task::TASK_ASSIGNED_STATUS) {
                 $assignee->status = Task::TASK_NOT_ASSIGNED_STATUS;
                 $taskModel->last_updated = new Expression('NOW()');
-                $taskModel->save();
                 $assignee->save();
-                $userDb = UserDb::findOne($user);
-                $person = $userDb->fullName;
-                $username = $userDb->username;
-                $image = $userDb->profile_image;
-                return json_encode([$user, $task, $person, $username, $image, $assignee->status]);
+                $taskModel->save();
+                return $model->taskAssignee($user, $userDb, $task, $assignee->status);
             }else if($exists && $assignee->status == Task::TASK_NOT_ASSIGNED_STATUS){
                 $assignee->status = Task::TASK_ASSIGNED_STATUS;
                 $assignee->assigned_date = new Expression('NOW()');
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $assignee->save();
-                $userDb = UserDb::findOne($user);
-                $person = $userDb->fullName;
-                $username = $userDb->username;
-                $image = $userDb->profile_image;
-                return json_encode([$user, $task, $person, $username, $image, $assignee->status]);
+                return $model->taskAssignee($user, $userDb, $task, $assignee->status);
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
@@ -354,11 +347,7 @@ class TaskController extends Controller
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $model->save();
-                $userDb = UserDb::findOne($user);
-                $person = $userDb->fullName;
-                $username = $userDb->username;
-                $image = $userDb->profile_image;
-                return json_encode([$user, $task, $person, $username, $image, $model->status]);
+                return $model->taskAssignee($user, $userDb, $task, $model->status);
             }
 
         }

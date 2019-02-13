@@ -4,11 +4,15 @@
   use yii\widgets\ActiveForm;
   use yii\helpers\Url;
   use yii\base\view;
+  use kartik\popover\PopoverX;
+  use kartik\widgets\FileInput;
   AppAsset::register($this);
+  $docUrl = Url::to(['edocument/upload']);
 ?>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
 <style>
+.click-upload{border: 2px dashed #949090;background: azure;}
 .dz-image img{width: 100%;height: 100%;}
 .dz-filename{display: none;}
 .dz-size{display: none;}
@@ -319,9 +323,23 @@
 .nadaaa{
     pointer-events: none;
 }
+.close-upload{
+    float: right;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.upload-dropzones{
+    display: none;
+}
+.add-attachments{
+    font-size: 16px;
+    cursor: pointer;
+}
 </style>
 
 <!-- Main edocument widget -->
+<?php if($edocument == 'dropzone'){ ?>
 <main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>%">
         <div class="dropzones <?=!empty($tasklist)?$tasklist:'';?>" id="dynamic-drop<?=$target;?>">
               <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
@@ -339,7 +357,21 @@
               <?php ActiveForm::end(); ?>
         </div>
 </main>
+<?php }else if($edocument == 'clickUpload'){ 
+    
+    ?>
+        <a class="add-attachments">Add attachments</a>
+        <div class="upload-dropzones">
+              <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone dz-clickable click-upload']]); ?>
+              <span class="close-upload" style="cursor: pointer;"> X </span>
+                <span class="dz-message doc-message">
+                  click to upload files.
+                </span>
+              <?php ActiveForm::end(); ?>
+        </div>
+<?php }?>
 
+<?php if($edocument == 'dropzone'){ ?>
 <?
 $taskUrl = Url::to(['task/view']);
 $doctype = Url::to('@web/images/edocuments');
@@ -501,3 +533,76 @@ Dropzone.autoDiscover = false;
 JS;
 $this->registerJs($dropzone);
 ?>
+<?php }else if($edocument == 'clickUpload'){?>
+<?php
+$doctype = Url::to('@web/images/edocuments');
+$taskUrl = Url::to(['task/view']);
+$upload = <<<JS
+$('.mybtnz').on('click', function(e){
+    $(this).next('.popover').show();
+})
+
+$('.add-attachments').on('click', function(e){
+    $(this).hide();
+    $(this).next('.upload-dropzones').slideDown();
+})
+
+$('.close-upload').on('click', function(e){
+   $(this).parent().parent().slideUp();
+   $(this).parent().parent().prev('.add-attachments').show();
+})
+
+var dropzone = new Dropzone('#dropupload$target', {
+  init: function() {
+    this.on("queuecomplete", function(file) {
+        $('#dropupload$target').parent().slideUp();
+    });
+    this.on("success", function(file, response) {
+        toastr.success("File uploaded successfully");
+        this.removeFile(file);
+        $('#dropupload$target').parent().prev('.add-attachments').show();
+        var taskId = $('#dropupload$target').getParent(2).attr('data-taskId');
+        var folderId =$('#dropupload$target').getParent(2).attr('data-folderId');
+        $.pjax.reload({container:"#kanban-refresh",async: false});
+        $.pjax.reload({container:"#task-list-refresh",async: false});
+        if($('#dropupload$target').hasClass('click-upload')){
+            $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+        }
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+            $.pjax.reload({container:"#folder-edoc", async:false});
+        }
+    });
+    this.on('error', function(file, response) {
+        toastr.error("Something went wrong,try again!");
+    });
+    this.on("sending", function(file, xhr, formData) {
+      formData.append("reference", '$reference'); //get reference location
+      formData.append("referenceID", '$referenceID'); //get reference location id
+    });
+  },
+  paramName: "file", // The name that will be used to transfer the file
+  maxFilesize: 50, // MB. maximum limit for upload
+  maxFiles: 10,
+  clickable: true,
+  accept: function(file, done) {
+    var ext = file.name.split('.').pop(); //get file extension
+    //show thumbnail of file depending on extension
+    if (ext == "pdf") {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/pdf.png");
+    } else if (ext.indexOf("docx") != -1) {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/word.png");
+    } else if (ext.indexOf("xls") != -1) {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/excel.png");
+    }else if (ext.indexOf("ppt") != -1) {
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/powerpoint.png");
+    }else{
+        $(file.previewElement).find(".dz-image img").attr("src", "$doctype/file.png");
+    }
+    done();
+  }
+});
+Dropzone.autoDiscover = false;
+JS;
+$this->registerJs($upload);
+?>
+<?php }?>

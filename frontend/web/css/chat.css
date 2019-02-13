@@ -1,5 +1,12 @@
 /**** Chat Popup Layout******/
-
+.close__icon{
+	color: #fff;
+    position: absolute;
+    top: 1px;
+    right: 7px;
+    font-size: 14px;
+    font-weight: 100;
+}
 .msg_box{
 	position:fixed;
 	bottom:-5px;
@@ -11,13 +18,15 @@
 }
 
 .msg_head{	
-	background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
+	/*background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);*/
+	background-color: #264787;
 	color:white;
 	padding:8px;
-	font-weight:bold;
+	font-weight:400;
 	cursor:pointer;
 	border-radius:5px 5px 0px 0px;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .20);
+	position: relative;
 }
 
 .msg_folder_head{	
@@ -73,10 +82,19 @@
 }
 
 .close{
-	float:right;
-	cursor:pointer;
-	color: #ccc;
-	opacity: 1 !important;
+	position: absolute;
+    cursor: pointer;
+    background: #0a0000;
+    opacity: 1 !important;
+    top: -9px;
+    right: -9px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: none;
+}
+.msg_box:hover .close{
+	display: block;
 }
 .minimize{
 	float:right;

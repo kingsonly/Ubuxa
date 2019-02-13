@@ -23,8 +23,8 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
 
 	arr.unshift(popupClass);
 	chatPopup =  '<div class="msg_box ' +username+'-'+folderDetailsId+'"data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
-	'<div class="msg_head"> <span>'+username +
-	'</span><div class="close">x</div> </div>'+
+	'<div class="msg_head"><span style="background-image:url("'+userImage+'")"></span> <span>'+username +
+	'</span><div class="close"><span class="close__icon">x</span></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
 	'<div class="msg_footer"><textarea class="msg_input" rows="4" placeholder="Enter message"></textarea></div> 	</div> 	</div>' ;
 

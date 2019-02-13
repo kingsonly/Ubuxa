@@ -36,7 +36,8 @@ use yii\bootstrap\Modal;
     line-height: 1.33333333333333;
 }
 .createDate {
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 #task-details-targ{
@@ -307,7 +308,6 @@ use yii\bootstrap\Modal;
     color: black;
 }
 </style>
-
     <div class="task-view">
 
         <div class="task-titlez">
@@ -392,7 +392,7 @@ use yii\bootstrap\Modal;
            </div>
     </div>
     <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
-    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
+    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10, 'edocument' => 'dropzone']);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
@@ -418,16 +418,17 @@ use yii\bootstrap\Modal;
         </div>
     </div>
     <?php }?>
-    <?php if(!empty($edocument)){?>
-    <h4>Attachments</h4>
-    <?php Pjax::begin(['id'=>'task-edoc']); ?>
-        <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
-        <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
-    <?php Pjax::end(); ?>
-    <?php }else{ ?>
-        <a>Add attachemnt</a>
-    <?php }?>
-    
+        <?php if(!empty($edocument)){?>
+        <h4>Attachments</h4>
+            <?php Pjax::begin(['id'=>'task-edoc']); ?>
+            <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+                <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
+            </div>
+            <?php Pjax::end(); ?>
+        <?php }?>
+    <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'task','edocument' => 'clickUpload','target' => 'modalUpload']);?>
+    </div>
   
     <div class ="timestamp">
         <div class="createDate">
