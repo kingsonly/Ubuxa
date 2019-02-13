@@ -121,8 +121,7 @@ $(document).ready(function(){
 	});
 
 	$ (function(){
-		//var socket = io('//127.0.0.1:4000');
-		var socket = io('http://ubuxachat.ubuxa.net');
+		var socket = io('//127.0.0.1:4000');
 
 		var username = $('body').data('username');
 		var noChat = 0; //setting 0 if all chats histroy is not loaded. 1 if all chats loaded.

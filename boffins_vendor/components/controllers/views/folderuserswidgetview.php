@@ -239,6 +239,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? }?>
 	
 	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
+	<? var_dump(Yii::$app->session['socketUsers']); ?>
 	<div class="user-image">
 	<?php $count = !empty($attributues)?count($attributues):0; ?>
 

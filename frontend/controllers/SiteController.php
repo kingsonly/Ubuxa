@@ -250,7 +250,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
-			$this->PostExample(yii::$app->user->identity->username);
+			$this->chatNodeLogin(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -524,7 +524,7 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 	
-	public function PostExample($username)
+	public function chatNodeLogin($username)
     {
         //Init curl
         $curl = new curl\Curl();
@@ -533,12 +533,10 @@ class SiteController extends BoffinsBaseController {
         $response = $curl->setOption(
                 CURLOPT_POSTFIELDS, 
                 http_build_query(array(
-                    //'email' => $username
-                    'email' => 'kingsonly'
+                    'email' => $username
                 )
             ))
-            ->post('http://ubuxachat.ubuxa.net/api');
-            //->post('127.0.0.1:4000/api');
+            ->post('127.0.0.1:4000/api');
     }
 	
 	public function actionUpdateSocketUserStack(){
