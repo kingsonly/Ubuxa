@@ -533,10 +533,12 @@ class SiteController extends BoffinsBaseController {
         $response = $curl->setOption(
                 CURLOPT_POSTFIELDS, 
                 http_build_query(array(
-                    'email' => $username
+                    //'email' => $username
+                    'email' => 'kingsonly'
                 )
             ))
-            ->post('127.0.0.1:4000/api');
+            ->post('http://ubuxachat.ubuxa.net/api');
+            //->post('127.0.0.1:4000/api');
     }
 	
 	public function actionUpdateSocketUserStack(){
