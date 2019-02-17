@@ -272,7 +272,7 @@ ioChat.on('connection', function(socket) {
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
 		userStack[socket.username] = "Offline";
-		ioChat.emit('onlineStack', userStack);
+		ioChat.emit('onlineStack', userSocket);
 	}); //end of disconnect event.
 
 }); //end of io.on(connection).

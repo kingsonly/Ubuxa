@@ -134,6 +134,7 @@ $(document).ready(function(){
 		//passing data on connection.
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
+			alert(username);
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
@@ -145,6 +146,7 @@ $(document).ready(function(){
 		//receiving onlineStack.
 		socket.on('onlineStack',function(stack){
 			var sessionUrl = $('body').data('sessionlink');
+			console.log(stack);
 			$.post(sessionUrl,{activitiesArray:stack},function(){
 				if($(".folderusers").length > 0){
 
