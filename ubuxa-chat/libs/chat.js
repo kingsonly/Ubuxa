@@ -59,9 +59,9 @@ ioChat.on('connection', function(socket) {
 				}
 			}
 			//for popping connection message.
-			//ioChat.emit('onlineStack', userStack);
 			ioChat.emit('onlineStack', userSocket);
-			console.log(userStack);
+			//ioChat.emit('onlineStack', userSocket);
+			
 		} //end of sendUserStack function.
 
 	}); //end of set-user-data event.
