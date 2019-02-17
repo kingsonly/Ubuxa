@@ -134,7 +134,7 @@ $(document).ready(function(){
 		//passing data on connection.
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
-			alert(username);
+			
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
