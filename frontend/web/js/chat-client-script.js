@@ -156,7 +156,7 @@ $(document).ready(function(){
 		});
 		
 		socket.on('wrong',function(stack){
-			alert(5678);
+			alert(stack);
 		});
 		//end of receiving onlineStack event.
 
