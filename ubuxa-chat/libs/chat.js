@@ -64,26 +64,31 @@ ioChat.on('connection', function(socket) {
 //			socket.broadcast.emit('onlineStack', userStack);
 //			socket.emit('onlineStack', userSocket);
 //		} //end of sendUserStack function.
-			
-			con.query("SELECT username FROM tm_user", function (err, result) {
-				if (err) {
-					console.log("Error : " + err);
-					ioChat.emit('wrong', err);
-				} else {
-					//console.log(result);
-					for (var i = 0; i < result.length; i++) {
-						userStack[result[i].username] = "Offline";
-					}
-					//console.log("stack "+Object.keys(userStack));
-					for (i in userSocket) {
-						for (j in userStack) {
-							if (j == i) {
-								userStack[j] = "Online";
+		con.connect(err => {
+			if (err) {
+				console.log(err);
+			}else{
+				con.query("SELECT username FROM tm_user", function (err, result) {
+					if (err) {
+						console.log("Error : " + err);
+						ioChat.emit('wrong', err);
+					} else {
+						//console.log(result);
+						for (var i = 0; i < result.length; i++) {
+							userStack[result[i].username] = "Offline";
+						}
+						//console.log("stack "+Object.keys(userStack));
+						for (i in userSocket) {
+							for (j in userStack) {
+								if (j == i) {
+									userStack[j] = "Online";
+								}
 							}
 						}
 					}
-				}
-			});
+				});
+		}});
+		
 		ioChat.emit('onlineStack', userStack);
 			socket.broadcast.emit('onlineStack', userStack);
 			socket.emit('onlineStack', userStack);
