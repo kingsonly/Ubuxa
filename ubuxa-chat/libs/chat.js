@@ -25,6 +25,7 @@ module.exports.sockets = function(http) {
 		password: "ubuxa##99",
 		database: "premux_main"
 	});
+	con.connect();
 
 io = socketio.listen(http);
 
@@ -64,34 +65,30 @@ ioChat.on('connection', function(socket) {
 //			socket.broadcast.emit('onlineStack', userStack);
 //			socket.emit('onlineStack', userSocket);
 //		} //end of sendUserStack function.
-		con.connect(err => {
+		
+		con.query("SELECT username FROM tm_user", function (err, result) {
 			if (err) {
-				console.log(err);
+				console.log("Error : " + err);
 				ioChat.emit('wrong', err);
-			}else{
-				con.query("SELECT username FROM tm_user", function (err, result) {
-					if (err) {
-						console.log("Error : " + err);
-						ioChat.emit('wrong', err);
-					} else {
-						//console.log(result);
-						for (var i = 0; i < result.length; i++) {
-							userStack[result[i].username] = "Offline";
+			} else {
+				//console.log(result);
+				for (var i = 0; i < result.length; i++) {
+					userStack[result[i].username] = "Offline";
+				}
+				//console.log("stack "+Object.keys(userStack));
+				for (i in userSocket) {
+					for (j in userStack) {
+						if (j == i) {
+							userStack[i] = "Online";
 						}
-						//console.log("stack "+Object.keys(userStack));
-						for (i in userSocket) {
-							for (j in userStack) {
-								if (j == i) {
-									userStack[i] = "Online";
-								}
-							}
-						}
-						ioChat.emit('fromconection', userStack);
-						ioChat.emit('onlineStack', userStack);
 					}
-				});
+				}
+				ioChat.emit('fromconection', userStack);
+				ioChat.emit('onlineStack', userStack);
 			}
 		});
+
+		
 		
 		
 			
