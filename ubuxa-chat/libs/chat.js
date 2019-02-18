@@ -67,6 +67,7 @@ ioChat.on('connection', function(socket) {
 		con.connect(err => {
 			if (err) {
 				console.log(err);
+				ioChat.emit('wrong', err);
 			}else{
 				con.query("SELECT username FROM tm_user", function (err, result) {
 					if (err) {
