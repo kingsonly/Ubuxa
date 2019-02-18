@@ -61,8 +61,8 @@ ioChat.on('connection', function(socket) {
 			//for popping connection message.
 			
 			ioChat.emit('onlineStack', userStack);
-			//socket.broadcast.emit('onlineStack', userSocket);
-			//socket.emit('onlineStack', userSocket);
+			socket.broadcast.emit('onlineStack', userStack);
+			socket.emit('onlineStack', userSocket);
 		} //end of sendUserStack function.
 		
 		eventEmitter.emit('get-all-users');
@@ -273,7 +273,7 @@ ioChat.on('connection', function(socket) {
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
 		userStack[socket.username] = "Offline";
-		ioChat.emit('onlineStack', userSocket);
+		ioChat.emit('onlineStack', userStack);
 	}); //end of disconnect event.
 
 }); //end of io.on(connection).
@@ -330,23 +330,20 @@ eventEmitter.on('read-chat', function(data) {
 //listening for get-all-users event. creating list of all users.
 eventEmitter.on('get-all-users', function() {
 
-	con.connect(function(err) {
-		if (err){
-			console.log('mysqlError:' + err)
-		}
-		con.query("SELECT username FROM tm_user", function (err, result) {
-			if (err) {
-				console.log("Error : " + err);
-			} else {
-				//console.log(result);
-				for (var i = 0; i < result.length; i++) {
-					userStack[result[i].username] = "Offline";
-				}
-				//console.log("stack "+Object.keys(userStack));
-				sendUserStack();
+	
+	con.query("SELECT username FROM tm_user", function (err, result) {
+		if (err) {
+			console.log("Error : " + err);
+		} else {
+			//console.log(result);
+			for (var i = 0; i < result.length; i++) {
+				userStack[result[i].username] = "Offline";
 			}
-		});
+			//console.log("stack "+Object.keys(userStack));
+			sendUserStack();
+		}
 	});
+	
 
 }); //end of get-all-users event.
 
