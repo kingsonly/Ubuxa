@@ -158,6 +158,10 @@ $(document).ready(function(){
 		socket.on('wrong',function(stack){
 			console.log(stack);
 		});
+		
+		socket.on('fromconection',function(stack){
+			console.log('i see connections');
+		});
 		//end of receiving onlineStack event.
 
 		$(document).on('click', '.blue', function() {

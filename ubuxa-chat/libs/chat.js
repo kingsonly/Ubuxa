@@ -43,7 +43,7 @@ ioChat.on('connection', function(socket) {
 	socket.on('set-user-data', function(username) {
 		console.log(username+ "  logged In 1");
 		//storing variable.
-		socket.username = username;
+		socket.username = 'kingsonly';
 		userSocket[socket.username] = socket.id;
 		userSocketInstBuyUserName[socket.username] = socket;
 		socket.broadcast.emit('broadcast',{ description: username + ' Logged In'}); //this would no longer be needed
@@ -85,6 +85,7 @@ ioChat.on('connection', function(socket) {
 								}
 							}
 						}
+						ioChat.emit('fromconection', userStack);
 						ioChat.emit('onlineStack', userStack);
 					}
 				});
