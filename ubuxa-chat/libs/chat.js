@@ -79,11 +79,11 @@ ioChat.on('connection', function(socket) {
 						}
 						//console.log("stack "+Object.keys(userStack));
 						for (i in userSocket) {
-							for (j in userStack) {
-								if (j == i) {
-									userStack[j] = "Online";
-								}
-							}
+							//for (j in userStack) {
+								//if (j == i) {
+									userStack[i] = "Online";
+								//}
+							//}
 						}
 						ioChat.emit('onlineStack', userStack);
 					}
