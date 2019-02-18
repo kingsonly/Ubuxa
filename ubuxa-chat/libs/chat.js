@@ -81,11 +81,11 @@ ioChat.on('connection', function(socket) {
 						for (i in userSocket) {
 							for (j in userStack) {
 								if (j == i) {
-									userStack[j] = "Online";
+									userStack[i] = "Online";
 								}
 							}
 						}
-						ioChat.emit('onlineStack', userSocket);
+						ioChat.emit('onlineStack', userStack);
 					}
 				});
 			}
