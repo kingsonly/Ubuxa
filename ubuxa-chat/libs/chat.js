@@ -85,13 +85,14 @@ ioChat.on('connection', function(socket) {
 								}
 							}
 						}
+						ioChat.emit('onlineStack', userStack);
 					}
 				});
-		}});
+			}
+		});
 		
-		ioChat.emit('onlineStack', userStack);
-			socket.broadcast.emit('onlineStack', userStack);
-			socket.emit('onlineStack', userStack);
+		
+			
 	}); //end of set-user-data event.
 
 	//setting room.
