@@ -7,7 +7,7 @@ use yii\db\Migration;
  */
 class m190207_075007_alter_task_group_table extends Migration
 {
-	
+    
 	/***
 	 *  a suffix to add to database name (Yii Application Component ID) for  different (special) migration controllers
 	 *  to determine the context of the migration. (really just for test = _test suffix)
