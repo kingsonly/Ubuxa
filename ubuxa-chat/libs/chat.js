@@ -50,22 +50,42 @@ ioChat.on('connection', function(socket) {
 		//getting all users list
 		
 		//sending all users list. and setting if online or offline.
-		sendUserStack = function() {
-			for (i in userSocket) {
-				for (j in userStack) {
-					if (j == i) {
-						userStack[j] = "Online";
+//		sendUserStack = function() {
+//			for (i in userSocket) {
+//				for (j in userStack) {
+//					if (j == i) {
+//						userStack[j] = "Online";
+//					}
+//				}
+//			}
+//			//for popping connection message.
+//			
+//			ioChat.emit('onlineStack', userStack);
+//			socket.broadcast.emit('onlineStack', userStack);
+//			socket.emit('onlineStack', userSocket);
+//		} //end of sendUserStack function.
+			
+			con.query("SELECT username FROM tm_user", function (err, result) {
+				if (err) {
+					console.log("Error : " + err);
+				} else {
+					//console.log(result);
+					for (var i = 0; i < result.length; i++) {
+						userStack[result[i].username] = "Offline";
+					}
+					//console.log("stack "+Object.keys(userStack));
+					for (i in userSocket) {
+						for (j in userStack) {
+							if (j == i) {
+								userStack[j] = "Online";
+							}
+						}
 					}
 				}
-			}
-			//for popping connection message.
-			
-			ioChat.emit('onlineStack', userStack);
+			});
+		ioChat.emit('onlineStack', userStack);
 			socket.broadcast.emit('onlineStack', userStack);
 			socket.emit('onlineStack', userSocket);
-		} //end of sendUserStack function.
-		getAllUsers();
-		eventEmitter.emit('get-all-users');
 	}); //end of set-user-data event.
 
 	//setting room.
