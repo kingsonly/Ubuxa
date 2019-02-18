@@ -68,6 +68,7 @@ ioChat.on('connection', function(socket) {
 			con.query("SELECT username FROM tm_user", function (err, result) {
 				if (err) {
 					console.log("Error : " + err);
+					ioChat.emit('wrong', userStack);
 				} else {
 					//console.log(result);
 					for (var i = 0; i < result.length; i++) {
@@ -85,7 +86,7 @@ ioChat.on('connection', function(socket) {
 			});
 		ioChat.emit('onlineStack', userStack);
 			socket.broadcast.emit('onlineStack', userStack);
-			socket.emit('onlineStack', userSocket);
+			socket.emit('onlineStack', userStack);
 	}); //end of set-user-data event.
 
 	//setting room.

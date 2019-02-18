@@ -154,6 +154,10 @@ $(document).ready(function(){
 				}
 			})
 		});
+		
+		socket.on('wrong',function(stack){
+			alert(5678);
+		});
 		//end of receiving onlineStack event.
 
 		$(document).on('click', '.blue', function() {
