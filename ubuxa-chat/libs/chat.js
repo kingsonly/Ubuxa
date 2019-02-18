@@ -79,13 +79,13 @@ ioChat.on('connection', function(socket) {
 						}
 						//console.log("stack "+Object.keys(userStack));
 						for (i in userSocket) {
-							//for (j in userStack) {
-								//if (j == i) {
-									userStack[i] = "Online";
-								//}
-							//}
+							for (j in userStack) {
+								if (j == i) {
+									userStack[j] = "Online";
+								}
+							}
 						}
-						ioChat.emit('onlineStack', userStack);
+						ioChat.emit('onlineStack', userSocket);
 					}
 				});
 			}
