@@ -48,7 +48,7 @@ ioChat.on('connection', function(socket) {
 		userSocketInstBuyUserName[socket.username] = socket;
 		socket.broadcast.emit('broadcast',{ description: username + ' Logged In'}); //this would no longer be needed
 		//getting all users list
-		eventEmitter.emit('get-all-users');
+		
 		//sending all users list. and setting if online or offline.
 		sendUserStack = function() {
 			for (i in userSocket) {
@@ -61,11 +61,11 @@ ioChat.on('connection', function(socket) {
 			//for popping connection message.
 			
 			//ioChat.emit('onlineStack', userSocket);
-			
-		} //end of sendUserStack function.
-		socket.broadcast.emit('onlineStack', userSocket);
+			socket.broadcast.emit('onlineStack', userSocket);
 			socket.emit('onlineStack', userSocket);
-
+		} //end of sendUserStack function.
+		
+		eventEmitter.emit('get-all-users');
 	}); //end of set-user-data event.
 
 	//setting room.
