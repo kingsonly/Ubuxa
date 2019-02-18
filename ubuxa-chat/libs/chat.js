@@ -64,7 +64,7 @@ ioChat.on('connection', function(socket) {
 			socket.broadcast.emit('onlineStack', userStack);
 			socket.emit('onlineStack', userSocket);
 		} //end of sendUserStack function.
-		
+		getAllUsers();
 		eventEmitter.emit('get-all-users');
 	}); //end of set-user-data event.
 
@@ -346,6 +346,26 @@ eventEmitter.on('get-all-users', function() {
 	
 
 }); //end of get-all-users event.
+	
+	
+function getAllUsers() {
+
+	
+	con.query("SELECT username FROM tm_user", function (err, result) {
+		if (err) {
+			console.log("Error : " + err);
+		} else {
+			//console.log(result);
+			for (var i = 0; i < result.length; i++) {
+				userStack[result[i].username] = "Offline";
+			}
+			//console.log("stack "+Object.keys(userStack));
+			sendUserStack();
+		}
+	});
+	
+
+}
 
 //listening get-room-data event.
 function getRoomData(room) {
