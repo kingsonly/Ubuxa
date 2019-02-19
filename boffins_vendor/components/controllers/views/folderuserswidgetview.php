@@ -239,7 +239,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? }?>
 	
 	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
-	<? var_dump(Yii::$app->session['socketUsers']); ?>
+	
 	<div class="user-image">
 	<?php $count = !empty($attributues)?count($attributues):0; ?>
 
@@ -254,13 +254,13 @@ transition: margin-top 0.1s ease-out 0s;
 			<? if (!empty($socketUsers)) {?>
 		
 		<?	if (array_key_exists($users->username, $socketUsers)) {
-			//if($socketUsers[$users->username] == 'Online'){
-				?>
-				<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
-			<?// }else{ ?>
+    			if($socketUsers[$users->username] == 'Online'){
+					?>
+					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+				<? }else{ ?>
 <!--					display user who is not online -->
-<!--				<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>-->
-			<? //} ?>
+					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+				<? } ?>
 			<? }else{ ?>
 <!--				// display user never the less-->
 		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
