@@ -44,53 +44,26 @@ ioChat.on('connection', function(socket) {
 	socket.on('set-user-data', function(username) {
 		console.log(username+ "  logged In 1");
 		//storing variable.
-		socket.username = 'kingsonly';
+		socket.username = username;
 		userSocket[socket.username] = socket.id;
 		userSocketInstBuyUserName[socket.username] = socket;
-		socket.broadcast.emit('broadcast',{ description: username + ' Logged In'}); //this would no longer be needed
+		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged In'}); //this would no longer be needed
 		//getting all users list
-		
+		eventEmitter.emit('get-all-users');
 		//sending all users list. and setting if online or offline.
-//		sendUserStack = function() {
-//			for (i in userSocket) {
-//				for (j in userStack) {
-//					if (j == i) {
-//						userStack[j] = "Online";
-//					}
-//				}
-//			}
-//			//for popping connection message.
-//			
-//			ioChat.emit('onlineStack', userStack);
-//			socket.broadcast.emit('onlineStack', userStack);
-//			socket.emit('onlineStack', userSocket);
-//		} //end of sendUserStack function.
-		
-		con.query("SELECT username FROM tm_user", function (err, result) {
-			if (err) {
-				console.log("Error : " + err);
-				ioChat.emit('wrong', err);
-			} else {
-				//console.log(result);
-				for (var i = 0; i < result.length; i++) {
-					userStack[result[i].username] = "Offline";
-				}
-				//console.log("stack "+Object.keys(userStack));
-				for (i in userSocket) {
-					for (j in userStack) {
-						if (j == i) {
-							userStack[i] = "Online";
-						}
+		sendUserStack = function() {
+			for (i in userSocket) {
+				for (j in userStack) {
+					if (j == i) {
+						userStack[j] = "Online";
 					}
 				}
-				ioChat.emit('fromconection', userStack);
-				ioChat.emit('onlineStack', userStack);
 			}
-		});
-
-		
-		
-		
+			//for popping connection message.
+			
+			ioChat.emit('onlineStack', userStack);
+			
+		} //end of sendUserStack function.
 			
 	}); //end of set-user-data event.
 
@@ -358,17 +331,26 @@ eventEmitter.on('get-all-users', function() {
 
 	
 	con.query("SELECT username FROM tm_user", function (err, result) {
-		if (err) {
-			console.log("Error : " + err);
-		} else {
-			//console.log(result);
-			for (var i = 0; i < result.length; i++) {
-				userStack[result[i].username] = "Offline";
+			if (err) {
+				console.log("Error : " + err);
+				ioChat.emit('wrong', err);
+			} else {
+				//console.log(result);
+				for (var i = 0; i < result.length; i++) {
+					userStack[result[i].username] = "Offline";
+				}
+				//console.log("stack "+Object.keys(userStack));
+				for (i in userSocket) {
+					for (j in userStack) {
+						if (j == i) {
+							userStack[i] = "Online";
+						}
+					}
+				}
+				ioChat.emit('fromconection', userStack);
+				ioChat.emit('onlineStack', userStack);
 			}
-			//console.log("stack "+Object.keys(userStack));
-			sendUserStack();
-		}
-	});
+		});
 	
 
 }); //end of get-all-users event.
@@ -378,17 +360,26 @@ function getAllUsers() {
 
 	
 	con.query("SELECT username FROM tm_user", function (err, result) {
-		if (err) {
-			console.log("Error : " + err);
-		} else {
-			//console.log(result);
-			for (var i = 0; i < result.length; i++) {
-				userStack[result[i].username] = "Offline";
+			if (err) {
+				console.log("Error : " + err);
+				ioChat.emit('wrong', err);
+			} else {
+				//console.log(result);
+				for (var i = 0; i < result.length; i++) {
+					userStack[result[i].username] = "Offline";
+				}
+				//console.log("stack "+Object.keys(userStack));
+				for (i in userSocket) {
+					for (j in userStack) {
+						if (j == i) {
+							userStack[i] = "Online";
+						}
+					}
+				}
+				ioChat.emit('fromconection', userStack);
+				ioChat.emit('onlineStack', userStack);
 			}
-			//console.log("stack "+Object.keys(userStack));
-			sendUserStack();
-		}
-	});
+		});
 	
 
 }
@@ -501,6 +492,7 @@ console.log("signup connected.");
 //verifying unique username.
 socket.on('checkUname', function(uname) {
 eventEmitter.emit('findUsername', uname); //event to perform database operation.
+
 }); //end of checkUname event.
 
 //function to emit event for checkUname.
