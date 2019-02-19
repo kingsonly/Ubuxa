@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Class m190111_074225_create_task_goal
  */
-class m190111_074225_create_task_goal extends Migration
+class m190111_074225_create_task_group extends Migration
 {
 	
 	/***
