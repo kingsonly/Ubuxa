@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 $userModel = new InviteUsers();
 
 
+
 if($type ===  'component'){
 	$url = [];
 	if(!empty($listOfUsers)){
