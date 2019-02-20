@@ -235,8 +235,13 @@ class ClipOnBehavior extends Behavior
 		
 		// if searchownertype is empty, this simply means such class is new to clipon, as such it has to be added to the db first and what it returs after adding would bbe used to finish the query process 
 		if(empty($searchOwnerTypeId)){
-			$ownerTypeModel->owner_type = $getClassName; //assign classname to ownertype
-			$searchOwnerTypeId = $ownerTypeModel->save();
+			$ownerTypeModel->owner_type = strtolower($getClassName); //assign classname to ownertype
+			
+			// if ownerTypeModel is saved pass the value to $searchOwnerTypeId variable to overrite $searchOwnerTypeId which at this point shouold be empty
+			if($ownerTypeModel->save()){
+				$searchOwnerTypeId = $ownerTypeModel;
+			}
+			 
 		}
 		
 		$clipBarModel->owner_id = $this->owner->id; // assign clipBarModel->owner_id with the owner id
@@ -266,8 +271,11 @@ class ClipOnBehavior extends Behavior
 			// if selection comes out empty, that means from where does not exist in the db, as such create a new one 
 			if(empty($ownerTypeModel)){
 				$clipBarOwner = new ClipBarOwnerType();
-				$clipBarOwner->owner_type = $this->owner->fromWhere; // assingn from where to owner_type property
-				$ownerTypeModel = $clipBarOwner->save(); // this should return an object of the just saved type
+				$clipBarOwner->owner_type = strtolower($this->owner->fromWhere); // assingn from where to owner_type property
+				// if clipBarOwner is saved, pass the saved object to $ownerTypeModel
+				if($clipBarOwner->save()){
+					$ownerTypeModel = $clipBarOwner; // this should return an object of the just saved type
+				}
 			}
 			
 			$ownerTypeId = $ownerTypeModel->id;
@@ -275,8 +283,12 @@ class ClipOnBehavior extends Behavior
 			
 			if(empty($getOwnerTypeId)){
 				$clipOwnerType = new ClipOwnerType();
-				$clipOwnerType->owner_type = $getClassName; // assingn class name to owner_type property
-				$getOwnerTypeId = $clipOwnerType->save(); // this should return an object of the just saved type
+				$clipOwnerType->owner_type = strtolower($getClassName); // assingn class name to owner_type property
+				
+				// if clipOwnerType is saved, pass the saved object to $getOwnerTypeId
+				if($clipOwnerType->save()){
+					$getOwnerTypeId = $clipOwnerType; // this should return an object of the just saved type
+				}
 			}
 			
 			$getClipBarId = ClipBar::find()->select(['id'])->andWhere(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task 
@@ -290,6 +302,10 @@ class ClipOnBehavior extends Behavior
 		}else{
 			return;
 		}
+	}
+	
+	private function fixEdocumentClips(){
+		
 	}
 	
 	
