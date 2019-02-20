@@ -1,5 +1,19 @@
 
-
+	/**
+	 * [addEmoji description]
+	 */
+	function addEmoji() {
+	        // Initializes and creates emoji set from sprite sheet
+	        window.emojiPicker = new EmojiPicker({
+	          emojiable_selector: '[data-emojiable=true]',
+	          assetsPath: 'images/emojis/img/',
+	          popupButtonClasses: 'fa fa-smile-o'
+	        });
+	        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+	        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+	        // It can be called as many times as necessary; previously converted input fields will not be converted again
+	        window.emojiPicker.discover();
+	};
 
 
 var arr = []; // List of users
@@ -23,14 +37,15 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
 
 	arr.unshift(popupClass);
 	chatPopup =  '<div class="msg_box ' +username+'-'+folderDetailsId+'"data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
-	'<div class="msg_head"><span style="background-image:url("'+userImage+'")"></span> <span>'+username +
-	'</span><div class="close"><span class="close__icon">x</span></div> </div>'+
+	'<div class="msg_head"><span class="image_holder"><img class="header_image" src="'+userImage+'"></span> <span class="msg_username">'+username +
+	'</span><div class="close"><div class="close__icon">x</div></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
-	'<div class="msg_footer"><textarea class="msg_input" rows="4" placeholder="Enter message"></textarea></div> 	</div> 	</div>' ;
+	'<div class="msg_footer"><textarea data-emojiable="true" data-emoji-input="unicode" class="msg_input" rows="4" placeholder="Type a message..."></textarea></div> 	</div> 	</div>' ;
 
 	$("body").append(  chatPopup  ); // append html to body
 	displayChatBox() // function is used to display the chat box that has just bn created
 	addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId) // used to add folder div which helps in setting the soccek room
+	addEmoji();
 }
 
 /**
@@ -55,7 +70,7 @@ function addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId){
  */
 function displayChatBox(){
 	i = 270 ; // start position
-	j = 290;  //next position
+	j = 295;  //next position
 
 	$.each( arr, function( index, value ) {
 		if(index < 3){
@@ -113,6 +128,8 @@ $(document).ready(function(){
 	$(document).on('click', '.msg_head', function() {
 		var chatbox = $(this).parents().attr("rel") ;
 		$('[rel="'+chatbox+'"] .msg_wrap').slideToggle('slow');
+		//$('[rel="'+chatbox+'"] .msg_wrap').parent().toggleClass('chat_width');
+		$(this).children('.msg_chat_editor').toggle();
 		return false;
 	});
 
@@ -149,6 +166,7 @@ $(document).ready(function(){
 		//receiving onlineStack.
 		socket.on('onlineStack',function(stack){
 			var sessionUrl = $('body').data('sessionlink');
+
 			$.post(sessionUrl,{activitiesArray:stack},function(){
 				if($(".folderusers").length > 0){
 
@@ -254,7 +272,7 @@ $(document).ready(function(){
 
 							var chatbox = $('.'+data.sender).attr("rel") ;
 
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
 							
 							$('.'+chatbox).data('userimage')
 
@@ -299,7 +317,7 @@ $(document).ready(function(){
 							var chatbox = $('.'+data.sender).attr("rel") ;
 							imageurl = $('.'+chatbox).data('userimage');
 
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
 							
 
 
@@ -391,7 +409,7 @@ $(document).ready(function(){
 
 							var chatbox = $('.'+data.result[i].msgTo+'-'+data.folderId).attr("rel") ;
 
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
 							
 
 							if(i == data.result.length-1){
@@ -410,7 +428,7 @@ $(document).ready(function(){
 							var chatbox = $('.'+data.result[i].msgFrom+'-'+data.folderId).attr("rel") ;
 							$(document).find('.'+chatbox).data('userimage',imageurl);
 
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
 							
 
 							if(i == data.result.length-1){
@@ -501,21 +519,21 @@ $(document).ready(function(){
 
 		}); //end of typing event.
 
-		$(document).on('keypress', 'textarea' , function(e) {
+		$(document).on('keypress', '.msg_input' , function(e) {
 			if (e.keyCode == 13 ) {
 				// Remove disclaimer on mesage send
 				msgWrap = $(this).parent().parent().parent().find('.msg_wrap');
 				if(msgWrap.children($('.background')).length > 0){
 					msgWrap.find('.background').hide();
 				}
-				var msg = $(this).val();
-				toUser = $(this).parent().parent().parent().find('.msg_head span').text();
+				var msg = $(this).text();
+				toUser = $(this).parent().parent().parent().find('.msg_head .msg_username').text();
 				var chatBoxFolderId = $(this).parent().parent().parent().find('.msg_folder_head').data('chatfolderid');
 
 				var currentRoom = username+"-"+toUser+'-'+chatBoxFolderId;
 				if(msg.trim().length != 0){
 					socket.emit('chat-msg',{msg:msg,msgTo:toUser,date:Date.now(),getRoom:currentRoom,userImage:mainUserImage});
-					$(this).val('');
+					$(this).text('');
 					return false;
 
 				}
@@ -558,7 +576,7 @@ $(document).ready(function(){
 					findWrapHead.addClass('chatblink');// make head to blink
 				}
 
-				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 				$('[rel="'+chatbox+'"] .msg_body').find('.remove').remove();
 				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}else{
@@ -583,7 +601,7 @@ $(document).ready(function(){
 				}
 				//else find the to client tab and and paste message
 
-				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 				$('[rel="'+chatbox+'"] .msg_body').find('.remove').remove();
 				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}
@@ -647,5 +665,4 @@ $(document).ready(function(){
 		}); //end of set-room event.
 
 	});//end of function.
-
 });

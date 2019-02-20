@@ -274,7 +274,7 @@ $(document).ready(function(){
        'min-height':'100%',
        'background-color': 'rgba(253, 253, 253, 0.9)',
        'overflow': 'scroll',
-      });
+      }).addClass('opened');
       $('.sider').hide('slow');
       
       $('.edocument-content').show('slow');
@@ -285,7 +285,7 @@ $(document).ready(function(){
        'width':'300px',
        'min-height':'1px',
        'visibility':'hidden'
-      });
+      }).removeClass('opened');
       $('.edocument-content').hide();
       setTimeout(function() { 
         $('.sider').show('slow');

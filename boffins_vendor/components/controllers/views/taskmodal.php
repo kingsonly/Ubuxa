@@ -418,16 +418,16 @@ use yii\bootstrap\Modal;
         </div>
     </div>
     <?php }?>
+    <?php Pjax::begin(['id'=>'task-edoc']); ?>
         <?php if(!empty($edocument)){?>
         <h4>Attachments</h4>
-            <?php Pjax::begin(['id'=>'task-edoc']); ?>
             <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
                 <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
             </div>
-            <?php Pjax::end(); ?>
         <?php }?>
+    <?php Pjax::end(); ?>
     <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
-        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'task','edocument' => 'clickUpload','target' => 'modalUpload']);?>
+        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'task','edocument' => 'clickUpload','target' => 'modalUpload', 'attachIcon' => 'yes']);?>
     </div>
   
     <div class ="timestamp">

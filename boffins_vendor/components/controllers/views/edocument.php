@@ -64,10 +64,22 @@
 .dropzonex.dz-started .dz-message {
     display: none;
 }
-.dropzonex.dz-drag-hover {
+.dropzonexx.dz-clickable {
+    cursor: pointer;
+}
+.dropzonexx.dz-clickable * {
+    cursor: default;
+}
+.dropzonexx.dz-clickable .dz-message, .dropzonex.dz-clickable .dz-message * {
+    cursor: pointer;
+}
+.dropzonexx.dz-started .dz-message {
+    display: none;
+}
+.dropzonexx.dz-drag-hover {
     border: 0.2px solid rgba(0, 0, 0, 0.5);
 }
-.dropzonex.dz-drag-hover .dz-message {
+.dropzonexx.dz-drag-hover .dz-message {
     opacity: 0.5;
 }
 .dropzonex .dz-message {
@@ -82,10 +94,23 @@
     margin: 1px;
     min-height: 1px;
 }
+.dropzonexx .dz-preview {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 1px;
+    min-height: 1px;
+}
 .dropzonex .dz-preview:hover {
     z-index: 1000;
 }
+.dropzonexx .dz-preview:hover {
+    z-index: 1000;
+}
 .dropzonex .dz-preview:hover .dz-details {
+    opacity: 1;
+}
+.dropzonexx .dz-preview:hover .dz-details {
     opacity: 1;
 }
 .dropzonex .dz-preview.dz-file-preview .dz-image {
@@ -93,13 +118,28 @@
     background: #999;
     background: linear-gradient(to bottom, #eee, #ddd);
 }
+.dropzonexx .dz-preview.dz-file-preview .dz-image {
+    border-radius: 20px;
+    background: #999;
+    background: linear-gradient(to bottom, #eee, #ddd);
+}
 .dropzonex .dz-preview.dz-file-preview .dz-details {
+    opacity: 1;
+}
+.dropzonexx .dz-preview.dz-file-preview .dz-details {
     opacity: 1;
 }
 .dropzonex .dz-preview.dz-image-preview {
     /*background: white;*/
 }
 .dropzonex .dz-preview.dz-image-preview .dz-details {
+    -webkit-transition: opacity 0.2s linear;
+    -moz-transition: opacity 0.2s linear;
+    -ms-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+}
+.dropzonexx .dz-preview.dz-image-preview .dz-details {
     -webkit-transition: opacity 0.2s linear;
     -moz-transition: opacity 0.2s linear;
     -ms-transition: opacity 0.2s linear;
@@ -113,13 +153,40 @@
     cursor: pointer;
     border: none;
 }
+.dropzonexx .dz-preview .dz-remove {
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+}
 .dropzonex .dz-preview .dz-remove:hover {
+    text-decoration: underline;
+}
+.dropzonexx .dz-preview .dz-remove:hover {
     text-decoration: underline;
 }
 .dropzonex .dz-preview:hover .dz-details {
     opacity: 1;
 }
+.dropzonexx .dz-preview:hover .dz-details {
+    opacity: 1;
+}
 .dropzonex .dz-preview .dz-details {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    font-size: 13px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 2em 1em;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.9);
+    line-height: 150%;
+}
+.dropzonexx .dz-preview .dz-details {
     z-index: 20;
     position: absolute;
     top: 0;
@@ -137,10 +204,21 @@
     margin-bottom: 1em;
     font-size: 16px;
 }
+.dropzonexx .dz-preview .dz-details .dz-size {
+    margin-bottom: 1em;
+    font-size: 16px;
+}
 .dropzonex .dz-preview .dz-details .dz-filename {
     white-space: nowrap;
 }
+.dropzonexx .dz-preview .dz-details .dz-filename {
+    white-space: nowrap;
+}
 .dropzonex .dz-preview .dz-details .dz-filename:hover span {
+    border: 1px solid rgba(200, 200, 200, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.dropzonexx .dz-preview .dz-details .dz-filename:hover span {
     border: 1px solid rgba(200, 200, 200, 0.8);
     background-color: rgba(255, 255, 255, 0.8);
 }
@@ -148,7 +226,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.dropzonexx .dz-preview .dz-details .dz-filename:not(:hover) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .dropzonex .dz-preview .dz-details .dz-filename:not(:hover) span {
+    border: 1px solid transparent;
+}
+.dropzonexx .dz-preview .dz-details .dz-filename:not(:hover) span {
     border: 1px solid transparent;
 }
 .dropzonex .dz-preview .dz-details .dz-filename span, .dropzonex .dz-preview .dz-details .dz-size span {
@@ -156,7 +241,21 @@
     padding: 0 0.4em;
     border-radius: 3px;
 }
+.dropzonexx .dz-preview .dz-details .dz-filename span, .dropzonex .dz-preview .dz-details .dz-size span {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0 0.4em;
+    border-radius: 3px;
+}
 .dropzonex .dz-preview:hover .dz-image img {
+    -webkit-transform: scale(1.05, 1.05);
+    -moz-transform: scale(1.05, 1.05);
+    -ms-transform: scale(1.05, 1.05);
+    -o-transform: scale(1.05, 1.05);
+    transform: scale(1.05, 1.05);
+    -webkit-filter: blur(8px);
+    filter: blur(8px);
+}
+.dropzonexx .dz-preview:hover .dz-image img {
     -webkit-transform: scale(1.05, 1.05);
     -moz-transform: scale(1.05, 1.05);
     -ms-transform: scale(1.05, 1.05);
@@ -174,7 +273,19 @@
     display: block;
     z-index: 10;
 }
+.dropzonexx .dz-preview .dz-image {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    position: relative;
+    display: block;
+    z-index: 10;
+}
 .dropzonex .dz-preview .dz-image img {
+    display: block;
+}
+.dropzonexx .dz-preview .dz-image img {
     display: block;
 }
 .dropzonex .dz-preview.dz-success .dz-success-mark {
@@ -184,7 +295,22 @@
     -o-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
     animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
 }
+.dropzonexx .dz-preview.dz-success .dz-success-mark {
+    -webkit-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -moz-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -ms-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -o-animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+    animation: passing-through 3s cubic-bezier(0.77, 0, 0.175, 1);
+}
 .dropzonex .dz-preview.dz-error .dz-error-mark {
+    opacity: 1;
+    -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -moz-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -ms-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    -o-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+    animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.dropzonexx .dz-preview.dz-error .dz-error-mark {
     opacity: 1;
     -webkit-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
     -moz-animation: slide-in 3s cubic-bezier(0.77, 0, 0.175, 1);
@@ -203,12 +329,39 @@
     margin-left: -27px;
     margin-top: -27px;
 }
+.dropzonexx .dz-preview .dz-success-mark, .dropzonex .dz-preview .dz-error-mark {
+    pointer-events: none;
+    opacity: 0;
+    z-index: 500;
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    margin-left: -27px;
+    margin-top: -27px;
+}
 .dropzonex .dz-preview .dz-success-mark svg, .dropzonex .dz-preview .dz-error-mark svg {
     display: block;
     width: 54px;
     height: 54px;
 }
+.dropzonexx .dz-preview .dz-success-mark svg, .dropzonex .dz-preview .dz-error-mark svg {
+    display: block;
+    width: 54px;
+    height: 54px;
+}
+.dropzonexx .dz-error-mark{
+    display: none;
+}
 .dropzonex .dz-preview.dz-processing .dz-progress {
+    opacity: 1;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+.dropzonexx .dz-preview.dz-processing .dz-progress {
     opacity: 1;
     -webkit-transition: all 0.2s linear;
     -moz-transition: all 0.2s linear;
@@ -224,7 +377,22 @@
     -o-transition: opacity 0.4s ease-in;
     transition: opacity 0.4s ease-in;
 }
+.dropzonexx .dz-preview.dz-complete .dz-progress {
+    opacity: 0;
+    -webkit-transition: opacity 0.4s ease-in;
+    -moz-transition: opacity 0.4s ease-in;
+    -ms-transition: opacity 0.4s ease-in;
+    -o-transition: opacity 0.4s ease-in;
+    transition: opacity 0.4s ease-in;
+}
 .dropzonex .dz-preview:not(.dz-processing) .dz-progress {
+    -webkit-animation: pulse 6s ease infinite;
+    -moz-animation: pulse 6s ease infinite;
+    -ms-animation: pulse 6s ease infinite;
+    -o-animation: pulse 6s ease infinite;
+    animation: pulse 6s ease infinite;
+}
+.dropzonexx .dz-preview:not(.dz-processing) .dz-progress {
     -webkit-animation: pulse 6s ease infinite;
     -moz-animation: pulse 6s ease infinite;
     -ms-animation: pulse 6s ease infinite;
@@ -247,7 +415,37 @@
     border-radius: 8px;
     overflow: hidden;
 }
+.dropzonexx .dz-preview .dz-progress {
+    opacity: 1;
+    z-index: 1000;
+    pointer-events: none;
+    position: absolute;
+    height: 16px;
+    left: 40%;
+    top: 50%;
+    margin-top: -8px;
+    width: 100px;
+    margin-left: -40px;
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-transform: scale(1);
+    border-radius: 8px;
+    overflow: hidden;
+}
 .dropzonex .dz-preview .dz-progress .dz-upload {
+    background: #264787;
+    /*background: linear-gradient(to bottom, #666, #444);*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    -webkit-transition: width 300ms ease-in-out;
+    -moz-transition: width 300ms ease-in-out;
+    -ms-transition: width 300ms ease-in-out;
+    -o-transition: width 300ms ease-in-out;
+    transition: width 300ms ease-in-out;
+}
+.dropzonexx .dz-preview .dz-progress .dz-upload {
     background: #264787;
     /*background: linear-gradient(to bottom, #666, #444);*/
     position: absolute;
@@ -264,7 +462,14 @@
 .dropzonex .dz-preview.dz-error .dz-error-message {
     display: block;
 }
+.dropzonexx .dz-preview.dz-error .dz-error-message {
+    display: block;
+}
 .dropzonex .dz-preview.dz-error:hover .dz-error-message {
+    opacity: 1;
+    pointer-events: auto;
+}
+.dropzonexx .dz-preview.dz-error:hover .dz-error-message {
     opacity: 1;
     pointer-events: auto;
 }
@@ -290,7 +495,40 @@
     padding: 0.5em 1.2em;
     color: white;
 }
+.dropzonexx .dz-preview .dz-error-message {
+    pointer-events: none;
+    z-index: 1000;
+    position: absolute;
+    display: block;
+    display: none;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+    font-size: 13px;
+    top: 130px;
+    left: -10px;
+    width: 140px;
+    background: #be2626;
+    background: linear-gradient(to bottom, #be2626, #a92222);
+    padding: 0.5em 1.2em;
+    color: white;
+}
 .dropzonex .dz-preview .dz-error-message:after {
+    content:'';
+    position: absolute;
+    top: -6px;
+    left: 64px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #be2626;
+}
+.dropzonexx .dz-preview .dz-error-message:after {
     content:'';
     position: absolute;
     top: -6px;
@@ -331,10 +569,32 @@
 }
 .upload-dropzones{
     display: none;
+    margin-bottom: 10px;
+    margin-right: 20px;
 }
 .add-attachments{
     font-size: 16px;
     cursor: pointer;
+}
+.upload-icons{
+  font-size: 32px;
+  position: absolute;
+  right: 50px;
+}
+.dropzonexx{
+    min-height: 150px;
+    padding: 20px 20px;
+}
+.upload-message{
+    /*margin-top: 20px;*/
+}
+.upload-icon{
+    position: relative;
+}
+.message-holder-upload{
+    position: absolute;
+    bottom: 70px;
+    right: 230px;
 }
 </style>
 
@@ -360,13 +620,21 @@
 <?php }else if($edocument == 'clickUpload'){ 
     
     ?>
-        <a class="add-attachments">Add attachments</a>
-        <div class="upload-dropzones">
-              <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone dz-clickable click-upload']]); ?>
-              <span class="close-upload" style="cursor: pointer;"> X </span>
-                <span class="dz-message doc-message">
-                  click to upload files.
-                </span>
+        <a class="add-attachments">Add attachments <i class="fa fa-paperclip" aria-hidden="true"></i>
+</a>
+        <div class="upload-dropzones" style="margin-top:<?= $target == 'folderUpload' ? 70 : 0 ?>px">
+              <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzonexx dz-clickable click-upload click-upload'.$target]]); ?>
+                <span class="close-upload" style="cursor: pointer;"> X </span>
+                <div class="message-holder-upload">
+                    <span class="dz-message upload-message">
+                      click to upload files.
+                    </span>
+                    <?php if($attachIcon === 'yes'){ ?>
+                        <div class="dz-message upload-icon">
+                            <i class="fa fa-paperclip upload-icons" aria-hidden="true"></i>
+                        </div>
+                    <?php }?>
+                </div>
               <?php ActiveForm::end(); ?>
         </div>
 <?php }?>
@@ -538,6 +806,7 @@ $this->registerJs($dropzone);
 $doctype = Url::to('@web/images/edocuments');
 $taskUrl = Url::to(['task/view']);
 $upload = <<<JS
+
 $('.mybtnz').on('click', function(e){
     $(this).next('.popover').show();
 })
@@ -554,7 +823,7 @@ $('.close-upload').on('click', function(e){
 
 var dropzone = new Dropzone('#dropupload$target', {
   init: function() {
-    this.on("queuecomplete", function(file) {
+    this.on("queuecomplete", function(file, response) {
         $('#dropupload$target').parent().slideUp();
     });
     this.on("success", function(file, response) {
@@ -565,10 +834,10 @@ var dropzone = new Dropzone('#dropupload$target', {
         var folderId =$('#dropupload$target').getParent(2).attr('data-folderId');
         $.pjax.reload({container:"#kanban-refresh",async: false});
         $.pjax.reload({container:"#task-list-refresh",async: false});
-        if($('#dropupload$target').hasClass('click-upload')){
+        if($('#dropupload$target').hasClass('click-uploadtask')){
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
-        if($('#dropupload$target').hasClass('dropzonefolder')){
+        if($('#dropupload$target').hasClass('click-uploadfolderUpload')){
             $.pjax.reload({container:"#folder-edoc", async:false});
         }
     });

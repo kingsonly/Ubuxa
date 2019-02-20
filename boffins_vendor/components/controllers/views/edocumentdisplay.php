@@ -26,6 +26,7 @@
   overflow: scroll;
   position: relative;
   transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .list-type{
@@ -250,7 +251,7 @@
             ?>
           </div>
           <div class="doc-info">
-            <a href="<?= $filepath;?>" class="download-documents" ria-hidden="true" data-toggle="tooltip" title="Download" download>
+            <a href="<?= $filepath;?>" class="download-documents" aria-hidden="true" data-toggle="tooltip" title="Download" download>
               <i class="fa fa-download download-doc" aria-hidden="true"></i>
             </a>
             <div id="basename-container">
@@ -368,10 +369,10 @@ $(".confirm-doc-delete").on('click', function(e){
   var getThis;
   getThis = $(this);
   $(this).next().show();
-  var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
-  var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
-  console.log(taskId, folderId);
-  _deleteEdocument(edocId,getThis,taskId,folderId) ;  
+  //var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
+  //var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
+  //console.log(taskId, folderId);
+  _deleteEdocument(edocId,getThis) ;  
 })
 
 $('.close-dropdown').on('click', function(e){
@@ -400,9 +401,7 @@ function _deleteEdocument(edocId, getThis,taskId,folderId){
           toastr.success('Document Deleted');
           $.pjax.reload({container:"#kanban-refresh",async: false});
           $.pjax.reload({container:"#task-list-refresh",async: false});
-          //$.pjax.reload({container:"#folder-edoc",async: false});
-          //$.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
-          //$(".edoc-drop").hide();
+         
           getThis.getParent(7).hide();
           //getThis.show();
           //getThis.next().hide();

@@ -31,5 +31,7 @@ class AppAsset extends AssetBundle
         '\frontend\assets\BootstrapTour',
         '\frontend\assets\DropzoneAsset',
         '\frontend\assets\CalendarAsset',
+        '\frontend\assets\EmojiPickerAsset',
+        //'\frontend\assets\EmojiOneAsset',
     ];
 }
