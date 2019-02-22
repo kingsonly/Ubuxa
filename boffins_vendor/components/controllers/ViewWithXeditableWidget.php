@@ -21,6 +21,7 @@ class ViewWithXeditableWidget extends Widget{
 	public $editableId;
 	public $attributeName;
 	public $modelUrl;
+	public $pjaxId;
 	
 	public $attributues = [];
 
@@ -44,6 +45,7 @@ class ViewWithXeditableWidget extends Widget{
 			'editableId' => !empty($this->editableId)?$this->editableId:'',
 			'attributeName' => $this->attributeName,
 			'modelUrl' => $this->modelUrl,
+			'pjaxId' => $this->pjaxId,
 		]);
 	}
 	

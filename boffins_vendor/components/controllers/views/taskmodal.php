@@ -311,7 +311,7 @@ use yii\bootstrap\Modal;
     <div class="task-view">
 
         <div class="task-titlez">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>

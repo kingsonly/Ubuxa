@@ -114,7 +114,6 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     }
     /**
     use to get time elapsed, when the document was created. This medthod uses the model last updated to get the date
-    ***Borrowed from remarks model
     **/
 
     public function getTimeElapsedString($full = false) {

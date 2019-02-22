@@ -26,6 +26,7 @@ class FolderUsersWidget extends Widget{
 	public $addUsersUrl;//  this is a url which would be used to add users.
 	public $type;//  could be folder remarks,component, as the case may be 
 	public $pjaxId;//  could be folder remarks,component, as the case may be 
+	public $dynamicId;//  dynamic id
 	
 	
 	
@@ -46,7 +47,7 @@ class FolderUsersWidget extends Widget{
 			'addUsersUrl' => $this->addUsersUrl,
 			'type' => $this->type,
 			'pjaxId' => !empty($pjaxId)?$pjaxId:'userjax',
-			
+			'dynamicId' => $this->dynamicId,
 		]);
 	}
 	

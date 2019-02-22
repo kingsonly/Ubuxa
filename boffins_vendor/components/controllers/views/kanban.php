@@ -374,9 +374,8 @@ a.addTaskButton.active {
   right: 10px;
   font-size: 13px;
   color: #6b808c;
-  top: 3px;
 }
-.edocuments-board{
+.holder-board{
   position: relative;
 }
 .assignedto{
@@ -410,22 +409,20 @@ a.addTaskButton.active {
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
                   <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban']);?>
-                  <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
-                      <div class="task-title">
+                  <div class="task-test task-kanban_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
+                      <div class="task-title" id="task-title<?=$values->id;?>">
                         <span class="task-titles"><?= $values->title; ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
-                      <div class="assignedto">
-                        <div class="user-image">
-                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
-                        </div>
+                      <div class="assignedto" id="assignedto<?=$values->id;?>">
+                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id]);?>
                       </div>
                     <?php }?>
-                    <div class="edocuments-board">
+                    <div class="holder-board" id="holder-board<?=$values->id;?>">
                       <?php
                         $edocuments = $values->clipOn['edocument'];
                         if(!empty($edocuments)){?>
-                            <span class="edoc-count" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                            <span class="edoc-count" id="edoc-count<?=$values->id;?>" aria-hidden="true" data-toggle="tooltip" title="Attachments" style="top:<?= !empty($values->personName) && empty($values->labelNames) ? '-32px' : '3px'; ?>">
                               <? 
                                 $edocs = count($edocuments); 
                                 echo $edocs;
@@ -437,8 +434,7 @@ a.addTaskButton.active {
                         <div class="task-label-title" style="width: <?= !empty($edocuments) ? '90' : '100';?>%">
                           <span class="label-task" id="label<?=$values->id.$count?>">
                             <?= $values->labelNames; ?>
-                          </span>
-                        </div>
+                          </span>                        </div>
                       <?php } ?>
                     </div>
                       <?php 

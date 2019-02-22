@@ -9,7 +9,6 @@ use yii\widgets\Pjax;
 $userModel = new InviteUsers();
 
 
-
 if($type ===  'component'){
 	$url = [];
 	if(!empty($listOfUsers)){
@@ -212,7 +211,7 @@ transition: margin-top 0.1s ease-out 0s;
 <div>
 
 </div>
-<div class="folderusers">
+<div class="folderusers" id="folderusers<?=$dynamicId;?>">
 	<? if($removeButtons !== false){?>
 	<? if($type != 'component' ){?>
 	<div id="invitenewuser">
@@ -240,8 +239,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? }?>
 	
 	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
-	
-	<div class="user-image">
+	<div class="user-image user_image<?=$dynamicId;?>" >
 	<?php $count = !empty($attributues)?count($attributues):0; ?>
 
 <?php 
@@ -257,19 +255,19 @@ transition: margin-top 0.1s ease-out 0s;
 		<?	if (array_key_exists($users->username, $socketUsers)) {
     			if($socketUsers[$users->username] == 'Online'){
 					?>
-					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 				<? }else{ ?>
 <!--					display user who is not online -->
-					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 				<? } ?>
 			<? }else{ ?>
 <!--				// display user never the less-->
-		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		
 			<? }?>
 		
 		<? }else{ ?>
-			<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+			<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
 		<? } ?>
 		
 		

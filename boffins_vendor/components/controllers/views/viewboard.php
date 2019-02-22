@@ -9,10 +9,10 @@
     top: 0;
     left: 0;
     background-color: #f8f6f6;
-    overflow-x: hidden;
+    overflow: scroll;
     transition: 0.5s;
     padding-top: 20px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin: auto;
 }
 
