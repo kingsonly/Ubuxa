@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'action' => $action,
 		'tenantEntity' => $tenantEntity,
 		'tenantCorporation' => $tenantCorporation,
-		'tenantPerson' => $tenantPerson,
+		'tenantPerson' => $tenantPerson, 
     ]) ?>
 
 </div>

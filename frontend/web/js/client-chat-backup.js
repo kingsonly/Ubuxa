@@ -36,11 +36,8 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
  * as such making chatbox folder specific.
  */
 function addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId){
-	var chatbox = '[rel="'+popupClass+'"]' ;
 	$('<div class="msg_folder_head" data-chatfolderid="'+folderDetailsId+'" data-chatfoldertitle="'+folderDetailsTitle+'"> <div class="chat_folder_content"> <div class="chat_folder_img"></div> <div class="chat_folder_title">'+folderDetailsTitle +
-	'</div></div> </div>').insertAfter(chatbox +' .msg_head')
-	//var chatbox = '[rel="'+popupClass+'"] .msg_push' ;
-
+	'</div></div> </div>').insertAfter('.'+popupClass +' .msg_head')
 }
 
 // display chat box and possition it right on the body of the page
@@ -184,6 +181,10 @@ $(document).ready(function(){
 			//assigning friends name to whom messages will send,(in case of group its value is Group).
 			toUser = toUsername;
 
+			//showing and hiding relevant information.
+			$('#frndName').text(toUser);
+			$('#initMsg').hide();
+
 			if(toUser == "Group"){
 				var currentRoom = "Group-Group";
 				var reverseRoom = "Group-Group";
@@ -258,6 +259,7 @@ $(document).ready(function(){
 					// find the to tab and display it
 
 							var chatbox = $('.'+data.sender).attr("rel") ;
+
 							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
 							
 							$('.'+chatbox).data('userimage')
