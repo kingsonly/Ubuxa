@@ -22,7 +22,7 @@ module.exports.sockets = function(http) {
     var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
-		password: "",
+		password: "", 
 		database: "premux_main"
 	});
 	con.connect();
