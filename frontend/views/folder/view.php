@@ -177,7 +177,7 @@ $img = $model->folder_image;
 
 
 
-<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
+<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
 <section>
     <div class="container-fluid">
         <div class="row">
@@ -226,6 +226,7 @@ $img = $model->folder_image;
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
+        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
         <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
@@ -277,7 +278,6 @@ $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
-
 
 localStorage.setItem("skipValidation", "");
 

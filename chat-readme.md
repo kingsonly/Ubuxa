@@ -100,7 +100,7 @@ Start mongodb
 cd to project directory/mondodb
 run bin/mongod 
 Start server
-on the project directory run node ./appsjs or nodemon ./appsjs if nodemon is installed 
+on the ubuxa-chat directory run node ./app.js or nodemon ./app.js if nodemon is installed 
 
 
 

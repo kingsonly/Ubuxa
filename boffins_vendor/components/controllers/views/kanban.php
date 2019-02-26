@@ -411,7 +411,7 @@ a.addTaskButton.active {
                   <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban']);?>
                   <div class="task-test task-kanban_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
                       <div class="task-title" id="task-title<?=$values->id;?>">
-                        <span class="task-titles"><?= $values->title; ?></span>
+                        <span class="task-titles"><?= strip_tags($values->title); ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto" id="assignedto<?=$values->id;?>">

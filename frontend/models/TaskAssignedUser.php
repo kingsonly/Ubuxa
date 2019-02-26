@@ -67,4 +67,13 @@ class TaskAssignedUser extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function taskAssignee($user, $userDb, $task, $status)
+    {
+        $userModel = $userDb->findOne($user);
+        $person = $userModel->fullName;
+        $username = $userModel->username;
+        $image = $userModel->profile_image;
+        return json_encode([$user, $task, $person, $username, $image, $status]);
+    }
+
 }

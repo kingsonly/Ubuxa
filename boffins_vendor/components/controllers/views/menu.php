@@ -61,7 +61,7 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
             <div class="row edocument-content" style="display: none">
                 <div class="col-sm-12">
                     <div class="col-md-10" style="padding-top:15px;">
-                        <span class="edocument-text">Edocument</span>
+                        <span class="edocument-text">eDocument</span>
                     </div>
                     <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">
                         <i class="fa fa-arrow-left fa-2x close-arrow"></i>

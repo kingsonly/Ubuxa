@@ -11,6 +11,7 @@ use frontend\models\Edocument;
 class EdocumentWidget extends Widget
 {
     public $edocument;
+    public $model;
     public $docsize; //set width of widget
     public $target; //
     public $attachIcon; //attach widgte icon

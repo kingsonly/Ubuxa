@@ -2,7 +2,6 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
@@ -12,6 +11,8 @@ use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
 use boffins_vendor\components\controllers\FeedbackWidget;
 use frontend\models\UserFeedback;
+use frontend\assets\AppAsset;
+AppAsset::register($this);
 
 $feedback = new UserFeedback();
 
@@ -198,11 +199,11 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 </footer>
 
 <?php $this->endBody() ?>
-
   <!--  MouseStats:Begin  -->
 <script type="text/javascript">var MouseStats_Commands=MouseStats_Commands?MouseStats_Commands:[]; (function(){function b(){if(void 0==document.getElementById("__mstrkscpt")){var a=document.createElement("script");a.type="text/javascript";a.id="__mstrkscpt";a.src=("https:"==document.location.protocol?"https://ssl":"http://www2")+".mousestats.com/js/5/6/5671434762617532649.js?"+Math.floor((new Date).getTime()/6E5);a.async=!0;a.defer=!0;(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}}window.attachEvent?window.attachEvent("onload",b):window.addEventListener("load", b,!1);"complete"===document.readyState&&b()})(); </script>
 <!--  MouseStats:End  -->
 <?php
+$imgs = 'images/emojis/img';
 $flash = <<<JS
   setTimeout(function(){ 
       $('#flas').fadeIn('slow');
