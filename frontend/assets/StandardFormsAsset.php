@@ -71,7 +71,7 @@ class StandardFormsAsset extends AssetBundle
 		'https://cdn.webrtc-experiment.com/socket.io.js',
 		'https://webrtc.github.io/adapter/adapter-latest.js',
 		'js/socketio.js',
-		'js/chat-client-script.js',
+		//'js/chat-client-script.js',
 		'js/moment.min.js',
 		'js/jquery.cookie.js',
 		
