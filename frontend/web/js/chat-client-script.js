@@ -190,7 +190,6 @@ $(document).ready(function(){
 		//end of receiving onlineStack event.
 
 		$(document).on('click', '.blue', function() {
-			alert(3456);
 			var toUsername = $(this).data('username') ;
 			var userID = toUsername+'_id';
 			var folderDetailsTitle = $(document).find('.folderdetls').data('foldertitle');
