@@ -6,146 +6,191 @@
   use yii\base\view;
   AppAsset::register($this);
 ?>
-<style>
-    body {
-    background: rgb(243, 244, 245);
-    height: 100%;
-    color: rgb(100, 108, 127);
-    line-height: 1.4rem;
-    font-family: Roboto, "Open Sans", sans-serif;
-    font-size: 20px;
-    font-weight: 300;
-    text-rendering: optimizeLegibility;
-}
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style type="text/css">
+  /* FONTS */
+    @media screen {
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+    }
+    
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Lato Bold'), local('Lato-Bold'), url(https://fonts.gstatic.com/s/lato/v11/qdgUG4U09HnJwhYI-uK18wLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+    }
+    
+    @font-face {
+      font-family: 'Lato';
+      font-style: italic;
+      font-weight: 400;
+      src: local('Lato Italic'), local('Lato-Italic'), url(https://fonts.gstatic.com/s/lato/v11/RYyZNoeFgb0l7W3Vu1aSWOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
+    }
+    
+    @font-face {
+      font-family: 'Lato';
+      font-style: italic;
+      font-weight: 700;
+      src: local('Lato Bold Italic'), local('Lato-BoldItalic'), url(https://fonts.gstatic.com/s/lato/v11/HkF_qI1x_noxlxhrhMQYELO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+    }
+    }
+    
+    /* CLIENT-SPECIFIC STYLES */
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; }
 
-h1 { text-align: center; }
+    /* RESET STYLES */
+    img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    table { border-collapse: collapse !important; }
+    body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
 
-.dropzone {
-    background: white;
-    border-radius: 5px;
-    border: 2px dashed rgb(0, 135, 247);
-    border-image: none;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
+    /* iOS BLUE LINKS */
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+    }
+
+    /* ANDROID CENTER FIX */
+    div[style*="margin: 16px 0;"] { margin: 0 !important; }
 </style>
-<h1>DropzoneJS File Upload Demo</h1>
-<SECTION>
-  <DIV id="dropzone">
-    <FORM class="dropzone needsclick" id="demo-upload" action="/upload">
-      <DIV class="dz-message needsclick">    
-        Drop files here or click to upload.<BR>
-        <SPAN class="note needsclick">(This is just a demo dropzone. Selected 
-        files are <STRONG>not</STRONG> actually uploaded.)</SPAN>
-      </DIV>
-    </FORM>
-  </DIV>
-</SECTION>
+</head>
+<body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
 
-<br/>
-<hr size="3" noshade color="#F00000">
-
-<div style="font-size: 0.8em;">
-<p>If you find this demo useful, please consider <a href="https://www.paypal.me/RobertGravelle/1" target="_blank">donating $1 dollar</a> for a coffee (secure PayPal link) or purchasing one of my songs from <a href="https://ax.itunes.apple.com/WebObjects/MZSearch.woa/wa/search?term=rob%20gravelle" target="_blank">iTunes.com</a> or <a href="http://www.amazon.com/s/ref=ntt_srch_drd_B001ES9TTK?ie=UTF8&field-keywords=Rob%20Gravelle&index=digital-music&search-type=ss" target="_blank">Amazon.com</a> for only 0.99 cents each.</p>
-<p>Rob uses and recommends <a href="http://www.mochahost.com/2425.html" target="_blank">MochaHost</a>, which provides Web Hosting for as low as $1.95 per month, as well as unlimited emails and disk space!</p>
-</div>  
-<DIV id="preview-template" style="display: none;">
-<DIV class="dz-preview dz-file-preview">
-<DIV class="dz-image"><IMG data-dz-thumbnail=""></DIV>
-<DIV class="dz-details">
-<DIV class="dz-size"><SPAN data-dz-size=""></SPAN></DIV>
-<DIV class="dz-filename"><SPAN data-dz-name=""></SPAN></DIV></DIV>
-<DIV class="dz-progress"><SPAN class="dz-upload" 
-data-dz-uploadprogress=""></SPAN></DIV>
-<DIV class="dz-error-message"><SPAN data-dz-errormessage=""></SPAN></DIV>
-<div class="dz-success-mark">
-  <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <title>Check</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <path d="M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" stroke-opacity="0.198794158" stroke="#747474" fill-opacity="0.816519475" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
-    </g>
-  </svg>
-</div>
-<div class="dz-error-mark">
-  <svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-      <title>error</title>
-      <desc>Created with Sketch.</desc>
-      <defs></defs>
-      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-          <g id="Check-+-Oval-2" sketch:type="MSLayerGroup" stroke="#747474" stroke-opacity="0.198794158" fill="#FFFFFF" fill-opacity="0.816519475">
-              <path d="M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z" id="Oval-2" sketch:type="MSShapeGroup"></path>
-          </g>
-      </g>
-  </svg>
+<!-- HIDDEN PREHEADER TEXT -->
+<div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Looks like you tried signing in a few too many times. Let's see if we can get you back into your account.
 </div>
 
-  <?
-$list = <<<JS
-var dropzone = new Dropzone('#demo-upload', {
-  previewTemplate: document.querySelector('#preview-template').innerHTML,
-  parallelUploads: 2,
-  thumbnailHeight: 120,
-  thumbnailWidth: 120,
-  maxFilesize: 3,
-  filesizeBase: 1000,
-  thumbnail: function(file, dataUrl) {
-    if (file.previewElement) {
-      file.previewElement.classList.remove("dz-file-preview");
-      var images = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
-      for (var i = 0; i < images.length; i++) {
-        var thumbnailElement = images[i];
-        thumbnailElement.alt = file.name;
-        thumbnailElement.src = dataUrl;
-      }
-      setTimeout(function() { file.previewElement.classList.add("dz-image-preview"); }, 1);
-    }
-  }
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <!-- LOGO -->
+    <tr>
+        <td bgcolor="#264787" align="center">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+                <tr>
+                    <td align="center" valign="top" style="padding: 30px 10px 30px 10px;">
+                            <img alt="Logo" src="images/ubuxa.png" width="100" height="100" style="display: block;  font-family: 'Lato', Helvetica, Arial, sans-serif; width:200px; color: #ffffff; font-size: 18px;" border="0">
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- HERO -->
+    <tr>
+        <td bgcolor="#264787" align="center" style="padding: 0px 10px 0px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+                <tr>
+                    <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 1px; line-height: 48px;">
+                      <h1 style="font-size: 32px; font-weight: 400; margin: 0;">Welcome to Ubuxa Beta</h1>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- COPY BLOCK -->
+    <tr>
+        <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+              <!-- COPY -->
+              <tr>
+                <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;" >
+                  <p style="margin: 0;">Thank you for accepting to join us on ubuxa beta. We hope you enjoy using ubuxa, and if you have issues don't fail to bring it to us, our team is always ready to support you. </p>
+                </td>
+              </tr>
+              <!-- BULLETPROOF BUTTON -->
+              <tr>
+                <td bgcolor="#ffffff" align="left">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                              <td align="center" style="border-radius: 3px;" bgcolor="#264787"><a href="test.htm" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #264787; display: inline-block;">Verify Your Account</a></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- COPY CALLOUT -->
+    <tr>
+        <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+                <!-- HEADLINE -->
+                <tr>
+                  <td bgcolor="#111111" align="left" style="padding: 40px 30px 20px 30px; color: #ffffff; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;" >
+                    <h2 style="font-size: 24px; font-weight: 400; margin: 0;">Unable to click on the button above?</h2>
+                  </td>
+                </tr>
+                <!-- COPY -->
+                <tr>
+                  <td bgcolor="#111111" align="left" style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;" >
+                    <p style="margin: 0;">Click on the link below or copy/paste in the address bar.</p>
+                  </td>
+                </tr>
+                <!-- COPY -->
+                <tr>
+                  <td bgcolor="#111111" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;" >
+                    <p style="margin: 0;"><a style="cursor: pointer;" href="http://www.ubuxa.net">http://www.ubuxa.net</a></p>
+                  </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- SUPPORT CALLOUT 
+    <tr>
+        <td bgcolor="#f4f4f4" align="center" style="padding: 30px 10px 0px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+                
+                <tr>
+                  <td bgcolor="#C6C2ED" align="center" style="padding: 30px 30px 30px 30px; border-radius: 4px 4px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;" >
+                    <h2 style="font-size: 20px; font-weight: 400; color: #111111; margin: 0;">Need more help?</h2>
+                    <p style="margin: 0;"><a href="http://litmus.com" target="_blank" style="color: #7c72dc;">We&rsquo;re here, ready to talk</a></p>
+                  </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    -->
+    <!-- FOOTER -->
+    <tr>
+        <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="480" >
+              
+              <!-- PERMISSION REMINDER -->
+              <tr>
+                <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                  <p style="margin: 0;">You received this email because you registered to join Ubuxa.</p>
+                </td>
+              </tr>
+              
+              <!-- ADDRESS -->
+              <tr>
+                <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                  <p style="margin: 0;">Ubuxa &copy 10 Danube Close, Maitama, Abuja, Nigeria</p>
+                </td>
+              </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
-});
-
-
-// Now fake the file upload, since GitHub does not handle file uploads
-// and returns a 404
-
-var minSteps = 6,
-    maxSteps = 60,
-    timeBetweenSteps = 100,
-    bytesPerStep = 100000;
-
-dropzone.uploadFiles = function(files) {
-  var self = this;
-
-  for (var i = 0; i < files.length; i++) {
-
-    var file = files[i];
-    totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
-
-    for (var step = 0; step < totalSteps; step++) {
-      var duration = timeBetweenSteps * (step + 1);
-      setTimeout(function(file, totalSteps, step) {
-        return function() {
-          file.upload = {
-            progress: 100 * (step + 1) / totalSteps,
-            total: file.size,
-            bytesSent: (step + 1) * file.size / totalSteps
-          };
-
-          self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
-          if (file.upload.progress == 100) {
-            file.status = Dropzone.SUCCESS;
-            self.emit("success", file, 'success', null);
-            self.emit("complete", file);
-            self.processQueue();
-            //document.getElementsByClassName("dz-success-mark").style.opacity = "1";
-          }
-        };
-      }(file, totalSteps, step), duration);
-    }
-  }
-}
-JS;
-$this->registerJs($list);
-?>
+</body>
+</html>
