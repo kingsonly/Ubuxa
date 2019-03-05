@@ -115,7 +115,7 @@ class EdocumentController extends Controller
                         $folder->folder_image = $filePath;
                         $folder->save();
                     }else{
-                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid, $userId); //upload
                     }
                 }
             }else{
@@ -128,7 +128,7 @@ class EdocumentController extends Controller
                         $folder->folder_image = $filePath;
                         $folder->save();
                     }else{
-                        $model->upload($model, $reference, $referenceID, $filePath, $cid); //upload
+                        $model->upload($model, $reference, $referenceID, $filePath, $cid, $userId); //upload
                     }
                 }            
             }

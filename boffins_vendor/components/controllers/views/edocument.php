@@ -579,7 +579,8 @@
 .upload-icons{
   font-size: 32px;
   position: absolute;
-  right: 50px;
+  right: 240px;
+  top: 10px;
 }
 .dropzonexx{
     min-height: 150px;
@@ -625,8 +626,8 @@
         <div class="upload-dropzones" style="margin-top:<?= $target == 'folderUpload' ? 70 : 0 ?>px">
               <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzonexx dz-clickable click-upload click-upload'.$target]]); ?>
                 <span class="close-upload" style="cursor: pointer;"> X </span>
-                <div class="message-holder-upload">
-                    <span class="dz-message upload-message">
+               <!-- <div class="message-holder-upload"> -->
+                    <span class="dz-message doc-message">
                       click to upload files.
                     </span>
                     <?php if($attachIcon === 'yes'){ ?>
@@ -634,7 +635,7 @@
                             <i class="fa fa-paperclip upload-icons" aria-hidden="true"></i>
                         </div>
                     <?php }?>
-                </div>
+              <!--  </div> -->
               <?php ActiveForm::end(); ?>
         </div>
 <?php }?>
@@ -706,15 +707,18 @@ var counter = 0;
 $(document).on('dragenter', function(e){
     lastTarget = e.target;
     counter++;
-    $('.dropzone-main').removeClass("remove-zindex"); //make div holding widget visble on window drag enter
-    $('.dropzone-main').addClass("add-zindex"); // add z-index on window drag enter
-    if($('.menu-icon').hasClass('closed')){
-        $('#dropzone-mainfolder').css('display', 'block'); //hide folder drag event if board is opened
-    }
-    if(($('#dropzone-mainfolder').hasClass('hideFolderDoc')) && ($('.menu-icon').hasClass('closed'))){
-        $('#dropzone-mainfolder').addClass('folderDoc');
-        $('.hidetasklist').removeClass('hideFolderDoc');
-        $('.hidetasklist').addClass('folderDoc');
+    var dt = e.originalEvent.dataTransfer;
+    if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))){
+        $('.dropzone-main').removeClass("remove-zindex"); //make div holding widget visble on window drag enter
+        $('.dropzone-main').addClass("add-zindex"); // add z-index on window drag enter
+        if($('.menu-icon').hasClass('closed')){
+            $('#dropzone-mainfolder').css('display', 'block'); //hide folder drag event if board is opened
+        }
+        if(($('#dropzone-mainfolder').hasClass('hideFolderDoc')) && ($('.menu-icon').hasClass('closed'))){
+            $('#dropzone-mainfolder').addClass('folderDoc');
+            $('.hidetasklist').removeClass('hideFolderDoc');
+            $('.hidetasklist').addClass('folderDoc');
+        }
     }
 }).bind('dragover', function(e){
     e.preventDefault();
@@ -742,10 +746,11 @@ var dropzone = new Dropzone('#dropupload$target', {
      $('.dropzone-main').removeClass("add-zindex");
     });
     this.on("complete", function(file) {
-        this.removeFile(file); //remove file thumbanil on complete
+        //this.removeFile(file); //remove file thumbanil on complete
     });
     this.on("success", function(file, response) {
         console.log(response);
+        this.removeFile(file);
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');

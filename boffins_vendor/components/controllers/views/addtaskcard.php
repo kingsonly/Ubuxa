@@ -30,7 +30,9 @@ use yii\widgets\ActiveForm;
     padding: 5px
  }
  .loading-kanban-task{
-    
+    position: absolute;
+    top: 6px;
+    right: 0;
     display: none;
  }
  .close-add {
@@ -43,8 +45,15 @@ use yii\widgets\ActiveForm;
     padding-left: 10px;
     cursor: pointer;
  }
+ .add-new-card{
+    position: relative;
+ }
+ .loader-holder{
+    width: 40px;
+    height: 40px;
+ }
 </style>
-<?php $form = ActiveForm::begin(['action'=>Url::to(['task/dashboardcreate']),'id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true ]]); ?>
+<?php $form = ActiveForm::begin(['action'=>Url::to(['task/dashboardcreate']),'id' => 'create-task-card'.$statusid,'options' => ['data-pjax' => true,'class'=>'add-new-card' ]]); ?>
     <?= $form->field($taskModel, 'title')->textarea(['maxlength' => true, 'id' => 'addCard'.$id, 'placeholder' => "Add a task", 'class' => 'cardInput'])->label(false) ?>
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
@@ -54,7 +63,7 @@ use yii\widgets\ActiveForm;
     <span class="for-task-loader">
         <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
         <span class="glyphicon glyphicon-remove close-add"></span>
-        <span class="loading-kanban-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+        <span class="loading-kanban-task"><?//= Yii::$app->settingscomponent->boffinsLoaderImage()?><img src="images/Spinner2.gif" class="loader-holder"></span>
     </span>
 
 <?php ActiveForm::end(); ?>
@@ -80,7 +89,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
            var form = $(this);
            $('.cardButton').hide();
            form.find('.close-add').hide();
-		   form.find('.loading-kanban-task').show();
+           form.find('.loading-kanban-task').show();
            
             if(form.find('#create-task-card$statusid').length) {
                 return false;

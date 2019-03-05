@@ -13,7 +13,10 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
-//$modalwait = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
+if(!empty($display)){
+  usort($display, Task::sortTaskList('status_id'));
+}
+//echo '<pre>',print_r($display),'</pre>';
 ?>
 <style type="text/css">
     .bg-info {
@@ -68,6 +71,7 @@ $boardUrl = Url::to(['task/index']);
  .todo__text {
    color: #135156;
    transition: all 0.4s linear 0.4s;
+   width: 95%;
 }
  .todo__icon {
    position: absolute;
@@ -302,7 +306,6 @@ $boardUrl = Url::to(['task/index']);
     top: 14px;
 }
 </style>
-
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
@@ -365,7 +368,7 @@ $boardUrl = Url::to(['task/index']);
     <?php }else { ?>
         <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
     <?php } ?>
-    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
+    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>
@@ -437,6 +440,7 @@ $(".todo__state").change(function() {
     checkedId = $(this).data('id');
     _UpdateStatus(checkedId);        
 });
+
 
 function _TaskOnboarding(){
           $.ajax({
@@ -513,7 +517,7 @@ $("#addTask").bind("keyup change", function() {
         $("#taskButton").hide();
     }
     if(value && value.length > 49){
-      toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
+      //toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
     }
 });
 
