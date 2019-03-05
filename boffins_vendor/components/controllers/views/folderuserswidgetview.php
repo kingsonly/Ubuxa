@@ -75,6 +75,15 @@ border:solid 1px #666;
 background-color: #fff;
 transition: margin-top 0.1s ease-out 0s;
 }
+	.online{
+		width: 8px;
+		height: 8px;
+		position: absolute;
+		right: 0px;
+		bottom: -2px ;
+		background: green;
+		border-radius: 50%;
+	}
 	.user-name{
 		color: #666;
 		font-size: 13px;
@@ -255,7 +264,9 @@ transition: margin-top 0.1s ease-out 0s;
 		<?	if (array_key_exists($users->username, $socketUsers)) {
     			if($socketUsers[$users->username] == 'Online'){
 					?>
-					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+						<div class="online"></div>
+		</div>
 				<? }else{ ?>
 <!--					display user who is not online -->
 					<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
