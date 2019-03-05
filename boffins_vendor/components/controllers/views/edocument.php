@@ -767,6 +767,7 @@ var dropzone = new Dropzone('#dropupload$target', {
         }
     });
     this.on('error', function(file, response) {
+		console.log(response);
         if(!$('#dropupload$target').hasClass('dropzonefolderdetails')){
             toastr.error("Something went wrong,try again!");
         }
