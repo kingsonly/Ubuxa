@@ -68,7 +68,7 @@
 </div>
 
 <div class="board-open">
-    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Board</span>
+    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Task Board</span>
 </div>
 
 <?

@@ -573,7 +573,7 @@
     margin-right: 20px;
 }
 .add-attachments{
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
 }
 .upload-icons{
@@ -603,7 +603,7 @@
 <?php if($edocument == 'dropzone'){ ?>
 <main class="dropzone-main <?=!empty($tasklist)?$tasklist:'';?> remove-zindex" id="dropzone-main<?=$target;?>" style="width: <?=$docsize;?>%">
         <div class="dropzones <?=!empty($tasklist)?$tasklist:'';?>" id="dynamic-drop<?=$target;?>">
-              <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
+              <?php $form = ActiveForm::begin(['action'=>Url::to(['edocument/upload']),'id' => 'dropupload'.$target, 'options' => ['class'=>'dropzone'.$target.' '.$tasklist.' dropzonex dz-clickable dummy','style'=>'padding:'.$iconPadding.'px'.' '.$iconPadding.'px']]); ?>
               <div class="nadaaa">
                 <span class="dz-message doc-message" style="padding-top: <?=$textPadding;?>px">
                   Drop files here.
@@ -754,8 +754,10 @@ var dropzone = new Dropzone('#dropupload$target', {
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');
-        $.pjax.reload({container:"#kanban-refresh",async: false});
-        $.pjax.reload({container:"#task-list-refresh",async: false});
+        if(!$('#dropupload$target').hasClass('foldervault')){
+            $.pjax.reload({container:"#kanban-refresh",async: false});
+            $.pjax.reload({container:"#task-list-refresh",async: false});
+        }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }

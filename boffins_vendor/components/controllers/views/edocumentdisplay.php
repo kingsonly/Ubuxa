@@ -142,6 +142,7 @@
     word-wrap: break-word;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    width: 85%;
 }
 .document-preview{
     background-color: #ccccccd1;
