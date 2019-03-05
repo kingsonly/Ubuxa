@@ -241,7 +241,7 @@
       $count = 0;
       foreach ($edocument as $key => $value) {
         $filename = $value->file_location; //get file location
-        $filepath = Url::base('http').Url::to(['@web/'.$filename]); //set file path
+        $filepath = Url::base('http').Url::to('@web/'.$filename); //set file path
         $gview = 'https://docs.google.com/viewer?embedded=true&url=';
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $count++;
