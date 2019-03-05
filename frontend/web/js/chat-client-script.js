@@ -15,7 +15,6 @@
 	        window.emojiPicker.discover();
 	};
 
-
 var arr = []; // List of users
 
 $('<audio id="chatAudio" src="audio/notify.ogg" type="audio/ogg"></audio>').appendTo('body');// sound file used on chat
@@ -55,8 +54,11 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
  * as such making chatbox folder specific.
  */
 function addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId){
+	var chatbox = '[rel="'+popupClass+'"]' ;
 	$('<div class="msg_folder_head" data-chatfolderid="'+folderDetailsId+'" data-chatfoldertitle="'+folderDetailsTitle+'"> <div class="chat_folder_content"> <div class="chat_folder_img"></div> <div class="chat_folder_title">'+folderDetailsTitle +
-	'</div></div> </div>').insertAfter('.'+popupClass +' .msg_head')
+	'</div></div> </div>').insertAfter(chatbox +' .msg_head')
+	//var chatbox = '[rel="'+popupClass+'"] .msg_push' ;
+
 }
 
 // display chat box and possition it right on the body of the page
@@ -155,6 +157,7 @@ $(document).ready(function(){
 		//passing data on connection.
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
+			
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
@@ -167,12 +170,22 @@ $(document).ready(function(){
 		socket.on('onlineStack',function(stack){
 			var sessionUrl = $('body').data('sessionlink');
 
+			console.log(stack);
+
 			$.post(sessionUrl,{activitiesArray:stack},function(){
 				if($(".folderusers").length > 0){
 
 					$.pjax.reload({container:"#user_prefixuserjax",async: false});
 				}
 			})
+		});
+		
+		socket.on('wrong',function(stack){
+			console.log(stack);
+		});
+		
+		socket.on('fromconection',function(stack){
+			console.log('i see connections');
 		});
 		//end of receiving onlineStack event.
 
@@ -192,10 +205,6 @@ $(document).ready(function(){
 
 			//assigning friends name to whom messages will send,(in case of group its value is Group).
 			toUser = toUsername;
-
-			//showing and hiding relevant information.
-			$('#frndName').text(toUser);
-			$('#initMsg').hide();
 
 			if(toUser == "Group"){
 				var currentRoom = "Group-Group";
@@ -270,18 +279,21 @@ $(document).ready(function(){
 						if(data.result[i].msgFrom == username){
 					// find the to tab and display it
 
-							var chatbox = $('.'+data.sender).attr("rel") ;
-
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							//var chatbox = $('.'+data.sender).attr("rel") ;
 							
-							$('.'+chatbox).data('userimage')
+							var relValue = data.sender;
+							var chatbox = '[rel="'+data.sender+'"]' ;
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
+
+							
+							$(chatbox).data('userimage')
 
 							var attr = 'chatbox';
 							if(i == data.result.length-1){
 								if (localStorage.getItem(attr) !== null) {
 									var storedChatInitCounters =  JSON.parse(localStorage.getItem(attr));
-									if(chatbox in storedChatInitCounters){
-										storedChatInitCounters[chatbox] =  storedChatInitCounters[chatbox] + 5;
+									if(relValue in storedChatInitCounters){
+										storedChatInitCounters[relValue] =  storedChatInitCounters[relValue] + 5;
 										console.log(storedChatInitCounters);
 										//storedChatInitCounters.push(oldStoredChatInitCounters)
 										newArray = storedChatInitCounters;
@@ -291,14 +303,14 @@ $(document).ready(function(){
 										// if it does do an addition else create a new key by runing an array push and passing the value 1 to it
 									}else{
 										// add the new key
-										storedChatInitCounters[chatbox] = 6;
+										storedChatInitCounters[relValue] = 6;
 										console.log(storedChatInitCounters);
 										//storedChatInitCounters.push(oldStoredChatInitCounters)
 										newArray = storedChatInitCounters;
 										console.log(newArray);
 										localStorage.setItem('chatbox', JSON.stringify(newArray));
-										$('.'+chatbox).find('.msg_push').attr('data-class',chatbox);
-										$('.'+chatbox).attr('data-oldinitdone',1);
+										$(chatbox).find('.msg_push').attr('data-class',relValue);
+										$(chatbox).attr('data-oldinitdone',1);
 										$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 									}
 									
@@ -307,17 +319,20 @@ $(document).ready(function(){
 									//newArray = {chatbox:1};
 									newArray[chatbox] = 6;
 									localStorage.setItem('chatbox', JSON.stringify(newArray));
-									$('.'+chatbox).attr('data-oldinitdone',1);
-									$('.'+chatbox).find('.msg_push').attr('data-class',chatbox);
+									$(chatbox).attr('data-oldinitdone',1);
+									$(chatbox).find('.msg_push').attr('data-class',relValue);
 									$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 								}
 							}
 						}else{
 							//else find the from tabe and onto it
-							var chatbox = $('.'+data.sender).attr("rel") ;
-							imageurl = $('.'+chatbox).data('userimage');
+							//var chatbox = $('.'+data.sender).attr("rel") ;
+							var relValue = data.sender;
+							var chatbox = '[rel="'+data.sender+'"]' ;
+							imageurl = $(chatbox).data('userimage');
 
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
+
 							
 
 
@@ -325,8 +340,8 @@ $(document).ready(function(){
 							if(i == data.result.length-1){
 								if (localStorage.getItem(attr) !== null) {
 									var storedChatInitCounters =  JSON.parse(localStorage.getItem(attr));
-									if(chatbox in storedChatInitCounters){
-										storedChatInitCounters[chatbox] =  storedChatInitCounters[chatbox] + 5;
+									if(relValue in storedChatInitCounters){
+										storedChatInitCounters[relValue] =  storedChatInitCounters[relValue] + 5;
 										console.log(storedChatInitCounters);
 										//storedChatInitCounters.push(oldStoredChatInitCounters)
 										newArray = storedChatInitCounters;
@@ -336,24 +351,24 @@ $(document).ready(function(){
 										// if it does do an addition else create a new key by runing an array push and passing the value 1 to it
 									}else{
 										// add the new key
-										storedChatInitCounters[chatbox] = 6;
+										storedChatInitCounters[relValue] = 6;
 										console.log(storedChatInitCounters);
 										//storedChatInitCounters.push(oldStoredChatInitCounters)
 										newArray = storedChatInitCounters;
 										console.log(newArray);
 										localStorage.setItem('chatbox', JSON.stringify(newArray));
-										$('.'+chatbox).find('.msg_push').attr('data-class',chatbox);
-										$('.'+chatbox).attr('data-oldinitdone',1);
+										$(chatbox).find('.msg_push').attr('data-class',relValue);
+										$(chatbox).attr('data-oldinitdone',1);
 										$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 									}
 									
 								}else{
 									newArray = {};
 									//newArray = {chatbox:1};
-									newArray[chatbox] = 6;
+									newArray[relValue] = 6;
 									localStorage.setItem('chatbox', JSON.stringify(newArray));
-									$('.'+chatbox).attr('data-oldinitdone',1);
-									$('.'+chatbox).find('.msg_push').attr('data-class',chatbox);
+									$(chatbox).attr('data-oldinitdone',1);
+									$(chatbox).find('.msg_push').attr('data-class',relValue);
 									$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 								}
 							}
@@ -368,8 +383,8 @@ $(document).ready(function(){
 					console.log(msgCount);
 				}else {
 					//var chatbox = $('.'+data.result[i].msgTo).attr("rel") ;
-
-					watermack.insertBefore('.'+data.sender +' .msg_body')
+					var chatbox = '[rel="'+data.sender+'"]' ;
+					watermack.insertBefore(chatbox+' .msg_body')
 					$('#noChat').show(); //displaying no more chats message.
 					noChat = 1; //to prevent unnecessary scroll event.
 				}
@@ -378,10 +393,10 @@ $(document).ready(function(){
 				$('#loading').hide();
 
 				//setting scrollbar position while first 5 chats loads.
-				if($('.'+data.sender).attr('data-oldinitdone') == 0){
+				if($(chatbox).attr('data-oldinitdone') == 0){
 					
 					$('#scrl2').scrollTop($('#scrl2').prop("scrollHeight"));
-					$('.'+chatbox).attr('data-oldinitdone',1);
+					$(chatbox).attr('data-oldinitdone',1);
 					console.log(data);
 				}
 
@@ -407,38 +422,48 @@ $(document).ready(function(){
 						if(data.result[i].msgFrom == username){
 					// find the to tab and display it
 
-							var chatbox = $('.'+data.result[i].msgTo+'-'+data.folderId).attr("rel") ;
-
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+//							var relName = data.result[i].msgTo+'-'+data.folderId;
+//							//var chatbox = $('.'+data.result[i].msgTo+'-'+data.folderId).attr("rel") ;
+//							var chatbox = '.msg_box [rel="'+relName+'"]' ;
+							var relValue = data.result[i].msgTo+'-'+data.folderId;
+							var chatbox = '[rel="'+relValue+'"]' ;
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 							
 
 							if(i == data.result.length-1){
 
-								msgcount = $('.'+chatbox).data('msgcount');
+								msgcount = $(chatbox).data('msgcount');
 								changeMsgCount = parseInt(msgcount) + 1;
 
-								$('.'+chatbox).attr('data-msgcount',msgcount);
-								$('.'+chatbox).attr('data-oldinitdone',1);
-								$('.'+chatbox).attr('data-userimage',imageurl);
+								$(chatbox).attr('data-msgcount',msgcount);
+								$(chatbox).attr('data-oldinitdone',1);
+								$(chatbox).attr('data-userimage',imageurl);
 
 
 							}
 						}else{
 							//else find the from tabe and onto it
-							var chatbox = $('.'+data.result[i].msgFrom+'-'+data.folderId).attr("rel") ;
-							$(document).find('.'+chatbox).data('userimage',imageurl);
+							
+//							var relName = data.result[i].msgTo+'-'+data.folderId;
+//							//var chatbox = $('.'+data.result[i].msgFrom+'-'+data.folderId).attr("rel") ;
+//							var chatbox = $('.msg_box [rel="'+relName+'"]') ;
+							
+							var relValue = data.result[i].msgFrom+'-'+data.folderId;
+							var chatbox = '[rel="'+relValue+'"]' ;
+							
+							$(document).find(chatbox).data('userimage',imageurl);
 
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter('[rel="'+chatbox+'"] .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox + ' .msg_push');
 							
 
 							if(i == data.result.length-1){
 
-								msgcount = $('.'+chatbox).data('msgcount');
+								msgcount = $(chatbox).data('msgcount');
 								changeMsgCount = parseInt(msgcount) + 1;
 
-								$('.'+chatbox).attr('data-msgcount',changeMsgCount);
-								$('.'+chatbox).attr('data-oldinitdone',1);
-								$('.'+chatbox).attr('data-userimage',imageurl);
+								$(chatbox).attr('data-msgcount',changeMsgCount);
+								$(chatbox).attr('data-oldinitdone',1);
+								$(chatbox).attr('data-userimage',imageurl);
 
 
 							}
@@ -452,8 +477,9 @@ $(document).ready(function(){
 					console.log(msgCount);
 				}else {
 					//var chatbox = $('.'+data.result[i].msgTo).attr("rel") ;
-
-					watermack.insertBefore('.'+data.sender +' .msg_body')
+					var relValue = data.result[i].msgTo+'-'+data.folderId;
+					var chatbox = '[rel="'+relValue+'"]' ;
+					watermack.insertBefore(chatbox+' .msg_body')
 					$('#noChat').show(); //displaying no more chats message.
 					noChat = 1; //to prevent unnecessary scroll event.
 				}
@@ -482,25 +508,26 @@ $(document).ready(function(){
 		socket.on('typing',function(data){
 			var imageurl = '';
 			var timeout;
-			if($('.msg_box').hasClass(data.updateChatBox)){
+			if($('.msg_box').attr('rel') == data.updateChatBox){
 
-				var chatbox = $('.'+data.updateChatBox).attr("rel") ;
-				if($('[rel="'+chatbox+'"] .msg_body').find('.remove').length !== 0){
+				//var chatbox = $('.'+data.updateChatBox).attr("rel") ;
+				var chatbox = '[rel="'+data.updateChatBox+'"]' ;
+				if($(chatbox+' .msg_body').find('.remove').length !== 0){
 					// clear text and add a new text but remove old text first
-					$('[rel="'+chatbox+'"] .msg_body .remove').find('.msg_chat_tex').empty(); // empty the content of the msg text
+					$(chatbox+' .msg_body .remove').find('.msg_chat_tex').empty(); // empty the content of the msg text
 
-					$('[rel="'+chatbox+'"] .msg_body .remove').find('.msg_chat_tex').text(data.msg);// append new text to the chat remove div
+					$(chatbox+' .msg_body .remove').find('.msg_chat_tex').text(data.msg);// append new text to the chat remove div
 
 					$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 					clearTimeout(timeout);
 					timeout = setTimeout(function(){
-						$('[rel="'+chatbox+'"] .msg_body .remove').remove();
+						$(chatbox+' .msg_body .remove').remove();
 					}, 8000);
 				}else{
 					// append a new remove area
-					$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container remove msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img style="display:none" src="'+imageurl+'"/></div><div class="msg_chat_text">'+data.msg+'</div></div></div>');
+					$(chatbox+' .msg_body').append('<div class="msg_chat_container remove msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img style="display:none" src="'+imageurl+'"/></div><div class="msg_chat_text">'+data.msg+'</div></div></div>');
     				timeout = setTimeout(function(){
-						$('[rel="'+chatbox+'"] .msg_body .remove').remove();
+						$(chatbox+' .msg_body .remove').remove();
 					}, 5000);
 					$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 				}
@@ -543,7 +570,7 @@ $(document).ready(function(){
 		//receiving messages.
 		socket.on('chat-msg',function(data){
 			console.log(data);
-			if($('.msg_box').hasClass(data.msgFrom+'-'+data.folderId) || data.msgFrom == username ){
+			if($('.msg_box').attr('rel') === data.msgFrom+'-'+data.folderId || data.msgFrom == username ){
 				console.log('doo nothing');
 			}else{
 				var senderUsername = data.msgFrom;
@@ -559,32 +586,36 @@ $(document).ready(function(){
 
 				// find the to tab and display it
 
-				var chatbox = $('.'+data.msgTo+'-'+data.folderId).attr("rel") ;
-				var msgWrap = $('[rel="'+chatbox+'"] .msg_wrap');
+				//var chatbox = $('.'+data.msgTo+'-'+data.folderId).attr("rel") ;
+				var chatbox = '[rel="'+data.msgTo+'-'+data.folderId+'"]' ;
+				var msgWrap = $(chatbox+' .msg_wrap');
 				// if msg wrap is hidden add a blink when new msg comes in
-				if(msgWrap.is(":hidden")){
-					// find msg wrap head and add a blink to it
-					var findWrapHead = msgWrap.parent().find('.msg_head');
-					findWrapHead.addClass('chatblink');// make head to blink
-				}
+//				if(msgWrap.is(":hidden")){
+//					// find msg wrap head and add a blink to it
+//					var findWrapHead = msgWrap.parent().find('.msg_head');
+//					findWrapHead.addClass('chatblink');// make head to blink
+//				}
+//
+//				// check if chatbox is open but input has lost focus
+//				if(msgWrap.is(":visible") && msgWrap.parent().find('.msg_input').is(':focus')){
+//					console.log('do nothing');
+//				}else{
+//					var findWrapHead = msgWrap.parent().find('.msg_head');
+//					findWrapHead.addClass('chatblink');// make head to blink
+//				}
+				
+				$(chatbox+' .msg_body').find('.remove').remove();
 
-				// check if chatbox is open but input has lost focus
-				if(msgWrap.is(":visible") && msgWrap.parent().find('.msg_input').is(':focus')){
-					console.log('do nothing');
-				}else{
-					var findWrapHead = msgWrap.parent().find('.msg_head');
-					findWrapHead.addClass('chatblink');// make head to blink
-				}
-
-				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
-				$('[rel="'+chatbox+'"] .msg_body').find('.remove').remove();
+					$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+				
 				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}else{
 				// add sound to the user who gets the message
 				$('#chatAudio')[0].play();
-				var chatbox = $('.'+data.msgFrom+'-'+data.folderId).attr("rel") ;
-				var msgWrap = $('[rel="'+chatbox+'"] .msg_wrap');
-				imageurl = $('.'+chatbox).data('userimage');
+				//var chatbox = $('.'+data.msgFrom+'-'+data.folderId).attr("rel") ;
+				var chatbox = '[rel="'+data.msgFrom+'-'+data.folderId+'"]' ;
+				var msgWrap = $(chatbox+' .msg_wrap');
+				imageurl = $(chatbox).data('userimage');
 				// if msg wrap is hidden add a blink when new msg comes in
 				if(msgWrap.is(":hidden")){
 
@@ -600,9 +631,10 @@ $(document).ready(function(){
 					findWrapHead.addClass('chatblink');// make head to blink
 				}
 				//else find the to client tab and and paste message
+				$(chatbox+' .msg_body').find('.remove').remove();
 
-				$('[rel="'+chatbox+'"] .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
-				$('[rel="'+chatbox+'"] .msg_body').find('.remove').remove();
+				$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+
 				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}
 

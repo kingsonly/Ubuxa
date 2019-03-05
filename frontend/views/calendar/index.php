@@ -651,10 +651,12 @@ $(document).ready(function(){
             event.append(p);
             $('.ui-dialog').find('[data-date =' + dateValue + ']').find('#calendar-task-refresh').find('#parent').append(event);
                     $('#new-task').val('')
+                    toastr.success('New task created successfully');
                     
                 },
               error: function(res, sec){
                     console.log('Something went wrong');
+                    toastr.error('Something went wrong');
               }
             });
           
@@ -875,7 +877,7 @@ $(document).ready(function(){
                 var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
                 var getStartDate = getStartDate+' '+time;
                 var getEndDate = getEndDate+' '+time;
-
+                setTimeout(function(){ 
                 $.post('$UpdateOnDrop',
                 {
                   id:getId,
@@ -886,6 +888,7 @@ $(document).ready(function(){
                    console.log(data);
                 }
                 )
+                },500)
 
             },
             eventResize: function(event, delta, revertFunc) {
@@ -952,10 +955,12 @@ $(document).ready(function(){
 
                 //Remove event from text input
                 $('#new-event').val('')
+                toastr.success('Event created successfully');
          
           },
         error: function(res, sec){
              console.log('Something went wrong');
+             toastr.error('Something went wrong');
         }
         });
       

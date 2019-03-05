@@ -183,6 +183,7 @@ class ClipOnBehavior extends Behavior
 		$ownerId = $this->owner->id; // owners id usually the folder id but could also be a task or a any thing that can be cliped to eg a clipbar
 		$ownerClassName= $this->_getShortClassName($this->owner); // holds a string value of the actuall class name
 		$getOwnerType = ClipBarOwnerType::find()->where(['owner_type'=>$ownerClassName])->one();
+		
 		$ownerTypeId = $getOwnerType->id; //returns the id which is gotten from the clip bar owner type search
 		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->count();// used to make sure a clip exist 
 		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // get clip bar id which would be used to fetch all clips associated to the bar 
@@ -231,7 +232,17 @@ class ClipOnBehavior extends Behavior
 		// 	return false;
 		// }
 		$searchOwnerTypeId = $ownerTypeModel->find()->select(['id'])->andWhere(['owner_type' => $getClassName])->one();// get the id of the ownertype eg folder component etc
-
+		
+		// if searchownertype is empty, this simply means such class is new to clipon, as such it has to be added to the db first and what it returs after adding would bbe used to finish the query process 
+		if(empty($searchOwnerTypeId)){
+			$ownerTypeModel->owner_type = strtolower($getClassName); //assign classname to ownertype
+			
+			// if ownerTypeModel is saved pass the value to $searchOwnerTypeId variable to overrite $searchOwnerTypeId which at this point shouold be empty
+			if($ownerTypeModel->save()){
+				$searchOwnerTypeId = $ownerTypeModel;
+			}
+			 
+		}
 		
 		$clipBarModel->owner_id = $this->owner->id; // assign clipBarModel->owner_id with the owner id
 		$clipBarModel->owner_type_id = $searchOwnerTypeId->id; // determine if its a folder or a component etc options could be more than just folder or components 
@@ -256,8 +267,29 @@ class ClipOnBehavior extends Behavior
 
 			// this should be the right implementation to get the owner type, never the less this is not a patch but would still be reviewed.
 			$ownerTypeModel = ClipBarOwnerType::find()->andWhere(['owner_type'=> $this->owner->fromWhere])->one();//$this->owner->fromWhere == 'folder'?1:2; (this comment should be removed after validated that code is working )
+			
+			// if selection comes out empty, that means from where does not exist in the db, as such create a new one 
+			if(empty($ownerTypeModel)){
+				$clipBarOwner = new ClipBarOwnerType();
+				$clipBarOwner->owner_type = strtolower($this->owner->fromWhere); // assingn from where to owner_type property
+				// if clipBarOwner is saved, pass the saved object to $ownerTypeModel
+				if($clipBarOwner->save()){
+					$ownerTypeModel = $clipBarOwner; // this should return an object of the just saved type
+				}
+			}
+			
 			$ownerTypeId = $ownerTypeModel->id;
 			$getOwnerTypeId = ClipOwnerType::find()->select(['id'])->andWhere(['owner_type' => $getClassName])->one();// get just the id of ClipOwnerType model
+			
+			if(empty($getOwnerTypeId)){
+				$clipOwnerType = new ClipOwnerType();
+				$clipOwnerType->owner_type = strtolower($getClassName); // assingn class name to owner_type property
+				
+				// if clipOwnerType is saved, pass the saved object to $getOwnerTypeId
+				if($clipOwnerType->save()){
+					$getOwnerTypeId = $clipOwnerType; // this should return an object of the just saved type
+				}
+			}
 			
 			$getClipBarId = ClipBar::find()->select(['id'])->andWhere(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task 
 
@@ -270,6 +302,10 @@ class ClipOnBehavior extends Behavior
 		}else{
 			return;
 		}
+	}
+	
+	private function fixEdocumentClips(){
+		
 	}
 	
 	

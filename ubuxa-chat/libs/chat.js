@@ -22,9 +22,10 @@ module.exports.sockets = function(http) {
     var con = mysql.createConnection({
 		host: "localhost",
 		user: "root",
-		password: "",
+		password: "", 
 		database: "premux_main"
 	});
+	con.connect();
 
 io = socketio.listen(http);
 
@@ -46,7 +47,7 @@ ioChat.on('connection', function(socket) {
 		socket.username = username;
 		userSocket[socket.username] = socket.id;
 		userSocketInstBuyUserName[socket.username] = socket;
-		socket.broadcast.emit('broadcast',{ description: username + ' Logged In'}); //this would no longer be needed
+		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged In'}); //this would no longer be needed
 		//getting all users list
 		eventEmitter.emit('get-all-users');
 		//sending all users list. and setting if online or offline.
@@ -59,9 +60,11 @@ ioChat.on('connection', function(socket) {
 				}
 			}
 			//for popping connection message.
+			
 			ioChat.emit('onlineStack', userStack);
+			
 		} //end of sendUserStack function.
-
+			
 	}); //end of set-user-data event.
 
 	//setting room.
@@ -326,25 +329,60 @@ eventEmitter.on('read-chat', function(data) {
 //listening for get-all-users event. creating list of all users.
 eventEmitter.on('get-all-users', function() {
 
-	con.connect(function(err) {
-		if (err){
-			console.log('mysqlError:' + err)
-		}
-		con.query("SELECT username FROM tm_user", function (err, result) {
+	
+	con.query("SELECT username FROM tm_user", function (err, result) {
 			if (err) {
 				console.log("Error : " + err);
+				ioChat.emit('wrong', err);
 			} else {
 				//console.log(result);
 				for (var i = 0; i < result.length; i++) {
 					userStack[result[i].username] = "Offline";
 				}
 				//console.log("stack "+Object.keys(userStack));
-				sendUserStack();
+				for (i in userSocket) {
+					for (j in userStack) {
+						if (j == i) {
+							userStack[i] = "Online";
+						}
+					}
+				}
+				ioChat.emit('fromconection', userStack);
+				ioChat.emit('onlineStack', userStack);
 			}
 		});
-	});
+	
 
 }); //end of get-all-users event.
+	
+	
+function getAllUsers() {
+
+	
+	con.query("SELECT username FROM tm_user", function (err, result) {
+			if (err) {
+				console.log("Error : " + err);
+				ioChat.emit('wrong', err);
+			} else {
+				//console.log(result);
+				for (var i = 0; i < result.length; i++) {
+					userStack[result[i].username] = "Offline";
+				}
+				//console.log("stack "+Object.keys(userStack));
+				for (i in userSocket) {
+					for (j in userStack) {
+						if (j == i) {
+							userStack[i] = "Online";
+						}
+					}
+				}
+				ioChat.emit('fromconection', userStack);
+				ioChat.emit('onlineStack', userStack);
+			}
+		});
+	
+
+}
 
 //listening get-room-data event.
 function getRoomData(room) {
@@ -454,6 +492,7 @@ console.log("signup connected.");
 //verifying unique username.
 socket.on('checkUname', function(uname) {
 eventEmitter.emit('findUsername', uname); //event to perform database operation.
+
 }); //end of checkUname event.
 
 //function to emit event for checkUname.

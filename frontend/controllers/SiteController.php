@@ -250,7 +250,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
-			$this->PostExample(yii::$app->user->identity->username);
+			$this->chatNodeLogin(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -524,7 +524,7 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 	
-	public function PostExample($username)
+	public function chatNodeLogin($username)
     {
         //Init curl
         $curl = new curl\Curl();

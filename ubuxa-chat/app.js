@@ -23,7 +23,7 @@ app.use(logger('dev'));
 //db connection
 var dbPath = "mongodb://localhost/socketChatDB";
 mongoose.connect(dbPath);
-mongoose.connection.once('open',function(){
+mongoose.connection.once('openUri',function(){
   console.log("Database Connection Established Successfully.");
 });
 
@@ -70,7 +70,7 @@ var userModel = mongoose.model('User');
 
 app.use(function(req,res,next){
 
-	
+
 
 if(req.session && req.session.user){
 
@@ -104,17 +104,33 @@ app.post('/api',function(req,res){
 
   //var epass = encrypt.encryptPassword(req.body.password);
     con.connect(function(err) {
-if (err){
-  console.log(err)
-}
+        if (err){
+            console.log(err)
+        }
+    if(!req.body.email) {
+        return res.status(400).send({
+          success: 'false',
+          message: 'email is required'
+        });
+      }
+
 con.query("SELECT * FROM tm_user WHERE username = '"+req.body.email+"' LIMIT 1", function (err, result) {
   if(err){
-      
-      console.log(err + 'we have an error')
+
+      console.log(err + 'we have an error');
+      return res.status(500).send({
+        success: 'true',
+        message: 'error in connection',
+      })
     }
     else if(result == null || result == undefined || result == ""){
 
-      console.log(result + 'this user could not be found in the db1')
+      console.log(result + 'this user could not be found in the db1');
+      return res.status(201).send({
+        success: 'true',
+        message: 'username not found',
+
+      })
     }
     else{
       req.user = result[0];
@@ -123,6 +139,16 @@ con.query("SELECT * FROM tm_user WHERE username = '"+req.body.email+"' LIMIT 1",
       delete req.session.user.password;
       // res.redirect('/chat');
       console.log(req.session.user.username + 'user loged');
+
+      const response = {
+        response: result[0]
+      }
+
+      return res.status(200).send({
+        success: 'true',
+        message: 'connected',
+        response
+      })
 
     }
 });
