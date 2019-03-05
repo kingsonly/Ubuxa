@@ -250,11 +250,11 @@
         <div class="doc-box" value="
         <?php 
             switch($ext){
-              case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF': case 'jpeg': case 'JPEG':
-                echo $filepath;
+              case 'doc': case 'docx': case 'xls': case 'xlsx': case 'pptx': case 'ppt':
+                echo $gview.$filepath;
               break;
               default:
-                echo $gview.$filepath;
+                echo $filepath;
             }
         ?>">
           <div class="doc-box-inner">

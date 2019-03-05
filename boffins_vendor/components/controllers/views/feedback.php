@@ -130,7 +130,7 @@
 	    <a href="#" id="close-feedback-form" class="close-feedback-widget" title="Close">X</a>
           <?php $form = ActiveForm::begin([ 'options' => ['class' => 'feedback-form', 'id' => 'createfeedback']]); ?>
 	        <div class="feedback-wrap">
-	          <label class="feedback-label">Feedback </label>
+	          <label class="feedback-label">Give Feedback </label>
             <?= $form->field($feedback, 'user_comment')->textarea(['maxlength' => true, 'class' => 'feedback-textarea']) ?>
 	        </div>
           <?= Html::submitButton('Submit Feedback <img id="feed-loader" src="images/ubuxaloader.gif"/>',['class' => 'feedback-submit']) ?>

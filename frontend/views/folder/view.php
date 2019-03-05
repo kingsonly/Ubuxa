@@ -175,8 +175,6 @@ $img = $model->folder_image;
     
 </style>
 
-
-
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
 <section>
     <div class="container-fluid">

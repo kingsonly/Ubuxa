@@ -92,11 +92,6 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
 				</span>
 			</a>
-            <div class="beacon-wrapper">
-              <span class="signal beacon--epicentre"></span>
-              <span class="signal signal--wave"></span>
-              <span class="signal signal--wave signal--delay"></span>
-            </div>
 		</div>
 	</div>
 	<div class="container sider">
@@ -126,14 +121,14 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
     <div id="one">
     	<ul class="list_load">
     		<!-- <a class="menu-list" href="<?//= Url::to(['site/index'])?>"><li class="list_item menu-settings"><i class="fa fa-home iconz" aria-hidden="true"></i></i>Dashboard</li></a> -->
-    		<a class="menu-list" href="<?= Url::to(['folder/index'])?>"><li class="list_item menu-settings"><i class="fa fa-folder iconz" aria-hidden="true"></i>Folder Vault</li></a>
+    		<a class="menu-list" href="<?= Url::to(['folder/index'])?>"><li class="list_item menu-settings"><i class="fa fa-folder iconz" aria-hidden="true"></i>Folder Cabinet</li></a>
     		<?php if (isset($this->blocks['subfolders'])){ ?>
 			 	<?//= MenuAccordionWidget::widget();?>
 			 <?php } ?> 
              <?php if($checkSiteUrl != 'folder/index'){ ?>
                 <li class="list_item"><?= ViewBoardWidget::widget();?></li>
                 <li class="list_item"><?= EdocumentFolder::widget();?></li>
-                <li class="list_item"><?= ViewCalendarWidget::widget(['folderId'=>$checkIdParam]);?></li>
+                <!--<li class="list_item"><?//= ViewCalendarWidget::widget(['folderId'=>$checkIdParam]);?></li> -->
              <?php }?>
 		</ul>
     </div>

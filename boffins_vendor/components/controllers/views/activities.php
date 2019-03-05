@@ -38,15 +38,15 @@
 	background-color: #fff;
 }
 .box-content-active {
-	height: 91px;
+	height: 92px;
 	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }
 
 	.active-text{
-		text-align: center !important;
-		position: absolute;
-		bottom: 0;
-		width: 100%
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	font-size: 13px;
 	}
 </style>
 
@@ -64,7 +64,7 @@
 			<div class="info-1">
 				<div class="box-content-active">
 					<h1 style="margin:0; text-align:center;color:red;">0</h1>
-					<div class="active-text"> New Activity</div>
+					<div class="active-text"> Recent Activity</div>
 				</div>
 			</div>
 		</div>

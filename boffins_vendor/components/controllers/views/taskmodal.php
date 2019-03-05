@@ -307,7 +307,7 @@ use yii\bootstrap\Modal;
     <?php }?>
     <?php Pjax::begin(['id'=>'task-edoc']); ?>
         <?php if(!empty($edocument)){?>
-        <h4>Attachments</h4>
+        <h4>Files</h4>
             <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
                 <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
             </div>

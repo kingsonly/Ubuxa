@@ -115,7 +115,7 @@ class OnboardingController extends Controller
             $data = Yii::$app->request->post();   
             $id =  $data['user_id'];
             $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id])->exists();
+            $exists = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
             if($exists){
                 $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
                 $userid = $onboardingModel->id;

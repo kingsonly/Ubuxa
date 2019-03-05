@@ -737,7 +737,6 @@ $(document).on('dragenter', function(e){
     } 
 })
 
-
 var dropzone = new Dropzone('#dropupload$target', {
   init: function() {
     this.on("queuecomplete", function(file, response) {
@@ -747,6 +746,19 @@ var dropzone = new Dropzone('#dropupload$target', {
     });
     this.on("complete", function(file) {
         //this.removeFile(file); //remove file thumbanil on complete
+    });
+    this.on("uploadprogress", function(file, progress, bytesSent) {
+        /*if (file.previewElement) {
+            var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
+            var x=document.getElementById("toastUpload");
+              x.classList.add("show");
+              x.textContent=progress + " %";
+              setTimeout(function(){
+                //x.classList.remove("show");
+              },3000);
+            //var myToast = toastr.success(progress + "%", {timeOut:0});
+            //myToast.find(".toast-message").text(progress + "%");
+        }*/
     });
     this.on("success", function(file, response) {
         console.log(response);
