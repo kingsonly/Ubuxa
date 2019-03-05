@@ -21,6 +21,9 @@ use yii\bootstrap\Modal;
 #task-details-cont {
     width: 100%;
 }
+#task-title-cont{
+  width: 100%;
+}
 .panel{
     border: none;
 }

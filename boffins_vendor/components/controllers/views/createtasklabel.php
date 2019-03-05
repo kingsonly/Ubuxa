@@ -10,13 +10,35 @@ use yii\widgets\ActiveForm;
 <style>
 .loading-add-label{
     display: none;
-    float: left;
-  }
+    position: absolute;
+    right: 100px;
+    top: 27px;
+}
+.add-label{
+    outline: none;
+    display: block;
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    transition: 0.3s ease;
+}
+.labelButton{
+    border: none;
+    width: 100%;
+}
 </style>
 <?php Pjax::begin(['id'=>'label-refresh']); ?>
 <?php 
     $form = ActiveForm::begin(['action'=>Url::to(['label/create']), 'id' => 'activeLabel'.$taskid.$labelId,'options' => ['class' => 'task-label-class']]); ?>
-    <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id.$labelId, 'placeholder' => "Add label"]) ?>
+    <?= $form->field($label, 'name')->textInput(['maxlength' => true,'id' => 'testing-'.$id.$labelId, 'placeholder' => "Add label",'class' => 'add-label']) ?>
     <?= $form->field($taskLabel, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $taskid])->label(false); ?>
     <?= Html::submitButton('Save', ['class' => 'btn btn-success labelButton', 'id'=>'checkb'.$id.$labelId, 'data-id' => $id]) ?>
     <span class="loading-add-label"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>

@@ -271,9 +271,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 5px;
+  padding-left: 8px;
     border-right-width: 1px;
-    padding-right: 5px;
+    padding-right: 8px;
     width: 272px;
     cursor: pointer;
 }
@@ -389,7 +389,7 @@ a.addTaskButton.active {
         <?php
         $count = 1; 
         foreach($taskStatus as $key => $value){ ?>
-        <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
+        <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
                 <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
@@ -405,11 +405,14 @@ a.addTaskButton.active {
                           if($values->status_id == $value->id){
                           $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
                           $reminderUrl = Url::to(['reminder/create']);
+                          $titleLength = strlen($values->title);
+                          $taskLabels = $values->labelNames;
+                          $edocuments = $values->clipOn['edocument'];
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
-                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban']);?>
-                  <div class="task-test task-kanban_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
+                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
+                  <div class="task-test task-kanban_<?= $values->id;?>" style="margin-bottom: <?= empty($taskLabels) && ($titleLength > 43) && !empty($edocuments) ? '15' : 0; ?>px" value ="<?= $boardUrl; ?>">
                       <div class="task-title" id="task-title<?=$values->id;?>">
                         <span class="task-titles"><?= strip_tags($values->title); ?></span>
                       </div>
@@ -420,7 +423,6 @@ a.addTaskButton.active {
                     <?php }?>
                     <div class="holder-board" id="holder-board<?=$values->id;?>">
                       <?php
-                        $edocuments = $values->clipOn['edocument'];
                         if(!empty($edocuments)){?>
                             <span class="edoc-count" id="edoc-count<?=$values->id;?>" aria-hidden="true" data-toggle="tooltip" title="Attachments" style="top:<?= !empty($values->personName) && empty($values->labelNames) ? '-32px' : '3px'; ?>">
                               <? 
@@ -522,10 +524,31 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
+/*
+
+dragula([
+document.getElementById('holder21'),
+document.getElementById('holder22'),
+document.getElementById('holder23'),
+document.getElementById('holder24')
+]).on('drag', function (el) {
+    el.classList.add('is-moving');
+  })
+  .on('drop', function (el) {
+    el.className += ' ex-moved';
+  })
+  .on('over', function (el, container) {
+    container.className += ' ex-over';
+  })
+  .on('out', function (el, container) {
+    container.className = container.className.replace('ex-over', '');
+  });
+
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
 });
 
+*/
 $(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')
@@ -554,7 +577,12 @@ $.fn.closest_descendent = function(filter) {
     document.getElementById('2'),
     document.getElementById('3'),
     document.getElementById('4'),
-    document.getElementById('5')
+    document.getElementById('5'),
+    document.getElementById('6'),
+    document.getElementById('7'),
+    document.getElementById('8'),
+    document.getElementById('9'),
+    document.getElementById('10')
 ])
 
 .on('drag', function(el) {

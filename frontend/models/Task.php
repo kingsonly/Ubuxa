@@ -307,4 +307,14 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
+
+    /**
+     * [This method is used to sort task list. It places checked task to the bottom. It sorts based on status id]
+     * @param  [key] $key [status id]
+     */
+    public static function sortTaskList($key) {
+        return function ($a, $b) use ($key) {
+            return strnatcmp($a[$key], $b[$key]);
+        };
+    }
 }
