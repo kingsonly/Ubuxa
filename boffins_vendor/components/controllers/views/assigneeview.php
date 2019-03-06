@@ -70,9 +70,9 @@ use yii\widgets\Pjax;
   padding: 4px;
 }
 
-/*Checkboxes styles*/
-input[type="checkbox"] { display: none; }
-
+.assign-input{
+  display: none;
+}
 .assign-input + .assign-name {
   display: block;
   position: relative;

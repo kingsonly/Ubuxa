@@ -14,9 +14,9 @@ $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
 if(!empty($display)){
-  usort($display, Task::sortTaskList('status_id'));
+  $array = Task::sortTaskList($display);
 }
-//echo '<pre>',print_r($display),'</pre>';
+//echo '<pre>',print_r($array),'</pre>';
 ?>
 <style type="text/css">
     .bg-info {
@@ -360,8 +360,8 @@ if(!empty($display)){
 <div class="todo-list">
   <?php 
     $id = 1;
-    if(!empty($display)){
-    foreach ($display as $key => $value) { ?>
+    if(!empty($array)){
+    foreach ($array as $key => $value) { ?>
   <label class="todo">
     <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
         <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>

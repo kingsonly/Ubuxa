@@ -309,12 +309,32 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
     }
 
     /**
-     * [This method is used to sort task list. It places checked task to the bottom. It sorts based on status id]
-     * @param  [key] $key [status id]
+     * [This method is used to sort task list. Create 2 arrays, one containing unchecked task sorted by date
+        and the other containing checked tasks.  
+     * @param  [array] $key [status id]
+     @return array containing unchecked task at the top and check task at the bottom
      */
-    public static function sortTaskList($key) {
-        return function ($a, $b) use ($key) {
-            return strnatcmp($a[$key], $b[$key]);
-        };
+    public static function sortTaskList($array) {
+        foreach ($array as $key => $row) {
+            if ($row['status_id'] == self::TASK_COMPLETED){
+              $status[] = $row;
+              $statusId[] = $row['create_date'];
+            }else{
+              $date[] = $row;
+              $dateTime[] = $row['create_date'];
+            }
+        }
+        if(!empty($date)){
+            array_multisort($dateTime, SORT_DESC, $date);
+        }
+        if(!empty($status)){
+            array_multisort($statusId, SORT_DESC, $status);
+        }
+        if(!empty($date) && !empty($status)){
+            return array_merge($date, $status);
+        }else{
+            return $date;
+        }
     }
+
 }
