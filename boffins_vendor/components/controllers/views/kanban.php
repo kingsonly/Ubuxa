@@ -101,6 +101,7 @@ $checkUrlParams = $checkUrls[0];
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
   cursor: grab;
   border-radius: 2px;
