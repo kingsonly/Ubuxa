@@ -92,7 +92,9 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 3px;
 }
 .drag-inner-list {
-  min-height: 50px;
+  min-height: 10px;
+  max-height: 80vh;
+  overflow: scroll;
 }
 .drag-item {
   /*width: 280px;*/
@@ -348,6 +350,7 @@ a.addTaskButton.active {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    padding-top: 10px;
 }
 
 .add-title:hover {
@@ -758,12 +761,15 @@ $(document).ready(
         $(".add-card").click(function (e) {
             e.preventDefault();
             $(this).hide();
+            $(this).prev('.drag-inner-list').css('max-height', '73vh')
             $(this).next('div.card-add').show("slow");
+            $(this).prev('.drag-inner-list').scrollTop($(this).prev('.drag-inner-list')[0].scrollHeight);
         });
         $(".close-add").click(function (e) {
             e.preventDefault();
             $('.card-add').hide();
             $('.add-card').fadeIn();
+            $('.drag-inner-list').css('max-height', '80vh')
         });
 
     });

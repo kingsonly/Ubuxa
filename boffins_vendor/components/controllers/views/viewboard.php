@@ -12,7 +12,7 @@
     overflow: scroll;
     transition: 0.5s;
     padding-top: 20px;
-    /*overflow: hidden;*/
+    overflow: hidden;
     margin: auto;
 }
 
