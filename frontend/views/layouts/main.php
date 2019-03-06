@@ -104,6 +104,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
       padding: 16px;
       display: none;
       box-shadow: -8px 8px 25px -2px rgba(0, 0, 0, 0.1);
+      cursor: unset;
     }
     .alert-text{
       color: #000;
@@ -173,7 +174,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 		 <div class="col-lg-12">
 			<?= Alert::widget([
 				   'options' => ['class' => 'alert-info btn btn-primary','id'=>'flas'],
-				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button btn btn-primary" id="open-feedback-form">Feedback</a>',
+				   'body' => '<div class="alert-text">Hi <span class="main-name">'.yii::$app->user->identity->firstname.'</span>, you are running on beta.</div><a href="#" class="feedback-button btn btn-primary" id="open-feedback-form">Give Feedback</a>',
 
 					 ]);?>
 		</div>

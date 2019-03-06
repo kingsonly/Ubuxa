@@ -92,13 +92,16 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 3px;
 }
 .drag-inner-list {
-  min-height: 50px;
+  min-height: 10px;
+  max-height: 80vh;
+  overflow: scroll;
 }
 .drag-item {
   /*width: 280px;*/
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
   cursor: grab;
   border-radius: 2px;
@@ -348,6 +351,7 @@ a.addTaskButton.active {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    padding-top: 10px;
 }
 
 .add-title:hover {
@@ -392,7 +396,7 @@ a.addTaskButton.active {
         <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
+                 <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> 
             </span>
                 
             <div class="drag-options" id="options<?=$count;?>"></div>
@@ -758,12 +762,15 @@ $(document).ready(
         $(".add-card").click(function (e) {
             e.preventDefault();
             $(this).hide();
+            $(this).prev('.drag-inner-list').css('max-height', '73vh')
             $(this).next('div.card-add').show("slow");
+            $(this).prev('.drag-inner-list').scrollTop($(this).prev('.drag-inner-list')[0].scrollHeight);
         });
         $(".close-add").click(function (e) {
             e.preventDefault();
             $('.card-add').hide();
             $('.add-card').fadeIn();
+            $('.drag-inner-list').css('max-height', '80vh')
         });
 
     });

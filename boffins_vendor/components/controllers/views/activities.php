@@ -38,23 +38,24 @@
 	background-color: #fff;
 }
 .box-content-active {
-	height: 91px;
+	height: 92px;
 	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }
 
-	.active-text{
-		text-align: center !important;
-		position: absolute;
-		bottom: 0;
-		width: 100%
-	}
+.active-text{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	font-size: 15px;
+	padding-left: 4px;	
+}
 </style>
 
 <div class="col-md-6">
 	<div class="col-sm-12 col-xs-12 infos-first column-margin">
 		<div class="col-sm-10 col-xs-8 folderdetlss ">
 			<div class="active-info">
-				<div class="act-header">New Activity</div>
+				<div class="act-header">Recent Activity</div>
 				<div class="box-content-activities">Coming Soon...</div>
 			</div>
 			<div class="green-border"></div>

@@ -36,7 +36,7 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
 		
 	chatPopup =  '<div class="msg_box" "data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
 	'<div class="msg_head"><span class="image_holder"><img class="header_image" src="'+userImage+'"></span> <span class="msg_username">'+username +
-	'</span><div class="close"><div class="close__icon">x</div></div> </div>'+
+	'</span><div class="close_chat"><div class="close__icon">x</div></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
 	'<div class="msg_footer"><textarea data-emojiable="true" data-emoji-input="unicode" class="msg_input" rows="4" placeholder="Type a message..."></textarea></div> 	</div> 	</div>' ;
 
@@ -138,7 +138,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-	
+
 	$ (function(){
 		var socket = io('//127.0.0.1:4000');
 
@@ -224,7 +224,7 @@ $(document).ready(function(){
 		});
 		
 		// close message box 
-		$(document).on('click', '.close', function() {
+		$(document).on('click', '.close_chat', function() {
 
 			var chatbox = $(this).parents().parents().attr("rel") ;
 			$('[rel="'+chatbox+'"]').remove();

@@ -10,9 +10,7 @@ use yii\widgets\ActiveForm;
 <style>
 .loading-add-label{
     display: none;
-    position: absolute;
-    right: 100px;
-    top: 27px;
+    text-align: center; 
 }
 .add-label{
     outline: none;

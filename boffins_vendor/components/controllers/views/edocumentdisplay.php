@@ -142,6 +142,7 @@
     word-wrap: break-word;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    width: 85%;
 }
 .document-preview{
     background-color: #ccccccd1;
@@ -249,11 +250,11 @@
         <div class="doc-box" value="
         <?php 
             switch($ext){
-              case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF': case 'jpeg': case 'JPEG':
-                echo $filepath;
+              case 'doc': case 'docx': case 'xls': case 'xlsx': case 'pptx': case 'ppt':
+                echo $gview.$filepath;
               break;
               default:
-                echo $gview.$filepath;
+                echo $filepath;
             }
         ?>">
           <div class="doc-box-inner">

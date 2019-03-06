@@ -12,7 +12,7 @@
     overflow: scroll;
     transition: 0.5s;
     padding-top: 20px;
-    /*overflow: hidden;*/
+    overflow: hidden;
     margin: auto;
 }
 
@@ -68,7 +68,7 @@
 </div>
 
 <div class="board-open">
-    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Board</span>
+    <span class="open-board"><i class="fa fa-tasks iconz"></i>View Task Board</span>
 </div>
 
 <?

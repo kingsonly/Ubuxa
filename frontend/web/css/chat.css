@@ -2,7 +2,7 @@
 .close__icon{
 	color: #fff;
     position: absolute;
-    top: 1px;
+    top: 0px;
     right: 7px;
     font-size: 14px;
     font-weight: 100;
@@ -90,7 +90,7 @@
 	outline: none;
 }
 
-.close{
+.close_chat{
 	position: absolute;
     cursor: pointer;
     background: #0a0000;
@@ -103,7 +103,7 @@
     display: none;
     z-index: 1000;
 }
-.msg_box:hover .close{
+.msg_box:hover .close_chat{
 	display: block;
 }
 .minimize{
