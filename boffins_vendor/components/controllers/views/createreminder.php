@@ -15,7 +15,7 @@ $taskremnider = new TaskReminder();
 <style>
   .loading-add-rem{
     display: none;
-    position
+    text-align: center;
   }
   .add-reminder{
     outline: none;
