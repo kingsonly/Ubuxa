@@ -42,19 +42,20 @@
 	box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }
 
-	.active-text{
+.active-text{
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	font-size: 13px;
-	}
+	font-size: 15px;
+	padding-left: 4px;	
+}
 </style>
 
 <div class="col-md-6">
 	<div class="col-sm-12 col-xs-12 infos-first column-margin">
 		<div class="col-sm-10 col-xs-8 folderdetlss ">
 			<div class="active-info">
-				<div class="act-header">New Activity</div>
+				<div class="act-header">Recent Activity</div>
 				<div class="box-content-activities">Coming Soon...</div>
 			</div>
 			<div class="green-border"></div>
@@ -64,7 +65,7 @@
 			<div class="info-1">
 				<div class="box-content-active">
 					<h1 style="margin:0; text-align:center;color:red;">0</h1>
-					<div class="active-text"> Recent Activity</div>
+					<div class="active-text"> New Activity</div>
 				</div>
 			</div>
 		</div>
