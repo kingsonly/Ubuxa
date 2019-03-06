@@ -28,6 +28,7 @@ class SubFolders extends Widget
 	public $onboarding;
     public $onboardingExists;
     public $userId;
+    public $placeHolderString;
 	
     public function run()
     {
@@ -43,6 +44,7 @@ class SubFolders extends Widget
 			'onboarding' => $this->onboarding,
             'onboardingExists' => $this->onboardingExists,
             'userId' => $this->userId,
+            'placeHolderString' => !empty($this->placeHolderString)?$this->placeHolderString:'a new ',
 		]);
     }
 }

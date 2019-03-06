@@ -63,9 +63,25 @@ use frontend\models\Folder;
 		padding-top: 6px !important;
 	}
 	
-	.fa-unlock-alt{
+/*
+	.folder-form.fa-unlock-alt{
+		
+		 fa-unlock-alt
+	}
+*/
+	
+	
+	span span span ul li i.fa.fa-lock,span span span .fa.fa-lock{
+		color:red;
 		font-size: 20px;
 	}
+	
+	span span span ul li i.fa.fa-unlock-alt, span span span .fa.fa-unlock-alt{
+		color:green;
+		font-size: 20px;
+	}
+	
+	
 	#form-content{
 		display: flex;
 		flex-direction: row;
@@ -142,7 +158,7 @@ if(isset($_GET['id'])){
 		<?= $form->field($folderModel, 'component_template_id')->hiddenInput(['value' => ''])->label(false); ?>
 	<? }?>
 	<span id="title-span">
-		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true,'id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$creationType])->label(false); ?>
+		<?= $form->field($folderModel, 'title')->textInput(['maxlength' => true,'id' => 'create-new-'.$formId.'-title','placeholder'=>'Create '.$placeHolderString.$creationType])->label(false); ?>
 	<?= $form->field($folderModel, 'parent_id')->hiddenInput(['value' => $folderId])->label(false); ?>
 	<?= $form->field($folderModel, 'cid')->hiddenInput(['value' => Yii::$app->user->identity->cid])->label(false); ?>
 	</span>
