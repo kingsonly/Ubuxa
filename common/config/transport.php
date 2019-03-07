@@ -7,7 +7,7 @@ return [
 //	'port' => '587',
 	
 	'class' => 'Swift_SmtpTransport',
-	'host' => 'mail.mailgun.com',
+	'host' => 'mailgun.com',
 	'username' => 'support@ubuxa.net',
 	'password' => 'ubuxa##99',
 	'port' => '587',
