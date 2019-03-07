@@ -85,7 +85,7 @@ AppAsset::register($this);
             <table border="0" cellpadding="0" cellspacing="0" width="480" >
                 <tr>
                     <td align="center" valign="top" style="padding: 30px 10px 30px 10px;">
-                            <img alt="Logo" src="images/ubuxa.png" width="100" height="100" style="display: block;  font-family: 'Lato', Helvetica, Arial, sans-serif; width:200px; color: #ffffff; font-size: 18px;" border="0">
+                            <img alt="Logo" src="http://ubuxa.net/images/ubuxa.png" width="100" height="100" style="display: block;  font-family: 'Lato', Helvetica, Arial, sans-serif; width:200px; color: #ffffff; font-size: 18px;" border="0">
                     </td>
                 </tr>
             </table>
