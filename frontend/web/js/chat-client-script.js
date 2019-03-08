@@ -135,6 +135,7 @@ $(document).ready(function(){
 		$('[rel="'+chatbox+'"] .msg_wrap').slideToggle('slow');
 		//$('[rel="'+chatbox+'"] .msg_wrap').parent().toggleClass('chat_width');
 		$(this).children('.msg_chat_editor').toggle();
+		$('[rel="'+chatbox+'"] .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 		return false;
 	});
 
