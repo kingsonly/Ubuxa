@@ -3,13 +3,12 @@
 
 .sidenav {
     height: 100vh;
-    width: 0;
     position: fixed;
     z-index: 10000;
+    width: 0;
     top: 0;
     left: 0;
     background-color: #f8f6f6;
-    overflow: scroll;
     transition: 0.5s;
     padding-top: 20px;
     overflow: hidden;
@@ -53,7 +52,9 @@
     padding-top: 15px;
     color: #fff;
 }
-
+.noscroll{
+    overflow-y: hidden;
+}
 
 </style>
 
@@ -79,6 +80,7 @@ $viewBoard = <<<JS
         $(this).addClass('board-opened');
         $(this).removeClass('board-closed');
         $('#mySidenav').css({'width':'100%'})
+        $('body').toggleClass('noscroll')
     });
 
     $('.closebtn').click(function(){
@@ -88,6 +90,7 @@ $viewBoard = <<<JS
         $('.board-open').removeClass('board-opened');
         $('.board-open').addClass('board-closed');
         $('#mySidenav').css({'width':'0'})
+        $('body').toggleClass('noscroll')
     });
 
 
