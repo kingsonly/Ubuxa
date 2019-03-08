@@ -333,7 +333,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         if(!empty($date) && !empty($status)){
             return array_merge($date, $status);
         }else{
-            return $date;
+            return $array;
         }
     }
 

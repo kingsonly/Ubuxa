@@ -94,7 +94,11 @@ $checkUrlParams = $checkUrls[0];
 .drag-inner-list {
   min-height: 10px;
   max-height: 80vh;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.dropdown-menu{
+ /* position: absolute;*/
 }
 .drag-item {
   /*width: 280px;*/
@@ -107,6 +111,9 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 2px;
   box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
   position: relative;
+}
+.dropdown-menu{
+  z-index: 9999;
 }
 .drag-item.is-moving {
   /*transform: scale(1.5);*/
@@ -179,6 +186,7 @@ $checkUrlParams = $checkUrls[0];
     width: 100%;
     clear: right;
     text-align: center;
+    z-index: 1005
 }
 .bg-info{
   background-color: #fff !important;
@@ -316,7 +324,7 @@ a.addTaskButton.active {
   width:340px;
 }
 .date-time {
-      color: rgba(0,0,0,.87);
+    color: rgba(0,0,0,.87);
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -385,6 +393,7 @@ a.addTaskButton.active {
 .assignedto{
   margin-left: 5px;
 }
+
 </style>
 
 <?php Pjax::begin(['id'=>'asign-refresh']); ?>
@@ -396,7 +405,7 @@ a.addTaskButton.active {
         <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                 <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> 
+                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
             </span>
                 
             <div class="drag-options" id="options<?=$count;?>"></div>
@@ -749,10 +758,11 @@ $('.drag-item').mouseenter(function(){
 $(document).click(function (e) {
     e.stopPropagation();
     var container = $(".testdrop");
+    var menu = $(".dropdown-menu");
     var containerr = container.find('.clicked');
 
     //check if the clicked area is dropDown or not
-    if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
+    if (container.has(e.target).length === 0 && container.hasClass('clicked') && !menu.hasClass('opened')) {
         container.removeClass('clicked');
         $('.bottom-content').css("visibility","hidden");
     }
@@ -774,6 +784,41 @@ $(document).ready(
         });
 
     });
+
+(function() {                                             
+  var dropdownMenu; 
+  var target;                                    
+  $('.testdrop').on('show.bs.dropdown', function(e) {
+   target = e.target;        
+    dropdownMenu = $(e.target).find('.dropdown-menu');
+    $('.drag-container').append(dropdownMenu.detach());          
+    dropdownMenu.css('display', 'block');             
+    dropdownMenu.position({                           
+      'my': 'right top',                            
+      'at': 'right bottom',                         
+      'of': $(e.relatedTarget)                      
+    })
+    dropdownMenu.mouseenter(function(){
+        dropdownMenu.addClass('opened')
+    });
+    dropdownMenu.mouseleave(function(){
+        dropdownMenu.removeClass('opened')
+    });                                                
+  });                                                   
+$(document).on('click', function(e) {
+      if(!dropdownMenu.hasClass('opened')){
+        $(target).append(dropdownMenu.detach());        
+        dropdownMenu.hide();
+      }
+  });
+  $('.testdrop').on('hidden.bs.dropdown', function(e) {
+    if(!dropdownMenu.hasClass('opened')){
+      $(target).append(dropdownMenu.detach());        
+      dropdownMenu.hide();
+    }
+  });                                                
+})();
+
 JS;
  
 $this->registerJs($board);

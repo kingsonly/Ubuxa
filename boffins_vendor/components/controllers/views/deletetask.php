@@ -11,7 +11,7 @@ use yii\helpers\Url;
 <style>
   .loading-delete-task{
     display: none;
-    float: left;
+    text-align: center;
   }
 </style>
 <div class="delete-header-holder">

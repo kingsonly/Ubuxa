@@ -55,7 +55,7 @@ if(!empty($display)){
    display: block;
    position: relative;
    padding: 1em 1em 1em 16%;
-   margin: 0 auto;
+   margin: 0 auto; 
    cursor: pointer;
    border-bottom: solid 1px #ddd;
 }
@@ -63,7 +63,7 @@ if(!empty($display)){
    border-bottom: none;
 }
  .todo__state {
-   position: absolute;
+  position: absolute;
    top: 0;
    left: 0;
    opacity: 0;
