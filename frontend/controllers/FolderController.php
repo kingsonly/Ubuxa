@@ -277,15 +277,65 @@ class FolderController extends Controller
     /**
      * Deletes an existing Folder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+		if(Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();   
+			$id =  $data['folderId'];
+			$userIdentityRole = yii::$app->user->identity->roleName;
+			$userIdentityId = yii::$app->user->identity->id;
+			$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$id,'user_id' => $userIdentityId])->one();
+			// use identity of the user to determine if the user has access to delete a folder or not 
+			if($folderManager == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
+				if(!empty($this->findModel($id)->delete())){
+					return 0;
+				}else{
+					return 1;
+				}
+			}else{
+				return 3;
+			}
+			
+		}
+		
+		
+    }
+	
+	/**
+     * Deletes an existing Folder model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $folderId, integer userId,
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+	public function actionDeleteUsers()
+    {
+		if(Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();   
+			$folderId =  $data['folderId'];
+			$userId =  $data['userId'];
+			$userIdentityRole = yii::$app->user->identity->roleName;
+			$userIdentityId = yii::$app->user->identity->id;
+			$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$folderId,'user_id' => $userIdentityId])->one();
+			// use identity of the user to determine if the user has access to delete a folder or not 
+			if($folderManager == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
+				$folderManagerModel = new FolderManager();
+				$findFolderUser = $folderManagerModel->find()->andWhere(['folder_id' => $folderId, 'user_id' => $userId])->one();
+				if($findFolderUser->delete()){
+					return 1;
+				}else{
+					return 0;
+				}
+			}else{
+				return 3;
+			}
+			
+		}
+		
+		
     }
 	
 	public function actionCheckIfFolderNameExist($folderName){
@@ -356,4 +406,6 @@ class FolderController extends Controller
 			
 		}
 	}
+	
+	
 }

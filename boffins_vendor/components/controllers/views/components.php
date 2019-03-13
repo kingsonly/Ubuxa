@@ -69,7 +69,7 @@ use yii\widgets\Pjax;
 
 </style>
 
-<div class="col-sm comps margin-bottom">
+<div class="col-sm comps margin-bottom" data-folderid='<?= $folderId;?>'>
     <div class="auth-users">
 
 		<?php Pjax::begin(['id'=>'for-profile-refresh']); ?>
