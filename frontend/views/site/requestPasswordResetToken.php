@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 <style>
 #loader{
 display: none;
+    width: 35px;
+    height: 35px;
 }
   html, body * { box-sizing: border-box; font-family: 'Open Sans', sans-serif; }
 
@@ -173,6 +175,7 @@ li {
   border-radius: 20px;
   margin-bottom: 1px;
   background: rgba(255,255,255,.2);
+  color: white;
 }
 
 label {
@@ -238,7 +241,7 @@ label {
 }
 .login-text{
     color: #fff;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
 }
 .login{
@@ -263,7 +266,7 @@ label {
                     <?= $form->field($model, 'address')->textInput(['autofocus' => true,  'class' => 'form-styling']) ?>
 
                     <div class="form-group">
-                        <?= Html::submitButton('Send <img id="loader" src="images/45.gif"/>', ['class' => 'btn-signup']) ?>
+                        <?= Html::submitButton('Send <img id="loader" src="images/ubuxaloader.gif"/>', ['class' => 'btn-signup']) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>
@@ -273,7 +276,7 @@ label {
                    <p class="confirm-text">Please check your email to reset your password.</p>
                 </div>
             </div>
-            <div class="login"><a href="login.php" class="login-text">Login</span></div>
+            <div class="login"><a href="login.php" class="login-text">Back to Login</span></div>
         </div>
     </div>
 </div>
@@ -306,8 +309,8 @@ $('#request-password-reset-form').on('beforeSubmit', function (e) {
             inTest();
             $(".fill-text,.form-reset, .login").css("display","none");
         },
-        error: function () {
-            alert("Something went wrong");
+        error: function (response) {
+            console.log(response);
         },
         beforeSend: function(){
             $("#loader").show()
