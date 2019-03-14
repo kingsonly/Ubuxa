@@ -11,10 +11,8 @@ use frontend\models\Reminder;
 use frontend\models\UserDb;
 use frontend\models\Task;
 use frontend\models\Telephone;
-use frontend\models\UserDbDoNotAttachDateBehavour;
-use frontend\models\Taskreminder;
+use frontend\models\TaskReminder;
 use yii\data\ActiveDataProvider;
-
 use yii\console\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Expression;
@@ -30,7 +28,7 @@ class AutoreminderController extends Controller {
         
     }
 	
-	function smssend($owneremail,$subacct,$subacctpwd,$sendto,$sender,$message){
+	function smsSend($owneremail,$subacct,$subacctpwd,$sendto,$sender,$message){
         
 		$url =
 		"http://www.smslive247.com/http/index.aspx?" . "cmd=sendquickmsg"
@@ -58,45 +56,76 @@ class AutoreminderController extends Controller {
         
         //send email
     }
+
+    function sendEmail($assignee,$message,$taskTitle)
+    {
+    	return Yii::$app->mailer->compose(['html' => 'newreminder'], [
+            'message' => $message, 'taskTitle' => $taskTitle
+        ])
+            ->setTo($assignee)
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('Reminder')
+            ->send();
+    }
+
+
+    function sendOwnerEmail($ownerEmail,$message,$taskTitle)
+    {
+    	return Yii::$app->mailer->compose(['html' => 'newreminder'], [
+            'message' => $message, 'taskTitle' => $taskTitle
+        ])
+            ->setTo($ownerEmail)
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('Reminder')
+            ->send();
+    }
+
+    function updateReminder($value)
+    {
+    	$updateReminderStatus = Reminder::findOne($value->id);
+		$updateReminderStatus->deleted = Reminder::REMINDER_SENT;
+		$updateReminderStatus->save(false);
+    }
 	
 	public function actionIndex()
 	{
 		
 		$model = new Reminder();
-		$taskReminderModel = new Taskreminder();
-		$userModel = new UserDbDoNotAttachDateBehavour();
-		$telephoneModel = new Telephone();
+		$taskReminderModel = new TaskReminder();
 		$taskModel = new Task();
 		$presentTime = new Expression('NOW()');
 		$getContact = $model->checkForReminders($presentTime);
-		$reminderId = [];
 		
-		foreach($getContact as $key => $value){
-			
-			$reminderTaskId =$taskReminderModel->find()->where(['reminder_id' => $value->id])->one()->task_id;
-			$ownerId = $taskModel->find()->where(['id' => $reminderTaskId])->one()->owner;
-			$assignedToId =$taskModel->find()->where(['id' => $reminderTaskId])->one()->assigned_to;
-			$note =$value->notes;
-			//$ownersNumber = $userModel->find()->where(['id'=>$ownerId])->one()->id; 
-			//$assignedToNumber = $userModel->find()->where(['id'=>$assignedToId])->one()->id;
-			$ownerNumber = $telephoneModel->numberFromUser($ownerId);
-			$assignedToNumber = $telephoneModel->numberFromUser($assignedToId);
-			array_push($reminderId,$value->id);
-			$owneremail = "kingsonly13c@gmail.com";
-			$subacct = 'KINGSONLY';
-			$subacctpwd = "firstoctober" ;
-			$sender = "Ubuxa";
-			$message = 'Reminder from tycol main portal '.$note;
-			$this->smssend($owneremail,$subacct,$subacctpwd,$ownersNumber,$sender,$message);
-			$this->smssend($owneremail,$subacct,$subacctpwd,$assignedToNumber,$sender,$message);
-			$updateReminderStatus = Reminder::findOne($value->id);
-			$updateReminderStatus->deleted = 1;
-			$updateReminderStatus->save(false);
-			
+		if(!empty($getContact)){
+			foreach($getContact as $key => $value){
+				$message = $value->notes;
+				$reminderTaskIds = $taskReminderModel->find()->where(['reminder_id' => $value->id])->one();
+				$reminderTaskId = $reminderTaskIds['task_id'];
+				$getTask = Task::findOne($reminderTaskId);
+				$taskTitle = $getTask->title;
+				$owner = $taskModel->find()->where(['id' => $reminderTaskId])->one();
+				$ownerId = $owner->owner;
+				$user = UserDb::findOne($ownerId);
+				$ownerEmail = $user->email;
+				$assignees = $getTask->taskAssigneesUserId;
+
+				if(!empty($assignees)){
+					foreach ($assignees as $key => $values) {
+						$assignee = UserDb::findOne($values);
+						$assigneeEmail = $assignee->email;
+						if($values != $ownerId){
+							$this->sendEmail($assigneeEmail, $message, $taskTitle);
+						}
+					}
+					$this->sendOwnerEmail($ownerEmail, $message, $taskTitle);
+					$this->updateReminder($value);
+				}else{
+					$this->sendOwnerEmail($ownerEmail, $message, $taskTitle);
+					$this->updateReminder($value);
+				}				
+			}
 		}
-		
-            
-            
+     
 	}
 }
 

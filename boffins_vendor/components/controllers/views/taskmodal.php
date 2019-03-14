@@ -11,9 +11,9 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
-use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
 use yii\bootstrap\Modal;
+use frontend\models\StatusType;
 
 ?>
 
@@ -193,9 +193,11 @@ use yii\bootstrap\Modal;
 #boardContent{
   overflow: scroll !important;
 }
-
+.no-access{
+    pointer-events: none;
+}
 </style>
-    <div class="task-view">
+    <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
         <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
@@ -224,6 +226,7 @@ use yii\bootstrap\Modal;
                     </div>
                     <div class="task-status">
                         <span class="task-titless"><?= $model->statusTitle; ?></span>
+                        
                     </div>
                 </div>
             </div>
@@ -333,7 +336,6 @@ use yii\bootstrap\Modal;
 
 <?
 $taskmodal = <<<JS
-
 JS;
 $this->registerJs($taskmodal);
 ?>

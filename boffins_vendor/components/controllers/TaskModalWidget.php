@@ -15,6 +15,9 @@ class TaskModalWidget extends Widget{
 	public $taskLabel;
 	public $edocument;
 	public $folderId;
+	public $statusData;
+	public $assigneesIds;
+	public $userid;
 
 	public function init()
 	{
@@ -31,6 +34,9 @@ class TaskModalWidget extends Widget{
 			'taskLabel' => $this->taskLabel,
 			'edocument' => $this->edocument,
 			'folderId' => $this->folderId,
+			'userid' => $this->userid,
+			'assigneesIds' => $this->assigneesIds,
+			'statusData' => $this->statusData,
 		]);
 	}
 	
