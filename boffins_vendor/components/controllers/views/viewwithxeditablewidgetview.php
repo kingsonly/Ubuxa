@@ -764,6 +764,28 @@ Editable::end();
 
 	?>
 </div>
+<?
+	}elseif($v['xeditable'] == 'dropdown'){
+			?>
+<div>
+	<?
+		echo Editable::widget([
+	    'model'=>$model,
+	    'asPopover' => false,
+	    'inputType' => Editable::INPUT_DROPDOWN_LIST,
+	    'attribute'=>$v['modelAttribute'],
+	    'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+	    'data'=>$data,
+	    'header' => 'Notes',
+	    'submitOnEnter' => false,
+	    'options' => [
+	        'class'=>'form-control',  
+	        'placeholder'=>'Select status...'
+    ]
+]);
+
+	?>
+</div>
 
 	<?
 		}elseif($v['xeditable'] == 'image'){

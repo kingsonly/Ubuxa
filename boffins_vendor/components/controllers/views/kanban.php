@@ -112,9 +112,6 @@ $checkUrlParams = $checkUrls[0];
   box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
   position: relative;
 }
-.dropdown-menu{
-  z-index: 9999;
-}
 .drag-item.is-moving {
   /*transform: scale(1.5);*/
   /*background: rgba(0, 0, 0, 0.8);*/
@@ -319,6 +316,7 @@ a.addTaskButton.active {
     padding-top: 1px;
     padding-bottom: 1px;
     font-size: 13px;
+    white-space: nowrap;
 }
 .assigndrop{
   width:340px;
@@ -393,7 +391,9 @@ a.addTaskButton.active {
 .assignedto{
   margin-left: 5px;
 }
-
+.no-access{
+  pointer-events: none;
+}
 </style>
 
 <?php Pjax::begin(['id'=>'asign-refresh']); ?>
@@ -421,9 +421,11 @@ a.addTaskButton.active {
                           $titleLength = strlen($values->title);
                           $taskLabels = $values->labelNames;
                           $edocuments = $values->clipOn['edocument'];
+                          $assigneesIds = $values->taskAssigneesUserId;
+                          $userid = Yii::$app->user->identity->id;
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
-                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
+                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  '' : 'no-drag'?> test_<?= $values->id;?>">
                   <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
                   <div class="task-test task-kanban_<?= $values->id;?>" style="margin-bottom: <?= empty($taskLabels) && ($titleLength > 43) && !empty($edocuments) ? '15' : 0; ?>px" value ="<?= $boardUrl; ?>">
                       <div class="task-title" id="task-title<?=$values->id;?>">
@@ -481,8 +483,9 @@ a.addTaskButton.active {
                       </div>
                     <?php } ?>
                 </div>
+                  
                     <div class="bottom-content">
-                      <div class="confirm">
+                      <div class="confirm <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?> test_<?= $values->id;?>">
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true" data-toggle="tooltip" title="Add reminder"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -537,31 +540,17 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
-/*
 
-dragula([
-document.getElementById('holder21'),
-document.getElementById('holder22'),
-document.getElementById('holder23'),
-document.getElementById('holder24')
-]).on('drag', function (el) {
-    el.classList.add('is-moving');
-  })
-  .on('drop', function (el) {
-    el.className += ' ex-moved';
-  })
-  .on('over', function (el, container) {
-    container.className += ' ex-over';
-  })
-  .on('out', function (el, container) {
-    container.className = container.className.replace('ex-over', '');
-  });
-
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
+$('#boardContent').on('show.bs.modal', function(){
+  if(!$(this).hasClass('in')){
+    $('.se-pre-con').show();
+  }
 });
 
-*/
+$('#boardContent').on('shown.bs.modal', function(){
+  $('.se-pre-con').hide();
+});
+
 $(function(){
     $('.task-test').click(function(){
         $('#boardContent').modal('show')
@@ -585,7 +574,7 @@ $.fn.closest_descendent = function(filter) {
 
 
 
-    dragula([
+dragula([
     document.getElementById('1'),
     document.getElementById('2'),
     document.getElementById('3'),
@@ -596,7 +585,15 @@ $.fn.closest_descendent = function(filter) {
     document.getElementById('8'),
     document.getElementById('9'),
     document.getElementById('10')
-])
+],{
+moves: function(el, target, source, sibling) {
+    if (el.classList.contains('no-drag')) {
+            toastr.error("You don't have permission to edit this task");
+            return false;
+        }
+        return true;
+    },
+})
 
 .on('drag', function(el) {
     
@@ -639,6 +636,7 @@ $.fn.closest_descendent = function(filter) {
     
     //alert(el.parent().attr('class'));
 });
+
 
 function _UpdateTask(status, contain){
           $.ajax({
@@ -805,7 +803,7 @@ $(document).ready(
         dropdownMenu.removeClass('opened')
     });                                                
   });                                                   
-$(document).on('click', function(e) {
+$('.drag-container').on('click', function(e) {
       if(!dropdownMenu.hasClass('opened')){
         $(target).append(dropdownMenu.detach());        
         dropdownMenu.hide();

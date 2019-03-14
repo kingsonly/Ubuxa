@@ -155,6 +155,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasOne(StatusType::className(), ['id' => 'status_id']);
     }
 
+
     public function getStatusTitle()
     {
         return $this->status->status_title;
@@ -218,6 +219,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('taskAssignees');
     }
 
+
     public function getPersonName()
     {   
         $names = [];
@@ -228,6 +230,16 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return implode(" ", $names);
 
         //return $this->person->first_name;
+    }
+
+    public function getTaskAssigneesUserId()
+    {
+        $userids = [];
+        $data = $this->taskAssignees;
+        foreach ($data as $attr) {
+            $userids[] = $attr->id;
+        }
+        return $userids;
     }
 
     public function displayTask()

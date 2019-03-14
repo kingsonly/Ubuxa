@@ -853,7 +853,7 @@ var dropzone = new Dropzone('#dropupload$target', {
         var folderId =$('#dropupload$target').getParent(2).attr('data-folderId');
         $.pjax.reload({container:"#kanban-refresh",async: false});
         $.pjax.reload({container:"#task-list-refresh",async: false});
-        if($('#dropupload$target').hasClass('click-uploadtask')){
+        if($('#dropupload$target').hasClass('click-uploadmodalUpload')){
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
         if($('#dropupload$target').hasClass('click-uploadfolderUpload')){
