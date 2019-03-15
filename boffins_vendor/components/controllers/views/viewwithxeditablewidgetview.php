@@ -737,7 +737,16 @@ Editable::end();
 				'options'=>[
         			'options'=>['placeholder'=>'From date','id' => 'x-editable-date'.$xEditableDateId,]
     			],
-				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
+				'editableValueOptions'=>['class'=>'well well-sm multi-reminder'],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+						}
+			 		}",
+    	],
 			]);
 			?>
 	</div>
@@ -774,14 +783,27 @@ Editable::end();
 	    'asPopover' => false,
 	    'inputType' => Editable::INPUT_DROPDOWN_LIST,
 	    'attribute'=>$v['modelAttribute'],
-	    'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+	    'displayValue' => $displayValue,
+	    //'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 	    'data'=>$data,
 	    'header' => 'Notes',
 	    'submitOnEnter' => false,
 	    'options' => [
 	        'class'=>'form-control',  
 	        'placeholder'=>'Select status...'
-    ]
+    ],
+    'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						var taskId = '$taskId';
+						var folderId = '$folderId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+						}
+			 		}",
+    	],
 ]);
 
 	?>
