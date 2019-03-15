@@ -263,6 +263,8 @@ function _AddUser(user,taskid){
                         }
                       }
                     }
+
+                    
               },
               error: function(res, sec){
                   console.log('Something went wrong');

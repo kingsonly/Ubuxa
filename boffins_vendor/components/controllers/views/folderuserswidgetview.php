@@ -243,9 +243,6 @@ transition: margin-top 0.1s ease-out 0s;
 		<span>AUTHORIZED USERS</span>
 	</div>
 <? }?>
-<div>
-
-</div>
 <div class="folderusers" id="folderusers<?=$dynamicId;?>">
 	<? if($removeButtons !== false){?>
 	<? if($type != 'component' ){?>
