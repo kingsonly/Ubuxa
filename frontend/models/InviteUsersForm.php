@@ -16,6 +16,7 @@ class InviteUsersForm extends Model
     public $subject;
     public $body;
     public $role;
+    public $folder;
 
 
     /**
@@ -26,6 +27,7 @@ class InviteUsersForm extends Model
         return [
             // name, email, subject and body are required
             [['email', 'subject', 'body', 'role'], 'required'],
+            [['folder'], 'safe'],
             // email has to be a valid email address
             ['email', 'email'],
         ];
@@ -58,7 +60,7 @@ class InviteUsersForm extends Model
     }
 	
 	// this is a better way to send an email
-	public function sendEmail($newCustomerEmail)
+	public function sendEmail($newCustomerEmail,$folderId)
     {
 		
 		$cid = Yii::$app->user->identity->cid;
@@ -67,7 +69,7 @@ class InviteUsersForm extends Model
 			Yii::$app->mailer->compose(['html' => 'inviteusers'],
                 [
                     //'body'  => $this->body,
-                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','email'=> $email,'cid'=>$cid,'role' => $this->role]),
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','folderid'=>empty($folderId)?0:$folderId,'email'=> $email,'cid'=>$cid,'role' => $this->role]),
                 ])
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
