@@ -75,13 +75,23 @@ border:solid 1px #666;
 background-color: #fff;
 transition: margin-top 0.1s ease-out 0s;
 }
-	.online{
+	.online-circle{
 		width: 8px;
 		height: 8px;
 		position: absolute;
 		right: 0px;
 		bottom: -2px ;
 		background: green;
+		border-radius: 50%;
+	}
+	
+	.standby-circle{
+		width: 8px;
+		height: 8px;
+		position: absolute;
+		right: 0px;
+		bottom: -2px ;
+		background: orange;
 		border-radius: 50%;
 	}
 	.user-name{
@@ -168,7 +178,7 @@ transition: margin-top 0.1s ease-out 0s;
         position: relative;
         
     }
-    .images-offonline,.images-online{
+    .images-offline,.images-online,.images-standby{
         width:35px;
         height:35px;
         border: 1px solid #fff;
@@ -187,8 +197,11 @@ transition: margin-top 0.1s ease-out 0s;
 	.images-online{
 		border: 2px solid green !important;
 	}
+	.images-standby{
+		border: 2px solid orange !important;
+	}
     
-    .images-offonline:hover,.images-online:hover{
+    .images-offline:hover,.images-online:hover,.images-standby:hover{
         cursor: pointer;
     }
     .select2-container--krajee .select2-selection--multiple .select2-search--inline .select2-search__field{
@@ -282,38 +295,11 @@ transition: margin-top 0.1s ease-out 0s;
 	$image = !empty($users["profile_image"])?$users["profile_image"]:'images/users/default-user.png';
 	$count--;
 			?>
-			<? if (!empty($socketUsers)) {?>
-		
-		<?	if (array_key_exists($users->username, $socketUsers)) {
-    			if($socketUsers[$users->username] == 'Online'){
-					?>
-					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
-						<div class="online"></div>
+			<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+						<div class="circle-holder"></div>
 						<div class="delete_user" ><div class="close__icon_users">x</div></div>
 						
 		</div>
-				<? }else{ ?>
-<!--					display user who is not online -->
-					<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
-					<div class="delete_user" ><div class="close__icon_users">x</div></div>
-					</div>
-		
-				<? } ?>
-			<? }else{ ?>
-<!--				// display user never the less-->
-		<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>"  data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
-		<div class="delete_user" ><div class="close__icon_users">x</div></div>
-		</div>
-		
-		
-			<? }?>
-		
-		<? }else{ ?>
-			<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
-		<div class="delete_user" ><div class="close__icon_users">x</div></div>
-		</div>
-		
-		<? } ?>
 		
 		
 		    
