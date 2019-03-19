@@ -266,9 +266,13 @@ $(document).ready(function(){
           }, 900);
       })
       $('.supplierLoader').show();
-
+	  if($(document).find('.folderdetls').length > 0){
+		var folderId = $(document).find('.folderdetls').data('folderid');
+	}else{
+		var folderId = 0;
+	}
       $.ajax({
-            url: '$userUrlInvite',
+			url:'$userUrlInvite'+'&folderid='+folderId, 
             type: 'POST',
             data: {
                 existingId:1

@@ -100,7 +100,7 @@ $(document).ready(function(){
 	}
     var getform = $('#add_email').serialize();
         $.ajax({ 
-            url:'$inviteUrl'+'&folderid = '+folderId, 
+            url:'$inviteUrl'+'&folderid='+folderId, 
 		    method:"POST",  
             data:$('#add_email').serialize(),
             type:'json',

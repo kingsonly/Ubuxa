@@ -405,13 +405,14 @@ class SiteController extends BoffinsBaseController {
     }
 
 
-    public function actionInviteusers($folderid=0)
+    public function actionInviteusers($folderid)
     {	
     	$model = new InviteUsersForm;
-		$folderId = $folderid;
+		
 		 
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
+				$folderId = $folderid;
 	    		$emails = $model->email;
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails,$folderId)){
