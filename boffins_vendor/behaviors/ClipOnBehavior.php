@@ -85,6 +85,31 @@ class ClipOnBehavior extends Behavior
 	}
 
 	
+//	public function behaviorBeforeDelete($event) 
+//	{
+//		// this method is to be called just before the clip is actually deleted
+//		$clipBarModel = new ClipBar();// instatnciate clipbar
+//		$clipOwnerTypeModel = new ClipOwnerType();// instatnciate clipownertypemodel
+//		$ownerId = $this->owner->id;// owners id 
+//		$ownerType = $this->_getShortClassName($this->owner) ;// get class name eg remaks
+//		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;// Change this fetch from the db 
+//		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
+//		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->andWhere(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
+//		$findClip = Clip::find()->andWhere(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
+//		// delete clip 
+//		if($findClip->delete()){
+//			// check is deletedt clip has a bar 
+//			if(!empty($getClipBar)){
+//				// delete bar 
+//				$getClipBar->delete();
+//			}
+//		}
+//		
+//	}
+	
+	
+	
+	
 	public function behaviorBeforeDelete($event) 
 	{
 		// this method is to be called just before the clip is actually deleted
