@@ -118,7 +118,8 @@ class ClipOnBehavior extends Behavior
 		$ownerId = $this->owner->id;// owners id 
 		$ownerType = $this->_getShortClassName($this->owner) ;// get class name eg remaks
 		$ownerTypeModel = ClipBarOwnerType::find()->andWhere(['owner_type'=> $ownerType])->one();
-		$ownerTypeId = $ownerTypeModel->id;// Change this fetch from the db 
+		//$ownerTypeId = $ownerTypeModel->id;// Change this fetch from the db 
+		$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2;
 		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();// find clip bar
 		$findClipOwnerType = $clipOwnerTypeModel->find()->select(['id'])->andWhere(['owner_type' => $ownerType])->asArray()->one();// find clip owner type 
 		$findClip = Clip::find()->andWhere(['owner_type_id' => $findClipOwnerType,'owner_id' => $ownerId])->one();// find clip using ownertype id
