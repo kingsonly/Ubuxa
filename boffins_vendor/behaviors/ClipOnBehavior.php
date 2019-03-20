@@ -162,14 +162,21 @@ class ClipOnBehavior extends Behavior
 //			
 //		}
 		
-		
-		if($findClip->delete()){
-			// check is deletedt clip has a bar 
+		if($this->_getShortClassName($this->owner) == 'Folder'){
 			if(!empty($getClipBar)){
-				// delete bar 
-				$getClipBar->delete();
+					// delete bar 
+					$getClipBar->delete();
+				}
+		}else{
+			if($findClip->delete()){
+				// check is deletedt clip has a bar 
+				if(!empty($getClipBar)){
+					// delete bar 
+					$getClipBar->delete();
+				}
 			}
 		}
+		
 		
 		
 		
