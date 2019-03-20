@@ -291,9 +291,9 @@ class FolderController extends Controller
 			// use identity of the user to determine if the user has access to delete a folder or not 
 			if($folderManager->role == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
 				if(!empty($this->findModel($id)->delete())){
-					return 0;
-				}else{
 					return 1;
+				}else{
+					return 0;
 				}
 			}else{
 				
