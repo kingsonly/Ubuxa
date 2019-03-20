@@ -304,9 +304,7 @@ $(document).ready(function(){
 			senderUsername = getParent.attr('rel');// found at the head of chat box/ holds the room id, which would be used to fetch chat history
 			folderId = senderUsername.split('-');
 			userImage = getParent.data('userimage')
-			alert(msgCounts[getClassData]);
 			if($(this).scrollTop() == 0  && oldInitDone == 1){
-
 				socket.emit('old-chats',{room:roomId,username:username,msgCount:msgCounts[getClassData],sender:senderUsername,folderId:folderId[1],userImage:userImage});
 			}
 
