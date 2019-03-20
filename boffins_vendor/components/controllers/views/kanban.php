@@ -572,8 +572,6 @@ $.fn.closest_descendent = function(filter) {
 }
 
 
-
-
 dragula([
     document.getElementById('1'),
     document.getElementById('2'),
