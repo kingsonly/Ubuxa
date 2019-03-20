@@ -70,7 +70,7 @@ class UserFeedback extends \yii\db\ActiveRecord
         return Yii::$app->mailer->compose(['html' => 'feedback'], [
             'message' => $message, 'agent' => $agent
         ])
-            ->setTo('customizebobby@gmail.com')
+            ->setTo('support@epsolun.com')
             ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
             ->setSubject('New Feedback')
             ->send();
