@@ -102,7 +102,7 @@ button:focus {outline:0;}
 </div>
 
 <?php 
-$loginUrl = 'ubuxa.net';
+$loginUrl = 'ubuxa.com';
 $signinUrl = Url::to(['site/signin']);
 $login = Url::to(['site/signin']);
 $indexJs = <<<JS
