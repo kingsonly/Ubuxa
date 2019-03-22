@@ -236,7 +236,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? }?>
 	
 	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
-	<div class="user-image user_image<?=$dynamicId;?>" >
+	<div class="user-image <?=$taskModal;?> user_image<?=$dynamicId;?>" >
 	<?php $count = !empty($attributues)?count($attributues):0; ?>
 
 <?php 

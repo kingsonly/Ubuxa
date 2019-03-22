@@ -432,7 +432,7 @@ a.addTaskButton.active {
                         <span class="task-titles"><?= strip_tags($values->title); ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
-                      <div class="assignedto" id="assignedto<?=$values->id;?>">
+                      <div class="assignedto assignedto<?=$values->id;?>" id="">
                          <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id]);?>
                       </div>
                     <?php }?>

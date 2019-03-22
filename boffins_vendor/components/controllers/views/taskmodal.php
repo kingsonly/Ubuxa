@@ -236,21 +236,20 @@ $taskUrl = Url::to(['task/view']);
             <div class="allassignees">
                 <div class="assignContent">
                     <span class="assignUsers">Assignees</span>
-                    <!--
                     <span class="dropdown taskdrop">
                              <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                             </a> 
                                 <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
-                                        <?//= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
+                                        <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
                                 </div>
-                    </span> -->
+                    </span>
                 </div>
                 <div id="memberz">
                 </div>
                     <?php if(!empty($model->taskAssignees)){?>
-                            <div class="assignedto" id="assignedto<?=$model->id;?>">
-                                <?//= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
+                            <div class="assignedto assignedto<?=$model->id;?>" id="">
+                                <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id, 'taskModal' => 'modal-users']);?>
                             </div>
                     <?php } ?>
             

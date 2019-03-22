@@ -224,12 +224,11 @@ function _AddUser(user,taskid){
                       userImage.append(element)
                       
 
-                      if($('#assignedto'+assigneeArray[1]).length > 0){
+                      if($('.assignedto'+assigneeArray[1]).length > 0){
                         $(document).find('.user_image'+assigneeArray[1]).append(element)
                       } else {
                         var assignedTo = $('<div />',{
-                        class: 'assignedto',
-                        id: 'assignedto'+assigneeArray[1],
+                        class: 'assignedto assignedto'+assigneeArray[1],
                         })
                         var folderUsers = $('<div />',{
                         class: 'folderusers',
@@ -238,8 +237,40 @@ function _AddUser(user,taskid){
                         folderUsers.append(userImage)
                         assignedTo.append(folderUsers)
                         $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
-                        if($('#memberz').length !== 0){
-                          //$('#memberz').append(assignedTo)
+                        if($('.allassignees').length !== 0){
+                            var userImagez = $('<div />',{
+                              class: 'modal-users user_image'+assigneeArray[1],
+                              })
+                            var elementz = $('<div />', {
+                            class: "images-offonline blue .user-sticker"+assigneeArray[0]+'-'+assigneeArray[1]
+                            });
+                            elementz.attr({
+                              'data-toggle':'tooltip',
+                              'data-id':assigneeArray[0],
+                              'data-placement':'bottom',
+                              'data-username':assigneeArray[3],
+                              'data-userimage':assigneeArray[4],
+                              'title':assigneeArray[2]
+                              })
+                            elementz.css({
+                              'position':'relative',
+                              'z-index':1,
+                              'background-image':'url('+assigneeArray[4]+')',
+
+                              })
+                            userImagez.append(elementz)
+                            var assignedToz = $('<div />',{
+                              class: 'assignedto assignedto'+assigneeArray[1],
+                            })
+                            var folderUsersz = $('<div />',{
+                            class: 'folderusers',
+                            })
+                            folderUsersz.append(userImagez)
+                            assignedToz.append(folderUsersz)
+                              console.log('found')
+                              $(document).find('.allassignees').append(assignedToz)
+                              //$(document).find('#memberz').append('<h2>fgjhgjh</h2>')
+                              console.log(assignedTo)
                         }
                         if($('#holder-board'+assigneeArray[1]).find('div.task-label-title').length !== 0){
                           $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
@@ -259,7 +290,7 @@ function _AddUser(user,taskid){
                       if($('.user_image'+assigneeArray[1]).children().length > 1 ){
                         $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
                       }else{
-                        $(document).find('#assignedto'+assigneeArray[1]).remove();
+                        $(document).find('.assignedto'+assigneeArray[1]).remove();
                         var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
                         if(getCss === '-32px'){
                           $('#edoc-count'+assigneeArray[1]).css('top','3px');
