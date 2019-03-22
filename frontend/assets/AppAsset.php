@@ -21,6 +21,7 @@ class AppAsset extends AssetBundle
         
         //'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
         'owlcarousel/owl.carousel.min.js',
+        '/socket.io/socket.io.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
