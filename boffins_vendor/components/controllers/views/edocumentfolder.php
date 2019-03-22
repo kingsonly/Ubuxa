@@ -266,6 +266,13 @@ $(document).ready(function(){
   }
 
     $('.folder-animated').click(function(){
+      var folderId = $('.board-specfic').attr('data-folderId');
+        $.ajax({
+            url: '$edocument'+'&folderId='+folderId,
+            success: function(data) {
+            $('.edoc-content').html(data);
+            }
+        });
      $('.edocument-container').css({
        'visibility':'visible',
        '-webkit-transition':'width 1s',

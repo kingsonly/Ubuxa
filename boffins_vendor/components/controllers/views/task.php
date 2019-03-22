@@ -20,7 +20,7 @@ if(!empty($display)){
 ?>
 <style type="text/css">
     .bg-info {
-        background-color: #fff;
+        background-color: #fff !important;
         box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
         padding-left: 15px;
         padding-right: 15px;
@@ -308,6 +308,9 @@ if(!empty($display)){
     color: #6b808c;
     top: 14px;
 }
+.todo__text{
+  cursor: pointer;
+}
 </style>
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
@@ -367,6 +370,7 @@ if(!empty($display)){
     foreach ($array as $key => $value) { 
       $assigneesIds = $value->taskAssigneesUserId;
       $userid = Yii::$app->user->identity->id;
+      $taskBoard = Url::to(['task/view', 'id' => $value->id,'folderId' => $folderId]);
     ?>
   <div class="todo">
         <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>
@@ -377,7 +381,7 @@ if(!empty($display)){
       <use xlink:href="#todo__check" class="todo__check"></use>
       <use xlink:href="#todo__circle" class="todo__circle"></use>
     </svg>
-    <div class="todo__text">
+    <div class="todo__text" value ="<?=$taskBoard;?>">
         <?php
           $edocLists = $value->clipOn['edocument'];
           if(!empty($edocLists)){?>
@@ -432,6 +436,7 @@ if(!empty($display)){
 
 <?php 
 $taskUrl = Url::to(['site/task']);
+$boardUrlz = Url::to(['task/board']);
 $taskOnboarding = Url::to(['onboarding/taskonboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
 $task = <<<JS
@@ -442,6 +447,14 @@ $(".todo__state").change(function() {
     _UpdateStatus(checkedId);        
 });
 
+$(function(){
+  $('.todo__text').on('click',function(){
+      var folderId = $('.board-specfic').attr('data-folderId');
+      $('#boardContent').modal('show')
+      .find('#viewcontent')
+      .load($(this).attr('value'));
+    });
+});
 
 function _TaskOnboarding(){
           $.ajax({
@@ -469,8 +482,9 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                var folderId = $('.board-specfic').attr('data-folderId');
                   setTimeout(function(){
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
                   }, 900);
               },
               error: function(res, sec){
@@ -496,10 +510,10 @@ $('#create-task').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 async: true,
                 success: function(response) { 
-                    console.log('completed');
+                  var folderId = $('.board-specfic').attr('data-folderId');
                     toastr.success('Task created');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
                     $.pjax.reload({container:"#task-modal-refresh",async: false});
                 },
               error: function(res, sec){
@@ -553,6 +567,7 @@ $('#addTask').bind("keyup keypress", function(e) {
           content: "Add new tasks here",
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-plus-square icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
+        
         {
           element: ".board-open",
           title: "Task board",
@@ -591,10 +606,17 @@ $('#addTask').bind("keyup keypress", function(e) {
           placement: "bottom",
           onShow: function(taskTour){
             $('#mySidenav').css({'width':'100%'});
+            var folderId = $('.board-specfic').attr('data-folderId');
+              $.ajax({
+              url: '$boardUrlz'+'&folderIds='+folderId,
+              success: function(data) {
+              $('.sidenav').html(data);
+              }
+            });
             },
           onShown: function(taskTour){
-            $(".tour-backdrop").appendTo(".view-task-board");
-            $(".tour-step-background").appendTo(".view-task-board");
+            $(".tour-backdrop").appendTo(".close-kanban");
+            $(".tour-step-background").appendTo(".close-kanban");
             $(".tour-step-background").css("left", "0px");
             },
             template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-clipboard icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
@@ -705,6 +727,7 @@ $('#addTask').bind("keyup keypress", function(e) {
           placement: "bottom",
           onShow: function(siteTaskTour){
             $('#mySidenav').css({'width':'100%'});
+            
             },
           onShown: function(siteTaskTour){
             $(".tour-backdrop").appendTo(".sidenav");

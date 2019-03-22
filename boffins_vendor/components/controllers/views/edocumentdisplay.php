@@ -145,12 +145,10 @@
     width: 85%;
 }
 .document-preview{
-    background-color: #ccccccd1;
     border-radius: 3px;
     border: 0;
     box-sizing: border-box;
     height: 100%;
-    padding: 12px;
     width: 100%;
 }
 .doc-box{

@@ -100,10 +100,7 @@ $taskUrl = Url::to(['task/view']);
 .modal-content {
     background-color: #ecf0f1;
 }
-.members {
-    margin-left: 10px;
-    margin-top: 10px;
-}
+
 .addUserz {
     padding: 5px;
     font-size: 12px;
@@ -200,7 +197,7 @@ $taskUrl = Url::to(['task/view']);
     <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
+        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh', 'folderId'=> $folderId,'attributues'=>[
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>
@@ -227,7 +224,7 @@ $taskUrl = Url::to(['task/view']);
                     <?php Pjax::begin(['id'=>'status']); ?>
                         <div class="task-status">
                             <!-- <span class="task-titless"><?//= $model->statusTitle; ?></span> -->
-                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh', 'displayValue' => $model->statusTitle, 'attributues'=>[
+                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh','folderId'=> $folderId,'displayValue' => $model->statusTitle, 'attributues'=>[
                                     ['modelAttribute'=>'status_id','xeditable' => 'dropdown'],
                                     ]]); ?></span>
                         </div>
@@ -235,11 +232,12 @@ $taskUrl = Url::to(['task/view']);
                 </div>
             </div>
         </div>
-        <?php if(!empty($model->taskAssignees)){?>
+        
             <div class="allassignees">
                 <div class="assignContent">
                     <span class="assignUsers">Assignees</span>
-                    <!--<span class="dropdown taskdrop">
+                    <!--
+                    <span class="dropdown taskdrop">
                              <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                             </a> 
@@ -248,13 +246,16 @@ $taskUrl = Url::to(['task/view']);
                                 </div>
                     </span> -->
                 </div>
-                
-
-                    <div class="members">
-                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
-                    </div>
+                <div id="memberz">
+                </div>
+                    <?php if(!empty($model->taskAssignees)){?>
+                            <div class="assignedto" id="assignedto<?=$model->id;?>">
+                                <?//= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
+                            </div>
+                    <?php } ?>
+            
             </div>
-        <?php } ?>
+        
         <?php if(!empty($model->labelNames)){ ?>
             <div class="all-labels">
                 <div class="assignContent">

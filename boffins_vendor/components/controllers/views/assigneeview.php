@@ -238,6 +238,9 @@ function _AddUser(user,taskid){
                         folderUsers.append(userImage)
                         assignedTo.append(folderUsers)
                         $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+                        if($('#memberz').length !== 0){
+                          //$('#memberz').append(assignedTo)
+                        }
                         if($('#holder-board'+assigneeArray[1]).find('div.task-label-title').length !== 0){
                           $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
                           var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
@@ -263,8 +266,6 @@ function _AddUser(user,taskid){
                         }
                       }
                     }
-
-                    
               },
               error: function(res, sec){
                   console.log('Something went wrong');

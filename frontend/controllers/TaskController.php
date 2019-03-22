@@ -23,7 +23,6 @@ use frontend\models\Edocument;
 use frontend\models\UserDb;
 
 
-
 /**
  * TaskController implements the CRUD actions for Task model.
  */
@@ -312,12 +311,42 @@ class TaskController extends Controller
             if($statusid == Task::TASK_COMPLETED){
                 $model->completion_time = new Expression('NOW()');
                 $model->save();
+                return json_encode($id);
             } elseif ($statusid == Task::TASK_IN_PROGRESS) {
                 $model->in_progress_time = new Expression('NOW()');
                 $model->save();
             }
             $model->save();
         }
+    }
+
+    public function actionBoard($folderIds)
+    {   
+        $task = new Task();
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+        $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
+        
+        return $this->renderAjax('board', [
+            'task' => $task,
+            'taskModel' => $task,
+            'taskStatus' => $taskStatus,
+            'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
+            'taskAssignedUser' => $taskAssignedUser,
+            'users' => $users,
+            'userId' => $userId,
+            'folderIds' => $folderIds,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionAssignee()

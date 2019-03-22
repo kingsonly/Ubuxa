@@ -67,10 +67,13 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
                         <i class="fa fa-arrow-left fa-2x close-arrow"></i>
                     </div>
                 </div>
-                <div class="edoc-content ">
+                <div style="margin-left: 40px">
                     <?php if (isset($this->blocks['edocument'])){ ?>
                         <?= $this->blocks['edocument'] ?>
                     <?php } ?>
+                </div>
+                <div class="edoc-content">
+                    
                 </div>
             </div>
         </div>

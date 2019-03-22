@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\popover\PopoverX;
-
+$boardUrl = Url::to(['task/board']);
 ?>
 <style>
 	#view-content h4{
@@ -690,8 +690,9 @@ Editable::end();
 				"editableSuccess"=>"
 					function(event, val, form, data) {
 						var pjax = '$pjaxId';
+						var folderId = $('.board-specfic').attr('data-folderId');
 						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
+							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
 						}
 			 		}",
     	],
@@ -800,6 +801,8 @@ Editable::end();
 						var folderId = '$folderId';
 						if(pjax !== ''){
 							$.pjax.reload({container:'$pjaxId',async: false});
+							var folderId = $('.board-specfic').attr('data-folderId');
+							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
 							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
 						}
 			 		}",

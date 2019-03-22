@@ -9,7 +9,7 @@ $checkUrlParamz = $checkUrlz[0];
 ?>
 <style type="text/css">
     .bg-info {
-        background-color: #fff;
+        background-color: #fff !important;
         box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
         padding-left: 15px;
         padding-right: 15px;

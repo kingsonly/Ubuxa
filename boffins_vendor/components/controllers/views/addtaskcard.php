@@ -70,6 +70,7 @@ use yii\widgets\ActiveForm;
 
 <?php
 $taskUrl = Url::to(['task/dashboardcreate']);
+$boardUrl = Url::to(['task/board']);
 $addCard = <<<JS
 
 $(document).ready(function(){
@@ -101,9 +102,9 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 success: function(response) {
                     toastr.success('Task created');
+                    var folderId = $('.board-specfic').attr('data-folderId');
                     $.pjax.reload({container:"#task-list-refresh"});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
-                    //$.pjax.reload({container:"#task-modal-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
