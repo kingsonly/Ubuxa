@@ -288,6 +288,7 @@ function _AddUser(user,taskid){
                       }
                     }else{
                       if($('.user_image'+assigneeArray[1]).children().length > 1 ){
+                        console.log('first')
                         $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
                       }else{
                         $(document).find('.assignedto'+assigneeArray[1]).remove();
