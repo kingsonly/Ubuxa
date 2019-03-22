@@ -12,6 +12,10 @@ use yii\bootstrap\Alert;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
+$workspace = Url::to(['site/signin']);
+if($subdomain != 'ubuxa'){
+    header('Location: '.$workspace);
+}
 
 ?>
 
