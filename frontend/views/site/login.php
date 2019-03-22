@@ -423,7 +423,7 @@ input[type=checkbox]{
          <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
      'enableAjaxValidation' => false,]); ?>
           <div class="form-element form-stack">
-            <label for="username-login" class="form-label">Username <?=$subdomain;?></label>
+            <label for="username-login" class="form-label">Username</label>
             <?= $form->field($model, 'username',['options'=>[
                 'tag'=>'div',
                 'class'=>'form-group has-feedback field-loginform-username required','id' => 'username-login'],
@@ -445,7 +445,7 @@ input[type=checkbox]{
             <button id="logIn" class="login" type="submit" name="login">Log In</button>
             <a class="signup" href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a>
           </div>
-          <?= $form->field($model, 'domain')->hiddenInput(['value' => 'ubuxa'])->label(false); ?>
+          <?= $form->field($model, 'domain')->hiddenInput(['value' => $subdomain])->label(false); ?>
           <?php ActiveForm::end(); ?>
           <div>
           	<a class="reset" href="<?= Url::to(['site/request-password-reset']);?>">Forgot Password </a>
@@ -458,8 +458,6 @@ input[type=checkbox]{
 <?php 
 $signupUrl = Url::to(['site/customersignup','plan_id' => 1]);
 $indexJs = <<<JS
-var sub_domain = window.location.split('.')[0].split('//')[1];
-console.log('sub domain:'+sub_domain);
 /* ====================== *
  *  Toggle Between        *
  *  Sign Up / Login       *
