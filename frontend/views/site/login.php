@@ -11,6 +11,8 @@ use yii\bootstrap\Alert;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
+$subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
+
 ?>
 
 <style>
@@ -421,7 +423,7 @@ input[type=checkbox]{
          <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
      'enableAjaxValidation' => false,]); ?>
           <div class="form-element form-stack">
-            <label for="username-login" class="form-label">Username</label>
+            <label for="username-login" class="form-label">Username <?=$subdomain;?></label>
             <?= $form->field($model, 'username',['options'=>[
                 'tag'=>'div',
                 'class'=>'form-group has-feedback field-loginform-username required','id' => 'username-login'],
@@ -456,7 +458,8 @@ input[type=checkbox]{
 <?php 
 $signupUrl = Url::to(['site/customersignup','plan_id' => 1]);
 $indexJs = <<<JS
-
+var sub_domain = window.location.split('.')[0].split('//')[1];
+console.log(sub_domain);
 /* ====================== *
  *  Toggle Between        *
  *  Sign Up / Login       *
