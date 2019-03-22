@@ -13,7 +13,7 @@ use frontend\models\Customer;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 //$subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
-$subdomain = 'testserver';
+$subdomain = 'boffinssystems';
 Customer::checkDomain($subdomain);
 ?>
 
