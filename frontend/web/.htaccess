@@ -7,9 +7,6 @@
 #RewriteCond %{REQUEST_FILENAME} !-f
 #RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteEngine on
-
-
 # otherwise forward it to index.php
 #RewriteRule . index.php
 
