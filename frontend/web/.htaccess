@@ -8,8 +8,7 @@
 #RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteEngine on
-RewriteCond %{HTTP_HOST} ^testserver.ubuxa.com [NC]
-RewriteRule ^(.*)$ http://testserver.ubuxa.com/index.php?r=site/signin [L,R=301]
+
 
 # otherwise forward it to index.php
 #RewriteRule . index.php
