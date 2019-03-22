@@ -130,7 +130,7 @@ function _CheckDomain(domain){
       		$('.loader-holder').hide();
       		if(response == 1){
       			var result = domain +'.'+ '$loginUrl';
-				window.location.href=result;
+				window.location.replace("http://"+result)
       		}else{
       			myAlertTop();
       		}
