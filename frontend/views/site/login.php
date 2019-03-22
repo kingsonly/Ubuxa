@@ -12,11 +12,6 @@ use yii\bootstrap\Alert;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
-$workspace = Url::to(['site/signin']);
-if($subdomain != 'ubuxa'){
-    header('Location: '.$workspace);
-}
-
 ?>
 
 <style>
@@ -460,8 +455,15 @@ input[type=checkbox]{
 </div>
 
 <?php 
-$signupUrl = Url::to(['site/customersignup','plan_id' => 1]);
+$signupUrl = Url::to(['site/signin']);
 $indexJs = <<<JS
+
+/*(function() {
+ if('$subdomain' !== 'ubuxa'){
+  window.location.replace("$signupUrl");
+ }
+ })();*/
+
 /* ====================== *
  *  Toggle Between        *
  *  Sign Up / Login       *
