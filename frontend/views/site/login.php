@@ -459,7 +459,7 @@ input[type=checkbox]{
 $signupUrl = Url::to(['site/customersignup','plan_id' => 1]);
 $indexJs = <<<JS
 var sub_domain = window.location.split('.')[0].split('//')[1];
-console.log(sub_domain);
+console.log('sub domain:'+sub_domain);
 /* ====================== *
  *  Toggle Between        *
  *  Sign Up / Login       *
