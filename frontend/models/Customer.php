@@ -99,4 +99,14 @@ class Customer extends \yii\db\ActiveRecord
             ->setSubject('Thanks for joining Ubuxa')
             ->send();
     }
+
+    public static function checkDomain($subdomain)
+    {
+        $domain = self::find()->where(['master_doman' => $subdomain])->exists();
+        if ($domain) {
+            echo 'found';
+        }else{
+            echo 'not found';
+        }
+    }
 }
