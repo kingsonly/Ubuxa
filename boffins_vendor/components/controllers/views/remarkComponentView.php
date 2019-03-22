@@ -355,6 +355,7 @@ AppAsset::register($this);
     }
   
   }
+
   #remarkSave{
     display: none;
   }
@@ -539,12 +540,16 @@ $('#create-remark').submit(function(e) {
                     } else {
                       setStatus = 0; //it is a new message
                     }
-                    Remarksocket.emit('chat message', $('#example-1').html()+','+remarkContainerID);
+                    Remarksocket.emit('chat message', $('#example-1').html()+','+remarkContainerID+','+userID);
                     $('#example-1').text();
                     $('#example-1').empty();
                     //$.pjax.reload({container:"#remark-refresh",async: false});
                     $('#remarkLoader').hide();
-                    $('#remarkSave').show();
+                    
+                    if($('#remarkCancelButton').hasClass('replyButon')){
+                    } else {
+                     $('#remarkSave').show();
+                    }
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
@@ -603,8 +608,20 @@ Remarksocket.on('chat message', function(msg){
     div.append(div2)
     li.append(div)
       $('.comments-list_'+msgArr[1]).prepend(li)
+      if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
+        var div_indic = $('<div/>',{
+            class:"commentz-indictor_container"
+          }).css({'display':'inline-block','margin-left':'10px'})
+          var div_indic_child = $('<div/>',{
+            class:"commentz-indictor"
+          })
+          var div_indic_span = $('<span/>').attr('class','commentz-msg')
+          div_indic.append(div_indic_child)
+          div_indic.append(div_indic_span)
+          $(document).find('.header').append(div_indic)
+      }
     } else {
-      $(document).find('.welll_a').append($('<li>').text('gghhjgfgcvghfgvhcvgfcvhgvhgvh'))
+      //$(document).find('.welll_a').append($('<li>').text('gghhjgfgcvghfgvhcvgfcvhgvhgvh'))
        var ul = $("<ul/>", {
                   class: "comments-list reply-list"
                 });
@@ -645,6 +662,15 @@ Remarksocket.on('chat message', function(msg){
           li.append(div2)
           ul.append(li)
           $(document).find('.welll_'+info[4]).append(ul)
+          if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
+            var div_indic_child = $('<div/>',{
+            class:"commentz-indictor"
+          })
+          var div_indic_span = $('<span/>').attr('class','commentz-msg')
+          div_indic.append(div_indic_child)
+          div_indic.append(div_indic_span)
+          $(document).find('.header').append(div_indic)
+          }
     }
 
 
@@ -674,6 +700,10 @@ function mycontent(mypage){
         })
 }
 $(document).on('click','.remark-reply',function(){
+  if($('#remarkCancelButton').hasClass('replyButon')){
+  } else {
+  $('#remarkCancelButton').addClass('replyButon')
+  }
   $('#remarkSave').hide('slow');
   if($(this).hasClass('reply-clicked')){
     var getRemarkId = $(this).data('id');
@@ -700,6 +730,9 @@ $(document).on('click','.remark-reply',function(){
   })
 $(document).on('click','#remarkCancelButton',function(e){
   e.preventDefault();
+  if($('#remarkCancelButton').hasClass('replyButon')){
+    $('#remarkCancelButton').removeClass('replyButon')
+  }
   $('.wrapp').slideUp();
   $('#remarkCancelButton').hide();
   $('#remarkSave').hide();
