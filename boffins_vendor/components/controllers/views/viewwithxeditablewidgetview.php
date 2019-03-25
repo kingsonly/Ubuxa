@@ -29,7 +29,7 @@ $boardUrl = Url::to(['task/board']);
 		padding: 2px !important;
 		font-style: italic;
 		border-radius: 5px;
-		text-align: center !important;
+		/*text-align: center !important;*/
 		border-radius: 5px;
 	}
 	.xinput{
@@ -58,7 +58,7 @@ $boardUrl = Url::to(['task/board']);
 		background: none;
 		border:none;
 		text-align: left !important;
-		width: 100%;
+		width: auto;
 		color:rgb(9, 30, 66);
 		min-height: 35px;
 		font-size: 16px;
@@ -743,9 +743,7 @@ Editable::end();
 				"editableSuccess"=>"
 					function(event, val, form, data) {
 						var pjax = '$pjaxId';
-						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
-						}
+						var folderId = '$folderId';
 			 		}",
     	],
 			]);
@@ -800,7 +798,6 @@ Editable::end();
 						var taskId = '$taskId';
 						var folderId = '$folderId';
 						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
 							var folderId = $('.board-specfic').attr('data-folderId');
 							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
 							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});

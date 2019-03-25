@@ -189,9 +189,6 @@ $checkUrlParams = $checkUrls[0];
   background-color: #fff !important;
 }
 
-.modal-content {
-    border-radius: 6px !important; 
-}
 
 /* NEW DIV */
 .wrapit {
@@ -416,7 +413,7 @@ a.addTaskButton.active {
                       if(!empty($dataProvider)){
                         foreach ($dataProvider as $key => $values) {
                           if($values->status_id == $value->id){
-                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $folderIds]);
+                          $boardUrl = Url::to(['task/modal', 'id' => $values->id,'folderId' => $folderIds]);
                           $reminderUrl = Url::to(['reminder/create']);
                           $titleLength = strlen($values->title);
                           $taskLabels = $values->labelNames;
@@ -433,7 +430,7 @@ a.addTaskButton.active {
                       </div>
                       <?php if(!empty($values->personName)){ ?>
                       <div class="assignedto assignedto<?=$values->id;?>" id="">
-                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id]);?>
+                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id, 'taskModal' => 'modal-users'.$values->id]);?>
                       </div>
                     <?php }?>
                     <div class="holder-board" id="holder-board<?=$values->id;?>">
@@ -539,13 +536,6 @@ a.addTaskButton.active {
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
-
-
-$('#boardContent').on('show.bs.modal', function(){
-  if(!$(this).hasClass('in')){
-    $('.se-pre-con').show();
-  }
-});
 
 $('#boardContent').on('shown.bs.modal', function(){
   $('.se-pre-con').hide();

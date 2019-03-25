@@ -26,6 +26,8 @@ class Customer extends \yii\db\ActiveRecord
      */
     Const NO_ADMIN = 0;
     Const HAS_ADMIN = 1;
+    Const CORPORATION = 'corporation';
+    Const PERSON = 'person';
     
     public static function tableName()
     {
@@ -82,6 +84,16 @@ class Customer extends \yii\db\ActiveRecord
         return $this->hasOne(TenantEntity::className(), ['id' => 'entity_id']);
     }
 
+    public function getCorporation()
+    {
+        return $this->hasOne(TenantCorporation::className(), ['entity_id' => 'id'])->via('entity');
+    }
+
+    public function getCorporationName()
+    {
+        return $this->corporation->name;
+    }
+
     public function getEntityName()
     {
         return $this->entity->entity_type;
@@ -102,11 +114,17 @@ class Customer extends \yii\db\ActiveRecord
 
     public static function checkDomain($subdomain)
     {
+        $customer = [];
         $domain = self::find()->where(['master_doman' => $subdomain])->exists();
+        array_push($customer, $domain);
         if ($domain) {
-            echo 'found';
-        }else{
-            echo 'not found';
+            $findTenant = self::find()->where(['master_doman' => $subdomain])->one();
+            if ($findTenant->entityName == self::CORPORATION) {
+                array_push($customer, ucfirst($findTenant->corporationName));
+            }else{
+                array_push($customer, ucfirst($findTenant->master_doman));
+            }
         }
+        return $customer;
     }
 }

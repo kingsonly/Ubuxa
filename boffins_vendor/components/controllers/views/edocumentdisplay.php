@@ -305,6 +305,8 @@
 
 <?
 $deleteEdocument = Url::to(['edocument/delete']); //path for delete action
+$boardUrl = Url::to(['task/board']);
+$edocsUrl = Url::to(['edocument/index']);
 $taskUrl = Url::to(['task/view']);
 $list = <<<JS
 //useful function to find nested parents of DOM
@@ -380,8 +382,8 @@ $(".confirm-doc-delete").on('click', function(e){
   getThis = $(this);
   $(this).next().show();
   //var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
-  //var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
-  //console.log(taskId, folderId);
+  //var folderId =$('.board-specfic').attr('data-folderId');
+  //console.log(folderId);
   _deleteEdocument(edocId,getThis) ;  
 })
 
@@ -409,9 +411,9 @@ function _deleteEdocument(edocId, getThis,taskId,folderId){
           },
         success: function(res, sec){
           toastr.success('Document Deleted');
-          $.pjax.reload({container:"#kanban-refresh",async: false});
+          //$.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
           $.pjax.reload({container:"#task-list-refresh",async: false});
-         
+          //$.pjax.reload({container:"#edoc-folders", replace: false, async:false, url: '$edocsUrl&folderId='+folderId});
           getThis.getParent(7).hide();
           //getThis.show();
           //getThis.next().hide();

@@ -370,7 +370,7 @@ if(!empty($display)){
     foreach ($array as $key => $value) { 
       $assigneesIds = $value->taskAssigneesUserId;
       $userid = Yii::$app->user->identity->id;
-      $taskBoard = Url::to(['task/view', 'id' => $value->id,'folderId' => $folderId]);
+      $taskBoard = Url::to(['task/modal', 'id' => $value->id,'folderId' => $folderId]);
     ?>
   <div class="todo">
         <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>

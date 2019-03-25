@@ -64,7 +64,7 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
                         <span class="edocument-text">Folder Files</span>
                     </div>
                     <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">
-                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+                        <i class="fa fa-times fa-2x close-arrow" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div style="margin-left: 40px">

@@ -202,7 +202,7 @@ function _AddUser(user,taskid){
                         assigneeArray[4] = 'images/users/default-user.png';
                       }
                       var userImage = $('<div />',{
-                        class: 'user-image user_image'+assigneeArray[1]
+                        class: 'user-image user_image'+assigneeArray[1]+' '+'modal-users'+assigneeArray[1]
                         })
                       var element = $('<div />', {
                       class: "images-offonline blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
@@ -242,7 +242,7 @@ function _AddUser(user,taskid){
                               class: 'modal-users user_image'+assigneeArray[1],
                               })
                             var elementz = $('<div />', {
-                            class: "images-offonline blue .user-sticker"+assigneeArray[0]+'-'+assigneeArray[1]
+                            class: "images-offonline blue user-sticker"+assigneeArray[0]+'-'+assigneeArray[1]
                             });
                             elementz.attr({
                               'data-toggle':'tooltip',
@@ -287,10 +287,11 @@ function _AddUser(user,taskid){
                         }
                       }
                     }else{
-                      if($('.user_image'+assigneeArray[1]).children().length > 1 ){
+                      if($('.modal-users'+assigneeArray[1]).children().length > 1 || $('.modal-users').children().length > 1){
                         console.log('first')
                         $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
                       }else{
+                        console.log('last')
                         $(document).find('.assignedto'+assigneeArray[1]).remove();
                         var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
                         if(getCss === '-32px'){

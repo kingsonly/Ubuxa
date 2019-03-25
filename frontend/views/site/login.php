@@ -12,11 +12,19 @@ use frontend\models\Customer;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
-//$subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
-$subdomain = 'boffinssystems';
-Customer::checkDomain($subdomain);
+$subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
+echo $_SERVER['HTTP_HOST'];
+if($_SERVER['HTTP_HOST']=='localhost'){
+  //echo 'yes';
+}
+return;
+//$subdomain = 'ubuxa';
+if(empty($subdomain) || $subdomain == 'www'){
+  //Yii::$app->response->redirect(Url::to(['site/signin']));
+}
+$customerDomain = Customer::checkDomain($subdomain);
 ?>
-
+<?php if($customerDomain[0]) {?>
 <style>
 	body {
   margin: 0;
@@ -44,7 +52,7 @@ Customer::checkDomain($subdomain);
   left: 0;
   width: 50%;
   height: 100%;
-  background-image: url("images/Ubuxa-1.png");
+  background-image: url("images/ubuxalg.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
@@ -337,126 +345,151 @@ input[type=checkbox]{
 	margin-top: 10px;
 }
 </style>
- <!--
-   <div class="login-box">
-      <div class="login-logo">
-		  <?//= Html::img('@web/images/ubu.png', ['alt' => 'logo', 'class' => 'user-image' ]); ?>
-		  <br>
-        
-      </div>
-        <div class="login-box-body">
-			<?/*php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
-				<?php echo Alert::widget([
-					'options' => ['class' => 'alert-danger'],
-					'body' => Yii::$app->session->getFlash('error'),
-					]);?>
-				<?php endif ?>
-				
-            <p class="login-box-msg">Sign into  <?//= $accountName;?></p>
-        <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
-     'enableAjaxValidation' => false,]); ?>
 
-            <?= $form->field($model, 'username',['options'=>[
-                'tag'=>'div',
-                'class'=>'form-group has-feedback field-loginform-username required'],
-                                                 
-                'template'=>'{input}<span class="glyphicon glyphicon-user form-control-feedback"></span>{error}{hint}'
-                    ])->textInput(['placeholder'=>'User Name']) ?>
+  <div id="back">
+    <canvas id="canvas" class="canvas-back"></canvas>
+    <div class="backRight">    
+    </div>
+    <div class="backLeft">
+    </div>
+  </div>
 
-            <?= $form->field($model, 'password',['options'=>[
-                'tag'=>'div',
-                'class'=>'form-group has-feedback field-loginform-password required'],
-                'template'=>'{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span>{error}{hint}'
-                    ])->passwordInput(['placeholder'=>'Password']) ?>
-
-            
-            
-            <div class="col-xs-8 pull-left" style="padding-left: 0px !important">
-          <div class="checkbox icheck">
-            <label>
-              <?= $form->field($model, 'rememberMe')->checkbox() ?>
-            </label>
-          </div>
-        </div>
-
-            <div class="form-group pull-right" id ="login-button">
-            
-          <?= Html::submitButton('Login', ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
-        
-                    
-                
+  <div id="slideBox">
+    <div class="topLayer">
+      <div class="right">
+        <div class="content">
+          <h2>Login in to <?= $customerDomain[1];?></h2>
+          <?php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
+  				<?php echo Alert::widget([
+  					'options' => ['class' => 'alert-danger'],
+  					'body' => Yii::$app->session->getFlash('error'),
+  					]);?>
+  		<?php endif ?>
+           <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
+       'enableAjaxValidation' => false,]); ?>
+            <div class="form-element form-stack">
+              <label for="username-login" class="form-label">Username</label>
+              <?= $form->field($model, 'username',['options'=>[
+                  'tag'=>'div',
+                  'class'=>'form-group has-feedback field-loginform-username required','id' => 'username-login'],
+                                                  
+                  'template'=>'{input}<span class="glyphicon glyphicon-user form-control-feedback"></span>{error}{hint}'
+                      ])->textInput(['placeholder'=>'User Name'])->label(false); ?>
             </div>
-			
-			<div class="col-xs-12 pull-left" style="padding-left: 0px !important">
-          <div class="checkbox icheck">
-            <label>
-				<a href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a></br>
-              <a href="<?= Url::to(['site/request-password-reset']);?>">Forgot Password </a>
-            </label>
-          </div>
+            <div class="form-element form-stack">
+              <label for="password-login" class="form-label">Password</label>
+              <?= $form->field($model, 'password',['options'=>[
+                  'tag'=>'div',
+                  'class'=>'form-group has-feedback field-loginform-password required', 'id' => 'password-login'],
+                  'template'=>'{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span>{error}{hint}'
+                      ])->passwordInput(['placeholder'=>'Password'])->label(false); ?>
+            </div>
+            		<label for="checkbox-lab">Remember me</label>
+                <?= $form->field($model, 'rememberMe',['options' => ['class' => 'checkbox-lab']])->checkbox()->label(false); ?>
+            <div class="form-element form-submit">
+              <button id="logIn" class="login" type="submit" name="login">Log In</button>
+              <a class="signup" href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a>
+            </div>
+            <?= $form->field($model, 'domain')->hiddenInput(['value' => $subdomain])->label(false); ?>
+            <?php ActiveForm::end(); ?>
+            <div>
+            	<a class="reset" href="<?= Url::to(['site/request-password-reset']);?>">Forgot Password </a>
+            </div>
         </div>
-
-            <?php ActiveForm::end(); */?>
-        </div>
-
-    </div>
-</div>
--->
-
-<div id="back">
-  <canvas id="canvas" class="canvas-back"></canvas>
-  <div class="backRight">    
-  </div>
-  <div class="backLeft">
-  </div>
-</div>
-
-<div id="slideBox">
-  <div class="topLayer">
-    <div class="right">
-      <div class="content">
-        <h2>Login</h2>
-        <?php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
-				<?php echo Alert::widget([
-					'options' => ['class' => 'alert-danger'],
-					'body' => Yii::$app->session->getFlash('error'),
-					]);?>
-		<?php endif ?>
-         <?php $form = ActiveForm::begin(['id' => 'login-form','enableClientValidation' => true,
-     'enableAjaxValidation' => false,]); ?>
-          <div class="form-element form-stack">
-            <label for="username-login" class="form-label">Username</label>
-            <?= $form->field($model, 'username',['options'=>[
-                'tag'=>'div',
-                'class'=>'form-group has-feedback field-loginform-username required','id' => 'username-login'],
-                                                
-                'template'=>'{input}<span class="glyphicon glyphicon-user form-control-feedback"></span>{error}{hint}'
-                    ])->textInput(['placeholder'=>'User Name'])->label(false); ?>
-          </div>
-          <div class="form-element form-stack">
-            <label for="password-login" class="form-label">Password</label>
-            <?= $form->field($model, 'password',['options'=>[
-                'tag'=>'div',
-                'class'=>'form-group has-feedback field-loginform-password required', 'id' => 'password-login'],
-                'template'=>'{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span>{error}{hint}'
-                    ])->passwordInput(['placeholder'=>'Password'])->label(false); ?>
-          </div>
-          		<label for="checkbox-lab">Remember me</label>
-              <?= $form->field($model, 'rememberMe',['options' => ['class' => 'checkbox-lab']])->checkbox()->label(false); ?>
-          <div class="form-element form-submit">
-            <button id="logIn" class="login" type="submit" name="login">Log In</button>
-            <a class="signup" href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a>
-          </div>
-          <?= $form->field($model, 'domain')->hiddenInput(['value' => $subdomain])->label(false); ?>
-          <?php ActiveForm::end(); ?>
-          <div>
-          	<a class="reset" href="<?= Url::to(['site/request-password-reset']);?>">Forgot Password </a>
-          </div>
       </div>
     </div>
   </div>
+<?php }else{ ?>
+  <style>
+    body{
+  background-color: #E6E6E6;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  padding-top: 50px;
+  text-align: left;
+}
+a { 
+  color: #666;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.containers {
+  margin: auto;
+  max-width: 540px;
+  min-width: 200px;
+}
+.box hr {
+  diplay: block;
+  border: none;
+  border-bottom: 1px dashed #ccc;
+}
+.box {
+  background-color: #fbfbfb;
+  border: 1px solid #AAA;
+  border-bottom: 1px solid #888;
+  border-radius: 3px;
+  color: black;
+  box-shadow: 0px 2px 2px #AAA;
+  padding: 20px;
+}
+.box h1, .box h2 {
+  display: block;
+  text-align: center;
+}
+.box h1 {
+  color: #666;
+  font-weight: normal;
+  font-size: 50px;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  line-height:50px
+}
+.box h2 {
+  color: #666;
+  font-weight: normal;
+  font-size: 1.5em;
+}
+.box p {
+  display: block;
+  margin-bottom: 10px;
+}
+.box ul li {
+  margin-bottom: 7px;
+}
+
+/**** Copyright Information ****/
+.copyright {
+  display: block;
+  text-align: center;
+  color: #999;
+  font-weight: normal;
+  margin-top: 20px;
+}
+  </style>
+
+
+<div class="containers">
+  <div class="box">
+    <h1>404</h1>
+    <h2>The workspace could not be found</h2>
+    <hr />
+    <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable</p>
+    <p>Please try the following:</p>
+    <ul>
+      <li>If you type the page address in the <strong>Address bar</strong>, make sure that it is spelled correctly.</li>
+      <li>If you were linked to this page, contact the administrator and make them aware of this issue.</li>
+    </ul>
+  </div>
 </div>
 
+<!-- Le Copyright Info -->
+<div class="copyright">
+  &copy 2019 <a href="http://fwpolice.com">Ubuxa</a>. All Rights Reserved.
+</div>
+<?php } ?>
 <?php 
 $signupUrl = Url::to(['site/signin']);
 $indexJs = <<<JS

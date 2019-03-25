@@ -208,6 +208,9 @@ Main Components
 .edocument-text{
   font-size: 25px;
 }
+.close-arrow{
+  cursor: pointer;
+}
 </style>
 
   <ul class="cd-edoc-accord-menu folder-animated">

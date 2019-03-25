@@ -113,6 +113,15 @@ class TaskController extends Controller
         }
     }
 
+    public function actionModal($id,$folderId)
+    {
+
+        return $this->renderAjax('modal', [
+            'id' => $id,
+            'folderId' => $folderId,
+        ]);
+    }
+
     /**
      * Displays a single Task model.
      * @param integer $id

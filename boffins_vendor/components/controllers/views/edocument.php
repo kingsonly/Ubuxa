@@ -827,6 +827,7 @@ $this->registerJs($dropzone);
 $doctype = Url::to('@web/images/edocuments');
 $taskUrl = Url::to(['task/view']);
 $boardUrl = Url::to(['task/board']);
+$edocsUrl = Url::to(['edocument/index']);
 $upload = <<<JS
 
 $('.mybtnz').on('click', function(e){
@@ -855,13 +856,14 @@ var dropzone = new Dropzone('#dropupload$target', {
         var taskId = $('#dropupload$target').getParent(2).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(2).attr('data-folderId');
         var folderId = $('.board-specfic').attr('data-folderId');
-        $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+        
         $.pjax.reload({container:"#task-list-refresh",async: false});
         if($('#dropupload$target').hasClass('click-uploadmodalUpload')){
+            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
         if($('#dropupload$target').hasClass('click-uploadfolderUpload')){
-            $.pjax.reload({container:"#folder-edoc", async:false});
+            $.pjax.reload({container:"#edoc-folders", replace: false, async:false, url: '$edocsUrl&folderId='+folderId});
         }
     });
     this.on('error', function(file, response) {

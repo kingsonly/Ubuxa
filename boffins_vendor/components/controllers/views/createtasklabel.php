@@ -47,6 +47,8 @@ use yii\widgets\ActiveForm;
 <?php
 $labelUrl = Url::to(['label/create']);
 $boardUrl = Url::to(['task/board']);
+$taskUrls = Url::to(['task/view']);
+$taskIds = $taskid;
 $assignee = <<<JS
 $('.task-label-class').on('beforeSubmit', function(e) {
             e.preventDefault();
@@ -63,9 +65,11 @@ $('.task-label-class').on('beforeSubmit', function(e) {
                     type: 'POST',
                     data: form.serialize(),
                     success: function(response) {
+                        $('.dropdown.open .dropdown-toggle').dropdown('toggle');
                         toastr.success('Label added');
                         var folderId = $('.board-specfic').attr('data-folderId');
                         $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+                        $.pjax.reload({container:"#task-modal-labels",replace: false, async:false, url: '$taskUrls&id='+'$taskIds'+'&folderId='+folderId});
                     },
                   error: function(res, sec){
                       console.log('Something went wrong');

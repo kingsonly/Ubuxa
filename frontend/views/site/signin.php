@@ -4,7 +4,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 ?>
+<head>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+</head>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
 body{overflow:hidden;}
@@ -14,6 +18,20 @@ body{overflow:hidden;}
     font-family:"Open Sans", sans-serif;
     width:620px; 
     height:300px; 
+    display:border-box; 
+    position:absolute;
+    background:#F5F5F5; 
+    top:0; left:0; right:0; bottom:0;
+    margin:auto;
+    box-shadow: 0px 30px 30px -20px rgba(0,0,0,0.2);
+    transition:all .4s cubic-bezier(1,.4,.4,1);
+    border-radius: 10px;
+}
+.cards{
+    overflow:hidden;
+    font-family:"Open Sans", sans-serif;
+    width:500px; 
+    height:350px; 
     display:border-box; 
     position:absolute;
     background:#F5F5F5; 
@@ -81,16 +99,68 @@ div.fullscreen {
     bottom: 20px;
     cursor: pointer;
 }
+.workspace{
+  display: none;
+}
+.headers{
+    color: #1d1c1d;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 1.2143;
+}
+.ubuxa-msg{
+  text-align: left;
+  color:  #676767;
+}
+.holder{
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-top: 20px;
+}
+.sign-in{
+  text-align: left;
+  border-top: 1px solid #ccc;
+  margin-top: 26px;
+  height: 50px;
+  position: relative;
+}
+.sign-in-text{
+  position: absolute;
+  top: 19px;
+  color: #1d1c1d;
+  font-weight: 700;
+  float: left;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  left: 45px;
+}
+.sign-in-icon{
+  position: absolute;
+  top: 19px;
+}
+.ubuxa{
+  color: #1d1c1d;
+  font-weight: 700;
+  font-size: 15px;
+}
+.logo-ubu{
+    width: inherit;
+    height: 80px;
+}
+.logo-holder{
+  text-align: center;
+  margin-top:50px;
+}
 button:focus {outline:0;}
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<div class="card">
+<div class="logo-holder"><img class="logo-ubu" src="images/ubu.png"></div>
+	<div class="card workspace">
 		<div class="workspace-header">
 			<h1>Sign in to your workspace</h1>
 			<p>Enter your workspace’s <strong>URL</strong>.</p>
 			<p class="">
-				<input type="text" name="domain" id="domain" value="" placeholder="your-workspace-url" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-				<span class="domain small_bottom_margin">.ubuxa.net</span>
+				<input type="text" name="domain" id="domain" value="" placeholder="workspace-url" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+				<span class="domain ubuxa">.ubuxa.net</span>
 			</p>
 			<button class="cont">Continue <img src="images/Spinner2.gif" class="loader-holder"></button>
 			<a href="<?= Url::to(['site/find-workspace']);?>" class="find">Can't remember your workspace? Find your workspace.</a>
@@ -101,22 +171,72 @@ button:focus {outline:0;}
   <strong>We couldn't find the workspace.</strong>
 </div>
 
+<div class="cards">
+  <div class="workspace-header">
+    <h1 class="headers">Start with a workspace</h1>
+    <div class="holder">
+      <p class="ubuxa-msg">In Ubuxa, everything happens in a workspace. Like a virtual office building, a workspace is where your team can gather in Ubuxa to collaborate and get work done.</p>
+      <a href="#workspace" class="get-workspace">
+        <div class="sign-in">
+          <i class="fas fa-sign-in-alt fa-2x sign-in-icon"></i>
+          <span class="sign-in-text"> Sign in to your workspace</span>
+        </div> 
+      </a>
+      <a href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">
+        <div class="sign-in">
+          <i class="fas fa-user-plus fa-2x sign-in-icon"></i>
+          <span class="sign-in-text"> Sign up to join Ubuxa</span>
+        </div>
+     </a>
+    </div>
+  </div>
+</div>
+
 <?php 
 $loginUrl = 'ubuxa.net';
 $signinUrl = Url::to(['site/signin']);
-$login = Url::to(['site/signin']);
 $indexJs = <<<JS
 $('.cont').on('click', function(){
 	$('.loader-holder').show();
 	var domain = $('#domain').val();
 	_CheckDomain(domain);
 })
+
+$('.get-workspace').on('click', function(e){
+  $('.cards').hide()
+  $('.card').show()
+})
+
+$('#domain').bind("keyup keypress", function(e) {
+  var domain = $('#domain').val();
+  var code = e.keyCode || e.which; 
+  if (code  == 13) {    
+      if($(this).val()==''){
+          e.preventDefault();
+          return false;
+      }
+      _CheckDomain(domain);
+  }
+});
+
 function myAlertTop(){
   $(".myAlert-top").show();
   setTimeout(function(){
     $(".myAlert-top").hide(); 
   }, 3000);
 }
+
+$(document).ready(function(){
+    $('.cont').attr('disabled',true);
+    $('#domain').keyup(function(){
+        if($(this).val().length !=0){
+            $('.cont').attr('disabled', false);            
+        }
+        else{
+            $('.cont').attr('disabled',true);
+        }
+    })
+});
 
 function _CheckDomain(domain){
   $.ajax({

@@ -132,8 +132,21 @@ button:focus {outline:0;}
     color: #d65f5f;
     display: none;
 }
+.noner{
+  margin-top: -20px;
+    color: #d65f5f;
+    display: none;
+}
+.logo-ubu{
+    width: inherit;
+    height: 80px;
+}
+.logo-holder{
+  text-align: center;
+  margin-top:70px;
+}
 </style>
-
+<div class="logo-holder"><img class="logo-ubu" src="images/ubu.png"></div>
 <div class="card">
 	<div class="workspace-header">
 		<div class="content">
@@ -155,6 +168,7 @@ button:focus {outline:0;}
 			</div>
 		</div>
 		<p class="none">We can't find your email. <a href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up?</a></p>
+    <p class="noner">Please enter a valid email address.</p>
 	</div>
 </div>
 
@@ -162,11 +176,35 @@ button:focus {outline:0;}
 <?php 
 $findDomain = Url::to(['site/find-workspace']);
 $indexJs = <<<JS
+function isValidEmailAddress(emailAddress) {
+    var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+    return pattern.test(emailAddress);
+};
+
 $('.send').on('click', function(){
 	$('.loader-holder').show();
 	var email = $('#user-email').val();
-	_FindWorkspace(email);
+  if(isValidEmailAddress(email)){
+    _FindWorkspace(email);
+  }else{
+    $('.loader-holder').hide();
+    $('.noner').show();
+  }
+	
 })
+
+$(document).ready(function(){
+    $('.send').attr('disabled',true);
+    $('#user-email').keyup(function(){
+      $('.noner').hide();
+        if($(this).val().length !=0){
+            $('.send').attr('disabled', false);            
+        }
+        else{
+            $('.send').attr('disabled',true);
+        }
+    })
+});
 
 function _FindWorkspace(email){
   $.ajax({
