@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+
+$this->title = 'Find workspace';
 ?>
 <style>
 .card{
