@@ -12,15 +12,14 @@ use frontend\models\Customer;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
-$subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
-echo $_SERVER['HTTP_HOST'];
+
 if($_SERVER['HTTP_HOST']=='localhost'){
-  //echo 'yes';
+  $subdomain = 'ubuxa';
+}else{
+  $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
 }
-return;
-//$subdomain = 'ubuxa';
 if(empty($subdomain) || $subdomain == 'www'){
-  //Yii::$app->response->redirect(Url::to(['site/signin']));
+  Yii::$app->response->redirect(Url::to(['site/signin']));
 }
 $customerDomain = Customer::checkDomain($subdomain);
 ?>
