@@ -593,6 +593,7 @@ class SiteController extends BoffinsBaseController {
 	public function actionGetChatFolderDetails(){
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName']; // post params from ajax call
 		$folderDetails = Folder::findOne($folderId); // get folder details 
 		$privateFolder = $folderDetails->private_folder;
 		
@@ -602,8 +603,9 @@ class SiteController extends BoffinsBaseController {
 			$folderManager = FolderManager::find()->select('role')->andWhere(['user_id' => yii::$app->user->identity->id, 'folder_id' => $folderDetails->id])->one();
 			$folderColor = $folderManager->role;
 		}
-		//$model->folderColors
-		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor ];
+		$initUser = UserDb::find()->andWhere(['username'=>$username])->one();
+		$getUserFullName = $initUser->fullName;
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor,'fullname'=>$getUserFullName ];
 		
 	}
 	

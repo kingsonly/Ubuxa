@@ -47,7 +47,7 @@ $('<audio id="chatAudio" src="audio/notify.ogg" type="audio/ogg"></audio>').appe
  *
  */
 // this function is used to create a chat area
-function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,userImage,folderColor){
+function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,userImage,folderColor,fullName){
 	// if user id is not  =  -1 then user tab has already been created
 	roomid = '';
 	var popupClass = username+'-'+folderDetailsId;
@@ -56,7 +56,7 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
 	}else{
 		
 	chatPopup =  '<div class="msg_box" "data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
-	'<div class="msg_head"><span class="image_holder"><img class="header_image" src="'+userImage+'"></span> <span class="msg_username">'+username +
+	'<div class="msg_head"><span class="image_holder"><img class="header_image" src="'+userImage+'"></span> <span class="msg_username" data-username="'+username+'">'+fullName +
 	'</span><div class="close_chat"><div class="close__icon">x</div></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
 	'<div class="msg_footer"><textarea data-emojiable="true" data-emoji-input="unicode" class="msg_input" rows="4" placeholder="Type a message..."></textarea></div> 	</div> 	</div>' ;
@@ -169,6 +169,7 @@ $(document).ready(function(){
 		var socket = io('//127.0.0.1:4000');
 
 		var username = $('body').data('username');
+		var fullname = $('body').data('fullname');
 		var noChat = 0; //setting 0 if all chats histroy is not loaded. 1 if all chats loaded.
 		//var msgCount = 0; //counting total number of messages displayed.
 		var oldInitDone = 0; //it is 0 when old-chats-init is not executed and 1 if executed.
@@ -221,6 +222,7 @@ $(document).ready(function(){
 
 		$(document).on('click', '.blue', function() {
 			var toUsername = $(this).data('username') ;
+			var fullname = $(this).data('fullname') ;
 			var userID = toUsername+'_id';
 			var folderDetailsTitle = $(document).find('.folderdetls').data('foldertitle');
 			var folderDetailsId = $(document).find('.folderdetls').data('folderid');
@@ -248,7 +250,7 @@ $(document).ready(function(){
 			}
 			
 			socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
-			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage,folderColor);
+			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage,folderColor,fullname);
 			console.log(arr);
 
 			//event to set room and join.
@@ -312,7 +314,7 @@ $(document).ready(function(){
 
 		//listening old-chats event.
 		socket.on('old-chats',function(data){
-			$(".msg_push").show();
+			
 			var msgcount;
 			var watermack = $('<div class="background"><p class="bg-text">Note that <br/>this chat is<br/> folder specific</p></div>');
 
@@ -332,6 +334,7 @@ $(document).ready(function(){
 							
 							var relValue = data.sender;
 							var chatbox = '[rel="'+data.sender+'"]' ;
+							$(chatbox+" .msg_push").show();
 							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 
 							
@@ -368,7 +371,7 @@ $(document).ready(function(){
 								}else{
 									newArray = {};
 									//newArray = {chatbox:1};
-									newArray[chatbox] = 6;
+									newArray[relValue] = 6;
 									localStorage.setItem('chatbox', JSON.stringify(newArray));
 									$(chatbox).attr('data-oldinitdone',1);
 									$(chatbox).find('.msg_push').attr('data-class',relValue);
@@ -382,6 +385,7 @@ $(document).ready(function(){
 							//var chatbox = $('.'+data.sender).attr("rel") ;
 							var relValue = data.sender;
 							var chatbox = '[rel="'+data.sender+'"]' ;
+							$(chatbox+" .msg_push").show();
 							imageurl = $(chatbox).data('userimage');
 							$(chatbox).find('.chatloader').remove();
 							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
@@ -405,6 +409,7 @@ $(document).ready(function(){
 									}else{
 										// add the new key
 										storedChatInitCounters[relValue] = 6;
+										
 										console.log(storedChatInitCounters);
 										//storedChatInitCounters.push(oldStoredChatInitCounters)
 										newArray = storedChatInitCounters;
@@ -419,6 +424,7 @@ $(document).ready(function(){
 									newArray = {};
 									//newArray = {chatbox:1};
 									newArray[relValue] = 6;
+									
 									localStorage.setItem('chatbox', JSON.stringify(newArray));
 									$(chatbox).attr('data-oldinitdone',1);
 									$(chatbox).find('.msg_push').attr('data-class',relValue);
@@ -439,7 +445,24 @@ $(document).ready(function(){
 				}else {
 					//var chatbox = $('.'+data.result[i].msgTo).attr("rel") ;
 					var chatbox = '[rel="'+data.sender+'"]' ;
-					watermack.insertBefore(chatbox+' .msg_body');
+					
+					var attr = 'chatbox';
+					var relValue = data.sender;
+					if (localStorage.getItem(attr) !== null) {
+						var storedChatInitCounters =  JSON.parse(localStorage.getItem(attr));
+						if(relValue in storedChatInitCounters){
+							if(storedChatInitCounters[relValue] >= 1){
+								
+							}else{
+								watermack.insertBefore(chatbox+' .msg_body');
+							}
+						}else{
+							watermack.insertBefore(chatbox+' .msg_body');
+						}
+					}else{
+						watermack.insertBefore(chatbox+' .msg_body');
+					}
+					$(chatbox+' .msg_push').remove();
 					$(chatbox).find('.chatloader').remove();
 					$('#noChat').show(); //displaying no more chats message.
 					noChat = 1; //to prevent unnecessary scroll event.
@@ -614,7 +637,7 @@ $(document).ready(function(){
 					msgWrap.find('.background').hide();
 				}
 				var msg = $(this).text();
-				toUser = $(this).parent().parent().parent().find('.msg_head .msg_username').text();
+				toUser = $(this).parent().parent().parent().find('.msg_head .msg_username').data('username');
 				var chatBoxFolderId = $(this).parent().parent().parent().find('.msg_folder_head').data('chatfolderid');
 
 				var currentRoom = username+"-"+toUser+'-'+chatBoxFolderId;
@@ -728,8 +751,8 @@ $(document).ready(function(){
 			var splitRoomName = roomName.split('-')
 
 			var getFolderDetailsUrl = $('body').data('getfolderdetailsurl');
-			$.post(getFolderDetailsUrl,{folderId:splitRoomName[2]},function(result){
-				createChateArea(senderUsername,userID,result.title,result.id,userImage,result.foldercolor);
+			$.post(getFolderDetailsUrl,{folderId:splitRoomName[2],userName:senderUsername},function(result){
+				createChateArea(senderUsername,userID,result.title,result.id,userImage,result.foldercolor,result.fullname);
 				console.log('this should show chatbox')
 				//event to get chat history affter adding usuer to specific room .
 				socket.emit('old-chats-init-for-join-request',{room:roomId,username:username,msgCount:msgCount,sender:senderUsername,folderId:result.id,userImage:userImage});
