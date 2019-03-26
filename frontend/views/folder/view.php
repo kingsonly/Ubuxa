@@ -209,7 +209,7 @@ $img = $model->folder_image;
 }  
 </style>
 <div class="toastit jamit hide-loads" id="edocument-io" aria-hidden="true">
-  <span class="closeit" aria-role="button" tabindex="0">&times;</span>
+  <!--<span class="closeit" aria-role="button" tabindex="0">&times;</span>-->
   <span id="folder-doc-loader"></span>
 </div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
@@ -310,9 +310,7 @@ $indexJs = <<<JS
 
 localStorage.setItem("skipValidation", "");
 
-$('.closeit').on('click', function(){
-  $('.toastit').hide();
-});
+
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
 	var getInput = $(this).find('input').val();
