@@ -761,14 +761,14 @@ var dropzone = new Dropzone('#dropupload$target', {
             var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
             var x=document.getElementById("edocument-io");
               //x.classList.remove("hide-loads");
-              $('#edocument-io').show();
+              $('#edocument-io').fadeIn();
               document.getElementById("folder-doc-loader").textContent="Uploading "+Math.round(progress) + "%";
         }
     });
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
-        $('#edocument-io').hide();
+        $('#edocument-io').fadeOut();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');

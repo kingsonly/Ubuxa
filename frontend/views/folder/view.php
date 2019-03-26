@@ -174,16 +174,15 @@ $img = $model->folder_image;
     }
   /* toast */
 .toastit {
-  color: #000;
-  line-height: 1.5;
-  margin-bottom: 1em;
-  padding: 1.25em;
-  position: absolute;
-  right: -110px;
-  top: 1em;
-  transition: 0.15s ease-in-out;
-  width: 325px;
-  z-index: 9999;
+    line-height: 1.5;
+    margin-bottom: 1em;
+    padding: 1.25em;
+    position: fixed;
+    right: 47px;
+    top: 1em;
+    transition: 0.15s ease-in-out;
+    width: 325px;
+    z-index: 9999;
 }
 .hide-loads{
   display: none;
