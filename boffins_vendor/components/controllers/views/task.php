@@ -13,9 +13,7 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
-if(!empty($display)){
-  $array = Task::sortTaskList($display);
-}
+
 //echo '<pre>',print_r($array),'</pre>';
 ?>
 <style type="text/css">
@@ -364,45 +362,11 @@ if(!empty($display)){
 
 
 <div class="todo-list">
-  <?php 
-    $id = 1;
-    if(!empty($array)){
-    foreach ($array as $key => $value) { 
-      $assigneesIds = $value->taskAssigneesUserId;
-      $userid = Yii::$app->user->identity->id;
-      $taskBoard = Url::to(['task/modal', 'id' => $value->id,'folderId' => $folderId]);
-    ?>
-  <div class="todo">
-        <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>
-    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
-      <use xlink:href="#todo__line" class="todo__line"></use>
-      <use xlink:href="#todo__box" class="todo__box"></use>
-      <use xlink:href="#todo__check" class="todo__check"></use>
-      <use xlink:href="#todo__circle" class="todo__circle"></use>
-    </svg>
-    <div class="todo__text" value ="<?=$taskBoard;?>">
-        <?php
-          $edocLists = $value->clipOn['edocument'];
-          if(!empty($edocLists)){?>
-              <span class="edoc-list" aria-hidden="true" data-toggle="tooltip" title="Attachments">
-                <? 
-                  $edoc = count($edocLists); 
-                  echo $edoc;
-                ?>
-                <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
-              </span>
-        <?php }?>
-        <span><?= strip_tags($value->title); ?></span>
-    </div>
-    
+  <div class="task-fetch">
+
   </div>
-
-  <?php $id++;}}else{
-    echo "No task";
-  }?>
 </div> 
-
+<div id="task-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
 </div>
       
 	   <div class="box-input1">
@@ -413,7 +377,7 @@ if(!empty($display)){
 					 
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Add a task"])->label(false) ?>
   					 
-  					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+  					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['id'=>'folders-id','value' => $parentOwnerId])->label(false) ?>
 					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                     
                     <span class="for-task-loader">
@@ -435,11 +399,54 @@ if(!empty($display)){
 
 
 <?php 
+$taskFetch = Url::to(['task/index2','src' => 'ref1']);
 $taskUrl = Url::to(['site/task']);
 $boardUrlz = Url::to(['task/board']);
 $taskOnboarding = Url::to(['onboarding/taskonboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
+$DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$DashboardUrlParam = $DashboardUrl[0];
+$modelName = $location;
 $task = <<<JS
+var getOwnerId = $('#folders-id').val();
+var mypage = 1;
+mycontents(mypage);
+jQuery(
+  function($)
+  {
+    $('.todo-list').bind('scroll', function()
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mypage++;
+          mycontents(mypage);
+        }
+      })
+  }
+);
+
+function mycontents(mypage){
+    $('#task-content-loading').show();
+    $.post('$taskFetch',
+    {
+      page:mypage,
+      ownerId:getOwnerId,
+      modelName:'$modelName',
+      DashboardUrlParam:'$DashboardUrlParam'
+    },
+    function(data){
+        if(data.trim().lenght == 0){
+            $('#task-content-loading').text('finished');
+        }
+        $('#remark-content-loading').hide();
+        if ($.trim(data)){ 
+        $('.task-fetch').append(data);
+        }
+        $('.todo').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
+        //$('#ani_img').hide();
+        })
+}
+
 
 $(".todo__state").change(function() {
     var checkedId;
