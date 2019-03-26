@@ -181,7 +181,7 @@ $img = $model->folder_image;
     right: 47px;
     top: 1em;
     transition: 0.15s ease-in-out;
-    width: 325px;
+    width: 300px;
     z-index: 9999;
 }
 .hide-loads{

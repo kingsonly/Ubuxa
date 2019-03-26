@@ -757,21 +757,24 @@ var dropzone = new Dropzone('#dropupload$target', {
         //this.removeFile(file); //remove file thumbanil on complete
     });
     this.on("uploadprogress", function(file, progress, bytesSent) {
-        if (file.previewElement) {
-            var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
-            var x=document.getElementById("edocument-io");
-              //x.classList.remove("hide-loads");
-              $('#edocument-io').fadeIn();
-              document.getElementById("folder-doc-loader").textContent="Uploading "+Math.round(progress) + "%";
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+            if (file.previewElement) {
+                var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
+                var x=document.getElementById("edocument-io");
+                  //x.classList.remove("hide-loads");
+                  $('#edocument-io').fadeIn();
+                  document.getElementById("folder-doc-loader").textContent="Uploading..."+Math.round(progress) + "%";
+            }
         }
     });
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
-        $('#edocument-io').hide();
+        $('#edocument-io').fadeOut();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
-        toastr.success('File uploaded successfully');
+        
+
         if(!$('#dropupload$target').hasClass('foldervault')){
             var folderId = $('.board-specfic').attr('data-folderId');
             //$.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
@@ -783,8 +786,8 @@ var dropzone = new Dropzone('#dropupload$target', {
         if($('#dropupload$target').hasClass('dropzonefolderdetails')){
             $.pjax.reload({container:"#folder-details-refresh", async:false});
         }
-        if($('#dropupload$target').hasClass('dropzonefolder')){
-            //$.pjax.reload({container:"#folder-edoc", async:false});
+        if(!$('#dropupload$target').hasClass('dropzonefolder')){
+            toastr.success('File uploaded successfully');
         }
     });
     this.on('error', function(file, response) {
