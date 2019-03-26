@@ -195,15 +195,17 @@ $img = $model->folder_image;
 .closeit {
   cursor: pointer;
   float: right;
-  font-size: 1.25rem;
-  line-height: 1;
+  font-size: 2.25rem;
+  line-height: 0.7;
   margin-left: 1em;
   opacity: .8;
 }
 
 .jamit {
-  background-color: #99004d;
+  background-color: #62b168;
   color: #fff;
+  border-radius: 3px;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }  
 </style>
 <div class="toastit jamit hide-loads" id="edocument-io" aria-hidden="true">
@@ -308,6 +310,9 @@ $indexJs = <<<JS
 
 localStorage.setItem("skipValidation", "");
 
+$('.closeit').on('click', function(){
+  $('.toastit').hide();
+});
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
 	var getInput = $(this).find('input').val();

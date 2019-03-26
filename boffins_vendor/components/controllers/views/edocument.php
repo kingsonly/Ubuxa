@@ -768,7 +768,7 @@ var dropzone = new Dropzone('#dropupload$target', {
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
-        $('#edocument-io').fadeOut();
+        $('#edocument-io').hide();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');
