@@ -172,8 +172,45 @@ $img = $model->folder_image;
     .just-for-test{
       background-color: red;
     }
-    
+  /* toast */
+.toastit {
+  color: #000;
+  line-height: 1.5;
+  margin-bottom: 1em;
+  padding: 1.25em;
+  position: absolute;
+  right: -110px;
+  top: 1em;
+  transition: 0.15s ease-in-out;
+  width: 325px;
+  z-index: 9999;
+}
+.hide-loads{
+  display: none;
+}
+
+.toastit.on {
+  transform: translateX(-220px);
+}
+
+.closeit {
+  cursor: pointer;
+  float: right;
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-left: 1em;
+  opacity: .8;
+}
+
+.jamit {
+  background-color: #99004d;
+  color: #fff;
+}  
 </style>
+<div class="toastit jamit hide-loads" id="edocument-io" aria-hidden="true">
+  <span class="closeit" aria-role="button" tabindex="0">&times;</span>
+  <span id="folder-doc-loader"></span>
+</div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
 <section>

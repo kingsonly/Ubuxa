@@ -597,6 +597,7 @@
     bottom: 70px;
     right: 230px;
 }
+
 </style>
 
 <!-- Main edocument widget -->
@@ -745,32 +746,36 @@ var dropzone = new Dropzone('#dropupload$target', {
      $('.dropzone-main').addClass("remove-zindex");
      $('.dropzone-main').removeClass("add-zindex");
     });
+    this.on("drop", function(file, response) {
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+         $(".dropzone$target").addClass("dummy"); //hide widget on complete
+         $('.dropzone-main').addClass("remove-zindex");
+         $('.dropzone-main').removeClass("add-zindex");
+        }
+    });
     this.on("complete", function(file) {
         //this.removeFile(file); //remove file thumbanil on complete
     });
     this.on("uploadprogress", function(file, progress, bytesSent) {
-        /*if (file.previewElement) {
+        if (file.previewElement) {
             var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
-            var x=document.getElementById("toastUpload");
-              x.classList.add("show");
-              x.textContent=progress + " %";
-              setTimeout(function(){
-                //x.classList.remove("show");
-              },3000);
-            //var myToast = toastr.success(progress + "%", {timeOut:0});
-            //myToast.find(".toast-message").text(progress + "%");
-        }*/
+            var x=document.getElementById("edocument-io");
+              //x.classList.remove("hide-loads");
+              $('#edocument-io').show();
+              document.getElementById("folder-doc-loader").textContent="Uploading "+Math.round(progress) + "%";
+        }
     });
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
+        $('#edocument-io').hide();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         toastr.success('File uploaded successfully');
         if(!$('#dropupload$target').hasClass('foldervault')){
             var folderId = $('.board-specfic').attr('data-folderId');
-            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
-            $.pjax.reload({container:"#task-list-refresh",async: false});
+            //$.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            //$.pjax.reload({container:"#task-list-refresh",async: false});
         }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
@@ -779,7 +784,7 @@ var dropzone = new Dropzone('#dropupload$target', {
             $.pjax.reload({container:"#folder-details-refresh", async:false});
         }
         if($('#dropupload$target').hasClass('dropzonefolder')){
-            $.pjax.reload({container:"#folder-edoc", async:false});
+            //$.pjax.reload({container:"#folder-edoc", async:false});
         }
     });
     this.on('error', function(file, response) {

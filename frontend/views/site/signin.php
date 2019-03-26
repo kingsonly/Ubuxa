@@ -176,7 +176,7 @@ button:focus {outline:0;}
   <div class="workspace-header">
     <h1 class="headers">Start with a workspace</h1>
     <div class="holder">
-      <p class="ubuxa-msg">In Ubuxa, everything happens in a workspace. Like a virtual office building, a workspace is where your team can gather in Ubuxa to collaborate and get work done.</p>
+      <p class="ubuxa-msg">Sign in to your Ubuxa workspace or signup to join Ubuxa</p>
       <a href="#workspace" class="get-workspace">
         <div class="sign-in">
           <i class="fas fa-sign-in-alt fa-2x sign-in-icon"></i>

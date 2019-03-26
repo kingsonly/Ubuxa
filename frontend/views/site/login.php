@@ -296,8 +296,8 @@ button:focus.off.login, button:active.off.login, button:hover.off.login {
 
 @media only screen and (max-width: 768px) {
   #slideBox {
-    width: 80%;
-    margin-left: 20%;
+    width: 100%;
+    margin-left: 0;
   }
 
   .signup-info, .login-info {
