@@ -16,7 +16,7 @@ $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 
 if($_SERVER['HTTP_HOST']=='localhost'){
-  $subdomain = 'ubuxan';
+  $subdomain = 'ubuxa';
 }else{
   $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
 }
@@ -25,7 +25,7 @@ if(empty($subdomain) || $subdomain == 'www'){
 }
 $customerDomain = Customer::checkDomain($subdomain);
 ?>
-<?php if($customerDomain[0]=='ubuxa') {?>
+<?php if($customerDomain[0]) {?>
 <style>
 	body {
   margin: 0;
