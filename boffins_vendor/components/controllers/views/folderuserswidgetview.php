@@ -236,6 +236,11 @@ transition: margin-top 0.1s ease-out 0s;
 		font-weight: bold;
 		text-align: center;
 	}
+	.add-new-folder-user{
+		width: 250px;
+    	padding-left: 10px;
+    	padding-right: 10px;
+	}
     
 	</style>
 <? if($type == 'component' ){?>
@@ -255,7 +260,7 @@ transition: margin-top 0.1s ease-out 0s;
 		<span id="plus-button" class="dropdown-toggle" id="dropdownMenuButtons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-plus-sign" data-toggle="tooltip-user" data-placement="bottom" title="add new user"></i></span>
 	
 	
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtons">
+                        <div class="dropdown-menu add-new-folder-user" aria-labelledby="dropdownMenuButtons">
 							<li id="" class="">
 	<?$form = ActiveForm::begin(['id' => $type.'add-new-user'.$id]); ?>
 	<?= $form->field($userModel, 'users[]')->widget(Select2::classname(),$pluginSettings );
