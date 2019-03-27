@@ -803,7 +803,11 @@ Editable::end();
 						var folderId = '$folderId';
 						if(pjax !== ''){
 							var folderId = $('.board-specfic').attr('data-folderId');
-							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+							if($('.board-open').hasClass('board-opened')){
+								$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+							}else{
+								$.pjax.reload({container:'#task-list-refresh', async:false});
+							}
 							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
 						}
 			 		}",
