@@ -98,11 +98,11 @@ li {
 
 
 .signup-active a {
-  cursor: pointer;
   color: #ffffff;
   text-decoration: none;
   border-bottom: solid 2px #1059FF;
   padding-bottom: 10px;
+  pointer-events: none;
 }
 
 .form-signup {
@@ -137,16 +137,15 @@ li {
 .success {
   width: 80%;
   height: 150px;
+  top: -600px; 
+  left: 450px; 
   text-align: center;
-  position: relative;
-  top: -600px;
-  left: 450px;
   opacity: .0;
   transition: all .8s .4s ease;
 }
 
 .success-left {
-  transform: translateX(-406px);
+  transform: translateX(50px);
   opacity: 1;
 }
 
@@ -154,10 +153,9 @@ li {
   color: #ffffff;
   font-size: 16px;
   font-weight: 300;
-  margin-top: 100%;
-  padding-top: 50px;
-    padding-right: 12px;
-  padding-left: 0px;
+  position: absolute;
+  top: 5px;
+  left: 18px;
 }
 
 
@@ -248,6 +246,9 @@ label {
     padding-left: 20px;
     margin-bottom: 10px;
 }
+.suc-pos{
+  position: relative;
+}
 </style>
 <div class="container">
     <div class="frame">
@@ -270,7 +271,7 @@ label {
                     </div>
 
                     <?php ActiveForm::end(); ?>
-            <div class="success">
+            <div class="success suc-pos">
               <svg id="check" ng-class="checked ? 'checked' : ''">
                 <div class="successtext">
                    <p class="confirm-text">Please check your email to reset your password.</p>
@@ -290,6 +291,7 @@ function inTest() {
   $(".form-signup-left").toggleClass("form-signup-down");
   $(".success").toggleClass("success-left"); 
   $(".frame").toggleClass("frame-short");
+  $('.success').removeClass('suc-pos')
 }
 
 /* function getURLParameter(name) {
@@ -322,10 +324,7 @@ $('#request-password-reset-form').on('beforeSubmit', function (e) {
     
 });
 
-$(document).ready(function () {
-    $(".form-signup").toggleClass("form-signup-left");
-    $(".frame").toggleClass("frame-long");
-});
+
 
 
 

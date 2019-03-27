@@ -337,6 +337,7 @@ class SiteController extends BoffinsBaseController {
 					} 
 				} else {
 		            return $this->render('createUser', [
+		            	'userExists' => $userExists,
 		            	'customer' => $customer,
 						'userForm' => $user,
 						'action' => ['createUser'],
@@ -346,7 +347,12 @@ class SiteController extends BoffinsBaseController {
 				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 			}
 		}else {
-			return $this->goHome();
+			return $this->render('signup', [
+		            	'userExists' => $userExists,
+		            	'customer' => $customer,
+						'userForm' => $user,
+						'action' => ['createUser'],
+					]);
 		}
     }
 
@@ -460,7 +466,7 @@ class SiteController extends BoffinsBaseController {
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->goHome();
+                //return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
             }

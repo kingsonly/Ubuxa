@@ -16,10 +16,10 @@ return [
         'admin',
     ],
     43 => [
-        'admin',
+        'field_officer',
     ],
     44 => [
-        'admin',
+        'field_officer',
     ],
     39 => [
         'admin',

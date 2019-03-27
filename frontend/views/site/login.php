@@ -9,12 +9,14 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Alert;
 use frontend\models\Customer;
+use boffins_vendor\components\controllers\ErrorPageWidget;
+
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 
 if($_SERVER['HTTP_HOST']=='localhost'){
-  $subdomain = 'ubuxa';
+  $subdomain = 'ubuxan';
 }else{
   $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
 }
@@ -23,7 +25,7 @@ if(empty($subdomain) || $subdomain == 'www'){
 }
 $customerDomain = Customer::checkDomain($subdomain);
 ?>
-<?php if($customerDomain[0]) {?>
+<?php if($customerDomain[0]=='ubuxa') {?>
 <style>
 	body {
   margin: 0;
@@ -399,96 +401,11 @@ input[type=checkbox]{
     </div>
   </div>
 <?php }else{ ?>
-  <style>
-    body{
-  background-color: #E6E6E6;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 10pt;
-  padding-top: 50px;
-  text-align: left;
-}
-a { 
-  color: #666;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-.containers {
-  margin: auto;
-  max-width: 540px;
-  min-width: 200px;
-}
-.box hr {
-  diplay: block;
-  border: none;
-  border-bottom: 1px dashed #ccc;
-}
-.box {
-  background-color: #fbfbfb;
-  border: 1px solid #AAA;
-  border-bottom: 1px solid #888;
-  border-radius: 3px;
-  color: black;
-  box-shadow: 0px 2px 2px #AAA;
-  padding: 20px;
-}
-.box h1, .box h2 {
-  display: block;
-  text-align: center;
-}
-.box h1 {
-  color: #666;
-  font-weight: normal;
-  font-size: 50px;
-  padding: 0;
-  margin: 0;
-  margin-top: 10px;
-  line-height:50px
-}
-.box h2 {
-  color: #666;
-  font-weight: normal;
-  font-size: 1.5em;
-}
-.box p {
-  display: block;
-  margin-bottom: 10px;
-}
-.box ul li {
-  margin-bottom: 7px;
-}
 
-/**** Copyright Information ****/
-.copyright {
-  display: block;
-  text-align: center;
-  color: #999;
-  font-weight: normal;
-  margin-top: 20px;
-}
-  </style>
-
-
-<div class="containers">
-  <div class="box">
-    <h1>404</h1>
-    <h2>The workspace could not be found</h2>
-    <hr />
-    <p>The page you are looking for might have been removed or had its name changed or is temporarily unavailable</p>
-    <p>Please try the following:</p>
-    <ul>
-      <li>If you type the page address in the <strong>Address bar</strong>, make sure that it is spelled correctly.</li>
-      <li>If you were linked to this page, contact the administrator and make them aware of this issue.</li>
-    </ul>
-  </div>
-</div>
-
-<!-- Le Copyright Info -->
-<div class="copyright">
-  &copy 2019 <a href="http://fwpolice.com">Ubuxa</a>. All Rights Reserved.
-</div>
+<?= ErrorPageWidget::widget(['errorHeader' => '404', 'contentHeader' => 'The workspace could not be found', 'content' => '<p>The page you are looking for might have been removed or had its name changed or is temporarily unavailable.</p>
+  Please check the workspace url or contact administrator', 'button' => 'BACK TO LOGIN', 'url' => Url::to(['site/signin'])]); ?>
 <?php } ?>
+
 <?php 
 $signupUrl = Url::to(['site/signin']);
 $indexJs = <<<JS

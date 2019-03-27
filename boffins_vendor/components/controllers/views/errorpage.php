@@ -9,7 +9,7 @@
 <style>
 @import url(https://fonts.googleapis.com/css?family=opensans:500);
 body{
-      background: #337ab7;
+      background: #337ab7 !important;
       color:#fff;
       font-family: 'Open Sans', sans-serif;
       max-height:700px;
@@ -20,7 +20,7 @@ body{
       display: block;
       position: relative;
       width:80%;
-      margin:100px auto;
+      margin:35px auto;
   }
   ._404{
       font-size: 220px;
@@ -34,7 +34,6 @@ body{
       text-align:center;
       display:block;
       position:relative;
-      letter-spacing: 12px;
       font-size: 4em;
       line-height: 80%;
   }
@@ -240,9 +239,9 @@ body{
   <div class="cloud x5"></div>
 </div>
 <div class='error-content'>
-  <div class='_404'>404</div>
+  <div class='_404'><?=$errorHeader;?></div>
   <hr class="error-ruler">
-  <div class='_1'>THE PAGE</div>
-  <div class='_2'>WAS NOT FOUND</div>
-  <a class='btn-errors' href='#'>BACK TO MARS</a>
+  <div class='_1'><?=$contentHeader;?>.</div><br>
+  <div class='_2'><?=$content?>.</div><br>
+  <a class='btn-errors' href='<?=$url;?>'><?=$button?></a>
 </div>
