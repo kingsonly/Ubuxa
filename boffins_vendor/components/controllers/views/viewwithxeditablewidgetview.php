@@ -38,8 +38,7 @@ $boardUrl = Url::to(['task/board']);
 	}
 	
 	#folder-title-targ,#folder-description-targ{
-		font-size: 17px !important;
-		font-weight: bold !important;
+		font-size: 14px !important;
 	}
 	#folder-title-targ:hover,#folder-description-targ:hover{
 		cursor: text;
@@ -77,12 +76,17 @@ text-overflow: ellipsis;
 	#folder-description{
 		width: 100%;
 	}
-	h5{
+	
+	.box-content-folder h5{
 		
-		margin-bottom: 5px;
+		margin-bottom: 2px;
 		margin-top: 5px;
-		font-size: 13px !important;
+		font-size: 15px !important;
 	}
+	
+	.box-content-folder h5::after {
+      content: ":"
+    }
 	
 	.kv-editable{
 		
@@ -111,7 +115,7 @@ foreach($attributues as $v){
 			if(!isset($v['xeditable'])){
 		?>
 <div>
-<h5><?= $attributeName;?></h5>
+<h5><?= $attributeName;?> </h5>
 <?
 				
 				

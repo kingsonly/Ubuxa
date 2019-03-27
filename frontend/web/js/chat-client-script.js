@@ -2,18 +2,19 @@
 	/**
 	 * [addEmoji description]
 	 */
-	function addEmoji() {
-	        // Initializes and creates emoji set from sprite sheet
-	        window.emojiPicker = new EmojiPicker({
-	          emojiable_selector: '[data-emojiable=true]',
-	          assetsPath: 'images/emojis/img/',
-	          popupButtonClasses: 'fa fa-smile-o'
-	        });
-	        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
-	        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
-	        // It can be called as many times as necessary; previously converted input fields will not be converted again
-	        window.emojiPicker.discover();
-	};
+function addEmoji() {
+		// Initializes and creates emoji set from sprite sheet
+		window.emojiPicker = new EmojiPicker({
+		  emojiable_selector: '[data-emojiable=true]',
+		  assetsPath: 'images/emojis/img/',
+		  popupButtonClasses: 'fa fa-smile-o'
+		});
+		// Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+		// You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+		// It can be called as many times as necessary; previously converted input fields will not be converted again
+		window.emojiPicker.discover();
+};
+
 
 var arr = []; // List of users
 
@@ -26,24 +27,28 @@ $('<audio id="chatAudio" src="audio/notify.ogg" type="audio/ogg"></audio>').appe
  *
  */
 // this function is used to create a chat area
-function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,userImage){
+function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,userImage,folderColor){
 	// if user id is not  =  -1 then user tab has already been created
 	roomid = '';
 	var popupClass = username+'-'+folderDetailsId;
-	if ($.inArray(userId, arr) != -1){
+	if ($.inArray(popupClass, arr) != -1){
 		arr.splice($.inArray(popupClass, arr), 1);
-	}
-
-	arr.unshift(popupClass);
-	chatPopup =  '<div class="msg_box ' +username+'-'+folderDetailsId+'"data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
+	}else{
+		
+	chatPopup =  '<div class="msg_box" "data-msgcount="0" data-oldinitdone="0" style="right:270px" rel="'+ popupClass+'" data-userimage="'+userImage+'">'+
 	'<div class="msg_head"><span class="image_holder"><img class="header_image" src="'+userImage+'"></span> <span class="msg_username">'+username +
 	'</span><div class="close_chat"><div class="close__icon">x</div></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
 	'<div class="msg_footer"><textarea data-emojiable="true" data-emoji-input="unicode" class="msg_input" rows="4" placeholder="Type a message..."></textarea></div> 	</div> 	</div>' ;
 
 	$("body").append(  chatPopup  ); // append html to body
+		
+		addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId,folderColor) // used to add folder div which helps in setting the soccek room
+	}
+	
+	arr.unshift(popupClass);
 	displayChatBox() // function is used to display the chat box that has just bn created
-	addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId) // used to add folder div which helps in setting the soccek room
+	
 	addEmoji();
 }
 
@@ -53,10 +58,13 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
  *  this function is added to the @function createChateArea to display the folder div on the chat box
  * as such making chatbox folder specific.
  */
-function addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId){
+function addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId,folderColor){
 	var chatbox = '[rel="'+popupClass+'"]' ;
-	$('<div class="msg_folder_head" data-chatfolderid="'+folderDetailsId+'" data-chatfoldertitle="'+folderDetailsTitle+'"> <div class="chat_folder_content"> <div class="chat_folder_img"></div> <div class="chat_folder_title">'+folderDetailsTitle +
-	'</div></div> </div>').insertAfter(chatbox +' .msg_head')
+	var folderViewUrl = $("body").data('folderviewurl');
+	var loader = $('<img class="chatloader" src="images/loader/spinner.gif" />');
+	$(' <div class="msg_folder_head" data-chatfolderid="'+folderDetailsId+'" data-chatfoldertitle="'+folderDetailsTitle+'"> <div class="chat_folder_content"> <div class="chat_folder_img '+folderColor+'"></div> <div class="chat_folder_title"> <a href="'+folderViewUrl+'&id='+folderDetailsId+'">'+folderDetailsTitle +
+	'</a></div></div> </div> ').insertAfter(chatbox +' .msg_head')
+	loader.insertBefore(chatbox+' .msg_body')
 	//var chatbox = '[rel="'+popupClass+'"] .msg_push' ;
 
 }
@@ -132,16 +140,10 @@ $(document).ready(function(){
 		$('[rel="'+chatbox+'"] .msg_wrap').slideToggle('slow');
 		//$('[rel="'+chatbox+'"] .msg_wrap').parent().toggleClass('chat_width');
 		$(this).children('.msg_chat_editor').toggle();
+		$('[rel="'+chatbox+'"] .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 		return false;
 	});
 
-	$(document).on('click', '.close_chat', function() {
-		var chatbox = $(this).parents().parents().attr("rel") ;
-		$('[rel="'+chatbox+'"]').remove();
-		arr.splice($.inArray(chatbox, arr), 1);
-		displayChatBox();
-		return false;
-	});
 
 	$ (function(){
 		var socket = io('//127.0.0.1:4000');
@@ -195,6 +197,7 @@ $(document).ready(function(){
 			var folderDetailsTitle = $(document).find('.folderdetls').data('foldertitle');
 			var folderDetailsId = $(document).find('.folderdetls').data('folderid');
 			var userImage = $(this).data('userimage');
+			var folderColor = $('.folderdetls').data('foldercolor');
 
 			//empty messages.
 			$('#messages').empty();
@@ -205,7 +208,8 @@ $(document).ready(function(){
 
 			//assigning friends name to whom messages will send,(in case of group its value is Group).
 			toUser = toUsername;
-
+			
+			
 			if(toUser == "Group"){
 				var currentRoom = "Group-Group";
 				var reverseRoom = "Group-Group";
@@ -214,13 +218,31 @@ $(document).ready(function(){
 				var reverseRoom = toUser+"-"+username+'-'+folderDetailsId;
 
 			}
+			
+			socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
+			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage,folderColor);
+			console.log(arr);
 
 			//event to set room and join.
-			socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
+			
 
-			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage);
+			
 
 		});
+		
+		// close message box 
+		$(document).on('click', '.close_chat', function() {
+
+			var chatbox = $(this).parents().parents().attr("rel") ;
+			$('[rel="'+chatbox+'"]').remove();
+			roomId = $(this).parents().parents().attr("data-roomid")
+			arr.splice($.inArray(chatbox, arr), 1);
+			socket.emit('leave-room',{room:roomId,});
+			displayChatBox();
+			return false;
+
+		});
+		
 		//event for setting roomId.
 		socket.on('set-room',function(room,toUsername,folderId){
 			// oldchatsnewjoin
@@ -235,7 +257,8 @@ $(document).ready(function(){
 			console.log("roomId : "+roomId);
 			//event to get chat history on button click or as room is set.
 			socket.emit('old-chats-init',{room:roomId,username:username,msgCount:msgCount,sender:toUsername,folderId:folderId});
-			$('.'+toUsername).attr('data-roomid',roomId);// create a roomid attribute and pass room id to it, Note this room id would be used to load old msg on scrool to top
+			
+			$('[rel="'+toUsername+'"]').attr('data-roomid',roomId);// create a roomid attribute and pass room id to it, Note this room id would be used to load old msg on scrool to top
 
 
 		}); //end of set-room event.
@@ -287,6 +310,8 @@ $(document).ready(function(){
 
 							
 							$(chatbox).data('userimage')
+							
+							$(chatbox).find('.chatloader').remove();
 
 							var attr = 'chatbox';
 							if(i == data.result.length-1){
@@ -311,7 +336,7 @@ $(document).ready(function(){
 										localStorage.setItem('chatbox', JSON.stringify(newArray));
 										$(chatbox).find('.msg_push').attr('data-class',relValue);
 										$(chatbox).attr('data-oldinitdone',1);
-										$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+										
 									}
 									
 								}else{
@@ -323,14 +348,16 @@ $(document).ready(function(){
 									$(chatbox).find('.msg_push').attr('data-class',relValue);
 									$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 								}
+								
 							}
+							$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 						}else{
 							//else find the from tabe and onto it
 							//var chatbox = $('.'+data.sender).attr("rel") ;
 							var relValue = data.sender;
 							var chatbox = '[rel="'+data.sender+'"]' ;
 							imageurl = $(chatbox).data('userimage');
-
+							$(chatbox).find('.chatloader').remove();
 							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 
 							
@@ -359,7 +386,7 @@ $(document).ready(function(){
 										localStorage.setItem('chatbox', JSON.stringify(newArray));
 										$(chatbox).find('.msg_push').attr('data-class',relValue);
 										$(chatbox).attr('data-oldinitdone',1);
-										$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+										
 									}
 									
 								}else{
@@ -369,9 +396,11 @@ $(document).ready(function(){
 									localStorage.setItem('chatbox', JSON.stringify(newArray));
 									$(chatbox).attr('data-oldinitdone',1);
 									$(chatbox).find('.msg_push').attr('data-class',relValue);
-									$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+									
 								}
 							}
+							$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+							
 						}
 
 
@@ -384,7 +413,8 @@ $(document).ready(function(){
 				}else {
 					//var chatbox = $('.'+data.result[i].msgTo).attr("rel") ;
 					var chatbox = '[rel="'+data.sender+'"]' ;
-					watermack.insertBefore(chatbox+' .msg_body')
+					watermack.insertBefore(chatbox+' .msg_body');
+					$(chatbox).find('.chatloader').remove();
 					$('#noChat').show(); //displaying no more chats message.
 					noChat = 1; //to prevent unnecessary scroll event.
 				}
@@ -427,6 +457,7 @@ $(document).ready(function(){
 //							var chatbox = '.msg_box [rel="'+relName+'"]' ;
 							var relValue = data.result[i].msgTo+'-'+data.folderId;
 							var chatbox = '[rel="'+relValue+'"]' ;
+							$(chatbox).find('.chatloader').remove();
 							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 							
 
@@ -441,6 +472,7 @@ $(document).ready(function(){
 
 
 							}
+							$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 						}else{
 							//else find the from tabe and onto it
 							
@@ -450,7 +482,7 @@ $(document).ready(function(){
 							
 							var relValue = data.result[i].msgFrom+'-'+data.folderId;
 							var chatbox = '[rel="'+relValue+'"]' ;
-							
+							$(chatbox).find('.chatloader').remove();
 							$(document).find(chatbox).data('userimage',imageurl);
 
 							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox + ' .msg_push');
@@ -466,7 +498,8 @@ $(document).ready(function(){
 								$(chatbox).attr('data-userimage',imageurl);
 
 
-							}
+								}
+							$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 							}
 
 
@@ -479,7 +512,8 @@ $(document).ready(function(){
 					//var chatbox = $('.'+data.result[i].msgTo).attr("rel") ;
 					var relValue = data.result[i].msgTo+'-'+data.folderId;
 					var chatbox = '[rel="'+relValue+'"]' ;
-					watermack.insertBefore(chatbox+' .msg_body')
+					watermack.insertBefore(chatbox+' .msg_body');
+					$(chatbox).find('.chatloader').remove();
 					$('#noChat').show(); //displaying no more chats message.
 					noChat = 1; //to prevent unnecessary scroll event.
 				}
@@ -518,7 +552,7 @@ $(document).ready(function(){
 
 					$(chatbox+' .msg_body .remove').find('.msg_chat_tex').text(data.msg);// append new text to the chat remove div
 
-					$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 					clearTimeout(timeout);
 					timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
@@ -529,7 +563,7 @@ $(document).ready(function(){
     				timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
 					}, 5000);
-					$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 				}
 
 			}
@@ -570,15 +604,7 @@ $(document).ready(function(){
 		//receiving messages.
 		socket.on('chat-msg',function(data){
 			console.log(data);
-			if($('.msg_box').attr('rel') === data.msgFrom+'-'+data.folderId || data.msgFrom == username ){
-				console.log('doo nothing');
-			}else{
-				var senderUsername = data.msgFrom;
-				var userID = senderUsername+'_id';
-				createChateArea(senderUsername,userID);
-				//createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage);
-				
-			}
+			
 			//specify date formart
 			var chatDate = moment(data.createdOn).format("MMMM Do YYYY, hh:mm:ss a");
 
@@ -608,7 +634,7 @@ $(document).ready(function(){
 
 					$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 				
-				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+				$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}else{
 				// add sound to the user who gets the message
 				$('#chatAudio')[0].play();
@@ -635,7 +661,7 @@ $(document).ready(function(){
 
 				$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 
-				$('.msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+				$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}
 
 		}); //end of receiving messages.
@@ -677,15 +703,15 @@ $(document).ready(function(){
 
 			var getFolderDetailsUrl = $('body').data('getfolderdetailsurl');
 			$.post(getFolderDetailsUrl,{folderId:splitRoomName[2]},function(result){
-				createChateArea(senderUsername,userID,result.title,result.id);
+				createChateArea(senderUsername,userID,result.title,result.id,userImage,result.foldercolor);
+				console.log('this should show chatbox')
 				//event to get chat history affter adding usuer to specific room .
 				socket.emit('old-chats-init-for-join-request',{room:roomId,username:username,msgCount:msgCount,sender:senderUsername,folderId:result.id,userImage:userImage});
 				;
 
 			});
 			// get the reciver chat box and add roomid
-			getRel = $('.'+senderUsername+'-'+splitRoomName[2]).attr('rel');
-			$(document).find('.'+getRel).attr('data-roomid',roomId);
+			$('[rel="'+senderUsername+'-'+splitRoomName[2]+'"]').attr('data-roomid',roomId);
 
 		});
 		//end of set-join-room event.

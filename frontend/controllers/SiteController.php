@@ -23,6 +23,7 @@ use frontend\models\SignupForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\Email;
+use frontend\models\FolderManager;
 use frontend\models\Address;
 use frontend\models\Telephone;
 use frontend\models\Entity;
@@ -653,7 +654,28 @@ class SiteController extends BoffinsBaseController {
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
 		$folderDetails = Folder::findOne($folderId); // get folder details 
-		return ['id' => $folderDetails->id,'title' => $folderDetails->title];
+		$privateFolder = $folderDetails->private_folder;
+		
+		if($privateFolder == 1){
+			$folderColor = 'private';
+		}else{
+			$folderManager = FolderManager::find()->select('role')->andWhere(['user_id' => yii::$app->user->identity->id, 'folder_id' => $folderDetails->id])->one();
+			$folderColor = $folderManager->role;
+		}
+		//$model->folderColors
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor ];
+		
+	}
+	
+	public function actionError(){
+		$this->layout = 'loginlayout';
+		$exception = Yii::$app->errorHandler->exception;
+        if ($exception instanceof \yii\web\NotFoundHttpException) {
+            // all non existing controllers+actions will end up here
+            return $this->render('pnf'); // page not found
+        } else {
+          return $this->render('error', ['exception' => $exception]);
+        }
 		
 	}
 

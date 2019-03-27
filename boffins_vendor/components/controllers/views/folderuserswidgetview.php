@@ -75,6 +75,15 @@ border:solid 1px #666;
 background-color: #fff;
 transition: margin-top 0.1s ease-out 0s;
 }
+	.online{
+		width: 8px;
+		height: 8px;
+		position: absolute;
+		right: 0px;
+		bottom: -2px ;
+		background: green;
+		border-radius: 50%;
+	}
 	.user-name{
 		color: #666;
 		font-size: 13px;
@@ -201,6 +210,32 @@ transition: margin-top 0.1s ease-out 0s;
     .select2-selection__clear{
     	top: -2.6rem !important;
     }
+	
+	.delete_user{
+		position: absolute;
+    	cursor: pointer;
+		background: #0a0000;
+		opacity: 1 !important;
+		bottom: -7px;
+		right: -7px;
+		width: 17px;
+		height: 17px;
+		border-radius: 50%;
+		display: none;
+		z-index: 1000;
+		font-family: Times, Times New Roman, Georgia, serif;
+	}
+	.blue:hover .delete_user{
+		display: block;
+	}
+	
+	.close__icon_users{
+		font-size: 13px;
+		color: aliceblue;
+		text-decoration: solid;
+		font-weight: bold;
+		text-align: center;
+	}
     
 	</style>
 <? if($type == 'component' ){?>
@@ -252,19 +287,32 @@ transition: margin-top 0.1s ease-out 0s;
 		<?	if (array_key_exists($users->username, $socketUsers)) {
     			if($socketUsers[$users->username] == 'Online'){
 					?>
-					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-online blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+						<div class="online"></div>
+						<div class="delete_user" ><div class="close__icon_users">x</div></div>
+						
+		</div>
 				<? }else{ ?>
 <!--					display user who is not online -->
-					<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+					<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+					<div class="delete_user" ><div class="close__icon_users">x</div></div>
+					</div>
+		
 				<? } ?>
 			<? }else{ ?>
 <!--				// display user never the less-->
-		<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+		<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>"  data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+		<div class="delete_user" ><div class="close__icon_users">x</div></div>
+		</div>
+		
 		
 			<? }?>
 		
 		<? }else{ ?>
-			<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
+			<div class="images-offonline blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')">
+		<div class="delete_user" ><div class="close__icon_users">x</div></div>
+		</div>
+		
 		<? } ?>
 		
 		
@@ -278,10 +326,75 @@ transition: margin-top 0.1s ease-out 0s;
 	<?php Pjax::end(); ?>
 	</div>
 <?php 
+$deleteFolderUsersUrl = Url::to(['folder/delete-users']);
 
 $userJs = <<<JS
 $(document).on('click','.select2-selection__choice__remove', function(e){
 	e.stopPropagation();
+})
+
+function toastFunction(type = 'success',message){
+	options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": true,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut",
+		"tapToDismiss": false
+	}
+	if(type == 'success'){
+		toastr.success(message, "", options);
+	}else if(type == 'error'){
+		toastr.error(message, "", options);
+	}else if(type == 'warning'){
+		toastr.warning(message, "", options);
+	}
+	
+}
+
+$(document).on('click','.delete_user', function(e){
+	e.stopPropagation();
+	\$this  = $(this);
+	userId = \$this.parent().data('userid');
+	folderId = \$this.parent().parent().parent().parent().parent().parent().parent().data('folderid');
+	$.ajax({
+              url: '$deleteFolderUsersUrl',
+              type: 'POST', 
+              data: {
+                  folderId: folderId,
+                  userId: userId,
+                },
+              success: function(res){
+			  if(res == 1){
+			  		console.log('folder deleted');
+				   // redirect to folder cabinet
+				   toastFunction('success','User has been deleted from folder');
+					\$this.parent().remove();
+				   console.log(res);
+			  }else if(res == 3){
+			   // you do not have access to delete this folder
+			   toastFunction('warning','sorry you do not have permission to delete this user');
+			  }else{
+			  // folder could not be deleted cause of unknown reasons, tray again alter;
+			  	toastFunction('error','something went wrong, try again ');
+			  }
+                   
+              },
+              error: function(res){
+                  console.log('Something went wrong');
+				  toastFunction('error','something went wrong, try again ');
+              }
+          });
+	
 })
 	$('.images').mouseenter(function(){
     $(this).css({

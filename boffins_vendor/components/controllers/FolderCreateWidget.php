@@ -29,6 +29,7 @@ class FolderCreateWidget extends Widget{
 	public $formId; // holds the id of form, this is done to make the form used multiple times on a single page 
 	public $creationType; // this property is used to determine if a user wants to create a folder or a component
 	public $newFolderCreated; // this property is used to determine if a user is new and does not have folder, so the folder create widget will redirect.
+	public $placeHolderString; // use to make placeholder readable
 	public function init()
 	{
 		// if formId is not set by a user, give a default id 
@@ -58,6 +59,7 @@ class FolderCreateWidget extends Widget{
 			'formAction' => $this->formAction,
 			'creationType' => $this->creationType,
 			'newFolderCreated' => $this->newFolderCreated,
+			'placeHolderString' => !empty($this->placeHolderString)?$this->placeHolderString:'a new ',
 		]);
 	}
 	

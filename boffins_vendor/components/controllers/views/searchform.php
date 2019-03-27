@@ -82,7 +82,7 @@ input[type="button"] {
 </style>
 <div id="wrap" class="col-sm-12 col-xs-12">
 	<form action="" autocomplete="on" id="search-form">
-		<input id="search" class="zindex-big" name="search" type="text" placeholder="Search for folders"><input id="search_submit" class="search_submit zindex-small" value="Search" type="button">
+		<input id="search" class="zindex-big" name="search" type="text" placeholder="Search for a subfolder"><input id="search_submit" class="search_submit zindex-small" value="Search" type="button">
 	</form>
 </div>
 

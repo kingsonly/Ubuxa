@@ -9,7 +9,7 @@
     
     ?>
            
-			<li class="welll">
+			<li class="welll welll_<?= $remark['id'];?>">
                 <div class="comment-main-level">
                     <!-- Avatar -->
                     <div class="comment-avatar" style="background-image: url('<?= Url::to('@web/' . $image); ?>'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
@@ -38,7 +38,7 @@
                         <!-- Contenedor del Comentario -->
                         <div class="comment-box">
                             <div class="comment-head">
-                                <h6 class="comment-name"><a href="http://creaticode.com/blog"><?= $reply['fullname']; ?></a></h6>
+                                <h6 class="comment-name"><a href="#"><?= $reply['fullname']; ?></a></h6>
                                 <span><?//= $reply['timeElapsedString'];?></span>
                             </div>
                             <div class="comment-content">

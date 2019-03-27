@@ -81,7 +81,7 @@ $(document).on('click',function (e) {
         $('.sider').show();
         $('.edocument-content').hide();
     } else {
-        //do nothing
+    	
     }
 	
   }

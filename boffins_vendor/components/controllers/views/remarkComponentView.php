@@ -11,24 +11,26 @@ AppAsset::register($this);
 /* @var $model frontend\models\Remark */
 ?>
 <style type="text/css">
-   
+#remarkCancelButton{
+   display:none;
+} 
 .wrapp {
    width: 70%;
    min-width: 100%;
    margin: 60px auto 0;
    border-radius: 3px;
    border:1px solid #ccc;
-   /*box-shadow: 0 5px 8px 0 rgba(0,0,0,.4);*/
+   box-shadow: 0 5px 8px 0 rgba(0,0,0,.4);
    padding: 10px;
 }
 .toolbar {
    width: 100%;
    margin: 0 auto 10px;
-   padding-left: 20px;
+   /*padding-left: 20px;*/
 }
 .remark-btn {
    width: 30px;
-   height: 30px;
+   /*height: 30px;*/
    border-radius: 3px;
    background: none;
    border: none;
@@ -46,7 +48,7 @@ AppAsset::register($this);
 #bold,
 #italic,
 #underline {
-   font-size: 12px;
+   font-size: 10px;
 }
 #align-left,
 #align-center,
@@ -107,7 +109,7 @@ AppAsset::register($this);
 .editor {
    position: relative;
    width: 100%;
-   min-height: 20vh;
+   min-height: 10vh;
    margin: 0 auto;
    padding: 20px;
    background: transparent;
@@ -278,7 +280,7 @@ AppAsset::register($this);
 }
 .comment-box .comment-head {
     background: #FCFCFC;
-    padding: 10px 12px;
+    padding: 0px 12px;
     border-bottom: 1px solid #E5E5E5;
     overflow: hidden;
     -webkit-border-radius: 4px 4px 0 0;
@@ -353,14 +355,16 @@ AppAsset::register($this);
     }
   
   }
-  #remarkSaveForm{
+
+  #remarkSave{
     display: none;
   }
-  #remarkReplyForm{
+  #remarkReply{
     display: none;
   }
   .wrapp{
     display: none;
+    min-height:120px;
   }
   .atwho-inserted {
       color: #4183C4;
@@ -372,11 +376,11 @@ AppAsset::register($this);
 <div class="" style="min-height: 200px">
   <div class="row">
     
-    <div class="col-md-12" id="flux" style="height: 200px;overflow:auto">
+    <div class="col-md-12" id="flux" style="height: 300px;overflow:auto">
       <!-- Contenedor Principal -->
     
     <div class="comments-container" id="comments-container">
-        <ul id="comments-list" class="comments-list results">
+        <ul id="comments-list" class="comments-list results comments-list_<?=$parentOwnerId;?>" data-id="comments-list_<?=$parentOwnerId;?>">
            
     </div>
     
@@ -444,10 +448,10 @@ AppAsset::register($this);
     
     <div class="form-group" id="remarkSaveForm">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
-    </div>
-    <div class="form-group" id="remarkReplyForm">
         <?= Html::submitButton('Reply', ['class' => 'btn btn-success', 'id' => 'remarkReply']) ?>
+        <?= Html::submitButton('Cancel', ['class' => 'btn btn-basic', 'id' => 'remarkCancelButton']) ?>
     </div>
+    
     <?php ActiveForm::end(); ?>
     <img src="<?= Url::to('@web/images/loader/loader.gif'); ?>" style = "display: none" id="remarkLoader">
   
@@ -463,7 +467,11 @@ $remarkUrlMentionFolder = Url::to(['remark/hashtag']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $baseUrl=Url::base(true);
+$userId = Yii::$app->user->identity->id;
 $remarkJs = <<<JS
+var remarkContainerID = '$parentOwnerId';
+var userID = '$userId';
+var setStatus;
 var issues = [
   { name: "1", content: "stay foolish"},
   { name: "2", content: "stay hungry"},
@@ -483,6 +491,10 @@ $('.editor').atwho({
 var mypage = 1;
 var getOwnerId = $('#owner-id').val();
 var getModelName = $('.getModelName').val();
+var Remarksocket = io('//127.0.0.1:4000/remark');
+var info;
+var userImage;
+
 mycontent(mypage);
 jQuery(
   function($)
@@ -516,18 +528,156 @@ $('#create-remark').submit(function(e) {
                 url: '$remarkUrlSave',
                 type: 'POST',
                 data: datas,
-                success: function(response) { 
+                success: function(response) {
+                    info = JSON.parse(response);
+                    if(info[0] == null){
+                      userImage = "images/users/default-user.png"
+                    } else {
+                      userImage = info[0]
+                    }
+                    if(info[4] > 0){
+                      setStatus = 1; //it is a replied message
+                    } else {
+                      setStatus = 0; //it is a new message
+                    }
+                    Remarksocket.emit('chat message', $('#example-1').html()+','+remarkContainerID+','+userID);
+                    $('#example-1').text();
                     $('#example-1').empty();
-                    $.pjax.reload({container:"#remark-refresh",async: false});
+                    //$.pjax.reload({container:"#remark-refresh",async: false});
                     $('#remarkLoader').hide();
-                    $('#remarkSave').show();
-                    $('#remarkSave').attr('disabled',true);
+                    
+                    if($('#remarkCancelButton').hasClass('replyButon')){
+                    } else {
+                     $('#remarkSave').show();
+                    }
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
               }
             });  
 });
+Remarksocket.on('chat message', function(msg){
+    msgArr = msg.split(',');
+    //$('.comments-list_'+msgArr[1]).prepend($('<li>').text(msgArr[0]));
+    
+    if(setStatus == 0){
+       var li = $("<li/>", {
+                  class: "welll welll_"+info[3]
+                });
+    var div = $("<div/>", {
+                  class: "comment-main-level"
+                });
+    var div1 = $("<div/>", {
+                  class: "comment-avatar"
+                }).css({
+                    'background-size':'cover',
+                    'background-repeat':'no-repeat',
+                    'background-position':'center',
+                    'background-image':'url(userImage)'
+                });
+
+    var div2 = $("<div/>", {
+                  class: "comment-box"
+                });
+    var div2_1 = $("<div/>", {
+                  class: "comment-head"
+                });
+    var h6 = $("<h6/>", {
+                  class: "comment-name by-author"
+                });
+
+    var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+    
+               
+    var span = $("<span/>");
+    var a2 = $("<a/>").attr({'data-toggle':'tooltip-reply','title':'reply message'});
+
+    var itag = $("<i/>").attr({'data-id':info[3], 'class':'fa fa-reply remark-reply'});
+    var div2_2 = $("<div/>", {
+                  class: "comment-content"
+                }).html(msgArr[0]);
+
+    h6.append(a)
+    div2_1.append(h6)
+    div2_1.append(span)
+    a2.append(itag)
+    div2_1.append(a2)
+    div2.append(div2_1)
+    div2.append(div2_2)
+    div.append(div1)
+    div.append(div2)
+    li.append(div)
+      $('.comments-list_'+msgArr[1]).prepend(li)
+      if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
+        var div_indic = $('<div/>',{
+            class:"commentz-indictor_container"
+          }).css({'display':'inline-block','margin-left':'10px'})
+          var div_indic_child = $('<div/>',{
+            class:"commentz-indictor"
+          })
+          var div_indic_span = $('<span/>').attr('class','commentz-msg')
+          div_indic.append(div_indic_child)
+          div_indic.append(div_indic_span)
+          $(document).find('.header').append(div_indic)
+      }
+    } else {
+      //$(document).find('.welll_a').append($('<li>').text('gghhjgfgcvghfgvhcvgfcvhgvhgvh'))
+       var ul = $("<ul/>", {
+                  class: "comments-list reply-list"
+                });
+          var li = $("<li/>");
+          var div1 = $("<div/>", {
+                        class: "comment-avatar"
+                      }).css({
+                          'background-size':'cover',
+                          'background-repeat':'no-repeat',
+                          'background-position':'center',
+                          'background-image':'url(userImage)'
+                      });
+
+          var div2 = $("<div/>", {
+                        class: "comment-box"
+                      });
+          var div2_1 = $("<div/>", {
+                        class: "comment-head"
+                      });
+          var h6 = $("<h6/>", {
+                        class: "comment-name"
+                      });
+
+          var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+          
+                     
+          var span = $("<span/>");
+          var div2_2 = $("<div/>", {
+                        class: "comment-content"
+                      }).html(msgArr[0]);
+
+          h6.append(a)
+          div2_1.append(h6)
+          div2_1.append(span)
+          div2.append(div2_1)
+          div2.append(div2_2)
+          li.append(div1)
+          li.append(div2)
+          ul.append(li)
+          $(document).find('.welll_'+info[4]).append(ul)
+          if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
+            var div_indic_child = $('<div/>',{
+            class:"commentz-indictor"
+          })
+          var div_indic_span = $('<span/>').attr('class','commentz-msg')
+          div_indic.append(div_indic_child)
+          div_indic.append(div_indic_span)
+          $(document).find('.header').append(div_indic)
+          }
+    }
+
+
+
+});
+
+
 function mycontent(mypage){
     $('#remark-content-loading').show();
     $.post('$remarkUrl',
@@ -549,38 +699,57 @@ function mycontent(mypage){
         $('#ani_img').hide();
         })
 }
-$('.remark-reply').click(function(){
+$(document).on('click','.remark-reply',function(){
+  if($('#remarkCancelButton').hasClass('replyButon')){
+  } else {
+  $('#remarkCancelButton').addClass('replyButon')
+  }
   $('#remarkSave').hide('slow');
   if($(this).hasClass('reply-clicked')){
     var getRemarkId = $(this).data('id');
-    $('.wrapp').slideUp(1000);
+    $('.wrapp').slideUp(500);
     $('#exampleInputRemark').show();
     $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 1000,function(){
-       $('#remarkReplyForm').hide();
+       $('#remarkReply').hide();
     });
     $(this).removeClass('reply-clicked');
   } else {
     var getRemarkId = $(this).data('id');
     $('#exampleInputRemark').hide();
-    $('.wrapp').slideDown(1000);
+    $('.wrapp').slideDown(500);
     $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
-        $('#remarkReplyForm').show('fast');
+        $('#remarkReply').show('fast');
     });
+    $('#remarkReply').show()
+    $('#remarkCancelButton').show()
  
     $('#parent-id').val(getRemarkId);
     $(this).addClass('reply-clicked');
     }
  
   })
+$(document).on('click','#remarkCancelButton',function(e){
+  e.preventDefault();
+  if($('#remarkCancelButton').hasClass('replyButon')){
+    $('#remarkCancelButton').removeClass('replyButon')
+  }
+  $('.wrapp').slideUp();
+  $('#remarkCancelButton').hide();
+  $('#remarkSave').hide();
+  $('#remarkReply').hide();
+  $(document).find('#exampleInputRemark').show();
+})
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
-  $('.wrapp').slideDown(1000);
+  $('.wrapp').slideDown(500);
+  $('.wrapp').addClass('opened');
   var div = $('#example-1');
   $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 2000,function(){
     setTimeout(function() {
        div.focus();
     }, 0);
-    $('#remarkSaveForm').show();
+    $(document).find('#remarkSave').show();
+    $(document).find('#remarkCancelButton').show();
     $('#remarkSave').attr('disabled', true);
   });
   
@@ -626,6 +795,8 @@ $('#size').on('change', function() {
    $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
 $('[data-toggle="tooltip-reply"]').tooltip();
+
+
 JS;
  
 $this->registerJs($remarkJs);

@@ -16,8 +16,11 @@ var logger = require('morgan');
 var port = process.env.PORT || 4000;
 
 //socket.io
-require('./libs/chat.js').sockets(http);
 
+
+
+require('./libs/chat.js').sockets(http);
+require('./libs/remark.js').remarkSockets(http);
 app.use(logger('dev'));
 
 //db connection

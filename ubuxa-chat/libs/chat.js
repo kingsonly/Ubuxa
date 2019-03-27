@@ -20,6 +20,11 @@ var roomModel = mongoose.model('Room');
 module.exports.sockets = function(http) {
 
     var con = mysql.createConnection({
+//		host: "localhost",
+//		user: "epsolun_ubuxa",
+//		password: "ubuxa##99",
+//		database: "premux_main"
+		
 		host: "localhost",
 		user: "root",
 		password: "", 
@@ -176,7 +181,7 @@ ioChat.on('connection', function(socket) {
 
 				roomId = jresult[0]._id;
 				//userSocketInstBuyUserName[data.msgTo].join(roomId)
-				console.log('romeid = '+ roomId);
+				console.log('romeid = '+ roomId); 
 
 				//console.log('number of users = '+ count)
 				from = socket.username; //this is the user who started the socket conection
@@ -219,6 +224,8 @@ ioChat.on('connection', function(socket) {
 					msgTo: data.msgTo,
 					date: data.date,
 					folderId: folderId[2],
+					userImage: data.userImage,
+					roomId: roomId,
 				});
 			}
 		} //end of else.
@@ -262,6 +269,11 @@ ioChat.on('connection', function(socket) {
 	socket.on('join-room', function(room,from,roomName,userImage) {
 		socket.join(room);
 		ioChat.to(userSocket[socket.username]).emit('set-join-room', room,from,roomName,userImage);
+	})
+	
+	socket.on('leave-room', function(data) {
+		console.log('lv room ' + data.room)
+		socket.leave(data.room); 
 	})
 	//	changes by kingsley of epsolun ends here
 

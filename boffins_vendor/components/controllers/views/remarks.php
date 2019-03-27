@@ -15,6 +15,16 @@ $checkUrlParamz = $checkUrlz[0];
         padding-right: 15px;
     }
 
+    .commentz-indictor{
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+    background: rgb(255, 204, 1);
+    display: inline-block;
+  }
+  .commentz-msg{
+    font-family: calibri
+  }
     .header {
         border-bottom: 1px solid #ccc;
         padding-top: 7px;
@@ -61,7 +71,7 @@ $checkUrlParamz = $checkUrlz[0];
                 </div>
             <?php } ?>
           <?php }?>
-            <span>COMMENTS</span>
+            <span style="display:inline-block">COMMENTS</span>
         </div>
         <?php Pjax::begin(['id'=>'remark-refresh']); ?>
 	    <div class="col-md-12 box-content"><?= RemarkComponentViewWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $parentOwnerId, 'remarks'=> $remarks, 'modelName'=> $modelName,'location' => $location]); ?></div>

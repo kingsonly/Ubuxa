@@ -30,6 +30,7 @@ class FolderCarouselWidget extends Widget{
 	public $createFormWidgetAttribute; // form widget attributes
 	public $folderCarouselWidgetAttributes; // forlder carousel widget attributes
 	public $folderId; // this propoerty is only usefull for component, to hold folder id, which would be used to fetch component of a specific folder
+	public $placeHolderString; // use to set a place holder for the title form 
 	
 	public function init()
 	{
@@ -66,6 +67,7 @@ class FolderCarouselWidget extends Widget{
 			'createForm' => $this->createFormWidgetAttribute,
 			'model' => $this->model,
 			'folderId' => $this->folderId,
+			'placeHolderString' => $this->placeHolderString,
 			
 		]);
 	}
