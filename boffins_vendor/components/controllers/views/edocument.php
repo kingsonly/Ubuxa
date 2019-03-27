@@ -770,15 +770,16 @@ var dropzone = new Dropzone('#dropupload$target', {
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
+        //document.getElementById("folder-doc-loader").textContent="Complete";
         $('#edocument-io').fadeOut();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
         
 
-        if(!$('#dropupload$target').hasClass('foldervault')){
+        if(!$('#dropupload$target').hasClass('foldervault') && !$('#dropupload$target').hasClass('dropzonefolderdetails')){
             var folderId = $('.board-specfic').attr('data-folderId');
-            //$.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
-            //$.pjax.reload({container:"#task-list-refresh",async: false});
+            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            $.pjax.reload({container:"#task-list-refresh",async: false});
         }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});

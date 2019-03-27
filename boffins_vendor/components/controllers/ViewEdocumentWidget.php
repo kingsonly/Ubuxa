@@ -13,6 +13,7 @@ class ViewEdocumentWidget extends Widget
     public $searchMargin;
     public $target;
 	public $forFolder;
+    public $folderClass;
 
     public function init()
     {
@@ -27,6 +28,7 @@ class ViewEdocumentWidget extends Widget
             'searchMargin' => $this->searchMargin,
             'target' => $this->target,
             'forFolder' => $this->forFolder,
+            'folderClass' => $this->folderClass,
         	]);
     }
 }

@@ -340,7 +340,7 @@ $taskUrl = Url::to(['task/view']);
   
     <div class ="timestamp">
         <div class="createDate">
-            <span>Created <?= $model->timeElapsedString;?></span>
+            <span>Created <?= $model->timeElapsedString;?> by <?=$model->ownerName;?></span>
         </div>
     <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == $model::TASK_COMPLETED){ ?>
         <div>

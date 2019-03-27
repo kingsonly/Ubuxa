@@ -232,6 +232,9 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.edoc-dropdown{
+  min-height: 125px;
+}
 </style>
   <div class="document-wrapper <?= !empty($forFolder) ? $forFolder : '';?>" id="document-wrapper<?=$target;?>">
     <div class="doc-container" id="doc-container<?=$target;?>">
@@ -274,7 +277,7 @@
             </div>
             <div class="dropdown" id="edoc-display<?=$value->id?>">
             <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc<?=$value->id;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
-            <div class="dropdown-menu edoc-drop" id="dropdownMenuButton<?=$value->id;?>" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu edoc-drop <?=$folderClass;?>" id="dropdownMenuButton<?=$value->id;?>" aria-labelledby="dropdownMenuButton">
               <div class="delete-header-holder">
                 <span class="delete-header">
                   Confirm Delete

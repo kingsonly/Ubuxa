@@ -12,7 +12,7 @@ if(!empty($tasks)){
     foreach ($array as $key => $value) { 
       $assigneesIds = $value->taskAssigneesUserId;
       $userid = Yii::$app->user->identity->id;
-      //$taskBoard = Url::to(['task/modal', 'id' => $value->id,'folderId' => $folderId]);
+      $taskBoard = Url::to(['task/modal', 'id' => $value->id,'folderId' => $folderId]);
     ?>
   <div class="todo">
         <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == $task::TASK_COMPLETED ? 'checked' : '';?>/>
@@ -23,7 +23,7 @@ if(!empty($tasks)){
       <use xlink:href="#todo__check" class="todo__check"></use>
       <use xlink:href="#todo__circle" class="todo__circle"></use>
     </svg>
-    <div class="todo__text" value ="<?//=$taskBoard;?>">
+    <div class="todo__text" value ="<?=$taskBoard;?>">
         <?php
           $edocLists = $value->clipOn['edocument'];
           if(!empty($edocLists)){?>

@@ -77,7 +77,7 @@ class TaskController extends Controller
         }
     }
 
-    public function actionIndex2()
+    public function actionIndex2($folderId)
     {   
         $perpage = 10;
         $task = new Task();
@@ -106,6 +106,7 @@ class TaskController extends Controller
                      return $this->renderAjax('index2', [
                          'tasks' => $tasks,
                          'task' => $task,
+                         'folderId' => $folderId,
                      ]);
                 }
                 

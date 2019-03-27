@@ -125,7 +125,12 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
      */
     public function getOwner0()
     {
-        return $this->hasOne(User::className(), ['id' => 'owner']);
+        return $this->hasOne(UserDb::className(), ['id' => 'owner']);
+    }
+
+    public function getOwnerName()
+    {
+        return $this->owner0->username;
     }
 
     public function getTaskLabels()
