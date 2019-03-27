@@ -25,13 +25,13 @@ return [
         'admin',
     ],
     45 => [
-        'admin',
+        'field_officer',
     ],
     46 => [
-        'admin',
+        'field_officer',
     ],
     47 => [
-        'admin',
+        'field_officer',
     ],
     48 => [
         'admin',

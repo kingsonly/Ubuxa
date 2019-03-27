@@ -234,7 +234,7 @@ $login = Url::to(['site/login']);
                 <div class="form-group">
                   <?php if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){ ?>
 
-                    <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                    <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling', 'pattern' => '^\S+$', 'title' => 'Spaces are not allowed.']) ?>
 
                     <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
                     <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
@@ -244,7 +244,7 @@ $login = Url::to(['site/login']);
 
                     <?= $form->field($userForm, 'surname')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
-                    <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                    <?= $form->field($userForm, 'username')->textInput(['maxlength' => true, 'class' => 'form-styling', 'pattern' => '^\S+$', 'title' => 'Spaces are not allowed.']) ?>
 
                     <?= $form->field($userForm, 'password')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>
                     <?= $form->field($userForm, 'password_repeat')->passwordInput(['minlength' => true, 'class' => 'form-styling']) ?>

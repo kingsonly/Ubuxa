@@ -511,6 +511,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if( $model->load(Yii::$app->request->post()) ) { 
+			
 			$formErrors = ActiveForm::validate($model);
 			if ( empty($formErrors) && $formErrors !== false  ) {
 				Yii::trace('Ajax validation passed (Customer)');
