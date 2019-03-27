@@ -805,6 +805,7 @@ Editable::end();
 							var folderId = $('.board-specfic').attr('data-folderId');
 							if($('.board-open').hasClass('board-opened')){
 								$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+								$.pjax.reload({container:'#task-list-refresh', async:false});
 							}else{
 								$.pjax.reload({container:'#task-list-refresh', async:false});
 							}
