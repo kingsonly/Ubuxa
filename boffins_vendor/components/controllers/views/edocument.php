@@ -6,7 +6,7 @@
   use yii\base\view;
   use kartik\popover\PopoverX;
   use kartik\widgets\FileInput;
-  AppAsset::register($this);
+  //AppAsset::register($this);
   $docUrl = Url::to(['edocument/upload']);
 ?>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">

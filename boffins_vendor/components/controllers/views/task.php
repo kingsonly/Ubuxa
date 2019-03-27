@@ -309,6 +309,9 @@ $boardUrl = Url::to(['task/index']);
 .todo__text{
   cursor: pointer;
 }
+#task-content-loading{
+  display: none;
+}
 </style>
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
@@ -414,7 +417,8 @@ mycontents(mypage);
 jQuery(
   function($)
   {
-    $('.todo-list').bind('scroll', function()
+
+    $('.box-content-task').bind('scroll', function()
       {
         if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
         {
@@ -426,7 +430,6 @@ jQuery(
 );
 
 function mycontents(mypage){
-    $('#task-content-loading').show();
     $.post('$taskFetch',
     {
       page:mypage,
@@ -438,11 +441,11 @@ function mycontents(mypage){
         if(data.trim().lenght == 0){
             $('#task-content-loading').text('finished');
         }
-        $('#remark-content-loading').hide();
+        $('#task-content-loading').hide();
         if ($.trim(data)){ 
         $('.task-fetch').append(data);
         }
-        $('.todo').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
+        $('.todoo').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
         //$('#ani_img').hide();
         })
 }

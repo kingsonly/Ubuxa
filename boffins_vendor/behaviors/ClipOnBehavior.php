@@ -112,7 +112,7 @@ class ClipOnBehavior extends Behavior
 		$this->getClipDetails();// method to fetch all clipons
 	}
 	
-	public function specificClips($ownerid=0,$ownerTypeId=1,$offset=0,$limit=1,$ownerType='remark')
+	public function specificClips($ownerid=0,$ownerTypeId=1,$offset=0,$limit=1,$ownerType='task')
 	{
 		// public funtion to be used outside of behaviour to fetch all clips and attache a limitatio
 		// quite usefull when creating an infinit scrol 
@@ -121,10 +121,11 @@ class ClipOnBehavior extends Behavior
 		$ownerId = $ownerid;// this could be folder id, but specifically the model a user is accessing
 		
 		//$ownerTypeId = $this->_getShortClassName($this->owner) == 'Folder'?1:2; // validate if owner is a folder or a component or something else 
-		
+		$initClipBarOwnerType = ClipBarOwnerType::find()->andWhere(['owner_type' => $this->owner->fromWhere])->one();
 		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->count(); // check to see if specified element has a clipbar *** which would be used for checkig in the below if clause ******
 		
-		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $ownerTypeId])->one();
+		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId,'owner_type_id' => $initClipBarOwnerType->id])->one();
+		
 		// if the bar exist then get all its clips 
 		if($getClipBarcount  !== '0'){
 			if(!empty($getClipBar->clips)){
@@ -133,6 +134,7 @@ class ClipOnBehavior extends Behavior
 				foreach($getClips as $value){
 					array_push($getArrayValues,$value['owner_id']); // convert clip owners id 
 				}
+				//var_dump($getArrayValues);
 				return  $this->tagetClipTypes($ownerType,array_values($getArrayValues));// retuen clips
 			}
 			return;
@@ -209,7 +211,7 @@ class ClipOnBehavior extends Behavior
 	{
 		$clipParentClass = ucwords($clipType);// convert classname to string with first figure capital to match the model class name naming style
 		$clipTypeModel = '\\frontend\\models\\'.$clipParentClass; // Add class namespace for models
-		// remarks has a parent column as such not all remarks are root remarks , some remarks are replies as such that need to be factored 
+		// remarks has a parent column as such not all remarks are root remarks , some remarks are replies as such that need to be factored
 		if($clipType == 'remark'){
 			$getClipDetails = $clipTypeModel::find()->andWhere(['in','id', $clipIds])->orderBy(['id'=>SORT_DESC])->andWhere(['parent_id' => $clipTypeModel::DEFAULT_PARENT_ID ])->all();
 		}else{

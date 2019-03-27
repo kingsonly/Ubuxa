@@ -81,7 +81,7 @@ class TaskController extends Controller
     {   
         $perpage = 10;
         $task = new Task();
-
+        $task->fromWhere = 'folder';
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
@@ -101,7 +101,7 @@ class TaskController extends Controller
                      ]);
                 } else {
                      
-                     $tasks = $task->specificClips($ownerid,1,$offset,$perpage,'task');
+                     $tasks = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                      
                      return $this->renderAjax('index2', [
                          'tasks' => $tasks,

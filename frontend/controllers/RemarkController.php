@@ -49,6 +49,7 @@ class RemarkController extends Controller
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
+                $remarkss->fromWhere = 'folder';
                 $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
