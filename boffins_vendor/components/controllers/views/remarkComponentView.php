@@ -468,7 +468,7 @@ $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $baseUrl=Url::base(true);
 $userId = Yii::$app->user->identity->id;
-$remarkJs = <<<JS
+$remarkJs = <<<abc
 var remarkContainerID = '$parentOwnerId';
 var userID = '$userId';
 var setStatus;
@@ -797,7 +797,7 @@ $('#size').on('change', function() {
 $('[data-toggle="tooltip-reply"]').tooltip();
 
 
-JS;
+abc;
  
 $this->registerJs($remarkJs);
 ?>

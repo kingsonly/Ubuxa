@@ -19,6 +19,8 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
+# accet folder
+/frontend/web/assets
 
 # composer itself is not needed
 composer.phar

@@ -35,7 +35,7 @@ module.exports.sockets = function(http) {
 io = socketio.listen(http);
 
 //setting chat route
-var ioChat = io.of('/');
+var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details

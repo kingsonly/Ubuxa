@@ -166,7 +166,7 @@ $(document).ready(function(){
 
 
 	$ (function(){
-		var socket = io('//127.0.0.1:4000');
+		var socket = io('//127.0.0.1:4000/chat');
 
 		var username = $('body').data('username');
 		var fullname = $('body').data('fullname');
