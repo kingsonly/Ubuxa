@@ -47,34 +47,46 @@ class TaskController extends Controller
      * Lists all Task models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        /** $model = new Task;
-        $dataProvider = $model->displayTask();
-        $task = StatusType::find()->where(['status_group' => 'task'])->all();
+    public function actionIndex($folderIds)
+    {/*
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
-            
-        return $this->renderAjax('index', [
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-            'task' => $task,
-            'reminder' => $reminder,
-        ]); */
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
         $perpage=10;
         $task = new Task();
-        if(isset($_GET['src1'])){
+        $task->fromWhere = 'folder';
+        if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
                 $ownerid = Yii::$app->request->post('ownerId');
+                $modelName = Yii::$app->request->post('modelName');
+                $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                      
                 $taskclips = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                 return $this->renderAjax('index', [
-                         'tasks' => $taskclips,
-                     ]);
+                    'task' => $task,
+                    'taskclips' => $taskclips,
+                    'taskStatus' => $taskStatus,
+                    'reminder' => $reminder,
+                    'label' => $label,
+                    'taskLabel' => $taskLabel,
+                    'taskAssignedUser' => $taskAssignedUser,
+                    'users' => $users,
+                    'userId' => $userId,
+                    'dataProvider' => $dataProvider,
+                    'folderIds' => $folderIds,
+                ]);
                 
             } 
-        }
+        }*/
     }
 
     public function actionIndex2($folderId)

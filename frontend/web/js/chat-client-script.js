@@ -40,7 +40,7 @@ function createChateArea(username,userId,folderDetailsTitle,folderDetailsId,user
 	'</span><div class="close_chat"><div class="close__icon">x</div></div> </div>'+
 	'<div class="msg_wrap"> <div id="scrl2" class="msg_body">	<div class="msg_push"> click to load</div> </div>'+
 	'<div class="msg_footer"><textarea data-emojiable="true" data-emoji-input="unicode" class="msg_input" rows="4" placeholder="Type a message..."></textarea></div> 	</div> 	</div>' ;
-
+	$('.info-msg').slideDown('slow');
 	$("body").append(  chatPopup  ); // append html to body
 		
 		addFolderDiv(popupClass,folderDetailsTitle,folderDetailsId,folderColor) // used to add folder div which helps in setting the soccek room
@@ -288,7 +288,8 @@ $(document).ready(function(){
 		socket.on('old-chats',function(data){
 			$(".msg_push").show();
 			var msgcount;
-			var watermack = $('<div class="background"><p class="bg-text">Note that <br/>this chat is<br/> folder specific</p></div>');
+			//var watermack = $('<div class="background"><p class="bg-text">Note that <br/>this chat is<br/> folder specific</p></div>');
+			var watermack = $('<div class="background info-msg"><i class="fa fa-info-circle"></i><span class="note-msg">Note that this chat is folder specific.</span></div>');
 
 			if(data.room == roomId){
 
@@ -438,7 +439,8 @@ $(document).ready(function(){
 
 		socket.on('old-chats-for-invite',function(data){
 			$(".msg_push").show();
-			var watermack = $('<div class="background"><p class="bg-text">Note that <br/>this chat is<br/> folder specific</p></div>');
+			//var watermack = $('<div class="background"><p class="bg-text">Note that <br/>this chat is<br/> folder specific</p></div>');
+			var watermack = $('<div class="background info-msg"><i class="fa fa-info-circle"></i><span class="note-msg">Note that this chat is folder specific.</span></div>');
 			imageurl = data.userImage;
 			if(data.room == roomId){
 				$('#chatAudio')[0].play();
