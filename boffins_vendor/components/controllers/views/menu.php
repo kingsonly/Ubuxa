@@ -89,7 +89,7 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 	<div class="burger_box">
 		<div class="menu-icon-container">
 
-			<a href="#" class="menu-icon js-menu_toggle closed">
+			<a href="#" class="menu-icon js-menu_toggle closed" id="breathing-button">
 				<span class="menu-icon_box">
                     <i class="fa fa-plus fa-2x menu-plus" style="color: #fff !important;" aria-hidden="true"></i>
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
