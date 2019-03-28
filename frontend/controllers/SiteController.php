@@ -304,7 +304,7 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email,$cid,$role)
+  public function actionSignup($email,$cid,$role,$folderid = 0)
     {
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
@@ -331,8 +331,27 @@ class SiteController extends BoffinsBaseController {
 							$customer->save();	
 						}
 						$newUser = UserDb::findOne([$user->id]);
+						// this section has been modified by kingsley of epsolun
+						// modification adds invited user to a specific folder 
 			            if (Yii::$app->user->login($newUser)){
-			                return $this->redirect(['folder/index']);
+							$folderId = $folderid;
+							$userId = $user->id;
+							$folderRole = 'user';
+							$folderManagerModel = new FolderManager();
+							
+							
+							if($folderId == 0){
+								return $this->redirect(['folder/index']);
+							}else{
+								$folderManagerModel -> user_id = $userId;
+								$folderManagerModel -> folder_id = $folderId;
+								$folderManagerModel -> role = $folderRole;
+								if($folderManagerModel->save()){
+									return $this->redirect(['folder/index']);
+								}	
+							}
+							
+			                
 			            }
 					} 
 				} else {
@@ -433,14 +452,17 @@ class SiteController extends BoffinsBaseController {
     }
 
 
-    public function actionInviteusers()
+    public function actionInviteusers($folderid)
     {	
     	$model = new InviteUsersForm;
+		
+		 
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
+				$folderId = $folderid;
 	    		$emails = $model->email;
 	    		if(!empty($emails)){
-	    				if($model->sendEmail($emails)){
+	    				if($model->sendEmail($emails,$folderId)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
 			
 							return 1;
@@ -660,6 +682,7 @@ class SiteController extends BoffinsBaseController {
 	public function actionGetChatFolderDetails(){
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName']; // post params from ajax call
 		$folderDetails = Folder::findOne($folderId); // get folder details 
 		$privateFolder = $folderDetails->private_folder;
 		
@@ -669,8 +692,9 @@ class SiteController extends BoffinsBaseController {
 			$folderManager = FolderManager::find()->select('role')->andWhere(['user_id' => yii::$app->user->identity->id, 'folder_id' => $folderDetails->id])->one();
 			$folderColor = $folderManager->role;
 		}
-		//$model->folderColors
-		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor ];
+		$initUser = UserDb::find()->andWhere(['username'=>$username])->one();
+		$getUserFullName = $initUser->fullName;
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor,'fullname'=>$getUserFullName ];
 		
 	}
 	

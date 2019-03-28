@@ -21,6 +21,9 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
 		],
+		'api' => [
+				'class' => 'common\components\Api',
+			],
 		'db' => $db,
 		'db_backup' => $db_backup,
 		'db_tenant' => $db_tenant,

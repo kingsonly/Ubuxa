@@ -92,10 +92,15 @@ $(document).ready(function(){
               $(this).closest('.dynamics').remove(); 
       		} 
       });  
-    $('#add_email').on('beforeSubmit', function(e) {   
+    $('#add_email').on('beforeSubmit', function(e) {
+	if($(document).find('.folderdetls').length > 0){
+		var folderId = $(document).find('.folderdetls').data('folderid');
+	}else{
+		var folderId = 0;
+	}
     var getform = $('#add_email').serialize();
         $.ajax({ 
-            url:'$inviteUrl', 
+            url:'$inviteUrl'+'&folderid='+folderId, 
 		    method:"POST",  
             data:$('#add_email').serialize(),
             type:'json',

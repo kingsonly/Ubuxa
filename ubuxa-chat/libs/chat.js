@@ -35,7 +35,7 @@ module.exports.sockets = function(http) {
 io = socketio.listen(http);
 
 //setting chat route
-var ioChat = io.of('/');
+var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details
@@ -141,7 +141,8 @@ ioChat.on('connection', function(socket) {
             result: result,
 			room: room,
 			sender: toUser,
-			folderId: folderId
+			folderId: folderId,
+			username: username,
 		});
 	}
 
@@ -283,7 +284,7 @@ ioChat.on('connection', function(socket) {
 		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged out'});
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
-		userStack[socket.username] = "Offline";
+		userStack[socket.username] = "standby";
 		ioChat.emit('onlineStack', userStack);
 	}); //end of disconnect event.
 

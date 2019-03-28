@@ -70,7 +70,7 @@
 }
 
 .chat_folder_img{
-	background: url(../images/folder/folderempty.png) blue;
+	background: url(../images/folder/folderempty.png);
     background-repeat: no-repeat;
     background-size: cover;
 	background-position: 0% 0%;
@@ -79,6 +79,13 @@
 }
 .chat_folder_title{
 	width: 80%;
+}
+.chatloader{
+	width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 138px;
+    bottom: 164px;
 }
 .msg_body{
 	background:white;
@@ -262,6 +269,7 @@
 	height:50px;
 	display: none;
 	text-align: center;
+	cursor: pointer;
 }
 
 .remove{
@@ -272,4 +280,8 @@
 	background: #fff !important;
 	font-style: italic !important;
 	opacity: 0.5;
+}
+
+.chat_folder_title a {
+    color: #333;
 }
