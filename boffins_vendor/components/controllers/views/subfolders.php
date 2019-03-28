@@ -118,7 +118,7 @@ use frontend\models\Onboarding;
 			</div>
 			
 			<div class="col-sm-9 col-xs-9 form-widget" >
-				<?= SearchFormWidget::widget();?>
+				<?= SearchFormWidget::widget(['filterContainer'=>$folderCarouselWidgetAttributes['class']]);?>
 			</div>
 			<?php 
 				$subfoldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();

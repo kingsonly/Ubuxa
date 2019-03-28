@@ -249,6 +249,7 @@
 	height:50px;
 	display: none;
 	text-align: center;
+	cursor: pointer;
 }
 
 .remove{

@@ -205,7 +205,7 @@ function _AddUser(user,taskid){
                         class: 'user-image user_image'+assigneeArray[1]
                         })
                       var element = $('<div />', {
-                      class: "images-offonline blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
+                      class: "images-folder-users blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
                       });
                       element.attr({
                         'data-toggle':'tooltip',

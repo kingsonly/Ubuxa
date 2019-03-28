@@ -20,15 +20,15 @@ var roomModel = mongoose.model('Room');
 module.exports.sockets = function(http) {
 
     var con = mysql.createConnection({
-		host: "localhost",
-		user: "epsolun_ubuxa",
-		password: "ubuxa##99",
-		database: "premux_main"
-		
 //		host: "localhost",
-//		user: "root",
-//		password: "", 
+//		user: "epsolun_ubuxa",
+//		password: "ubuxa##99",
 //		database: "premux_main"
+		
+		host: "localhost",
+		user: "root",
+		password: "", 
+		database: "premux_main"
 	});
 	con.connect();
 
@@ -141,7 +141,8 @@ ioChat.on('connection', function(socket) {
             result: result,
 			room: room,
 			sender: toUser,
-			folderId: folderId
+			folderId: folderId,
+			username: username,
 		});
 	}
 
