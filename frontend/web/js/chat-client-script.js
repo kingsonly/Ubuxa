@@ -146,7 +146,7 @@ $(document).ready(function(){
 
 
 	$ (function(){
-		var socket = io('//127.0.0.1:4000');
+		var socket = io('//127.0.0.1:4000/chat');
 
 		var username = $('body').data('username');
 		var noChat = 0; //setting 0 if all chats histroy is not loaded. 1 if all chats loaded.

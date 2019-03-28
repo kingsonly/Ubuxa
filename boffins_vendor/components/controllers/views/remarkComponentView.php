@@ -558,7 +558,7 @@ $('#create-remark').submit(function(e) {
 });
 Remarksocket.on('chat message', function(msg){
     msgArr = msg.split(',');
-    //$('.comments-list_'+msgArr[1]).prepend($('<li>').text(msgArr[0]));
+    $('.comments-list_'+msgArr[1]).prepend($('<li>').text(msgArr[0]));
     
     if(setStatus == 0){
        var li = $("<li/>", {
@@ -795,8 +795,6 @@ $('#size').on('change', function() {
    $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
 $('[data-toggle="tooltip-reply"]').tooltip();
-
-
 JS;
  
 $this->registerJs($remarkJs);

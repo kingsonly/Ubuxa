@@ -1,4 +1,4 @@
-var socketio = require('socket.io');
+
 var mongoose = require('mongoose');
 var events = require('events');
 var mysql = require('mysql');
@@ -32,10 +32,10 @@ module.exports.sockets = function(http) {
 	});
 	con.connect();
 
-io = socketio.listen(http);
+
 
 //setting chat route
-var ioChat = io.of('/');
+var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details

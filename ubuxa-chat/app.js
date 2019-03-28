@@ -11,6 +11,7 @@ var methodOverride = require('method-override');
 var path = require('path');
 var fs = require('fs');
 var logger = require('morgan');
+var socketio = require('socket.io');
 
 //port setup
 var port = process.env.PORT || 4000;
@@ -18,9 +19,10 @@ var port = process.env.PORT || 4000;
 //socket.io
 
 
-
-require('./libs/chat.js').sockets(http);
+io = socketio.listen(http);
 require('./libs/remark.js').remarkSockets(http);
+require('./libs/chat.js').sockets(http);
+
 app.use(logger('dev'));
 
 //db connection
