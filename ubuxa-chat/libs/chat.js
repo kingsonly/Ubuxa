@@ -20,15 +20,15 @@ var roomModel = mongoose.model('Room');
 module.exports.sockets = function(http) {
 
     var con = mysql.createConnection({
-//		host: "localhost",
-//		user: "epsolun_ubuxa",
-//		password: "ubuxa##99",
-//		database: "premux_main"
-		
 		host: "localhost",
-		user: "root",
-		password: "", 
+		user: "epsolun_ubuxa",
+		password: "ubuxa##99",
 		database: "premux_main"
+		
+//		host: "localhost",
+//		user: "root",
+//		password: "", 
+//		database: "premux_main"
 	});
 	con.connect();
 
@@ -283,7 +283,7 @@ ioChat.on('connection', function(socket) {
 		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged out'});
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
-		userStack[socket.username] = "Offline";
+		userStack[socket.username] = "standby";
 		ioChat.emit('onlineStack', userStack);
 	}); //end of disconnect event.
 

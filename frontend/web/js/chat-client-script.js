@@ -15,6 +15,26 @@ function addEmoji() {
 		window.emojiPicker.discover();
 };
 
+function updateUsersStatus(data){
+	//check if user is in folder dashboard
+	if($(document).find('.auth-users').length > 0){
+		usersStatus = data.userStack;
+		$('.user-image > .blue').each(function () { 
+			var thisUser = $(this).data('username');
+			if(thisUser in usersStatus){
+				// remove all class and add the class that is needed
+				$(this).removeClass('images-online');
+				$(this).removeClass('images-offonline');
+				$(this).removeClass('images-standby');
+				$(this).addClass('images-'+usersStatus[thisUser].toLowerCase());
+				$(this).find('.circle-holder').html('<div class="'+usersStatus[thisUser].toLowerCase()+'-circle"></div>')
+				
+				
+				
+			}
+		});
+	}
+}
 
 var arr = []; // List of users
 
@@ -109,7 +129,7 @@ $(document).ready(function(){
 		var msgHead = findInputParentHead.find('.msg_head')
 		if(msgHead.hasClass('chatblink')){
 			msgHead.removeClass('chatblink');
-		}
+		} 
 	})
 
 	// when clicked on msg head if msg head has a chat blink remove the blinking class
@@ -173,13 +193,21 @@ $(document).ready(function(){
 			var sessionUrl = $('body').data('sessionlink');
 
 			console.log(stack);
+			var attr = 'onlineusers';
+			var today = Date.now();
+			var userstack = {userStack:stack,time:today};
+			var getOnlineUsers =  localStorage.setItem(attr, JSON.stringify(userstack));
+			var getOnlineUsers =  JSON.parse(localStorage.getItem(attr));
+			updateUsersStatus(getOnlineUsers);
 
-			$.post(sessionUrl,{activitiesArray:stack},function(){
-				if($(".folderusers").length > 0){
-
-					$.pjax.reload({container:"#user_prefixuserjax",async: false});
-				}
-			})
+//			$.post(sessionUrl,{activitiesArray:stack},function(){
+//				if($(".folderusers").length > 0){
+//
+//					//$.pjax.reload({container:"#user_prefixuserjax",async: false});
+//					
+//					
+//				}
+//			})
 		});
 		
 		socket.on('wrong',function(stack){
@@ -276,9 +304,7 @@ $(document).ready(function(){
 			senderUsername = getParent.attr('rel');// found at the head of chat box/ holds the room id, which would be used to fetch chat history
 			folderId = senderUsername.split('-');
 			userImage = getParent.data('userimage')
-			alert(msgCounts[getClassData]);
 			if($(this).scrollTop() == 0  && oldInitDone == 1){
-
 				socket.emit('old-chats',{room:roomId,username:username,msgCount:msgCounts[getClassData],sender:senderUsername,folderId:folderId[1],userImage:userImage});
 			}
 

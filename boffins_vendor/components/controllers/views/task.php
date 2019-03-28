@@ -56,7 +56,6 @@ if(!empty($display)){
    position: relative;
    padding: 1em 1em 1em 16%;
    margin: 0 auto; 
-   cursor: pointer;
    border-bottom: solid 1px #ddd;
 }
  .todo:last-child {
@@ -64,9 +63,12 @@ if(!empty($display)){
 }
  .todo__state {
   position: absolute;
-   top: 0;
+   top: 10px;
    left: 0;
    opacity: 0;
+   cursor: pointer;
+   width: 32px;
+   height: 25px;
 }
  .todo__text {
    color: #135156;
@@ -78,7 +80,8 @@ if(!empty($display)){
    top: 0;
    bottom: 0;
    left: 0;
-   width: 100%;
+   /*width: 100%;*/
+   pointer-events: none;
    height: auto;
    margin: auto;
    fill: none;
@@ -361,13 +364,12 @@ if(!empty($display)){
   <?php 
     $id = 1;
     if(!empty($array)){
-    foreach ($array as $key => $value) { ?>
-  <label class="todo">
-    <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
-    <?php }else { ?>
-        <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
-    <?php } ?>
+    foreach ($array as $key => $value) { 
+      $assigneesIds = $value->taskAssigneesUserId;
+      $userid = Yii::$app->user->identity->id;
+    ?>
+  <div class="todo">
+        <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>
     <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
@@ -375,7 +377,6 @@ if(!empty($display)){
       <use xlink:href="#todo__check" class="todo__check"></use>
       <use xlink:href="#todo__circle" class="todo__circle"></use>
     </svg>
-
     <div class="todo__text">
         <?php
           $edocLists = $value->clipOn['edocument'];
@@ -391,7 +392,7 @@ if(!empty($display)){
         <span><?= strip_tags($value->title); ?></span>
     </div>
     
-  </label>
+  </div>
 
   <?php $id++;}}else{
     echo "No task";

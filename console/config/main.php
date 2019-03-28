@@ -38,6 +38,9 @@ return [
                 ],
             ],
         ],
+        'settingscomponent' => [
+            'class' => 'frontend\settings\components\SettingsComponent',
+        ],
 
 		'queue' => [
             'class' => \yii\queue\redis\Queue::class,

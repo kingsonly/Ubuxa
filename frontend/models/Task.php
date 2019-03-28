@@ -155,6 +155,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasOne(StatusType::className(), ['id' => 'status_id']);
     }
 
+
     public function getStatusTitle()
     {
         return $this->status->status_title;
@@ -218,6 +219,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('taskAssignees');
     }
 
+
     public function getPersonName()
     {   
         $names = [];
@@ -228,6 +230,16 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return implode(" ", $names);
 
         //return $this->person->first_name;
+    }
+
+    public function getTaskAssigneesUserId()
+    {
+        $userids = [];
+        $data = $this->taskAssignees;
+        foreach ($data as $attr) {
+            $userids[] = $attr->id;
+        }
+        return $userids;
     }
 
     public function displayTask()
@@ -246,7 +258,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         $result = "";
         if ($interval->y) { $result .= $interval->format("%y years "); }
         if ($interval->m) { $result .= $interval->format("%m months "); }
-        if ($interval->d) { $result .= $interval->format("%d days "); }
+        if ($interval->d) { $result .= $interval->format("%d day(s) "); }
         if ($interval->h) { $result .= $interval->format("%h hours "); }
         if ($interval->i) { $result .= $interval->format("%i minutes "); }
         if ($interval->s) { $result .= $interval->format("%s seconds "); }

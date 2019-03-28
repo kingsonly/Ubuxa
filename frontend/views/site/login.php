@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="checkbox icheck">
             <label>
 				<a href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a></br>
-              <a href="<?= Url::to(['site/customersignup']);?>">Forgot Password </a>
+              <a href="<?= Url::to(['site/request-password-reset']);?>">Forgot Password </a>
             </label>
           </div>
         </div>

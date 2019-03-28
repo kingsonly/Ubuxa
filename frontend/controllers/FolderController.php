@@ -169,7 +169,7 @@ class FolderController extends Controller
 		if (!is_null($q)) {
 			$query = new Person();
 			$allUsers = $query->find()->select('id, first_name, surname')
-				->where(['like', 'first_name', $q])->orWhere(['like', 'surname', $q])->all();
+				->andWhere(['like', 'first_name', $q])->orWhere(['like', 'surname', $q])->all();
 			
 			$out['results'] = array_values($allUsers);
 		}
@@ -289,13 +289,14 @@ class FolderController extends Controller
 			$userIdentityId = yii::$app->user->identity->id;
 			$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$id,'user_id' => $userIdentityId])->one();
 			// use identity of the user to determine if the user has access to delete a folder or not 
-			if($folderManager == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
+			if($folderManager->role == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
 				if(!empty($this->findModel($id)->delete())){
 					return 0;
 				}else{
 					return 1;
 				}
 			}else{
+				
 				return 3;
 			}
 			

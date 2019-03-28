@@ -11,10 +11,10 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
-use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
 use yii\bootstrap\Modal;
-
+use frontend\models\StatusType;
+$taskUrl = Url::to(['task/view']);
 ?>
 
 <style>
@@ -193,9 +193,11 @@ use yii\bootstrap\Modal;
 #boardContent{
   overflow: scroll !important;
 }
-
+.no-access{
+    pointer-events: none;
+}
 </style>
-    <div class="task-view">
+    <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
         <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
@@ -210,7 +212,7 @@ use yii\bootstrap\Modal;
                         <span class="assignUsers">Due Date</span>
                     </div>    
                     <div class="due-labels">
-                        <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+                        <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model, 'pjaxId'=>'#kanban-refresh','attributues'=>[
                                 ['modelAttribute'=>'due_date','xeditable' => 'datetime'],
                                 ]]); ?></span>
                     </div>
@@ -222,9 +224,14 @@ use yii\bootstrap\Modal;
                     <div class="task-statuz">
                         <span class="stat-title">Status</span>
                     </div>
-                    <div class="task-status">
-                        <span class="task-titless"><?= $model->statusTitle; ?></span>
-                    </div>
+                    <?php Pjax::begin(['id'=>'status']); ?>
+                        <div class="task-status">
+                            <!-- <span class="task-titless"><?//= $model->statusTitle; ?></span> -->
+                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh', 'displayValue' => $model->statusTitle, 'attributues'=>[
+                                    ['modelAttribute'=>'status_id','xeditable' => 'dropdown'],
+                                    ]]); ?></span>
+                        </div>
+                    <?php Pjax::end(); ?>
                 </div>
             </div>
         </div>
@@ -244,7 +251,7 @@ use yii\bootstrap\Modal;
                 
 
                     <div class="members">
-                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false]);?>
+                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
                     </div>
             </div>
         <?php } ?>
@@ -295,7 +302,7 @@ use yii\bootstrap\Modal;
                        ${'model'.$count}= new Reminder();
                         ${'model1'.$count} = ${'model'.$count}->findOne($reminder->id);
                     ?>
-                        <?= ViewWithXeditableWidget::widget(['model'=>${'model1'.$count},'attributues'=>[
+                        <?= ViewWithXeditableWidget::widget(['model'=>${'model1'.$count}, 'pjaxId'=>'#kanban-refresh','attributues'=>[
                         ['modelAttribute'=>'reminder_time','xeditable' => 'datetime'],
                         ],'xEditableDateId' => $count]); ?>
                     <?php $count++; }?>
@@ -333,7 +340,6 @@ use yii\bootstrap\Modal;
 
 <?
 $taskmodal = <<<JS
-
 JS;
 $this->registerJs($taskmodal);
 ?>

@@ -26,6 +26,8 @@ class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDelete
      */
     const REMINDER_NOT_DELETED = 0 ; //Reminder status value when it is not deleted
     const REMINDER_DELETED = 1 ; //Reminder status value when it is deleted
+    const REMINDER_SENT = 2; //Reminder status when it is sent
+    
     public static function tableName()
     {
         return '{{%reminder}}';
@@ -75,8 +77,8 @@ class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDelete
 
     public function checkForReminders($presentTime)
     {
-        $reminderAlert = Reminder::find()->where(['<=', 'reminder_time', $presentTime])
-            ->andWhere(['deleted'=>0]) 
+        $reminderAlert = Reminder::find()->andWhere(['<=', 'reminder_time', $presentTime])
+            ->andWhere(['deleted'=>self::REMINDER_NOT_DELETED]) 
             ->all();
         return $reminderAlert;
     }

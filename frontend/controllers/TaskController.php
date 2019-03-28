@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\StatusType;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
 use frontend\models\Folder;
 use frontend\models\TaskReminder;
@@ -130,6 +131,9 @@ class TaskController extends Controller
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
         $edocument = $model->clipOn['edocument'];
+        $assigneesIds = $model->taskAssigneesUserId;
+        $userid = Yii::$app->user->identity->id;
+        $statusData = ArrayHelper::map(StatusType::find()->where(['status_group' => 'task'])->all(), 'id', 'status_title');
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -162,6 +166,9 @@ class TaskController extends Controller
             'reminder' => $reminder,
             'edocument' => $edocument,
             'folderId' => $folderId,
+            'assigneesIds' => $assigneesIds,
+            'userid' => $userid,
+            'statusData' => $statusData,
         ]);
     }
 
