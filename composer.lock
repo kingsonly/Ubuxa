@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6720c484f86a652116616733c34c51ad",
+    "content-hash": "a0e74b3e4ec434ee96cb7e67d8448154",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -65,16 +65,16 @@
         },
         {
             "name": "bower-asset/bootstrap",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "4c547f2175b9a05aa43551f6927da83fe249ce42"
+                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/4c547f2175b9a05aa43551f6927da83fe249ce42",
-                "reference": "4c547f2175b9a05aa43551f6927da83fe249ce42",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/68b0d231a13201eb14acd3dc84e51543d16e5f7e",
+                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
                 "responsive",
                 "web"
             ],
-            "time": "2018-12-13T23:45:51+00:00"
+            "time": "2019-02-13T15:55:38+00:00"
         },
         {
             "name": "bower-asset/inputmask",
@@ -303,22 +303,35 @@
             "version": "2.0.7.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:yiisoft/jquery-pjax.git",
+                "url": "https://github.com/yiisoft/jquery-pjax.git",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/aef7b953107264f00234902a3880eb50dafc48be",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be",
-                "shasum": null
+                "shasum": ""
             },
             "require": {
                 "bower-asset/jquery": ">=1.8"
             },
-            "type": "bower-asset",
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "./jquery.pjax.js",
+                "bower-asset-ignore": [
+                    ".travis.yml",
+                    "Gemfile",
+                    "Gemfile.lock",
+                    "CONTRIBUTING.md",
+                    "vendor/",
+                    "script/",
+                    "test/"
+                ]
+            },
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2017-10-12T10:11:14+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -2392,26 +2405,60 @@
         },
         {
             "name": "kriswallsmith/assetic",
-            "version": "v1.0.5",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "8ab3638325af9cd144242765494a9dc9b53ab430"
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/8ab3638325af9cd144242765494a9dc9b53ab430",
-                "reference": "8ab3638325af9cd144242765494a9dc9b53ab430",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
+                "reference": "e911c437dbdf006a8f62c2f59b15b2d69a5e0aa1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.1"
+                "php": ">=5.3.1",
+                "symfony/process": "~2.1|~3.0"
+            },
+            "conflict": {
+                "twig/twig": "<1.27"
+            },
+            "require-dev": {
+                "leafo/lessphp": "^0.3.7",
+                "leafo/scssphp": "~0.1",
+                "meenie/javascript-packer": "^1.1",
+                "mrclay/minify": "<2.3",
+                "natxet/cssmin": "3.0.4",
+                "patchwork/jsqueeze": "~1.0|~2.0",
+                "phpunit/phpunit": "~4.8 || ^5.6",
+                "psr/log": "~1.0",
+                "ptachoire/cssembed": "~1.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "twig/twig": "~1.23|~2.0",
+                "yfix/packager": "dev-master"
+            },
+            "suggest": {
+                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
+                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
+                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
+                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
+                "twig/twig": "Assetic provides the integration with the Twig templating engine"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Assetic": "src/"
-                }
+                },
+                "files": [
+                    "src/functions.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2431,7 +2478,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2014-12-12T05:07:58+00:00"
+            "time": "2016-11-11T18:43:20+00:00"
         },
         {
             "name": "linslin/yii2-curl",
@@ -2742,7 +2789,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/at.js/-/at.js-1.5.4.tgz",
-                "reference": null,
                 "shasum": "8fc60cc80eadbe4874449b166a818e7ae1d784c1"
             },
             "type": "npm-asset-library",
@@ -2782,7 +2828,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/atoa/-/atoa-1.0.0.tgz",
-                "reference": null,
                 "shasum": "0cc0e91a480e738f923ebc103676471779b34a49"
             },
             "type": "npm-asset-library",
@@ -2811,8 +2856,7 @@
                 }
             ],
             "description": "Creates a true array based on `arraylike`, starting at `startIndex`.",
-            "homepage": "https://github.com/bevacqua/atoa#readme",
-            "time": "2015-07-02T15:12:19+00:00"
+            "homepage": "https://github.com/bevacqua/atoa#readme"
         },
         {
             "name": "npm-asset/contra",
@@ -2820,7 +2864,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/contra/-/contra-1.9.4.tgz",
-                "reference": null,
                 "shasum": "f53bde42d7e5b5985cae4d99a8d610526de8f28d"
             },
             "require": {
@@ -2876,8 +2919,7 @@
                 "generator",
                 "promises",
                 "q"
-            ],
-            "time": "2016-05-20T17:01:34+00:00"
+            ]
         },
         {
             "name": "npm-asset/crossvent",
@@ -2885,7 +2927,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/crossvent/-/crossvent-1.5.4.tgz",
-                "reference": null,
                 "shasum": "da2c4f8f40c94782517bf2beec1044148194ab92"
             },
             "require": {
@@ -2932,8 +2973,7 @@
                 }
             ],
             "description": "Cross-platform browser event handling",
-            "homepage": "https://github.com/bevacqua/crossvent",
-            "time": "2015-08-25T00:19:47+00:00"
+            "homepage": "https://github.com/bevacqua/crossvent"
         },
         {
             "name": "npm-asset/custom-event",
@@ -2941,7 +2981,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/custom-event/-/custom-event-1.0.0.tgz",
-                "reference": null,
                 "shasum": "2e4628be19dc4b214b5c02630c5971e811618062"
             },
             "require-dev": {
@@ -2981,8 +3020,7 @@
                 "customevent",
                 "dom",
                 "event"
-            ],
-            "time": "2015-01-07T22:33:23+00:00"
+            ]
         },
         {
             "name": "npm-asset/dragula",
@@ -2990,7 +3028,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/dragula/-/dragula-3.7.2.tgz",
-                "reference": null,
                 "shasum": "4a35c9d3981ffac1a949c29ca7285058e87393ce"
             },
             "require": {
@@ -3052,8 +3089,7 @@
                 }
             ],
             "description": "Drag and drop so simple it hurts",
-            "homepage": "https://github.com/bevacqua/dragula",
-            "time": "2016-09-12T12:35:26+00:00"
+            "homepage": "https://github.com/bevacqua/dragula"
         },
         {
             "name": "npm-asset/easy-pie-chart",
@@ -3061,7 +3097,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/easy-pie-chart/-/easy-pie-chart-2.1.7.tgz",
-                "reference": null,
                 "shasum": "35e49fb7daf9a94e52b8294f51626919bcaee7cc"
             },
             "type": "npm-asset-library",
@@ -3107,7 +3142,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/jquery.caret/-/jquery.caret-0.3.1.tgz",
-                "reference": null,
                 "shasum": "9c093318faf327eff322e826ca9f3241368bc7b8"
             },
             "type": "npm-asset-library",
@@ -3143,7 +3177,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz",
-                "reference": null,
                 "shasum": "5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
             },
             "type": "npm-asset-library",
@@ -3197,7 +3230,6 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/ticky/-/ticky-1.0.1.tgz",
-                "reference": null,
                 "shasum": "b7cfa71e768f1c9000c497b9151b30947c50e46d"
             },
             "type": "npm-asset-library",
@@ -3226,8 +3258,7 @@
                 }
             ],
             "description": "Run a callback as soon as possible",
-            "homepage": "https://github.com/bevacqua/ticky#readme",
-            "time": "2016-05-20T16:56:23+00:00"
+            "homepage": "https://github.com/bevacqua/ticky#readme"
         },
         {
             "name": "phar-io/manifest",
@@ -3933,16 +3964,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.11.4",
+            "version": "3.11.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "c136bf9147bd8f33746b1915331fba133d076ed5"
+                "reference": "cce3213e9b42deaacd21d33c02811c59b6e54099"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c136bf9147bd8f33746b1915331fba133d076ed5",
-                "reference": "c136bf9147bd8f33746b1915331fba133d076ed5",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/cce3213e9b42deaacd21d33c02811c59b6e54099",
+                "reference": "cce3213e9b42deaacd21d33c02811c59b6e54099",
                 "shasum": ""
             },
             "require": {
@@ -3984,7 +4015,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-12-26T22:52:19+00:00"
+            "time": "2019-02-10T21:21:01+00:00"
         },
         {
             "name": "psr/http-message",
@@ -4997,25 +5028,25 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.2.3",
+            "version": "v3.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "6c05edb11fbeff9e2b324b4270ecb17911a8b7ad"
+                "reference": "009f8dda80930e89e8344a4e310b08f9ff07dd2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/6c05edb11fbeff9e2b324b4270ecb17911a8b7ad",
-                "reference": "6c05edb11fbeff9e2b324b4270ecb17911a8b7ad",
+                "url": "https://api.github.com/repos/symfony/process/zipball/009f8dda80930e89e8344a4e310b08f9ff07dd2e",
+                "reference": "009f8dda80930e89e8344a4e310b08f9ff07dd2e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3"
+                "php": "^5.5.9|>=7.0.8"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -5042,7 +5073,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-24T22:05:03+00:00"
+            "time": "2019-01-16T13:27:11+00:00"
         },
         {
             "name": "thadafinser/package-info",
@@ -6059,11 +6090,6 @@
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
-            },
-            "require-dev": {
-                "bower-asset/jasmine-ajax": "~1.3.1",
-                "bower-asset/jasmine-jquery": "~1.5.2",
-                "bower-asset/jquery": "~1.7"
             },
             "type": "bower-asset-library",
             "extra": {
