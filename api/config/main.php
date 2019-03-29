@@ -27,10 +27,13 @@ return [
             // ...
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'api\models\UserDb',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
+		'settingscomponent' => [
+        	'class' => 'frontend\settings\components\SettingsComponent',
+    	],
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',

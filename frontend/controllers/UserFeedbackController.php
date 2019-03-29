@@ -9,11 +9,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\Expression;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * UserFeedbackController implements the CRUD actions for UserFeedback model.
  */
-class UserFeedbackController extends Controller
+class UserFeedbackController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

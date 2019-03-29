@@ -12,11 +12,12 @@ use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * ComponentTemplateAttributeController implements the CRUD actions for ComponentTemplate model.
  */
-class ComponentTemplateAttributeController extends Controller
+class ComponentTemplateAttributeController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

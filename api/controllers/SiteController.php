@@ -3,7 +3,7 @@ namespace api\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use api\models\LoginForm;
 use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
@@ -111,6 +111,7 @@ class SiteController extends RestController
     {
         $data = Yii::$app->user->identity;
         $data = $data->attributes;
+		$data['id2'] = Yii::$app->user->identity->username;
         unset($data['auth_key']);
         unset($data['password_hash']);
         unset($data['password_reset_token']);

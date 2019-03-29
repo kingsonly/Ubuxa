@@ -23,7 +23,7 @@ class AccessTokens extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'access_tokens';
+		return '{{%access_tokens}}';
     }
 
     /**

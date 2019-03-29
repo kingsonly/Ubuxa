@@ -8,11 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * OnboardingController implements the CRUD actions for Onboarding model.
  */
-class OnboardingController extends Controller
+class OnboardingController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

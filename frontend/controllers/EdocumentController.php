@@ -12,11 +12,12 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 use yii\db\Expression;
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * EdocumentController implements the CRUD actions for Edocument model.
  */
-class EdocumentController extends Controller
+class EdocumentController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

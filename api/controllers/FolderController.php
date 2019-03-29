@@ -4,15 +4,15 @@ namespace api\controllers;
 
 
 use yii\filters\AccessControl;
-use app\models\Employee;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
+use frontend\models\Folder;
 
 use Yii;
 
 
 
-class EmployeeController extends RestController
+class FolderController extends RestController
 {
 
     public function behaviors()
@@ -66,9 +66,42 @@ class EmployeeController extends RestController
 
     public function actionIndex()
     {
-        $params = $this->request['search'];
-        $response = Employee::search($params);
-        Yii::$app->api->sendSuccessResponse($response['data'], $response['info']);
+        $folder = Folder::find()->all();
+		$seperateFolders = array();
+		foreach ($folder as $firstFolderFilter) {
+			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+				$folderStatus = 'public';
+			}else{
+				$folderStatus = 'private';
+			}
+			if($firstFolderFilter->parent_id > $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS){
+				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]); 
+			}
+			if($firstFolderFilter->parent_id == $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS ){
+				if($firstFolderFilter->folderManagerFilter->role == 'author'){
+					$seperateFolders['root folder'][$folderStatus][] = $firstFolderFilter;
+				}else{
+					$seperateFolders['root folder']['shared'][] = $firstFolderFilter;
+				}
+			} else{
+				if($firstFolderFilter->folderManagerFilter->role == 'author'){
+					$news = ['test' => $firstFolderFilter->folderManagerFilter->role];
+					$myArray['folderDetails'] =  [$firstFolderFilter];
+					$myArray['folderDetails']['otherdetails']=$news; 
+					
+					$seperateFolders['sub folder'][$folderStatus][] = $myArray;
+					
+				}else{
+					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
+				}
+			}
+			
+
+		}
+		
+        $response = $seperateFolders;
+        Yii::$app->api->sendSuccessResponse($response);
+		
     }
 
     public function actionCreate()

@@ -10,11 +10,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * UserController implements the CRUD actions for UserDb model.
  */
-class UserController extends Controller
+class UserController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}
