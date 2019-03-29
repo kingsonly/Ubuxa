@@ -107,7 +107,7 @@ class RemarkController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $remarkSaved = "remark saved successfully";
-             $userImage = UserDb::find()->andWhere(['person_id'=>$commenterUserId])->one();
+             $userImage = UserDb::find()->andWhere(['id'=>$commenterUserId])->one();
              $user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
              $remarkId = $model->id;
              $remarkReply = $model->parent_id;
