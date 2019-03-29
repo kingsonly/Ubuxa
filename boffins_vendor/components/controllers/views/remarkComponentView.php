@@ -560,7 +560,7 @@ Remarksocket.on('chat message', function(msg){
     msgArr = msg.split(',');
     $('.comments-list_'+msgArr[1]).prepend($('<li>').text(msgArr[0]));
     
-    if(setStatus == 0){
+   //if(setStatus == 0){
        var li = $("<li/>", {
                   class: "welll welll_"+info[3]
                 });
@@ -607,74 +607,9 @@ Remarksocket.on('chat message', function(msg){
     div.append(div1)
     div.append(div2)
     li.append(div)
-      $('.comments-list_'+msgArr[1]).prepend(li)
-      if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
-        var div_indic = $('<div/>',{
-            class:"commentz-indictor_container"
-          }).css({'display':'inline-block','margin-left':'10px'})
-          var div_indic_child = $('<div/>',{
-            class:"commentz-indictor"
-          })
-          var div_indic_span = $('<span/>').attr('class','commentz-msg')
-          div_indic.append(div_indic_child)
-          div_indic.append(div_indic_span)
-          $(document).find('.header').append(div_indic)
-      }
-    } else {
-      //$(document).find('.welll_a').append($('<li>').text('gghhjgfgcvghfgvhcvgfcvhgvhgvh'))
-       var ul = $("<ul/>", {
-                  class: "comments-list reply-list"
-                });
-          var li = $("<li/>");
-          var div1 = $("<div/>", {
-                        class: "comment-avatar"
-                      }).css({
-                          'background-size':'cover',
-                          'background-repeat':'no-repeat',
-                          'background-position':'center',
-                          'background-image':'url(userImage)'
-                      });
+      $(document).find('.comments-list_'+msgArr[1]).prepend(li)
 
-          var div2 = $("<div/>", {
-                        class: "comment-box"
-                      });
-          var div2_1 = $("<div/>", {
-                        class: "comment-head"
-                      });
-          var h6 = $("<h6/>", {
-                        class: "comment-name"
-                      });
-
-          var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
-          
-                     
-          var span = $("<span/>");
-          var div2_2 = $("<div/>", {
-                        class: "comment-content"
-                      }).html(msgArr[0]);
-
-          h6.append(a)
-          div2_1.append(h6)
-          div2_1.append(span)
-          div2.append(div2_1)
-          div2.append(div2_2)
-          li.append(div1)
-          li.append(div2)
-          ul.append(li)
-          $(document).find('.welll_'+info[4]).append(ul)
-          if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
-            var div_indic_child = $('<div/>',{
-            class:"commentz-indictor"
-          })
-          var div_indic_span = $('<span/>').attr('class','commentz-msg')
-          div_indic.append(div_indic_child)
-          div_indic.append(div_indic_span)
-          $(document).find('.header').append(div_indic)
-          }
-    }
-
-
-
+     
 });
 
 

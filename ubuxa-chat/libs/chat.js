@@ -141,8 +141,7 @@ ioChat.on('connection', function(socket) {
             result: result,
 			room: room,
 			sender: toUser,
-			folderId: folderId,
-			username: username,
+			folderId: folderId
 		});
 	}
 
@@ -284,7 +283,7 @@ ioChat.on('connection', function(socket) {
 		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged out'});
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
-		userStack[socket.username] = "standby";
+		userStack[socket.username] = "Offline";
 		ioChat.emit('onlineStack', userStack);
 	}); //end of disconnect event.
 
