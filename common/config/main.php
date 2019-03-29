@@ -13,7 +13,7 @@ return [
 	'sourceLanguage' => 'en-GB',
 	'timeZone' => 'Africa/Lagos',
     'aliases' => [
-        '@bower' => '@vendor/bower-asset',
+        '@bower' => '@vendor/bower',
         '@npm'   => '@vendor/npm',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
@@ -63,7 +63,7 @@ return [
 	'controllerMap' => [
 		// Common migrations for the whole application
 		'migrate' => [
-			//'class' => 'yii\console\controllers\MigrateController'
+			//'class' => 'yii\console\controllers\MigrateController',
 			'class' => 'boffins_vendor\migration\SpecialMigration',
 			//'migrationNamespaces' => ['console\migrations'],
 			'migrationTable' => '{{%migration}}',
