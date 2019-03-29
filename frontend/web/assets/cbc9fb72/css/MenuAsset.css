@@ -451,8 +451,8 @@ a,
 	display: none;
 }
 #breathing-button {
-    -webkit-animation: breathing 5s ease-out infinite normal;
-    animation: breathing 5s ease-out infinite normal;
+    -webkit-animation: breathing 3s ease-out infinite normal;
+    animation: breathing 3s ease-out infinite normal;
     -webkit-font-smoothing: antialiased;   
 }
 
