@@ -27,12 +27,13 @@ use yii\db\Expression;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use \boffins_vendor\queue\FolderUsersQueue;
+use \boffins_vendor\classes\BoffinsBaseController;
 
 
 /**
  * FolderController implements the CRUD actions for Folder model.
  */
-class FolderController extends Controller
+class FolderController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}
