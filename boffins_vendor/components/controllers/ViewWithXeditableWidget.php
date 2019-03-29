@@ -21,6 +21,12 @@ class ViewWithXeditableWidget extends Widget{
 	public $editableId;
 	public $attributeName;
 	public $modelUrl;
+	public $pjaxId;
+	public $data;
+	public $displayValue;
+	public $taskUrl;
+	public $taskId;
+	public $folderId;
 	
 	public $attributues = [];
 
@@ -44,6 +50,12 @@ class ViewWithXeditableWidget extends Widget{
 			'editableId' => !empty($this->editableId)?$this->editableId:'',
 			'attributeName' => $this->attributeName,
 			'modelUrl' => $this->modelUrl,
+			'pjaxId' => $this->pjaxId,
+			'data' => $this->data,
+			'displayValue' => $this->displayValue,
+			'taskUrl' => $this->taskUrl,
+			'taskId' => $this->taskId,
+			'folderId' => $this->folderId,
 		]);
 	}
 	

@@ -92,13 +92,20 @@ $checkUrlParams = $checkUrls[0];
   border-radius: 3px;
 }
 .drag-inner-list {
-  min-height: 50px;
+  min-height: 10px;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.dropdown-menu{
+ /* position: absolute;*/
 }
 .drag-item {
   /*width: 280px;*/
   margin: 10px;
   background: #FAFAFA;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   cursor: -webkit-grab;
   cursor: grab;
   border-radius: 2px;
@@ -176,6 +183,7 @@ $checkUrlParams = $checkUrls[0];
     width: 100%;
     clear: right;
     text-align: center;
+    z-index: 1005
 }
 .bg-info{
   background-color: #fff !important;
@@ -271,9 +279,9 @@ a.addTaskButton.active {
 }
 
 .dropdown-menu {
-  padding-left: 5px;
+  padding-left: 8px;
     border-right-width: 1px;
-    padding-right: 5px;
+    padding-right: 8px;
     width: 272px;
     cursor: pointer;
 }
@@ -308,12 +316,13 @@ a.addTaskButton.active {
     padding-top: 1px;
     padding-bottom: 1px;
     font-size: 13px;
+    white-space: nowrap;
 }
 .assigndrop{
   width:340px;
 }
 .date-time {
-      color: rgba(0,0,0,.87);
+    color: rgba(0,0,0,.87);
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -348,6 +357,7 @@ a.addTaskButton.active {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    padding-top: 10px;
 }
 
 .add-title:hover {
@@ -374,13 +384,15 @@ a.addTaskButton.active {
   right: 10px;
   font-size: 13px;
   color: #6b808c;
-  top: 3px;
 }
-.edocuments-board{
+.holder-board{
   position: relative;
 }
 .assignedto{
   margin-left: 5px;
+}
+.no-access{
+  pointer-events: none;
 }
 </style>
 
@@ -390,7 +402,7 @@ a.addTaskButton.active {
         <?php
         $count = 1; 
         foreach($taskStatus as $key => $value){ ?>
-        <li class="drag-column drag-column-on-hold" data-statusid="<?= $value->id; ?>">
+        <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
                 <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
@@ -406,26 +418,28 @@ a.addTaskButton.active {
                           if($values->status_id == $value->id){
                           $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
                           $reminderUrl = Url::to(['reminder/create']);
+                          $titleLength = strlen($values->title);
+                          $taskLabels = $values->labelNames;
+                          $edocuments = $values->clipOn['edocument'];
+                          $assigneesIds = $values->taskAssigneesUserId;
+                          $userid = Yii::$app->user->identity->id;
                           //$listData=ArrayHelper::map($users,'id','username');
                  ?>
-                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item test_<?= $values->id;?>">
-                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban']);?>
-                  <div class="task-test test3_<?= $values->id;?>" value ="<?= $boardUrl; ?>">
-                      <div class="task-title">
-                        <span class="task-titles"><?= $values->title; ?></span>
+                <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  '' : 'no-drag'?> test_<?= $values->id;?>">
+                  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
+                  <div class="task-test task-kanban_<?= $values->id;?>" style="margin-bottom: <?= empty($taskLabels) && ($titleLength > 43) && !empty($edocuments) ? '15' : 0; ?>px" value ="<?= $boardUrl; ?>">
+                      <div class="task-title" id="task-title<?=$values->id;?>">
+                        <span class="task-titles"><?= strip_tags($values->title); ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
-                      <div class="assignedto">
-                        <div class="user-image">
-                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false]);?>
-                        </div>
+                      <div class="assignedto" id="assignedto<?=$values->id;?>">
+                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id]);?>
                       </div>
                     <?php }?>
-                    <div class="edocuments-board">
+                    <div class="holder-board" id="holder-board<?=$values->id;?>">
                       <?php
-                        $edocuments = $values->clipOn['edocument'];
                         if(!empty($edocuments)){?>
-                            <span class="edoc-count" aria-hidden="true" data-toggle="tooltip" title="Attachments">
+                            <span class="edoc-count" id="edoc-count<?=$values->id;?>" aria-hidden="true" data-toggle="tooltip" title="Attachments" style="top:<?= !empty($values->personName) && empty($values->labelNames) ? '-32px' : '3px'; ?>">
                               <? 
                                 $edocs = count($edocuments); 
                                 echo $edocs;
@@ -437,8 +451,7 @@ a.addTaskButton.active {
                         <div class="task-label-title" style="width: <?= !empty($edocuments) ? '90' : '100';?>%">
                           <span class="label-task" id="label<?=$values->id.$count?>">
                             <?= $values->labelNames; ?>
-                          </span>
-                        </div>
+                          </span>                        </div>
                       <?php } ?>
                     </div>
                       <?php 
@@ -470,8 +483,9 @@ a.addTaskButton.active {
                       </div>
                     <?php } ?>
                 </div>
+                  
                     <div class="bottom-content">
-                      <div class="confirm">
+                      <div class="confirm <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?> test_<?= $values->id;?>">
                       <div class="dropdown testdrop">
                         <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true" data-toggle="tooltip" title="Add reminder"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -526,8 +540,15 @@ $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
 
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();   
+
+$('#boardContent').on('show.bs.modal', function(){
+  if(!$(this).hasClass('in')){
+    $('.se-pre-con').show();
+  }
+});
+
+$('#boardContent').on('shown.bs.modal', function(){
+  $('.se-pre-con').hide();
 });
 
 $(function(){
@@ -551,15 +572,26 @@ $.fn.closest_descendent = function(filter) {
 }
 
 
-
-
-    dragula([
+dragula([
     document.getElementById('1'),
     document.getElementById('2'),
     document.getElementById('3'),
     document.getElementById('4'),
-    document.getElementById('5')
-])
+    document.getElementById('5'),
+    document.getElementById('6'),
+    document.getElementById('7'),
+    document.getElementById('8'),
+    document.getElementById('9'),
+    document.getElementById('10')
+],{
+moves: function(el, target, source, sibling) {
+    if (el.classList.contains('no-drag')) {
+            toastr.error("You don't have permission to edit this task");
+            return false;
+        }
+        return true;
+    },
+})
 
 .on('drag', function(el) {
     
@@ -602,6 +634,7 @@ $.fn.closest_descendent = function(filter) {
     
     //alert(el.parent().attr('class'));
 });
+
 
 function _UpdateTask(status, contain){
           $.ajax({
@@ -721,10 +754,11 @@ $('.drag-item').mouseenter(function(){
 $(document).click(function (e) {
     e.stopPropagation();
     var container = $(".testdrop");
+    var menu = $(".dropdown-menu");
     var containerr = container.find('.clicked');
 
     //check if the clicked area is dropDown or not
-    if (container.has(e.target).length === 0 && container.hasClass('clicked')) {
+    if (container.has(e.target).length === 0 && container.hasClass('clicked') && !menu.hasClass('opened')) {
         container.removeClass('clicked');
         $('.bottom-content').css("visibility","hidden");
     }
@@ -734,15 +768,53 @@ $(document).ready(
         $(".add-card").click(function (e) {
             e.preventDefault();
             $(this).hide();
+            $(this).prev('.drag-inner-list').css('max-height', '73vh')
             $(this).next('div.card-add').show("slow");
+            $(this).prev('.drag-inner-list').scrollTop($(this).prev('.drag-inner-list')[0].scrollHeight);
         });
         $(".close-add").click(function (e) {
             e.preventDefault();
             $('.card-add').hide();
             $('.add-card').fadeIn();
+            $('.drag-inner-list').css('max-height', '80vh')
         });
 
     });
+
+(function() {                                             
+  var dropdownMenu; 
+  var target;                                    
+  $('.testdrop').on('show.bs.dropdown', function(e) {
+   target = e.target;        
+    dropdownMenu = $(e.target).find('.dropdown-menu');
+    $('.drag-container').append(dropdownMenu.detach());          
+    dropdownMenu.css('display', 'block');             
+    dropdownMenu.position({                           
+      'my': 'right top',                            
+      'at': 'right bottom',                         
+      'of': $(e.relatedTarget)                      
+    })
+    dropdownMenu.mouseenter(function(){
+        dropdownMenu.addClass('opened')
+    });
+    dropdownMenu.mouseleave(function(){
+        dropdownMenu.removeClass('opened')
+    });                                                
+  });                                                   
+$('.drag-container').on('click', function(e) {
+      if(!dropdownMenu.hasClass('opened')){
+        $(target).append(dropdownMenu.detach());        
+        dropdownMenu.hide();
+      }
+  });
+  $('.testdrop').on('hidden.bs.dropdown', function(e) {
+    if(!dropdownMenu.hasClass('opened')){
+      $(target).append(dropdownMenu.detach());        
+      dropdownMenu.hide();
+    }
+  });                                                
+})();
+
 JS;
  
 $this->registerJs($board);

@@ -59,7 +59,7 @@ class m190205_074221_calendar_check_status extends Migration
          //create google calendar id table.
         $this->createTable('{{%google_calendar_id}}', [
             'id' => $this->primaryKey(11),
-            'calendar_id' => $this->integer(11)->comment("A column for google calendar IDs"),
+            'calendar_id' => $this->string(255)->comment("A column for google calendar IDs"),
             'user_id' => $this->integer(11)->comment("foreign key to user table"),
         ]);
 

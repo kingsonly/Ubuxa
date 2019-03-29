@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\StatusType;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
 use frontend\models\Folder;
 use frontend\models\TaskReminder;
@@ -19,6 +20,7 @@ use frontend\models\TaskAssignedUser;
 use frontend\models\TaskGroup;
 use frontend\models\TaskColor;
 use frontend\models\Edocument;
+use frontend\models\UserDb;
 
 
 
@@ -129,6 +131,9 @@ class TaskController extends Controller
         $taskLabel = new TaskLabel();
         $reminder = new Reminder();
         $edocument = $model->clipOn['edocument'];
+        $assigneesIds = $model->taskAssigneesUserId;
+        $userid = Yii::$app->user->identity->id;
+        $statusData = ArrayHelper::map(StatusType::find()->where(['status_group' => 'task'])->all(), 'id', 'status_title');
 
         // Check if there is an Editable ajax request
     if (isset($_POST['hasEditable'])) {
@@ -161,6 +166,9 @@ class TaskController extends Controller
             'reminder' => $reminder,
             'edocument' => $edocument,
             'folderId' => $folderId,
+            'assigneesIds' => $assigneesIds,
+            'userid' => $userid,
+            'statusData' => $statusData,
         ]);
     }
 
@@ -315,6 +323,7 @@ class TaskController extends Controller
     public function actionAssignee()
     {    
         $model = new TaskAssignedUser();
+        $userDb = new UserDb();
         
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();   
@@ -327,14 +336,16 @@ class TaskController extends Controller
             if($exists && $assignee->status == Task::TASK_ASSIGNED_STATUS) {
                 $assignee->status = Task::TASK_NOT_ASSIGNED_STATUS;
                 $taskModel->last_updated = new Expression('NOW()');
-                $taskModel->save();
                 $assignee->save();
+                $taskModel->save();
+                return $model->taskAssignee($user, $userDb, $task, $assignee->status);
             }else if($exists && $assignee->status == Task::TASK_NOT_ASSIGNED_STATUS){
                 $assignee->status = Task::TASK_ASSIGNED_STATUS;
                 $assignee->assigned_date = new Expression('NOW()');
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $assignee->save();
+                return $model->taskAssignee($user, $userDb, $task, $assignee->status);
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
@@ -343,6 +354,7 @@ class TaskController extends Controller
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $model->save();
+                return $model->taskAssignee($user, $userDb, $task, $model->status);
             }
 
         }
@@ -378,8 +390,7 @@ class TaskController extends Controller
         if(Yii::$app->request->post('id')) {
             $taskId = Yii::$app->request->post('id');
             $deleteTask = Task::findOne($taskId);
-            $deleteTask->deleted = 1;
-            $deleteTask->save(); 
+            $deleteTask->delete();
         }
     }
 

@@ -18,6 +18,7 @@ use frontend\models\Folder;
 
 class SearchFormWidget extends Widget{
 	
+	public $filterContainer;
 	public function init()
 	{
 		parent::init();
@@ -26,6 +27,7 @@ class SearchFormWidget extends Widget{
 	public function run(){
 		
 		return $this->render('searchform',[
+			'filterContainer' => $this->filterContainer,
 		]);
 	}
 	

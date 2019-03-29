@@ -26,6 +26,7 @@
   overflow: scroll;
   position: relative;
   transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
 .list-type{
@@ -74,30 +75,26 @@
 
 .document-wrapper .doc-box{
   float:left;
-  width:273px;
-  height:100%;
-  margin:0 10px 10px 0;
+  width:97%;
+  height:70px;
   background-color:#fff;
-  border-radius: 20px;
   -webkit-transition:all 1.0s ease;
   -moz-transition:all 1.0s ease;
   transition:all 1.0s ease;
   transition:all 1.0s ease;
   box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+  border-bottom: 1px solid #828080;
+  position: relative;
 }
 
 .doc-box .doc-box-inner{
   float:left;
-  width:25%;
+  width:13%;
   height:80px;
   -webkit-transition:all 1.0s ease;
   -moz-transition:all 1.0s ease;
   transition:all 1.0s ease;
   transition:all 1.0s ease;
-}
-
-.doc-info{
-  margin: 15px 0px 0px 135px;
 }
 
 .document-wrapper.list-mode .doc-container{
@@ -113,15 +110,21 @@
     background-position: 50%;
     background-size: cover;
     background-repeat: no-repeat;
-    border-radius: 20px;
-    height: 100px;
+    border-radius: 0;
+    height: 45px;
     position: absolute;
     text-align: center;
     z-index: 1;
-    width: 120px;
+    width: 45px;
+    left: 18px;
+    top: 12px;
 }
 .download-doc{
     cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 19px;
 }
 .doc-date{
     font-family: calibri;
@@ -129,7 +132,17 @@
     font-size: 13px;
 }
 .file_basename{
-    font-size: 13px;
+    font-size: 16px;
+    font-weight: 550;
+    color: #1d1c1d;
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 85%;
 }
 .document-preview{
     background-color: #ccccccd1;
@@ -216,6 +229,11 @@
 .edocs-list div:nth-child(n+5) {
     display: none;
 }
+#basename-container{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 </style>
   <div class="document-wrapper <?= !empty($forFolder) ? $forFolder : '';?>" id="document-wrapper<?=$target;?>">
     <div class="doc-container" id="doc-container<?=$target;?>">
@@ -224,27 +242,37 @@
       $count = 0;
       foreach ($edocument as $key => $value) {
         $filename = $value->file_location; //get file location
-        $filepath = Url::to('@web/'.$filename); //set file path
+        $filepath = Url::base('http').Url::to('@web/'.$filename); //set file path
         $gview = 'https://docs.google.com/viewer?embedded=true&url=';
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $count++;
       ?>
-        <div class="doc-box" value="<?=$gview.$filepath;?>">
+        <div class="doc-box" value="
+        <?php 
+            switch($ext){
+              case 'doc': case 'docx': case 'xls': case 'xlsx': case 'pptx': case 'ppt':
+                echo $gview.$filepath;
+              break;
+              default:
+                echo $filepath;
+            }
+        ?>">
           <div class="doc-box-inner">
             <?php
               $value->fileExtension($filename);//show file thumbnail image based on extension
             ?>
           </div>
           <div class="doc-info">
-            <a href="<?= $filepath;?>" class="download-documents" ria-hidden="true" data-toggle="tooltip" title="Download" download>
-              <i class="fa fa-download download-doc" aria-hidden="true"></i>
+            <a href="<?= $filepath;?>" class="download-documents" download>
+              <i class="fa fa-cloud-download download-doc" aria-hidden="true" data-toggle="tooltip" title="Download"></i>
             </a>
             <div id="basename-container">
-              <span class="file_basename">
+              <span class="file_basename" data-toggle="tooltip" title="<?=basename($value->file_location);?>">
                 <?=basename($value->file_location); //get basename of file?> 
               </span>
             </div>
             <div>
-              <span class="doc-date">Added <?=$value->timeElapsedString; //show how long ago the file was uploaded?></span>
+              <span class="doc-date">Added <?=$value->timeElapsedString; //show how long ago the file was uploaded?></span> <span> <?= !empty($value->owner_id) ? 'by '.$value->username : ''?></span>
             </div>
             <div class="dropdown" id="edoc-display<?=$value->id?>">
             <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc<?=$value->id;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
@@ -325,7 +353,7 @@ $('.doc-box').click(function(e){
     var value = $(this).attr('value')
         $('#kvFileinputModal').modal('show')
             .find('.kv-zoom-body')
-            .html('<iframe class="document-preview" src="'+value+'" height="100%" width="100%"></iframe>');
+            .html('<embed class="document-preview" src="'+value+'" height="100%" width="100%">');
 });
 
 //for deleting documents
@@ -353,10 +381,10 @@ $(".confirm-doc-delete").on('click', function(e){
   var getThis;
   getThis = $(this);
   $(this).next().show();
-  var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
-  var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
-  console.log(taskId, folderId);
-  _deleteEdocument(edocId,getThis,taskId,folderId) ;  
+  //var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
+  //var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
+  //console.log(taskId, folderId);
+  _deleteEdocument(edocId,getThis) ;  
 })
 
 $('.close-dropdown').on('click', function(e){
@@ -385,9 +413,7 @@ function _deleteEdocument(edocId, getThis,taskId,folderId){
           toastr.success('Document Deleted');
           $.pjax.reload({container:"#kanban-refresh",async: false});
           $.pjax.reload({container:"#task-list-refresh",async: false});
-          //$.pjax.reload({container:"#folder-edoc",async: false});
-          //$.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
-          //$(".edoc-drop").hide();
+         
           getThis.getParent(7).hide();
           //getThis.show();
           //getThis.next().hide();

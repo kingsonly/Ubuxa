@@ -81,8 +81,8 @@ input[type="button"] {
 }
 </style>
 <div id="wrap" class="col-sm-12 col-xs-12">
-	<form action="" autocomplete="on" id="search-form">
-		<input id="search" class="zindex-big" name="search" type="text" placeholder="Search for folders"><input id="search_submit" class="search_submit zindex-small" value="Search" type="button">
+	<form action="#" autocomplete="on" id="search-form">
+		<input id="search" class="zindex-big" name="search" type="text" placeholder="Search for a subfolder"><input id="search_submit" class="search_submit zindex-small" value="Search" type="button">
 	</form>
 </div>
 
@@ -176,6 +176,25 @@ toastr.info("You can View all subfolder from the side bar", "Title", options);
 }
 
 });
+
+
+
+$("form #search").on("keyup", function(e) {
+    var value = $(this).val().toLowerCase();
+    $(".$filterContainer").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  
+  $("form #search").on("keydown", function(e) {
+	if (e.keyCode == 13 ) {
+		e.preventDefault();
+        return false;
+	};
+  });
+  
+  
+  
 Search;
  
 $this->registerJs($Search);

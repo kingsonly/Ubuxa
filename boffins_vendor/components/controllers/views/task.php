@@ -13,7 +13,10 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
-//$modalwait = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $type = 'link');
+if(!empty($display)){
+  $array = Task::sortTaskList($display);
+}
+//echo '<pre>',print_r($array),'</pre>';
 ?>
 <style type="text/css">
     .bg-info {
@@ -52,29 +55,33 @@ $boardUrl = Url::to(['task/index']);
    display: block;
    position: relative;
    padding: 1em 1em 1em 16%;
-   margin: 0 auto;
-   cursor: pointer;
+   margin: 0 auto; 
    border-bottom: solid 1px #ddd;
 }
  .todo:last-child {
    border-bottom: none;
 }
  .todo__state {
-   position: absolute;
-   top: 0;
+  position: absolute;
+   top: 10px;
    left: 0;
    opacity: 0;
+   cursor: pointer;
+   width: 32px;
+   height: 25px;
 }
  .todo__text {
    color: #135156;
    transition: all 0.4s linear 0.4s;
+   width: 95%;
 }
  .todo__icon {
    position: absolute;
    top: 0;
    bottom: 0;
    left: 0;
-   width: 100%;
+   /*width: 100%;*/
+   pointer-events: none;
    height: auto;
    margin: auto;
    fill: none;
@@ -302,7 +309,6 @@ $boardUrl = Url::to(['task/index']);
     top: 14px;
 }
 </style>
-
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
@@ -357,22 +363,20 @@ $boardUrl = Url::to(['task/index']);
 <div class="todo-list">
   <?php 
     $id = 1;
-    if(!empty($display)){
-    foreach ($display as $key => $value) { ?>
-  <label class="todo">
-    <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo_listt<?= $value->id; ?> todo__state checked<?= $value->id; ?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
-    <?php }else { ?>
-        <input class=" todo_listt<?= $value->id; ?> todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
-    <?php } ?>
-    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
+    if(!empty($array)){
+    foreach ($array as $key => $value) { 
+      $assigneesIds = $value->taskAssigneesUserId;
+      $userid = Yii::$app->user->identity->id;
+    ?>
+  <div class="todo">
+        <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>
+    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
       <use xlink:href="#todo__line" class="todo__line"></use>
       <use xlink:href="#todo__box" class="todo__box"></use>
       <use xlink:href="#todo__check" class="todo__check"></use>
       <use xlink:href="#todo__circle" class="todo__circle"></use>
     </svg>
-
     <div class="todo__text">
         <?php
           $edocLists = $value->clipOn['edocument'];
@@ -388,7 +392,7 @@ $boardUrl = Url::to(['task/index']);
         <span><?= strip_tags($value->title); ?></span>
     </div>
     
-  </label>
+  </div>
 
   <?php $id++;}}else{
     echo "No task";
@@ -437,6 +441,7 @@ $(".todo__state").change(function() {
     checkedId = $(this).data('id');
     _UpdateStatus(checkedId);        
 });
+
 
 function _TaskOnboarding(){
           $.ajax({
@@ -513,7 +518,7 @@ $("#addTask").bind("keyup change", function() {
         $("#taskButton").hide();
     }
     if(value && value.length > 49){
-      toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
+      //toastr.info("Maximum characters for task title reached. You can add description to a task from the task board");
     }
 });
 

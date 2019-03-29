@@ -15,26 +15,57 @@ $taskremnider = new TaskReminder();
 <style>
   .loading-add-rem{
     display: none;
-    float: left;
+    text-align: center;
+  }
+  .add-reminder{
+    outline: none;
+    display: block;
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    color: rgba(0, 0, 0, 0.6);
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    transition: 0.3s ease;
+  }
+  .input-group-addon{
+    border-radius: 4px;
+    background: rgba(214, 213, 213, 0.6);
+    border: 1px solid #ccc;
+  }
+  .rem-title{
+    color: #6b808c;
+  }
+  .save-rem{
+    border: none;
+    width: 100%;
+  }
+  .rem-button{
+    position: relative;
   }
 </style>
 
 <div class="reminder-form">
 
     <?php $form = ActiveForm::begin(['id' => 'save-rem-form'.$id]); ?>
-    <h3>Reminder</h3>
+    <h3 class="rem-title">Reminder</h3>
     <?php echo $form->field($reminder, 'reminder_time')->widget(DateTimePicker::classname(), [
-    'options' => ['placeholder' => 'Select date','id' => 'save-rem'.$id,],
+    'options' => ['placeholder' => 'Select date','id' => 'save-rem'.$id,'class'=>'add-reminder'],
     'pluginOptions' => [
         'autoclose' => true,
     ]
 
     ]); ?>
 
-    <?= $form->field($reminder, 'notes')->textarea(['maxlength' => true]) ?>
+    <?= $form->field($reminder, 'notes')->textarea(['maxlength' => true,'class' => 'add-reminder']) ?>
     <?= $form->field($taskremnider, 'task_id')->hiddenInput(['maxlength' => true, 'value' => $id])->label(false); ?>
 
-    <div class="form-group">
+    <div class="form-group rem-button">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success save-rem']) ?>
         <span class="loading-add-rem"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
     </div>

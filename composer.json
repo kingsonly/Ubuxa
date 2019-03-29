@@ -57,7 +57,8 @@
         "enyo/dropzone": "^5.5",
         "moment/moment": "*",
         "fullcalendar/fullcalendar": "*",
-        "linslin/yii2-curl": "*"
+        "linslin/yii2-curl": "*",
+        "npm-asset/onesignal-emoji-picker": "1.0.0"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

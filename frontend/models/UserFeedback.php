@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use yii\base\Model;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%user_feedback}}".
@@ -61,5 +63,16 @@ class UserFeedback extends \yii\db\ActiveRecord
             'deleted' => 'Deleted',
             'cid' => 'Cid',
         ];
+    }
+
+    public function sendEmail($message, $agent)
+    {
+        return Yii::$app->mailer->compose(['html' => 'feedback'], [
+            'message' => $message, 'agent' => $agent
+        ])
+            ->setTo('support@epsolun.com')
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('New Feedback')
+            ->send();
     }
 }

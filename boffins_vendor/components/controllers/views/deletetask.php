@@ -11,20 +11,25 @@ use yii\helpers\Url;
 <style>
   .loading-delete-task{
     display: none;
-    float: left;
+    text-align: center;
   }
 </style>
-<div>
-  <span>
-    Are you sure you want to delete this task?
+<div class="delete-header-holder">
+  <span class="delete-header">
+    Confirm Delete
   </span>
 </div>
-<span class="for-task-loader">
-  <?php $form = ActiveForm::begin(['action'=>Url::to(['task/delete'])]); ?>
-  <?= Html::button('Delete', ['class' => 'btn btn-success delete-task', 'name' => 'add', 'id' => 'delete-task'.$id, 'data-taskid' => $taskid]) ?>
-  <?php ActiveForm::end(); ?>
-   <span class="loading-delete-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
-</span>
+<div class="text-delete">
+  <div class="for-edoc-loader">
+    <p>Are you sure you want to delete this task?</p>
+    <span class="for-task-loader">
+      <?php $form = ActiveForm::begin(['action'=>Url::to(['task/delete'])]); ?>
+      <?= Html::button('Delete', ['class' => 'btn btn-success delete-task confirm-doc-delete', 'name' => 'add', 'id' => 'delete-task'.$id, 'data-taskid' => $taskid]) ?>
+      <?php ActiveForm::end(); ?>
+       <span class="loading-delete-task"><?= Yii::$app->settingscomponent->boffinsLoaderImage()?></span>
+  </span>
+  </div>
+</div>
 
 
 <?php

@@ -45,7 +45,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     {
         return [
             [['reference_id', 'file_location'], 'required'],
-            [['reference_id', 'deleted', 'cid'], 'integer'],
+            [['reference_id', 'deleted', 'cid', 'owner_id'], 'integer'],
             [['file_location'], 'string'],
             [['last_updated', 'fromWhere'], 'safe'],
             [['reference'], 'string', 'max' => 25],
@@ -64,12 +64,13 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             'file_location' => 'File Location',
             'last_updated' => 'Last Updated',
             'deleted' => 'Deleted',
+            'Owner ID' => 'Owner ID',
             'cid' => 'Cid',
         ];
     }
 
     //file upload method
-    public function upload($edocument, $reference, $referenceID, $filePath, $cid)
+    public function upload($edocument, $reference, $referenceID, $filePath, $cid, $ownerId)
     {   
             $edocument->file_location = $filePath;
             $edocument->reference = $reference;
@@ -78,6 +79,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             $edocument->cid = $cid;
             $edocument->ownerId = $referenceID;
             $edocument->fromWhere = $reference;
+            $edocument->owner_id = $ownerId;
             $edocument->save();
     }
 
@@ -114,37 +116,41 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     }
     /**
     use to get time elapsed, when the document was created. This medthod uses the model last updated to get the date
-    ***Borrowed from remarks model
     **/
 
     public function getTimeElapsedString($full = false) {
+        //$date = strtotime($this->last_updated);
         $now = new \DateTime();
         $ago = new \DateTime($this->last_updated); 
         $diff = $now->diff($ago);
 
-        $diff->w = floor($diff->d / 7);  
-        $diff->d -= $diff->w * 7;
-
-        //
-        $string = array(
-            'y' => 'year',
-            'm' => 'month',
-            'w' => 'week',
-            'd' => 'day',
-            'h' => 'hour',
-            'i' => 'minute',
-            's' => 'second',
-        );
-        foreach ($string as $k => &$v) {
-            if ($diff->$k) {
-                $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-            } else {
-                unset($string[$k]);
+        if ($diff->d >= 1) {
+            $result = $ago->format('M j, Y \a\t g:ia');
+            return $result;
+        } else {
+            $diff->w = floor($diff->d / 7);  
+            $diff->d -= $diff->w * 7;
+            $string = array(
+                'y' => 'year',
+                'm' => 'month',
+                'w' => 'week',
+                'd' => 'day',
+                'h' => 'hour',
+                'i' => 'minute',
+                's' => 'second',
+            );
+            foreach ($string as $k => &$v) {
+                if ($diff->$k) {
+                    $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+                } else {
+                    unset($string[$k]);
+                }
             }
-        }
 
-        if (!$full) $string = array_slice($string, 0, 1);
-        return $string ? implode(', ', $string) . ' ago' : 'just now'; 
+            if (!$full) $string = array_slice($string, 0, 1);
+            return $string ? implode(', ', $string) . ' ago' : 'just now'; 
+        }
+        
     }
 
     //check if filename already exist and append numbers to it
@@ -164,5 +170,15 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
          }
          $newFilePath = $path . '/' . $newname; 
          return $newFilePath;
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(UserDb::className(), ['id' => 'owner_id']);
+    }
+
+    public function getUsername()
+    {
+        return $this->user->username;
     }
 }

@@ -70,9 +70,9 @@ use yii\widgets\Pjax;
   padding: 4px;
 }
 
-/*Checkboxes styles*/
-input[type="checkbox"] { display: none; }
-
+.assign-input{
+  display: none;
+}
 .assign-input + .assign-name {
   display: block;
   position: relative;
@@ -170,7 +170,8 @@ $(".assign-input").change(function(event) {
     user = $(this).data('userid');
     taskid = $(this).data('taskid');
     console.log(user, taskid)
-    _AddUser(user, taskid);        
+    _AddUser(user, taskid); 
+    //$('.user-image'+taskid+'_'+user).attr('id','user_'+user+'_'+taskid)       
 });
 
 $(document).ready(function(){
@@ -190,12 +191,80 @@ function _AddUser(user,taskid){
                   user_id: user,
                   task_id: taskid, 
                 },
-              success: function(res, sec){
+              success: function(response){
                     toastr.success('Completed');
-                    $.pjax.reload({container:"#task-list-refresh"});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    //$.pjax.reload({container:"#task-list-refresh"});
+                    //$.pjax.reload({container:"#kanban-refresh",async: false});
                     //$.pjax.reload({container:"#task-modal-refresh",async: false});
-                   console.log('Completed');
+                    var assigneeArray = JSON.parse(response);
+                    if(assigneeArray[5] == 1){
+                      if(assigneeArray[4] == null){
+                        assigneeArray[4] = 'images/users/default-user.png';
+                      }
+                      var userImage = $('<div />',{
+                        class: 'user-image user_image'+assigneeArray[1]
+                        })
+                      var element = $('<div />', {
+                      class: "images-folder-users blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
+                      });
+                      element.attr({
+                        'data-toggle':'tooltip',
+                        'data-id':assigneeArray[0],
+                        'data-placement':'bottom',
+                        'data-username':assigneeArray[3],
+                        'data-userimage':assigneeArray[4],
+                        'title':assigneeArray[2]
+                        })
+                      element.css({
+                        'position':'relative',
+                        'z-index':1,
+                        'background-image':'url('+assigneeArray[4]+')',
+
+                        })
+                      userImage.append(element)
+                      
+
+                      if($('#assignedto'+assigneeArray[1]).length > 0){
+                        $(document).find('.user_image'+assigneeArray[1]).append(element)
+                      } else {
+                        var assignedTo = $('<div />',{
+                        class: 'assignedto',
+                        id: 'assignedto'+assigneeArray[1],
+                        })
+                        var folderUsers = $('<div />',{
+                        class: 'folderusers',
+                        id: 'folderusers'+assigneeArray[1]
+                        })
+                        folderUsers.append(userImage)
+                        assignedTo.append(folderUsers)
+                        $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+                        if($('#holder-board'+assigneeArray[1]).find('div.task-label-title').length !== 0){
+                          $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+                          var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+                          if(getCss === '-32px'){
+                            $('#edoc-count'+assigneeArray[1]).css('top','3px');
+                          }
+                        }else{
+                          var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+                          if(getCss === '3px'){
+                            $('#edoc-count'+assigneeArray[1]).css('top','-32px');
+                          }
+                          $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+                        }
+                      }
+                    }else{
+                      if($('.user_image'+assigneeArray[1]).children().length > 1 ){
+                        $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
+                      }else{
+                        $(document).find('#assignedto'+assigneeArray[1]).remove();
+                        var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+                        if(getCss === '-32px'){
+                          $('#edoc-count'+assigneeArray[1]).css('top','3px');
+                        }
+                      }
+                    }
+
+                    
               },
               error: function(res, sec){
                   console.log('Something went wrong');

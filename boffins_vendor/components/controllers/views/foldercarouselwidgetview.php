@@ -287,7 +287,7 @@ text-overflow: ellipsis;
       </div>
 	<div class="create-new-<?= $htmlAttributes; ?> display-non">
 		
-		<?=FolderCreateWidget::widget(['creationType'=>$displayType,'folderModel'=>$folderModel,'folderPrivacy'=>$createForm['folderPrivacy'],'refreshSectionElement' => $createForm['refreshSectionElement'],'formId' => $createForm['formId'],'formAction' =>$createForm['formAction']]);?>
+		<?=FolderCreateWidget::widget(['placeHolderString'=>$placeHolderString,'creationType'=>$displayType,'folderModel'=>$folderModel,'folderPrivacy'=>$createForm['folderPrivacy'],'refreshSectionElement' => $createForm['refreshSectionElement'],'formId' => $createForm['formId'],'formAction' =>$createForm['formAction']]);?>
 		
 	</div>
     </section>
@@ -319,12 +319,7 @@ var owl = $('.'+'$displayType');
                
               });
 			  
-			  $("#search").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $(".$htmlAttributes").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
+			  
   
 		
 		

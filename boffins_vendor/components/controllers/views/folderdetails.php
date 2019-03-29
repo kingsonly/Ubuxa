@@ -66,10 +66,29 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 		display: block;
 		background: red;
 	}
+	
+	.delete_folder{
+	position: absolute;
+    cursor: pointer;
+    background: #0a0000;
+    opacity: 1 !important;
+    top: -10px;
+	right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: none;
+    z-index: 1000;
+	font-family: Times, Times New Roman, Georgia, serif;
+}
+.folderdetls:hover .delete_folder{
+	display: block;
+}
 </style>
 <?php Pjax::begin(['id'=>'folder-details-refresh']); ?>
-<div class="col-md-5 folderdetls" data-foldertitle="<?= $model->title; ?>" data-folderid="<?= $model->id; ?>">
-	<?= EdocumentWidget::widget(['docsize'=>94,'target'=>'folderdetails', 'textPadding'=>60,'referenceID'=>$model->id,'reference'=>'folderDetails','iconPadding'=>0,'tasklist'=>'hidetasklist']);?>
+<div class="col-md-5 folderdetls" data-foldercolor="<?= $model->folderColors;?>" data-foldertitle="<?= $model->title; ?>" data-folderid="<?= $model->id; ?>">
+	<div class="delete_folder" data-folderid="<?= $model->id; ?>"><div class="close__icon">x</div></div>
+	<?= EdocumentWidget::widget(['docsize'=>94,'target'=>'folderdetails', 'textPadding'=>60,'referenceID'=>$model->id,'reference'=>'folderDetails','iconPadding'=>0,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
 
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">
@@ -115,8 +134,37 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 
 <?
 $folderdetailsOnboarding = Url::to(['onboarding/folderdetailsonboarding']);
+$deleteFolderUrl = Url::to(['folder/delete']);
+$folderCabinetUrl = Url::to(['folder/index']);
 $updateImage = <<<updateImage
 
+function toastFunction(type = 'success',message){
+	options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": true,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut",
+		"tapToDismiss": false
+	}
+	if(type == 'success'){
+		toastr.success(message, "", options);
+	}else if(type == 'error'){
+		toastr.error(message, "", options);
+	}else if(type == 'warning'){
+		toastr.warning(message, "", options);
+	}
+	
+}
 function _FolderDetailsOnboarding(){
           $.ajax({
               url: '$folderdetailsOnboarding',
@@ -132,6 +180,38 @@ function _FolderDetailsOnboarding(){
               }
           });
 }
+
+
+$(document).on('click','.delete_folder',function(){
+	id = $(this).data('folderid');
+	$.ajax({
+              url: '$deleteFolderUrl',
+              type: 'POST', 
+              data: {
+                  folderId: id,
+                },
+              success: function(res){
+			  if(res == 1){
+			  		console.log('folder deleted');
+				   // redirect to folder cabinet
+				   toastFunction('success','Folder has been deleted');
+					window.location.replace("$folderCabinetUrl");
+				   console.log(res);
+			  }else if(res == 3){
+			   // you do not have access to delete this folder
+			   toastFunction('warning','sorry you do not have permission to delete this folder');
+			  }else{
+			  // folder could not be deleted cause of unknown reasons, tray again alter;
+			  	toastFunction('error','something went wrong, try again ');
+			  }
+                   
+              },
+              error: function(res){
+                  console.log('Something went wrong');
+				  toastFunction('error','something went wrong, try again ');
+              }
+          });
+})
 
 $(function() {
 

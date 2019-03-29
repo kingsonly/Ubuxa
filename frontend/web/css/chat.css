@@ -1,25 +1,43 @@
 /**** Chat Popup Layout******/
-
+.close__icon{
+	color: #fff;
+    position: absolute;
+    top: 0px;
+    right: 7px;
+    font-size: 14px;
+    font-weight: 100;
+}
 .msg_box{
 	position:fixed;
 	bottom:-5px;
-	width:280px;
+	width:285px;
 	background:white;
 	border-radius:5px 5px 0px 0px;
 	z-index: 100;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
 }
-
+.chat_width{
+	width: 200px;
+}
 .msg_head{	
-	background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);
+	/*background-image: linear-gradient(to top, #002f74, #234585, #3b5b95, #5472a5, #6d8ab5);*/
+	background-color: #264787;
 	color:white;
 	padding:8px;
-	font-weight:bold;
+	font-weight:400;
 	cursor:pointer;
 	border-radius:5px 5px 0px 0px;
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .20);
+	position: relative;
 }
-
+.image_holder{
+	margin-right: 5px;
+}
+.header_image{
+	width: 25px;
+	height: 25px;
+	border-radius: 50%;
+}
 .msg_folder_head{	
 	box-shadow: 0 2px 1px rgba(0, 0, 0, .1), 0 -1px 0 #dadde1;
 	position: relative;
@@ -36,7 +54,7 @@
 }
 
 .chat_folder_img{
-	background: url(../images/folder/folderempty.png) blue;
+	background: url(../images/folder/folderempty.png);
     background-repeat: no-repeat;
     background-size: cover;
 	background-position: 0% 0%;
@@ -47,11 +65,18 @@
 	width: 80%;
 }
 
+.chatloader{
+	width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 138px;
+    bottom: 164px;
+}
 .msg_body{
 	background:white;
 	height:250px;
 	font-size:14px;
-	padding:15px;
+	padding:5px;
 	overflow:scroll;
 	overflow-x: hidden;
 }
@@ -72,11 +97,21 @@
 	outline: none;
 }
 
-.close{
-	float:right;
-	cursor:pointer;
-	color: #ccc;
-	opacity: 1 !important;
+.close_chat{
+	position: absolute;
+    cursor: pointer;
+    background: #0a0000;
+    opacity: 1 !important;
+    top: -9px;
+    right: -9px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: none;
+    z-index: 1000;
+}
+.msg_box:hover .close_chat{
+	display: block;
 }
 .minimize{
 	float:right;
@@ -92,7 +127,7 @@
 	margin-bottom:5px;
 	margin-right:10px;
 	border-radius:5px;
-	word-break: break-all;
+	word-break: keep-all;;
 }
 
 .msg-right{
@@ -128,9 +163,6 @@
 100%{opacity: 1;}
 }
 
-
-
-
 .msg_chat_container{	
 	position: relative;
 	width: 100%;
@@ -138,13 +170,15 @@
 }
 
 .msg_chat_content{
-	align-items: center;
-	display: flex;
-	min-height: 15px;
-	justify-content: space-around;
-	padding: 0 5px;
+    display: flex;
+    min-height: 15px;
+    padding: 0 5px;
+    position: relative;
 }
-
+.msg_chat_content_right{
+	justify-content: flex-end;
+	margin-right: 5px;
+}
 .msg_chart_img{
     background-size: cover;
 	background-position: 0% 0%;
@@ -152,41 +186,70 @@
     width: 30px;
 }
 .msg_chat_text{
-	width: 80%;
+	max-width: 80%;
+    margin-left: 20px;
 }
 
 .msg_chat_img img {
     width: 25px;
     height: 25px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 1px rgba(0, 0, 0, .2);
+    position: absolute;
+    left: 0;
+    top: 1px;
 }
-
+.msg_chat_img{
+	margin-right: 5px;
+}
+.emoji-picker-icon{
+	bottom: 10px !important;
+	top: unset !important;
+}
+.emoji-menu{
+	top: -250px !important;
+}
 .msg_chat_container.msg-left .msg_chat_content .msg_chat_text {
     border-radius: 10px;
-    background: #e2e2e2;
-    padding: 4px 5px;
+	background: #e2e2e2;
+	padding: 3px 9px;
 	text-align: left;
+	border-bottom-right-radius: 18px;
+	border-bottom-left-radius: 20px;
+	border-top-right-radius: 27px;
+	border-top-left-radius: 0px;
 }
 
 .msg_chat_container.msg-right .msg_chat_content .msg_chat_text {
-    border-radius: 10px;
-    background:#d4e7fa;
-    padding: 4px 5px;
-	text-align: right;
+    border-radius: 15px;
+    background: #d4e7fa;
+    padding: 3px 9px;
+    word-break: keep-all;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 0px;
+}
+
 }
 .msg_chat_img_empty{
 	min-width: 30px;
 }
-
+.msg_chat_text_left{
+	/*margin-left: 50px;*/
+}
 .msg_chat_date {
     text-align: center;
     font-size: 10px;
 	opacity: 0.5;
+	clear: right;
 }
 .msg_push{
 	width:100%;
 	height:50px;
 	display: none;
 	text-align: center;
+	cursor: pointer;
 }
 
 .remove{
@@ -197,4 +260,8 @@
 	background: #fff !important;
 	font-style: italic !important;
 	opacity: 0.5;
+}
+
+.chat_folder_title a {
+    color: #333;
 }

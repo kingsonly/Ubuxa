@@ -23,6 +23,7 @@ use frontend\models\SignupForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\Email;
+use frontend\models\FolderManager;
 use frontend\models\Address;
 use frontend\models\Telephone;
 use frontend\models\Entity;
@@ -252,7 +253,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if ($authenticated) {
-			$this->PostExample(yii::$app->user->identity->username);
+			$this->chatNodeLogin(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
@@ -264,7 +265,7 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email,$cid,$role)
+  public function actionSignup($email,$cid,$role,$folderid = 0)
     {
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
@@ -291,8 +292,27 @@ class SiteController extends BoffinsBaseController {
 							$customer->save();	
 						}
 						$newUser = UserDb::findOne([$user->id]);
+						// this section has been modified by kingsley of epsolun
+						// modification adds invited user to a specific folder 
 			            if (Yii::$app->user->login($newUser)){
-			                return $this->redirect(['folder/index']);
+							$folderId = $folderid;
+							$userId = $user->id;
+							$folderRole = 'user';
+							$folderManagerModel = new FolderManager();
+							
+							
+							if($folderId == 0){
+								return $this->redirect(['folder/index']);
+							}else{
+								$folderManagerModel -> user_id = $userId;
+								$folderManagerModel -> folder_id = $folderId;
+								$folderManagerModel -> role = $folderRole;
+								if($folderManagerModel->save()){
+									return $this->redirect(['folder/index']);
+								}	
+							}
+							
+			                
 			            }
 					} 
 				} else {
@@ -387,14 +407,17 @@ class SiteController extends BoffinsBaseController {
     }
 
 
-    public function actionInviteusers()
+    public function actionInviteusers($folderid)
     {	
     	$model = new InviteUsersForm;
+		
+		 
     	if ($model->load(Yii::$app->request->post()))
 	    	{	
+				$folderId = $folderid;
 	    		$emails = $model->email;
 	    		if(!empty($emails)){
-	    				if($model->sendEmail($emails)){
+	    				if($model->sendEmail($emails,$folderId)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
 			
 							return 1;
@@ -496,6 +519,27 @@ class SiteController extends BoffinsBaseController {
 		return $formErrors;
 	}
 
+	public function actionAjaxValidateRequestPasswordForm()
+	{	
+		$this->layout = 'loginlayout';
+        $model = new PasswordResetRequestForm();
+		$formErrors = false;
+		Yii::trace('Begin Ajax Validation (User)');
+		if ( Yii::$app->request->isAjax ) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		
+		if( $model->load(Yii::$app->request->post()) ) { 
+			$formErrors = ActiveForm::validate($model);
+			if ( empty($formErrors) && $formErrors !== false  ) {
+				Yii::trace('Ajax validation passed (User)');
+				return true;
+			}
+		}
+		Yii::trace( 'Ajax Validation failed' );
+		return $formErrors;
+	}
+
 	public function actionBoard()
 	{
 		return $this->renderAjax('board');	
@@ -526,7 +570,7 @@ class SiteController extends BoffinsBaseController {
     	return $this->render('newpage');
     }
 	
-	public function PostExample($username)
+	public function chatNodeLogin($username)
     {
         //Init curl
         $curl = new curl\Curl();
@@ -551,8 +595,31 @@ class SiteController extends BoffinsBaseController {
 	public function actionGetChatFolderDetails(){
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName']; // post params from ajax call
 		$folderDetails = Folder::findOne($folderId); // get folder details 
-		return ['id' => $folderDetails->id,'title' => $folderDetails->title];
+		$privateFolder = $folderDetails->private_folder;
+		
+		if($privateFolder == 1){
+			$folderColor = 'private';
+		}else{
+			$folderManager = FolderManager::find()->select('role')->andWhere(['user_id' => yii::$app->user->identity->id, 'folder_id' => $folderDetails->id])->one();
+			$folderColor = $folderManager->role;
+		}
+		$initUser = UserDb::find()->andWhere(['username'=>$username])->one();
+		$getUserFullName = $initUser->fullName;
+		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor,'fullname'=>$getUserFullName ];
+		
+	}
+	
+	public function actionError(){
+		$this->layout = 'loginlayout';
+		$exception = Yii::$app->errorHandler->exception;
+        if ($exception instanceof \yii\web\NotFoundHttpException) {
+            // all non existing controllers+actions will end up here
+            return $this->render('pnf'); // page not found
+        } else {
+          return $this->render('error', ['exception' => $exception]);
+        }
 		
 	}
 

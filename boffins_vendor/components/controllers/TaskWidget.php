@@ -28,7 +28,7 @@ class TaskWidget extends Widget
     {
          // Register AssetBundle
         return $this->render('task', [
-            'display' => !empty($this->task)?array_reverse($this->task):$this->task,
+            'display' => $this->task,
         	'tasks' => $this->tasks,
             'taskModel' => $this->taskModel,
             'id' => $this->id,

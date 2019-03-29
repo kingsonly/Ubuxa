@@ -15,29 +15,37 @@ $jsEventTriger = $htmlAttributes['class'];
 }
 .text {
 	color: rgb(122, 134, 154);
-	width: 100%;
+	min-width: 100%;
 	height: 48px;
 	display: table;
 	font-size: 14px;
 	font-weight: 400;
 	padding-left: 20px;
+	cursor: pointer;
+}
 	
-}
-
-.text span {
-	display: table-cell;
-	vertical-align: middle;
-}
+	.create-text{
+		text-align: center !important;
+		display: inline;
+		color: #ccc;
+		letter-spacing: 3px;
+		transform: scale(1.5,1);
+		width: 100% !important;
+		position: absolute;
+	}
+	
 	.icon{
 		background: #ccc;
 		text-align: center;
 		vertical-align: middle;
 		height: 50px;
-		width: 40%;
 		position: relative;
 		margin-top: 1px;
+		
 	}
-	
+	.test-icon{
+		width:40% !important;
+	}
 	.icondesign{
 		width: 30px;
 		height: 30px;
@@ -52,6 +60,10 @@ $jsEventTriger = $htmlAttributes['class'];
 		color: #fff !important;
 		padding-top: 8px;
 	}
+	
+	h4 .fa.fa-plus {
+		color: green;
+	}
 
 	
 </style>
@@ -60,12 +72,12 @@ $jsEventTriger = $htmlAttributes['class'];
 <section id="carousles">
 	<? if($buttonType == 'text'){?>
 			<div id="<?= $jsEventTriger;?>-text" style="<?= array_key_exists("style",$htmlAttributes)?$htmlAttributes['style']:'';?>" class="text <?= $class;?> <?= $jsEventTriger;?>-text">
-				<span>
+				<div>
 					<h4>
 						<i class="fa fa-plus"></i>
-						Create folder
+						<span class="create-text">Create a new subfolder</span>
 					</h4>
-				</span>
+				</div>
 			</div>
 	<? }elseif($buttonType == 'icon'){ ?>
 		<div class="dropdown">

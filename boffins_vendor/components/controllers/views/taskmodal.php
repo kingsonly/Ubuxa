@@ -11,15 +11,18 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 use boffins_vendor\components\controllers\ViewEdocumentWidget;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
-use yii\helpers\ArrayHelper;
 use frontend\models\Reminder;
 use yii\bootstrap\Modal;
-
+use frontend\models\StatusType;
+$taskUrl = Url::to(['task/view']);
 ?>
 
 <style>
 #task-details-cont {
     width: 100%;
+}
+#task-title-cont{
+  width: 100%;
 }
 .panel{
     border: none;
@@ -36,7 +39,8 @@ use yii\bootstrap\Modal;
     line-height: 1.33333333333333;
 }
 .createDate {
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 #task-details-targ{
@@ -185,133 +189,18 @@ use yii\bootstrap\Modal;
 }
 
 /*-- For document view--*/
-.show-list{
-  -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
 
-.document-wrapper{
-  width:100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.list-type{
-  text-align:right;
-  padding:10px;
-  margin-bottom:10px;
-  background-color:#5DBA9D;
-}
-
-.list-type a{
-  font-size:20px;
-  color:#FFFFFF;
-  width:40px;
-  height:40px;
-  line-height:40px;
-  margin-left:10px;
-  text-align:center;
-  display:inline-block;
-}
-
-.list-type a:hover, .list-mode .list-type a.hide-list:hover{
-  background-color:#11956c;
-}
-
-.list-type a.hide-list{
-  background-color:#11956c;
-}
-
-.list-mode .list-type a.hide-list{
-  background-color:#5DBA9D;
-}
-
-.list-mode .list-type a.show-list{
-  background-color:#11956c;
-}
-
-.doc-container:after{
-  content:"";
-  clear:both;
-  display:table;
-}
-
-.doc-container{
-  /*padding:10px 0 10px 10px;*/
-}
-
-.document-wrapper .doc-box{
-  float:left;
-  width:273px;
-  height:100px;
-  margin:0 10px 10px 0;
-  background-color:#fff;
-  border-radius: 20px;
-  -webkit-transition:all 1.0s ease;
-  -moz-transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-}
-
-.doc-box .doc-box-inner{
-  float:left;
-  width:25%;
-  height:80px;
-  -webkit-transition:all 1.0s ease;
-  -moz-transition:all 1.0s ease;
-  transition:all 1.0s ease;
-  transition:all 1.0s ease;
-}
-
-.doc-info{
-  margin: 15px 0px 0px 135px;
-}
-
-.document-wrapper.list-mode .doc-container{
-  padding-right:10px;
-}
-
-.document-wrapper.list-mode .doc-box{
-  width:100%;
-}
-.doc-img{
-    background-position: 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border-radius: 20px;
-    height: 100px;
-    position: absolute;
-    text-align: center;
-    z-index: 1;
-    width: 120px;
-}
-.download-doc{
-    cursor: pointer;
-}
-.doc-date{
-    font-family: calibri;
-    color: #707070;
-    font-size: 13px;
-}
-.file_basename{
-    font-size: 13px;
-}
 #boardContent{
   overflow: scroll !important;
 }
-.download-documents:hover{
-    color: black;
+.no-access{
+    pointer-events: none;
 }
 </style>
-
-    <div class="task-view">
+    <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>
@@ -323,7 +212,7 @@ use yii\bootstrap\Modal;
                         <span class="assignUsers">Due Date</span>
                     </div>    
                     <div class="due-labels">
-                        <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model,'attributues'=>[
+                        <span class="label-date"><?= ViewWithXeditableWidget::widget(['model'=>$model, 'pjaxId'=>'#kanban-refresh','attributues'=>[
                                 ['modelAttribute'=>'due_date','xeditable' => 'datetime'],
                                 ]]); ?></span>
                     </div>
@@ -335,9 +224,14 @@ use yii\bootstrap\Modal;
                     <div class="task-statuz">
                         <span class="stat-title">Status</span>
                     </div>
-                    <div class="task-status">
-                        <span class="task-titless"><?= $model->statusTitle; ?></span>
-                    </div>
+                    <?php Pjax::begin(['id'=>'status']); ?>
+                        <div class="task-status">
+                            <!-- <span class="task-titless"><?//= $model->statusTitle; ?></span> -->
+                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh', 'displayValue' => $model->statusTitle, 'attributues'=>[
+                                    ['modelAttribute'=>'status_id','xeditable' => 'dropdown'],
+                                    ]]); ?></span>
+                        </div>
+                    <?php Pjax::end(); ?>
                 </div>
             </div>
         </div>
@@ -357,7 +251,7 @@ use yii\bootstrap\Modal;
                 
 
                     <div class="members">
-                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false]);?>
+                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
                     </div>
             </div>
         <?php } ?>
@@ -392,7 +286,7 @@ use yii\bootstrap\Modal;
            </div>
     </div>
     <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
-    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10]);?>
+    <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10, 'edocument' => 'dropzone']);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
             <div class="reminder-dates">
@@ -408,7 +302,7 @@ use yii\bootstrap\Modal;
                        ${'model'.$count}= new Reminder();
                         ${'model1'.$count} = ${'model'.$count}->findOne($reminder->id);
                     ?>
-                        <?= ViewWithXeditableWidget::widget(['model'=>${'model1'.$count},'attributues'=>[
+                        <?= ViewWithXeditableWidget::widget(['model'=>${'model1'.$count}, 'pjaxId'=>'#kanban-refresh','attributues'=>[
                         ['modelAttribute'=>'reminder_time','xeditable' => 'datetime'],
                         ],'xEditableDateId' => $count]); ?>
                     <?php $count++; }?>
@@ -418,16 +312,17 @@ use yii\bootstrap\Modal;
         </div>
     </div>
     <?php }?>
-    <?php if(!empty($edocument)){?>
-    <h4>Attachments</h4>
     <?php Pjax::begin(['id'=>'task-edoc']); ?>
-        <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
-        <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
+        <?php if(!empty($edocument)){?>
+        <h4>Files</h4>
+            <div class="edocument-view" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+                <?= ViewEdocumentWidget::widget(['edocument' => $edocument, 'target' => 'task']);?>
+            </div>
+        <?php }?>
     <?php Pjax::end(); ?>
-    <?php }else{ ?>
-        <a>Add attachemnt</a>
-    <?php }?>
-    
+    <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'task','edocument' => 'clickUpload','target' => 'modalUpload', 'attachIcon' => 'yes']);?>
+    </div>
   
     <div class ="timestamp">
         <div class="createDate">
@@ -445,7 +340,6 @@ use yii\bootstrap\Modal;
 
 <?
 $taskmodal = <<<JS
-
 JS;
 $this->registerJs($taskmodal);
 ?>

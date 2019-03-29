@@ -72,7 +72,9 @@ class UserFeedbackController extends Controller
         $model->created_at = new Expression('NOW()');
 
         if ($model->load(Yii::$app->request->post())) {
-                $model->save();
+            if($model->save()){
+                $model->sendEmail($model->user_comment, $model->user_agent);
+            }
         }
 
         return $this->render('create', [

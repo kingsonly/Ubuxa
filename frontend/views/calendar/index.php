@@ -223,6 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
     box-shadow: 0 3px 5px #bbb;
     padding: 3px 2px 10px 8px;
     margin-bottom: 21px;
+    display: none;
 
 }
 
@@ -544,6 +545,7 @@ $newEve                  = json_encode($events); //pass event array as json enco
 $calendarScript = <<<JS
 $(document).ready(function(){
       var eve = $newEve; //get the event array from server
+      console.log(eve)
       //function to toggle the switch button for google calendar and update the database switch status
     $(function(){
         //get user google calendar ID. If its empty user should fill the form to insert goodle calendar ID
@@ -651,10 +653,12 @@ $(document).ready(function(){
             event.append(p);
             $('.ui-dialog').find('[data-date =' + dateValue + ']').find('#calendar-task-refresh').find('#parent').append(event);
                     $('#new-task').val('')
+                    toastr.success('New task created successfully');
                     
                 },
               error: function(res, sec){
                     console.log('Something went wrong');
+                    toastr.error('Something went wrong');
               }
             });
           
@@ -739,13 +743,12 @@ $(document).ready(function(){
                 copiedEventObject.id              = getId
                 copiedEventObject.backgroundColor = $(this).css('background-color')
 
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                //console.log(copiedEventObject);
-                console.log(date.format());
-                var getDate = date.format()+' '+time;
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
+                
                // update remove after drop status
+                
+                // is the "remove after drop" checkbox checked?
+                if ($('#drop-remove').is(':checked')) {
+                  // if so, remove the element from the "Draggable Events" list
                 setTimeout(function(){ 
                 $.post('$DropUrl',
                 {
@@ -758,9 +761,6 @@ $(document).ready(function(){
                 }
                 )
                 },500)
-                // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
-                  // if so, remove the element from the "Draggable Events" list
                 setTimeout(function(){ 
                 $.post('$updateDropUrl',
                 {
@@ -772,7 +772,57 @@ $(document).ready(function(){
                 }
                 )
                 },500)  
+                } else {
+                   var event2 = '<div class="external-child" style="background-color: '+ getColor + '; border-color:'+ getColor + '; color:#fff">'+elements.text()+'</div>'
+                  var datas = $('#create-task-calendar').serializeArray();
+                  datas.push({name: 'field', value: event2});
+                  $.ajax({
+                    url: '$createTaskUrl',
+                    type: 'POST',
+                    data: datas,
+                    success: function(response) {
+                        console.log(response)
+                        copiedEventObject.id = response;
+                        console.log(copiedEventObject.id)
+                   
+                    },
+                  error: function(res, sec){
+                       console.log('Something went wrong');
+                       toastr.error('Something went wrong');
+                  }
+                  });
+
+                  setTimeout(function(){ 
+                  $.post('$updateDropUrl',
+                  {
+                    id:copiedEventObject.id
+                  },
+                  function(data){
+                     console.log(data);
+                  }
+                  )
+                  },500)
+
+                   setTimeout(function(){ 
+                  $.post('$DropUrl',
+                  {
+                    id:copiedEventObject.id,
+                    color:getColor,
+                    date:getDate
+                  },
+                  function(data){
+                    console.log(data);
+                  }
+                  )
+                  },500)
                 }
+
+                // render the event on the calendar
+                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                //console.log(copiedEventObject);
+                console.log(date.format());
+                var getDate = date.format()+' '+time;
+                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
             },
             dayClick: function(date, jsEvent, view) {
                 //empty the dialog box first
@@ -875,7 +925,7 @@ $(document).ready(function(){
                 var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
                 var getStartDate = getStartDate+' '+time;
                 var getEndDate = getEndDate+' '+time;
-
+                setTimeout(function(){ 
                 $.post('$UpdateOnDrop',
                 {
                   id:getId,
@@ -886,6 +936,7 @@ $(document).ready(function(){
                    console.log(data);
                 }
                 )
+                },500)
 
             },
             eventResize: function(event, delta, revertFunc) {
@@ -952,10 +1003,12 @@ $(document).ready(function(){
 
                 //Remove event from text input
                 $('#new-event').val('')
+                toastr.success('Event created successfully');
          
           },
         error: function(res, sec){
              console.log('Something went wrong');
+             toastr.error('Something went wrong');
         }
         });
       

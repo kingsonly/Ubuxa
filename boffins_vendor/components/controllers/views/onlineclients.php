@@ -36,7 +36,7 @@
    .infos-sub{
     background:#fff;
     box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-    padding: 10px;
+    padding: 6px;
    }
 </style>
 <?php
@@ -60,7 +60,7 @@
                           echo 0;
                         } ?>
                         </div>
-                        <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Folder Users</div>
+                        <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Authorized Users</div>
                     </div>
                     <div class="col-sm-4 col-xs-4 box-clients-count">
                       <em class="fa fa-circle-o-notch" style="font-size: 2em; color:#d9534f !important"></em>
@@ -77,7 +77,7 @@
                         echo 0;
                       } ?>
                       </div>
-                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks</div>
+                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Total Tasks</div>
 
                     </div>
                     <div class="col-sm-4 col-xs-4 box-clients-count1" style="text-align:center">
@@ -97,7 +97,7 @@
                           echo 0;
                         } ?>
                       </div>
-                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Task Completed</div>
+                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks Completed</div>
                     </div>
                       </div>
                   </div>
@@ -137,7 +137,7 @@
                             }
                           ?>
                       </div>
-                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Tasks</div>
+                      <div class="active-client-clients" style="margin-top: -6px;text-transform: uppercase;font-weight: bold;font-size: 0.8em;color:#c5c7cc">Total Tasks</div>
                     </div>
                      </div> 
                   </div>

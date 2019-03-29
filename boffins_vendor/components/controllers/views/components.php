@@ -22,11 +22,12 @@ use yii\widgets\Pjax;
 		margin: 0px !important;
 	}
 
-	
+
 .auth-users {
 	border-bottom: 1px solid #ccc;
 	padding-top: 12px;
 }
+	
 	.components .col-sm-12, .components .col-xs-12,.components .col-xs-5,.components .col-sm-2{
 		padding-left: 0px !important;
 	}
@@ -57,16 +58,25 @@ use yii\widgets\Pjax;
 	.comps .owl-nav{
 		margin: 0px !important;
 	}
+	.disable-component{
+		text-align: center;
+		padding-top: 11px;
+		letter-spacing: 8px;
+		font-size: 20px;
+		color: #ccc;
+		opacity: 0.7;
+	}
 
 </style>
 
-<div class="col-sm comps margin-bottom">
+<div class="col-sm comps margin-bottom" data-folderid='<?= $folderId;?>'>
     <div class="auth-users">
 
 		<?php Pjax::begin(['id'=>'for-profile-refresh']); ?>
     	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder','pjaxId' => $id])?>	
 		<?php Pjax::end(); ?>
     </div>
+	<? if(yii::$app->user->identity->cid == 5784 or yii::$app->user->identity->cid == 856){?>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">
 		
@@ -98,8 +108,14 @@ use yii\widgets\Pjax;
 						]) ?>
 				
 			
+			</div>
 		</div>
-	</div></div>
+	</div>
+	<? }else{ ?>
+	<div class="components">
+		<div class="disable-component"> Dynamic modules coming soon</div>
+	</div>
+	<?}?>
 </div>
 
 <div class="component-display-wrapper">

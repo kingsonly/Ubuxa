@@ -38,8 +38,7 @@ use kartik\popover\PopoverX;
 	}
 	
 	#folder-title-targ,#folder-description-targ{
-		font-size: 17px !important;
-		font-weight: bold !important;
+		font-size: 14px !important;
 	}
 	#folder-title-targ:hover,#folder-description-targ:hover{
 		cursor: text;
@@ -77,12 +76,17 @@ text-overflow: ellipsis;
 	#folder-description{
 		width: 100%;
 	}
-	h5{
+	
+	.box-content-folder h5{
 		
-		margin-bottom: 5px;
+		margin-bottom: 2px;
 		margin-top: 5px;
-		font-size: 13px !important;
+		font-size: 15px !important;
 	}
+	
+	.box-content-folder h5::after {
+      content: ":"
+    }
 	
 	.kv-editable{
 		
@@ -111,7 +115,7 @@ foreach($attributues as $v){
 			if(!isset($v['xeditable'])){
 		?>
 <div>
-<h5><?= $attributeName;?></h5>
+<h5><?= $attributeName;?> </h5>
 <?
 				
 				
@@ -685,7 +689,16 @@ Editable::end();
 			'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 			'size'=>'sm',
 			'options'=>['placeholder'=>'Enter title...'],
-			'editableValueOptions'=>['class'=>'xinput-component xinput']
+			'editableValueOptions'=>['class'=>'xinput-component xinput'],
+			'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+						}
+			 		}",
+    	],
 			
 		]);
 		Editable::end();
@@ -728,7 +741,16 @@ Editable::end();
 				'options'=>[
         			'options'=>['placeholder'=>'From date','id' => 'x-editable-date'.$xEditableDateId,]
     			],
-				'editableValueOptions'=>['class'=>'well well-sm multi-reminder']
+				'editableValueOptions'=>['class'=>'well well-sm multi-reminder'],
+				'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+						}
+			 		}",
+    	],
 			]);
 			?>
 	</div>
@@ -742,6 +764,7 @@ Editable::end();
 	    'asPopover' => false,
 	    'inputType' => Editable::INPUT_TEXTAREA,
 	    'attribute'=>$v['modelAttribute'],
+	    'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
 	    'header' => 'Notes',
 	    'submitOnEnter' => false,
 	    'options' => [
@@ -750,6 +773,41 @@ Editable::end();
 	        'style'=>'width:400px', 
 	        'placeholder'=>'Enter details...'
     ]
+]);
+
+	?>
+</div>
+<?
+	}elseif($v['xeditable'] == 'dropdown'){
+			?>
+<div>
+	<?
+		echo Editable::widget([
+	    'model'=>$model,
+	    'asPopover' => false,
+	    'inputType' => Editable::INPUT_DROPDOWN_LIST,
+	    'attribute'=>$v['modelAttribute'],
+	    'displayValue' => $displayValue,
+	    //'valueIfNull' =>'<em style="color:blue;">( Enter '. $v['modelAttribute'].' )</em>',
+	    'data'=>$data,
+	    'header' => 'Notes',
+	    'submitOnEnter' => false,
+	    'options' => [
+	        'class'=>'form-control',  
+	        'placeholder'=>'Select status...'
+    ],
+    'pluginEvents' => [
+				"editableSuccess"=>"
+					function(event, val, form, data) {
+						var pjax = '$pjaxId';
+						var taskId = '$taskId';
+						var folderId = '$folderId';
+						if(pjax !== ''){
+							$.pjax.reload({container:'$pjaxId',async: false});
+							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
+						}
+			 		}",
+    	],
 ]);
 
 	?>

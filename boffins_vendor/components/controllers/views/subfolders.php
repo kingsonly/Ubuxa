@@ -27,10 +27,17 @@ use frontend\models\Onboarding;
 	}
 	.subheader {
 	    padding-top: 7px;
+	    padding-left: 0px !important;
+	    padding-right: 26px !important;
 	    padding-bottom: 7px;
 	    font-weight: bold;
 	    background-color: #fff;
 	    border-bottom: 1px solid #ccc;
+	}
+	
+	.sub-folder{
+		padding-left: 0px !important;
+	    padding-right: 0px !important;
 	}
 	.sub-second {
 		padding-right: 0px !important;
@@ -111,7 +118,7 @@ use frontend\models\Onboarding;
 			</div>
 			
 			<div class="col-sm-9 col-xs-9 form-widget" >
-				<?= SearchFormWidget::widget();?>
+				<?= SearchFormWidget::widget(['filterContainer'=>$folderCarouselWidgetAttributes['class']]);?>
 			</div>
 			<?php 
 				$subfoldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();
@@ -140,7 +147,7 @@ use frontend\models\Onboarding;
 		<? }?>
 			<div class="info-2">
 				<div class="box-sub-folders">
-					<?= FolderCarouselWidget::widget(['model' => $displayModel,'numberOfDisplayedItems' => 3,'htmlAttributes'=>$folderCarouselWidgetAttributes['class'],'createFormWidgetAttribute'=>['formId'=>'test', 'formAction'=>$formAction,'refreshSectionElement'=>'create-folder-refresh','folderPrivacy'=>$folderPrivacy]]) ?>
+					<?= FolderCarouselWidget::widget(['placeHolderString' => $placeHolderString,'model' => $displayModel,'numberOfDisplayedItems' => 3,'htmlAttributes'=>$folderCarouselWidgetAttributes['class'],'createFormWidgetAttribute'=>['formId'=>'test', 'formAction'=>$formAction,'refreshSectionElement'=>'create-folder-refresh','folderPrivacy'=>$folderPrivacy]]) ?>
 					
 				</div>
 			</div>

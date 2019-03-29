@@ -155,6 +155,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasOne(StatusType::className(), ['id' => 'status_id']);
     }
 
+
     public function getStatusTitle()
     {
         return $this->status->status_title;
@@ -218,6 +219,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return $this->hasMany(Person::className(), ['id' => 'person_id'])->via('taskAssignees');
     }
 
+
     public function getPersonName()
     {   
         $names = [];
@@ -228,6 +230,16 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         return implode(" ", $names);
 
         //return $this->person->first_name;
+    }
+
+    public function getTaskAssigneesUserId()
+    {
+        $userids = [];
+        $data = $this->taskAssignees;
+        foreach ($data as $attr) {
+            $userids[] = $attr->id;
+        }
+        return $userids;
     }
 
     public function displayTask()
@@ -246,7 +258,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         $result = "";
         if ($interval->y) { $result .= $interval->format("%y years "); }
         if ($interval->m) { $result .= $interval->format("%m months "); }
-        if ($interval->d) { $result .= $interval->format("%d days "); }
+        if ($interval->d) { $result .= $interval->format("%d day(s) "); }
         if ($interval->h) { $result .= $interval->format("%h hours "); }
         if ($interval->i) { $result .= $interval->format("%i minutes "); }
         if ($interval->s) { $result .= $interval->format("%s seconds "); }
@@ -307,4 +319,34 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
+
+    /**
+     * [This method is used to sort task list. Create 2 arrays, one containing unchecked task sorted by date
+        and the other containing checked tasks.  
+     * @param  [array] $key [status id]
+     @return array containing unchecked task at the top and check task at the bottom
+     */
+    public static function sortTaskList($array) {
+        foreach ($array as $key => $row) {
+            if ($row['status_id'] == self::TASK_COMPLETED){
+              $status[] = $row;
+              $statusId[] = $row['create_date'];
+            }else{
+              $date[] = $row;
+              $dateTime[] = $row['create_date'];
+            }
+        }
+        if(!empty($date)){
+            array_multisort($dateTime, SORT_DESC, $date);
+        }
+        if(!empty($status)){
+            array_multisort($statusId, SORT_DESC, $status);
+        }
+        if(!empty($date) && !empty($status)){
+            return array_merge($date, $status);
+        }else{
+            return $array;
+        }
+    }
+
 }

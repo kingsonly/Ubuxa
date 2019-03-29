@@ -75,6 +75,25 @@ border:solid 1px #666;
 background-color: #fff;
 transition: margin-top 0.1s ease-out 0s;
 }
+	.online-circle{
+		width: 8px;
+		height: 8px;
+		position: absolute;
+		right: 0px;
+		bottom: -2px ;
+		background: green;
+		border-radius: 50%;
+	}
+	
+	.standby-circle{
+		width: 8px;
+		height: 8px;
+		position: absolute;
+		right: 0px;
+		bottom: -2px ;
+		background: orange;
+		border-radius: 50%;
+	}
 	.user-name{
 		color: #666;
 		font-size: 13px;
@@ -159,7 +178,7 @@ transition: margin-top 0.1s ease-out 0s;
         position: relative;
         
     }
-    .images-offonline,.images-online{
+    .images-folder-users{
         width:35px;
         height:35px;
         border: 1px solid #fff;
@@ -168,7 +187,7 @@ transition: margin-top 0.1s ease-out 0s;
  		background-position: center;
         border-radius: 50%;
         display: inline-block;
-        margin-left: -8px;
+        margin-left: 1px;
         -webkit-transition: width 0.2s;
         -webkit-transition: height 0.2s;
         transition: width 0.2s;
@@ -178,8 +197,11 @@ transition: margin-top 0.1s ease-out 0s;
 	.images-online{
 		border: 2px solid green !important;
 	}
+	.images-standby{
+		border: 2px solid orange !important;
+	}
     
-    .images-offonline:hover,.images-online:hover{
+    .images-offline:hover,.images-online:hover,.images-standby:hover{
         cursor: pointer;
     }
     .select2-container--krajee .select2-selection--multiple .select2-search--inline .select2-search__field{
@@ -201,6 +223,42 @@ transition: margin-top 0.1s ease-out 0s;
     .select2-selection__clear{
     	top: -2.6rem !important;
     }
+	
+	.delete_users{
+		position: absolute;
+    	cursor: pointer;
+		
+		opacity: 1 !important;
+		bottom: -8px;
+		right: -7px;
+		width: 17px;
+		height: 17px;
+		border-radius: 50%;
+		z-index: 1000;
+		font-family: Times, Times New Roman, Georgia, serif;
+	}
+	.delete_usersx{
+    	cursor: pointer;
+		background: #0a0000;
+		opacity: 1 !important;
+		width: 17px;
+		height: 17px;
+		border-radius: 50%;
+		z-index: 1000;
+		display: none;
+		font-family: Times, Times New Roman, Georgia, serif;
+	}
+	.auth-users .blue:hover .delete_usersx{
+		display: block;
+	}
+	
+	.close__icon_users{
+		font-size: 13px;
+		color: aliceblue;
+		text-decoration: solid;
+		font-weight: bold;
+		text-align: center;
+	}
     
 	</style>
 <? if($type == 'component' ){?>
@@ -208,10 +266,7 @@ transition: margin-top 0.1s ease-out 0s;
 		<span>AUTHORIZED USERS</span>
 	</div>
 <? }?>
-<div>
-
-</div>
-<div class="folderusers">
+<div class="folderusers" id="folderusers<?=$dynamicId;?>">
 	<? if($removeButtons !== false){?>
 	<? if($type != 'component' ){?>
 	<div id="invitenewuser">
@@ -239,7 +294,7 @@ transition: margin-top 0.1s ease-out 0s;
 	<? }?>
 	
 	<?php Pjax::begin(['id'=>'user_prefix'.$pjaxId]); ?>
-	<div class="user-image">
+	<div class="user-image user_image<?=$dynamicId;?>" >
 	<?php $count = !empty($attributues)?count($attributues):0; ?>
 
 <?php 
@@ -250,25 +305,29 @@ transition: margin-top 0.1s ease-out 0s;
 	$image = !empty($users["profile_image"])?$users["profile_image"]:'images/users/default-user.png';
 	$count--;
 			?>
-			<? if (!empty($socketUsers)) {?>
-		
-		<?	if (array_key_exists($users->username, $socketUsers)) {
-    			if($socketUsers[$users->username] == 'Online'){
-					?>
-					<div class="images-online blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
-				<? }else{ ?>
-<!--					display user who is not online -->
-					<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
-				<? } ?>
-			<? }else{ ?>
-<!--				// display user never the less-->
-		<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>"  title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
-		
-			<? }?>
-		
-		<? }else{ ?>
-			<div class="images-offonline blue" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?php echo $count;?>;background-image:url('<?= $image ?>')"></div>
-		<? } ?>
+			<div data-abc=5 class="images-folder-users blue user-sticker<?=$users->id.'-'.$dynamicId;?>" data-userid="<?= $users->id;?>" data-toggle="tooltip" data-id="<?php echo $count;?>" data-placement="bottom" data-fullname="<?= $users->fullName;?>" data-username="<?= $users->username;?>" data-userimage="<?= $image ?>" title="<?= $users->fullName;?>" style="position: relative;z-index:<?=5;//$count;?>;background-image:url('<?= $image ?>')">
+						<div class="circle-holder"></div>
+						
+				<div class="dropdown delete_users">
+                        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><div class="delete_usersx" ><div class="close__icon_users">x</div></div></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <div class="delete-header-holder">
+							  <span class="delete-header">
+								Confirm Delete
+							  </span>
+							</div>
+							<div class="text-delete">
+							  <div class="for-user-loader">
+								<p>Are you sure you want to delete this user?</p>
+								<button class="btn btn-success delete_user">
+								  Delete Users
+								  </button>
+							  </div>
+							</div>
+                        </div>
+                      </div>
+						
+		</div>
 		
 		
 		    
@@ -281,10 +340,82 @@ transition: margin-top 0.1s ease-out 0s;
 	<?php Pjax::end(); ?>
 	</div>
 <?php 
+$deleteFolderUsersUrl = Url::to(['folder/delete-users']);
 
 $userJs = <<<JS
 $(document).on('click','.select2-selection__choice__remove', function(e){
 	e.stopPropagation();
+})
+
+function toastFunction(type = 'success',message){
+	options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-top-right",
+		"preventDuplicates": true,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut",
+		"tapToDismiss": false
+	}
+	if(type == 'success'){
+		toastr.success(message, "", options);
+	}else if(type == 'error'){
+		toastr.error(message, "", options);
+	}else if(type == 'warning'){
+		toastr.warning(message, "", options);
+	}
+	
+}
+
+$(document).on('click','.delete_user', function(e){
+	e.stopPropagation();
+	\$this  = $(this);
+	userId = \$this.parent().parent().parent().parent().parent().data('userid');
+	folderId = \$this.parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().data('folderid');
+	
+	$.ajax({
+              url: '$deleteFolderUsersUrl',
+              type: 'POST', 
+              data: {
+                  folderId: folderId,
+                  userId: userId,
+                },
+              success: function(res){
+			  if(res == 1){
+			  		console.log('folder deleted');
+				   // redirect to folder cabinet
+				   toastFunction('success','User has been deleted from folder');
+					\$this.parent().remove();
+				   console.log(res);
+				   $('body').trigger('click');
+				   $.pjax.reload({container:"#user_prefix"+"$pjaxId",async: false});
+			  }else if(res == 3){
+			   // you do not have access to delete this folder
+			   toastFunction('warning','sorry you do not have permission to delete this user');
+			   $('body').trigger('click');
+			  }else{
+			  // folder could not be deleted cause of unknown reasons, tray again alter;
+			  	toastFunction('error','something went wrong, try again ');
+				$('body').trigger('click');
+			  }
+                   
+              },
+              error: function(res){
+                  console.log('Something went wrong');
+				  toastFunction('error','something went wrong, try again ');
+				  $('body').trigger('click');
+              }
+          });
+	
+	
 })
 	$('.images').mouseenter(function(){
     $(this).css({
