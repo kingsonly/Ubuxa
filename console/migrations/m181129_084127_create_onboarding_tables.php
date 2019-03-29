@@ -30,7 +30,7 @@ class m181129_084127_create_onboarding_tables extends Migration
      */
     public function safeUp()
     {
-        // create a table for onboarding
+        // create a table for onboarding 
         $this->createTable("{{%onboarding}}", [
                                         'id' => $this->primaryKey(11),
                                         'user_id' => $this->integer(11)->comment('foreign key to user table'), 

@@ -55,8 +55,11 @@ class m181031_092316_task_label extends Migration
     public function safeDown()
     {
         echo "m181031_092316_task_label cannot be reverted.\n";
+		
+        $this->dropTable("{{%task_label}}");
+        $this->dropTable("{{%label}}");
 
-        return false;
+        //return false;
     }
 
     /*

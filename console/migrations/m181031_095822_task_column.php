@@ -25,8 +25,12 @@ class m181031_095822_task_column extends Migration
     public function safeDown()
     {
         echo "m181031_094709_task_column cannot be reverted.\n";
+		
+		$this->dropColumn("{{%task}}", 'completion_time');
+		$this->dropColumn("{{%task}}", 'in_progress_time');
+		$this->dropColumn("{{%task_assigned_user}}", 'status');
 
-        return false;
+        //return false;
     }
 
     /*
