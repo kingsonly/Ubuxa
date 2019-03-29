@@ -22,28 +22,52 @@ use frontend\models\FolderComponent;
 use frontend\models\Clip;
 
 
-
-class BoffinsArRootModel extends ActiveRecord
+/***
+ *  This is the base/root Active Record Model for most DB objects in Ubuxa. 
+ *  
+ */
+class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is poorly named and I named it! Anthony.
 {
-	/**
-     * Initialise AR. 
-	 * Respond to new Events defined in DeleteUpdateBehavior
-	 * All child classes must call parent::init() if they override this function. 
+	//this class is also POORLY documented. 
+	
+	/***
+	 *  boolean. To indicate that an instance of this class should not implement any other behaviors but those configures in-class 
+	 *  THIS IS NOT IMPLEMENTED SO THIS IS USELESS.
 	 */
 	public $defaltBehaviour;
 	
-	public $ownerId;
-	public $fromWhere;
+	public $ownerId; //what is this?
+	public $fromWhere; //what is this? 
 	
 	/*
 	 * @array or string to list date values in the ARModel/Child class
+	 * each child class should define it's own dateAttributes - this should be deprecated once the 
+	 * date fields all move to timestamp instead of dateTime. 
 	 */
 	public $dateAttributes = array( 'last_updated' );
 	
+	/**
+     * Initialise AR. 
+	 * Respond to new Events defined in DeleteUpdateBehavior
+	 * @imporatant! All child classes must call parent::init() if they override this function. 
+	 * attaches behaviors for each instance of this class depending on the needs for that instance/the type of child class. 
+	 * this kind of implies global knowledge - breaks encapsulation I think. Refactor this. 
+	 * all these attachments at initialisation, does this mean behaviors(), myBehaviors() and _mergeBehaviours() are deprecated?
+	 */
 	public function init() 
 	{
+		//attach the TenantSpecificBehavior if this SUBCLASS implements it.  
+		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", class_implements(static::class) ) ) {
+			Yii::trace("Attaching TenantSpecificBehavior in " . static::class, __METHOD__ );
+			$this->attachBehavior("TenantSpecificBehavior", [
+					'class' => TenantSpecificBehavior::className(),
+					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
+				]);
+		}
+
+		//attach the DeleteUpdateBehavior if this subclass implements it.  
 		if ( in_array( "boffins_vendor\classes\models\TrackDeleteUpdateInterface", class_implements(static::className()) ) ) {
-			Yii::trace("Attaching this");
+			Yii::trace("Attaching DeleteUpdateBehavior in " . static::class, __METHOD__ );
 			$this->attachBehavior("DeleteUpdateBehavior", [
 					'class' => DeleteUpdateBehavior::className(),
 				]);
@@ -53,22 +77,12 @@ class BoffinsArRootModel extends ActiveRecord
 			$this->on(DeleteUpdateBehavior::EVENT_BEFORE_UNDO_DELETE, [$this, 'beforeUndoDelete']);
 			$this->on(DeleteUpdateBehavior::EVENT_AFTER_UNDO_DELETE, [$this, 'afterUndoDelete']);
 		}			
-		
-		 
-		//attach the TenantSpecificBehavior if this model implements it.  
-		if ( in_array( "boffins_vendor\classes\models\TenantSpecific", class_implements(static::class) ) ) {
-			Yii::trace("Attaching TenantSpecificBehavior " . static::class );
-			$this->attachBehavior("TenantSpecificBehavior", [
-					'class' => TenantSpecificBehavior::className(),
-					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
-				]);
-		}
-		
+				
+		//attach the ClipOnBehavior if this INSTANCE implements it.  
 		if ( $this->usesClipOnBehavior() ) {
-			Yii::trace("Attaching ClipOnBehavior " . static::class );
+			Yii::trace("Attaching ClipOnBehavior in " . static::class, __METHOD__ );
 			$this->attachBehavior("ClipOnBehavior", [
 					'class' => ClipOnBehavior::className(),
-					//'tenantID' => '...', //we should have a global function that retrieves the tenantID agnostically in all situations.
 				]);
 		}
  	}
@@ -83,6 +97,7 @@ class BoffinsArRootModel extends ActiveRecord
 	}
 	
 	/*
+	 * IS THIS DEPRECATED?
 	 * Merges two behaviors. Expects to merge a base behavior (internally defined) 
 	 * and custom behaviors defined by the user. Those behaviors common to the base behavior will
 	 * be ovewritten by the custom behavior.
@@ -242,9 +257,14 @@ class BoffinsArRootModel extends ActiveRecord
 	{
 	}
 	
+	/**
+	 * {@inheritdoc}  
+	 *
+	 *  @details switching Query class for all instances of this class. 
+	 */
 	public static function find() 
 	{
-		Yii::trace("Skipped it");
+		Yii::info("Using StandardQuery class to perform queries in " . static::class, __METHOD__ );
 		return new StandardQuery(get_called_class());
 	}
 	
@@ -261,7 +281,8 @@ class BoffinsArRootModel extends ActiveRecord
 	 */
 	public function beforeValidate()  
 	{
-		if ($this->hasAttribute('deleted') && $this->isNewRecord ) {
+		if ($this->hasAttribute('deleted') && $this->isNewRecord ) { //this can be improved simply by setting a default value for deleted!
+																	//in the DB
 			$this->deleted = 0;
 		}
 		return parent::beforeValidate();
@@ -286,5 +307,16 @@ class BoffinsArRootModel extends ActiveRecord
 		$result = in_array( "boffins_vendor\classes\models\ClipableInterface", class_implements(static::class) ) ? true : $result; 
 		
 		return $result;
+	}
+	
+	/**
+	 *  @brief A simple function to identify what class this object is of. 
+	 *  
+	 *  @return returns the class name without the namespace 
+	 */
+	public static function  shortClassName()
+	{
+		$fqnm = static::class;
+		return substr($fqnm, strrpos($fqnm, '\\')+1);
 	}
 }
