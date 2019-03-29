@@ -95,4 +95,22 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 		
     }
 	
+	/**
+	 *  @brief Activity stream needs to subscribe this instance for this user at the point of insert. 
+	 *  this code can be copy pasted onto any AR model you want to subscribe. 
+	 *  this was not placed in parent class because subscription should be limited to a small set of AR models - user centred models.
+	 *  
+	 *  @inheritdoc
+	 */
+	public function afterSave ( $insert, $changedAttributes ) 
+	{
+		parent::afterSave( $insert, $changedAttributes );
+		if ( $insert ) {
+			Yii::$app->activityManager->subscribe($this);
+			//you might want to trigger a Subscription event here. User subscribed to this folder etc.
+		}
+	}
+	
+	
+	
 }
