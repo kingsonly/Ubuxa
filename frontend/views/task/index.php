@@ -1,350 +1,146 @@
-<?php
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\bootstrap\Modal;
-use boffins_vendor\components\controllers\TaskViewWidget;
-use yii\widgets\Pjax;
-use yii\widgets\ActiveForm;
-use yii\web\View;
-use frontend\models\Task;
-
-$boardUrl = Url::to(['task/index']);
+<?/*php
+use yii\helpers\Url; 
+use boffins_vendor\components\controllers\CreateReminderWidget;
+use boffins_vendor\components\controllers\AssigneeViewWidget;
+use boffins_vendor\components\controllers\CreateLabelWidget;
+use boffins_vendor\components\controllers\AddCardWidget;
+use boffins_vendor\components\controllers\DeleteTaskWidget;
+use boffins_vendor\components\controllers\FolderUsersWidget;
+use boffins_vendor\components\controllers\EdocumentWidget;
+$checkUrls = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$checkUrlParams = $checkUrls[0];
 ?>
-<style type="text/css">
-    .bg-info {
-        background-color: #fff;
-        box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .task-header {
-        border-bottom: 1px solid #ccc;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-weight: bold;
-        position: relative;
-    }
-
-    .box-content-task {
-        height: 230px;
-        border-bottom: 1px solid #ccc;
-        padding-top: 8px;
-        overflow: auto;
-    }
-
-    .box-input1 {
-        padding-top: 5px;
-        height: 50px;
-    }
-
-     .todo-list {
-   background: #FFF;
-   font-size: 13px;
-}
- .todo {
-   display: block;
-   position: relative;
-   padding: 1em 1em 1em 16%;
-   margin: 0 auto;
-   cursor: pointer;
-   border-bottom: solid 1px #ddd;
-}
- .todo:last-child {
-   border-bottom: none;
-}
- .todo__state {
-   position: absolute;
-   top: 0;
-   left: 0;
-   opacity: 0;
-}
- .todo__text {
-   color: #135156;
-   transition: all 0.4s linear 0.4s;
-}
- .todo__icon {
-   position: absolute;
-   top: 0;
-   bottom: 0;
-   left: 0;
-   width: 100%;
-   height: auto;
-   margin: auto;
-   fill: none;
-   stroke: #27FDC7;
-   stroke-width: 1;
-   stroke-linejoin: round;
-   stroke-linecap: round;
-}
- .todo__line, .todo__box, .todo__check {
-   transition: stroke-dashoffset 0.8s cubic-bezier(.9,.0,.5,1);
-}
- .todo__circle {
-   stroke: #27FDC7;
-   stroke-dasharray: 1 6;
-   stroke-width: 0;
-   transform-origin: 13.5px 12.5px;
-   transform: scale(0.4) rotate(0deg);
-   animation: none 0.8s linear;
-}
- .todo__circle 30% {
-     stroke-width: 3;
-     stroke-opacity: 1;
-     transform: scale(0.8) rotate(40deg);
-  }
-   
-   .todo__circle 100% {
-     stroke-width: 0;
-     stroke-opacity: 0;
-     transform: scale(1.1) rotate(60deg);
-  } 
-  .todo__box {
-   stroke-dasharray: 56.1053, 56.1053;
-   stroke-dashoffset: 0;
-   transition-delay: 0.16s;
-}
- .todo__check {
-   stroke: #27FDC7;
-   stroke-dasharray: 9.8995, 9.8995;
-   stroke-dashoffset: 9.8995;
-   transition-duration: 0.32s;
-}
- .todo__line {
-   stroke-dasharray: 168, 1684;
-   stroke-dashoffset: 168;
-}
- .todo__circle {
-   animation-delay: 0.56s;
-   animation-duration: 0.56s;
-}
- .todo__state:checked ~ .todo__text {
-   transition-delay: 0s;
-   color: #ccc;;
-   opacity: 0.6;
-}
- .todo__state:checked ~ .todo__icon .todo__box {
-   stroke-dashoffset: 56.1053;
-   transition-delay: 0s;
-}
- .todo__state:checked ~ .todo__icon .todo__line {
-   stroke-dashoffset: -8;
-}
- .todo__state:checked ~ .todo__icon .todo__check {
-   stroke-dashoffset: 0;
-   transition-delay: 0.48s;
-}
- .todo__state:checked ~ .todo__icon .todo__circle {
-   animation-name: explode;
-}
-
-.assignee {
-    float: right;
-}
-
- .embed-submit-field {
-   position: relative;
-}
- #addTask {
-   width: 100%;
-   padding: 9px;
-}
- #taskButton {
-    position: absolute;
-    right: 3px;
-    top: 3px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: none;
-    background: #ededed;
-    border-radius: 3px;
-    padding: 6px;
-    width: 60px;
-    transition: all 0.2s;
-}
- .embed-submit-field #taskButton:hover {
-   background-color: #37c88d;
-   color: #fff;
-   cursor: pointer;
-}
-.form-containers {
-   margin: 0 auto;
-}
-#addTask {
-    border:none;
-}
-#taskButton {
-    display: none;
-}
-
-</style>
-
-   <div class="col-md-4">
-        <div class="bg-info column-margin taskz-listz">
-          <div class="task-header">
-                <span>TASKS</span>
-                 
-            </div>
+ <ul class="drag-list" id="kanban-board">
+        <?php
+        $count = 1; 
+        foreach($taskStatus as $key => $value){ ?>
+        <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
+            <span class="drag-column-header">
+                <?= $value->status_title;?>
+                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
+            </span>
+                
+            <div class="drag-options" id="options<?=$count;?>"></div>
             
-          <div class="box-content-task" id="box-content">
-             <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
-  <defs>
-    <linearGradient id="boxGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="25" y2="25">
-      <stop offset="0%"   stop-color="#27FDC7"/>
-      <stop offset="100%" stop-color="#0FC0F5"/>
-    </linearGradient>
-
-    <linearGradient id="lineGradient">
-      <stop offset="0%"    stop-color="#ccc"/>
-      <stop offset="100%"  stop-color="#ccc"/>
-    </linearGradient>
-
-    <path id="todo__line" stroke="url(#lineGradient)" d="M21 12.3h168v0.1z"></path>
-    <path id="todo__box" stroke="url(#boxGradient)" d="M21 12.7v5c0 1.3-1 2.3-2.3 2.3H8.3C7 20 6 19 6 17.7V7.3C6 6 7 5 8.3 5h10.4C20 5 21 6 21 7.3v5.4"></path>
-    <path id="todo__check" stroke="url(#boxGradient)" d="M10 13l2 2 5-5"></path>
-    <circle id="todo__circle" cx="13.5" cy="12.5" r="10"></circle>
-  </defs>
-</svg>
-
-
-<div class="todo-list">
-  <?php 
-    $id = 1;
-    if(!empty($tasks)){
-    foreach ($tasks as $key => $value) { ?>
-  <label class="todo">
-    <?php if($value->status_id == Task::TASK_COMPLETED){ ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" checked/>
-    <?php }else { ?>
-        <input class="todo__state" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox"/>
+            <ul class="drag-inner-list" id="<?=$count;?>" data-contain="<?= $value->id; ?>">
+<?php
+    $count2 = 1;
+      if(!empty($taskclips)){
+        foreach ($taskclips as $key => $values) {
+          if($values->status_id == $value->id){
+          $boardUrl = Url::to(['task/modal', 'id' => $values->id,'folderId' => $folderIds]);
+          $reminderUrl = Url::to(['reminder/create']);
+          $titleLength = strlen($values->title);
+          $taskLabels = $values->labelNames;
+          $edocuments = $values->clipOn['edocument'];
+          $assigneesIds = $values->taskAssigneesUserId;
+          $userid = Yii::$app->user->identity->id;
+          //$listData=ArrayHelper::map($users,'id','username');
+ ?>
+<li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  '' : 'no-drag'?> test_<?= $values->id;?>">
+  <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
+  <div class="task-test task-kanban_<?= $values->id;?>" style="margin-bottom: <?= empty($taskLabels) && ($titleLength > 43) && !empty($edocuments) ? '15' : 0; ?>px" value ="<?= $boardUrl; ?>">
+      <div class="task-title" id="task-title<?=$values->id;?>">
+        <span class="task-titles"><?= strip_tags($values->title); ?></span>
+      </div>
+      <?php if(!empty($values->personName)){ ?>
+      <div class="assignedto assignedto<?=$values->id;?>" id="">
+         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id, 'taskModal' => 'modal-users'.$values->id]);?>
+      </div>
+    <?php }?>
+    <div class="holder-board" id="holder-board<?=$values->id;?>">
+      <?php
+        if(!empty($edocuments)){?>
+            <span class="edoc-count" id="edoc-count<?=$values->id;?>" aria-hidden="true" data-toggle="tooltip" title="Attachments" style="top:<?= !empty($values->personName) && empty($values->labelNames) ? '-32px' : '3px'; ?>">
+              <? 
+                $edocs = count($edocuments); 
+                echo $edocs;
+              ?>
+              <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
+            </span>
+      <?php }?>
+      <?php if(!empty($values->labelNames)){ ?>
+        <div class="task-label-title" style="width: <?= !empty($edocuments) ? '90' : '100';?>%">
+          <span class="label-task" id="label<?=$values->id.$count?>">
+            <?= $values->labelNames; ?>
+          </span>                        </div>
+      <?php } ?>
+    </div>
+      <?php 
+      $time = $values->reminderTime;
+      $timers = explode(",",$time);
+      $check = date("Y-m-d H:i:s");
+      $timeNow = strtotime($check);
+      $closest = $values->closestReminder($timers, $check);
+      $reminders = date('M j, g:i a', strtotime($closest));
+        if(!empty($time) && strtotime($closest) >= $timeNow){ ?>
+        <div class="reminder-time">
+            <i class="fa fa-bell time-icon"></i>
+            <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Reminder">
+              <?= $reminders; ?>
+            </span>
+          </div>
+      <?php } ?>
+      <?php if(!empty($values->due_date)){ ?>
+      <div class="due-date">
+        <span class="glyphicon glyphicon-time time-icon"></span>
+          <?php
+            $date = $values->due_date;
+            $date = date('M j, g:i a', strtotime($date));
+            $boardDate = date('M j', strtotime($date))
+          ?>
+          <span class="date-time" aria-hidden="true" data-toggle="tooltip" title="Due: <?=$date; ?>">
+            <?= $boardDate; ?>
+          </span>
+      </div>
     <?php } ?>
-    
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
-      <use xlink:href="#todo__line" class="todo__line"></use>
-      <use xlink:href="#todo__box" class="todo__box"></use>
-      <use xlink:href="#todo__check" class="todo__check"></use>
-      <use xlink:href="#todo__circle" class="todo__circle"></use>
-    </svg>
-
-    <div class="todo__text">
-        <span><?= $value->title; ?></span>
-        
-    </div>
-    
-  </label>
-
-  <?php $id++;}}else{
-    echo "No task";
-  }?>
-</div> 
-
 </div>
-
-     <div class="box-input1">
-            <div class="form-containers">
-                 <div class="embed-submit-field">
-           
-                    <?php $form = ActiveForm::begin(['id' => 'create-task']); ?>
-           
-                      <?= $form->field($task, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Write some task here"])->label(false) ?>
-             
-                       <?= $form->field($task, 'ownerId')->hiddenInput(['value' => 14, 'id' => 'task-Owner'])->label(false) ?>
-                     
-                      <?= Html::submitButton('Save', ['id' => 'taskButton']) ?>
-                    
-                    <?php ActiveForm::end(); ?>
-                </div> 
-            </div>  
+  
+    <div class="bottom-content">
+      <div class="confirm <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?> test_<?= $values->id;?>">
+      <div class="dropdown testdrop">
+        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell icons" aria-hidden="true" data-toggle="tooltip" title="Add reminder"></i></a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
         </div>
+      </div>
+      <?php if($checkUrlParams == 'folder' || $checkUrlParams == 'task'){?>
+        <div class="dropdown testdrop">
+          <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
+          <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
+              <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $values->id, 'assigneeId' => $count]) ?>  
+          </div>
+        </div>
+      <?php }?>
+      <div class="dropdown testdrop">
+        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags icons" aria-hidden="true" data-toggle="tooltip" title="Add label"></i></a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+         <?= CreateLabelWidget::widget(['id' => $count,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $values->id, 'labelId' => $count]) ?>
+        </div>
+      </div>
+      <div class="dropdown testdrop">
+        <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-trash icons" aria-hidden="true" data-toggle="tooltip" title="Delete task"></i></a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+         <?= DeleteTaskWidget::widget(['id' => $count,'taskid' => $values->id]) ?>
+        </div>
+      </div>
+      </div>
     </div>
-</div>
+</li>
+<?php $count2++;}}}?>
 
-
-
-
-
-<?php 
-$taskUrl = Url::to(['site/task']);
-$createUrl = Url::to(['task/dashboardcreate']);
-$task = <<<JS
-
-
-
-
-$(".todo__state").change(function() {
-    var checkedId;
-    checkedId = $(this).data('id');
-    _UpdateStatus(checkedId);        
-});
-
-//$(".todo__icon").click(false);
-
-function _UpdateStatus(checkedId){
-          $.ajax({
-              url: '$taskUrl',
-              type: 'POST', 
-              data: {
-                  id: checkedId,
-                },
-              success: function(res, sec){
-                $.pjax.reload({container:"#kanban-refresh",async: false});
-                   console.log('Status updated');
-              },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-          });
-}
-
-$('#create-task').on('beforeSubmit', function(e) { 
-           var form = $(this);
-           e.preventDefault();
-            if(form.find('.has-error').length) {
-                return false;
-            }
-            $.ajax({
-                url: '$createUrl',
-                type: 'POST',
-                data: form.serialize(),
-                success: function(response) { 
-                    console.log('completed');
-                    $.pjax.reload({container:"#task-list-refresh",async: false});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-modal-refresh",async: false});
-                },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-            });    
-});
-
-var mytaskpage = 1;
-var getTaskOwnerId = $('#task-Owner').val();
-mycontent(mytaskpage);
-jQuery(
-  function($)
-  {
-    $('#flux').bind('scroll', function()
-      {
-        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
-        {
-          mytaskpage++;
-          mycontent(mytaskpage);
-        }
-      })
-  }
-);
-
-$("#addTask").bind("keyup change", function() {
-    var value = $(this).val();
-    if (value && value.length > 0) {
-        $("#taskButton").show();
-    } else {
-        $("#taskButton").hide();
-    }
-});
-JS;
- 
-$this->registerJs($task);
-?>
-
+</ul>
+            <?php if($checkUrlParams == 'folder' || $checkUrlParams == 'task'){?>
+              <a class="add-card" href="#">
+                <span class="cardTask">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  <span class="add-title"> Add Task </span>
+                </span>
+              </a>
+              <div class="card-add" id="add-new-cardz">
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $folderIds]) ?>
+              </div>
+            <?php }?>
+        </li>
+        <?php $count++;} ?>
+    </ul> */

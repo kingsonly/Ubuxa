@@ -49,6 +49,7 @@ class RemarkController extends BoffinsBaseController
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
+                $remarkss->fromWhere = 'folder';
                 $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
@@ -106,7 +107,7 @@ class RemarkController extends BoffinsBaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $remarkSaved = "remark saved successfully";
-             $userImage = UserDb::find()->andWhere(['person_id'=>$commenterUserId])->one();
+             $userImage = UserDb::find()->andWhere(['id'=>$commenterUserId])->one();
              $user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
              $remarkId = $model->id;
              $remarkReply = $model->parent_id;

@@ -11,8 +11,10 @@ module.exports.remarkSockets = function(http) {
 	ioRemark.on('connection', function(socket) {
 		console.log('we got here');
 		socket.on('chat message', function(msg){
-			console.log('message: ' + msg);
-		    ioRemark.emit('chat message', msg); 
+			var value1 = msg.test;
+			var value2 = msg.test2;
+			console.log(value1);
+		    ioRemark.emit('chat message', value1,value2); 
 		});
 	})
 

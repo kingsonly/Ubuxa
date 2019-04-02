@@ -18,6 +18,7 @@ class TaskWidget extends Widget
     public $onboardingExists;
     public $userId;
     public $location;
+    public $folderId;
 	
     public function init()
     {
@@ -36,6 +37,7 @@ class TaskWidget extends Widget
             'onboarding' => $this->onboarding,
             'onboardingExists' => $this->onboardingExists,
             'userId' => $this->userId,
+            'folderId' => $this->folderId,
 			'location' => !empty($this->location)?$this->location:'folder',
         	]);
     }

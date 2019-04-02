@@ -23,7 +23,6 @@ use frontend\models\Edocument;
 use frontend\models\UserDb;
 use boffins_vendor\classes\BoffinsBaseController;
 
-
 /**
  * TaskController implements the CRUD actions for Task model.
  */
@@ -48,41 +47,53 @@ class TaskController extends BoffinsBaseController
      * Lists all Task models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        /** $model = new Task;
-        $dataProvider = $model->displayTask();
-        $task = StatusType::find()->where(['status_group' => 'task'])->all();
+    public function actionIndex($folderIds)
+    {/*
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
-            
-        return $this->renderAjax('index', [
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-            'task' => $task,
-            'reminder' => $reminder,
-        ]); */
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
         $perpage=10;
         $task = new Task();
-        if(isset($_GET['src1'])){
+        $task->fromWhere = 'folder';
+        if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
                 $ownerid = Yii::$app->request->post('ownerId');
+                $modelName = Yii::$app->request->post('modelName');
+                $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                      
                 $taskclips = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                 return $this->renderAjax('index', [
-                         'tasks' => $taskclips,
-                     ]);
+                    'task' => $task,
+                    'taskclips' => $taskclips,
+                    'taskStatus' => $taskStatus,
+                    'reminder' => $reminder,
+                    'label' => $label,
+                    'taskLabel' => $taskLabel,
+                    'taskAssignedUser' => $taskAssignedUser,
+                    'users' => $users,
+                    'userId' => $userId,
+                    'dataProvider' => $dataProvider,
+                    'folderIds' => $folderIds,
+                ]);
                 
             } 
-        }
+        }*/
     }
 
-    public function actionIndex2()
+    public function actionIndex2($folderId)
     {   
         $perpage = 10;
         $task = new Task();
-
+        $task->fromWhere = 'folder';
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
@@ -102,16 +113,26 @@ class TaskController extends BoffinsBaseController
                      ]);
                 } else {
                      
-                     $tasks = $task->specificClips($ownerid,1,$offset,$perpage,'task');
+                     $tasks = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                      
                      return $this->renderAjax('index2', [
                          'tasks' => $tasks,
                          'task' => $task,
+                         'folderId' => $folderId,
                      ]);
                 }
                 
             } 
         }
+    }
+
+    public function actionModal($id,$folderId)
+    {
+
+        return $this->renderAjax('modal', [
+            'id' => $id,
+            'folderId' => $folderId,
+        ]);
     }
 
     /**
@@ -312,12 +333,42 @@ class TaskController extends BoffinsBaseController
             if($statusid == Task::TASK_COMPLETED){
                 $model->completion_time = new Expression('NOW()');
                 $model->save();
+                return json_encode($id);
             } elseif ($statusid == Task::TASK_IN_PROGRESS) {
                 $model->in_progress_time = new Expression('NOW()');
                 $model->save();
             }
             $model->save();
         }
+    }
+
+    public function actionBoard($folderIds)
+    {   
+        $task = new Task();
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+        $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
+        
+        return $this->renderAjax('board', [
+            'task' => $task,
+            'taskModel' => $task,
+            'taskStatus' => $taskStatus,
+            'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
+            'taskAssignedUser' => $taskAssignedUser,
+            'users' => $users,
+            'userId' => $userId,
+            'folderIds' => $folderIds,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionAssignee()

@@ -81,12 +81,11 @@ $(document).on('click',function (e) {
         $('.sider').show();
         $('.edocument-content').hide();
     } else {
-        //do nothing
+    	
     }
 	
   }
 });
-
 
 //var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
