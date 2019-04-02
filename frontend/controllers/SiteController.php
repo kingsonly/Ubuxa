@@ -632,6 +632,30 @@ class SiteController extends BoffinsBaseController {
 		return $this->render('signin');	
 	}
 
+	public function actionResendInvite($email)
+	{
+		$this->layout = 'loginlayout';
+		$customerModel = new Customer();
+		if (Yii::$app->request->isAjax) { 
+		    $data = Yii::$app->request->post(); 
+		    $email =  $data['email'];
+		    $customerExists = Customer::find()->where(['master_email'=>$email])->exists();
+		    $userExists = Email::find()->where(['address'=>$email])->exists();
+		    if($customerExists && !$userExists){
+		    	$customer = Customer::find()->where(['master_email'=>$email])->one();
+	            $cid = $customer->cid;
+	            $domain = $customer->master_doman;
+	            $registrationLink = 'http://'.$domain.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $cid, 'email' => $email, 'role' => 1]);
+	            if($customerModel->sendEmail($email,$registrationLink)){
+					return 1;
+				} else{
+					return 0;
+				}
+	        }
+		}
+		return $this->render('signin');	
+	}
+
     public function actionTask()
     {
     	$task = new Task();
