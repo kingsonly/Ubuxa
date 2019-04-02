@@ -8,11 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ValueLongStringController implements the CRUD actions for ValueLongString model.
  */
-class ValueLongStringController extends Controller
+class ValueLongStringController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

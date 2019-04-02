@@ -21,12 +21,12 @@ use frontend\models\TaskGroup;
 use frontend\models\TaskColor;
 use frontend\models\Edocument;
 use frontend\models\UserDb;
-
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * TaskController implements the CRUD actions for Task model.
  */
-class TaskController extends Controller
+class TaskController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

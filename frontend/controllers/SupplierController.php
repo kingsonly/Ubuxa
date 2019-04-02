@@ -19,11 +19,11 @@ use frontend\models\TelephoneEntity;
 use frontend\models\State;
 use yii\helpers\Json;
 use yii\db\Exception;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * SupplierController implements the CRUD actions for Supplier model.
  */
-class SupplierController extends Controller
+class SupplierController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

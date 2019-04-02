@@ -8,11 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ValueKnownClassController implements the CRUD actions for ValueKnownClass model.
  */
-class ValueKnownClassController extends Controller
+class ValueKnownClassController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

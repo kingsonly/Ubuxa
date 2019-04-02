@@ -11,11 +11,11 @@ use frontend\models\Folder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * RemarkController implements the CRUD actions for Remark model.
  */
-class RemarkController extends Controller
+class RemarkController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

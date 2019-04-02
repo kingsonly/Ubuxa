@@ -12,11 +12,11 @@ use yii\db\Expression;
 use frontend\models\TaskReminder;
 use frontend\models\CalendarReminder;
 use frontend\models\UserDb;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ReminderController implements the CRUD actions for Reminder model.
  */
-class ReminderController extends Controller
+class ReminderController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

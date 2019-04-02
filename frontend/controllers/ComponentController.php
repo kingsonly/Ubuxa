@@ -13,8 +13,9 @@ use frontend\models\ComponentAttributeModel;
 use frontend\models\InviteUsers;
 use frontend\models\UserDb;
 use boffins_vendor\queue\FolderUsersQueue;
+use boffins_vendor\classes\BoffinsBaseController;
 
-class ComponentController extends Controller
+class ComponentController extends BoffinsBaseController
 {
     public function actionCreate()
     {

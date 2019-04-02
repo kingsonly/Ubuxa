@@ -22,7 +22,7 @@ class AuthorizationCodes extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'authorization_codes';
+		return '{{%authorization_codes}}';
     }
 
     /**

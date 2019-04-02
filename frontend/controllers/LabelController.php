@@ -9,11 +9,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\TaskLabel;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * LabelController implements the CRUD actions for Label model.
  */
-class LabelController extends Controller
+class LabelController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}
