@@ -5,14 +5,14 @@
 
     if(!empty($remarks)){
         foreach ($remarks as $key => $remark) {
-        $image = !empty($remark["userImage"]) ? $remark["userImage"] : 'default-user.png';
+        $image = !empty($remark["userImage"]) ? $remark["userImage"] : 'images/users/default-user.png';
     
     ?>
            
 			<li class="welll welll_<?= $remark['id'];?>">
                 <div class="comment-main-level">
                     <!-- Avatar -->
-                    <div class="comment-avatar" style="background-image: url('<?= Url::to('@web/' . $image); ?>'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+                    <div class="comment-avatar" style="background-image: url('<?= Url::to($image); ?>'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
                     <!-- Contenedor del Comentario -->
                     <div class="comment-box">
                         <div class="comment-head">
@@ -28,13 +28,13 @@
 
                  <?php foreach($remarkReply as $reply){
                       if($remark['id'] == $reply['parent_id'] ){ 
-                      $imageReply = !empty($reply["userImage"]) ? $reply["userImage"] : 'default-user.png';
+                      $imageReply = !empty($reply["userImage"]) ? $reply["userImage"] : 'images/users/default-user.png';
                  ?>
 
                 <ul class="comments-list reply-list">
                          <li>
                         <!-- Avatar -->
-                        <div class="comment-avatar" style="background-image: url('<?= Url::to('@web/' . $imageReply); ?>'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
+                        <div class="comment-avatar" style="background-image: url('<?= Url::to($imageReply); ?>'); background-size: cover; background-repeat: no-repeat; background-position: center;"></div>
                         <!-- Contenedor del Comentario -->
                         <div class="comment-box">
                             <div class="comment-head">

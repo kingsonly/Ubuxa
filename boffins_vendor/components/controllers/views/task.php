@@ -13,14 +13,12 @@ use frontend\models\Onboarding;
 $checkUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $checkUrlParam = $checkUrl[0];
 $boardUrl = Url::to(['task/index']);
-if(!empty($display)){
-  $array = Task::sortTaskList($display);
-}
+
 //echo '<pre>',print_r($array),'</pre>';
 ?>
 <style type="text/css">
     .bg-info {
-        background-color: #fff;
+        background-color: #fff !important;
         box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
         padding-left: 15px;
         padding-right: 15px;
@@ -308,6 +306,12 @@ if(!empty($display)){
     color: #6b808c;
     top: 14px;
 }
+.todo__text{
+  cursor: pointer;
+}
+#task-content-loading{
+  display: none;
+}
 </style>
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
@@ -361,44 +365,11 @@ if(!empty($display)){
 
 
 <div class="todo-list">
-  <?php 
-    $id = 1;
-    if(!empty($array)){
-    foreach ($array as $key => $value) { 
-      $assigneesIds = $value->taskAssigneesUserId;
-      $userid = Yii::$app->user->identity->id;
-    ?>
-  <div class="todo">
-        <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == Task::TASK_COMPLETED ? 'checked' : '';?>/>
-    <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
-      <use xlink:href="#todo__line" class="todo__line"></use>
-      <use xlink:href="#todo__box" class="todo__box"></use>
-      <use xlink:href="#todo__check" class="todo__check"></use>
-      <use xlink:href="#todo__circle" class="todo__circle"></use>
-    </svg>
-    <div class="todo__text">
-        <?php
-          $edocLists = $value->clipOn['edocument'];
-          if(!empty($edocLists)){?>
-              <span class="edoc-list" aria-hidden="true" data-toggle="tooltip" title="Attachments">
-                <? 
-                  $edoc = count($edocLists); 
-                  echo $edoc;
-                ?>
-                <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
-              </span>
-        <?php }?>
-        <span><?= strip_tags($value->title); ?></span>
-    </div>
-    
+  <div class="task-fetch">
+
   </div>
-
-  <?php $id++;}}else{
-    echo "No task";
-  }?>
 </div> 
-
+<div id="task-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
 </div>
       
 	   <div class="box-input1">
@@ -409,7 +380,7 @@ if(!empty($display)){
 					 
                       <?= $form->field($taskModel, 'title')->textInput(['maxlength' => true, 'id' => 'addTask', 'placeholder' => "Add a task"])->label(false) ?>
   					 
-  					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
+  					           <?= $form->field($taskModel, 'ownerId')->hiddenInput(['id'=>'folders-id','value' => $parentOwnerId])->label(false) ?>
 					 			<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
                     
                     <span class="for-task-loader">
@@ -431,10 +402,54 @@ if(!empty($display)){
 
 
 <?php 
+$taskFetch = Url::to(['task/index2','src' => 'ref1','folderId' => $parentOwnerId]);
 $taskUrl = Url::to(['site/task']);
+$boardUrlz = Url::to(['task/board']);
 $taskOnboarding = Url::to(['onboarding/taskonboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
+$DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
+$DashboardUrlParam = $DashboardUrl[0];
+$modelName = $location;
 $task = <<<JS
+var getOwnerId = $('#folders-id').val();
+var mypage = 1;
+mycontents(mypage);
+jQuery(
+  function($)
+  {
+
+    $('.box-content-task').bind('scroll', function()
+      {
+        if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
+        {
+          mypage++;
+          mycontents(mypage);
+        }
+      })
+  }
+);
+
+function mycontents(mypage){
+    $.post('$taskFetch',
+    {
+      page:mypage,
+      ownerId:getOwnerId,
+      modelName:'$modelName',
+      DashboardUrlParam:'$DashboardUrlParam'
+    },
+    function(data){
+        if(data.trim().lenght == 0){
+            $('#task-content-loading').text('finished');
+        }
+        $('#task-content-loading').hide();
+        if ($.trim(data)){ 
+        $('.task-fetch').append(data);
+        }
+        $('.todoo').animate({srollTop: $('#loading').offset().top},5000,'easeOutBounce');
+        //$('#ani_img').hide();
+        })
+}
+
 
 $(".todo__state").change(function() {
     var checkedId;
@@ -442,6 +457,14 @@ $(".todo__state").change(function() {
     _UpdateStatus(checkedId);        
 });
 
+$(function(){
+  $('.todo__text').on('click',function(){
+      var folderId = $('.board-specfic').attr('data-folderId');
+      $('#boardContent').modal('show')
+      .find('#viewcontent')
+      .load($(this).attr('value'));
+    });
+});
 
 function _TaskOnboarding(){
           $.ajax({
@@ -469,8 +492,9 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
+                var folderId = $('.board-specfic').attr('data-folderId');
                   setTimeout(function(){
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
                   }, 900);
               },
               error: function(res, sec){
@@ -496,10 +520,10 @@ $('#create-task').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 async: true,
                 success: function(response) { 
-                    console.log('completed');
+                  var folderId = $('.board-specfic').attr('data-folderId');
                     toastr.success('Task created');
                     $.pjax.reload({container:"#task-list-refresh",async: false});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
                     $.pjax.reload({container:"#task-modal-refresh",async: false});
                 },
               error: function(res, sec){
@@ -553,6 +577,7 @@ $('#addTask').bind("keyup keypress", function(e) {
           content: "Add new tasks here",
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-plus-square icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
+        
         {
           element: ".board-open",
           title: "Task board",
@@ -591,10 +616,17 @@ $('#addTask').bind("keyup keypress", function(e) {
           placement: "bottom",
           onShow: function(taskTour){
             $('#mySidenav').css({'width':'100%'});
+            var folderId = $('.board-specfic').attr('data-folderId');
+              $.ajax({
+              url: '$boardUrlz'+'&folderIds='+folderId,
+              success: function(data) {
+              $('.sidenav').html(data);
+              }
+            });
             },
           onShown: function(taskTour){
-            $(".tour-backdrop").appendTo(".view-task-board");
-            $(".tour-step-background").appendTo(".view-task-board");
+            $(".tour-backdrop").appendTo(".close-kanban");
+            $(".tour-step-background").appendTo(".close-kanban");
             $(".tour-step-background").css("left", "0px");
             },
             template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-clipboard icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
@@ -705,6 +737,7 @@ $('#addTask').bind("keyup keypress", function(e) {
           placement: "bottom",
           onShow: function(siteTaskTour){
             $('#mySidenav').css({'width':'100%'});
+            
             },
           onShown: function(siteTaskTour){
             $(".tour-backdrop").appendTo(".sidenav");

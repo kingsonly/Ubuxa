@@ -205,13 +205,34 @@ class SiteController extends BoffinsBaseController {
 		if ( isset(Yii::$app->session['authenticateNewDevice']) 
 			&& Yii::$app->session['authenticateNewDevice'] === true ) {
 			$model->scenario = $model::SCENARIO_LOGIN_NEW_DEVICE;
-			if ( $model->load(Yii::$app->request->post()) ) { 
-				if ( $model->login() ) {
-					$authenticated = true;
-				} else {
+			if ( $model->load(Yii::$app->request->post()) ) {
+		    	$subdomain =  $model->domain;
+		    	$username =  $model->username;
+		    	$user = UserDb::find()->where(['username' => $username])->exists();
+		    	if($user){
+		    		$getUser = UserDb::find()->where(['username' => $username])->one();
+		    		$cid = $getUser->cid;
+		    		$customer = Customer::find()->where(['cid' => $cid])->one();
+		    		$domain = $customer->master_doman;
+		    		if($domain == $subdomain){
+						if ( $model->login() ) {
+							$authenticated = true;
+						} else {
+							Yii::$app->session->setFlash('error', 'Invalid login details.');
+							return $this->render('authenticate_new_device', [
+								'model' => $model,
+							]);
+						}
+					}else{
+						Yii::$app->session->setFlash('error', 'This user is not associated with this account.');
+							return $this->render('authenticate_new_device', [
+								'model' => $model,
+							]);
+					}
+				}else{
 					Yii::$app->session->setFlash('error', 'Invalid login details.');
-					return $this->render('authenticate_new_device', [
-						'model' => $model,
+							return $this->render('authenticate_new_device', [
+								'model' => $model,
 					]);
 				}
 			} else {
@@ -227,19 +248,39 @@ class SiteController extends BoffinsBaseController {
 		} else {
 			$model->scenario = $model::SCENARIO_LOGIN;
 			if ( $model->load(Yii::$app->request->post()) ) {
-				
-				if ( $model->login() ) {
-					
-					$authenticated = true;
-				} elseif ( isset(Yii::$app->session['authenticateNewDevice']) 
-							&& Yii::$app->session['authenticateNewDevice'] === true ) {
-					return $this->render('new_device', [
-						'model' => $model,
-					]);
-				} else {
+		    	$subdomain =  $model->domain;
+		    	$username =  $model->username;
+		    	$user = UserDb::find()->where(['username' => $username])->exists();
+		    	if($user){
+		    		$getUser = UserDb::find()->where(['username' => $username])->one();
+		    		$cid = $getUser->cid;
+		    		$customer = Customer::find()->where(['cid' => $cid])->one();
+		    		$domain = $customer->master_doman;
+		    		if($domain == $subdomain){
+						if ( $model->login() ) {
+							
+							$authenticated = true;
+						} elseif ( isset(Yii::$app->session['authenticateNewDevice']) 
+									&& Yii::$app->session['authenticateNewDevice'] === true ) {
+							return $this->render('new_device', [
+								'model' => $model,
+							]);
+						} else {
+							Yii::$app->session->setFlash('error', 'Invalid login details.');
+							return $this->render('login', [
+								'model' => $model,
+							]);
+						}
+					}else {
+							Yii::$app->session->setFlash('error', 'This user is not associated with this account.');
+							return $this->render('login', [
+								'model' => $model,
+							]);
+					}
+				}else{
 					Yii::$app->session->setFlash('error', 'Invalid login details.');
-					return $this->render('login', [
-						'model' => $model,
+							return $this->render('login', [
+								'model' => $model,
 					]);
 				}		
 			} else {
@@ -315,6 +356,7 @@ class SiteController extends BoffinsBaseController {
 					} 
 				} else {
 		            return $this->render('createUser', [
+		            	'userExists' => $userExists,
 		            	'customer' => $customer,
 						'userForm' => $user,
 						'action' => ['createUser'],
@@ -324,7 +366,12 @@ class SiteController extends BoffinsBaseController {
 				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
 			}
 		}else {
-			return $this->goHome();
+			return $this->render('signup', [
+		            	'userExists' => $userExists,
+		            	'customer' => $customer,
+						'userForm' => $user,
+						'action' => ['createUser'],
+					]);
 		}
     }
 
@@ -441,7 +488,7 @@ class SiteController extends BoffinsBaseController {
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-                return $this->goHome();
+                //return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
             }
@@ -486,6 +533,7 @@ class SiteController extends BoffinsBaseController {
 		}
 		
 		if( $model->load(Yii::$app->request->post()) ) { 
+			
 			$formErrors = ActiveForm::validate($model);
 			if ( empty($formErrors) && $formErrors !== false  ) {
 				Yii::trace('Ajax validation passed (Customer)');
@@ -541,6 +589,47 @@ class SiteController extends BoffinsBaseController {
 	public function actionBoard()
 	{
 		return $this->renderAjax('board');	
+	}
+
+	public function actionFindWorkspace()
+	{
+		$this->layout = 'loginlayout';
+		if (Yii::$app->request->isAjax) { 
+		    $data = Yii::$app->request->post(); 
+		    $email =  $data['email'];
+		    $emailExist = Email::find()->where(['address' => $email])->exists();
+		    if($emailExist){
+		    	$emails = Email::find()->where(['address' => $email])->all();
+		    	$domains = [];
+		    	foreach ($emails as $email) {
+		    		$cid = $email->cid;
+			    	$getTenant = Customer::find()->where(['cid' => $cid])->one();
+			    	$domain = $getTenant->master_doman;
+			    	array_push($domains, $domain);
+		    	}
+		    	UserDb::sendDomainName($domains);
+		    	return 1;
+		    }else{
+		    	return 0;
+		    }
+		}
+		return $this->render('findWorkspace');	
+	}
+
+	public function actionSignin()
+	{
+		$this->layout = 'loginlayout';
+		if (Yii::$app->request->isAjax) { 
+		    $data = Yii::$app->request->post(); 
+		    $domain =  $data['domain'];
+		    $findDomain = Customer::find()->where(['master_doman' => $domain])->exists();
+		    if($findDomain){
+		    	return 1;
+		    }else{
+		    	return 0;
+		    }
+		}
+		return $this->render('signin');	
 	}
 
     public function actionTask()

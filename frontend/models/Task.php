@@ -52,6 +52,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
     const TASK_ASSIGNED_STATUS = 1;
 
     const TASK_NOT_ASSIGNED_STATUS = 0;
+    public const DEFAULT_PARENT_ID = 0;
 	public $fromWhere; // a public attribute only used by clipon behavior
     
     public static function tableName()
@@ -124,7 +125,12 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
      */
     public function getOwner0()
     {
-        return $this->hasOne(User::className(), ['id' => 'owner']);
+        return $this->hasOne(UserDb::className(), ['id' => 'owner']);
+    }
+
+    public function getOwnerName()
+    {
+        return $this->owner0->username;
     }
 
     public function getTaskLabels()

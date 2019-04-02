@@ -270,7 +270,7 @@ label {
 
                 <div class="input-box">
 
-                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling'])?> 
+                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling', 'pattern' => '^\S+$', 'title' => 'Spaces are not allowed.'])?> 
                   <span class="unit">.ubuxa.net</span>
                 </div>
 
@@ -372,8 +372,8 @@ $('#customerForm').on('beforeSubmit', function (e) {
 $(document).ready(function () {
     $(".form-signup").toggleClass("form-signup-left");
     $(".frame").toggleClass("frame-long");
-    var val = getURLParameter('plan_id');
-    $('#customersignupform-plan_id').val(val); 
+    //var val = getURLParameter('plan_id');
+    //$('#customersignupform-plan_id').val(val); 
 });
 
 

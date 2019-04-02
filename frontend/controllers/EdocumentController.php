@@ -37,14 +37,13 @@ class EdocumentController extends Controller
      * Lists all Edocument models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($folderId)
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Edocument::find(),
-        ]);
+        $folder = Folder::findOne($folderId);
+        $edocument = $folder->clipOn['edocument'];
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
+        return $this->renderAjax('index', [
+            'edocument' => $edocument,
         ]);
     }
 

@@ -97,7 +97,7 @@ First unzip the project file .
 On terminal run npm i --save socket.io express.
 
 Start mongodb
-cd to project directory/mondodb
+cd to project directory/mongodb
 run bin/mongod 
 Start server
 on the ubuxa-chat directory run node ./app.js or nodemon ./app.js if nodemon is installed 

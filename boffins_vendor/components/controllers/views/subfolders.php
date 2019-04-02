@@ -200,7 +200,7 @@ $(function() {
         {
           element: "#search_submit",
           title: "Folder Image",
-          content: "You can add image to your folder here.",
+          content: "You can search for subfolders here.",
           placement: 'left',
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-search icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
           onShown: function(subfolderTour){

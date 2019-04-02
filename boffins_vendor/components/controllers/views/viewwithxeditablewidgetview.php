@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\popover\PopoverX;
-
+$boardUrl = Url::to(['task/board']);
 ?>
 <style>
 	#view-content h4{
@@ -29,7 +29,7 @@ use kartik\popover\PopoverX;
 		padding: 2px !important;
 		font-style: italic;
 		border-radius: 5px;
-		text-align: center !important;
+		/*text-align: center !important;*/
 		border-radius: 5px;
 	}
 	.xinput{
@@ -57,7 +57,7 @@ use kartik\popover\PopoverX;
 		background: none;
 		border:none;
 		text-align: left !important;
-		width: 100%;
+		width: auto;
 		color:rgb(9, 30, 66);
 		min-height: 35px;
 		font-size: 16px;
@@ -694,8 +694,9 @@ Editable::end();
 				"editableSuccess"=>"
 					function(event, val, form, data) {
 						var pjax = '$pjaxId';
+						var folderId = $('.board-specfic').attr('data-folderId');
 						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
+							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
 						}
 			 		}",
     	],
@@ -746,9 +747,7 @@ Editable::end();
 				"editableSuccess"=>"
 					function(event, val, form, data) {
 						var pjax = '$pjaxId';
-						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
-						}
+						var folderId = '$folderId';
 			 		}",
     	],
 			]);
@@ -803,7 +802,13 @@ Editable::end();
 						var taskId = '$taskId';
 						var folderId = '$folderId';
 						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false});
+							var folderId = $('.board-specfic').attr('data-folderId');
+							if($('.board-open').hasClass('board-opened')){
+								$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+								$.pjax.reload({container:'#task-list-refresh', async:false});
+							}else{
+								$.pjax.reload({container:'#task-list-refresh', async:false});
+							}
 							$.pjax.reload({container:'#status',replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
 						}
 			 		}",

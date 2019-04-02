@@ -87,7 +87,6 @@ $(document).on('click',function (e) {
   }
 });
 
-
 //var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiPod = /ipod/i.test(navigator.userAgent.toLowerCase());
 var isiDevice = /ipad|iphone|ipod/i.test(navigator.userAgent.toLowerCase());

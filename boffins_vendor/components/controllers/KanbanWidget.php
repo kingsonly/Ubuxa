@@ -17,6 +17,7 @@ class KanbanWidget extends Widget{
 	public $users;
 	public $taskAssignedUser;
 	public $folderId;
+	public $folderIds;
 	public $label;
 	public $taskLabel;
 	public $edocument;
@@ -39,6 +40,7 @@ class KanbanWidget extends Widget{
 			'users' => $this->users,
 			'taskAssignedUser' => $this->taskAssignedUser,
 			'folderId' => $this->folderId,
+			'folderIds' => $this->folderIds,
 			'label' => $this->label,
 			'taskLabel' => $this->taskLabel,
 			'edocument' => $this->edocument,

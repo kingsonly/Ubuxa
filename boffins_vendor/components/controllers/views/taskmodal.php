@@ -95,15 +95,12 @@ $taskUrl = Url::to(['task/view']);
 }
 .taskdrop {
     background-color: rgba(9,45,66,.08);
-    padding: 6px;
+    padding: 0px;
 }
 .modal-content {
     background-color: #ecf0f1;
 }
-.members {
-    margin-left: 10px;
-    margin-top: 10px;
-}
+
 .addUserz {
     padding: 5px;
     font-size: 12px;
@@ -196,11 +193,23 @@ $taskUrl = Url::to(['task/view']);
 .no-access{
     pointer-events: none;
 }
+.assigntask{
+    width: 350px;
+}
+.list-name:hover{
+    background-color: unset !important;
+    text-decoration: none;
+}
+.task-label{
+    width: 250px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 </style>
     <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh','attributues'=>[
+        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh', 'folderId'=> $folderId,'attributues'=>[
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>
@@ -227,7 +236,7 @@ $taskUrl = Url::to(['task/view']);
                     <?php Pjax::begin(['id'=>'status']); ?>
                         <div class="task-status">
                             <!-- <span class="task-titless"><?//= $model->statusTitle; ?></span> -->
-                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh', 'displayValue' => $model->statusTitle, 'attributues'=>[
+                            <span class=""><?= ViewWithXeditableWidget::widget(['model'=>$model, 'data' => $statusData,'taskUrl' => $taskUrl,'taskId'=>$model->id,'folderId' => $folderId, 'pjaxId'=>'#kanban-refresh','folderId'=> $folderId,'displayValue' => $model->statusTitle, 'attributues'=>[
                                     ['modelAttribute'=>'status_id','xeditable' => 'dropdown'],
                                     ]]); ?></span>
                         </div>
@@ -235,45 +244,50 @@ $taskUrl = Url::to(['task/view']);
                 </div>
             </div>
         </div>
-        <?php if(!empty($model->taskAssignees)){?>
+        
             <div class="allassignees">
                 <div class="assignContent">
                     <span class="assignUsers">Assignees</span>
-                    <!--<span class="dropdown taskdrop">
+                    <span class="dropdown taskdrop">
                              <a class="dropdown-toggle drop-assignee moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-plus addUserz" aria-hidden="true" data-toggle="tooltip" title="Assign Users"></span>
                             </a> 
                                 <div class="dropdown-menu assigntask" aria-labelledby="dropdownMenuButton">
-                                        <?//= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
+                                        <?= AssigneeViewWidget::widget(['users' => $users, 'taskid' => $model->id]) ?>  
                                 </div>
-                    </span> -->
+                    </span>
                 </div>
-                
-
-                    <div class="members">
-                        <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id]);?>
-                    </div>
+                <div id="memberz">
+                </div>
+                    <?php if(!empty($model->taskAssignees)){?>
+                            <div class="assignedto assignedto<?=$model->id;?>" id="">
+                                <?= FolderUsersWidget::widget(['attributues'=>$model->taskAssignees,'removeButtons' => false, 'dynamicId' => $model->id, 'taskModal' => 'modal-users']);?>
+                            </div>
+                    <?php } ?>
+            
             </div>
-        <?php } ?>
-        <?php if(!empty($model->labelNames)){ ?>
+        
+        
             <div class="all-labels">
                 <div class="assignContent">
                     <span class="assignUsers">Labels</span>
-                    <!--<span class="dropdown taskdrop">
+                    <span class="dropdown taskdrop">
                          <a class="dropdown-toggle drop-labels moreusers" type="button" id="dropdownMenuButtont" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-plus addLabels" aria-hidden="true" data-toggle="tooltip" title="Add Label"></span>
                         </a> 
-                        <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
-                            <?//= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
-                        </div>
-                    </span> -->
+                            <div class="dropdown-menu task-label" aria-labelledby="dropdownMenuButton">
+                                <?= CreateLabelWidget::widget(['id' => $model->id,'label' => $label, 'taskLabel' => $taskLabel, 'taskid' => $model->id]) ?>  
+                            </div>
+                    </span>
                 </div>  
-                  
+                <?php Pjax::begin(['id'=>'task-modal-labels']); ?>
                     <div class="task-labels">
-                        <span class="label-task"><?= $model->labelNames; ?></span>
+                        <?php if(!empty($model->labelNames)){ ?>
+                            <span class="label-task"><?= $model->labelNames; ?></span>
+                        <?php } ?>
                     </div>
+                <?php Pjax::end(); ?>
             </div>
-        <?php } ?>
     <div class="task-detailzz">
         <div>
             <span class="glyphicon glyphicon-tasks"></span>
@@ -285,7 +299,7 @@ $taskUrl = Url::to(['task/view']);
                         ]]); ?>
            </div>
     </div>
-    <div data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
+    <div class="folder-specific-board" data-taskId = '<?=$model->id;?>' data-folderId = '<?=$folderId;?>'>
     <?= EdocumentWidget::widget(['docsize'=>95,'target'=>'taskboard','attachIcon'=>'yes','textPadding'=>20,'referenceID'=>$model->id,'reference'=>'task','iconPadding'=>10, 'edocument' => 'dropzone']);?>
     <?php if(!empty($model->reminderTimeTask)){ ?>
     <div class="allreminder">
@@ -326,7 +340,7 @@ $taskUrl = Url::to(['task/view']);
   
     <div class ="timestamp">
         <div class="createDate">
-            <span>Created <?= $model->timeElapsedString;?></span>
+            <span>Created <?= $model->timeElapsedString;?> by <?=$model->ownerName;?></span>
         </div>
     <?php if($model->completion_time != NULL && $model->in_progress_time !=NULL && $model->status_id == $model::TASK_COMPLETED){ ?>
         <div>
@@ -339,7 +353,16 @@ $taskUrl = Url::to(['task/view']);
 
 
 <?
+$folderIds = $folderId;
+$boardUrl = Url::to(['task/board']);
 $taskmodal = <<<JS
+
+$('#boardContent').on('hide.bs.modal', function () {
+  setTimeout(function(){
+    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds=$folderIds'});
+  }, 200);
+});
+
 JS;
 $this->registerJs($taskmodal);
 ?>

@@ -16,22 +16,22 @@ return [
         'admin',
     ],
     43 => [
-        'admin',
+        'field_officer',
     ],
     44 => [
-        'admin',
+        'field_officer',
     ],
     39 => [
         'admin',
     ],
     45 => [
-        'admin',
+        'field_officer',
     ],
     46 => [
-        'admin',
+        'field_officer',
     ],
     47 => [
-        'admin',
+        'field_officer',
     ],
     48 => [
         'admin',

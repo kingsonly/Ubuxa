@@ -172,9 +172,47 @@ $img = $model->folder_image;
     .just-for-test{
       background-color: red;
     }
-    
-</style>
+  /* toast */
+.toastit {
+    line-height: 1.5;
+    margin-bottom: 1em;
+    padding: 1.25em;
+    position: fixed;
+    right: 47px;
+    top: 1em;
+    transition: 0.15s ease-in-out;
+    width: 300px;
+    z-index: 9999;
+}
+.hide-loads{
+  display: none;
+}
 
+.toastit.on {
+  transform: translateX(-220px);
+}
+
+.closeit {
+  cursor: pointer;
+  float: right;
+  font-size: 2.25rem;
+  line-height: 0.7;
+  margin-left: 1em;
+  opacity: .8;
+}
+
+.jamit {
+  background-color: #62b168;
+  color: #fff;
+  border-radius: 3px;
+  box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
+}  
+</style>
+<div class="toastit jamit hide-loads" id="edocument-io" aria-hidden="true">
+  <!--<span class="closeit" aria-role="button" tabindex="0">&times;</span>-->
+  <span id="folder-doc-loader"></span>
+</div>
+<div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
 <section>
     <div class="container-fluid">
@@ -205,7 +243,7 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId]) ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderId' => $model->id]) ?>
             		<?php Pjax::end(); ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
@@ -213,19 +251,12 @@ $img = $model->folder_image;
             </section>
         </div>
     </div>
-    
-    <? $this->beginBlock('kanban')?>
-    	<?php Pjax::begin(['id'=>'kanban-refresh']); ?>
-		    <div class="view-task-board">
-		    	<?= KanbanWidget::widget(['taskStatus' => $taskStatus, 'dataProvider' => $model->clipOn['task'], 'task' => $task, 'reminder' => $reminder, 'users' => $users, 'taskAssignedUser' => $taskAssignedUser,'label' => $label, 'taskLabel' => $taskLabel, 'id' => $id]) ?>
-		    </div>
-	    <?php Pjax::end(); ?>
-    <? $this->endBlock();?>
+
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
         <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
-        <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
+        
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
 
@@ -278,6 +309,7 @@ $mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
 
 localStorage.setItem("skipValidation", "");
+
 
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
@@ -371,6 +403,18 @@ function defaultOnboarding() {
           content: "Click on the question mark icon to view more tips",
           placement: 'left',
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+        {
+          element: ".menu-plus",
+          title: "Tips",            
+          content: "Do more from the side menu.",
+          placement: 'right',
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo(".menu-icon ");
+            $(".tour-step-background").appendTo(".menu-icon ");
+            $(".tour-step-background").css("left", "0px");
+            },
         },
       ],
     backdrop: true,  
