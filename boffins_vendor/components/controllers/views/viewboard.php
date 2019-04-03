@@ -190,6 +190,7 @@ use yii\helpers\Url;
         </div>
       </div>
     </div>
+    <a class="closebtn kanban-board-app">&times;</a>
     
 </div>
 
@@ -219,6 +220,13 @@ $viewBoard = <<<JS
             });
         }, 700);
     });
+
+$('.closebtn').click(function(){
+  $('.board-open').removeClass('board-opened');
+  $('.board-open').addClass('board-closed');
+  $('#mySidenav').css({'width':'0'})
+  $('body').toggleClass('noscroll')
+});
 JS;
 $this->registerJs($viewBoard);
 ?>

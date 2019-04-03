@@ -381,7 +381,7 @@ class SiteController extends BoffinsBaseController {
 		
 		$this->layout = 'loginlayout';
 		$customerModel = new Customer();
-       	$customer = new CustomerSignupForm;
+       	$customer = new CustomerSignupForm();
        	$tenantEntity = new TenantEntity();
        	$tenantCorporation = new TenantCorporation();
        	$tenantPerson = new TenantPerson();
