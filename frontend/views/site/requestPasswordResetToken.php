@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -277,7 +278,7 @@ label {
                    <p class="confirm-text">Please check your email to reset your password.</p>
                 </div>
             </div>
-            <div class="login"><a href="login.php" class="login-text">Back to Login</span></div>
+            <div class="login"><a href="<?= Url::to(['site/login'])?>" class="login-text">Back to Login</span></div>
         </div>
     </div>
 </div>
