@@ -548,7 +548,7 @@ Tasksocket.on('task status', function(status){
   if($(".todo_listt"+status).is(":checked")){
     $(".todo_listt"+status).removeAttr('checked')
   }else{
-    $(".todo_listt"+).attr('checked', 'checked');
+    $(".todo_listt"+status).attr('checked', 'checked');
   }
 })
 
