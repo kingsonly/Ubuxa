@@ -427,7 +427,7 @@ AppAsset::register($this);
       <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
       <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
       <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
-      <span class="dropdown">
+      <span class="dropdown" style="display:none">
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
@@ -519,7 +519,15 @@ $('#example-1').keyup(function(){
 $('#create-remark').submit(function(e) { 
            e.preventDefault();
     e.stopImmediatePropagation();
-           var remark_value = $('#example-1').html();
+           //var remark_value = $('#example-1').html();
+          $('#example-1').html(function(i, text) {
+                 return text.replace(
+                     /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>'
+                 );
+            })
+            var remark_value = $('#example-1').html();
+            console.log(remark_value)
            var form = $(this);
            var datas = form.serializeArray();
            datas.push({name: '&moredata', value: remark_value});
