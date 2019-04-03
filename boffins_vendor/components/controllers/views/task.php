@@ -312,6 +312,12 @@ $boardUrl = Url::to(['task/index']);
 #task-content-loading{
   display: none;
 }
+.no-access{
+  pointer-events: none;
+}
+.has-access{
+  pointer-events: unset;
+}
 </style>
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
@@ -403,16 +409,18 @@ $boardUrl = Url::to(['task/index']);
 
 <?php 
 $taskFetch = Url::to(['task/index2','src' => 'ref1','folderId' => $parentOwnerId]);
-$taskUrl = Url::to(['site/task']);
+$taskUrl = Url::to(['task/check-task']);
 $boardUrlz = Url::to(['task/board']);
 $taskOnboarding = Url::to(['onboarding/taskonboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $modelName = $location;
+$modalurl = Url::to(['task/view']);
 $task = <<<JS
 var getOwnerId = $('#folders-id').val();
 var mypage = 1;
+var Tasksocket = io('//127.0.0.1:4000/task');
 mycontents(mypage);
 jQuery(
   function($)
@@ -492,10 +500,7 @@ function _UpdateStatus(checkedId){
                   id: checkedId,
                 },
               success: function(res, sec){
-                var folderId = $('.board-specfic').attr('data-folderId');
-                  setTimeout(function(){
-                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
-                  }, 900);
+                Tasksocket.emit('task status', checkedId);
               },
               error: function(res, sec){
                   //console.log(' went wrong');
@@ -507,6 +512,7 @@ function _UpdateStatus(checkedId){
 $('#create-task').on('beforeSubmit', function(e) {
            var form = $(this);
            var task = $('#addCard').val();
+           var taskTitle = $('#addTask').val();
            $('#taskButton').hide();
            $("#loading-task").show();
            e.preventDefault();
@@ -520,11 +526,11 @@ $('#create-task').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 async: true,
                 success: function(response) { 
+                  var info = JSON.parse(response);
                   var folderId = $('.board-specfic').attr('data-folderId');
                     toastr.success('Task created');
-                    $.pjax.reload({container:"#task-list-refresh",async: false});
-                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrlz&folderIds='+folderId});
-                    $.pjax.reload({container:"#task-modal-refresh",async: false});
+                    //$.pjax.reload({container:"#task-list-refresh",async: false});
+                    Tasksocket.emit('task title', taskTitle);
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
@@ -533,6 +539,20 @@ $('#create-task').on('beforeSubmit', function(e) {
             }, 5);
             return false;    
 });
+
+Tasksocket.on('task title', function(msg){
+  $.pjax.reload({container:"#task-list-refresh",async: false});
+})
+
+Tasksocket.on('task status', function(status){
+  if($(".todo_listt"+status).is(":checked")){
+    $(".todo_listt"+status).removeAttr('checked')
+    $(".todo_listt"+status).addClass('confimriii')
+  }else{status
+    $(".todo_listt"+).attr('checked', 'checked');
+    $(".todo_listt"+status).addClass('noneee')
+  }
+})
 
 $("#addTask").bind("keyup change", function() {
     var value = $(this).val();

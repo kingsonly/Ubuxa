@@ -238,13 +238,14 @@
 	border-bottom-left-radius: 20px;
 	border-top-right-radius: 27px;
 	border-top-left-radius: 0px;
+	word-break: break-word;
 }
 
 .msg_chat_container.msg-right .msg_chat_content .msg_chat_text {
     border-radius: 15px;
     background: #d4e7fa;
     padding: 3px 9px;
-    word-break: keep-all;
+    word-break: break-word;
     border-bottom-left-radius: 18px;
     border-bottom-right-radius: 20px;
     border-top-left-radius: 15px;

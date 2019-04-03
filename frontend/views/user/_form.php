@@ -278,7 +278,6 @@ $('#userform').on('beforeSubmit', function (e) {
         type: 'post',
         success: function(res){
           toastr.success('Profile image changed');
-        	$.pjax.reload({container:"#kanban-refresh",async: false});
         	$.pjax.reload({container:"#for-profile-refresh",async: false});
         	$.pjax.reload({container:"#profile-refresh",async: false});
         	$.pjax.reload({container:"#remark-refresh",async: false});
