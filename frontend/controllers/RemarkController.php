@@ -15,7 +15,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * RemarkController implements the CRUD actions for Remark model.
  */
-class RemarkController extends BoffinsBaseController
+class RemarkController extends Controller
 {
     /**
      * {@inheritdoc}
