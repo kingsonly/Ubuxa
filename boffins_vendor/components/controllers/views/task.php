@@ -528,7 +528,7 @@ $('#create-task').on('beforeSubmit', function(e) {
                 success: function(response) { 
                   var info = JSON.parse(response);
                   var folderId = $('.board-specfic').attr('data-folderId');
-                    toastr.success('Task created');
+                    
                     //$.pjax.reload({container:"#task-list-refresh",async: false});
                     Tasksocket.emit('task title', taskTitle);
                 },
@@ -541,6 +541,7 @@ $('#create-task').on('beforeSubmit', function(e) {
 });
 
 Tasksocket.on('task title', function(msg){
+  toastr.success('Task created');
   $.pjax.reload({container:"#task-list-refresh",async: false});
 })
 
