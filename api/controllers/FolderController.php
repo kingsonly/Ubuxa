@@ -196,13 +196,6 @@ class FolderController extends RestController
         
 	}
 	
-	
-//    public function actionView($id)
-//    {
-//        $model = $this->findModel($id);
-//        Yii::$app->api->sendSuccessResponse($model->attributes);
-//    }
-
     public function actionDelete($id)
     {
         $model = $this->findModel($id);

@@ -26,7 +26,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * TaskController implements the CRUD actions for Task model.
  */
-class TaskController extends BoffinsBaseController
+class TaskController extends Controller
 {
     /**
      * {@inheritdoc}
