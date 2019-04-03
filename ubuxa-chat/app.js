@@ -21,6 +21,7 @@ var port = process.env.PORT || 4000;
 
 require('./libs/chat.js').sockets(http);
 require('./libs/remark.js').remarkSockets(http);
+require('./libs/task.js').taskSockets(http);
 app.use(logger('dev'));
 
 //db connection

@@ -656,26 +656,6 @@ class SiteController extends BoffinsBaseController {
 		return $this->render('signin');	
 	}
 
-    public function actionTask()
-    {
-    	$task = new Task();
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();   
-            $checkedid =  $data['id'];
-
-            $model = Task::findOne($checkedid);
-
-            if($model->status_id != $task::TASK_COMPLETED){
-            	$model->status_id = $task::TASK_COMPLETED;
-            	$model->save();
-            } else {
-            	$model->status_id = $task::TASK_NOT_STARTED;
-            	$model->save();
-            }
-            
-        }
-    }
-
     public function actionNewpage()
     {
     	return $this->render('newpage');

@@ -280,6 +280,7 @@ class TaskController extends Controller
                         $taskGroupModel->task_group_id = $model->id;
                         $taskGroupModel->task_child_id = $model->id;
                         $taskGroupModel->save();
+                        return json_encode($model->id);
                     }
                 }
                 
@@ -464,6 +465,26 @@ class TaskController extends Controller
           return 1;
         } else {
             return 0;
+        }
+    }
+
+    public function actionCheckTask()
+    {
+        $task = new Task();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $checkedid =  $data['id'];
+
+            $model = Task::findOne($checkedid);
+
+            if($model->status_id != $task::TASK_COMPLETED){
+                $model->status_id = $task::TASK_COMPLETED;
+                $model->save();
+            } else {
+                $model->status_id = $task::TASK_NOT_STARTED;
+                $model->save();
+            }
+            
         }
     }
 
