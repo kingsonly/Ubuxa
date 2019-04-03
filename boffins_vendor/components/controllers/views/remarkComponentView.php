@@ -559,6 +559,7 @@ $('#create-remark').submit(function(e) {
             });  
 });
 Remarksocket.on('chat message', function(msg, info){
+   console.log(msg)
     msgArr = msg.split(',');
     
     if(msgArr[3] == 0){
