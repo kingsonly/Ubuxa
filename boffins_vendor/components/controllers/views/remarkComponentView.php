@@ -427,7 +427,7 @@ AppAsset::register($this);
       <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
       <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
       <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
-      <span class="dropdown" style="display: none">
+      <span class="dropdown">
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
