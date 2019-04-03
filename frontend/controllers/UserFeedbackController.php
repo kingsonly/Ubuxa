@@ -13,7 +13,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * UserFeedbackController implements the CRUD actions for UserFeedback model.
  */
-class UserFeedbackController extends BoffinsBaseController
+class UserFeedbackController extends Controller
 {
     /**
      * {@inheritdoc}

@@ -12,7 +12,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * OnboardingController implements the CRUD actions for Onboarding model.
  */
-class OnboardingController extends BoffinsBaseController
+class OnboardingController extends Controller
 {
     /**
      * {@inheritdoc}

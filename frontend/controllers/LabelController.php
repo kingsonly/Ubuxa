@@ -13,7 +13,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * LabelController implements the CRUD actions for Label model.
  */
-class LabelController extends BoffinsBaseController
+class LabelController extends Controller
 {
     /**
      * {@inheritdoc}

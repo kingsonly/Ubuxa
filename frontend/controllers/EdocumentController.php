@@ -17,7 +17,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * EdocumentController implements the CRUD actions for Edocument model.
  */
-class EdocumentController extends BoffinsBaseController
+class EdocumentController extends Controller
 {
     /**
      * {@inheritdoc}

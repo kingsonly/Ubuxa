@@ -16,7 +16,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ReminderController implements the CRUD actions for Reminder model.
  */
-class ReminderController extends BoffinsBaseController
+class ReminderController extends Controller
 {
     /**
      * {@inheritdoc}
