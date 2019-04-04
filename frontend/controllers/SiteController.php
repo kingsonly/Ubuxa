@@ -605,7 +605,7 @@ class SiteController extends BoffinsBaseController {
 			    	$domain = $getTenant->master_doman;
 			    	array_push($domains, $domain);
 		    	}
-		    	UserDb::sendDomainName($domains);
+		    	UserDb::sendDomainName($domains,$email);
 		    	return 1;
 		    }else{
 		    	return 0;

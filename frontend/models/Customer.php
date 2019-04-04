@@ -103,7 +103,6 @@ class Customer extends \yii\db\ActiveRecord
     {
         return Yii::$app->mailer->compose(['html' => 'newcustomer'],
                 [
-                    //'body'  => $this->body,
                     'link'  => $registrationLink,
                 ])
             ->setTo($newCustomerEmail)

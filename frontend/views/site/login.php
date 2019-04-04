@@ -359,7 +359,7 @@ input[type=checkbox]{
     <div class="topLayer">
       <div class="right">
         <div class="content">
-          <h2>Login in to <?= $customerDomain[1];?></h2>
+          <h2>Login  to <?= $customerDomain[1];?></h2>
           <?php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
   				<?php echo Alert::widget([
   					'options' => ['class' => 'alert-danger'],
