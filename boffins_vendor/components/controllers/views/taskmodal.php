@@ -358,9 +358,9 @@ $boardUrl = Url::to(['task/board']);
 $taskmodal = <<<JS
 
 $('#boardContent').on('hide.bs.modal', function () {
-  setTimeout(function(){
+  /*setTimeout(function(){
     $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds=$folderIds'});
-  }, 200);
+  }, 200);*/
 });
 
 JS;
