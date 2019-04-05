@@ -218,8 +218,10 @@ $viewBoard = <<<JS
                   $('.sidenav').html(data);
                 },
                 complete: function(){
-                    $('.content-loader').fadeOut();
+                    
                  }
+            }).then(function() {
+                $('.content-loader').fadeOut();
             });
         }, 700);
     });
