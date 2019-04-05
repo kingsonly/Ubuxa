@@ -50,46 +50,16 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        
+
+
+        
         'urlManager' => [
-            'class' => 'yii\web\UrlManager',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-                '1/register'=>'site/register',
-                '1/authorize'=>'site/authorize',
-                '1/accesstoken'=>'site/accesstoken',
-                '1/me'=>'site/me',
-                '1/logout'=>'site/logout',
-
-
-                '1/employees'=>'employee/index',
-                '1/employees/view/<id>'=>'employee/view',
-                '1/employees/create'=>'employee/create',
-                '1/employees/update/<id>'=>'employee/update',
-                '1/employees/delete/<id>'=>'employee/delete',
-
-
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-                '<module:\w+>/<controller:\w+>/<id:\d+>' => '<module>/<controller>/view',
-                '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<module>/<controller>/<action>',
-                // '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
-            ],
-
-        ],
-
-
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'enableStrictParsing' => true,
-            'showScriptName' => false,
-            'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'employee'],
-            ],
-        ],
-        */
+        'class' => 'yii\web\UrlManager',
+        'enablePrettyUrl' => true,
+        'showScriptName' => false,
+         ],
+        
 
 
         /*

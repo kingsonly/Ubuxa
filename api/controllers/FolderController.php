@@ -75,12 +75,15 @@ class FolderController extends RestController
 			}else{
 				$folderStatus = 'private';
 			}
-			$folderDetails = (array) $firstFolderFilter->attributes;
+			$folderDetails  = $firstFolderFilter->attributes;
+			foreach($firstFolderFilter->attributes as $key => $value){
+				$folderDetails[$key] = $value;
+			}
 			$folderDetails['folderstatus'] = $folderStatus;
 			$folderRole = $firstFolderFilter['role'];
 			$folderDetails['role'] =  $folderRole['role'];
 			$folderDetails['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
-			$folders[] =   $folderDetails;
+			$folders[] =   (array) $folderDetails;
 		}
         $response = $folders;
         Yii::$app->api->sendSuccessResponse($response);
