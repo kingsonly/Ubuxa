@@ -213,6 +213,7 @@ $viewBoard = <<<JS
         setTimeout(function(){  
             $.ajax({
                 url: '$boardUrlz'+'&folderIds='+folderId,
+                async: false,
                 success: function(data) {
                   $('.sidenav').html(data);
                 },
