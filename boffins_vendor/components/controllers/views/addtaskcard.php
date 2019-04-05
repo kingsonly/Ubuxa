@@ -99,6 +99,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
             $.ajax({
                 url: '$taskUrl',
                 type: 'POST',
+                async:true,
                 data: form.serialize(),
                 success: function(response) {
                     toastr.success('Task created');
