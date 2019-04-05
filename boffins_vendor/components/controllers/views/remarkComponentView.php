@@ -427,7 +427,7 @@ AppAsset::register($this);
       <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
       <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
       <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
-      <span class="dropdown" style="display: none">
+      <span class="dropdown" style="display:none">
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
@@ -469,7 +469,7 @@ $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $baseUrl=Url::base(true);
 $userId = Yii::$app->user->identity->id;
-$remarkJs = <<<abc
+$remarkJs = <<<remarkjs
 var remarkContainerID = '$parentOwnerId';
 var userID = '$userId';
 var setStatus;
@@ -519,7 +519,15 @@ $('#example-1').keyup(function(){
 $('#create-remark').submit(function(e) { 
            e.preventDefault();
     e.stopImmediatePropagation();
-           var remark_value = $('#example-1').html();
+           //var remark_value = $('#example-1').html();
+          $('#example-1').html(function(i, text) {
+                 return text.replace(
+                     /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>'
+                 );
+            })
+            var remark_value = $('#example-1').html();
+            console.log(remark_value)
            var form = $(this);
            var datas = form.serializeArray();
            datas.push({name: '&moredata', value: remark_value});
@@ -561,7 +569,7 @@ $('#create-remark').submit(function(e) {
 Remarksocket.on('chat message', function(msg, info){
    console.log(msg)
     msgArr = msg.split(',');
-    
+
     if(msgArr[3] == 0){
        var li = $("<li/>", {
                   class: "welll welll_"+info[3]
@@ -675,8 +683,7 @@ Remarksocket.on('chat message', function(msg, info){
           }
     }
 
-
-
+     
 });
 
 
@@ -802,8 +809,6 @@ $('#size').on('change', function() {
 });
 $('[data-toggle="tooltip-reply"]').tooltip();
 
-
-abc;
- 
+remarkjs;
 $this->registerJs($remarkJs);
 ?>

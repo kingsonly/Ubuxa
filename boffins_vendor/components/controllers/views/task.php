@@ -309,15 +309,16 @@ $boardUrl = Url::to(['task/index']);
 .todo__text{
   cursor: pointer;
 }
-#task-content-loading{
-  display: none;
-}
 .no-access{
   pointer-events: none;
 }
 .has-access{
   pointer-events: unset;
 }
+ .loader-holder{
+    width: 40px;
+    height: 40px;
+ }
 </style>
 	 <div class="col-md-4" id="for-pjax">
         <div class="bg-info column-margin taskz-listz">
@@ -375,7 +376,7 @@ $boardUrl = Url::to(['task/index']);
 
   </div>
 </div> 
-<div id="task-content-loading" style="text-align: center; display: none; color:#ccc">more content loading...</div>
+<div id="task-content-loading" style="text-align: center; display: none; color:#ccc"><img src="images/more-content.gif" class="loader-holder"></div>
 </div>
       
 	   <div class="box-input1">
@@ -431,6 +432,7 @@ jQuery(
         if($(this).scrollTop() + $(this).innerHeight()>=$(this)[0].scrollHeight)
         {
           mypage++;
+          $('#task-content-loading').show();
           mycontents(mypage);
         }
       })
@@ -446,10 +448,10 @@ function mycontents(mypage){
       DashboardUrlParam:'$DashboardUrlParam'
     },
     function(data){
-        if(data.trim().lenght == 0){
-            $('#task-content-loading').text('finished');
+        if(data.trim().length == 0){
+            $('#task-content-loading').text('');
         }
-        $('#task-content-loading').hide();
+        
         if ($.trim(data)){ 
         $('.task-fetch').append(data);
         }
@@ -541,6 +543,7 @@ $('#create-task').on('beforeSubmit', function(e) {
 });
 
 Tasksocket.on('task title', function(msg){
+  
   $.pjax.reload({container:"#task-list-refresh",async: false});
 })
 

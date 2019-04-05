@@ -302,7 +302,7 @@ $login = Url::to(['site/login']);
 
 
 
-  JS;
+JS;
    
   $this->registerJs($js);
 ?>

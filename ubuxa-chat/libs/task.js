@@ -18,6 +18,14 @@ module.exports.taskSockets = function(http) {
 			console.log(status);
 			ioTask.emit('task status', status); 
 		});
+		socket.on('task delete', function(taskid){
+			console.log(taskid);
+			ioTask.emit('task delete', taskid); 
+		});
+		socket.on('task assignee', function(assigneeArray){
+			console.log(assigneeArray);
+			ioTask.emit('task assignee', assigneeArray); 
+		});
 	})
 
 
