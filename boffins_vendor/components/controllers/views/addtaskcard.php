@@ -104,7 +104,7 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
                     toastr.success('Task created');
                     var folderId = $('.board-specfic').attr('data-folderId');
                     $.pjax.reload({container:"#task-list-refresh"});
-                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:true, url: '$boardUrl&folderIds='+folderId});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
