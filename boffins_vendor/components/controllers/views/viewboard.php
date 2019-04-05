@@ -215,14 +215,14 @@ $viewBoard = <<<JS
                 url: '$boardUrlz'+'&folderIds='+folderId,
 
                 success: function(data) {
-                  $('.sidenav').html(data);
+                  setTimeout(function(){
+                    $('.sidenav').html(data);
+                    },300)
                 },
                 complete: function(){
-                    
+                    $('.content-loader').fadeOut();
                  }
-            }).then(function() {
-                $('.content-loader').fadeOut();
-            });
+            })
         }, 700);
     });
 
