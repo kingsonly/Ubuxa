@@ -214,20 +214,14 @@ $viewBoard = <<<JS
             $.ajax({
                 url: '$boardUrlz'+'&folderIds='+folderId,
                 success: function(data) {
-                $('.sidenav').html(data);
-                
+                  $('.sidenav').html(data);
                 },
+                complete: function(){
+                    $('.content-loader').fadeOut();
+                 }
             });
         }, 700);
     });
-
-     $(document).ajaxStop(function () {
-        $('.content-loader').fadeOut();
-    });
-
-    $(document).ajaxStart(function () {
-        //$('#loading').show();
-    })
 
 $('.closebtn').click(function(){
   $('.board-open').removeClass('board-opened');
