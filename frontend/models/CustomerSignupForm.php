@@ -106,7 +106,7 @@ class CustomerSignupForm extends Model
         }
         
     }
-    
+    /*
     public function clientValidateAttribute($model, $attribute, $view)
     {
     
@@ -119,6 +119,7 @@ class CustomerSignupForm extends Model
         }
         
     }
+    */
 
 
 
