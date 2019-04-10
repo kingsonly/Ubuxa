@@ -106,8 +106,8 @@ class CustomerSignupForm extends Model
         }
         
     }
-    /*
-    public function clientValidateAttribute($model, $attribute, $view)
+    
+    /*public function clientValidateAttribute($model, $attribute, $view)
     {
     
     $uniq = self::find()->where(['master_email'=>$this->master_email])->one();
@@ -118,8 +118,7 @@ class CustomerSignupForm extends Model
     JS;
         }
         
-    }
-    */
+    }*/
 
 
 

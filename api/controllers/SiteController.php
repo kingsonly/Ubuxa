@@ -8,8 +8,16 @@ use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
 use api\models\SignupForm;
+use api\models\ValidationKey;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
+use frontend\models\Customer;
+use frontend\models\CustomerSignupForm;
+use api\models\CustomerSignup;
+use frontend\models\TenantEntity;
+use frontend\models\TenantCorporation;
+use frontend\models\TenantPerson;
+use frontend\models\UserSetting;
 
 /**
  * Site controller
@@ -27,7 +35,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -99,6 +107,23 @@ class SiteController extends RestController
             unset($data['auth_key']);
             unset($data['password_hash']);
             unset($data['password_reset_token']);
+
+            Yii::$app->api->sendSuccessResponse($data);
+
+        }
+
+    }
+	
+	public function actionCustomerSignup()
+    {
+
+        $model = new CustomerSignup();
+        $model->attributes = $this->request;
+
+        if ($user = $model->signup()) {
+
+            $data=$user;
+           
 
             Yii::$app->api->sendSuccessResponse($data);
 
@@ -184,4 +209,26 @@ class SiteController extends RestController
 
 
     }
+	
+	public function actionValidateCode($id)
+    {
+
+        $model = new ValidationKey();
+        $checkIfCodeIsValid = $model->find()->andWhere(['key_code' => $id])->one();
+        if (!empty($checkIfCodeIsValid)) {
+			$customerId = $checkIfCodeIsValid->customer_id;
+			$customer = new Customer();
+            $customerModel = $customer->find(['cid' => $customerId])->asArray()->one();
+			$customerModel['role'] = 1;
+			//$checkIfCodeIsValid->delete();
+            Yii::$app->api->sendSuccessResponse([$customerModel]);
+
+        }else{
+			Yii::$app->api->sendFailedResponse(['code is not valid']);
+
+		}
+
+    }
+	
 }
+	

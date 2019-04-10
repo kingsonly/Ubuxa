@@ -75,14 +75,13 @@ class FolderController extends RestController
 			}else{
 				$folderStatus = 'private';
 			}
-			$folderDetails = (array) $firstFolderFilter->attributes;
+			$folderDetails  = $firstFolderFilter->attributes;
 			$folderDetails['folderstatus'] = $folderStatus;
 			$folderRole = $firstFolderFilter['role'];
 			$folderDetails['role'] =  $folderRole['role'];
 			$folderDetails['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
-			$folders[] =   $folderDetails;
 		}
-        $response = $folders;
+        $response = $folderDetails;
         Yii::$app->api->sendSuccessResponse($response);
 		
     }
@@ -201,6 +200,62 @@ class FolderController extends RestController
         $model = $this->findModel($id);
         $model->delete();
         Yii::$app->api->sendSuccessResponse($model->attributes);
+    }
+	
+	public function actionFolderUsers($id)
+    {
+		
+		$model = $this->findModel($id);
+		$users = $model->users;
+		$folderManager = $model->folderManager;
+		$folderUsers = [];
+		$i = 0;
+		foreach($users as $userKey => $userValue){
+			foreach($userValue as $key => $value){
+				$folderUsers[$i][$key] = $value;
+			}
+			
+			
+			foreach($folderManager as $managerKey => $managerValue){
+				
+				if($userValue->id == $managerValue->user_id){
+					
+					$folderUsers[$i]['role'] = $managerValue->role;
+				}
+			}
+			
+			$i++;
+		}
+		Yii::$app->api->sendSuccessResponse($folderUsers);
+    }
+	
+	public function actionAddUserToFolder($id)
+    {
+       
+    }
+	
+	public function actionDeleteUsers($id)
+    {
+       
+		$data = Yii::$app->request->post();   
+		$folderId =  $data['folderId'];
+		$userId =  $data['userId'];
+		$userIdentityRole = yii::$app->user->identity->roleName;
+		$userIdentityId = yii::$app->user->identity->id;
+		$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$folderId,'user_id' => $userIdentityId])->one();
+		// use identity of the user to determine if the user has access to delete a folder or not 
+		if($folderManager->role == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
+			$folderManagerModel = new FolderManager();
+			$findFolderUser = $folderManagerModel->find()->andWhere(['folder_id' => $folderId, 'user_id' => $userId])->one();
+			if($findFolderUser->delete()){
+				return 1;
+			}else{
+				return 0;
+			}
+		}else{
+			return 3;
+		}
+		
     }
 
     protected function findModel($id)
