@@ -213,19 +213,13 @@ $viewBoard = <<<JS
         setTimeout(function(){  
             $.ajax({
                 url: '$boardUrlz'+'&folderIds='+folderId,
-
                 success: function(data) {
-                  setTimeout(function(){
-                    $('.sidenav').html(data);
-                    },300)
+                $('.content-loader').fadeOut();
+                $('.sidenav').html(data);
                 },
-                complete: function(){
-                    $('.content-loader').fadeOut();
-                 }
-            })
+            });
         }, 700);
     });
-
 
 $('.closebtn').click(function(){
   $('.board-open').removeClass('board-opened');
