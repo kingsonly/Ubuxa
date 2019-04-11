@@ -35,7 +35,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
