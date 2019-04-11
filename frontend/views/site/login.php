@@ -53,7 +53,7 @@ $customerDomain = Customer::checkDomain($subdomain);
   left: 0;
   width: 50%;
   height: 100%;
-  background-image: url("images/loginpage.png");
+  background-image: url("images/loginpage1.jpg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
