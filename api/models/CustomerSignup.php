@@ -105,7 +105,7 @@ class CustomerSignup extends Model
 						$validateKeyModel->customer_id = $customerModel->cid;
 						
 						if($validateKeyModel->save()){
-							if($customerModel->sendEmail($email,$validateKeyModel->key_code)){
+							if($customerModel->sendEmailToken($email,$validateKeyModel->key_code)){
 							 	Yii::$app->api->sendSuccessResponse($customer->attributes);
 							} else{
 								Yii::$app->api->sendFailedResponse("Invalid Request");
