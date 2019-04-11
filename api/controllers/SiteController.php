@@ -7,8 +7,9 @@ use api\models\LoginForm;
 use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
-use api\models\SignupForm;
-use api\models\ValidationKey;
+//use api\models\SignupForm;
+use api\models\ValidateEmail;
+use api\models\PasswordResetRequestForm;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
 use frontend\models\Customer;
@@ -18,6 +19,8 @@ use frontend\models\TenantEntity;
 use frontend\models\TenantCorporation;
 use frontend\models\TenantPerson;
 use frontend\models\UserSetting;
+use frontend\models\SignupForm;
+use frontend\models\Email;
 
 /**
  * Site controller
@@ -35,7 +38,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -210,23 +213,77 @@ class SiteController extends RestController
 
     }
 	
-	public function actionValidateCode($id)
+	public function actionValidateCode()
     {
-
-        $model = new ValidationKey();
-        $checkIfCodeIsValid = $model->find()->andWhere(['key_code' => $id])->one();
-        if (!empty($checkIfCodeIsValid)) {
-			$customerId = $checkIfCodeIsValid->customer_id;
+		$model = new ValidateEmail();
+		$model->attributes = $this->request;
+        if (!empty($model->validateEmail())) {
+			$customerId = $model->validateEmail()->customer_id;
 			$customer = new Customer();
-            $customerModel = $customer->find(['cid' => $customerId])->asArray()->one();
+            $customerModel = $customer->find()->andWhere(['cid' => $customerId])->asArray()->one();
 			$customerModel['role'] = 1;
+			$customerModel['validation_code'] = $model->validation_code;
 			//$checkIfCodeIsValid->delete();
             Yii::$app->api->sendSuccessResponse([$customerModel]);
 
         }else{
-			Yii::$app->api->sendFailedResponse(['code is not valid']);
+			Yii::$app->api->sendFailedResponse([$model->errors]);
 
 		}
+
+    }
+	
+	public function actionSignups($email,$cid,$role,$validation_code,$folderid = 0)
+	{
+       	$user = new SignupForm();
+       	$customer = Customer::find()->where(['cid' => $cid])->one();
+       	$userExists = Email::find()->where(['address' => $email])->exists();
+       	$user->attributes = $this->request;
+		
+       	if(!$userExists){
+			
+			if(!empty($customer)){
+				
+				$user->address = $email;
+				$user->cid = $cid;
+				$user->basic_role = $role;
+				if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+					
+					$user->first_name = $customer->entity->firstname;
+					$user->surname = $customer->entity->surname;
+				}
+				//$user->_userAR->tenantID = $cid;
+				if($user->save()){
+					
+					if($customer->has_admin == Customer::NO_ADMIN){
+						$customer->has_admin = Customer::HAS_ADMIN;
+						$customer->save();	
+					}
+					Yii::$app->api->sendSuccessResponse([$user]);
+					
+				} else{
+					Yii::$app->api->sendFailedResponse([$user->errors]);
+				}
+				
+			} else {
+				Yii::$app->api->sendFailedResponse(['Customer does not exist']);
+			}
+		}else {
+			Yii::$app->api->sendFailedResponse(['User already exist']);
+		}
+    }
+	
+	public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+		$model->attributes = $this->request;
+		if ($model->sendEmail()) {
+			Yii::$app->api->sendSuccessResponse($model);
+			//return $this->goHome();
+		} else {
+			Yii::$app->api->sendFailedResponse([$model->errors]);
+		}
+
 
     }
 	
