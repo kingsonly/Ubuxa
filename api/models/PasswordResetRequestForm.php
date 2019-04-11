@@ -50,8 +50,8 @@ class PasswordResetRequestForm extends Model
         ->where(['address' => $this->address])
         ->one();
 		
-        if (!$user->user) {
-            return false;
+        if (!isset($user->user)) {
+            Yii::$app->api->sendFailedResponse($this->errors);
         }
         
         if (!UserDb::isPasswordResetTokenValid($user->user->password_reset_token)) {
