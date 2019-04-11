@@ -303,7 +303,7 @@ class SiteController extends BoffinsBaseController {
     }
 
   public function actionSignup($email,$cid,$role,$folderid = 0)
-    {
+  {
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }

@@ -110,6 +110,19 @@ class Customer extends \yii\db\ActiveRecord
             ->setSubject('Thanks for joining Ubuxa')
             ->send();
     }
+	
+	public function sendEmailToken($newCustomerEmail,$token)
+    {
+        return Yii::$app->mailer->compose(['html' => 'newcustomertoken'],
+                [
+                    'token'  => $token,
+                ])
+            ->setTo($newCustomerEmail)
+            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setSubject('Ubuxa Email Verification Token')
+            ->send();
+    }
+
 
     public static function checkDomain($subdomain)
     {
