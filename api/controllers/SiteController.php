@@ -220,8 +220,10 @@ class SiteController extends RestController
         if (!empty($model->validateEmail())) {
 			$customerId = $model->validateEmail()->customer_id;
 			$customer = new Customer();
+			$getCustomerEntity = $customer->find()->andWhere(['cid' => $customerId])->one();
             $customerModel = $customer->find()->andWhere(['cid' => $customerId])->asArray()->one();
 			$customerModel['role'] = 1;
+			$customerModel['account_type'] = $getCustomerEntity->entity->entity_type;
 			$customerModel['validation_code'] = $model->validation_code;
 			//$checkIfCodeIsValid->delete();
             Yii::$app->api->sendSuccessResponse([$customerModel]);
