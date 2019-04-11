@@ -2,7 +2,7 @@
 namespace api\models;
 
 use yii\base\Model;
-use common\models\User;
+use frontend\models\UserDb as User;
 use Yii;
 
 /**
