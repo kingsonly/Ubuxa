@@ -280,8 +280,6 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
         
         $timeTaken = $startTime->diff($endTime);
 
-        //$timeTaken = $endTime - $startTime;
-
         return $this->formatInterval($timeTaken);
     }
     public function getTaskGroup()

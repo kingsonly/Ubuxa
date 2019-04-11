@@ -78,17 +78,39 @@ class CustomerSignupForm extends Model
         ];
     }
 
+    private function generateRandomCid()
+    {
+        $rand = rand(10, 100000);
+        $checkRand = Customer::find()->where(['cid'=>$rand])->exists();
+        if (!$checkRand) {
+            return $rand;
+        }else{
+            $this->generateRandomCid();
+        }
+    }
+
+    private function generateRandomAccount()
+    {
+        $randacc = rand(10, 100000);
+        $checkRand = Customer::find()->where(['account_number'=>$randacc])->exists();
+        if (!$checkRand) {
+            return $randacc;
+        }else{
+            $this->generateRandomAccount();
+        }
+    }
+
     
     public function signup($customer)
     {   
             $customer->master_email = $this->master_email;
             $customer->master_doman = $this->master_doman;
-            $customer->account_number = $this->plan_id.rand(10, 10000); //dummy account number
+            $customer->account_number = $this->plan_id.$this->generateRandomAccount(); //dummy account number
             $customer->plan_id = $this->plan_id;
             $customer->billing_date = $this->billing_date;
             $customer->entity_id = $this->entity_id;
             $customer->has_admin = 0;
-            $customer->cid = $this->plan_id.rand(10, 10000); //dummy cid
+            $customer->cid = $this->plan_id.$this->generateRandomCid(); //dummy cid
             if($customer->save()){
 				return $customer->cid;
 			}
@@ -106,6 +128,7 @@ class CustomerSignupForm extends Model
         }
         
     }
+
     
     /*public function clientValidateAttribute($model, $attribute, $view)
     {
