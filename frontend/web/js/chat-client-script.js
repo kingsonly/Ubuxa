@@ -35,6 +35,28 @@ function updateUsersStatus(data){
 		});
 	}
 }
+function newToast(title,message){
+	options = {
+		  "closeButton": true,
+		  "debug": false,
+		  "newestOnTop": true,
+		  "progressBar": true,
+		  "positionClass": "toast-bottom-right",
+		  "preventDuplicates": true,
+		  "showDuration": "300",
+		  "hideDuration": "1000",
+		  "timeOut": "5000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut",
+		  "tapToDismiss": true,
+		  "iconClass": 'customer-info'
+		  }
+		  
+		toastr.info(message, title, options);
+}
 
 var arr = []; // List of users
 
@@ -180,7 +202,8 @@ $(document).ready(function(){
 		//passing data on connection.
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
-			
+			socket.emit('check-for-message',username);
+	
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
@@ -201,14 +224,23 @@ $(document).ready(function(){
 			var getOnlineUsers =  JSON.parse(localStorage.getItem(attr));
 			updateUsersStatus(getOnlineUsers);
 
-//			$.post(sessionUrl,{activitiesArray:stack},function(){
-//				if($(".folderusers").length > 0){
-//
-//					//$.pjax.reload({container:"#user_prefixuserjax",async: false});
-//					
-//					
-//				}
-//			})
+		});
+		
+		//receiving onlineStack.
+		socket.on('check-for-message',function(data){
+			// get all message and display them
+			localStorage.setItem('chatnotification', JSON.stringify(data));
+			var allNotifications = JSON.parse(localStorage.getItem('chatnotification'));
+			var time = 9000;
+			//var splitNotification;
+			$.each(allNotifications, function( index, value ) {
+				var url = $('body').data('newmessageurl');
+				splitNotification = value.split(')');
+				$.post(url,{folderId:splitNotification[2],userName:splitNotification[0]},function(result){
+					newToast('From '+result.name+' in '+result.folder+' folder',splitNotification[1]);
+				}) 	
+			});
+			
 		});
 		
 		socket.on('wrong',function(stack){
@@ -354,6 +386,7 @@ $(document).ready(function(){
 										newArray = storedChatInitCounters;
 										console.log(newArray);
 										localStorage.setItem('chatbox', JSON.stringify(newArray));
+										
 										//check if key exist 
 										// if it does do an addition else create a new key by runing an array push and passing the value 1 to it
 									}else{

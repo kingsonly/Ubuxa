@@ -42,6 +42,9 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	z-index: 9999;
 	background: url(<?= $waitToLoad; ?>) center no-repeat #fff;
 }
+.customer-info{
+	background: black !important;
+}
 		
 		
 .images ul li img {
@@ -57,7 +60,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
+<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
 <!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
 	<div class="se-pre-con"></div>
 

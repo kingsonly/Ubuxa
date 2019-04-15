@@ -261,6 +261,8 @@ class SiteController extends RestController
 						$customer->has_admin = Customer::HAS_ADMIN;
 						$customer->save();	
 					}
+					//unset($data['password_hash']);
+					//unset($data['password_reset_token']);
 					Yii::$app->api->sendSuccessResponse([$user]);
 					
 				} else{
