@@ -39,7 +39,11 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
+<<<<<<< HEAD
                 'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users'],
+=======
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups','validate-code'],
+>>>>>>> 090c5ef7c0f3c6b2e7690d3337c7ce285da18bb6
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -221,8 +225,10 @@ class SiteController extends RestController
         if (!empty($model->validateEmail())) {
 			$customerId = $model->validateEmail()->customer_id;
 			$customer = new Customer();
+			$getCustomerEntity = $customer->find()->andWhere(['cid' => $customerId])->one();
             $customerModel = $customer->find()->andWhere(['cid' => $customerId])->asArray()->one();
 			$customerModel['role'] = 1;
+			$customerModel['account_type'] = $getCustomerEntity->entity->entity_type;
 			$customerModel['validation_code'] = $model->validation_code;
 			//$checkIfCodeIsValid->delete();
             Yii::$app->api->sendSuccessResponse([$customerModel]);
@@ -260,6 +266,8 @@ class SiteController extends RestController
 						$customer->has_admin = Customer::HAS_ADMIN;
 						$customer->save();	
 					}
+					//unset($data['password_hash']);
+					//unset($data['password_reset_token']);
 					Yii::$app->api->sendSuccessResponse([$user]);
 					
 				} else{

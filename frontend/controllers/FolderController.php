@@ -180,6 +180,17 @@ class FolderController extends BoffinsBaseController
 		return $out;
 	}
 	
+	public function actionNewMessage() {
+		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName'];
+		$folder = Folder::find()->andWhere(['id' => $folderId])->select('title')->one();
+		$user = UserDb::find()->andWhere(['username' => $username])->one();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$out = ['name'=>$user->fullname,'folder' => 'i test you '];
+		
+		return $out;
+	}
+	
 	public function actionAddUsers($id) {
 		$inviteUsersModel = new InviteUsers();
 		$userModel = new UserDb();

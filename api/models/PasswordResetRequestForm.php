@@ -26,7 +26,7 @@ class PasswordResetRequestForm extends Model
             ['address', 'required'],
             ['address', 'email'],
             ['address', 'exist',
-                'targetClass' => '\frontend\models\Email',
+                'targetClass' => 'frontend\models\Email',
                 //'filter' => ['status' => User::STATUS_ACTIVE],
                 'message' => 'There is no user with this email address.'
             ],
@@ -50,8 +50,8 @@ class PasswordResetRequestForm extends Model
         ->where(['address' => $this->address])
         ->one();
 		
-        if (!$user->user) {
-            return false;
+        if (!isset($user->user)) {
+            Yii::$app->api->sendFailedResponse($this->errors);
         }
         
         if (!UserDb::isPasswordResetTokenValid($user->user->password_reset_token)) {

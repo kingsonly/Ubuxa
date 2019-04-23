@@ -7,6 +7,8 @@ use yii\filters\AccessControl;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
 use frontend\models\Folder;
+use api\models\UserSearch;
+use frontend\models\Person;
 use yii\web\UploadedFile;
 use Yii;
 use yii\db\Expression;
@@ -25,7 +27,7 @@ class FolderController extends RestController
 
            'apiauth' => [
                'class' => Apiauth::className(),
-               'exclude' => [],
+               'exclude' => ['users'],
                'callback'=>[]
            ],
             'access' => [
@@ -221,6 +223,7 @@ class FolderController extends RestController
 				if($userValue->id == $managerValue->user_id){
 					
 					$folderUsers[$i]['role'] = $managerValue->role;
+					$folderUsers[$i]['folder_id'] = $managerValue->folder_id;
 				}
 			}
 			
@@ -229,17 +232,56 @@ class FolderController extends RestController
 		Yii::$app->api->sendSuccessResponse($folderUsers);
     }
 	
-	public function actionAddUserToFolder($id)
-    {
-       
-    }
+	public function actionUsers() {
+		$model = new UserSearch();
+		$model->attributes = $this->request;
+		if (!$model->validate()) {
+
+            Yii::$app->api->sendFailedResponse($model->errors);
+            //return null;
+        }
+		if (!is_null($model->search_string)) {
+			$query = new Person();
+			$allUsers = $query->find()
+				->andWhere(['like', 'first_name', $model->search_string])->orWhere(['cid' =>yii::$app->user->identity->cid])->orWhere(['like', 'surname', $model->search_string])->all();
+			$userDetails = [];
+			if(!is_null($allUsers)){
+				foreach($allUsers as $key => $value){
+					$userDetails[$key]['first_name'] = $value->first_name;
+					$userDetails[$key]['id'] = $value->id;
+					$userDetails[$key]['userid'] = $value->user['id'];
+				}
+				Yii::$app->api->sendSuccessResponse($userDetails);
+			}else{
+				Yii::$app->api->sendFailedResponse(['no result was found']);
+			}
+			
+		}
+		
+		
+	}
 	
-	public function actionDeleteUsers($id)
+	
+	public function actionAddUserToFolder($userId = '', $folderId = '')
+	{
+		$folderModel = Folder::find()->andWhere(['id'=>$folderId])->one();
+		$folderManagerModel = new FolderManager();
+		$folderManagerModel->user_id = $userId;
+		$folderManagerModel->folder_id = $folderId;
+		$folderManagerModel->role = 'user';
+		
+		if($folderManagerModel->save(false)){
+			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
+			return true;
+		}
+	}
+	
+	
+	public function actionDeleteUsers($folderid,$userid)
     {
        
-		$data = Yii::$app->request->post();   
-		$folderId =  $data['folderId'];
-		$userId =  $data['userId'];
+		$folderId =  $folderid;
+		$userId =  $userid;
 		$userIdentityRole = yii::$app->user->identity->roleName;
 		$userIdentityId = yii::$app->user->identity->id;
 		$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$folderId,'user_id' => $userIdentityId])->one();
@@ -248,12 +290,12 @@ class FolderController extends RestController
 			$folderManagerModel = new FolderManager();
 			$findFolderUser = $folderManagerModel->find()->andWhere(['folder_id' => $folderId, 'user_id' => $userId])->one();
 			if($findFolderUser->delete()){
-				return 1;
+				Yii::$app->api->sendSuccessResponse(['delete was successfull']);
 			}else{
-				return 0;
+				Yii::$app->api->sendFailedResponse(['somthing went wrong pls try again ']);
 			}
 		}else{
-			return 3;
+			Yii::$app->api->sendFailedResponse(['you dont have access to delete a user in this  folder']);
 		}
 		
     }
