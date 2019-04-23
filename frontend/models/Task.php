@@ -37,12 +37,12 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
      */
     const TASK_COMPLETED = 24;
     /***
-     * accessible value linked to the database id of "completed" in status_type under task group.. 
+     * accessible value linked to the database id of "in_progress" in status_type under task group.. 
      * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
      */
     const TASK_IN_PROGRESS = 22;
     /***
-     * accessible value linked to the database id of "completed" in status_type under task group.. 
+     * accessible value linked to the database id of "mot started" in status_type under task group.. 
      * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
      */
     const TASK_NOT_STARTED = 21;
@@ -282,6 +282,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
 
         return $this->formatInterval($timeTaken);
     }
+
     public function getTaskGroup()
     {
         return $this->hasOne(TaskGroup::className(), ['task_group_id' => 'id']);
@@ -328,7 +329,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
      * [This method is used to sort task list. Create 2 arrays, one containing unchecked task sorted by date
         and the other containing checked tasks.  
      * @param  [array] $key [status id]
-     @return array containing unchecked task at the top and check task at the bottom
+       @return array containing unchecked task at the top and check task at the bottom
      */
     public static function sortTaskList($array) {
         foreach ($array as $key => $row) {

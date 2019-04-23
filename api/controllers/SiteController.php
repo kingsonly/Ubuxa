@@ -21,6 +21,7 @@ use frontend\models\TenantPerson;
 use frontend\models\UserSetting;
 use frontend\models\SignupForm;
 use frontend\models\Email;
+use api\models\InviteUsersForm;
 
 /**
  * Site controller
@@ -38,7 +39,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -285,6 +286,24 @@ class SiteController extends RestController
 		}
 
 
+    }
+
+    public function actionInviteUsers($folderid)
+    {   
+        $model = new InviteUsersForm;
+        $model->attributes = $this->request;  
+        $folderId = $folderid;
+        $emails = $model->email;
+        $role = $model->role;
+        if(!empty($emails)){
+            if($model->sendEmail($emails, $folderid, $role)){
+                Yii::$app->api->sendSuccessResponse($model);
+            } else {
+                Yii::$app->api->sendFailedResponse([$model->errors]);
+            }
+        } else {
+            Yii::$app->api->sendFailedResponse("Email cannot be empty");
+        } 
     }
 	
 }
