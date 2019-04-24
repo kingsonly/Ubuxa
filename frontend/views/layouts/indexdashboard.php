@@ -171,7 +171,7 @@ Yii::$app->settingscomponent->boffinsUsersAsset()
     
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 1.2
+      <b>Version</b> 1.4
     </div>
     <!--<strong>Copyright &copy; Tycol 2017<a href="#"> Boffins Systems</a>.</strong>--> All rights reserved.
 </footer>

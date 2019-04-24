@@ -32,10 +32,10 @@ class <?= $className ?> extends Migration
 	 *  {@inheritdoc}
 	 */
 	public function init()
-    {
+    {        
+		parent::init(); //init should be run by first running parent before commencing subclass initialisation 
 		//if changing the database connection, the next line needs to be uncommented. Works with SpecialMigration controller only.
-        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; 
-        parent::init();
+        //$this->db = '[INSERT THE COMPONENT ID FOR THE DB YOU WANT]' . $this->db_suffix; 
     }
 
     /**

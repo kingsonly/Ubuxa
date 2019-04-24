@@ -40,7 +40,7 @@ class Folder extends FolderARModel
 	const ROLEAUTHOR = 'author';
     public static function tableName()
     {
-        return 'tm_folder';
+        return '{{%folder}}';
     }
 	
 	public  function init()

@@ -156,7 +156,7 @@ class SiteController extends BoffinsBaseController {
        
     }
 
-    public function actionLogin($id=0) 
+    public function actionLogin() 
 	{	
 		if (!Yii::$app->user->isGuest) {
 			return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
@@ -285,7 +285,9 @@ class SiteController extends BoffinsBaseController {
 				return $this->render('login', [
 					'model' => $model,
 					'accountName' => $accountName,
-				]);			
+				]);	
+				//var_dump($model);
+				
 			}
 		}
 		

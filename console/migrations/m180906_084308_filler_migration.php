@@ -24,7 +24,7 @@ class m180906_084308_filler_migration extends Migration
     {
         echo "m180906_084308_filler_migration cannot be reverted.\n";
 
-        return false;
+        //return false;
     }
 
     /*

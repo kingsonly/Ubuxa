@@ -40,6 +40,8 @@ class m190206_073658_alter_edocument_table extends Migration
     {
         echo "m190206_073658_alter_edocument_table should not be reverted. Reverting for development only.\n";
 
+		$this->renameColumn('{{%e_document}}', 'reference_id', 'component_id');
+
         //return false;
     }
 

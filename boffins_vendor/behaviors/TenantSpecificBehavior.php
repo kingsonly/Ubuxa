@@ -69,18 +69,17 @@ class TenantSpecificBehavior extends Behavior
 	 */
 	public function TSBHandleBeforeInsert() 
 	{
-		Yii::trace("Adding A Tenant ID");
 		if ( $this->retrieveTenantID() !== false ) {
 			if ( $this->owner->hasAttribute('cid') ) {
 				$this->owner->cid = $this->retrieveTenantID();
 			} else {
-				Yii::warning("I cannot set a tenant ID on this component. Is this a model that has a tenant ID?");
+				Yii::warning("I cannot set a tenant ID on this component. Is this a model that has a tenant ID?", __METHOD__);
 				//throw exception here? This is not a must fail issue. If this is just wrongly applied, move on - warn the programmer.
 				
 			}
 		} else {
 			//throw an error here. This is a must fail scenario because the programmer is expecting an action that is not possible. 
-			Yii::error("I cannot set a tenant ID. This may not be running on a web controller or the user is not logged in. Please supply a tenant ID from instantiation of this behavior or before insert.  ");
+			Yii::error("I cannot set a tenant ID. This may not be running on a web controller or the user is not logged in. Please supply a tenant ID from instantiation of this behavior or before insert.  ", __METHOD__);
 			//Yii::error is an exception I believe. 
 		}
 	}
@@ -102,12 +101,12 @@ class TenantSpecificBehavior extends Behavior
 	public function TSBHandleAfterFind()
 	{
 		if ( ! $this->owner->hasAttribute('cid') ) {
-			Yii::warning("This base component is not a model with a tenant id attribute. Reconsider your application of this behaviour.");
+			Yii::warning("This base component is not a model with a tenant id attribute. Reconsider your application of this behaviour.", __METHOD__);
 			return;
 		} 
 		
 		if ( empty($this->owner->cid) ) {
-			Yii::warning("This model's tenant id is not set! ");
+			Yii::warning("This model's tenant id is not set! ", __METHOD__);
 			return;
 		}
 		
@@ -116,12 +115,12 @@ class TenantSpecificBehavior extends Behavior
 		}
 		
 		if ( ! Yii::$app->has('user') || empty(Yii::$app->user->identity->cid) ) {
-			Yii::error("This application does not have a user component or the identity does not have a tenant id.");
+			Yii::error("This application does not have a user component or the identity does not have a tenant id.", __METHOD__);
 			return; 
 		}
 		
 		if ( $this->owner->cid != $this->retrieveTenantID() ) {
-			Yii::error("There is a problem. This tenant ID and the model's tenant ID simply do not match and this should not be possible.");
+			Yii::error("There is a problem. This tenant ID and the model's tenant ID simply do not match and this should not be possible.", __METHOD__);
 			//this line of code needs to be rewritten for multiple tenants' access to shared content. maybe have a test against shared ids. 
 		}
 	}
@@ -143,17 +142,16 @@ class TenantSpecificBehavior extends Behavior
 	protected function retrieveTenantID()
 	{
 		if ( !empty($this->tenantID) ) { 
-			Yii::trace("Using a tenant ID supplied by programmer"); 
+			Yii::trace("Using a tenant ID supplied by programmer", __METHOD__); 
 			return $this->tenantID; 
 		}
 		
 		if ( $this->tenantID === null && Yii::$app->has('user') && ! (Yii::$app->user->identity->cid === null) ) {  
-			Yii::trace("Retrieving it here?" . Yii::$app->user->identity->cid );
 			$this->tenantID = Yii::$app->user->identity->cid;
 			return $this->tenantID;
 		} 
 		
-		Yii::warning("Can't get a tenant id from user component");
+		Yii::warning("Can't get a tenant id from user component", __METHOD__);
 		return false;
 		//or throw an exception here?
 	}

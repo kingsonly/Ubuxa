@@ -1,0 +1,9 @@
+diff a/frontend/config/main.php b/frontend/config/main.php	(rejected hunks)
+@@ -138,7 +138,6 @@
+ 			$comingFrom = ['folder/index'];
+ 			$comingFrom = $comingFrom[0] == 'site/login' || empty($comingFrom[0]) ? [Yii::$app->defaultRoute] : $comingFrom;
+ 			Yii::$app->request->isPjax || Yii::$app->request->isAjax ? Yii::$app->session->set( 'comingFrom', [Yii::$app->defaultRoute] ) : Yii::$app->session->set( 'comingFrom', $comingFrom );
+-			return Yii::$app->response->redirect(['site/login', 'test' => 2]);
+ 			return Yii::$app->response->redirect(['site/login']);
+ 		},
+ 	],
