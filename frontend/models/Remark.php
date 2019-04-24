@@ -34,7 +34,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     public function rules()
     {
         return [
-            [['parent_id', 'cid', 'user_id', 'person_id'], 'integer'],
+            [['parent_id', 'cid', 'user_id'], 'integer'],
             [['remark_date','last_updated','text', 'ownerId','fromWhere'], 'safe'],
             [['text'], 'string', 'max' => 255],
         ];
@@ -65,7 +65,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     }
     public function getFullname()
     {
-        return $this->person->first_name." ".$this->person->surname;
+        return $this->user->fullname;
     }
     public function getUserImage()
     {
