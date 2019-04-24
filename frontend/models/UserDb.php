@@ -488,14 +488,14 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	
 	/**
 	 *  @brief logs the user in 
-	 *  by invocating the yii\web\user::login($identity, $duration) function. 
+	 *  by invoking the yii\web\user::login($identity, $duration) function. 
 	 *  $duration is calculated in seconds. 
 	 *  @param [bool] $rememberMe Supplied by the user at the point of login - remember my login 
 	 *  @return void.
 	 */
 	public function login($rememberMe = false)
 	{
-		return Yii::$app->user->login($this, $rememberMe ? 172800 : 39600);  //duration in seconds. 2 days if remember, 11 hours if not. 
+		return Yii::$app->user->login($this, $rememberMe ? 0 : 3600);  //duration in seconds. unlimited if remember, 1 hour if not. 
 	}
 	
 	/***
@@ -534,6 +534,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 
 	public  static function handleBeforeLogout()
 	{
+		//throw new yii\base\Exception("What's going on?");
 		'do nothing';
 	}
 	public static function handleAfterLogout()

@@ -46,7 +46,7 @@
         "kartik-v/yii2-popover-x": "dev-master",
         "kingsonly/yii2-wiki": "dev-master",
         "yiisoft/yii2-queue": "dev-master",
-        "yiisoft/yii2-redis": "dev-master",
+        "yiisoft/yii2-redis": "^2.0",
         "npm-asset/at.js": "1.5.4",
         "npm-asset/jquery.caret": "0.3.1",
         "codeception/specify": "^1.1",

@@ -36,8 +36,8 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
 			'enableSession' => true,
-			'authTimeout' => 21600, //6 hours 
-			'absoluteAuthTimeout' => 86400, //24 hours 
+			//'authTimeout' => 21600, //6 hours 
+			'absoluteAuthTimeout' => 172800, //72 hours 
 			'on ' . \yii\web\User::EVENT_BEFORE_LOGIN => ['frontend\models\UserDb', 'handleBeforeLogin'],
 			'on ' . \yii\web\User::EVENT_AFTER_LOGIN => ['frontend\models\UserDb', 'handleAfterLogin'],
 			'on ' . \yii\web\User::EVENT_BEFORE_LOGOUT => ['frontend\models\UserDb', 'handleBeforeLogout'],
@@ -48,7 +48,10 @@ return [
 			'class' => 'yii\web\DbSession',
             'name' => 'advanced-frontend',
 			
-        ],
+		],
+		'cache'         => [
+			'class' => 'yii\redis\Cache',
+		 ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -131,6 +134,7 @@ return [
 			],
 			[
 				'allow' => true,
+				//'actions' => ['logout'],
 				'roles' => ['@'],
 			],
 			/*[

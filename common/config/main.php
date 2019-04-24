@@ -6,6 +6,7 @@ $db_backup_test = require(__DIR__ . '/db_backup_test.php');
 $db_tenant_test = require(__DIR__ . '/db_tenant_test.php');
 $db_test = require(__DIR__ . '/testDb.php');
 $transport = require(__DIR__ . '/transport.php');
+$redis = require(__DIR__ . '/redis.php');
 
 return [
 	'name' => 'Ubuxa',
@@ -30,6 +31,7 @@ return [
 		'db_test' => $db_test,
 		'db_backup_test' => $db_backup_test,
 		'db_tenant_test' => $db_tenant_test, 
+		'redis' => $redis,
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',

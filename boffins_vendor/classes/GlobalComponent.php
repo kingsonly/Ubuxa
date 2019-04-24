@@ -5,6 +5,7 @@ namespace boffins_vendor\classes;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidArgumentException;
 use common\models\AccessPermission;
 
 
@@ -62,7 +63,7 @@ class GlobalComponent extends Component
 	 *  @details this can be refactored. Consider eliminating loop (though in most cases it will be a short loop so...)
 	 *  also consider ensuring it's absolutely random and not guessable 
 	 */
-	public static function generateRandomAlphaNumericString($length = 32) 
+	public static function generateRandomAlphaNumericString($length = 32) : string
 	{
 		$approvedCharacters = "pqrstuvwxyz223456789abcdefghijklmnopqrstuvwxyz456789abcdefghijklmnop"; 
 		//1 and 0 are ommitted so as not to be confused with O OR I
@@ -76,6 +77,5 @@ class GlobalComponent extends Component
 		return $result;
 	}
 	
-
 	
 }

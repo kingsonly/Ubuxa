@@ -94,6 +94,19 @@ class FolderController extends BoffinsBaseController
         
     }
 
+	public function actionIndex2()
+    {
+       	$folder = Folder::find()->all();
+		if(empty($folder)){
+            return $this->render('empty_index');
+        } else {
+            return $this->render('empty_index', [
+            'folders' => $folder,
+            ]);
+        }
+
+	}
+
     /**
      * Displays a single Folder model.
      * @param integer $id

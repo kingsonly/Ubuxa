@@ -81,6 +81,8 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 	 */
 	public static function find() 
 	{
+		Yii::info("Using StandardFolderQuery class to perform queries in " . static::class, __METHOD__ );
+		static::beforeFind();
 		return new StandardFolderQuery(get_called_class());
 	}
 	
@@ -96,21 +98,12 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
     }
 	
 	/**
-	 *  @brief Activity stream needs to subscribe this instance for this user at the point of insert. 
-	 *  this code can be copy pasted onto any AR model you want to subscribe. 
-	 *  this was not placed in parent class because subscription should be limited to a small set of AR models - user centred models.
-	 *  
-	 *  @inheritdoc
+	 *  @brief {@inheritdoc}
 	 */
-	public function afterSave ( $insert, $changedAttributes ) 
+	protected function subscribeInstanceOnInsert()
 	{
-		parent::afterSave( $insert, $changedAttributes );
-		if ( $insert ) {
-			Yii::$app->activityManager->subscribe($this);
-			//you might want to trigger a Subscription event here. User subscribed to this folder etc.
-		}
+		return true;
 	}
-	
 	
 	
 }

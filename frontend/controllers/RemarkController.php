@@ -96,7 +96,7 @@ class RemarkController extends Controller
         $commenterUserId = Yii::$app->user->identity->id;
         $commenterPersonId = Yii::$app->user->identity->person_id;
         $model->user_id = $commenterUserId;
-        $model->person_id = $commenterPersonId;
+        //$model->person_id = $commenterPersonId;
         if(!empty(Yii::$app->request->post('&moredata'))){
             $model->text = Yii::$app->request->post('&moredata');
         } else {

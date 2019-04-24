@@ -175,24 +175,25 @@ $img = $model->folder_image;
     
 </style>
 
-<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
-<?= $onboardingExists = true; ?>
+<?php $onboardingExists = true; ?>
+
+
 <section>
     <div class="container-fluid">
         <div class="row">
+        	<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10]);?>
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
                   	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
                   </div>  
                     	<div class="row">
-							
    						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
+   						 	<?= SubFolders::widget(['folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>
         </div>
- 
+
         <div class="row">
 			<?php Pjax::begin(['id'=>'component-pjax']); ?>
 			<?
@@ -225,7 +226,6 @@ $img = $model->folder_image;
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
-        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
         <?= ViewEdocumentWidget::widget(['edocument'=>$edocument, 'target' => 'folder', 'forFolder' => 'forfolderDocs']) ?>
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
@@ -277,6 +277,7 @@ $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $indexJs = <<<JS
+
 
 localStorage.setItem("skipValidation", "");
 

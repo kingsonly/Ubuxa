@@ -16,7 +16,7 @@ use boffins_vendor\behaviors\ComponentsBehavior;
 use boffins_vendor\behaviors\ClipOnBehavior;
 use boffins_vendor\behaviors\TenantSpecificBehavior;
 use yii\db\ActiveQuery;
-use boffins_vendor\classes\StandardQuery;
+use boffins_vendor\classes\{StandardQuery, ActivityEvent};
 use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, ClipperInterface, ClipableInterface};
 use frontend\models\FolderComponent;
 use frontend\models\Clip;
@@ -24,9 +24,8 @@ use frontend\models\Clip;
 
 /***
  *  This is the base/root Active Record Model for most DB objects in Ubuxa. 
- *  
  */
-class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is poorly named and I named it! Anthony.
+class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is poorly named and I named it! Anthony
 {
 	//this class is also POORLY documented. 
 	
@@ -38,6 +37,41 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	
 	public $ownerId; //what is this?
 	public $fromWhere; //what is this? 
+	
+	/***
+	 *  triggered at the beginning of an activity 
+	 */
+	const BEGIN_ACTIVITY = 'beginActivity';
+
+	/***
+	 *  triggered at the end of an activity 
+	 */
+	const COMPLETED_ACTIVITY = 'completeActivity';
+	
+	/***
+	 *  corresponds to the find activity
+	 */
+	const MODEL_ACTIVITY_FIND = 'find';
+	
+	/***
+	 *  corresponds to the insert activity
+	 */
+	const MODEL_ACTIVITY_INSERT = 'insert';
+	
+	/***
+	 *  corresponds to the update activity
+	 */
+	const MODEL_ACTIVITY_UPDATE = 'update';
+	
+	/***
+	 *  corresponds to the delete activity
+	 */
+	const MODEL_ACTIVITY_DELETE = 'delete';
+	
+	/***
+	 *  corresponds to the softDelete activity
+	 */
+	const MODEL_ACTIVITY_SOFT_DELETE = 'softDelete';
 	
 	/*
 	 * @array or string to list date values in the ARModel/Child class
@@ -87,14 +121,15 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 		}
  	}
 	
-	/* 
+	/**** behaviors function DEPRECATED?
 	 * Final function returns a merged array of the base behaviors and the custom behaviors created by user
 	 * Function cannot be overridden by child classes. Use 'myBehaviors' to assign new behaviors
 	 *
-	final public function behaviors() 
+	final public function behaviors()
 	{
-		return $this->_mergeBehaviours( $this->_baseBehaviors(), $this->myBehaviors() );		
-	}
+		return [];
+		//return $this->_mergeBehaviours( $this->_baseBehaviors(), $this->myBehaviors() );		
+	}*/
 	
 	/*
 	 * IS THIS DEPRECATED?
@@ -104,7 +139,7 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 * @params $base - expexts a base behavior 
 	 * @param $customBehaviors - optional should be the custom behaviors set by the user.
 	 */
-	private function _mergeBehaviours($base, $customBehaviors = array()) 
+	private function _mergeBehaviours($base, $customBehaviors = array())
 	{
 		$mergedBehaviors = array();
 		
@@ -137,7 +172,7 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 					}
 				} else {
 					//neither is a string or array trigger error
-					trigger_error("Behavior type neither strig nor array? - " . __METHOD__, E_USER_ERROR );
+					trigger_error("Behavior the type neither string nor array? - " . __METHOD__, E_USER_ERROR );
 				}
 			}
 						
@@ -154,9 +189,11 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 * if the behavior is simply a class string, returns the class string. 
 	 * if the behavior it returns the array item in the 'class' key. Returns false if this is empty
 	 * returns null if the class found is not a valid class.
-	 * @params string or array variables. 
+	 * @params string or array variables.
+	 * @details returns the class name as stored in an array/string, but, 'className' is already taken
+	 * @return string
 	 */
-	private function _classString($item) //returns the class name as stored in an array/string, however, 'className' is already taken 
+	private function _classString($item) 
 	{
 		if ( is_array($item) ) {
 			if ( !empty($item['class']) ) {
@@ -175,8 +212,8 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 * Should be extendable to accept multiple items but currently limited to 2.
 	 * @params string or array variables. 
 	 */
-	public function merge_string_array() 
-	{	
+	public function merge_string_array()
+	{
 		$result = array();
 		$args = func_get_args();
 		$arrayItem = array();
@@ -214,7 +251,7 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 * to ammend this, the user can set their configurations in 
 	 * myBehaviors function. 
 	 */
-	private function _baseBehaviors() 
+	private function _baseBehaviors()
 	{
 		return [
 			
@@ -222,35 +259,42 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 
 	}
 
-	
-	public function myBehaviors() 
+	/**
+	 * @brief a function to be overriden by a child class. This function should return a set of behaviors for the child class
+	 * 
+	 * @return array
+	 */
+	public function myBehaviors()
 	{
 		return array();
 		
 	}
 	
-	/***
+	/**
 	 * placeholder function - to be overridden by user as required.
 	 */
-	public function beforeSoftDelete() 
+	public function beforeSoftDelete()
 	{
 	}
 	
-	/***
+	/**
+	 * @details - triggers the completion of an activity. Also consider refactoring. 
+	 */
+	public function afterSoftDelete()
+	{
+		$activityEvent = new ActivityEvent;
+		$activityEvent->modelAction = self::MODEL_ACTIVITY_SOFT_DELETE;
+		$this->trigger(self::COMPLETED_ACTIVITY, $activityEvent);
+	}
+	
+	/**
 	 * placeholder function - to be overridden by user as required.
 	 */
-	public function afterSoftDelete() 
+	public function beforeUndoDelete()
 	{
 	}
 	
-	/***
-	 * placeholder function - to be overridden by user as required.
-	 */
-	public function beforeUndoDelete() 
-	{
-	}
-	
-	/***
+	/**
 	 * placeholder function - to be overridden by user as required.
 	 */
 	public function afterUndoDelete()
@@ -258,11 +302,63 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	}
 	
 	/**
-	 * {@inheritdoc}  
-	 *
-	 *  @details switching Query class for all instances of this class. 
+	 *  @brief {@inheritdoc}
+	 *  
+	 *  @details leaving this function here in order to make progress. 
+	 *  however, this terribly needs to be refactored because if child classes overload this, then the Completed Activity will be triggered 
+	 *  WHILE the final checks and transformations for the find activity are still being done. 
+	 *  
+	 *  IMPORTANT NOTICE: All child classes overriding afterFinde MUST call parent::afterFind() AFTER their custom code. 
+	 *  i.e. it should be the last line of code.
+	 *  @future refactor - this should be placed in StandardQuery Class populate function 
 	 */
-	public static function find() 
+	public function afterFind() 
+	{
+		parent::afterFind();
+		$activityEvent = new ActivityEvent;
+		$activityEvent->modelAction = self::MODEL_ACTIVITY_FIND;
+		$this->trigger(self::COMPLETED_ACTIVITY, $activityEvent);
+	}
+		
+	/**
+	 *  @brief {@inheritdoc}
+	 *  
+	 *  @details overriding save in order to ensure that an activity event is only triggered AFTER a successful save. 
+	 *  Note that this calls the parent save function (ActiveRecord or BaseActiveRecord) and so this function 
+	 *  is run BEFORE and AFTER afterSave. It is run before afterSave in that it is the entry function to commence the saving process
+	 *  (this is consistent with how Yii2 core works). Then the parent runs the functions, beforeSave, updates or inserts and then afterSave
+	 *  This is all consistent with Yii2 core. After this is all done, the ActivityEvent 'COMPLETED_ACTIVITY' will be triggered.
+	 *  
+	 *  Steps are therefore as follows:
+	 *  1. Ask to save the record. 
+	 *  2. Initiate beforeSave function (this is in the parent and goes through the update/insert and internal functions)
+	 *  3. If 2 is successful, run the actual database queries 
+	 *  4. Trigger afterSave function (this is done in the parent)
+	 *  5. ActivityEvent is triggered. 
+	 *  
+	 *  IMPORTANT NOTICE: All child classes overriding save MUST call parent::save() AFTER their custom code. i.e. 
+	 *  it should be the last line of code. Otherwise, the activity event will be triggered BEFORE the save is acually completed.
+	 *  Which is not the intended behavior. 
+	 */
+	public function save($runValidation = true, $attributeNames = null)
+    {
+		$newRecord = $this->isNewRecord; //once parent::save is completed through insert, isNewRecord is no longer true;
+		if ( $result = parent::save($runValidation, $attributeNames) ) {
+			$activityEvent = new ActivityEvent;
+			$activityEvent->modelAction = $newRecord ? self::MODEL_ACTIVITY_INSERT : self::MODEL_ACTIVITY_UPDATE;
+			$this->trigger(self::COMPLETED_ACTIVITY, $activityEvent);
+		}
+		
+		//$activityEvent->additonalParams['changedAttributes'] = $changedAttributes; //have to figure out where this is injected.
+		return $result;
+    }
+	
+	/**
+	 * {@inheritdoc}
+	 *
+	 *  @details switching Query class for all instances of this class
+	 */
+	public static function find()
 	{
 		Yii::info("Using StandardQuery class to perform queries in " . static::class, __METHOD__ );
 		return new StandardQuery(get_called_class());
@@ -270,11 +366,11 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	
 	/***
 	 * Get the type of a given attribute 
-	
+	 * THIS SEEMS TO CLASH WITH a child class. Removed as it is barely in use. 
 	public function getAttributeType($attribute)
 	{
 		return $this->hasAttribute($attribute) ? self::getTableSchema()->columns[$attribute]->type : trigger_error('This attribute ({$attribute}) does not exist: ' . $attribute . ' ' . __METHOD__);
-	}
+	}*/
 	
 	/***
 	 * basic before validate function for each component 
@@ -294,8 +390,6 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	public function specificClipsWithLimitAndOffset($limit=4,$offset=0,$ownerTypeId=2,$barId = 0)
     {
         return Clip::find()->select(['owner_id'])->andWhere(['bar_id' => $barId])->andWhere(['owner_type_id' => $ownerTypeId])->asArray()->limit($limit)->offset($offset)->all();
-		
-		
     }
 	
 	protected function usesClipOnBehavior($className = '')  //just in case child classes want a variable. 
@@ -309,14 +403,97 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 		return $result;
 	}
 	
-	/**
+	/***
 	 *  @brief A simple function to identify what class this object is of. 
 	 *  
 	 *  @return returns the class name without the namespace 
 	 */
-	public static function  shortClassName()
+	public static function shortClassName()
 	{
 		$fqnm = static::class;
 		return substr($fqnm, strrpos($fqnm, '\\')+1);
 	}
+	
+	/***
+	 *  @brief This method tries to use one of the standard ways to determine
+	 *  a public title for this instance.
+	 *  
+	 *  @return string - the title
+	 *  
+	 */
+	public function getPublicTitleofBARRM() : string 
+	{
+		if ( $this->hasProperty('nameString') ) {
+			return $this->nameString;
+		}
+		
+		if ( $this->hasMethod('nameString') ) {
+			return $this->nameString();
+		}
+		
+		if ( $this->hasProperty('title') ) {
+			return $this->title;
+		}
+		
+		if ( $this->hasProperty('name') ) {
+			return $this->name;
+		}
+		
+		if ( $this->hasProperty('id') ) {
+			Yii::error("Using ID as a public title! All other properties failed. This child class '" . static::class . "' should implement a nameString property.");
+			return $this->id;
+		}
+		
+		throw new yii\base\InvalidCallException("I tried. This object has no method or property to use as a public title. Needs nameString");
+	}
+	
+	/**
+	 *  @brief a function that child classes can override in order for instances of that child class to be subscribed
+	 *  for activity manager UPON their first creation i.e. insertion into the DB ONLY. If you want to subscribe 
+	 *  an instance for activity manager, you have to call Yii::$app->activityManager->subscribe($this); at that point. 
+	 *  For instance, if you want a new instances of your child class to be subscribed, 
+	 *  simply override this so that in the scenarios you want, it returns true. 
+	 *  And in scenarios you do not want it to be subscribed, return false. 
+	 */
+	protected function subscribeInstanceOnInsert()
+	{
+		return false;
+	}
+	
+	/**
+	 *  @brief {@inheritdoc}
+	 *  
+	 *  @details Activity stream needs to subscribe this instance for this user at the point of insert. 
+	 *  this code can be copy pasted onto any AR model you want to subscribe. 
+	 *  this was not placed in parent class because subscription should be limited to a small set of AR models - user centred models.
+	 *  
+	 *  @future you might want to trigger a Subscription event here. User subscribed to this folder etc.
+	 */
+	public function afterSave ( $insert, $changedAttributes ) 
+	{
+		if ( $insert && $this->subscribeInstanceOnInsert() ) {
+			Yii::$app->activityManager->subscribe($this);
+		}
+		parent::afterSave( $insert, $changedAttributes );
+	}
+
+	/***
+	 * @brief introducing a function that MUST be run before any find process. 
+	 * @details This function triggers a BEGIN_ACTIVITY event. 
+	 * This is important as it is the only way to introduce an event before a find is commenced 
+	 * The current ActiveRecord lifecycle leaves no space for an event to be triggered before the find. 
+	 * 
+	 * @future consider other ways to trigger an event before the find without touching Yii core.
+	 */
+	public static function beforeFind()
+	{
+		Yii::info("Running Before Find for " . static::class, __METHOD__);
+		$activityEvent = new ActivityEvent;
+		$activityEvent->eventPhase = 'before';
+		$activityEvent->modelAction = SELF::MODEL_ACTIVITY_FIND;
+		$activityEvent->additonalParams['modelClass'] = static::class;
+		
+		ModelEvent::trigger(static::class, SELF::BEGIN_ACTIVITY, $activityEvent);
+	}
+
 }
