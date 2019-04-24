@@ -420,7 +420,6 @@ a.addTaskButton.active {
                           $edocuments = $values->clipOn['edocument'];
                           $assigneesIds = $values->taskAssigneesUserId;
                           $userid = Yii::$app->user->identity->id;
-                          //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  '' : 'no-drag'?> test_<?= $values->id;?>">
                   <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
@@ -778,6 +777,7 @@ $(document).ready(
   $('.testdrop').on('show.bs.dropdown', function(e) {
    target = e.target;        
     dropdownMenu = $(e.target).find('.dropdown-menu');
+    dropdownMenu.addClass('openDropdown');
     $('.drag-container').append(dropdownMenu.detach());          
     dropdownMenu.css('display', 'block');             
     dropdownMenu.position({                           
@@ -800,7 +800,8 @@ $('.drag-container').on('click', function(e) {
   });
   $('.testdrop').on('hidden.bs.dropdown', function(e) {
     if(!dropdownMenu.hasClass('opened')){
-      $(target).append(dropdownMenu.detach());        
+      $(target).append(dropdownMenu.detach());
+      dropdownMenu.removeClass('openDropdown');        
       dropdownMenu.hide();
     }
   });                                                

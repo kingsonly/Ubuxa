@@ -119,12 +119,12 @@ class Folder extends FolderARModel
      * @return \yii\db\ActiveQuery
      */
 	
-    public function getUsers()
-    {
-        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
-    }
+//    public function getUsers()
+//    {
+//        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
+//    }
 	
-	public function getFolderUsers()
+	public function getUsers()
 	{
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
     }

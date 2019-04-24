@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var events = require('events');
 var mysql = require('mysql');
+var redis = require('redis');
 var _ = require('lodash');
 var eventEmitter = new events.EventEmitter();
 
@@ -14,8 +15,11 @@ require('../app/models/room.js');
 var userModel = mongoose.model('User');
 var chatModel = mongoose.model('Chat');
 var roomModel = mongoose.model('Room');
+var client = redis.createClient(); //creates a new client
 
-
+client.on('connect', function() {
+    console.log('connected to redis');
+});
 //reatime magic begins here
 module.exports.sockets = function(http) {
 
@@ -46,6 +50,29 @@ ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
 
 	//function to get user name, this would be emited from the client and recieved on the server
+	socket.on('check-for-message',function(username){
+		client.exists(username, function(err, reply) {
+			if (reply === 1) {
+				client.lrange(username, 0, -1, function(err, data) {
+					if(!err){
+						console.log(data);
+						ioChat.to(userSocket[username]).emit('check-for-message', data);
+						// delete key after a single fetch
+						client.del(username, function(err, reply) {
+							console.log(reply);
+						});
+					}
+
+
+				});
+			} else {
+				console.log('doesn\'t exist');
+			}
+		});
+		
+		
+	});
+	
 	socket.on('set-user-data', function(username) {
 		console.log(username+ "  logged In 1");
 		//storing variable.
@@ -67,6 +94,7 @@ ioChat.on('connection', function(socket) {
 			//for popping connection message.
 			
 			ioChat.emit('onlineStack', userStack);
+			
 			
 		} //end of sendUserStack function.
 			
@@ -203,8 +231,18 @@ ioChat.on('connection', function(socket) {
                         }
 						//ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from);
 					}else{
-						ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
-						console.log('go ahead2');
+						if(data.msgTo in userSocket){
+							ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
+							console.log('go ahead2');
+						}else{
+							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.date;
+							client.rpush([data.msgTo, redisString], function(err, reply) {
+    							console.log(redisString); //prints 2
+							});
+							
+							console.log('user not online '+data.msgTo); 
+						}
+						
 					}
 
 				});

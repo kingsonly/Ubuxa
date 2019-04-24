@@ -305,7 +305,7 @@ class SiteController extends BoffinsBaseController {
     }
 
   public function actionSignup($email,$cid,$role,$folderid = 0)
-    {
+  {
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
@@ -383,7 +383,7 @@ class SiteController extends BoffinsBaseController {
 		
 		$this->layout = 'loginlayout';
 		$customerModel = new Customer();
-       	$customer = new CustomerSignupForm;
+       	$customer = new CustomerSignupForm();
        	$tenantEntity = new TenantEntity();
        	$tenantCorporation = new TenantCorporation();
        	$tenantPerson = new TenantPerson();
@@ -607,7 +607,7 @@ class SiteController extends BoffinsBaseController {
 			    	$domain = $getTenant->master_doman;
 			    	array_push($domains, $domain);
 		    	}
-		    	UserDb::sendDomainName($domains);
+		    	UserDb::sendDomainName($domains,$email);
 		    	return 1;
 		    }else{
 		    	return 0;

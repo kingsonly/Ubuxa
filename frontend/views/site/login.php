@@ -53,7 +53,7 @@ $customerDomain = Customer::checkDomain($subdomain);
   left: 0;
   width: 50%;
   height: 100%;
-  background-image: url("images/ubuxalg.png");
+  background-image: url("images/loginpage1.jpg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
@@ -359,7 +359,8 @@ input[type=checkbox]{
     <div class="topLayer">
       <div class="right">
         <div class="content">
-          <h2>Login in to <?= $customerDomain[1];?></h2>
+
+          <h2>Login to <?= $customerDomain[1];?></h2>
           <?php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
   				<?php echo Alert::widget([
   					'options' => ['class' => 'alert-danger'],

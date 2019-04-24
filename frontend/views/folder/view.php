@@ -221,7 +221,7 @@ $img = $model->folder_image;
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->folderUsers]) ?>
+                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
                   </div>  
                     	<div class="row">
 							
@@ -239,7 +239,7 @@ $img = $model->folder_image;
 			
 			?>
 			
-        	<?= ComponentWidget::widget(['users'=>$model->folderUsers,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
+        	<?= ComponentWidget::widget(['users'=>$model->users,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">

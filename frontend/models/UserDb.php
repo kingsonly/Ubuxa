@@ -554,12 +554,12 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return !empty($user);
 	}
 
-	public static function sendDomainName($domain)
+	public static function sendDomainName($domain,$usersEmail)
 	{
 		return Yii::$app->mailer->compose(['html' => 'domain'], [
 	            'domain' => $domain
 	        ])
-	            ->setTo('support@epsolun.com')
+	            ->setTo($usersEmail)
 	            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
 	            ->setSubject('Ubuxa Workspace')
 	            ->send();

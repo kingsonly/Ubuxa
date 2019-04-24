@@ -67,6 +67,7 @@ use yii\helpers\Url;
 $boardUrl = Url::to(['task/board']);
 $deleteTaskUrl = Url::to(['task/delete']);
 $deleteTask = <<<JS
+var DeleteTasksocket = io('//127.0.0.1:4000/task');
 
 $(".delete-task").on('click',function(e) {
     var taskid;
@@ -87,16 +88,21 @@ function _deleteTask(taskid){
                 },
               success: function(res, sec){
                     toastr.success('Task Deleted');
-                    var folderId = $('.board-specfic').attr('data-folderId');
-                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
-                    $.pjax.reload({container:"#task-list-refresh"});
-                   //console.log('Task Deleted');
+                    DeleteTasksocket.emit('task delete', taskid);
               },
               error: function(res, sec){
                   console.log('Something went wrong');
               }
     	});
 }
+
+DeleteTasksocket.on('task delete', function(taskid){
+  $('.openDropdown').hide();
+  $('.delete-task').show();
+  $('.loading-delete-task').hide();
+  $('.test_'+taskid).remove();
+  $('.todo_'+taskid).remove();
+})
 
 JS;
 $this->registerJs($deleteTask);
