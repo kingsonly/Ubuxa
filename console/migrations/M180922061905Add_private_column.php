@@ -22,8 +22,8 @@ class M180922061905Add_private_column extends Migration
      */
     public function safeDown()
     {
-        echo "M180922061905 Private is a standard feature. This column should not be reverted. Reverting for development only.\n";
-		$this->dropColumn('{{%folder}}', 'private');
+        echo "M180922061905 Private Folder is a standard feature. This column should not be reverted. Reverting for development only.\n";
+		$this->dropColumn('{{%folder}}', 'private_folder');
     }
 
     /*

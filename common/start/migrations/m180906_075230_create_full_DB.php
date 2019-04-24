@@ -15,7 +15,7 @@ class m180906_075230_create_full_DB extends Migration
     {
 		$updates = file_get_contents(__DIR__ . '/db_updates/tycol_main_updates_full_dump_2018_09_06.sql');
 		$customers = file_get_contents(__DIR__ . '/db_updates/premux_main_customers_full_dump_2018_09_06.sql');
-		$sql = file_get_contents(__DIR__ . '/db_updates/tycol_main_full_dump_and_rename_2018_09_06.sql');
+		$sql = file_get_contents(__DIR__ . '/db_updates/tycol_main_full_dump_and_rename_2018_09_06_new.sql');
 		$this->execute($updates);
 		$this->execute($customers);
 		$this->execute($sql);

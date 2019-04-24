@@ -24,8 +24,8 @@ class M180919034504Create_user_image extends Migration
     public function safeDown()
     {
         echo "M180919034504Create_user_image cannot be reverted. Reverting for development\n";
-
-        return false;
+        $this->dropColumn("{{%user}}", 'profile_image');
+        //return false;
     }
 
     /*

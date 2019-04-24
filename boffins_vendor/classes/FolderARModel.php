@@ -81,6 +81,8 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 	 */
 	public static function find() 
 	{
+		Yii::info("Using StandardFolderQuery class to perform queries in " . static::class, __METHOD__ );
+		static::beforeFind();
 		return new StandardFolderQuery(get_called_class());
 	}
 	
@@ -94,5 +96,14 @@ class FolderARModel extends BoffinsArRootModel implements TenantSpecific, TrackD
 		
 		
     }
+	
+	/**
+	 *  @brief {@inheritdoc}
+	 */
+	protected function subscribeInstanceOnInsert()
+	{
+		return true;
+	}
+	
 	
 }

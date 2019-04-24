@@ -3,7 +3,7 @@
 use yii\db\Migration;
 
 /**
- * Class m190111_074225_create_task_goal
+ * Class m190111_074225_create_task_group
  */
 class m190111_074225_create_task_group extends Migration
 {
@@ -69,7 +69,7 @@ class m190111_074225_create_task_group extends Migration
      */
     public function safeDown()
     {
-        echo "m190111_074225_create_task_goal should not be reverted. Reverting for development only.\n";
+        echo "m190111_074225_create_task_group should not be reverted. Reverting for development only.\n";
 		
 		$this->dropForeignKey('TaskChild', "{{%task_group}}");
 		$this->dropForeignKey('TaskGroup', "{{%task_group}}");
@@ -88,7 +88,7 @@ class m190111_074225_create_task_group extends Migration
 
     public function down()
     {
-        echo "m190111_074225_create_task_goal cannot be reverted.\n";
+        echo "m190111_074225_create_task_group cannot be reverted.\n";
 
         return false;
     }

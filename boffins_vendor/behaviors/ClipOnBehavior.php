@@ -254,15 +254,26 @@ class ClipOnBehavior extends Behavior
 		return $getClipDetails; //return an object of the clip depending on the type
 	}
 
+	/***
+	 * @brief - this is missing. @KINGLSLEY add this so that other people can fully understand what this funcion does and what it 
+	 * is meant to achieve. This is better than describing what each line does (which isn't helpful because everyone already reads)
+	 * 
+	 * @future - The three lines marked as LINE 1, LINE 2, LINE 3 should be merged into one line 
+	 * wih one query using one find. Right now, this triggers 3 finds which throws off the system.
+	 * @KINGLSLEY or anyoen else, please refactor. Consider joins.
+	 * 	 */
 	private function getAllClips()
 	{
 		$clipBarModel = new ClipBar(); // clipbar instance 
 		$ownerId = $this->owner->id; // owners id usually the folder id but could also be a task or a any thing that can be cliped to eg a clipbar
 		$ownerClassName= $this->_getShortClassName($this->owner); // holds a string value of the actuall class name
-		$getOwnerType = ClipBarOwnerType::find()->where(['owner_type'=>$ownerClassName])->one();
+		//LINE 1 REFACTOR
+		$getOwnerType = ClipBarOwnerType::find()->andWhere(['owner_type'=>$ownerClassName])->one();
 		
 		$ownerTypeId = $getOwnerType->id; //returns the id which is gotten from the clip bar owner type search
+		//LINE 2 REFACTOR
 		$getClipBarcount = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->count();// used to make sure a clip exist 
+		//LINE 3 REFACTOR USE JOINS 
 		$getClipBar = $clipBarModel->find()->andWhere(['owner_id' => $ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // get clip bar id which would be used to fetch all clips associated to the bar 
 		
 		/**** if bar exist run the below set of code to complete the circle ***********

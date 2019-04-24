@@ -112,6 +112,7 @@ class m190205_074221_calendar_check_status extends Migration
         $this->dropTable("{{%calendar_check_status}}");
         $this->dropTable("{{%calendar_reminder}}");
         $this->dropTable("{{%google_calendar_id}}");
+        $this->dropTable("{{%calendar}}");
 
         //return false;
     }

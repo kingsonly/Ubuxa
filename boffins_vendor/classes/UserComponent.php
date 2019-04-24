@@ -18,7 +18,7 @@ class UserComponent extends User
 	/*
 	 * Cookie configuration for the device Cookie. 
 	 */
-	public $deviceCookieConfig = ['name' => 'ds', 'httpOnly' => true]; // httpOnly ensures this cookie cannot be stolen via javascrpt. Set to false if you absolutely need it. s
+	public $deviceCookieConfig = ['name' => 'ds', 'httpOnly' => true]; // httpOnly ensures this cookie cannot be stolen via javascrpt. Set to false if you absolutely need it. 
 	/* 
 	 * Device through which user is authenticated. When instantiated, it will be of class \frontend\models\Device 
 	 */
@@ -228,8 +228,7 @@ class UserComponent extends User
 	}
 	
 	/*
-	 * Ensure that the authentication items are atored for the user. 
-	 
+	 * Ensure that the authentication items are stored for the user. 
 	 */
 	public function beforeLogin($identity, $cookieBased, $duration) 
 	{
