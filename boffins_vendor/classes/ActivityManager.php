@@ -329,7 +329,7 @@ class ActivityManager extends Component
 		Yii::warning($this->activityTree->resolve(), __METHOD__);
 		$redis = Yii::$app->redis;
 		
-		$redis->lpush( "user_message:$user_id", $this->activityTree->resolve() );
+		//$redis->lpush( "user_message:$user_id", $this->activityTree->resolve() );
 		//$redis->hmset( "user_message:$user_id", "message", $this->activityTree->resolve(), "date", time() );
 		//echo "<pre>";
 		//var_dump($this->activityTree);
@@ -456,11 +456,11 @@ class ActivityManager extends Component
 					//Yii::warning("Object is target " . $this->objectIsTarget($event->sender), __METHOD__);
 					break;
 				case 'create':
-					$this->assignActivityDetails($newNode, $this->currentActivityNode);
+					$this->assignActivityDetails($newNode, $activityObject);
 					$this->currentActivityNode = $this->addActivityMessage($messageConstructs, $this->activityTree);
 					break;
 				case 'update':
-					$this->assignActivityDetails($newNode, $this->currentActivityNode);
+					$this->assignActivityDetails($newNode, $activityObject);
 					$this->currentActivityNode = $this->addActivityMessage($messageConstructs, $this->activityTree);
 					break;
 				case 'delete':
