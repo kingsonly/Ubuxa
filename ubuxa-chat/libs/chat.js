@@ -36,7 +36,28 @@ module.exports.sockets = function(http) {
 	});
 	con.connect();
 
+var pub, sub
+//.: Activate "notify-keyspace-events" for expired type events
 
+client.send_command('config', ['set','notify-keyspace-events','Ex'], SubscribeExpired)
+//.: Subscribe to the "notify-keyspace-events" channel used for expired type events
+function SubscribeExpired(e,r){
+ sub = redis.createClient()
+ const expired_subKey = '__keyevent@0__:expired'
+ sub.subscribe(expired_subKey,function(){
+  console.log(' [i] Subscribed to "'+expired_subKey+'" event channel : '+r)
+  sub.on('message',function (chan,msg){
+	  console.log('[expired]',msg)
+									  })
+ })
+ TestKey(10,'wait');
+}
+//.: For example (create a key & set to expire in 10 seconds)
+function TestKey(time,key){
+ client.set(key,'redis notify-keyspace-events : expired')
+ client.expire(key,time)
+}
+	
 
 //setting chat route
 var ioChat = io.of('/chat');
@@ -48,7 +69,7 @@ var userSocketInstBuyUserName = {}; // this might not be needed any more
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
-
+	TestKey(20,'food');
 	//function to get user name, this would be emited from the client and recieved on the server
 	socket.on('check-for-message',function(username){
 		client.exists(username, function(err, reply) {
@@ -235,7 +256,7 @@ ioChat.on('connection', function(socket) {
 							ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
 							console.log('go ahead2');
 						}else{
-							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.date;
+							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.msgTo+')'+data.date;
 							client.rpush([data.msgTo, redisString], function(err, reply) {
     							console.log(redisString); //prints 2
 							});

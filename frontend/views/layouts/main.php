@@ -9,6 +9,7 @@ use yii\bootstrap\Alert;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
+use boffins_vendor\components\controllers\ChatNotificationWidget;
 use boffins_vendor\components\controllers\FeedbackWidget;
 use frontend\models\UserFeedback;
 use frontend\assets\AppAsset;
@@ -60,7 +61,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
+<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" data-chatnotificationurl="<?= Url::to(['site/update-chat-notification'])?>" >
 <!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
 	<div class="se-pre-con"></div>
 
@@ -156,18 +157,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                 <?= ChatNotificationWidget::widget(); ?>
                   <!-- end message -->
                 </ul>
               </li>
@@ -220,6 +210,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
+		 
     </section>
       <!-- /.content -->
     </div>

@@ -228,11 +228,18 @@ $(document).ready(function(){
 		
 		//receiving onlineStack.
 		socket.on('check-for-message',function(data){
+			
 			// get all message and display them
 			localStorage.setItem('chatnotification', JSON.stringify(data));
 			var allNotifications = JSON.parse(localStorage.getItem('chatnotification'));
 			var time = 9000;
 			//var splitNotification;
+			var notificationurl = $('body').data('chatnotificationurl');
+			$.post(notificationurl,{data:data},function(result){
+					// use pjax to update notification area
+					// use html to add number
+					alert(4567)
+				}) 	
 			$.each(allNotifications, function( index, value ) {
 				var url = $('body').data('newmessageurl');
 				splitNotification = value.split(')');
@@ -284,12 +291,41 @@ $(document).ready(function(){
 			socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
 			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage,folderColor,fullname);
 			console.log(arr);
+		});
+		
+		$(document).on('click', '.notificationbox', function() {
+			var toUsername = $(this).data('username') ;
+			var fullname = $(this).data('fullname') ;
+			var userID = toUsername+'_id';
+			var folderDetailsTitle = $(this).data('foldertitle');
+			var folderDetailsId = $(this).data('folderid');
+			var userImage = $(this).data('senderimage');
+			var folderColor = $(this).data('foldercolor');
 
-			//event to set room and join.
+
+			//empty messages.
+			$('#messages').empty();
+			$('#typing').text("");
+			msgCount = 0;
+			noChat = 0;
+			oldInitDone = 0;
+
+			//assigning friends name to whom messages will send,(in case of group its value is Group).
+			toUser = toUsername;
 			
-
 			
+			if(toUser == "Group"){
+				var currentRoom = "Group-Group";
+				var reverseRoom = "Group-Group";
+			}else{
+				var currentRoom = username+"-"+toUser+'-'+folderDetailsId;
+				var reverseRoom = toUser+"-"+username+'-'+folderDetailsId;
 
+			}
+			
+			socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
+			createChateArea(toUsername,userID,folderDetailsTitle,folderDetailsId,userImage,folderColor,fullname);
+			console.log(arr);
 		});
 		
 		// close message box 
