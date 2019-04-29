@@ -70,7 +70,12 @@ class ReminderController extends RestController
     {
         $taskModel = Task::findOne($taskId);
         $reminders = $taskModel->reminderTimeTask;
-        Yii::$app->api->sendSuccessResponse($reminders);
+		if(empty($reminders)){
+			 Yii::$app->api->sendFailedResponse('Task does not have a reminder');
+		}else{
+			Yii::$app->api->sendSuccessResponse($reminders);
+		}
+        
     }
 
 
@@ -83,17 +88,23 @@ class ReminderController extends RestController
         $taskReminder->attributes = $this->request;
         $model->last_updated = $presentTime;
 
-        if(!empty($model)){
+        if(!empty($model->attributes)){
             if ($model->save()) {
                 $taskReminder->reminder_id = $model->id;
                 $taskReminder->task_id = $taskId;
                 $taskReminder->save(false);
                Yii::$app->api->sendSuccessResponse($model->attributes);
             }else{
-                Yii::$app->api->sendFailedResponse($model->attributes);
+               // Yii::$app->api->sendFailedResponse($model->attributes);
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
             }
         }else{
-            Yii::$app->api->sendFailedResponse($model->attributes);
+			if (!$model->validate()) {
+				Yii::$app->api->sendFailedResponse($model->errors);
+			}
+            //Yii::$app->api->sendFailedResponse($model->attributes);
         }
    	}
 
@@ -103,11 +114,17 @@ class ReminderController extends RestController
 		
         $model =  $this->findModel($id);
 		$model->attributes = $this->request;
-		if(!empty($model)){
+		if(!empty($model->attributes)){
 			if ($model->save()) {
 			   Yii::$app->api->sendSuccessResponse($model->attributes);
 			}else{
-				Yii::$app->api->sendFailedResponse($model->attributes);
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
+			}
+		}else{
+			if (!$model->validate()) {
+				Yii::$app->api->sendFailedResponse($model->errors);
 			}
 		}
 	}
