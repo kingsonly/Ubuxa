@@ -92,7 +92,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         /* check file extension to determine the file thumbnail */
         switch($ext) {
             case 'JPG': case 'jpg': case 'PNG': case 'png': case 'gif': case 'GIF':
-                echo '<a class="doc-img" target="_blank" style="background-image: url('.$docpath.');"></a>';
+                echo '<a class="doc-img" target="_blank" style="background-image: url('.str_replace(" ","%20",$docpath).');"></a>';
             break;
             case 'zip': case 'rar': case 'tar':
                 echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/zip.png");"></a>';

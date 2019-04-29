@@ -808,7 +808,8 @@ var dropzone = new Dropzone('#dropupload$target', {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
   clickable: false,
-  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 10,
+  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
+  parallelUploads: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
   /*addRemoveLinks: true,*/
   acceptedFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 'image/*' : '',
   accept: function(file, done) {
@@ -886,7 +887,7 @@ var dropzone = new Dropzone('#dropupload$target', {
   },
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
-  maxFiles: 10,
+  maxFiles: 20,
   clickable: true,
   accept: function(file, done) {
     var ext = file.name.split('.').pop(); //get file extension
