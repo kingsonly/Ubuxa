@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
 use frontend\models\Task;
+use frontend\models\Folder;
 use Yii;
 use yii\db\Expression;
 
@@ -64,6 +65,13 @@ class TaskController extends RestController
         ];
     }
 
+    public function actionIndex($folderId)
+    {
+    	$folderModel = Folder::findOne($folderId);
+    	$fetchTasks = $folderModel->clipOn['task'];
+    	Yii::$app->api->sendSuccessResponse($fetchTasks);
+    }
+
 
    public function actionCreate()
    {
@@ -71,12 +79,20 @@ class TaskController extends RestController
 		$model->attributes = $this->request;
         if (!empty($model->attributes['title'])) {
 			$model->last_updated =  new Expression('NOW()');
+			$model->create_date =  new Expression('NOW()');
 			$model->completion_time = NULL;
             $model->in_progress_time = NULL;
             $model->due_date = NULL;
+            $model->status_id = Task::TASK_NOT_STARTED;
+            $model->owner = Yii::$app->user->identity->id;
+            $model->fromWhere = 'folder';
 			if($model->save()){
             	Yii::$app->api->sendSuccessResponse($model->attributes);
+			}else{
+				Yii::$app->api->sendFailedResponse([$model->errors]);
 			}
+        }else{
+        	Yii::$app->api->sendFailedResponse([$model->errors]);
         }
    	}
 
@@ -90,10 +106,17 @@ class TaskController extends RestController
 			if ($model->save()) {
 			   Yii::$app->api->sendSuccessResponse($model->attributes);
 			}else{
-				Yii::$app->api->sendFailedResponse(['Could not update']);
+				Yii::$app->api->sendFailedResponse($model->attributes);
 			}
 		}
 	}
+
+	public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->delete();
+        Yii::$app->api->sendSuccessResponse($model->attributes);
+    }
 
     protected function findModel($id)
     {
