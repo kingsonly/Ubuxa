@@ -599,8 +599,8 @@ class SiteController extends BoffinsBaseController {
 		    if($emailExist){
 		    	$emails = Email::find()->where(['address' => $email])->all();
 		    	$domains = [];
-		    	foreach ($emails as $email) {
-		    		$cid = $email->cid;
+		    	foreach ($emails as $userEmail) {
+		    		$cid = $userEmail->cid;
 			    	$getTenant = Customer::find()->where(['cid' => $cid])->one();
 			    	$domain = $getTenant->master_doman;
 			    	array_push($domains, $domain);
