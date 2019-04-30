@@ -132,8 +132,19 @@ class ReminderController extends RestController
 	public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->delete();
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+		if(!empty($model)){
+			if($model->delete()){
+				Yii::$app->api->sendSuccessResponse($model->attributes);
+			}else{
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
+			}
+		}else{
+			Yii::$app->api->sendFailedResponse('Reminder is empty or does not exist');
+		}
+        
+        
     }
 
     protected function findModel($id)

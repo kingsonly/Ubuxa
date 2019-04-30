@@ -228,8 +228,17 @@ class FolderController extends RestController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->delete();
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+		if(empty($model)){
+			Yii::$app->api->sendFailedResponse('task does not exist');
+		}else{
+			if($model->delete()){
+        		Yii::$app->api->sendSuccessResponse($model->attributes);
+			}else{
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
+			}
+		}
     }
 	
 	public function actionFolderUsers($id)

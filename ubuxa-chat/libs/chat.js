@@ -4,6 +4,7 @@ var events = require('events');
 var mysql = require('mysql');
 var redis = require('redis');
 var _ = require('lodash');
+var https = require("http");
 var eventEmitter = new events.EventEmitter();
 
 //adding db models
@@ -42,20 +43,60 @@ var pub, sub
 client.send_command('config', ['set','notify-keyspace-events','Ex'], SubscribeExpired)
 //.: Subscribe to the "notify-keyspace-events" channel used for expired type events
 function SubscribeExpired(e,r){
- sub = redis.createClient()
- const expired_subKey = '__keyevent@0__:expired'
- sub.subscribe(expired_subKey,function(){
-  console.log(' [i] Subscribed to "'+expired_subKey+'" event channel : '+r)
-  sub.on('message',function (chan,msg){
-	  console.log('[expired]',msg)
-									  })
- })
- TestKey(10,'wait');
+	sub = redis.createClient()
+	const expired_subKey = '__keyevent@0__:expired'
+	sub.subscribe(expired_subKey,function(){
+		console.log(' [i] Subscribed to "'+expired_subKey+'" event channel : '+r)
+		sub.on('message',function (chan,key){
+			console.log('[expired]',key)
+			var splitKey = key.split(':');
+			console.log('thisis '+splitKey[1])
+			client.exists(splitKey[1], function(err, reply) {
+				
+			if (reply === 1) {
+				client.get(splitKey[1], function(err, data) {
+					console.log(err)
+					if(!err){
+						
+						console.log(data);
+						console.log('yesyesyesno')
+						//ioChat.to(userSocket[username]).emit('check-for-message', data);
+						// delete key after a single fetch
+						//client.del(splitKey, function(err, reply) {
+						//	console.log(reply);
+						//});
+						
+						const options = {
+						  hostname: 'http://localhost/ubuxabeta/api/web/site/index',
+						  method: 'get',
+							};
+
+var req = https.get('http://localhost/ubuxabeta/api/web/site/test?id='+data, (res) => {
+  console.log(res.statusCode);
+});
+
+req.on('error', (e) => {
+  console.error(e.message);
+});
+
+req.end();
+					}
+
+
+				});
+			} else {
+				console.log('doesn\'t exist');
+			}
+		});
+		})
+	})
 }
 //.: For example (create a key & set to expire in 10 seconds)
 function TestKey(time,key){
+ 
  client.set(key,'redis notify-keyspace-events : expired')
- client.expire(key,time)
+ client.set('shadow:'+key,'')
+ client.expire('shadow:'+key,time)
 }
 	
 
@@ -69,9 +110,9 @@ var userSocketInstBuyUserName = {}; // this might not be needed any more
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
-	TestKey(20,'food');
 	//function to get user name, this would be emited from the client and recieved on the server
 	socket.on('check-for-message',function(username){
+		TestKey(10,'yes');
 		client.exists(username, function(err, reply) {
 			if (reply === 1) {
 				client.lrange(username, 0, -1, function(err, data) {
@@ -260,6 +301,9 @@ ioChat.on('connection', function(socket) {
 							client.rpush([data.msgTo, redisString], function(err, reply) {
     							console.log(redisString); //prints 2
 							});
+							var shadowKey = 'shadowkey:'+data.msgTo;
+							client.set(shadowKey,'')
+							client.expire(shadowKey,1800);
 							
 							console.log('user not online '+data.msgTo); 
 						}

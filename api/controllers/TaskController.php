@@ -64,18 +64,26 @@ class TaskController extends RestController
 
         ];
     }
-
-    public function actionIndex($folderId)
-    {
+	
+	public function actionIndex($folderId)
+	{
     	$folderModel = Folder::findOne($folderId);
-    	$fetchTasks = $folderModel->clipOn['task'];
-    	Yii::$app->api->sendSuccessResponse($fetchTasks);
-    }
+		if(empty($folderModel)){
+			Yii::$app->api->sendFailedResponse('Folder  does not exist');
+		}else{
+			if(empty($folderModel->clipOn['task'])){
+				Yii::$app->api->sendFailedResponse('there  are no task in this folder');
+			}else{
+				$fetchTasks = $folderModel->clipOn['task'];
+    			Yii::$app->api->sendSuccessResponse($fetchTasks);
+			}
+			
+		}
+	}
 
-
-   public function actionCreate()
-   {
-        $model = new Task();
+	public function actionCreate()
+	{
+		$model = new Task();
 		$model->attributes = $this->request;
         if (!empty($model->attributes['title'])) {
 			$model->last_updated =  new Expression('NOW()');
@@ -89,12 +97,16 @@ class TaskController extends RestController
 			if($model->save()){
             	Yii::$app->api->sendSuccessResponse($model->attributes);
 			}else{
-				Yii::$app->api->sendFailedResponse([$model->errors]);
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
 			}
         }else{
-        	Yii::$app->api->sendFailedResponse([$model->errors]);
+        	if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
         }
-   	}
+	}
 
 
     public function actionUpdate($id)
@@ -106,7 +118,9 @@ class TaskController extends RestController
 			if ($model->save()) {
 			   Yii::$app->api->sendSuccessResponse($model->attributes);
 			}else{
-				Yii::$app->api->sendFailedResponse($model->attributes);
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
 			}
 		}
 	}
@@ -114,8 +128,18 @@ class TaskController extends RestController
 	public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->delete();
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+		if(empty($model)){
+			Yii::$app->api->sendFailedResponse('task does not exist');
+		}else{
+			if($model->delete()){
+        		Yii::$app->api->sendSuccessResponse($model->attributes);
+			}else{
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
+			}
+		}
+        
     }
 
     protected function findModel($id)
