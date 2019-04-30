@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m181031_121458_alter_remark_timestamp
+ * Class m181123_163209_customer_has_admin
  */
-class m181031_121458_alter_remark_timestamp extends Migration
+class m181123_163209_customer_has_admin extends Migration
 {
 	
 	/***
@@ -21,13 +21,17 @@ class m181031_121458_alter_remark_timestamp extends Migration
 	public function init()
     {
 		//if changing the database connection, the next line needs to be uncommented. Works with SpecialMigration controller only.
-        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; . 
+        //$this->db = [INSERT THE COMPONENT ID FOR THE DB YOU WANT] . $this->db_suffix; 
+        $this->db = 'db_tenant' . $this->db_suffix; 
         parent::init();
     }
-	
+
+    /**
+     * {@inheritdoc}
+     */
     public function safeUp()
     {
-        $this->alterColumn('{{%remark}}', 'remark_date', $this->timestamp('CURRENT_TIMESTAMP'));
+        $this->addColumn( '{{%customer}}', 'has_admin', $this->integer(11)->defaultValue(0)->after('account_number'));
     }
 
     /**
@@ -35,8 +39,9 @@ class m181031_121458_alter_remark_timestamp extends Migration
      */
     public function safeDown()
     {
-        echo "m181031_121458_alter_remark_timestamp cannot be reverted.\n";
-
+        echo "m181123_163209_customer_has_admin cannot be reverted.\n";
+        $this->dropColumn("{{%customer}}", 'has_admin');
+        //return false;
     }
 
     /*
@@ -48,7 +53,7 @@ class m181031_121458_alter_remark_timestamp extends Migration
 
     public function down()
     {
-        echo "m181031_121458_alter_remark_timestamp cannot be reverted.\n";
+        echo "m181123_163209_customer_has_admin cannot be reverted.\n";
 
         return false;
     }

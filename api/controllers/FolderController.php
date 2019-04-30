@@ -71,20 +71,23 @@ class FolderController extends RestController
     {
         $folder = Folder::find()->all();
 		$seperateFolders = array();
-		foreach ($folder as $firstFolderFilter) {
+		foreach ($folder as $key => $firstFolderFilter) {
 			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
 				$folderStatus = 'public';
 			}else{
 				$folderStatus = 'private';
 			}
-			$folderDetails  = $firstFolderFilter->attributes;
-			$folderDetails['folderstatus'] = $folderStatus;
+			
+			$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
+			$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
 			$folderRole = $firstFolderFilter['role'];
-			$folderDetails['role'] =  $folderRole['role'];
-			$folderDetails['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+			$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
+			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
 		}
-        $response = $folderDetails;
-        Yii::$app->api->sendSuccessResponse($response);
+		$folders[] = $folderDetails;
+        $response = $folders;
+        Yii::$app->api->sendSuccessResponse([$response]);
 		
     }
 	
@@ -119,14 +122,33 @@ class FolderController extends RestController
     {
         $folder = Folder::find()->andWhere(['id' => $id])->one();
 		if(!empty($folder)){
+			$folderDetails['parent_details']['total_task'] = count($folder->clipOn['task']);
+			$folderDetails['parent_details']['users'] = count($folder->users);
+			$i = 1;
+			foreach ($folder->clipOn['task'] as $key => $completed) {
+				if($completed->status_id == 24){
+					 $i++;
+				 }
+			 }
+			$folderDetails['parent_details']['completed_task'] = $i;
+			foreach ($folder->subFolders as $key => $firstFolderFilter) {
+				if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+					$folderStatus = 'public';
+				}else{
+					$folderStatus = 'private';
+				}
 			
-			$folderDetails['subfolders'] = $folder->subFolders;
-			$folders[] =   $folderDetails;
-
+				$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
+				$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
+				$folderRole = $firstFolderFilter['role'];
+				$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
+				$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+			}
+			$folders['subfolders'] = $folderDetails;
 			$response = $folders;
-			Yii::$app->api->sendSuccessResponse($response);
+			Yii::$app->api->sendSuccessResponse([$response]);
 		}else{
-			$response = ['somthing went wrong'];
+			$response = ['there are no subfolders'];
 			Yii::$app->api->sendFailedResponse($response);
 		}
 		
@@ -174,7 +196,13 @@ class FolderController extends RestController
             	Yii::$app->api->sendSuccessResponse($model->attributes);
 			}
             
+        }else{
+			if (!$model->validate()) {
+
+            Yii::$app->api->sendFailedResponse($model->errors);
         }
+			
+		}
 
         
     }
@@ -200,8 +228,17 @@ class FolderController extends RestController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->delete();
-        Yii::$app->api->sendSuccessResponse($model->attributes);
+		if(empty($model)){
+			Yii::$app->api->sendFailedResponse('task does not exist');
+		}else{
+			if($model->delete()){
+        		Yii::$app->api->sendSuccessResponse($model->attributes);
+			}else{
+				if (!$model->validate()) {
+					Yii::$app->api->sendFailedResponse($model->errors);
+				}
+			}
+		}
     }
 	
 	public function actionFolderUsers($id)

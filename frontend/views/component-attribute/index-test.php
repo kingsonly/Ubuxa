@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		echo "Value: {$model['value']} AND index {$i} \n"; 
 		echo "This Model: {$models[$i]['name']} )} </br>"; 
 		$i++;
-		echo "<b> Revised! {$revised[1]['value']} </b></br>";
+		echo "<b> Revised! {$revised[5]['value']} </b></br>";
 	}?>
 	</p>
 

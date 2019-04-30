@@ -6,6 +6,16 @@ use Yii;
 
 class StandardQuery extends BaseQuery
 {
+	/***
+	 * @brief {@inheritdoc}
+	 */
+	public function init() 
+	{
+		parent::init();
+        $modelClass = $this->modelClass;
+		$modelClass::beforeFind();
+	}
+
     public function deleted()
     {
         $modelClass = $this->modelClass;

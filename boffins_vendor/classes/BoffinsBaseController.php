@@ -15,12 +15,43 @@ class BoffinsBaseController extends Controller
 
 	public function beforeAction($action)
 	{
+		//return true;
+		if ( $this->_userPermmitted($action) && parent::beforeAction($action) ) {
+			Yii::trace("This user is permitted this action. Performing necessary procedures before action.", __METHOD__);
+			return true;
+		}
+		
+		//$this->_view = 'mobile';
+		throw new ForbiddenHttpException(Yii::t('yii', "This page does not exist or you do not have access $actionName:$controllerName"));
+	}
+	
+	/**
+	 *  @inheritdoc. 
+	 *  currently no new changes to parent function???
+	 */
+	public function render($view, $params = [])
+    {
+		return parent::render($view, $params);
+    }
+	
+	/**
+	 *  @brief checks if a user can perform a certain action 
+	 *  and return trus if so. 
+	 *  
+	 *  @param [in] $action. The action object to check for. Use $action->id to access the id
+	 *  @return boolean
+	 *  
+	 *  @details More details
+	 */
+	private function _userPermmitted($action) 
+	{
+		$evaluation = false;
 		$controlledActions = AccessPermission::allActions();
 		$views = [
 				'index', 
-				'invoiceview', 
-				'invoicelistview', 
 				'folderview',
+				/*'invoiceview', 
+				'invoicelistview', 
 				'projectlistview', 
 				'projectview', 
 				'orderlistview', 
@@ -32,30 +63,19 @@ class BoffinsBaseController extends Controller
 				'rpoview',
 				'rpolistview',
 				'Receivedpurchaseorder'
+				THESE VIEWS HAVE BEEN DEPRECATED*/
 				];
 		$actionName = in_array($action->id, $views) ? 'view' : $action->id;
 		if ( !in_array($actionName, $controlledActions) ) {
-			return true;
+			$evaluation = true; //permit all actions that are not controlled. Hmn... Is this the desired result?
 		}
 		$controllerName = ucfirst($action->controller->id);
-		Yii::trace("Running $actionName:$controllerName");
-		if (parent::beforeAction($action)) {
-			if (Yii::$app->user->can("$actionName:$controllerName")) {
-				return true;
-			}
+		Yii::trace("Evaluating $actionName:$controllerName");
+		if (Yii::$app->user->can("$actionName:$controllerName")) { //Hmn!
+			$evaluation = true;
 		}
-		throw new ForbiddenHttpException(Yii::t('yii', "This page does not exist or you do not have access $actionName:$controllerName"));
-		$this->_view = 'mobile';
-		return false; 
-		
+		return $evaluation; 
 	}
-	
-	public function render($view, $params = [])
-    {
-		
-        $content = $this->getView()->render($view, $params, $this);
-        return $this->renderContent($content);
-    }
 	
 	
 	

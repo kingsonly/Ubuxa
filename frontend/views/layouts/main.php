@@ -9,6 +9,7 @@ use yii\bootstrap\Alert;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
+use boffins_vendor\components\controllers\ChatNotificationWidget;
 use boffins_vendor\components\controllers\FeedbackWidget;
 use frontend\models\UserFeedback;
 use frontend\assets\AppAsset;
@@ -60,7 +61,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
+<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" data-chatnotificationurl="<?= Url::to(['site/update-chat-notification'])?>" >
 <!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
 	<div class="se-pre-con"></div>
 
@@ -142,10 +143,35 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 
           
         </div>
+		  
+		  <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-success">4</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">You have 4 messages</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                 <?= ChatNotificationWidget::widget(); ?>
+                  <!-- end message -->
+                </ul>
+              </li>
+              
+            </ul>
+          </li>
+          
+        </ul>
+      </div>
 
         
       </div>
       <!-- /.container-fluid -->
+		
     </nav>
   </header>
 	
@@ -184,6 +210,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
+		 
     </section>
       <!-- /.content -->
     </div>
@@ -197,7 +224,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-      <b>Version</b> 1.2
+      <b>Version</b> 1.4
     </div>
     <!--<strong>Copyright &copy; Tycol 2017<a href="#"> Boffins Systems</a>.</strong>--> All rights reserved.
 </footer>

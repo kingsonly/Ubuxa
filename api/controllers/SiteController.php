@@ -21,6 +21,7 @@ use frontend\models\TenantPerson;
 use frontend\models\UserSetting;
 use frontend\models\SignupForm;
 use frontend\models\Email;
+use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
 
 /**
@@ -39,7 +40,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','test'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -97,6 +98,17 @@ class SiteController extends RestController
     {
         Yii::$app->api->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
         //  return $this->render('index');
+    }
+	
+	public function actionTest()
+    {
+        $model = new ChatNotification();
+		$model->sender_id = 31;
+		$model->receivers_id = 33;
+		//$model->time_sent = $notificationStringSplit[3] ;
+		$model->folder_id = 33 ;
+		$model->msg = 'try this' ;
+		$model->save(false);
     }
 
     public function actionRegister()

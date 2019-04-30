@@ -40,7 +40,8 @@ class Api extends Component
             $response = array_merge($response, $additional_info);
         }
 
-        $response = Json::encode($response, JSON_PRETTY_PRINT);
+        //$response = Json::encode($response, JSON_PRETTY_PRINT);
+        $response = Json::encode($response);
 
 
         if (isset($_GET['callback'])) {
@@ -49,7 +50,7 @@ class Api extends Component
 
             echo $response;
         } else {
-            echo $response;
+           echo $response;
         }
 
         Yii::$app->end();
@@ -69,7 +70,7 @@ class Api extends Component
 
         header($status_header);
         header('Content-type: ' . $content_type);
-        header('X-Powered-By: ' . "Your Company <www.mywebsite.com>");
+        header('X-Powered-By: ' . "Your Company <www.ubuxa.net>");
         header('Access-Control-Allow-Origin:*');
 
 

@@ -34,7 +34,7 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     public function rules()
     {
         return [
-            [['parent_id', 'cid', 'user_id', 'person_id'], 'integer'],
+            [['parent_id', 'cid', 'user_id'], 'integer'],
             [['remark_date','last_updated','text', 'ownerId','fromWhere'], 'safe'],
             [['text'], 'string', 'max' => 255],
         ];

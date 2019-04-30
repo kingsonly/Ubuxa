@@ -38,7 +38,6 @@ class m181031_121047_alter_remark_date extends Migration
         echo "m181031_121047_alter_remark_date cannot be reverted.\n";
         $this->alterColumn('{{%remark}}', 'remark_date', 'datetime');//timestamp new_data_type
 
-        return false;
     }
 
     /*
