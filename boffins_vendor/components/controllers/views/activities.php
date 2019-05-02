@@ -184,7 +184,7 @@ use frontend\assets\AppAsset;
 			<div class="active-info">
 				<div class="act-header">Recent Activity</div>
 				<div class="stream_activity">
-					<div id="divTAReviews">Review Text1</div>
+					<div id="divTAReviewss">Review Text1</div>
 				</div>
 				
 			</div>
@@ -196,7 +196,7 @@ use frontend\assets\AppAsset;
 			<div class="info-1">
 				<div class="box-content-active">
 					<a data-toggle="collapse" href="#activity1">
-					<h1 style="margin:0; text-align:center;color:red;">0</h1>
+					<h1  class="act_count" style="margin:0; text-align:center;color:red;">0</h1>
 					<div class="active-text"> New Activity</div>
 				    </a>
 				</div>

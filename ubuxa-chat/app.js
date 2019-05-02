@@ -23,6 +23,7 @@ io = socketio.listen(http);
 require('./libs/remark.js').remarkSockets(http);
 require('./libs/task.js').taskSockets(http);
 require('./libs/chat.js').sockets(http);
+require('./libs/redisDemo.js').redisSocket(http);
 
 app.use(logger('dev'));
 
