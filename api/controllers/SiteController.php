@@ -21,6 +21,7 @@ use frontend\models\TenantPerson;
 use frontend\models\UserSetting;
 use frontend\models\SignupForm;
 use frontend\models\Email;
+use frontend\models\UserDb;
 use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
 
@@ -40,7 +41,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','test'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','test', 'list-users'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -320,6 +321,19 @@ class SiteController extends RestController
         } else {
             Yii::$app->api->sendFailedResponse("Email cannot be empty");
         } 
+    }
+
+    public function actionListUsers()
+    {
+        $model = new UserDb();
+        $dataProvider =$model->find()->all();
+        $userData = [];
+        if(!empty($dataProvider)){
+            foreach ($dataProvider as $data) {
+               array_push($userData, $data->fullName); 
+            }
+            Yii::$app->api->sendSuccessResponse($userData);
+        }
     }
 	
 }
