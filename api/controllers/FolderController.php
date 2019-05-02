@@ -269,7 +269,8 @@ class FolderController extends RestController
 		Yii::$app->api->sendSuccessResponse($folderUsers);
     }
 	
-	public function actionUsers() {
+	public function actionUsers() 
+	{
 		$model = new UserSearch();
 		$model->attributes = $this->request;
 		if (!$model->validate()) {
@@ -297,7 +298,6 @@ class FolderController extends RestController
 		
 		
 	}
-	
 	
 	public function actionAddUserToFolder($userId = '', $folderId = '')
 	{

@@ -53,41 +53,28 @@ function SubscribeExpired(e,r){
 			console.log('thisis '+splitKey[1])
 			client.exists(splitKey[1], function(err, reply) {
 				
-			if (reply === 1) {
-				client.get(splitKey[1], function(err, data) {
-					console.log(err)
-					if(!err){
-						
-						console.log(data);
-						console.log('yesyesyesno')
-						//ioChat.to(userSocket[username]).emit('check-for-message', data);
-						// delete key after a single fetch
-						//client.del(splitKey, function(err, reply) {
-						//	console.log(reply);
-						//});
-						
-						const options = {
-						  hostname: 'http://localhost/ubuxabeta/api/web/site/index',
-						  method: 'get',
-							};
+				if (reply === 1) {
+					client.lrange(splitKey[1], 0, -1, function(err, data) {
+						console.log(err)
+						if(!err){
 
-var req = https.get('http://localhost/ubuxabeta/api/web/site/test?id='+data, (res) => {
-  console.log(res.statusCode);
-});
+							console.log(data);
+		
+							var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							  console.log(res.statusCode);
+							});
 
-req.on('error', (e) => {
-  console.error(e.message);
-});
+							req.on('error', (e) => {
+							  console.error(e.message);
+							});    
 
-req.end();
-					}
-
-
-				});
-			} else {
-				console.log('doesn\'t exist');
-			}
-		});
+							req.end();
+						}
+					});
+				} else {
+					console.log('doesn\'t exist');
+				}
+			});
 		})
 	})
 }
@@ -112,7 +99,7 @@ ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
 	//function to get user name, this would be emited from the client and recieved on the server
 	socket.on('check-for-message',function(username){
-		TestKey(10,'yes');
+		
 		client.exists(username, function(err, reply) {
 			if (reply === 1) {
 				client.lrange(username, 0, -1, function(err, data) {
@@ -125,7 +112,7 @@ ioChat.on('connection', function(socket) {
 						});
 					}
 
-
+ 
 				});
 			} else {
 				console.log('doesn\'t exist');
@@ -303,7 +290,7 @@ ioChat.on('connection', function(socket) {
 							});
 							var shadowKey = 'shadowkey:'+data.msgTo;
 							client.set(shadowKey,'')
-							client.expire(shadowKey,1800);
+							client.expire(shadowKey,10);
 							
 							console.log('user not online '+data.msgTo); 
 						}

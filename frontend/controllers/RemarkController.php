@@ -159,7 +159,7 @@ class RemarkController extends Controller
         $getUsers = $users->find()->andWhere(['id' => $owner])->one();
         $name = array();
         $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers->folderUsers as $user) {
+        foreach ($getUsers->users as $user) {
             $name[] = $user->fullname;
         }
        return json_encode($name);

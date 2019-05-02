@@ -40,7 +40,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','test'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -100,15 +100,18 @@ class SiteController extends RestController
         //  return $this->render('index');
     }
 	
-	public function actionTest()
+	public function actionChatEmail($id)
     {
-        $model = new ChatNotification();
-		$model->sender_id = 31;
-		$model->receivers_id = 33;
-		//$model->time_sent = $notificationStringSplit[3] ;
-		$model->folder_id = 33 ;
-		$model->msg = 'try this' ;
-		$model->save(false);
+		foreach(json_decode($id, true) as $key => $value ){
+			$model = new ChatNotification();
+			$model->sender_id = 31;
+			$model->receivers_id = 33;
+			//$model->time_sent = $notificationStringSplit[3] ;
+			$model->folder_id = 33 ;
+			$model->msg = $value ;
+			$model->save(false);
+		}
+        
     }
 
     public function actionRegister()
