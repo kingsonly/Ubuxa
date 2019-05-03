@@ -4,6 +4,7 @@ namespace api\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use api\models\LoginForm;
+use api\models\ChatNotificationEmail;
 use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
@@ -15,9 +16,11 @@ use api\behaviours\Apiauth;
 use frontend\models\Customer;
 use frontend\models\CustomerSignupForm;
 use api\models\CustomerSignup;
+use frontend\models\UserDb;
 use frontend\models\TenantEntity;
 use frontend\models\TenantCorporation;
 use frontend\models\TenantPerson;
+use api\models\ApiFolder;
 use frontend\models\UserSetting;
 use frontend\models\SignupForm;
 use frontend\models\Email;
@@ -102,16 +105,24 @@ class SiteController extends RestController
 	
 	public function actionChatEmail($id)
     {
+		$msgArray = [];
+		$model = new ChatNotificationEmail();
 		foreach(json_decode($id, true) as $key => $value ){
-			$model = new ChatNotification();
-			$model->sender_id = 31;
-			$model->receivers_id = 33;
-			//$model->time_sent = $notificationStringSplit[3] ;
-			$model->folder_id = 33 ;
-			$model->msg = $value ;
-			$model->save(false);
+			$userModels = new UserDb();
+			$folderModels = new ApiFolder();
+			$extractString = explode(')',$value);
+			$username = !empty($extractString[0])?$extractString[0]:'guest';
+			$folderId = !empty($extractString[2])?$extractString[2]:33;
+			$userModel = $userModels->find()->where(['username' => $username])->one();
+			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
+			
+			$msgArray[$key]['fullname'] = $userModel->fullName;
+			$msgArray[$key]['foldertitle'] = $folderModel['title'];
+			$msgArray[$key]['msg'] = $extractString[1];
+			
+			
 		}
-        
+		$model->sendEmail($msgArray,'kingsonly13c@gmail.com');
     }
 
     public function actionRegister()

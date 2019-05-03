@@ -13,6 +13,7 @@ use boffins_vendor\components\controllers\ChatNotificationWidget;
 use boffins_vendor\components\controllers\FeedbackWidget;
 use frontend\models\UserFeedback;
 use frontend\assets\AppAsset;
+use yii\widgets\Pjax;
 AppAsset::register($this);
 
 $feedback = new UserFeedback();
@@ -128,6 +129,9 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 .alert-text{
   text-align: left !important;
 }
+		.hide-label{
+			display: none;
+		}
     </style>
     
 
@@ -143,17 +147,18 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 
           
         </div>
-		  
+		  <?php Pjax::begin(['id'=>'chat-refresher']); ?>
 		  <div class="navbar-custom-menu">
+			  
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="#" class="dropdown-toggle hide-counter" data-toggle="dropdown">
               <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+              <span class="label label-success hide-label"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
+              <li class="header header-info"></li>
               <li>
                 <!-- inner menu: contains the actual data -->
                 <ul class="menu">
@@ -166,8 +171,31 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
           </li>
           
         </ul>
-      </div>
+			  <?php
 
+$flashs = <<<ABC
+  $(document).on('click','.hide-counter',function(){
+			  	localStorage.removeItem('chatcounter');
+				$(document).find('.hide-label').hide();
+			  })
+			  		$.pjax.reload({container:"#"+"chat-refresher",async: false});
+					if ("chatcounter" in localStorage) {
+					var chtacounter = localStorage.getItem('chatcounter')
+						alert(chtacounter);
+						$(document).find('.header-info').html('You have '+chtacounter+' messages');
+						$(document).find('.hide-label').show().html(chtacounter);
+					} else {
+						$(document).find('.header-info').html('You have 0 message');
+						$(document).find('.hide-label').hide();
+					}
+ABC;
+$this->registerJs($flashs);
+?>
+			  
+		
+			  
+      </div>
+<?php Pjax::end(); ?>
         
       </div>
       <!-- /.container-fluid -->
@@ -246,3 +274,4 @@ $this->registerJs($flash);
 	
 </html>
 <?php $this->endPage() ?>
+ 
