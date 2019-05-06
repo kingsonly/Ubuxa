@@ -85,6 +85,7 @@ class FolderController extends RestController
 			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
 			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
 		}
+		array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
 		$folders[] = $folderDetails;
         $response = $folders;
         Yii::$app->api->sendSuccessResponse([$response]);
@@ -122,33 +123,42 @@ class FolderController extends RestController
     {
         $folder = Folder::find()->andWhere(['id' => $id])->one();
 		if(!empty($folder)){
-			$folderDetails['parent_details']['total_task'] = count($folder->clipOn['task']);
-			$folderDetails['parent_details']['users'] = count($folder->users);
-			$i = 1;
-			foreach ($folder->clipOn['task'] as $key => $completed) {
-				if($completed->status_id == 24){
-					 $i++;
+			$folders['parent_details']['users'] = count($folder->users);
+			$i = 0;
+			if(!empty($folder->clipOn['task'])){
+				$folders['parent_details']['total_task'] = count($folder->clipOn['task']);
+				foreach ($folder->clipOn['task'] as $key => $completed) {
+					if($completed->status_id == 24){
+						 $i++;
+					 }
 				 }
-			 }
-			$folderDetails['parent_details']['completed_task'] = $i;
-			foreach ($folder->subFolders as $key => $firstFolderFilter) {
-				if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
-					$folderStatus = 'public';
-				}else{
-					$folderStatus = 'private';
-				}
-			
-				$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
-				$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
-				$folderRole = $firstFolderFilter['role'];
-				$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
-				$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+				$folders['parent_details']['completed_task'] = $i;
+			}else{
+				$folders['parent_details']['total_task'] = 0;
+				$folders['parent_details']['completed_task'] = 0;
 			}
-			$folders['subfolders'] = $folderDetails;
-			$response = $folders;
-			Yii::$app->api->sendSuccessResponse([$response]);
+			if(!empty($folder->subFolders)){
+				foreach ($folder->subFolders as $key => $firstFolderFilter) {
+					if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+						$folderStatus = 'public';
+					}else{
+						$folderStatus = 'private';
+					}
+				
+					$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
+					$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
+					$folderRole = $firstFolderFilter['role'];
+					$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
+					$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+				}
+				array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
+				$folders['subfolders'] = $folderDetails;
+				$response = $folders;
+				Yii::$app->api->sendSuccessResponse([$response]);
+			}else{
+				Yii::$app->api->sendFailedResponse('There are no subfolders');
+			}
 		}else{
-			$response = ['there are no subfolders'];
 			Yii::$app->api->sendFailedResponse($response);
 		}
 		

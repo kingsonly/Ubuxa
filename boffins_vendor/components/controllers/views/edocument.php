@@ -778,7 +778,9 @@ var dropzone = new Dropzone('#dropupload$target', {
 
         if(!$('#dropupload$target').hasClass('foldervault') && !$('#dropupload$target').hasClass('dropzonefolderdetails')){
             var folderId = $('.board-specfic').attr('data-folderId');
-            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-list-refresh",async: false});
         }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
@@ -870,7 +872,9 @@ var dropzone = new Dropzone('#dropupload$target', {
         
         $.pjax.reload({container:"#task-list-refresh",async: false});
         if($('#dropupload$target').hasClass('click-uploadmodalUpload')){
-            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
         if($('#dropupload$target').hasClass('click-uploadfolderUpload')){

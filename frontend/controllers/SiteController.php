@@ -79,7 +79,7 @@ class SiteController extends BoffinsBaseController {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
             ],
 			
