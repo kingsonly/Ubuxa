@@ -200,7 +200,7 @@ class FolderController extends BoffinsBaseController
 		$folder = Folder::find()->andWhere(['id' => $folderId])->select('title')->one();
 		$user = UserDb::find()->andWhere(['username' => $username])->one();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		$out = ['name'=>$user->fullname,'folder' => 'i test you '];
+		$out = ['name'=>$user->fullname,'folder' => $folder['title']];
 		
 		return $out;
 	}

@@ -204,6 +204,22 @@ ioChat.on('connection', function(socket) {
 		});
 		// eventEmitter.emit('read-chat-join-request', data);
 	});
+	
+	socket.on('getchats', function(data) {
+		chatModel.find({"username" : {$regex : ".*son.*"}})
+		.where('room').equals(data.room)
+		.lean()
+		.limit(5)
+		.exec(function(err, result) {
+			if (err) {
+				console.log("Error : " + err);
+			} else {
+				//calling function which emits event to client to show chats.
+				oldChatsNewJoin(result, data.username, data.room,data.sender,data.folderId,data.userImage);
+			}
+		});
+		// eventEmitter.emit('read-chat-join-request', data);
+	});
 
 	//emits event to read old chats from database.
 	socket.on('old-chats', function(data) {

@@ -147,8 +147,8 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 
           
         </div>
-		  <?php Pjax::begin(['id'=>'chat-refresher']); ?>
-		  <div class="navbar-custom-menu">
+		
+		  <div id="chat-refresher" class="navbar-custom-menu chat-refresher">
 			  
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
@@ -178,12 +178,14 @@ $flashs = <<<ABC
 			  	localStorage.removeItem('chatcounter');
 				$(document).find('.hide-label').hide();
 			  })
-			  		$.pjax.reload({container:"#"+"chat-refresher",async: false});
+			  		
+					
 					if ("chatcounter" in localStorage) {
+					
 					var chtacounter = localStorage.getItem('chatcounter')
-						alert(chtacounter);
 						$(document).find('.header-info').html('You have '+chtacounter+' messages');
 						$(document).find('.hide-label').show().html(chtacounter);
+						
 					} else {
 						$(document).find('.header-info').html('You have 0 message');
 						$(document).find('.hide-label').hide();
@@ -195,7 +197,7 @@ $this->registerJs($flashs);
 		
 			  
       </div>
-<?php Pjax::end(); ?>
+
         
       </div>
       <!-- /.container-fluid -->

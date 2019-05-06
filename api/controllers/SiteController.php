@@ -107,22 +107,24 @@ class SiteController extends RestController
     {
 		$msgArray = [];
 		$model = new ChatNotificationEmail();
+		$reciever = '';
 		foreach(json_decode($id, true) as $key => $value ){
 			$userModels = new UserDb();
 			$folderModels = new ApiFolder();
 			$extractString = explode(')',$value);
-			$username = !empty($extractString[0])?$extractString[0]:'guest';
-			$folderId = !empty($extractString[2])?$extractString[2]:33;
+			$username = $extractString[0];
+			$folderId = $extractString[2];
 			$userModel = $userModels->find()->where(['username' => $username])->one();
+			$recievers = $userModels->find()->where(['username' => $username])->one();
 			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
 			
 			$msgArray[$key]['fullname'] = $userModel->fullName;
 			$msgArray[$key]['foldertitle'] = $folderModel['title'];
 			$msgArray[$key]['msg'] = $extractString[1];
-			
+			$reciever = $recievers->email;
 			
 		}
-		$model->sendEmail($msgArray,'kingsonly13c@gmail.com');
+		$model->sendEmail($msgArray,$reciever);
     }
 
     public function actionRegister()

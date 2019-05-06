@@ -15,7 +15,7 @@ use frontend\models\UserDb;
 use boffins_vendor\queue\FolderUsersQueue;
 use boffins_vendor\classes\BoffinsBaseController;
 
-class ComponentController extends BoffinsBaseController
+class ComponentController extends Controller
 {
     public function actionCreate()
     {
