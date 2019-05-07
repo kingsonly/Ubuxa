@@ -6,15 +6,15 @@ namespace api\controllers;
 use yii\filters\AccessControl;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
-use frontend\models\Reminder;
+use frontend\models\Label;
 use frontend\models\Task;
-use frontend\models\TaskReminder;
+use frontend\models\TaskLabel;
 use Yii;
 use yii\db\Expression;
 
 
 
-class ReminderController extends RestController
+class LabelController extends RestController
 {
  
     public function behaviors()
@@ -69,42 +69,30 @@ class ReminderController extends RestController
     public function actionIndex($taskId)
     {
         $taskModel = Task::findOne($taskId);
-        $reminders = $taskModel->reminderTimeTask;
-		if(empty($reminders)){
-			 Yii::$app->api->sendFailedResponse('Task does not have a reminder');
-		}else{
-			return Yii::$app->apis->sendSuccessResponse($reminders);
+        $labels = $taskModel->labels;
+		if(!empty($labels)){
+			 return Yii::$app->apis->sendSuccessResponse($reminders);
 		}
-        
     }
 
 
    public function actionCreate($taskId)
    {
-        $model = new Reminder();
-        $presentTime = new Expression('NOW()');
-        $taskReminder = new TaskReminder();
+        $model = new Label();
+        $taskLabel = new TaskLabel();
         $model->attributes = $this->request;
-        $taskReminder->attributes = $this->request;
-        $model->last_updated = $presentTime;
 
-        if(!empty($model->attributes)){
-            if ($model->save()) {
-                $taskReminder->reminder_id = $model->id;
-                $taskReminder->task_id = $taskId;
-                $taskReminder->save(false);
-               return Yii::$app->apis->sendSuccessResponse($model->attributes);
-            }else{
-               // Yii::$app->api->sendFailedResponse($model->attributes);
-				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
-				}
+        if (!empty($model->attributes)) {
+            if($model->save()){
+                $taskLabel->label_id = $model->id;
+                $taskLabel->task_id = $taskId;
+                $taskLabel->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }
         }else{
-			if (!$model->validate()) {
-				Yii::$app->api->sendFailedResponse($model->errors);
-			}
-            //Yii::$app->api->sendFailedResponse($model->attributes);
+            if (!$model->validate()) {
+                Yii::$app->api->sendFailedResponse($model->errors);
+            }
         }
    	}
 
@@ -140,16 +128,13 @@ class ReminderController extends RestController
 					Yii::$app->api->sendFailedResponse($model->errors);
 				}
 			}
-		}else{
-			Yii::$app->api->sendFailedResponse('Reminder is empty or does not exist');
 		}
-        
         
     }
 
     protected function findModel($id)
     {
-        if (($model = Reminder::findOne($id)) !== null) {
+        if (($model = Label::findOne($id)) !== null) {
             return $model;
         } else {
             Yii::$app->api->sendFailedResponse("Invalid Record requested");

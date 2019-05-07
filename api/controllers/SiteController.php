@@ -43,7 +43,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -99,7 +99,7 @@ class SiteController extends RestController
      */
     public function actionIndex()
     {
-        Yii::$app->api->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
+        return Yii::$app->apis->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
         //  return $this->render('index');
     }
 	
@@ -140,7 +140,7 @@ class SiteController extends RestController
             unset($data['password_hash']);
             unset($data['password_reset_token']);
 
-            Yii::$app->api->sendSuccessResponse($data);
+            return Yii::$app->apis->sendSuccessResponse($data);
 
         }
 
@@ -157,7 +157,7 @@ class SiteController extends RestController
             $data=$user;
            
 
-            Yii::$app->api->sendSuccessResponse($data);
+            return Yii::$app->apis->sendSuccessResponse($data);
 
         }
 
@@ -173,7 +173,7 @@ class SiteController extends RestController
         unset($data['password_hash']);
         unset($data['password_reset_token']);
 
-        Yii::$app->api->sendSuccessResponse($data);
+        return Yii::$app->apis->sendSuccessResponse($data);
     }
 
     public function actionAccesstoken()
@@ -195,7 +195,7 @@ class SiteController extends RestController
         $data = [];
         $data['access_token'] = $accesstoken->token;
         $data['expires_at'] = $accesstoken->expires_at;
-        Yii::$app->api->sendSuccessResponse($data);
+        return Yii::$app->apis->sendSuccessResponse($data);
 
     }
 
@@ -214,7 +214,7 @@ class SiteController extends RestController
             $data['authorization_code'] = $auth_code->code;
             $data['expires_at'] = $auth_code->expires_at;
 
-            Yii::$app->api->sendSuccessResponse($data);
+            return Yii::$app->apis->sendSuccessResponse($data);
         } else {
             Yii::$app->api->sendFailedResponse($model->errors);
         }
@@ -233,7 +233,7 @@ class SiteController extends RestController
 
         if ($model->delete()) {
 
-            Yii::$app->api->sendSuccessResponse(["Logged Out Successfully"]);
+            return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
 
         } else {
             Yii::$app->api->sendFailedResponse("Invalid Request");
@@ -255,7 +255,7 @@ class SiteController extends RestController
 			$customerModel['account_type'] = $getCustomerEntity->entity->entity_type;
 			$customerModel['validation_code'] = $model->validation_code;
 			//$checkIfCodeIsValid->delete();
-            Yii::$app->api->sendSuccessResponse([$customerModel]);
+            return Yii::$app->apis->sendSuccessResponse([$customerModel]);
 
         }else{
 			Yii::$app->api->sendFailedResponse([$model->errors]);
@@ -292,7 +292,7 @@ class SiteController extends RestController
 					}
 					//unset($data['password_hash']);
 					//unset($data['password_reset_token']);
-					Yii::$app->api->sendSuccessResponse([$user]);
+					return Yii::$app->apis->sendSuccessResponse([$user]);
 					
 				} else{
 					Yii::$app->api->sendFailedResponse([$user->errors]);
@@ -311,7 +311,7 @@ class SiteController extends RestController
         $model = new PasswordResetRequestForm();
 		$model->attributes = $this->request;
 		if ($model->sendEmail()) {
-			Yii::$app->api->sendSuccessResponse($model);
+			return Yii::$app->apis->sendSuccessResponse($model);
 			//return $this->goHome();
 		} else {
 			Yii::$app->api->sendFailedResponse([$model->errors]);
@@ -329,13 +329,26 @@ class SiteController extends RestController
         $role = $model->role;
         if(!empty($emails)){
             if($model->sendEmail($emails, $folderid, $role)){
-                Yii::$app->api->sendSuccessResponse($model);
+                return Yii::$app->apis->sendSuccessResponse($model);
             } else {
                 Yii::$app->api->sendFailedResponse([$model->errors]);
             }
         } else {
             Yii::$app->api->sendFailedResponse("Email cannot be empty");
         } 
+    }
+
+    public function actionListUsers()
+    {
+        $model = new UserDb();
+        $dataProvider =$model->find()->all();
+        $userData = [];
+        if(!empty($dataProvider)){
+            foreach ($dataProvider as $data) {
+               array_push($userData, $data->fullName); 
+            }
+            return Yii::$app->apis->sendSuccessResponse($userData);
+        }
     }
 	
 }

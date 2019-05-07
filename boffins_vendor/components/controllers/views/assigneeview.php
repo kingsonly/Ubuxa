@@ -196,17 +196,7 @@ function _AddUser(user,taskid){
                     toastr.success('Completed');
                     var assigneeArray = JSON.parse(response);
                     Tasksockets.emit('task assignee', assigneeArray);
-                    
-              },
-              error: function(res, sec){
-                  console.log('Something went wrong');
-              }
-          });
-}
-
-
-Tasksockets.on('task assignee', function(assigneeArray){
-  if(assigneeArray[5] == 1){
+                    if(assigneeArray[5] == 1){
     if(assigneeArray[4] == null){
       assigneeArray[4] = 'images/users/default-user.png';
     }
@@ -308,6 +298,17 @@ Tasksockets.on('task assignee', function(assigneeArray){
       }
     }
   }
+                    
+              },
+              error: function(res, sec){
+                  console.log('Something went wrong');
+              }
+          });
+}
+
+
+Tasksockets.on('task assignee', function(assigneeArray){
+  
 })
 
 JS;

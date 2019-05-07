@@ -5,6 +5,8 @@ namespace frontend\models;
 use Yii;
 use yii\helpers\Url;
 use yii\db\Expression;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\models\{ClipableInterface, ClipperInterface};
 /**
@@ -25,6 +27,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
      * {@inheritdoc}
      */
     public $fromWhere;
+    public $file;
     /*
     public $file_location;
     public $reference;
@@ -47,7 +50,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             [['reference_id', 'file_location'], 'required'],
             [['reference_id', 'deleted', 'cid', 'owner_id'], 'integer'],
             [['file_location'], 'string'],
-            [['last_updated', 'fromWhere'], 'safe'],
+            [['last_updated', 'fromWhere', 'file'], 'safe'],
             [['reference'], 'string', 'max' => 25],
         ];
     }
@@ -170,6 +173,51 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
          }
          $newFilePath = $path . '/' . $newname; 
          return $newFilePath;
+    }
+
+    public function documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)
+    {
+        $cidDir = $uploadPath. $cidPath; //set a varaible for customer id path
+        $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
+        $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date
+
+        /* check if  directory with customer id path exists, if not create one. In UNIX systems files are seen as directories hence the need to check if !file_exists*/
+        if (!file_exists($cidDir) && !is_dir($cidDir)) {
+            FileHelper::createDirectory($cidDir);         
+        }else if(file_exists($cidDir) && is_dir($cidDir) && !file_exists($userDir) && !is_dir($userDir)){
+            FileHelper::createDirectory($userDir); 
+        }
+        $file = UploadedFile::getInstanceByName($fileName); //get uploaded instance of file
+
+
+        //check if the directory with current date exist
+        if (file_exists($dir) && is_dir($dir)) {
+            $filePath = $this->checkFileName($dir, $file); //check if file name exist in that directory and append a number to it, if it does.
+            if ($file->saveAs($filePath)){
+                if($reference == 'folderDetails'){
+                    $folder = Folder::findOne($referenceID);
+                    $folder->folder_image = $filePath;
+                    $folder->save();
+                }else{
+                    $this->upload($this, $reference, $referenceID, $filePath, $cid, $userId); //upload
+                    return $file;
+                }
+            }
+        }else{
+            FileHelper::createDirectory($dir, $mode = 0777, $recursive = true); //create directory with read and write permission
+            $filePath = $dir . '/' . $file->name;
+            
+            if ($file->saveAs($filePath)) {
+                if($reference == 'folderDetails'){
+                    $folder = Folder::findOne($referenceID);
+                    $folder->folder_image = $filePath;
+                    $folder->save();
+                }else{
+                    $this->upload($this, $reference, $referenceID, $filePath, $cid, $userId); //upload
+                    return $file;
+                }
+            }            
+        }
     }
 
     public function getUser()

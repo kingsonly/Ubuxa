@@ -83,11 +83,11 @@ class FolderController extends RestController
 			$folderRole = $firstFolderFilter['role'];
 			$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
 			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
-			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
 		}
+		array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
 		$folders[] = $folderDetails;
         $response = $folders;
-        Yii::$app->api->sendSuccessResponse([$response]);
+        return Yii::$app->apis->sendSuccessResponse([$response]);
 		
     }
 	
@@ -109,7 +109,7 @@ class FolderController extends RestController
 			$folders[] =   $folderDetails;
 
 			$response = $folders;
-			Yii::$app->api->sendSuccessResponse($response);
+			return Yii::$app->apis->sendSuccessResponse($response);
 		}else{
 			$response = ['somthing went wrong'];
 			Yii::$app->api->sendFailedResponse($response);
@@ -122,33 +122,42 @@ class FolderController extends RestController
     {
         $folder = Folder::find()->andWhere(['id' => $id])->one();
 		if(!empty($folder)){
-			$folderDetails['parent_details']['total_task'] = count($folder->clipOn['task']);
-			$folderDetails['parent_details']['users'] = count($folder->users);
-			$i = 1;
-			foreach ($folder->clipOn['task'] as $key => $completed) {
-				if($completed->status_id == 24){
-					 $i++;
+			$folders['parent_details']['users'] = count($folder->users);
+			$i = 0;
+			if(!empty($folder->clipOn['task'])){
+				$folders['parent_details']['total_task'] = count($folder->clipOn['task']);
+				foreach ($folder->clipOn['task'] as $key => $completed) {
+					if($completed->status_id == 24){
+						 $i++;
+					 }
 				 }
-			 }
-			$folderDetails['parent_details']['completed_task'] = $i;
-			foreach ($folder->subFolders as $key => $firstFolderFilter) {
-				if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
-					$folderStatus = 'public';
-				}else{
-					$folderStatus = 'private';
-				}
-			
-				$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
-				$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
-				$folderRole = $firstFolderFilter['role'];
-				$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
-				$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+				$folders['parent_details']['completed_task'] = $i;
+			}else{
+				$folders['parent_details']['total_task'] = 0;
+				$folders['parent_details']['completed_task'] = 0;
 			}
-			$folders['subfolders'] = $folderDetails;
-			$response = $folders;
-			Yii::$app->api->sendSuccessResponse([$response]);
+			if(!empty($folder->subFolders)){
+				foreach ($folder->subFolders as $key => $firstFolderFilter) {
+					if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+						$folderStatus = 'public';
+					}else{
+						$folderStatus = 'private';
+					}
+				
+					$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
+					$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
+					$folderRole = $firstFolderFilter['role'];
+					$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
+					$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+				}
+				array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
+				$folders['subfolders'] = $folderDetails;
+				$response = $folders;
+				return Yii::$app->apis->sendSuccessResponse([$response]);
+			}else{
+				Yii::$app->api->sendFailedResponse('There are no subfolders');
+			}
 		}else{
-			$response = ['there are no subfolders'];
 			Yii::$app->api->sendFailedResponse($response);
 		}
 		
@@ -171,7 +180,7 @@ class FolderController extends RestController
 					// file is uploaded successfully
 					if($model->save()){
 						$response = ['msg' => 'created'];
-						Yii::$app->api->sendSuccessResponse($model->attributes,$response);
+						return Yii::$app->apis->sendSuccessResponse($model->attributes,$response);
 					} else{
 						Yii::$app->api->sendFailedResponse(['didnot create']);
 					}
@@ -193,7 +202,7 @@ class FolderController extends RestController
         if (!empty($model->attributes['title'])) {
 			$model->last_updated =  new Expression('NOW()');
 			if($model->save()){
-            	Yii::$app->api->sendSuccessResponse($model->attributes);
+            	return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}
             
         }else{
@@ -215,7 +224,7 @@ class FolderController extends RestController
 		$model->attributes = $this->request;
 		if(!empty($model)){
 			if ($model->save()) {
-			   Yii::$app->api->sendSuccessResponse($model->attributes);
+			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				Yii::$app->api->sendFailedResponse(['could not create']);
 			}
@@ -232,7 +241,7 @@ class FolderController extends RestController
 			Yii::$app->api->sendFailedResponse('task does not exist');
 		}else{
 			if($model->delete()){
-        		Yii::$app->api->sendSuccessResponse($model->attributes);
+        		return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
 					Yii::$app->api->sendFailedResponse($model->errors);
@@ -266,7 +275,7 @@ class FolderController extends RestController
 			
 			$i++;
 		}
-		Yii::$app->api->sendSuccessResponse($folderUsers);
+		return Yii::$app->apis->sendSuccessResponse($folderUsers);
     }
 	
 	public function actionUsers() 
@@ -289,7 +298,7 @@ class FolderController extends RestController
 					$userDetails[$key]['id'] = $value->id;
 					$userDetails[$key]['userid'] = $value->user['id'];
 				}
-				Yii::$app->api->sendSuccessResponse($userDetails);
+				return Yii::$app->apis->sendSuccessResponse($userDetails);
 			}else{
 				Yii::$app->api->sendFailedResponse(['no result was found']);
 			}
@@ -327,7 +336,7 @@ class FolderController extends RestController
 			$folderManagerModel = new FolderManager();
 			$findFolderUser = $folderManagerModel->find()->andWhere(['folder_id' => $folderId, 'user_id' => $userId])->one();
 			if($findFolderUser->delete()){
-				Yii::$app->api->sendSuccessResponse(['delete was successfull']);
+				return Yii::$app->apis->sendSuccessResponse(['delete was successfull']);
 			}else{
 				Yii::$app->api->sendFailedResponse(['somthing went wrong pls try again ']);
 			}

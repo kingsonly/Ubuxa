@@ -1,4 +1,4 @@
-<? 
+<? /*
 $getAllNotifications = $model->find()->where(['receivers_id' => yii::$app->user->identity->id])->all();
 foreach($getAllNotifications as $key => $value){ ?>
 	<? $image = !empty($value->sender->profile_image)?$value->sender->profile_image:'images/users/default-user.png'; ?>
@@ -17,5 +17,5 @@ foreach($getAllNotifications as $key => $value){ ?>
 			<p><?= $value->msg;?></p>
 		</a>
 	</li>
-<? }?>
+<? }*/?>
 
