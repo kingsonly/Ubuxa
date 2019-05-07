@@ -82,8 +82,8 @@ class FolderController extends RestController
 			$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
 			$folderRole = $firstFolderFilter['role'];
 			$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
-			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
-			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+			//$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+			//$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
 		}
 		array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
 		$folders[] = $folderDetails;
