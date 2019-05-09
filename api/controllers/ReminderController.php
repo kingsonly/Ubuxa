@@ -137,11 +137,11 @@ class ReminderController extends RestController
 				return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}else{
-			Yii::$app->api->sendFailedResponse('Reminder is empty or does not exist');
+			return Yii::$app->apis->sendFailedResponse('Reminder is empty or does not exist');
 		}
         
         
@@ -152,7 +152,7 @@ class ReminderController extends RestController
         if (($model = Reminder::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }

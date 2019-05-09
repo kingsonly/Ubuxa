@@ -85,12 +85,12 @@ class RemarkController extends RestController
                 return Yii::$app->apis->sendSuccessResponse([ $userImage['profile_image'],$user_names['first_name'].' '.$user_names['surname'],$remarkId, $remarkReply, $model->text]);
             }else{
                 if (!$model->validate()) {
-                    Yii::$app->api->sendFailedResponse($model->errors);
+                    return Yii::$app->apis->sendFailedResponse($model->errors);
                 }
             }
         }else{
             if (!$model->validate()) {
-                Yii::$app->api->sendFailedResponse($model->errors);
+                return Yii::$app->apis->sendFailedResponse($model->errors);
             }
         }
     }
@@ -105,12 +105,12 @@ class RemarkController extends RestController
                return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }else{
                 if (!$model->validate()) {
-                    Yii::$app->api->sendFailedResponse($model->errors);
+                    return Yii::$app->apis->sendFailedResponse($model->errors);
                 }
             }
         }else{
             if (!$model->validate()) {
-                Yii::$app->api->sendFailedResponse($model->errors);
+                return Yii::$app->apis->sendFailedResponse($model->errors);
             }
         }
     }
@@ -119,13 +119,13 @@ class RemarkController extends RestController
     {
         $model = $this->findModel($id);
         if(empty($model)){
-            Yii::$app->api->sendFailedResponse('Remark does not exist');
+            return Yii::$app->apis->sendFailedResponse('Remark does not exist');
         }else{
             if($model->delete()){
                 return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }else{
                 if (!$model->validate()) {
-                    Yii::$app->api->sendFailedResponse($model->errors);
+                    return Yii::$app->apis->sendFailedResponse($model->errors);
                 }
             }
         }

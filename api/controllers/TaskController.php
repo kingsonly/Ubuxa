@@ -71,10 +71,10 @@ class TaskController extends RestController
 	{
     	$folderModel = Folder::findOne($folderId);
 		if(empty($folderModel)){
-			Yii::$app->api->sendFailedResponse('Folder  does not exist');
+			return Yii::$app->apis->sendFailedResponse('Folder  does not exist');
 		}else{
 			if(empty($folderModel->clipOn['task'])){
-				Yii::$app->api->sendFailedResponse('There are no task in this folder');
+				return Yii::$app->apis->sendFailedResponse('There are no task in this folder');
 			}else{
 				$fetchTasks = $folderModel->clipOn['task'];
     			return Yii::$app->apis->sendSuccessResponse($fetchTasks);
@@ -99,12 +99,12 @@ class TaskController extends RestController
             	return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()){
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
         }else{
         	if (!$model->validate()) {
-				Yii::$app->api->sendFailedResponse($model->errors);
+				return Yii::$app->apis->sendFailedResponse($model->errors);
 			}
         }
 	}
@@ -122,11 +122,11 @@ class TaskController extends RestController
         		   return Yii::$app->apis->sendSuccessResponse($model->attributes);
         		}else{
         			if (!$model->validate()) {
-        				Yii::$app->api->sendFailedResponse($model->errors);
+        				return Yii::$app->apis->sendFailedResponse($model->errors);
         			}
         		}
             }else{
-                Yii::$app->api->sendFailedResponse("You don't have permission to edit this task");
+                return Yii::$app->apis->sendFailedResponse("You don't have permission to edit this task");
             }
 		}
 	}
@@ -135,13 +135,13 @@ class TaskController extends RestController
     {
         $model = $this->findModel($id);
 		if(empty($model)){
-			Yii::$app->api->sendFailedResponse('task does not exist');
+			return Yii::$app->apis->sendFailedResponse('task does not exist');
 		}else{
 			if($model->delete()){
         		return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}
@@ -183,7 +183,7 @@ class TaskController extends RestController
             }
         }else{
            if (!$model->validate()) {
-                    Yii::$app->api->sendFailedResponse($model->errors);
+                    return Yii::$app->apis->sendFailedResponse($model->errors);
             } 
         }
     }
@@ -193,7 +193,7 @@ class TaskController extends RestController
         if (($model = Task::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }

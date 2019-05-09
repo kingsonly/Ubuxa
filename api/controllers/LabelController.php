@@ -91,7 +91,7 @@ class LabelController extends RestController
             }
         }else{
             if (!$model->validate()) {
-                Yii::$app->api->sendFailedResponse($model->errors);
+                return Yii::$app->apis->sendFailedResponse($model->errors);
             }
         }
    	}
@@ -107,12 +107,12 @@ class LabelController extends RestController
 			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}else{
 			if (!$model->validate()) {
-				Yii::$app->api->sendFailedResponse($model->errors);
+				return Yii::$app->apis->sendFailedResponse($model->errors);
 			}
 		}
 	}
@@ -125,7 +125,7 @@ class LabelController extends RestController
 				return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ class LabelController extends RestController
         if (($model = Label::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }

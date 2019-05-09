@@ -13,6 +13,12 @@ return [
 	'language' => 'en-GB',
 	'sourceLanguage' => 'en-GB',
 	'timeZone' => 'Africa/Lagos',
+	'bootstrap' => [
+					'queue', 
+					'log',
+					'activityManager'
+					
+					],
     'aliases' => [
         '@bower' => '@vendor/bower',
         '@npm'   => '@vendor/npm',
@@ -44,6 +50,9 @@ return [
 		'global' => [
 			'class' => 'boffins_vendor\classes\GlobalComponent',
 		],
+		'activityManager' => [
+				'class' => 'boffins_vendor\classes\ActivityManager'
+			],
 	          'redis' => [
             'class' => \yii\redis\Connection::class,
             // ...

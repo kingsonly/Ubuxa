@@ -71,7 +71,7 @@ class UsersController extends RestController
 		$initModdel = new UserDb();
         $model = $initModdel->find()->all();
 		if(empty($model)){
-			 Yii::$app->api->sendFailedResponse('There are no user');
+			 return Yii::$app->apis->sendFailedResponse('There are no user');
 		}else{
 			$users = [];
 			foreach($model as $key => $value){
@@ -106,7 +106,7 @@ class UsersController extends RestController
             unset($users['password_reset_token']);
 			return Yii::$app->apis->sendSuccessResponse($users);
 		}else{
-			yii::$app->api->sendFailedResponse('there is no user with this id ');
+			return Yii::$app->apis->sendFailedResponse('there is no user with this id ');
 		}
 	}
 
@@ -120,31 +120,18 @@ class UsersController extends RestController
 			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}else{
 			if (!$model->validate()) {
-				Yii::$app->api->sendFailedResponse($model->errors);
+				return Yii::$app->apis->sendFailedResponse($model->errors);
 			}
 		}
 	}
 	
 	public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-		if(!empty($model)){
-			if($model->delete()){
-				return Yii::$app->apis->sendSuccessResponse($model->attributes);
-			}else{
-				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
-				}
-			}
-		}else{
-			Yii::$app->api->sendFailedResponse('Reminder is empty or does not exist');
-		}
-        
         
     }
 
@@ -153,7 +140,7 @@ class UsersController extends RestController
         if (($model = UserDb::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }
