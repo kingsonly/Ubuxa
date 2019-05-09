@@ -180,14 +180,14 @@ class SiteController extends RestController
     {
 
         if (!isset($this->request["authorization_code"])) {
-            Yii::$app->api->sendFailedResponse("Authorization code missing");
+            return Yii::$app->apis->sendFailedResponse("Authorization code missing");
         }
 
         $authorization_code = $this->request["authorization_code"];
 
         $auth_code = AuthorizationCodes::isValid($authorization_code);
         if (!$auth_code) {
-            Yii::$app->api->sendFailedResponse("Invalid Authorization Code");
+            return Yii::$app->apis->sendFailedResponse("Invalid Authorization Code");
         }
 
         $accesstoken = Yii::$app->api->createAccesstoken($authorization_code);
@@ -216,7 +216,7 @@ class SiteController extends RestController
 
             return Yii::$app->apis->sendSuccessResponse($data);
         } else {
-            Yii::$app->api->sendFailedResponse($model->errors);
+            return Yii::$app->apis->sendFailedResponse($model->errors);
         }
     }
 
@@ -236,7 +236,7 @@ class SiteController extends RestController
             return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
 
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Request");
+            return Yii::$app->apis->sendFailedResponse("Invalid Request");
         }
 
 
@@ -258,7 +258,7 @@ class SiteController extends RestController
             return Yii::$app->apis->sendSuccessResponse([$customerModel]);
 
         }else{
-			Yii::$app->api->sendFailedResponse([$model->errors]);
+			return Yii::$app->apis->sendFailedResponse([$model->errors]);
 
 		}
 
@@ -295,14 +295,14 @@ class SiteController extends RestController
 					return Yii::$app->apis->sendSuccessResponse([$user]);
 					
 				} else{
-					Yii::$app->api->sendFailedResponse([$user->errors]);
+					return Yii::$app->apis->sendFailedResponse([$user->errors]);
 				}
 				
 			} else {
-				Yii::$app->api->sendFailedResponse(['Customer does not exist']);
+				return Yii::$app->apis->sendFailedResponse(['Customer does not exist']);
 			}
 		}else {
-			Yii::$app->api->sendFailedResponse(['User already exist']);
+			return Yii::$app->apis->sendFailedResponse(['User already exist']);
 		}
     }
 	
@@ -314,7 +314,7 @@ class SiteController extends RestController
 			return Yii::$app->apis->sendSuccessResponse($model);
 			//return $this->goHome();
 		} else {
-			Yii::$app->api->sendFailedResponse([$model->errors]);
+			return Yii::$app->apis->sendFailedResponse([$model->errors]);
 		}
 
 
@@ -334,7 +334,7 @@ class SiteController extends RestController
                 Yii::$app->api->sendFailedResponse([$model->errors]);
             }
         } else {
-            Yii::$app->api->sendFailedResponse("Email cannot be empty");
+            return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
         } 
     }
 

@@ -112,7 +112,7 @@ class FolderController extends RestController
 			return Yii::$app->apis->sendSuccessResponse($response);
 		}else{
 			$response = ['somthing went wrong'];
-			Yii::$app->api->sendFailedResponse($response);
+			return Yii::$app->apis->sendFailedResponse($response);
 		}
 		
 		
@@ -155,10 +155,10 @@ class FolderController extends RestController
 				$response = $folders;
 				return Yii::$app->apis->sendSuccessResponse([$response]);
 			}else{
-				Yii::$app->api->sendFailedResponse('There are no subfolders');
+				return Yii::$app->apis->sendFailedResponse('There are no subfolders');
 			}
 		}else{
-			Yii::$app->api->sendFailedResponse($response);
+			return Yii::$app->apis->sendFailedResponse($response);
 		}
 		
 		
@@ -182,7 +182,7 @@ class FolderController extends RestController
 						$response = ['msg' => 'created'];
 						return Yii::$app->apis->sendSuccessResponse($model->attributes,$response);
 					} else{
-						Yii::$app->api->sendFailedResponse(['didnot create']);
+						return Yii::$app->apis->sendFailedResponse(['did not create']);
 					}
 
 				}
@@ -190,7 +190,7 @@ class FolderController extends RestController
 			
 
 		}else{
-			Yii::$app->api->sendFailedResponse(['you dont have access to this folder']);
+			return Yii::$app->apis->sendFailedResponse(['you dont have access to this folder']);
 		}
         
 	}
@@ -208,7 +208,7 @@ class FolderController extends RestController
         }else{
 			if (!$model->validate()) {
 
-            Yii::$app->api->sendFailedResponse($model->errors);
+            return Yii::$app->apis->sendFailedResponse($model->errors);
         }
 			
 		}
@@ -226,10 +226,10 @@ class FolderController extends RestController
 			if ($model->save()) {
 			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
-				Yii::$app->api->sendFailedResponse(['could not create']);
+				return Yii::$app->apis->sendFailedResponse(['could not create']);
 			}
 		}else{
-			Yii::$app->api->sendFailedResponse(['you dont have access to this folder']);
+			return Yii::$app->apis->sendFailedResponse(['you dont have access to this folder']);
 		}
         
 	}
@@ -238,13 +238,13 @@ class FolderController extends RestController
     {
         $model = $this->findModel($id);
 		if(empty($model)){
-			Yii::$app->api->sendFailedResponse('task does not exist');
+			return Yii::$app->apis->sendFailedResponse('task does not exist');
 		}else{
 			if($model->delete()){
         		return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}
@@ -300,7 +300,7 @@ class FolderController extends RestController
 				}
 				return Yii::$app->apis->sendSuccessResponse($userDetails);
 			}else{
-				Yii::$app->api->sendFailedResponse(['no result was found']);
+				return Yii::$app->apis->sendFailedResponse(['no result was found']);
 			}
 			
 		}
@@ -338,10 +338,10 @@ class FolderController extends RestController
 			if($findFolderUser->delete()){
 				return Yii::$app->apis->sendSuccessResponse(['delete was successfull']);
 			}else{
-				Yii::$app->api->sendFailedResponse(['somthing went wrong pls try again ']);
+				return Yii::$app->apis->sendFailedResponse(['somthing went wrong pls try again ']);
 			}
 		}else{
-			Yii::$app->api->sendFailedResponse(['you dont have access to delete a user in this  folder']);
+			return Yii::$app->apis->sendFailedResponse(['you dont have access to delete a user in this  folder']);
 		}
 		
     }
@@ -351,7 +351,7 @@ class FolderController extends RestController
         if (($model = Folder::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }

@@ -79,14 +79,7 @@ function SubscribeExpired(e,r){
 	})
 }
 //.: For example (create a key & set to expire in 10 seconds)
-function TestKey(time,key){
- 
- client.set(key,'redis notify-keyspace-events : expired')
- client.set('shadow:'+key,'')
- client.expire('shadow:'+key,time)
-}
 	
-
 //setting chat route
 var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
@@ -205,17 +198,24 @@ ioChat.on('connection', function(socket) {
 		// eventEmitter.emit('read-chat-join-request', data);
 	});
 	
-	socket.on('getchats', function(data) {
-		chatModel.find({"username" : {$regex : ".*son.*"}})
-		.where('room').equals(data.room)
+	
+	
+	
+	socket.on('getchats', function() {
+		roomModel.find({
+			$or: [{
+				'name1': {'$regex': 'guest-14'}
+			}, {
+				'name2': {'$regex': 'guest-14'}
+			}, ]
+		})
 		.lean()
-		.limit(5)
 		.exec(function(err, result) {
 			if (err) {
 				console.log("Error : " + err);
 			} else {
 				//calling function which emits event to client to show chats.
-				oldChatsNewJoin(result, data.username, data.room,data.sender,data.folderId,data.userImage);
+				console.log(result);
 			}
 		});
 		// eventEmitter.emit('read-chat-join-request', data);

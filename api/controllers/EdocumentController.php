@@ -70,13 +70,13 @@ class EdocumentController extends RestController
     {
         $folderModel = Folder::findOne($folderId);
         if(empty($folderModel)){
-            Yii::$app->api->sendFailedResponse('Folder does not exist');
+           return Yii::$app->apis->sendFailedResponse('Folder does not exist');
         }else{
             if(empty($folderModel->clipOn['edocument'])){
-                Yii::$app->api->sendFailedResponse('There are no edocument in this folder');
+                return Yii::$app->apis->sendFailedResponse('There are no edocument in this folder');
             }else{
                 $folderEdocs = $folderModel->clipOn['edocument'];
-                Yii::$app->api->sendSuccessResponse($folderEdocs);
+                return Yii::$app->apis->sendSuccessResponse($folderEdocs);
             }
         }
     }
@@ -85,13 +85,13 @@ class EdocumentController extends RestController
     {
         $taskModel = Task::findOne($taskId);
         if(empty($taskModel)){
-            Yii::$app->api->sendFailedResponse('Task does not exist');
+            return Yii::$app->apis->sendFailedResponse('Task does not exist');
         }else{
             if(empty($taskModel->clipOn['edocument'])){
-                Yii::$app->api->sendFailedResponse('There are no edocument for this task');
+               return Yii::$app->apis->sendFailedResponse('There are no edocument for this task');
             }else{
                 $taskEdocs = $taskModel->clipOn['edocument'];
-                Yii::$app->api->sendSuccessResponse($taskEdocs);
+                return Yii::$app->apis->sendSuccessResponse($taskEdocs);
             }
         }
     }
@@ -99,6 +99,7 @@ class EdocumentController extends RestController
     public function actionUpload($reference, $referenceID)
     {
         $model = new Edocument();
+		$model->controlerLocation = 'API';
         $fileName = 'file';
         $cid = Yii::$app->user->identity->cid;
         $uploadPath = 'images/';
@@ -107,19 +108,20 @@ class EdocumentController extends RestController
         $model->attributes = $this->request;
         if (isset($_FILES[$fileName])) {
             if($model->documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)){
-                Yii::$app->api->sendSuccessResponse($model->attributes); 
+                return Yii::$app->apis->sendSuccessResponse($model->attributes); 
             }else{
                 if (!$model->validate()) {
-                    Yii::$app->api->sendFailedResponse($model->errors);
+                    return Yii::$app->apis->sendFailedResponse($model->errors);
                 }
             }
         }else{
            if (!$model->validate()) {
-                Yii::$app->api->sendFailedResponse($model->errors);
+                return Yii::$app->apis->sendFailedResponse($model->errors);
             } 
         }
         
     }
+	
 
 	public function actionDelete($id)
     {
@@ -127,10 +129,10 @@ class EdocumentController extends RestController
 		if(!empty($model)){
 			if($model->delete()){
                 unlink($model->file_location); //delete file from folder path
-				Yii::$app->api->sendSuccessResponse($model->attributes);
+				return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
+					return Yii::$app->apis->sendFailedResponse($model->errors);
 				}
 			}
 		}
@@ -141,7 +143,7 @@ class EdocumentController extends RestController
         if (($model = Edocument::findOne($id)) !== null) {
             return $model;
         } else {
-            Yii::$app->api->sendFailedResponse("Invalid Record requested");
+            return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
 }

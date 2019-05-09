@@ -28,6 +28,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
      */
     public $fromWhere;
     public $file;
+	public $controlerLocation = 'frontend';
     /*
     public $file_location;
     public $reference;
@@ -177,7 +178,12 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
 
     public function documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)
     {
-        $cidDir = $uploadPath. $cidPath; //set a varaible for customer id path
+		$this->controlerLocation === 'API'?\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/uploads/':\Yii::$app->params['edocumentUploadPath'] = \Yii::$app->basePath.'/web/';
+			//\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
+			\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/';
+			$edocumentPath = \Yii::$app->params['edocumentUploadPath'];
+		
+        $cidDir = $edocumentPath.$uploadPath. $cidPath; //set a varaible for customer id path
         $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
         $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date
 

@@ -83,9 +83,7 @@ return [
                 ],
             ],
         ],
-		'activityManager' => [
-			'class' => 'boffins_vendor\classes\ActivityManager'
-		],
+		
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

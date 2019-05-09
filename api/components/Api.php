@@ -20,7 +20,7 @@ class Api extends Component
     {
         $this->setHeader(400);
 
-        echo json_encode(array('status' => 0, 'error_code' => 400, 'errors' => $message), JSON_PRETTY_PRINT);
+        return array('status' => 0, 'error_code' => 400, 'errors' => $message);
 
         Yii::$app->end();
     }
