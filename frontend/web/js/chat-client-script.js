@@ -198,7 +198,7 @@ $(document).ready(function(){
 		var roomId;//variable for setting room.
 		var toUser; //variable for setting toUser.
 		var mainUserImage = $('body').data('userimage');// holds value for users image which would be displayed beside each chat 
-
+		var timeout;
 		//passing data on connection.
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
@@ -238,7 +238,11 @@ $(document).ready(function(){
 			$.post(notificationurl,{data:data},function(result){
 					// use pjax to update notification area
 					// use html to add number
-					alert(4567)
+					localStorage.setItem('chatcounter', data.length);	
+					$('#chat-refresher').load(' #chat-refresher');
+					var chtacounter = localStorage.getItem('chatcounter')
+						$(document).find('.header-info').html('You have '+chtacounter+' messages');
+						$(document).find('.hide-label').show().html(chtacounter);
 				}) 	
 			$.each(allNotifications, function( index, value ) {
 				var url = $('body').data('newmessageurl');
@@ -247,6 +251,7 @@ $(document).ready(function(){
 					newToast('From '+result.name+' in '+result.folder+' folder',splitNotification[1]);
 				}) 	
 			});
+			
 			
 		});
 		
@@ -404,7 +409,8 @@ $(document).ready(function(){
 							var relValue = data.sender;
 							var chatbox = '[rel="'+data.sender+'"]' ;
 							$(chatbox+" .msg_push").show();
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 
 							
 							$(chatbox).data('userimage')
@@ -458,7 +464,8 @@ $(document).ready(function(){
 							$(chatbox+" .msg_push").show();
 							imageurl = $(chatbox).data('userimage');
 							$(chatbox).find('.chatloader').remove();
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 
 							
 
@@ -578,7 +585,8 @@ $(document).ready(function(){
 							var relValue = data.result[i].msgTo+'-'+data.folderId;
 							var chatbox = '[rel="'+relValue+'"]' ;
 							$(chatbox).find('.chatloader').remove();
-							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
+							$('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.result[i].msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox+' .msg_push');
 							
 
 							if(i == data.result.length-1){
@@ -605,7 +613,8 @@ $(document).ready(function(){
 							$(chatbox).find('.chatloader').remove();
 							$(document).find(chatbox).data('userimage',imageurl);
 
-							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox + ' .msg_push');
+							$('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+data.userImage+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.result[i].msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>').insertAfter(chatbox + ' .msg_push');
 							
 
 							if(i == data.result.length-1){
@@ -661,7 +670,6 @@ $(document).ready(function(){
 		//receiving typing message.
 		socket.on('typing',function(data){
 			var imageurl = '';
-			var timeout;
 			if($('.msg_box').attr('rel') == data.updateChatBox){
 
 				//var chatbox = $('.'+data.updateChatBox).attr("rel") ;
@@ -672,7 +680,7 @@ $(document).ready(function(){
 
 					$(chatbox+' .msg_body .remove').find('.msg_chat_tex').text(data.msg);// append new text to the chat remove div
 
-					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					//$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 					clearTimeout(timeout);
 					timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
@@ -683,7 +691,7 @@ $(document).ready(function(){
     				timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
 					}, 5000);
-					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					//$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 				}
 
 			}
@@ -752,7 +760,8 @@ $(document).ready(function(){
 				
 				$(chatbox+' .msg_body').find('.remove').remove();
 
-					$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+					$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-right"><div class="msg_chat_content msg_chat_content_right"><div class="msg_chat_img_empty"></div><div class="msg_chat_text">'+data.msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 				
 				$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}else{
@@ -779,7 +788,8 @@ $(document).ready(function(){
 				//else find the to client tab and and paste message
 				$(chatbox+' .msg_body').find('.remove').remove();
 
-				$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
+				$(chatbox+' .msg_body').append('<div class="msg_chat_container msg-left"><div class="msg_chat_content"><div class="msg_chat_img">'+'<img src="'+imageurl+'"/></div><div class="msg_chat_text msg_chat_text_left">'+data.msg.replace( /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>' )+'</div></div><div class="msg_chat_date">'+chatDate+'</div></div>');
 
 				$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 			}
@@ -844,3 +854,80 @@ $(document).ready(function(){
 
 	});//end of function.
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var element = $('.floating-chat');
+var myStorage = localStorage;
+
+if (!myStorage.getItem('chatID')) {
+    myStorage.setItem('chatID', createUUID());
+}
+
+if ("chatindicator" in localStorage) {
+    if (localStorage.getItem('chatindicator') == 0) {
+		// show chat instance
+		$(document).find('.chatindicator-container').show();
+	}else{
+		//hide chat instance 
+		$(document).find('.chatindicator-container').hide();
+	}
+} else {
+   localStorage.setItem('chatindicator', 0)
+}
+
+setTimeout(function() {
+    element.addClass('enter');
+}, 1000);
+
+element.click(openElement);
+
+function openElement() {
+    element.find('>i').hide();
+    element.addClass('expand');
+    element.find('.chat').addClass('enter');
+    element.off('click', openElement);
+    element.find('.header button').click(closeElement);
+	localStorage.setItem('chatindicator', 1)
+}
+
+function closeElement() {
+    element.find('.chat').removeClass('enter').hide();
+    element.find('>i').show();
+    element.removeClass('expand');
+    element.find('.header button').off('click', closeElement);
+    setTimeout(function() {
+        element.find('.chat').removeClass('enter').show()
+        element.click(openElement);
+    }, 500);
+}
+
+function createUUID() {
+    // http://www.ietf.org/rfc/rfc4122.txt
+    var s = [];
+    var hexDigits = "0123456789abcdef";
+    for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[8] = s[13] = s[18] = s[23] = "-";
+
+    var uuid = s.join("");
+    return uuid;
+}

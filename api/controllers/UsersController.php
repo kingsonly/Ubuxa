@@ -6,15 +6,14 @@ namespace api\controllers;
 use yii\filters\AccessControl;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
-use frontend\models\Reminder;
-use frontend\models\Task;
-use frontend\models\TaskReminder;
+use frontend\models\UserDb;
 use Yii;
 use yii\db\Expression;
+use yii\helpers\Json;
 
 
 
-class ReminderController extends RestController
+class UsersController extends RestController
 {
  
     public function behaviors()
@@ -66,48 +65,50 @@ class ReminderController extends RestController
         ];
     }
 
-    public function actionIndex($taskId)
+    public function actionIndex()
     {
-        $taskModel = Task::findOne($taskId);
-        $reminders = $taskModel->reminderTimeTask;
-		if(empty($reminders)){
-			 Yii::$app->api->sendFailedResponse('Task does not have a reminder');
+		
+		$initModdel = new UserDb();
+        $model = $initModdel->find()->all();
+		if(empty($model)){
+			 Yii::$app->api->sendFailedResponse('There are no user');
 		}else{
-			return Yii::$app->apis->sendSuccessResponse($reminders);
+			$users = [];
+			foreach($model as $key => $value){
+				$users[$value->id] =  $value['attributes'];
+				$users[$value->id]['email'] =  $value->email;
+				$users[$value->id]['telephone'] =  $value['telephone'] ;
+				unset($users[$value->id]['authKey']);
+				unset($users[$value->id]['salt']);
+				unset($users[$value->id]['password_hash']);
+				unset($users[$value->id]['password']);
+				unset($users[$value->id]['password_reset_token']);
+			}
+			return Yii::$app->apis->sendSuccessResponse($users);
+			
 		}
         
     }
-
-
-   public function actionCreate($taskId)
-   {
-        $model = new Reminder();
-        $presentTime = new Expression('NOW()');
-        $taskReminder = new TaskReminder();
-        $model->attributes = $this->request;
-        $taskReminder->attributes = $this->request;
-        $model->last_updated = $presentTime;
-
-        if(!empty($model->attributes)){
-            if ($model->save()) {
-                $taskReminder->reminder_id = $model->id;
-                $taskReminder->task_id = $taskId;
-                $taskReminder->save(false);
-               return Yii::$app->apis->sendSuccessResponse($model->attributes);
-            }else{
-               // Yii::$app->api->sendFailedResponse($model->attributes);
-				if (!$model->validate()) {
-					Yii::$app->api->sendFailedResponse($model->errors);
-				}
-            }
-        }else{
-			if (!$model->validate()) {
-				Yii::$app->api->sendFailedResponse($model->errors);
-			}
-            //Yii::$app->api->sendFailedResponse($model->attributes);
-        }
-   	}
-
+	
+	public function actionView($id)
+    {
+		
+        $model =  $this->findModel($id);
+		if(!empty($model)){
+			$users = [];
+			$users =  $model['attributes'];
+			$users['email'] =  $model->email;
+			$users['telephone'] =  $model['telephone'] ;
+			unset($users['authKey']);
+			unset($users['salt']);
+            unset($users['password_hash']);
+            unset($users['password']);
+            unset($users['password_reset_token']);
+			return Yii::$app->apis->sendSuccessResponse($users);
+		}else{
+			yii::$app->api->sendFailedResponse('there is no user with this id ');
+		}
+	}
 
     public function actionUpdate($id)
     {
@@ -128,7 +129,7 @@ class ReminderController extends RestController
 			}
 		}
 	}
-
+	
 	public function actionDelete($id)
     {
         $model = $this->findModel($id);
@@ -149,7 +150,7 @@ class ReminderController extends RestController
 
     protected function findModel($id)
     {
-        if (($model = Reminder::findOne($id)) !== null) {
+        if (($model = UserDb::findOne($id)) !== null) {
             return $model;
         } else {
             Yii::$app->api->sendFailedResponse("Invalid Record requested");

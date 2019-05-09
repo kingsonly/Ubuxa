@@ -79,7 +79,7 @@ class ComponentsBehavior extends Behavior
 		$model = new Folder();// init folder
 		$getAllFolderUsers  = $model->find()
 			->select(['id'])->where(['id' => $this->owner->folderId])->one();//Find folder of component
-		return $getAllFolderUsers->folderUsers; // Return all users in fetched folder above
+		return $getAllFolderUsers->users; // Return all users in fetched folder above
 	}
 	
 	private function linkUserToComponent($userId,$componentId,$role)

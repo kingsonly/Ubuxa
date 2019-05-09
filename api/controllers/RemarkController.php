@@ -82,7 +82,7 @@ class RemarkController extends RestController
                 $user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
                 $remarkId = $model->id;
                 $remarkReply = $model->parent_id;
-                Yii::$app->api->sendSuccessResponse([ $userImage['profile_image'],$user_names['first_name'].' '.$user_names['surname'],$remarkId, $remarkReply, $model->text]);
+                return Yii::$app->apis->sendSuccessResponse([ $userImage['profile_image'],$user_names['first_name'].' '.$user_names['surname'],$remarkId, $remarkReply, $model->text]);
             }else{
                 if (!$model->validate()) {
                     Yii::$app->api->sendFailedResponse($model->errors);
@@ -102,7 +102,7 @@ class RemarkController extends RestController
         $model->attributes = $this->request;
         if(!empty($model->attributes)){
             if ($model->save()) {
-               Yii::$app->api->sendSuccessResponse($model->attributes);
+               return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }else{
                 if (!$model->validate()) {
                     Yii::$app->api->sendFailedResponse($model->errors);
@@ -122,7 +122,7 @@ class RemarkController extends RestController
             Yii::$app->api->sendFailedResponse('Remark does not exist');
         }else{
             if($model->delete()){
-                Yii::$app->api->sendSuccessResponse($model->attributes);
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }else{
                 if (!$model->validate()) {
                     Yii::$app->api->sendFailedResponse($model->errors);

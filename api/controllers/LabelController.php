@@ -71,7 +71,7 @@ class LabelController extends RestController
         $taskModel = Task::findOne($taskId);
         $labels = $taskModel->labels;
 		if(!empty($labels)){
-			 Yii::$app->api->sendSuccessResponse($reminders);
+			 return Yii::$app->apis->sendSuccessResponse($reminders);
 		}
     }
 
@@ -87,7 +87,7 @@ class LabelController extends RestController
                 $taskLabel->label_id = $model->id;
                 $taskLabel->task_id = $taskId;
                 $taskLabel->save();
-                Yii::$app->api->sendSuccessResponse($model->attributes);
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
             }
         }else{
             if (!$model->validate()) {
@@ -104,7 +104,7 @@ class LabelController extends RestController
 		$model->attributes = $this->request;
 		if(!empty($model->attributes)){
 			if ($model->save()) {
-			   Yii::$app->api->sendSuccessResponse($model->attributes);
+			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
 					Yii::$app->api->sendFailedResponse($model->errors);
@@ -122,7 +122,7 @@ class LabelController extends RestController
         $model = $this->findModel($id);
 		if(!empty($model)){
 			if($model->delete()){
-				Yii::$app->api->sendSuccessResponse($model->attributes);
+				return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
 					Yii::$app->api->sendFailedResponse($model->errors);
