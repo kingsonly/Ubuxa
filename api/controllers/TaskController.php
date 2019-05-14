@@ -188,6 +188,29 @@ class TaskController extends RestController
         }
     }
 
+    public function actionCheckTask($id)
+    {
+        $model = new Task();
+        $model->attributes = $this->request;
+        if (!empty($model)) {
+            
+            $model = Task::findOne($id);
+
+            if($model->status_id != $model::TASK_COMPLETED){
+                $model->status_id = $model::TASK_COMPLETED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            } else {
+                $model->status_id = $model::TASK_NOT_STARTED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            }
+            
+        }else{
+           return Yii::$app->apis->sendFailedResponse($model->errors); 
+        }
+    }
+
     protected function findModel($id)
     {
         if (($model = Task::findOne($id)) !== null) {
