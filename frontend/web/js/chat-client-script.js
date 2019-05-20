@@ -203,7 +203,6 @@ $(document).ready(function(){
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
 			socket.emit('check-for-message',username);
-	
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
@@ -225,6 +224,7 @@ $(document).ready(function(){
 			updateUsersStatus(getOnlineUsers);
 
 		});
+		
 		
 		//receiving onlineStack.
 		socket.on('check-for-message',function(data){
