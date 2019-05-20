@@ -112,7 +112,7 @@ class FolderController extends RestController
 			$folderDetails['fullname'] = $fullName;
 			$folderDetails['subfolders'] = $folder->subFolders;
 			$folders[] =   $folderDetails;
-
+			//array_walk_recursive($folders,function(&$item){$item=strval($item);});
 			$response = $folders;
 			return Yii::$app->apis->sendSuccessResponse($response);
 		}else{

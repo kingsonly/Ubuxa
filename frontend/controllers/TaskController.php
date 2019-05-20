@@ -164,7 +164,6 @@ class TaskController extends Controller
         // read your posted model attributes
         if ($model->load(Yii::$app->request->post())) {
             // read or convert your posted information
-            
             $model->save(false);
             // return JSON encoded output in the below format
             return ['output'=>'', 'message'=>''];
