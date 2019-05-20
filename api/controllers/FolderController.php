@@ -9,6 +9,7 @@ use api\behaviours\Apiauth;
 use frontend\models\Folder;
 use api\models\UserSearch;
 use frontend\models\Person;
+use frontend\models\UserDb;
 use yii\web\UploadedFile;
 use Yii;
 use yii\db\Expression;
@@ -105,9 +106,13 @@ class FolderController extends RestController
 			$folderRole = $folder['role'];
 			$folderDetails['role'] =  $folderRole['role'];
 			$folderDetails['createdby'] = $folder->folderManagerByRole['user_id'];
+			$userId = $folder->folderManagerByRole['user_id'];
+			$user = UserDb::find()->andWhere(['id' => $userId])->one();
+			$fullName = $user->fullName;
+			$folderDetails['fullname'] = $fullName;
 			$folderDetails['subfolders'] = $folder->subFolders;
 			$folders[] =   $folderDetails;
-
+			//array_walk_recursive($folders,function(&$item){$item=strval($item);});
 			$response = $folders;
 			return Yii::$app->apis->sendSuccessResponse($response);
 		}else{
@@ -262,7 +267,9 @@ class FolderController extends RestController
 			foreach($userValue as $key => $value){
 				$folderUsers[$i][$key] = $value;
 			}
-			
+			$user = UserDb::find()->andWhere(['id' => $userValue->id])->one();
+			$fullName = $user->fullName;
+			$folderUsers[$i]['fullName'] = $fullName;
 			
 			foreach($folderManager as $managerKey => $managerValue){
 				
@@ -275,6 +282,7 @@ class FolderController extends RestController
 			
 			$i++;
 		}
+		array_walk_recursive($folderUsers,function(&$item){$item=strval($item);});
 		return Yii::$app->apis->sendSuccessResponse($folderUsers);
     }
 	

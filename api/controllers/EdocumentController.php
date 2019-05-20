@@ -76,7 +76,17 @@ class EdocumentController extends RestController
                 return Yii::$app->apis->sendFailedResponse('There are no edocument in this folder');
             }else{
                 $folderEdocs = $folderModel->clipOn['edocument'];
-                return Yii::$app->apis->sendSuccessResponse($folderEdocs);
+                foreach ($folderEdocs as $key => $docs) {
+                    $edocuments[$key] =  $docs->attributes;
+                    $edocuments[$key]['basename'] = basename($docs->file_location);
+                    $edocuments[$key]['extension'] = pathinfo($docs->file_location, PATHINFO_EXTENSION);   
+                    $edocuments[$key]['time_elapsed'] = $docs->timeElapsedString; 
+                    $edocuments[$key]['owner'] = $docs->username; 
+                }
+                $documents[] = $edocuments;
+                $response = $documents;
+                
+                return Yii::$app->apis->sendSuccessResponse([$response]);
             }
         }
     }

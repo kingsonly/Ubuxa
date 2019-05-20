@@ -233,6 +233,6 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
 
     public function getUsername()
     {
-        return $this->user->username;
+        return $this->user->fullName;
     }
 }

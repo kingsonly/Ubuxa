@@ -77,6 +77,9 @@ class TaskController extends RestController
 				return Yii::$app->apis->sendFailedResponse('There are no task in this folder');
 			}else{
 				$fetchTasks = $folderModel->clipOn['task'];
+                /*foreach ($fetchTasks as $value) {
+                    $tasks[$value->status_id][] = $value;
+                }*/
     			return Yii::$app->apis->sendSuccessResponse($fetchTasks);
 			}
 		}
@@ -148,6 +151,19 @@ class TaskController extends RestController
         
     }
 
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+        if(empty($model)){
+            return Yii::$app->apis->sendFailedResponse('task does not exist');
+        }else{
+            $response = $model->attributes;
+            array_walk_recursive($response,function(&$item){$item=strval($item);});
+            return Yii::$app->apis->sendSuccessResponse($response);
+        }
+        
+    }
+
     public function actionAssignee($user, $task)
     {    
         $model = new TaskAssignedUser();
@@ -185,6 +201,29 @@ class TaskController extends RestController
            if (!$model->validate()) {
                     return Yii::$app->apis->sendFailedResponse($model->errors);
             } 
+        }
+    }
+
+    public function actionCheckTask($id)
+    {
+        $model = new Task();
+        $model->attributes = $this->request;
+        if (!empty($model)) {
+            
+            $model = Task::findOne($id);
+
+            if($model->status_id != $model::TASK_COMPLETED){
+                $model->status_id = $model::TASK_COMPLETED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            } else {
+                $model->status_id = $model::TASK_NOT_STARTED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            }
+            
+        }else{
+           return Yii::$app->apis->sendFailedResponse($model->errors); 
         }
     }
 

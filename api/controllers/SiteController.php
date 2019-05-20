@@ -192,10 +192,18 @@ class SiteController extends RestController
         }
 
         $accesstoken = Yii::$app->api->createAccesstoken($authorization_code);
+        $userId = $accesstoken->user_id;
+        $user = UserDb::findOne($userId);
+        $firstname = $user['firstname'];
+        $fullname = $user['fullname'];
+        $profilePhoto = $user['profile_image'];
 
         $data = [];
         $data['access_token'] = $accesstoken->token;
         $data['expires_at'] = $accesstoken->expires_at;
+        $data['user']['firstname'] = $firstname;
+        $data['user']['fullname'] = $fullname;
+        $data['user']['profilePhoto'] = $profilePhoto;
         return Yii::$app->apis->sendSuccessResponse($data);
 
     }
