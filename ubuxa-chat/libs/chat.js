@@ -78,7 +78,7 @@ function SubscribeExpired(e,r){
 		})
 	})
 }
-//.: For example (create a key & set to expire in 10 seconds)
+//.: For example (create a key & set to expire in  10 seconds)
 	
 //setting chat route
 var ioChat = io.of('/chat');
@@ -86,7 +86,7 @@ var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details
 var userSocketInstBuyUserName = {}; // this might not be needed any more
-
+	
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
@@ -156,6 +156,7 @@ ioChat.on('connection', function(socket) {
             socket.join(roomId);
             ioChat.to(userSocket[socket.username]).emit('set-room', socket.room,room.toUser+'-'+folderId,folderId);
         };
+		
 
 	}); //end of set-room event.
 
@@ -189,37 +190,18 @@ ioChat.on('connection', function(socket) {
 		.limit(5)
 		.exec(function(err, result) {
 			if (err) {
-				console.log("Error : " + err);
+				console.log("Error : " + err); 
 			} else {
 				//calling function which emits event to client to show chats.
 				oldChatsNewJoin(result, data.username, data.room,data.sender,data.folderId,data.userImage);
+				
 			}
 		});
 		// eventEmitter.emit('read-chat-join-request', data);
+		
 	});
+	   
 	
-	
-	
-	
-	socket.on('getchats', function() {
-		roomModel.find({
-			$or: [{
-				'name1': {'$regex': 'guest-14'}
-			}, {
-				'name2': {'$regex': 'guest-14'}
-			}, ]
-		})
-		.lean()
-		.exec(function(err, result) {
-			if (err) {
-				console.log("Error : " + err);
-			} else {
-				//calling function which emits event to client to show chats.
-				console.log(result);
-			}
-		});
-		// eventEmitter.emit('read-chat-join-request', data);
-	});
 
 	//emits event to read old chats from database.
 	socket.on('old-chats', function(data) {

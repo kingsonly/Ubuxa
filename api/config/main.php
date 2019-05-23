@@ -21,6 +21,12 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
+		'mongodb' => [
+            'class' => '\yii\mongodb\Connection',
+            'dsn' => 'mongodb://localhost:27017/socketChatDB',
+            
+        ],
+    
 		'apis' => [
 					'class' => 'api\components\Api',
 				],

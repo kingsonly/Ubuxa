@@ -26,6 +26,7 @@ use frontend\models\SignupForm;
 use frontend\models\Email;
 use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
+use yii\mongodb\Query;
 
 /**
  * Site controller
@@ -43,7 +44,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users','chat-list'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -358,6 +359,48 @@ class SiteController extends RestController
             return Yii::$app->apis->sendSuccessResponse($userData);
         }
     }
+	
+	public function actionChatList($username)
+	{
+		$splitUserName = explode('-',$username);
+		$data = [];
+		$query = new Query();
+		// compose the query
+		$query->select([])
+			->from('rooms')
+			->where(['name1' => ['$regex' => 'guest-33']])
+			->orWhere(['name2' => ['$regex' => 'guest-33']]);
+			
+		// execute the query
+		$rows = $query->all();
+		foreach($rows as $key => $value){
+			
+			$name1 = explode('-',$value['name1']);
+			$name2 = explode('-',$value['name2']);
+			if($splitUserName[0] == $name1[0]){
+				$nonrequesterusername  = $name2[0];
+			}else{
+				$nonrequesterusername  = $name1[0];
+			}
+			$chats = new Query();
+			$roomId = (string) $value['_id'] ;
+			$chats->from('chats')->where(['room' => ['$eq' => $roomId]]);
+			$chatRows = $chats->one();
+	
+			$model = new UserDb();
+        	$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
+			$data[$key]['name'] = $dataProvider->fullName;
+			$data[$key]['avatar'] = 'http://localhost/ubuxabeta/frontend/web/'.$dataProvider->profile_image;
+			$data[$key]['unread'] = 3;
+			$data[$key]['lastTime'] = '2pm';//(string) $chatRows['createdOn'];
+			$data[$key]['lastMessage'] = $chatRows['msg'];
+			$data[$key]['roomid'] = $roomId;
+			$data[$key]['username'] = $dataProvider->username;
+			$data[$key]['userid'] = $dataProvider->id;
+		}
+		return Yii::$app->apis->sendSuccessResponse($data);
+		//?access_token=c1e669e76a2a5ff32102d7caea389b6ds
+	}
 	
 }
 	
