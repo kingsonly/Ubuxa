@@ -179,14 +179,18 @@ class TaskController extends RestController
                 $taskModel->last_updated = new Expression('NOW()');
                 $assignee->save();
                 $taskModel->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status));
+                $id = $assignee->id;
+                $date = $assignee->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status, $id, $date));
             }else if($exists && $assignee->status == Task::TASK_NOT_ASSIGNED_STATUS){
                 $assignee->status = Task::TASK_ASSIGNED_STATUS;
                 $assignee->assigned_date = new Expression('NOW()');
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $assignee->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status));
+                $id = $assignee->id;
+                $date = $assignee->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status, $id, $date));
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
@@ -195,7 +199,9 @@ class TaskController extends RestController
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $model->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $model->status));
+                $id = $model->id;
+                $date = $model->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $model->status, $id, $date));
             }
         }else{
            if (!$model->validate()) {
@@ -224,6 +230,27 @@ class TaskController extends RestController
             
         }else{
            return Yii::$app->apis->sendFailedResponse($model->errors); 
+        }
+    }
+
+    public function actionTaskAssignees($id)
+    {
+        $model = Task::findOne($id);
+        $assignees = $model->taskAssignedUsers;
+        if(!empty($assignees)){
+            $i = 0;
+            foreach ($assignees as $users) {
+                $user = UserDb::findOne($users->user_id);
+                $name = $user->fullName;
+                $photo = $user->profile_image;
+                $taskAssignees[$i] = $users->attributes;
+                $taskAssignees[$i]['name'] = $name;
+                $taskAssignees[$i]['profile_image'] = $photo;
+                $i++;
+            }
+            return Yii::$app->apis->sendSuccessResponse($taskAssignees);
+        }else{
+            return Yii::$app->apis->sendFailedResponse("No assigned users."); 
         }
     }
 

@@ -282,7 +282,7 @@ class FolderController extends RestController
 			
 			$i++;
 		}
-		array_walk_recursive($folderUsers,function(&$item){$item=strval($item);});
+		//array_walk_recursive($folderUsers,function(&$item){$item=strval($item);});
 		return Yii::$app->apis->sendSuccessResponse($folderUsers);
     }
 	

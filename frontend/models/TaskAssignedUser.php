@@ -76,13 +76,20 @@ class TaskAssignedUser extends \yii\db\ActiveRecord
         return json_encode([$user, $task, $person, $username, $image, $status]);
     }
 
-    public function taskApiAssignees($user, $userDb, $task, $status)
+    public function taskApiAssignees($user, $userDb, $task, $status, $id, $date)
     {
         $userModel = $userDb->findOne($user);
         $person = $userModel->fullName;
         $username = $userModel->username;
         $image = $userModel->profile_image;
-        return [$username, $image, $status];
+        $assignee['id'] = $id;
+        $assignee['task_id'] = $task;
+        $assignee['user_id'] = $user;
+        $assignee['assigned_date'] = $date;
+        $assignee['name'] = $person;
+        $assignee['profile_image'] = $image;
+        $assignee['status'] = $status;
+        return [$assignee];
     }
 
 }
