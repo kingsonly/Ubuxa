@@ -10,6 +10,7 @@ use frontend\models\Folder;
 use api\models\UserSearch;
 use frontend\models\Person;
 use frontend\models\UserDb;
+use frontend\models\FolderManager;
 use yii\web\UploadedFile;
 use Yii;
 use yii\db\Expression;
@@ -323,10 +324,18 @@ class FolderController extends RestController
 		$folderManagerModel->user_id = $userId;
 		$folderManagerModel->folder_id = $folderId;
 		$folderManagerModel->role = 'user';
+		$user = UserDb::findOne($userId);
+		$profile_image = $user->profile_image;
+		$fullname = $user->fullName;
+		$folderManager['id'] = $userId;
+		$folderManager['fullName'] = $fullname;
+		$folderManager['profile_image'] = $profile_image;
+		$folderManager['folder_id'] = $folderId;
+		$folderManager['role'] = $folderManagerModel->role;
 		
 		if($folderManagerModel->save(false)){
 			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
-			return true;
+			return $folderManager;
 		}
 	}
 	
