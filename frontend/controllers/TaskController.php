@@ -279,7 +279,7 @@ class TaskController extends Controller
                         $taskGroupModel->task_group_id = $model->id;
                         $taskGroupModel->task_child_id = $model->id;
                         $taskGroupModel->save();
-                        return json_encode($model->id);
+                        return json_encode($model->attributes);
                     }
                 }
                 

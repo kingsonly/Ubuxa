@@ -14,7 +14,7 @@ if(!empty($tasks)){
       $userid = Yii::$app->user->identity->id;
       $taskBoard = Url::to(['task/modal', 'id' => $value->id,'folderId' => $folderId]);
     ?>
-  <div class="todo todo_$value->id">
+  <div class="todo todo_<?=$value->id; ?>">
         <input class="todo_listt<?= $value->id; ?> todo__state <?= ($userid == $value->owner) || in_array($userid, $assigneesIds) ?  'has-access' : 'no-access'?>" data-id="<?= $value->id; ?>" id="todo-list<?= $value->status_id; ?>" type="checkbox" <?= $value->status_id == $task::TASK_COMPLETED ? 'checked' : '';?>/>
     <?= EdocumentWidget::widget(['docsize'=>84,'target'=>'tasklist'.$value->id, 'textPadding'=>18,'referenceID'=>$value->id,'reference'=>'task','iconPadding'=>1,'tasklist'=>'hidetasklist', 'edocument' => 'dropzone']);?>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 25" class="todo__icon" id="task-box">
