@@ -101,7 +101,16 @@ class EdocumentController extends RestController
                return Yii::$app->apis->sendFailedResponse('There are no edocument for this task');
             }else{
                 $taskEdocs = $taskModel->clipOn['edocument'];
-                return Yii::$app->apis->sendSuccessResponse($taskEdocs);
+                foreach ($taskEdocs as $key => $docs) {
+                    $edocuments[$key] =  $docs->attributes;
+                    $edocuments[$key]['basename'] = basename($docs->file_location);
+                    $edocuments[$key]['extension'] = pathinfo($docs->file_location, PATHINFO_EXTENSION);   
+                    $edocuments[$key]['time_elapsed'] = $docs->timeElapsedString; 
+                    $edocuments[$key]['owner'] = $docs->username; 
+                }
+                $documents[] = $edocuments;
+                $response = $documents;
+                return Yii::$app->apis->sendSuccessResponse([$response]);
             }
         }
     }
@@ -118,7 +127,12 @@ class EdocumentController extends RestController
         $model->attributes = $this->request;
         if (isset($_FILES[$fileName])) {
             if($model->documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)){
-                return Yii::$app->apis->sendSuccessResponse($model->attributes); 
+                $models['id'] =  $model->attributes;
+                $models['id']['basename'] = basename($model->file_location);
+                $models['id']['extension'] = pathinfo($model->file_location, PATHINFO_EXTENSION);   
+                $models['id']['time_elapsed'] = $model->timeElapsedString; 
+                $models['id']['owner'] = $model->username; 
+                return Yii::$app->apis->sendSuccessResponse($models); 
             }else{
                 if (!$model->validate()) {
                     return Yii::$app->apis->sendFailedResponse($model->errors);

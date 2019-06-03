@@ -78,6 +78,8 @@ class UsersController extends RestController
 				$users[$value->id] =  $value['attributes'];
 				$users[$value->id]['email'] =  $value->email;
 				$users[$value->id]['telephone'] =  $value['telephone'] ;
+                $users[$value->id]['fullName'] =  $value['fullName'] ;
+                $users[$value->id]['profile_image'] =  $value['profile_image'] ;
 				unset($users[$value->id]['authKey']);
 				unset($users[$value->id]['salt']);
 				unset($users[$value->id]['password_hash']);

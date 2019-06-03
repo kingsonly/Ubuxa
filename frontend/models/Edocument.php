@@ -79,7 +79,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             $edocument->file_location = $filePath;
             $edocument->reference = $reference;
             $edocument->reference_id = $referenceID;
-            $edocument->last_updated = new Expression('NOW()');
+            $edocument->last_updated = date("Y-m-d H:i:s");
             $edocument->cid = $cid;
             $edocument->ownerId = $referenceID;
             $edocument->fromWhere = $reference;

@@ -528,11 +528,12 @@ $('#create-task').on('beforeSubmit', function(e) {
                 data: form.serialize(),
                 async: true,
                 success: function(response) { 
+                  console.log(response)
                   var info = JSON.parse(response);
                   var folderId = $('.board-specfic').attr('data-folderId');
                     toastr.success('Task created');
                     //$.pjax.reload({container:"#task-list-refresh",async: false});
-                    Tasksocket.emit('task title', taskTitle);
+                    Tasksocket.emit('task title', info);
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
@@ -548,6 +549,7 @@ Tasksocket.on('task title', function(msg){
 })
 
 Tasksocket.on('task status', function(status){
+  console.log(status)
   if($(".todo_listt"+status).is(":checked")){
     $(".todo_listt"+status).removeAttr('checked')
   }else{

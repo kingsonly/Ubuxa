@@ -234,21 +234,23 @@ class SiteController extends RestController
         $headers = Yii::$app->getRequest()->getHeaders();
         $access_token = $headers->get('x-access-token');
 
-        if(!$access_token){
-            $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+        if(!empty($access_token)){
+            if(!$access_token){
+                $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+            }
+
+            $model = AccessTokens::findOne(['token' => $access_token]);
+
+            if ($model->delete()) {
+
+                return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
+
+            } else {
+                return Yii::$app->apis->sendFailedResponse("Invalid Request");
+            }
+        }else{
+            return Yii::$app->apis->sendFailedResponse("Invalid Access Token");
         }
-
-        $model = AccessTokens::findOne(['token' => $access_token]);
-
-        if ($model->delete()) {
-
-            return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
-
-        } else {
-            return Yii::$app->apis->sendFailedResponse("Invalid Request");
-        }
-
-
     }
 	
 	public function actionValidateCode()

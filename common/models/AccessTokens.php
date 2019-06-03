@@ -55,4 +55,13 @@ class AccessTokens extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
+    /**
+        *Added by Emeka.
+        *Table does not contain a primary key
+    */
+        public static function primaryKey()
+        {
+            return ['token'];
+        }
 }

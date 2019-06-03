@@ -39,8 +39,8 @@ class Reminder extends BoffinsArRootModel implements TenantSpecific, TrackDelete
     public function rules()
     {
         return [
-            [['reminder_time', 'notes', 'last_updated'], 'required'],
-            [['reminder_time', 'last_updated','deleted'], 'safe'],
+            [['reminder_time', 'last_updated'], 'required'],
+            [['reminder_time', 'last_updated','deleted', 'notes'], 'safe'],
             [['deleted', 'cid'], 'integer'],
             [['notes'], 'string', 'max' => 255],
         ];
