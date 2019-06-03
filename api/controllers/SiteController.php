@@ -368,8 +368,8 @@ class SiteController extends RestController
 		// compose the query
 		$query->select([])
 			->from('rooms')
-			->where(['name1' => ['$regex' => 'guest-33']])
-			->orWhere(['name2' => ['$regex' => 'guest-33']]);
+			->where(['name1' => ['$regex' => $username]])
+			->orWhere(['name2' => ['$regex' => $username]]);
 			
 		// execute the query
 		$rows = $query->all();
@@ -391,12 +391,14 @@ class SiteController extends RestController
         	$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
 			$data[$key]['name'] = $dataProvider->fullName;
 			$data[$key]['avatar'] = 'http://localhost/ubuxabeta/frontend/web/'.$dataProvider->profile_image;
-			$data[$key]['unread'] = 3;
-			$data[$key]['lastTime'] = '2pm';//(string) $chatRows['createdOn'];
+			$data[$key]['unread'] = 0;
+			$data[$key]['lastTime'] = (string) $chatRows['createdOn'];
 			$data[$key]['lastMessage'] = $chatRows['msg'];
 			$data[$key]['roomid'] = $roomId;
 			$data[$key]['username'] = $dataProvider->username;
 			$data[$key]['userid'] = $dataProvider->id;
+			$data[$key]['roomId'] = (string) $value['_id'];
+			$data[$key]['folderId'] = $splitUserName[1];
 		}
 		return Yii::$app->apis->sendSuccessResponse($data);
 		//?access_token=c1e669e76a2a5ff32102d7caea389b6ds

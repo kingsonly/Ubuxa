@@ -25,7 +25,7 @@ class UsersController extends RestController
 
            'apiauth' => [
                'class' => Apiauth::className(),
-               'exclude' => [],
+               'exclude' => ['get-user-by-username'],
                'callback'=>[]
            ],
             'access' => [
@@ -134,6 +134,28 @@ class UsersController extends RestController
     {
         
     }
+	
+	public function actionGetUserByUsername($username)
+    {
+		
+        $model =  UserDb::find()->where(['username' => $username])->one();
+		if(!empty($model)){
+			$users = [];
+			$users =  $model['attributes'];
+			$users['email'] =  $model->email;
+			$users['telephone'] =  $model['telephone'] ;
+			$users['fullname'] =  $model['fullname'] ;
+			unset($users['authKey']);
+			unset($users['salt']);
+            unset($users['password_hash']);
+            unset($users['password']);
+            unset($users['password_reset_token']);
+			return Yii::$app->apis->sendSuccessResponse($users);
+		}else{
+			return Yii::$app->apis->sendFailedResponse('there is no user with this id ');
+		}
+	}
+
 
     protected function findModel($id)
     {
@@ -143,4 +165,5 @@ class UsersController extends RestController
             return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
+	
 }
