@@ -74,6 +74,7 @@ class SiteController extends RestController
                     'authorize' => ['POST'],
                     'register' => ['POST'],
                     'accesstoken' => ['POST'],
+                    'chat-list' => ['GET'],
                     'me' => ['GET'],
                 ],
             ],
@@ -204,6 +205,7 @@ class SiteController extends RestController
         $data['user']['firstname'] = $firstname;
         $data['user']['fullname'] = $fullname;
         $data['user']['profilePhoto'] = $profilePhoto;
+        $data['user']['username'] = $user['username'];
         return Yii::$app->apis->sendSuccessResponse($data);
 
     }
@@ -375,6 +377,7 @@ class SiteController extends RestController
 			
 		// execute the query
 		$rows = $query->all();
+		$i=0;
 		foreach($rows as $key => $value){
 			
 			$name1 = explode('-',$value['name1']);
@@ -384,23 +387,27 @@ class SiteController extends RestController
 			}else{
 				$nonrequesterusername  = $name1[0];
 			}
-			$chats = new Query();
-			$roomId = (string) $value['_id'] ;
-			$chats->from('chats')->where(['room' => ['$eq' => $roomId]]);
-			$chatRows = $chats->one();
-	
-			$model = new UserDb();
-        	$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
-			$data[$key]['name'] = $dataProvider->fullName;
-			$data[$key]['avatar'] = 'http://localhost/ubuxabeta/frontend/web/'.$dataProvider->profile_image;
-			$data[$key]['unread'] = 0;
-			$data[$key]['lastTime'] = (string) $chatRows['createdOn'];
-			$data[$key]['lastMessage'] = $chatRows['msg'];
-			$data[$key]['roomid'] = $roomId;
-			$data[$key]['username'] = $dataProvider->username;
-			$data[$key]['userid'] = $dataProvider->id;
-			$data[$key]['roomId'] = (string) $value['_id'];
-			$data[$key]['folderId'] = $splitUserName[1];
+			
+			if($splitUserName[1] === $name1[2]){
+				$chats = new Query();
+				$roomId = (string) $value['_id'] ;
+				$chats->from('chats')->where(['room' => ['$eq' => $roomId]]);
+				$chatRows = $chats->one();
+
+				$model = new UserDb();
+				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
+				$data[$i]['name'] = $dataProvider->fullName;
+				$data[$i]['avatar'] = 'http://localhost/ubuxabeta/frontend/web/'.$dataProvider->profile_image;
+				$data[$i]['unread'] = 0;
+				$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
+				$data[$i]['lastMessage'] = $chatRows['msg'];
+				$data[$i]['roomid'] = $roomId;
+				$data[$i]['username'] = $dataProvider->username;
+				$data[$i]['userid'] = $dataProvider->id;
+				$data[$i]['roomId'] = (string) $value['_id'];
+				$data[$i]['folderId'] = $splitUserName[1];
+				$i++;
+			}
 		}
 		return Yii::$app->apis->sendSuccessResponse($data);
 		//?access_token=c1e669e76a2a5ff32102d7caea389b6ds
