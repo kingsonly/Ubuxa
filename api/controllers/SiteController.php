@@ -28,6 +28,7 @@ use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
 use yii\mongodb\Query;
 
+
 /**
  * Site controller
  */
@@ -397,7 +398,7 @@ class SiteController extends RestController
 				$model = new UserDb();
 				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
 				$data[$i]['name'] = $dataProvider->fullName;
-				$data[$i]['avatar'] = 'http://localhost/ubuxabeta/frontend/web/'.$dataProvider->profile_image;
+				$data[$i]['avatar'] = 'http://ubuxa.net/'.$dataProvider->profile_image;
 				$data[$i]['unread'] = 0;
 				$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
 				$data[$i]['lastMessage'] = $chatRows['msg'];
