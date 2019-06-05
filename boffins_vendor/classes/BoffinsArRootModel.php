@@ -389,7 +389,7 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 */ 
 	public function specificClipsWithLimitAndOffset($limit=4,$offset=0,$ownerTypeId=2,$barId = 0)
     {
-        return Clip::find()->select(['owner_id'])->andWhere(['bar_id' => $barId])->andWhere(['owner_type_id' => $ownerTypeId])->asArray()->limit($limit)->offset($offset)->orderBy(['id'=>SORT_DESC])->all();
+        return Clip::find()->select(['owner_id'])->andWhere(['bar_id' => $barId])->andWhere(['owner_type_id' => $ownerTypeId])->asArray()->limit($limit)->offset($offset)->all();
     }
 	
 	protected function usesClipOnBehavior($className = '')  //just in case child classes want a variable. 

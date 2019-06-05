@@ -470,6 +470,7 @@ $DashboardUrlParam = $DashboardUrl[0];
 $baseUrl=Url::base(true);
 $userId = Yii::$app->user->identity->id;
 $remarkJs = <<<remarkjs
+
 var remarkContainerID = '$parentOwnerId';
 var userID = '$userId';
 var setStatus;
@@ -554,6 +555,7 @@ $('#create-remark').submit(function(e) {
                     $('#example-1').text();
                     $('#example-1').empty();
                     //$.pjax.reload({container:"#remark-refresh",async: false});
+                    
                     $('#remarkLoader').hide();
                     
                     if($('#remarkCancelButton').hasClass('replyButon')){
@@ -596,7 +598,7 @@ Remarksocket.on('chat message', function(msg, info){
                   class: "comment-name by-author"
                 });
 
-    var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+    var a = $("<a/>").attr('href','#').text(info[1]);
     
                
     var span = $("<span/>");
@@ -655,7 +657,7 @@ Remarksocket.on('chat message', function(msg, info){
                         class: "comment-name"
                       });
 
-          var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+          var a = $("<a/>").attr('href','#').text(info[1]);
           
                      
           var span = $("<span/>");
@@ -808,6 +810,7 @@ $('#size').on('change', function() {
    $('.editor').wrapInner("<span></span>").find('span').css('fontSize', size + 'px');
 });
 $('[data-toggle="tooltip-reply"]').tooltip();
+
 
 remarkjs;
 $this->registerJs($remarkJs);
