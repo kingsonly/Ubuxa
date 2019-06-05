@@ -11,6 +11,7 @@ use boffins_vendor\classes\StandardQuery;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use yii\web\User;
+use frontend\models\Customer;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
 use common\models\AccessTokens;

@@ -15,7 +15,7 @@ use frontend\models\UserDb;
 use boffins_vendor\queue\FolderUsersQueue;
 use boffins_vendor\classes\BoffinsBaseController;
 
-class ComponentController extends BoffinsBaseController
+class ComponentController extends Controller
 {
     public function actionCreate()
     {
@@ -70,7 +70,7 @@ class ComponentController extends BoffinsBaseController
 		$modelData = $collector->models;*/
 		$folder = new Folder();
 		$getCurrentFolder = $folder->find()->andWhere(['id' => $folderId])->one();
-		$getFolderUsers = $getCurrentFolder->folderUsers;
+		$getFolderUsers = $getCurrentFolder->users;
 		
 		$componentModel = new Component();
 		$query = $componentModel->find()->andWhere(['id'=>$id]);

@@ -778,7 +778,9 @@ var dropzone = new Dropzone('#dropupload$target', {
 
         if(!$('#dropupload$target').hasClass('foldervault') && !$('#dropupload$target').hasClass('dropzonefolderdetails')){
             var folderId = $('.board-specfic').attr('data-folderId');
-            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-list-refresh",async: false});
         }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
@@ -808,7 +810,8 @@ var dropzone = new Dropzone('#dropupload$target', {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
   clickable: false,
-  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 10,
+  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
+  parallelUploads: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
   /*addRemoveLinks: true,*/
   acceptedFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 'image/*' : '',
   accept: function(file, done) {
@@ -869,7 +872,9 @@ var dropzone = new Dropzone('#dropupload$target', {
         
         $.pjax.reload({container:"#task-list-refresh",async: false});
         if($('#dropupload$target').hasClass('click-uploadmodalUpload')){
-            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
         if($('#dropupload$target').hasClass('click-uploadfolderUpload')){
@@ -886,7 +891,7 @@ var dropzone = new Dropzone('#dropupload$target', {
   },
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
-  maxFiles: 10,
+  maxFiles: 20,
   clickable: true,
   accept: function(file, done) {
     var ext = file.name.split('.').pop(); //get file extension

@@ -21,9 +21,20 @@ return [
                 'application/json' => 'yii\web\JsonParser',
             ]
         ],
+		'apis' => [
+					'class' => 'api\components\Api',
+				],
         'response' => [
             'format' => yii\web\Response::FORMAT_JSON,
             'charset' => 'UTF-8',
+	'formatters' => [
+        \yii\web\Response::FORMAT_JSON => [
+             'class' => 'yii\web\JsonResponseFormatter',
+             'prettyPrint' => YII_ENV, // use "pretty" output in debug mode
+             // ...
+        ],
+    ],
+			
             // ...
         ],
         'user' => [

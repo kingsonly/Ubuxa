@@ -65,6 +65,10 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	 * internal variable to determine if the user password was correct. 
 	 */
 	private $_passwordValid = false;
+
+	//public $profile_image;
+
+	public $controlerLocation = 'frontend';
 	
     /***
      * @inheritdoc
@@ -443,6 +447,34 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		
 		return $device->approveDevice($deviceAccessToken, $this);
 	}
+
+		public function upload()
+    {
+        if ($this->validate()) {
+			$holdPath = '';
+			$file = $this->profile_image;
+			$ext = $file->extension;
+			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
+			$basePath = explode('/',\Yii::$app->basePath);
+			$this->controlerLocation === 'API'?\Yii::$app->params['uploadPath'] = '../../frontend/web/images/users/':\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/images/users/';
+			//\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
+			\Yii::$app->params['uploadPath'] = '../../frontend/web/images/users/';
+			$path = \Yii::$app->params['uploadPath'] . $newName;
+			$dbpath = 'images/users/' . $newName;
+			
+			$holdPath= $dbpath;
+			
+			if($file->saveAs($path)){
+				
+				$this->profile_image = $dbpath;
+				
+			}
+			
+            return true;
+        } else {
+            return false;
+        }
+    }
 	
 
 	/*

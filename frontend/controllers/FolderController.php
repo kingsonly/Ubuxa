@@ -30,6 +30,7 @@ use \boffins_vendor\queue\FolderUsersQueue;
 use boffins_vendor\classes\BoffinsBaseController;
 
 
+
 /**
  * FolderController implements the CRUD actions for Folder model.
  */
@@ -93,6 +94,19 @@ class FolderController extends BoffinsBaseController
         }
         
     }
+
+	public function actionIndex2()
+    {
+       	$folder = Folder::find()->all();
+		if(empty($folder)){
+            return $this->render('empty_index');
+        } else {
+            return $this->render('empty_index', [
+            'folders' => $folder,
+            ]);
+        }
+
+	}
 
     /**
      * Displays a single Folder model.
@@ -177,6 +191,17 @@ class FolderController extends BoffinsBaseController
 		elseif ($id > 0) {
 			$out['results'] = ['id' => 0, 'first_name' => 'could not find ','surname' => 'a any user'];
 		}
+		return $out;
+	}
+	
+	public function actionNewMessage() {
+		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName'];
+		$folder = Folder::find()->andWhere(['id' => $folderId])->select('title')->one();
+		$user = UserDb::find()->andWhere(['username' => $username])->one();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$out = ['name'=>$user->fullname,'folder' => $folder['title']];
+		
 		return $out;
 	}
 	

@@ -4,6 +4,7 @@ var events = require('events');
 var mysql = require('mysql');
 var redis = require('redis');
 var _ = require('lodash');
+var https = require("http");
 var eventEmitter = new events.EventEmitter();
 
 //adding db models
@@ -36,8 +37,49 @@ module.exports.sockets = function(http) {
 	});
 	con.connect();
 
+var pub, sub
+//.: Activate "notify-keyspace-events" for expired type events
 
+client.send_command('config', ['set','notify-keyspace-events','Ex'], SubscribeExpired)
+//.: Subscribe to the "notify-keyspace-events" channel used for expired type events
+function SubscribeExpired(e,r){
+	sub = redis.createClient()
+	const expired_subKey = '__keyevent@0__:expired'
+	sub.subscribe(expired_subKey,function(){
+		console.log(' [i] Subscribed to "'+expired_subKey+'" event channel : '+r)
+		sub.on('message',function (chan,key){
+			console.log('[expired]',key)
+			var splitKey = key.split(':');
+			console.log('thisis '+splitKey[1])
+			client.exists(splitKey[1], function(err, reply) {
+				
+				if (reply === 1) {
+					client.lrange(splitKey[1], 0, -1, function(err, data) {
+						console.log(err)
+						if(!err){
 
+							console.log(data);
+		
+							var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							  console.log(res.statusCode);
+							});
+
+							req.on('error', (e) => {
+							  console.error(e.message);
+							});    
+
+							req.end();
+						}
+					});
+				} else {
+					console.log('doesn\'t exist');
+				}
+			});
+		})
+	})
+}
+//.: For example (create a key & set to expire in 10 seconds)
+	
 //setting chat route
 var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
@@ -48,9 +90,9 @@ var userSocketInstBuyUserName = {}; // this might not be needed any more
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
-
 	//function to get user name, this would be emited from the client and recieved on the server
 	socket.on('check-for-message',function(username){
+		
 		client.exists(username, function(err, reply) {
 			if (reply === 1) {
 				client.lrange(username, 0, -1, function(err, data) {
@@ -63,7 +105,7 @@ ioChat.on('connection', function(socket) {
 						});
 					}
 
-
+ 
 				});
 			} else {
 				console.log('doesn\'t exist');
@@ -155,6 +197,29 @@ ioChat.on('connection', function(socket) {
 		});
 		// eventEmitter.emit('read-chat-join-request', data);
 	});
+	
+	
+	
+	
+	socket.on('getchats', function() {
+		roomModel.find({
+			$or: [{
+				'name1': {'$regex': 'guest-14'}
+			}, {
+				'name2': {'$regex': 'guest-14'}
+			}, ]
+		})
+		.lean()
+		.exec(function(err, result) {
+			if (err) {
+				console.log("Error : " + err);
+			} else {
+				//calling function which emits event to client to show chats.
+				console.log(result);
+			}
+		});
+		// eventEmitter.emit('read-chat-join-request', data);
+	});
 
 	//emits event to read old chats from database.
 	socket.on('old-chats', function(data) {
@@ -235,10 +300,13 @@ ioChat.on('connection', function(socket) {
 							ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
 							console.log('go ahead2');
 						}else{
-							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.date;
+							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.msgTo+')'+data.date;
 							client.rpush([data.msgTo, redisString], function(err, reply) {
     							console.log(redisString); //prints 2
 							});
+							var shadowKey = 'shadowkey:'+data.msgTo;
+							client.set(shadowKey,'')
+							client.expire(shadowKey,10);
 							
 							console.log('user not online '+data.msgTo); 
 						}

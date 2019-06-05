@@ -49,6 +49,7 @@ use frontend\models\Onboarding;
 use frontend\models\Label;
 use frontend\models\TaskLabel;
 use frontend\models\Plan;
+use frontend\models\ChatNotification;
 use frontend\models\Role;
 use frontend\models\UserSetting;
 use linslin\yii2\curl;
@@ -60,6 +61,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 set_include_path(Yii::$app->BasePath  . '/vendor/google/apiclient/src');
 
 class SiteController extends BoffinsBaseController {
+	
     public function behaviors()
     {
         return [
@@ -77,7 +79,7 @@ class SiteController extends BoffinsBaseController {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
             ],
 			
@@ -304,8 +306,8 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
-  public function actionSignup($email,$cid,$role,$folderid = 0)
-  {
+  	public function actionSignup($email,$cid,$role,$folderid = 0)
+  	{
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
@@ -374,7 +376,7 @@ class SiteController extends BoffinsBaseController {
 					]);
 		}
     }
-
+	
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
@@ -601,8 +603,8 @@ class SiteController extends BoffinsBaseController {
 		    if($emailExist){
 		    	$emails = Email::find()->where(['address' => $email])->all();
 		    	$domains = [];
-		    	foreach ($emails as $email) {
-		    		$cid = $email->cid;
+		    	foreach ($emails as $userEmail) {
+		    		$cid = $userEmail->cid;
 			    	$getTenant = Customer::find()->where(['cid' => $cid])->one();
 			    	$domain = $getTenant->master_doman;
 			    	array_push($domains, $domain);
@@ -659,6 +661,33 @@ class SiteController extends BoffinsBaseController {
     public function actionNewpage()
     {
     	return $this->render('newpage');
+    } 
+	
+	public function actionUpdateChatNotification()
+    {
+		$checkActivityOfLoop = 0;
+		foreach($_REQUEST['data'] as $key => $value){
+			$notificationStringSplit = explode(')',$value);
+			$getSenderId = UserDb::find()->andWhere(['username' => $notificationStringSplit[0]])->one();
+			$getReceiversId = yii::$app->user->identity->id;
+			$model = new ChatNotification();
+			$model->sender_id = $getSenderId->id;
+			$model->receivers_id = $getReceiversId;
+			$model->time_sent = $notificationStringSplit[3] ;
+			$model->folder_id = $notificationStringSplit[2] ;
+			$model->msg = $notificationStringSplit[1] ;
+			//$model->last_updated =$_REQUEST['activitiesArray'];
+			if($model->save(false)){
+				$checkActivityOfLoop++;
+			};
+			
+		}
+		if($checkActivityOfLoop > 0){
+			return $checkActivityOfLoop;
+		}else{
+			return 0;
+		}
+		
     }
 	
 	public function chatNodeLogin($username)
