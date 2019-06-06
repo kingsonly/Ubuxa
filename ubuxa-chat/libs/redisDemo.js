@@ -35,7 +35,10 @@ function waitForPush () {
     }
     
   	console.log('We have retrieved data from the front of the queue:', data);
-    ioRedis.emit('redis message', data[1]);
+	if(data !== null){
+		ioRedis.emit('redis message', data[1]);
+	}
+    
     client.exists('user_message:33', function(err, reply) {
       if (reply === 1) {
         
