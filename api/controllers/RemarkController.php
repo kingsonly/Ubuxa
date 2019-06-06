@@ -92,7 +92,7 @@ class RemarkController extends RestController
                         foreach($remarks[$i]->reply as $key => $value){
                             $test = ['name' => $remarks[$i]->reply[$key]->fullname,
                                      'id' => $remarks[$i]->reply[$key]->id,
-                                     'description' => $remarks[$i]->reply[$key]->text,
+                                     'description' => strip_tags($remarks[$i]->reply[$key]->text),
                                      'time' => $remarks[$i]->reply[$key]->timeElapsedString
                                     ];
                             array_push($fake, $test);

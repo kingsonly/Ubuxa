@@ -79,11 +79,9 @@ class UsersController extends RestController
 			foreach($model as $key => $value){
 				$users[$value->id] =  $value['attributes'];
                 $users[$value->id]['email'] =  $value->email;
-                $users[$value->id]['profile_image'] = 'http://192.168.1.6/ubuxa-beta/frontend/web/'.$value['profile_image'];
-				$users[$value->id]['default_image'] = !empty($value['profile_image'])?'ubuxa.net/'.$value['profile_image']:'ubuxa.net/images/users/default-user.png';
 				$users[$value->id]['telephone'] =  $value['telephone'] ;
                 $users[$value->id]['fullName'] =  $value['fullName'] ;
-                $users[$value->id]['profile_image'] =  !empty($value['profile_image'])?'ubuxa.net/'.$value['profile_image']:'ubuxa.net/images/users/default-user.png';
+                $users[$value->id]['profile_image'] =  !empty($value['profile_image'])?'http://ubuxa.net/'.$value['profile_image']:'http://ubuxa.net/images/users/default-user.png';
 				unset($users[$value->id]['authKey']);
 				unset($users[$value->id]['salt']);
 				unset($users[$value->id]['password_hash']);
@@ -106,7 +104,7 @@ class UsersController extends RestController
 			$users['email'] =  $model->email;
             $users['telephone'] =  $model['telephone'] ;
             $users['fullname'] =  $model['fullName'] ;
-			$users['profile_image'] =  !empty($model['profile_image'])?'ubuxa.net/'.$model['profile_image']:'ubuxa.net/images/users/default-user.png';
+			$users['profile_image'] =  !empty($model['profile_image'])?'http://ubuxa.net/'.$model['profile_image']:'http://ubuxa.net/images/users/default-user.png';
 			unset($users['authKey']);
 			unset($users['salt']);
             unset($users['password_hash']);

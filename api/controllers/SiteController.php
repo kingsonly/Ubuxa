@@ -207,6 +207,7 @@ class SiteController extends RestController
         $data['user']['fullname'] = $fullname;
         $data['user']['profilePhoto'] = $profilePhoto;
         $data['user']['username'] = $user['username'];
+        $data['user']['id'] = $user['id'];
         return Yii::$app->apis->sendSuccessResponse($data);
 
     }
