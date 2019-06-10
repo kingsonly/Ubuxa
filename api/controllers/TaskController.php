@@ -158,6 +158,8 @@ class TaskController extends RestController
             return Yii::$app->apis->sendFailedResponse('task does not exist');
         }else{
             $response = $model->attributes;
+            $response['time_elapsed'] = $model->timeElapsedString;
+            $response['task_owner'] = $model->ownerFullName;
             array_walk_recursive($response,function(&$item){$item=strval($item);});
             return Yii::$app->apis->sendSuccessResponse($response);
         }
