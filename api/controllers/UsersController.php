@@ -154,6 +154,7 @@ class UsersController extends RestController
                     // file is uploaded successfully
                     if($model->save()){
                         $response = ['msg' => 'created'];
+                        $response['images'] = !empty($model->profile_image)?'http://ubuxa.net/'.$model->profile_image:'http://ubuxa.net/images/users/default-user.png';                         
                         return Yii::$app->apis->sendSuccessResponse($model->attributes,$response);
                     } else{
                         return Yii::$app->apis->sendFailedResponse(['did not create']);
