@@ -87,7 +87,7 @@ class TaskAssignedUser extends \yii\db\ActiveRecord
         $assignee['user_id'] = $user;
         $assignee['assigned_date'] = $date;
         $assignee['name'] = $person;
-        $assignee['profile_image'] = $image;
+        $assignee['profile_image'] = !empty($image)?'http://ubuxa.net/'.$image : 'http://ubuxa.net/images/users/default-user.png';;
         $assignee['status'] = $status;
         return [$assignee];
     }

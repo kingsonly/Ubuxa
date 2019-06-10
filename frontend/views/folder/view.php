@@ -583,10 +583,15 @@ $img = $model->folder_image;
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
+$getuserId = Yii::$app->user->identity->id;
 $indexJs = <<<JS
-
+var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
+RedisSocket.on('redis message', function(msg){
+$(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
+$('.act_count').text($('.act_str').length)
 
+})
 
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){

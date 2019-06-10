@@ -65,7 +65,8 @@ class InviteUsersForm extends Model
 		
 		$cid = Yii::$app->user->identity->cid;
         $emails = $this->email;
-		foreach ($emails as $email) {
+		foreach ($emails as $index=>$email) {
+            $this->role=="Administrator"?$this->role=1:$this->role=0;
 			Yii::$app->mailer->compose(['html' => 'inviteusers'],
                 [
                     //'body'  => $this->body,

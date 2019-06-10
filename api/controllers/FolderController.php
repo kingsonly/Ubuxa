@@ -277,6 +277,7 @@ class FolderController extends RestController
 				if($userValue->id == $managerValue->user_id){
 					
 					$folderUsers[$i]['role'] = $managerValue->role;
+					$folderUsers[$i]['images'] = !empty($userValue->profile_image)?'http://ubuxa.net/'.$userValue->profile_image:'http://ubuxa.net/images/users/default-user.png';
 					$folderUsers[$i]['folder_id'] = $managerValue->folder_id;
 				}
 			}

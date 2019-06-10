@@ -10,6 +10,8 @@ use frontend\models\UserDb;
 use Yii;
 use yii\db\Expression;
 use yii\helpers\Json;
+use yii\web\UploadedFile;
+use yii\helpers\Url;
 
 
 
@@ -25,7 +27,7 @@ class UsersController extends RestController
 
            'apiauth' => [
                'class' => Apiauth::className(),
-               'exclude' => [],
+               'exclude' => ['get-user-by-username'],
                'callback'=>[]
            ],
             'access' => [
@@ -76,10 +78,10 @@ class UsersController extends RestController
 			$users = [];
 			foreach($model as $key => $value){
 				$users[$value->id] =  $value['attributes'];
-				$users[$value->id]['email'] =  $value->email;
+                $users[$value->id]['email'] =  $value->email;
 				$users[$value->id]['telephone'] =  $value['telephone'] ;
                 $users[$value->id]['fullName'] =  $value['fullName'] ;
-                $users[$value->id]['profile_image'] =  $value['profile_image'] ;
+                $users[$value->id]['profile_image'] =  !empty($value['profile_image'])?'http://ubuxa.net/'.$value['profile_image']:'http://ubuxa.net/images/users/default-user.png';
 				unset($users[$value->id]['authKey']);
 				unset($users[$value->id]['salt']);
 				unset($users[$value->id]['password_hash']);
@@ -91,7 +93,7 @@ class UsersController extends RestController
 		}
         
     }
-	
+
 	public function actionView($id)
     {
 		
@@ -100,7 +102,9 @@ class UsersController extends RestController
 			$users = [];
 			$users =  $model['attributes'];
 			$users['email'] =  $model->email;
-			$users['telephone'] =  $model['telephone'] ;
+            $users['telephone'] =  $model['telephone'] ;
+            $users['fullname'] =  $model['fullName'] ;
+			$users['profile_image'] =  !empty($model['profile_image'])?'http://ubuxa.net/'.$model['profile_image']:'http://ubuxa.net/images/users/default-user.png';
 			unset($users['authKey']);
 			unset($users['salt']);
             unset($users['password_hash']);
@@ -116,9 +120,13 @@ class UsersController extends RestController
     {
 		
         $model =  $this->findModel($id);
-		$model->attributes = $this->request;
+        $person = $model->person;
+        $model->attributes = $this->request;
+		$person->attributes = $this->request;
+        
 		if(!empty($model->attributes)){
-			if ($model->save()) {
+
+			if ($model->save() && $person->save(false)) {
 			   return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{
 				if (!$model->validate()) {
@@ -131,11 +139,62 @@ class UsersController extends RestController
 			}
 		}
 	}
+
+    public function actionUpdateUserImage($id)
+    {
+        
+        $model =  $this->findModel($id);
+        $model->controlerLocation = 'API';
+        $model->attributes = $this->request;
+        if(!empty($model)){
+            if (Yii::$app->request->isPost) {
+                $model->profile_image = UploadedFile::getInstanceByName('profile_image');
+                
+                if ($model->upload()) {
+                    // file is uploaded successfully
+                    if($model->save()){
+                        $response = ['msg' => 'created'];
+                        return Yii::$app->apis->sendSuccessResponse($model->attributes,$response);
+                    } else{
+                        return Yii::$app->apis->sendFailedResponse(['did not create']);
+                    }
+
+                }
+            }
+            
+
+        }else{
+            return Yii::$app->apis->sendFailedResponse(['you dont have access to this folder']);
+        }
+        
+    }
 	
 	public function actionDelete($id)
     {
         
     }
+	
+	public function actionGetUserByUsername($username)
+    {
+		
+        $model =  UserDb::find()->where(['username' => $username])->one();
+		if(!empty($model)){
+			$users = [];
+			$users =  $model['attributes'];
+			$users['email'] =  $model->email;
+			$users['telephone'] =  $model['telephone'] ;
+			$users['fullname'] =  $model['fullname'] ;
+			unset($users['authKey']);
+			unset($users['salt']);
+            unset($users['password_hash']);
+            unset($users['password']);
+            unset($users['password_reset_token']);
+			return Yii::$app->apis->sendSuccessResponse($users);
+		}else{
+			return Yii::$app->apis->sendFailedResponse('there is no user with this id ');
+		}
+	}
+
 
     protected function findModel($id)
     {
@@ -145,4 +204,5 @@ class UsersController extends RestController
             return Yii::$app->apis->sendFailedResponse("Invalid Record requested");
         }
     }
+	
 }

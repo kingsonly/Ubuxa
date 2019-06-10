@@ -244,7 +244,7 @@ class TaskController extends RestController
             foreach ($assignees as $users) {
                 $user = UserDb::findOne($users->user_id);
                 $name = $user->fullName;
-                $photo = $user->profile_image;
+                $photo = !empty($user->profile_image)?'http://ubuxa.net/'.$user->profile_image : 'http://ubuxa.net/images/users/default-user.png';
                 $taskAssignees[$i] = $users->attributes;
                 $taskAssignees[$i]['name'] = $name;
                 $taskAssignees[$i]['profile_image'] = $photo;

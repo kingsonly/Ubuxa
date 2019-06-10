@@ -55,18 +55,27 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         ];
     }
 
-   
+    public function getPerson()
+    {
+        return $this->hasOne(Person::className(), ['id' => 'person_id']);
+    }
     public function getUser()
     {
         return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
     }
     public function getFullname()
     {
-        return $this->user->fullName;
+        return $this->user->fullname;
     }
     public function getUserImage()
     {
         return $this->user->profile_image;
+    }
+    public function getReply()
+    {
+        return $this->hasMany($this::className(), ['parent_id' => 'id'])->orderBy([
+            'id' => SORT_DESC
+        ]);
     }
 
     public function getTimeElapsedString($full = false) {
