@@ -205,7 +205,7 @@ class SiteController extends RestController
         $data['expires_at'] = $accesstoken->expires_at;
         $data['user']['firstname'] = $firstname;
         $data['user']['fullname'] = $fullname;
-        $data['user']['profilePhoto'] = $profilePhoto;
+        $data['user']['profilePhoto'] = !empty($profilePhoto)?'http://ubuxa.net/'.$profilePhoto:'http://ubuxa.net/images/users/default-user.png';
         $data['user']['username'] = $user['username'];
         $data['user']['id'] = $user['id'];
         return Yii::$app->apis->sendSuccessResponse($data);

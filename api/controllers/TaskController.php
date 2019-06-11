@@ -158,6 +158,8 @@ class TaskController extends RestController
             return Yii::$app->apis->sendFailedResponse('task does not exist');
         }else{
             $response = $model->attributes;
+            $response['time_elapsed'] = $model->timeElapsedString;
+            $response['task_owner'] = $model->ownerFullName;
             array_walk_recursive($response,function(&$item){$item=strval($item);});
             return Yii::$app->apis->sendSuccessResponse($response);
         }
@@ -242,7 +244,7 @@ class TaskController extends RestController
             foreach ($assignees as $users) {
                 $user = UserDb::findOne($users->user_id);
                 $name = $user->fullName;
-                $photo = $user->profile_image;
+                $photo = !empty($user->profile_image)?'http://ubuxa.net/'.$user->profile_image : 'http://ubuxa.net/images/users/default-user.png';
                 $taskAssignees[$i] = $users->attributes;
                 $taskAssignees[$i]['name'] = $name;
                 $taskAssignees[$i]['profile_image'] = $photo;
