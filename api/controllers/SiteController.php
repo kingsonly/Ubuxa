@@ -398,9 +398,8 @@ class SiteController extends RestController
 			if($splitUserName[1] === $name1[2]){
 				$chats = new Query();
 				$roomId = (string) $value['_id'] ;
-				$chats->from('chats')->where(['room' => ['$eq' => $roomId]]);
+				$chats->from('chats')->where(['room' => ['$eq' => $roomId]])->addOptions(['sort'=>['createdOn' => -1]]);
 				$chatRows = $chats->one();
-
 				$model = new UserDb();
 				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
 				$data[$i]['name'] = $dataProvider->fullName;
@@ -417,7 +416,6 @@ class SiteController extends RestController
 			}
 		}
 		return Yii::$app->apis->sendSuccessResponse($data);
-		//?access_token=c1e669e76a2a5ff32102d7caea389b6ds
 	}
 	
 }
