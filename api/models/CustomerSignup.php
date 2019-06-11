@@ -35,7 +35,7 @@ class CustomerSignup extends Model
             [['corporation_name','first_name','surname'],'safe'],
             ['master_email', 'trim'],
             ['master_doman', 'trim'],
-            ['master_doman', 'unique', 'targetClass' => 'frontend\models\Customer', 'message' => 'This domain has already bn taken has already been taken.'],
+            ['master_doman', 'unique', 'targetClass' => 'frontend\models\Customer', 'message' => 'This domain has already been taken.'],
             ['master_email', 'string', 'min' => 2, 'max' => 255],
             ['master_doman', 'string', 'min' => 2, 'max' => 255],
             ['master_email', 'string', 'max' => 255],
