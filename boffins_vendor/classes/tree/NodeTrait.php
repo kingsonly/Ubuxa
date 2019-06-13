@@ -28,7 +28,7 @@ trait NodeTrait
     /**
      * @var NodeInterface - the parent node -  if this is false, then this node is a root node or orphan. 
      */
-    protected $parentNode = false;
+    protected $parentNode = null;
 	
     /**
      * @var NodeInterface[] an array of nodes which are the children of this node - 
@@ -229,7 +229,7 @@ trait NodeTrait
     {
         $parents = [];
         $node = $this;
-        while ($parent = $node->getParent()) { //if parent is false, this terminates 
+        while ($parent = $node->getParent() && !empty($parent) ) { //if parent is false, this terminates 
             array_unshift($parents, $parent);
             $node = $parent;
         }
@@ -256,7 +256,7 @@ trait NodeTrait
             array_filter(
                 $neighbors,
                 function ($item) use ($current) {
-                    return $item != $current;
+                    return $item !== $current;
                 }
             )
         );
@@ -283,7 +283,7 @@ trait NodeTrait
      */
     public function isRoot()
     {
-        return $this->getParent() === false;
+        return $this->getParent() === null;
     }
 	
     /**
@@ -291,7 +291,7 @@ trait NodeTrait
      */
     public function isChild()
     {
-        return $this->getParent() !== false;
+        return $this->getParent() !== null;
     }
 	
     /**
@@ -302,7 +302,7 @@ trait NodeTrait
     public function root()
     {
         $node = $this;
-        while ($parent = $node->getParent())
+        while ($parent = $node->getParent() && !empty($parent) )
             $node = $parent;
         return $node;
     }

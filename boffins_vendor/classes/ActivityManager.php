@@ -24,140 +24,347 @@ use boffins_vendor\classes\Tree\{Node};
  * 
  * @future
  * Extend this by using the redis stream log data structure. This data structure is best suited for the goal of Activity Manager 
- * however, it was discovered late in the development process of Activity Stream (the project name that generated Activiyt Manager).
+ * however, it was discovered late in the development process of Activity Stream (the project name that generated ActiviytManager).
  * With redis streams however, much greater efficiencies are possible and more advanced uses are possible.
  * https://redis.io/topics/streams-intro
  */
 class ActivityManager extends Component 
 {
 	/**
-	 *  Tree of activity message nodes that indicate all the activities that occur in a given ActivityManager/Request. 
+	 * Serie of activity message nodes/trees that indicate all the activities that occur in a given ActivityManager/Request.
+	 * Each series represents a tree (or node).
 	 */
-	protected $activityTree = null;
+	protected $activitySeries = null;
 	
 	/**
-	 *  tracks the current active node in the tree so that you can make good guesses as to what should be a child node or if you should 
-	 *  act on the node you are on.
+	 * tracks the current active node in the series. You should only act on the current activity node when generating a message
+	 * but you manage the activity series by keeping track of your current node and switching to a new node when you actually need 
+	 * one.
 	 */
 	protected $currentActivityNode = null;
 	
 	/**
-	 *  tracks the objects you have treated so that you are not adding the same object in the same tree doing the same thing. 
-	 *  an object may have duplicates in the activity tree but only if it is transformed i.e. it occurs in a different DB activity such 
-	 *  as find and update. 
+	 * tracks the objects you have treated so that you are not adding the same object in the same tree doing the same thing. 
+	 * an object may have duplicates in the activity tree but only if it is transformed i.e. it occurs in a different DB activity such 
+	 * as find and update. 
 	 */
 	protected $discoveredObjects = [];
 	
 	/**
-	 *  Keeps a set of activity objects that activity manager watches/listens to. Outside of this list (which is populated upon init)
-	 *  other objects are ignored. In order for an object to be listened to, it needs to suscribe. 
+	 * Keeps a set of activity objects that activity manager watches/listens to. Outside of this list (which is populated upon init)
+	 * other objects are ignored. In order for an object to be listened to, it needs to suscribe. 
 	 */
 	protected $_activityObjectClasses = [];
 	
 	/**
-	 *  what is this?
+	 * what is this?
 	 */
 	protected $_subscriptions = [];
 	
 	/**
-     * @var Controller|\yii\web\Controller|\yii\console\Controller the controller that initiates the source action
+     * the controller that initiates the source action Controller|\yii\web\Controller|\yii\console\Controller 
 	 */
 	protected $sourceControllerID;
 	
 	/**
-	 *  the action that commences the activity. 
+	 * the action that commences the activity. 
 	 */
 	protected $sourceActionID;
 	
 	/***
-	 *  the user who makes the request that initiates the activities. 
-	 *  Note that each activity manager manages only one request so only ever has one actor. That said,
-	 *  this variable is public so that, through the process of request, it can be intercepted and potentially restyled. 
+	 * the user who makes the request that initiates the activities. This variable is expected to be a simple string.
+	 * Note that each activity manager manages only one request so only ever has one actor. That said,
+	 * this variable is public so that, through the process of request, it can be intercepted and potentially restyled. 
 	 */
 	public $actor;
 
-	public $globalCount = 0;
+	/***
+	 * simple boolean tracker to determine if activity manager should terminate all observation of the action.
+	 * if true. Observation is terminated. 
+	 */
+	protected $terminate = false;
 
+	/***
+	 * Cool off period during which similar actions will be ignored. This is to prevent manager from tracking similar actions within 
+	 * the cool off period.
+	 */
+	public $coolOff = 5;
+
+	/***
+	 * an array to emulate a stack. This array should not be handled directly but on through prodided functions 
+	 * addToStack() - add an item to the top of the stack
+	 * removeFromStack() - removes the top item from stack
+	 * topStackItem() - returns the top stack item
+	 * @future convert stack into a class.
+	 */
+	private $_stack = null;
+
+	/**
+	 * indicate whether the stack is NEW or being USED in a new stack cycle.
+	 */
+	private $_stackState = 0;
+
+	/***
+	 * this indicates that the stack iS new. The stack is considered NEW at the point when it is first populated. It continuues to be 
+	 * considered new as long as it is not emptied even if more items are added to the stack and items are removed, it remains new. 
+	 * It only becomes USED when after populting it, you then empty it.
+	 */
+	const STACK_IS_NEW = 1;
+
+	/***
+	 * this indicates that the stack iS USED. The stack is considered USED when it has been populated then emptied
+	 * so that it is available for a new cycle of populating and removing items.  
+	 */
+	const STACK_IS_USED = -1;
+
+	/***
+	 * each redis key should begin with a prefix which indicates which module is using redis for that key. This is to prevent clashing
+	 * keys within the application space.
+	 */
+	const REDIS_NAMESPACE_PREFIX	= "AM"; //activity manager.
+
+	/** 
+	 * an array of intercepts to run before generating activity message(s)
+	 */
+	public $intercepts = [];
 
 	/**
 	 * @brief {@inheritdoc}
 	 * 
-	 * @details basic initialisations and start listening to controller actions (only those that are relevant to the activity manager)
+	 * @details basic initialisations and start listening to controller actions 
+	 * (only those that are relevant to the activity manager)
 	 */
 	public function init()
 	{
+		Yii::warning("Initialising Activity Manager", __METHOD__);
 		parent::init();
-						
-		$this->currentActivityNode = $this->activityTree = new ActivityMessageNode;
+		$this->currentActivityNode = $this->activitySeries[0] = new ActivityMessageNode; //first, primary tree.
 		
-		foreach ($this->getActivityObjectClasses() as $activityObjectClass) { 
+		foreach ($this->getActivityObjectClasses() as $activityObjectClass) {
 			$controller = $activityObjectClass->controller_name;
-			ActionEvent::on($controller, \yii\web\Controller::EVENT_BEFORE_ACTION, [$this, 'handleBeforeAction']);
-			ActionEvent::on($controller, \yii\web\Controller::EVENT_AFTER_ACTION, [$this, 'handleAfterAction']);
-		}
-		
-		if ( Yii::$app->user->identity instanceof boffins_vendor\classes\BoffinsArRootModel ) { //this never happens which means activity
-																							//manager is instantiated before a user is
-																							//created
-			throw new yii\base\InvalidArgumentException("Can't get a public title.");
-		}
+			ActionEvent::on($controller, BoffinsBaseController::EVENT_BEFORE_ACTION, [$this, 'handleBeforeAction']);
+			ActionEvent::on($controller, BoffinsBaseController::EVENT_AFTER_ACTION, [$this, 'handleAfterAction']);
+		}		
 	}
 	
 	/**
-	 *  @brief 
-	 *  
-	 *  @param [in] $event The event object triggered by the controller
-	 *  @return void
-	 *  
-	 *  @details More details
+	 * @brief 
+	 * 
+	 * @param [in] $event The event object triggered by the controller
+	 * @return void
+	 * 
+	 * @details More details
 	 */
 	public function handleBeforeAction($event)
 	{
 		$this->sourceControllerID = $event->sender->id;
 		$this->sourceActionID = $event->action->id;
+		$sessID = Yii::$app->session->id;
+		$key = self::REDIS_NAMESPACE_PREFIX . ":session:$sessID:{$this->sourceControllerID}/{$this->sourceActionID}";
+		$escapedStr = 'frontend\controllers\\' . ucfirst($this->sourceControllerID) . 'Controller' ;
+		Yii::warning("$key", "SEE KEY");
+
+		$trackedActions = \frontend\models\ActivityAction::find()
+										->where([
+											'controller_name' => $escapedStr,
+											'action' => $this->sourceActionID,
+										])
+										->count();
+
+		//var_dump($key);
+		if ( $trackedActions < 1 ) {
+			Yii::warning("Activity Manager does not track this action. Terminating shortly", __METHOD__);
+			$this->terminate = true; //this action is not being tracked by activity streem. 
+			return;
+		}
 		
+		$redis = Yii::$app->redis;
+		if ( $redis->exists($key) ) {
+			Yii::warning("This action has been run within the last {$this->coolOff} seconds. Terminating duplicate", __METHOD__);
+			$this->terminate = true; //this action has been run before within this instance. This is to counter a potential bug.
+			return;
+		}
+
+		$redis->setex($key, $this->coolOff, 1); //SETEX key expire_in_seconds string_value NOTE: cooloff period can be set from config
+
 		Yii::warning('Activity Manager is now tracking events on ' . $this->sourceControllerID . ' through ' . $this->sourceActionID, __METHOD__);
 		
 		foreach ($this->getActivityObjectClasses() as $activityObjectClass) {
-			//attach event handlers for all relevant events for each model in $activityObjectClass
-			//these are class level event handlers so they will listen to the events of all 
-			//instances of the class which are created within this action. 
+			//attach event handlers for COMPLETED_ACTIVITY and BEGIN_ACTIVITY which are special Activity events 
+			//triggered by a BARRM instance when it conducts an activity which it wants Activity Manager to track.
+			//these are class level event handlers so they will listen to the events of all
+			//instances of the class that are created within this action.
+			//@future - make this so that some instances do not trigger the activty manager.
 			$ARModelClass = $activityObjectClass->class_name;
-			Yii::warning("Creating listeners on specfic events for $ARModelClass", __METHOD__);
+			Yii::info("Creating listeners on specfic events for $ARModelClass", __METHOD__);
 			
 			ActivityEvent::on($ARModelClass, BoffinsArRootModel::COMPLETED_ACTIVITY, [$this, 'handleCompletedActivity']);
 			ActivityEvent::on($ARModelClass, BoffinsArRootModel::BEGIN_ACTIVITY, [$this, 'handleBeginActivity']);
 		}
-		//check the subscriptions this user is currently listed on
-		//if any of these subscriptions result in an object activiity 
-		//record that object activity 
 	}
 	
+	/**
+	 * @brief
+	 * 
+	 * @details
+	 */
 	public function handleBeginActivity($event)
 	{
-		static $staticCount = 0;
-
+		//do some house keeping to make sure that this event was triggered correctly
 		if (! $event instanceof ActivityEvent) {
 			throw new yii\base\InvalidCallException("Activity Manager only works with instances or child classes of ActivityEvent!");
 		}
 
-		
-		Yii::warning("Commence Activity static:" . ++$staticCount . ' Global:' . ++$this->globalCount, __METHOD__);
+		if ($event->eventPhase != ActivityEvent::ACTIVITY_EVENT_PHASE_BEFORE) {
+			throw new yii\base\InvalidCallException("This event should have a phase {ActivityEvent::ACTIVITY_EVENT_PHASE_BEFORE}");
+		}
 
+		if ( ! isset($event->additionalParams['shortClass']) ) {
+			throw new yii\base\InvalidCallException("This event must provide shortClass details of the BARRM");
+		}
+
+
+		static $emptyObjectCount = 0;
 		$activityObject = $event->sender;
-
-		if ( empty($activityObject) ) {
-			return;
-		}
-		$objectClass = empty($activityObject) ? $activityObject->additonalParams['modelClass'] : $activityObject->shortClassName();
-		$id = $activityObject->id;
+		$objectClass = $event->additionalParams['shortClass'];
+		$id = empty($activityObject) ? 'e:' . ++$emptyObjectCount : $activityObject->id;
 		$modelActivity = $event->modelAction;
+		$key = "{$objectClass}:{$modelActivity}:{$id}";
+		//var_dump($id);
 		
-		if ( array_key_exists("{$objectClass}:{$modelActivity}:{$id}", $this->discoveredObjects) ) {
+		Yii::info("Starting an new activity with the following key: $key", __METHOD__);
+
+		if ( array_key_exists($key, $this->discoveredObjects) ) {
+			Yii::warning("This is totally unexpected. I have alread found this activity???", __METHOD__);
 			return;
 		}
 
+		if ( empty($activityObject)	&& empty($event->additionalParams['modelClass']) ) {
+			Yii::warning("This could cause a serious error. When generating an event, you must critically provide a sender object and/or provide a modelClass to the event->additionalParams array ", __METHOD__);
+			return;
+		}
 
+		switch ($modelActivity) {
+			case BoffinsArRootModel::MODEL_ACTIVITY_FIND : 
+				$this->handleBeforeFind($event);
+				break;
+			case BoffinsArRootModel::MODEL_ACTIVITY_INSERT : 
+				$this->handleBeforeInsert($event);
+				break;
+			case BoffinsArRootModel::MODEL_ACTIVITY_UPDATE : 
+				$this->handleBeforeUpdate($event);
+				break;
+			case BoffinsArRootModel::MODEL_ACTIVITY_SOFT_DELETE : 
+				$this->handleBeforeSoftDelete($event);
+				break;
+			//have not treated delete proper. 
+			default: 
+				Yii::error("Scratching head. Activity manager doesn't track this event and yet found it???");
+				break;
+		}
+	}
+
+	/**
+	 * @brief 
+	 *  
+	 * @param [ModelEvent] $event The event object triggered by ActiveRecord
+	 * @return void
+	 *  
+	 * @details More details
+	 */
+	protected function handleBeforeFind($event) 
+	{
+		$activityObject = $event->sender;
+		$aoClass = $event->additionalParams['shortClass'];
+
+		switch ( $this->sourceActionID ) {
+			case 'index' :
+				//in an index, simply provide a list of activity objects
+				if ( $this->classMatchesController($aoClass) ) {
+					//Yii::warning("Using a child node as current");
+					$childNode = new ActivityMessageNode;
+					$this->currentActivityNode->addChildNode($childNode);
+					$this->currentActivityNode = $childNode;
+				}
+				break;
+
+			case 'view' :
+				if ( !$this->stackIsEmpty() ) {
+					//Yii::warning("Creating a child node");
+					//attachh a child node to the tree. 
+					$childNode = new ActivityMessageNode;
+					$this->currentActivityNode->addChildNode($childNode);
+					$this->currentActivityNode = $childNode;
+				}
+
+				if ( $this->_stackState === SELF::STACK_IS_USED && $this->stackIsEmpty() ) {
+					//Yii::warning("Starting a new series");
+					//start a new seriess
+					$newNode = $this->getNewSeriesNode();
+					$this->currentActivityNode = $newNode;
+				}
+
+				if ( $this->_stackState === SELF::STACK_IS_NEW && $this->stackIsEmpty() ) {
+					//Yii::warning("Doing nothing. At the head. ");
+
+					//do nothing here.
+					//in a view, if there is nothing in a brand new stack then do nothing - (just add to to the stack)
+					//at this point, the currentActivityNode is already set at the very head of the tree so there is no work to do.
+					//if the stack is not empty, go down one child (i.e. first if block above.)
+					//however, at the beginning of each new stack cycle, you add a new series and set the
+					//currentActivityNode to the head of that series (i.e. the second if block above)
+					//providing this only to improve code readability.
+				}
+				break;
+
+			default:
+				//do nothing. 
+		}
+		//Yii::trace("Adding an item to the stack: {$aoClass}:beforeFind");
+		$this->addToStack("{$aoClass}:beforeFind");
+		//var_dump($this->_stack); //die();
+	}
+
+	/**
+	 * @brief 
+	 *  
+	 * @param [ModelEvent] $event The event object triggered by ActiveRecord
+	 * @return void
+	 *  
+	 * @details More details
+	 */
+	protected function handleBeforeInsert($activityObject) 
+	{
+		$activityObject = $event->sender;
+		$aoClass = $event->additionalParams['shortClass'];
+		//var_dump($activityObject);
+		//nothing here really 
+	}
+
+	/**
+	 * @brief 
+	 *  
+	 * @param [ModelEvent] $event The event object triggered by ActiveRecord
+	 * @return void
+	 *  
+	 * @details More details
+	 */
+	protected function handleBeforeUpdate($activityObject) 
+	{
+		//nothing here yet
+	}
+
+	/**
+	 * @brief 
+	 *  
+	 * @param [ModelEvent] $event The event object triggered by ActiveRecord
+	 * @return void
+	 *  
+	 * @details More details
+	 */
+	protected function handleBeforeSoftDelete($activityObject) 
+	{
+		//nothing here yet
 	}
 
 	/**
@@ -169,34 +376,41 @@ class ActivityManager extends Component
 	 */
 	public function handleCompletedActivity($event)
 	{
+		//conduct some housekeeping and then hand over to proper handlers 
 		if (! $event instanceof ActivityEvent) {
 			throw new yii\base\InvalidCallException("Activity Manager only works with instances or child classes of ActivityEvent!");
 		}
 
-		Yii::warning("Running this a second time! Or first??? {$event->modelAction} ", __METHOD__);
+		if ($event->eventPhase != ActivityEvent::ACTIVITY_EVENT_PHASE_AFTER) {
+			throw new yii\base\InvalidCallException("This event should be of phase {ActivityEvent::ACTIVITY_EVENT_PHASE_AFTER}");
+		}
+
+		//Yii::warning("Running this a second time! Or first??? {$event->modelAction} ", __METHOD__);
 		$activityObject = $event->sender;
 		$objectClass = $activityObject->shortClassName();
 		$id = $activityObject->id;
 		$modelActivity = $event->modelAction;
+		$key = "{$objectClass}:{$modelActivity}:{$id}";
 		
-		if ( array_key_exists("{$objectClass}:{$modelActivity}:{$id}", $this->discoveredObjects) ) {
+		if ( array_key_exists($key, $this->discoveredObjects) ) {
+			Yii::warning("This object has already been handled.", __METHOD__);
 			return;
 		}
 		
 		$this->discoveredObjects["{$objectClass}:{$modelActivity}:{$id}"] = $id;
 		
 		switch ($modelActivity) {
-			case BoffinsArRootModel::MODEL_ACTIVITY_FIND : 
+			case BoffinsArRootModel::MODEL_ACTIVITY_FIND :
 				$this->handleAfterFind($event);
 				break;
-			case BoffinsArRootModel::MODEL_ACTIVITY_INSERT : 
+			case BoffinsArRootModel::MODEL_ACTIVITY_INSERT :
 				$this->handleAfterInsert($event);
 				break;
-			case BoffinsArRootModel::MODEL_ACTIVITY_UPDATE : 
+			case BoffinsArRootModel::MODEL_ACTIVITY_UPDATE :
 				$this->handleAfterUpdate($event);
 				break;
-			case BoffinsArRootModel::MODEL_ACTIVITY_SOFT_DELETE : 
-				$this->handleAfterDelete($event);
+			case BoffinsArRootModel::MODEL_ACTIVITY_SOFT_DELETE :
+				$this->handleAfterSoftDelete($event);
 				break;
 			//have not treated delete proper. 
 			default: 
@@ -206,46 +420,100 @@ class ActivityManager extends Component
 	}
 
 	/**
-	 *  @brief 
-	 *  
-	 *  @param [ModelEvent] $event The event object triggered by ActiveRecord
-	 *  @return void
-	 *  
-	 *  @details More details
+	 * @brief 
+	 *
+	 * @param [ModelEvent] $event The event object triggered by ActiveRecord
+	 * @return void
+	 *
+	 * @details More details
 	 */
-	protected function handleAfterFind($event) 
+	protected function handleAfterFind($event)
 	{
 		$activityObject = $event->sender;
-		if ( $activityObject->hasMethod('shortClassName') ) {
-			$objectName = ucfirst($activityObject->shortClassName());
-			$this->addActivityToTree($activityObject, [
-				'verb' => 'found',
-				'article' => 'the',
-				'object' => $objectName . ' ' . $activityObject->getPublicTitleofBARRM(),
-			]);
+		$aoClass = $activityObject->shortClassName();
+		//var_dump($this->_stack);
+		if ( $this->sourceActionID == 'index' ) {
+			Yii::trace("Applying afterFind INDEX rule for this class: $aoClass");
+			if ( ! $this->classMatchesController($aoClass) ) {
+				//in a index, only the controller related objects are treated. 
+				Yii::trace("This controller does not match this object. In index, it is ignored and top stack item removed.");
+				Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point:  1");
+				$this->removeFromStack();
+				return;
+			}
+		}
+		
+		Yii::trace("Will test the class: $aoClass with id {$activityObject->id} agains the stack item: [{$this->topStackItem()}]");
+		if ( $this->topStackItem() != "{$aoClass}:beforeFind" ) {
+			//this scenario could occur when you conduct a find on another BARRM which results in NO active records. 
+			//In which case, there will be no afterFind but a beforeFind will be trigggered. 
+			//Therefore, remove the offending stack item and return in the hopes that the next stack item's 
+			//related event will be triggered
+			//@future - the scenario could occur in which a completed activity (afterFind) is triggered wthout 
+			//it's begin activity ever being triggered. This would mess up the stack completely. Guard against this. 
+			Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point: 2");
+			$this->removeFromStack();
+			return;
+		}
+
+		if ( $this->sourceActionID != 'index' ) {
+			if ( $this->topStackItem() == "{$aoClass}:beforeFind" ) {
+				Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point: 3");
+				$this->removeFromStack();
+			}
+		}
+
+		Yii::warning("Passed all tests. Now generating a message.");
+
+		$defaultConstructs = [
+			'verb'=> Yii::t("activity_manager", "afterFind_verb"),
+			'article' => Yii::t("activity_manager", "afterFind_article"),
+			'object' => Yii::t("activity_manager", $aoClass) . ' - ' . $activityObject->getPublicTitleofBARRM(),
+		];
+
+		$modelConstructs = isset($event->additionalParams['modelConstructs']) ? $event->additionalParams['modelConstructs'] : [] ;
+		$correctConstructs = array_merge($defaultConstructs, $modelConstructs);
+		$tes = $this->addActivityToTree2($activityObject, $correctConstructs);
+
+		//Yii::warning($tes->resolve(), implode(",", $modelConstructs) );
+		//Yii::warning($tes->resolve(), implode(",", array_keys($correctConstructs) ) );
+
+
+		if ( $this->currentActivityNode->isChild() ) {
+			$this->currentActivityNode = $this->currentActivityNode->parent;
 		}
 		//Yii::warning("$objectName " . $activityObject->id . ' is found', 'Actvity Manager');
+
+		if ( $this->stackIsEmpty() && $this->sourceActionID == 'index' ) {
+			$topRoot = reset($this->activitySeries);
+			//add objecte details and message to this root. 
+		}
 	}
 	
 	/**
 	 *  @brief 
-	 *  
+	 *
 	 *  @param [ModelEvent] $event The event object triggered by ActiveRecord
 	 *  @return void
-	 *  
+	 *
 	 *  @details More details
 	 */
-	protected function handleAfterInsert($event) 
+	protected function handleAfterInsert($event)
 	{
 		$activityObject = $event->sender;
+		$aoClass = $activityObject->shortClassName();
+		$defaultConstructs = [
+			'verb'=> Yii::t("activity_manager", "afterInsert_verb"),
+			'article' => Yii::t("activity_manager", "afterInsert_article"),
+			'object' => Yii::t("activity_manager", $aoClass) . ' - ' . $activityObject->getPublicTitleofBARRM(),
+		];
+
+		$modelConstructs = isset($event->additionalParams['modelConstructs']) ? $event->additionalParams['modelConstructs'] : [] ;
+		$correctConstructs = array_merge($defaultConstructs, $modelConstructs);
+		
 		if ( $activityObject->hasMethod('shortClassName') ) {
 			$objectName = $activityObject->shortClassName();
-			$this->addActivityToTree($activityObject, [
-				'verb' => 'created',
-				'article' => 'a',
-				'object' => $objectName . ': ' . $activityObject->getPublicTitleofBARRM(),
-			]);
-
+			$this->addActivityToTree2($activityObject, $correctConstructs);
 		}
 		//Yii::warning("$objectName " . $activityObject->id . ' is found', 'Actvity Manager');
 	}
@@ -261,9 +529,19 @@ class ActivityManager extends Component
 	protected function handleAfterUpdate($event) 
 	{
 		$activityObject = $event->sender;
+		$aoClass = $activityObject->shortClassName();
+		$defaultConstructs = [
+			'verb'=> Yii::t("activity_manager", "afterUpdate_verb"),
+			'article' => Yii::t("activity_manager", "afterUpdate_article"),
+			'object' => Yii::t("activity_manager", $aoClass) . ' - ' . $activityObject->getPublicTitleofBARRM(),
+		];
+
+		$modelConstructs = isset($event->additionalParams['modelConstructs']) ? $event->additionalParams['modelConstructs'] : [] ;
+		$correctConstructs = array_merge($defaultConstructs, $modelConstructs);
+		
 		if ( $activityObject->hasMethod('shortClassName') ) {
 			$objectName = ucfirst($activityObject->shortClassName());
-			$this->addActivityToTree($activityObject, [
+			$this->addActivityToTree2($activityObject, [
 				'verb' => 'updated',
 				'article' => 'the',
 				'object' => $objectName . ': ' . $activityObject->getPublicTitleofBARRM(),
@@ -280,13 +558,24 @@ class ActivityManager extends Component
 	 *  
 	 *  @details More details
 	 */
-	protected function handleAfterDelete($event) 
+	protected function handleAfterSoftDelete($event) 
 	{
 		$activityObject = $event->sender;
+		$aoClass = $activityObject->shortClassName();
+
+		$defaultConstructs = [
+			'verb'=> Yii::t("activity_manager", "afterUpdate_verb"),
+			'article' => Yii::t("activity_manager", "afterUpdate_article"),
+			'object' => Yii::t("activity_manager", $aoClass) . ' - ' . $activityObject->getPublicTitleofBARRM(),
+		];
+
+		$modelConstructs = isset($event->additionalParams['modelConstructs']) ? $event->additionalParams['modelConstructs'] : [] ;
+		$correctConstructs = array_merge($defaultConstructs, $modelConstructs);
+
 		if ( $activityObject->hasMethod('shortClassName') ) {
 			
 			$objectName = ucfirst($activityObject->shortClassName());
-			$this->addActivityToTree($activityObject, [
+			$this->addActivityToTree2($activityObject, [
 				'verb' => 'deleted',
 				'article' => 'the',
 				'object' => $objectName . ': ' . $activityObject->getPublicTitleofBARRM(),
@@ -304,48 +593,104 @@ class ActivityManager extends Component
 	 *  
 	 *  @details More details
 	 */
+	static $functionCount;
+
 	public function handleAfterAction($event)
 	{
+		if ( $this->terminate ) { //I've been instructed to terminate activity manager observations.
+			Yii::warning("I've been instructed to terminate", __METHOD__);
+			return;
+		}
+
 		if ( empty(Yii::$app->user->identity) ) {
 			Yii::warning("User component is empty or user identity is not set. Stopping", __METHOD__);
 			return; // there is no user, Activity Manager currently will not work with console requests or before a user identity is set. 20/04/19 WHY???
 		}
-		
-		$user_id = Yii::$app->user->identity->id;
-		//$objectClassID = ActivityObjectClass::findOne(['class_name' => $this->activityTree->activityDetails['object_class'] ])->id;
-		//$userSubscriptions = Subscription::findAll(['object_class_id' => $objectClassID, 'action_id' => $this->sourceActionID ]);
-		//don't forget the object id in the line above. 
-		//$sub_user_id = $userSubscriptions->user_id;
-		//Yii::warning("The number of subscriptions are " . count($userSubscriptions), __METHOD__ );
-		
+
+		//$subscriberUserID = $user_id = Yii::$app->user->identity->id;
+		Yii::Warning(\yii\helpers\VarDumper::dumpAsString($this->activitySeries), "SERIES HERE");
+		$activitySeriesTip = reset($this->activitySeries); //the very first node. Root of the first series.		
+		if ( $activitySeriesTip->isEmpty() ) {
+			Yii::warning("No activity nodes generated. Stopping", __METHOD__);
+			return;
+		}
+
 		if (Yii::$app->has('user') && !empty(Yii::$app->user->identity) && Yii::$app->user->identity instanceof BoffinsArRootModel ) {
 			$actor = Yii::$app->user->identity->getPublicTitleofBARRM();
 		} else {
 			$actor = 'The System';
 		}
+
+		$activitySeriesTip->prependFormat('actor');
+		$activitySeriesTip->addConstruct('actor', $actor);
+
+		//$redis = Yii::$app->redis;
+		$sessID = Yii::$app->session->id;
+		$key = self::REDIS_NAMESPACE_PREFIX . ":session:$sessID:{$this->sourceControllerID}/{$this->sourceActionID}";
+		//$msg = "Runing to die";
+
 		
-		$this->activityTree->prependFormat('actor');
-		$this->activityTree->addConstruct('actor', $actor);
-		Yii::warning($this->activityTree->resolve(), __METHOD__);
+
+		//$objectClassID = ActivityObjectClass::findOne(['class_name' => $this->activityTree->activityDetails['object_class'] ])->id;
+		/*if ( $activitySeriesTip->isEmpty() ) {
+			Yii::warning("Tip is empty", 'SERIES HERE');
+			return;
+		}*/
+		$userSubscriptions = Subscription::find()
+								->joinWith('activityObjectClass aoc')
+								->andWhere( ['aoc.class_name' => $activitySeriesTip->activityDetails['object_class'] ])
+								->andWhere( ['{{%subscription}}.object_id' => $activitySeriesTip->activityDetails['object_id'] ])
+								->andWhere( ['{{%subscription}}.action_id' => $this->sourceActionID])
+								->all();
+
+		Yii::Warning(\yii\helpers\VarDumper::dumpAsString($userSubscriptions), "SUBS HERE2");
+		
+		if ( empty($userSubscriptions) ) {
+			Yii::error("No subscriptions, we still have a problem here.", __METHOD__);
+			$subscriberUserID = Yii::$app->user->identity->id;
+		} else {
+			foreach ( $userSubscriptions as $subscriber ) {
+				$subscriberUserID[] = $subscriber->user_id;
+			}
+			//$subscriberUserID = $userSubscriptions->user_id;
+		}
+		$this->dispatchMessages($activitySeriesTip, $subscriberUserID);
+		//Yii::warning("The number of subscriptions are " . count($userSubscriptions), __METHOD__ );
+		
+		//Yii::warning($this->activityTree->resolve(), __METHOD__);
+		Yii::warning("One increase", __METHOD__);
+		Yii::warning('Activity Manager has now finished tracking events on ' . $event->sender->id, __METHOD__); //sender is FolderController
+		Yii::trace('Activity Manager has now finished tracking events on ' . $event->sender->id, __METHOD__); //sender is FolderController
+	}
+
+	/***
+	 * @brief dispatches messages to a specific node.
+	 * 
+	 * @param [ActivityMessageNode] $node
+	 * @param [int] $userIDs - the id(s) 0f the users who have subscribed to the given activity.
+	 * @param [bool] $resolveAll - defaults to false. If set to true, this will loop through the node to resolve child messages. 
+	 * @return void
+	 */
+	public function dispatchMessages($node, $userIDs, $resolveAll = false)
+	{
+		//nothing yet
 		$redis = Yii::$app->redis;
 		
-		//$redis->lpush( "user_message:$user_id", $this->activityTree->resolve() );
-		//$redis->hmset( "user_message:$user_id", "message", $this->activityTree->resolve(), "date", time() );
-		//echo "<pre>";
-		//var_dump($this->activityTree);
-		
-		//check the activities and activity objects that were generated in this request.
-		//generate messages for each of the objects
-		//encapsulate into a single message
-		//store that message or trigger a message send routine that will ensure the message is published on the frontend.
-		Yii::warning('Activity Manager has now finished tracking events on ' . $event->sender->id, __METHOD__); //sender is FolderController
-
+		if (is_array($userIDs)) {
+			Yii::Warning("Looing through users to send messages");
+			foreach( $userIDs as $userID ) {
+				$redis->lpush( "user_message:$userID", $node->resolve() );
+			}
+		} else {
+			Yii::warning("Sending a single message");
+			$redis->lpush( "user_message:$userIDs", $node->resolve() );
+		}
 	}
-	
+
 	/***
-	 *  @brief getter for private $_activityObjectClasses
-	 *  
-	 *  @return $_activityObjectClasses
+	 * @brief getter for private $_activityObjectClasses
+	 *
+	 * @return $_activityObjectClasses
 	 */
 	public function getActivityObjectClasses()
 	{
@@ -356,11 +701,11 @@ class ActivityManager extends Component
 	}
 	
 	/***
-	 *  @brief fetch activity object classes
-	 *  this is only useful if there is any need, within a request to update the ActivityObject Classes.
-	 *  this function is pretty redundant otherwise.
-	 *  
-	 *  @return $_activityObjectClasses
+	 * @brief fetch activity object classes
+	 * this is only useful if there is any need, within a request to update the ActivityObject Classes.
+	 * this function is pretty redundant otherwise.
+	 *
+	 * @return $_activityObjectClasses
 	 */
 	public function fetchActivityObjectClasses()
 	{
@@ -369,17 +714,17 @@ class ActivityManager extends Component
 	}
 	
 	/***
-	 *  @brief a function that any BARRM can run to subscribe itself to activity stream.
+	 * @brief a function that any BARRM can run to subscribe itself to activity stream.
 	 *  
-	 *  @param [BoffinsArRootModel] $object the object that wants to be subscribed.
-	 *  @params [array] $actions the actions for which this object should be subscribed.
-	 *  @return void
+	 * @param [BoffinsArRootModel] $object the object that wants to be subscribed.
+	 * @params [array] $actions the actions for which this object should be subscribed.
+	 * @return void
 	 *  
-	 *  @details You can call this function simply as follows from any BARRM (only models saved in the DB can subscribe)
-	 *  FROM within any model write:
-	 *  Yii::$app->activityManager->subscribe($this); or Yii::$app->activityManager->subscribe($this, ['view']);
-	 *  In the first example, activity manager will subscribe the BoffinsArRootModel object instance ($this)
-	 *  In the second example, activity manager will subscribe the BoffinsArRootModel instance to listen to the view action only of that object
+	 * @details You can call this function simply as follows from any BARRM (only models saved in the DB can subscribe)
+	 * FROM within any model write:
+	 * Yii::$app->activityManager->subscribe($this); or Yii::$app->activityManager->subscribe($this, ['view']);
+	 * In the first example, activity manager will subscribe the BoffinsArRootModel object instance ($this)
+	 * In the second example, activity manager will subscribe the BoffinsArRootModel instance to listen to the view action only of that object
 	 * @future register new BARRM classes which are not in ActivityObjectClasses set by creating a new instance of 
 	 * ActivityObjectClasses and saving to the DB. This way when someone subscribes a new instance of BARRM and Activity Manager 
 	 * will now begin to listen for it. 
@@ -406,7 +751,7 @@ class ActivityManager extends Component
 
 		$objectClass = ActivityObjectClass::findOne(['class_name' => $object->className()]);
 		if ( empty($objectClass) ) {
-			Yii::error("Hmn. Can't subscribe this object. There is no objectClass!", __METHOD__); //or you include this one. 
+			Yii::error("Hmn. Can't subscribe this object. There is no registerd objectClass!", __METHOD__); //or you include this one. 
 		}
 		
 		$security = new \yii\base\Security;
@@ -420,6 +765,14 @@ class ActivityManager extends Component
 			$subscription->save();
 		}
 	}
+
+	protected function addActivityToTree2($activityObject, $messageConstructs)
+	{
+		$this->assignActivityDetails($this->currentActivityNode, $activityObject);
+		$this->addActivityMessage($messageConstructs, $this->currentActivityNode);
+		return $this->currentActivityNode;
+	}
+
 	
 	/**
 	 * @brief simple function to create an activity message node upon the completion of each activity.
@@ -432,7 +785,7 @@ class ActivityManager extends Component
 	{
 		$sourceModelName = strtolower($activityObject->shortClassName());
 		
-		Yii::warning("Model and Controller: {$sourceModelName} and {$this->sourceControllerID}", __METHOD__);
+		//Yii::warning("Model and Controller: {$sourceModelName} and {$this->sourceControllerID}", __METHOD__);
 		
 		$newNode = new ActivityMessageNode;
 		$this->assignActivityDetails($newNode, $activityObject);
@@ -440,24 +793,23 @@ class ActivityManager extends Component
 			switch ($this->sourceActionID) {
 				case 'index':
 					//in a list. Just list all items
-					$this->currentActivityNode->addChildNode( $this->addActivityMessage($messageConstructs, $newNode) );
+					//$this->assignActivityDetails($this->currentActivityNode, $activityObject);
+					$this->addActivityMessage($messageConstructs, $this->currentActivityNode);
 					break;
 				case 'view':
 					//check url if it's the same one, then
 					if ( $this->objectIsTarget($activityObject) ) {
-						$this->addActivityMessage($messageConstructs, $this->currentActivityNode);
+						$this->assignActivityDetails($this->currentActivityNode, $activityObject);
 						Yii::warning("Object is self!", __METHOD__);
 					} else {
-						$this->currentActivityNode->addChildNode( $this->addActivityMessage($messageConstructs, $newNode) );
-						$this->currentActivityNode = $newNode;
-						
 						Yii::warning("Object is child", __METHOD__);
 					} 
+					$this->addActivityMessage($messageConstructs, $this->currentActivityNode);
 					//Yii::warning("Object is target " . $this->objectIsTarget($event->sender), __METHOD__);
 					break;
 				case 'create':
-					$this->assignActivityDetails($newNode, $activityObject);
-					$this->currentActivityNode = $this->addActivityMessage($messageConstructs, $this->activityTree);
+				$this->assignActivityDetails($newNode, $activityObject);
+				$this->currentActivityNode = $this->addActivityMessage($messageConstructs, $this->activityTree);
 					break;
 				case 'update':
 					$this->assignActivityDetails($newNode, $activityObject);
@@ -476,26 +828,31 @@ class ActivityManager extends Component
 			$this->currentActivityNode->addChildNode( $this->addActivityMessage($messageConstructs) );
 		}
 		
-		return $this->activityTree;
+		//return $this->activityTree;
 	}
 	
 	/**
-	 *  @brief simple function to create an activity message node upon the completion of each activity.
-	 *  
-	 *  @param [arr] $constructs an array of constructs to the activity message node
-	 *  @param [NodeInterface] $node an ActivityMessageNode
-	 *  @return [ActivityMessageNode]
+	 * @brief simple function to create an activity message node upon the completion of each activity.
+	 *
+	 * @param [array] $constructs an array of constructs to the activity message node
+	 * @param [NodeInterface] $node an ActivityMessageNode
+	 * @param [string] $msgFormat a string indicating the format
+	 * @return [ActivityMessageNode]
 	 */
-	protected function addActivityMessage($constructs, &$node = null)
+	protected function addActivityMessage($constructs, &$node = null, $msgFormat = null)
 	{
 		if ( $node === null ) {
 			$node = new ActivityMessageNode;
 		} elseif ( !$node instanceof ActivityMessageNode ) {
-			throw new yii\base\InvalidArgumentException("You must provide a node instance of ActivityMessageNode: " . __METHOD__ );
+			throw new yii\base\InvalidArgumentException("You must provide a node instance of ActivityMessageNode." . __METHOD__ );
 		}
 		
 		foreach ( $constructs as $construct => $value ) {
 			$node->addConstruct($construct, $value);
+		}
+
+		if ( $msgFormat !== null ) {
+			$node->format = $msgFormat; 
 		}
 				
 		Yii::warning($node->resolve(), __METHOD__);
@@ -552,5 +909,155 @@ class ActivityManager extends Component
 	{
 		$node->activityDetails['object_id'] = $activityObject->id;
 		$node->activityDetails['object_class'] = $activityObject->className();
+	}
+
+	/***
+	 * @brief a function to check if a given activity object class matches the current controller which ActivityManager is observing
+	 * @param $class the clas you want to test against.
+	 * @return boolean - true is the given short class name matches the contoller
+	 */
+	protected function classMatchesController($class)
+	{
+		Yii::warning("$class : {$this->sourceControllerID}");
+		return strtolower($class) == strtolower($this->sourceControllerID);
+	}
+
+	/***
+	 * @brief adds an item to the stack 
+	 *
+	 * @param [mixed] $item 
+	 */
+	protected function addToStack($item)
+	{
+		if ( $this->_stack === null ) {
+			$this->_stack = [];
+			$this->_stack[] = $item;
+			$this->_stackState = SELF::STACK_IS_NEW;
+			return;
+		} 
+
+		array_push($this->_stack, $item);
+	}
+
+	/***
+	 * @brief removes an item from the stack.
+	 *
+	 * @return mixed
+	 */
+	protected function removeFromStack()
+	{
+		array_pop($this->_stack);
+		if ( empty($this->_stack) ) {
+			$this->_stackState = SELF::STACK_IS_USED;
+		}
+	}
+
+	/***
+	 * @brief returns the top item on the stack 
+	 * @return mixed 
+	 */
+	protected function topStackItem()
+	{
+		if ( empty($this->_stack) ) {
+			return null;
+		}
+
+		$item = end($this->_stack);
+		reset($this->_stack);
+		return $item;
+	}
+
+	/***
+	 * @brief checks if stack is empty 
+	 * @return bool - whether or not the stack is empty.
+	 */
+	protected function stackIsEmpty()
+	{
+		return empty($this->_stack);
+	}
+
+	/***
+	 * @brief creates a new series in the activitySeries array under specific conditions.
+	 * 
+	 * @return void 
+	 * 
+	 * @details the activitySeries is an array that models a series of nodes/trees of activities within a single action.
+	 * Generally, a single action should generate a single activity i.e. a node. In some actions, like an index or view
+	 * what is generated is a set of related activities which are collected in a tree. In even more complex actions,
+	 * the action results in not just in one set of related activities, but a series of activities. Each set of related
+	 * activities is collected in a tree, but there are a set of trees or series of related activities  - as in a forest
+	 * which is held by the activitySeries array.
+	 * A new series can only be created when one set of activities is completely finished. The best way to determine this is through
+	 * the stack. When the stack is filled (with strings indicating the activieies) and then emptied (when the related activies
+	 * are completed) and another activity is started (or set of activities) then a new series can be created.
+	 */
+	protected function getNewSeriesNode()
+	{
+		static $index = 0;
+		if ( isset( $this->activitySeries[$index] ) && !$this->activitySeries[$index]->isEmpty() ) {
+			Yii::warning("Through a new index");
+			$node = $this->activitySeries[++$index] = new ActivityMessageNode;
+			return $node;
+		}
+		if (isset( $this->activitySeries[$index]) ) {
+			Yii::warning("Reusing that index");
+			return $this->activitySeries[$index];
+		}
+
+		if ( $this->currentActivityNode->isEmpty() ) {
+			Yii::warning("The last node on the previous series is stil empty? This shouldn't happen really!");
+			return $this->currentActivityNode;
+		}
+
+		throw new yii\base\InvalidCallException("There appears to be a logical error in navigating the activity series object!");
+	}
+
+	/***
+	 * @brief provides a simple way to include a message to an activity node at any point BEFORE it is handled by acivityManager
+	 * 
+	 * @param [array] $messageDetails an array providing details of the message to include. 
+	 * @details the $messageDetails array must provide some information as a minimum for this to work. 
+	 * 1. Provide the message you want to add. For now, this should just be a simple message with the flag (array index) indicating if 
+	 * the message is to be apended or prepended upon resolution. 
+	 * 2. The object to which this message relates. Right now, messages need to be linked to specific activity objects.
+	 * 
+	 * @future create a message draft object which can be provied instead of the array. The message draft object at instantiation 
+	 * would test against the conditions automatically. Then create a simple system with which a message construct can be amended 
+	 * through a message draft.
+	 */
+	public function includeMessage($messageDetails) 
+	{
+		if (!is_array($messageDetails)) {
+			throw new yii\base\InvalidCallException("You must provide an array for message details.");
+		}
+
+		if ( !( array_key_exists('PREPEND', $messageDetails) || array_key_exists('APPEND', $messageDetails) ) ) {
+			throw new yii\base\InvalidCallException("You must provide a message string in either a PREPEND or APPEND key");
+		}
+
+		if ( ( array_key_exists('PREPEND', $messageDetails) && ! is_string($messageDetails['PREPEND']) ) ) {
+			throw new yii\base\InvalidCallException("This value must be a string");
+		}
+
+		if ( ( array_key_exists('APPEND', $messageDetails) && ! is_string($messageDetails['APPEND']) ) ) {
+			throw new yii\base\InvalidCallException("This value must be a string");
+		}
+		
+		if ( !( array_key_exists('OBJECT_ID', $messageDetails) ) ) {
+			throw new yii\base\InvalidCallException("You must provide an object id");
+		}
+		
+		if ( !( array_key_exists('OBJECT_SHORT_CLASS', $messageDetails) ) ) {
+			throw new yii\base\InvalidCallException("You must provide an object class");
+		}
+
+		$this->informActivity($messageDetails);
+
+	}
+
+	protected function informActivity($messageDetails) 
+	{
+		$interceptKey = $messageDetails['OBJECT_SHORT_CLASS'] . ':' . $messageDetails['OBJECT_ID'];
+		$this->intercepts[$interceptKey] = $messageDetails;
 	}
 }
