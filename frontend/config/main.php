@@ -13,7 +13,6 @@ return [
 					'queue', 
 					'log',
 					'activityManager'
-					
 					],
     'controllerNamespace' => 'frontend\controllers',
 	'on beforeRequest' => ['boffins_vendor\access\ApplicationEventsHandler', 'handleBeforeRequest'],
@@ -53,7 +52,7 @@ return [
 			'class' => 'yii\redis\Cache',
 		 ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => YII_DEBUG ? 5 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
@@ -115,7 +114,9 @@ return [
 	],
 	],
 
-	'defaultRoute' => 'folder/index',
+	'defaultRoute' => 'folder/index2', /*deliberately set to index2 which is an empty view as index causes multiple actions 
+	to be run when there are missing asset bundles (redirects?). This happens even when you run other actions as somehow 
+	the default route is also run???? */
 
     'params' => $params,
 	'as beforeRequest' => [
