@@ -13,6 +13,7 @@ use frontend\models\ComponentAttributeModel;
 use frontend\models\InviteUsers;
 use frontend\models\UserDb;
 use boffins_vendor\queue\FolderUsersQueue;
+use boffins_vendor\classes\BoffinsBaseController;
 
 class ComponentController extends Controller
 {
@@ -69,7 +70,7 @@ class ComponentController extends Controller
 		$modelData = $collector->models;*/
 		$folder = new Folder();
 		$getCurrentFolder = $folder->find()->andWhere(['id' => $folderId])->one();
-		$getFolderUsers = $getCurrentFolder->folderUsers;
+		$getFolderUsers = $getCurrentFolder->users;
 		
 		$componentModel = new Component();
 		$query = $componentModel->find()->andWhere(['id'=>$id]);

@@ -289,7 +289,6 @@ text-overflow: ellipsis;
 	//var_dump(Yii::$app->session['socketUsers']);
 ?>
 <div class="folder-index">
-
 		<? 
 			$style = 'background-color:transparent;float: right;width: 20px;';
 			$iconJs = 'if($(this).hasClass("ubuxaTimes")){

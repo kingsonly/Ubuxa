@@ -36,6 +36,7 @@ class Folder extends FolderARModel
 	public $privateFolder;
 	public $upload_file;
 	public $externalTemplateId;
+	public $controlerLocation = 'frontend';
 	const ROLEAUTHOR = 'author';
     public static function tableName()
     {
@@ -118,12 +119,12 @@ class Folder extends FolderARModel
      * @return \yii\db\ActiveQuery
      */
 	
-    public function getUsers()
-    {
-        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
-    }
+//    public function getUsers()
+//    {
+//        return $this->hasMany(Userdb::className(), ['id' => 'user_id'])->viaTable('tm_folder_manager', ['folder_id' => 'id']);
+//    }
 	
-	public function getFolderUsers()
+	public function getUsers()
 	{
          return $this->hasMany(UserDb::className(), ['id' => 'user_id'])->via('folderManager');
     }
@@ -298,18 +299,19 @@ class Folder extends FolderARModel
 			$ext = $file->extension;
 			$newName = \Yii::$app->security->generateRandomString().".{$ext}";
 			$basePath = explode('/',\Yii::$app->basePath);
+			$this->controlerLocation === 'API'?\Yii::$app->params['uploadPath'] = '../../frontend/web/uploads/':\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
 			//\Yii::$app->params['uploadPath'] = \Yii::$app->basePath.'/web/uploads/';
-			$path = 'uploads/' . $newName;
+			\Yii::$app->params['uploadPath'] = '../../frontend/web/uploads/';
+			$path = \Yii::$app->params['uploadPath'] . $newName;
 			$dbpath = 'uploads/' . $newName;
 			
 			$holdPath= $dbpath;
 			
 			if($file->saveAs($path)){
 				
-				$this->folder_image = $path;
+				$this->folder_image = $dbpath;
 				
 			}
-			//$this->file_location = implode(",",$holdPath);
 			
             return true;
         } else {

@@ -145,12 +145,10 @@
     width: 85%;
 }
 .document-preview{
-    background-color: #ccccccd1;
     border-radius: 3px;
     border: 0;
     box-sizing: border-box;
     height: 100%;
-    padding: 12px;
     width: 100%;
 }
 .doc-box{
@@ -234,6 +232,9 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.edoc-dropdown{
+  min-height: 125px;
+}
 </style>
   <div class="document-wrapper <?= !empty($forFolder) ? $forFolder : '';?>" id="document-wrapper<?=$target;?>">
     <div class="doc-container" id="doc-container<?=$target;?>">
@@ -276,7 +277,7 @@
             </div>
             <div class="dropdown" id="edoc-display<?=$value->id?>">
             <span class="delete-document dropdown-toggle" id="dropdownMenuButton-doc<?=$value->id;?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-docid="<?= $value->id;?>">Delete</span>
-            <div class="dropdown-menu edoc-drop" id="dropdownMenuButton<?=$value->id;?>" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu edoc-drop <?=$folderClass;?>" id="dropdownMenuButton<?=$value->id;?>" aria-labelledby="dropdownMenuButton">
               <div class="delete-header-holder">
                 <span class="delete-header">
                   Confirm Delete
@@ -307,6 +308,8 @@
 
 <?
 $deleteEdocument = Url::to(['edocument/delete']); //path for delete action
+$boardUrl = Url::to(['task/board']);
+$edocsUrl = Url::to(['edocument/index']);
 $taskUrl = Url::to(['task/view']);
 $list = <<<JS
 //useful function to find nested parents of DOM
@@ -382,8 +385,8 @@ $(".confirm-doc-delete").on('click', function(e){
   getThis = $(this);
   $(this).next().show();
   //var taskId = $('#document-wrappertask').getParent(3).attr('data-taskId');
-  //var folderId =$('#document-wrappertask').getParent(3).attr('data-folderId');
-  //console.log(taskId, folderId);
+  //var folderId =$('.board-specfic').attr('data-folderId');
+  //console.log(folderId);
   _deleteEdocument(edocId,getThis) ;  
 })
 
@@ -411,9 +414,9 @@ function _deleteEdocument(edocId, getThis,taskId,folderId){
           },
         success: function(res, sec){
           toastr.success('Document Deleted');
-          $.pjax.reload({container:"#kanban-refresh",async: false});
+          //$.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
           $.pjax.reload({container:"#task-list-refresh",async: false});
-         
+          //$.pjax.reload({container:"#edoc-folders", replace: false, async:false, url: '$edocsUrl&folderId='+folderId});
           getThis.getParent(7).hide();
           //getThis.show();
           //getThis.next().hide();

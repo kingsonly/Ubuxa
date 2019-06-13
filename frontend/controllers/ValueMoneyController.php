@@ -8,11 +8,11 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ValueMoneyController implements the CRUD actions for ValueMoney model.
  */
-class ValueMoneyController extends Controller
+class ValueMoneyController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

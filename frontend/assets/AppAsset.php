@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
         '\frontend\assets\DropzoneAsset',
         '\frontend\assets\CalendarAsset',
         '\frontend\assets\EmojiPickerAsset',
+        '\frontend\assets\perfectScrollbar',
         //'\frontend\assets\EmojiOneAsset',
     ];
 }

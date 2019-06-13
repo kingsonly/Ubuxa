@@ -9,10 +9,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\Collection;
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ValueIntegerController implements the CRUD actions for ValueInteger model.
  */
-class ValueIntegerController extends Controller
+class ValueIntegerController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

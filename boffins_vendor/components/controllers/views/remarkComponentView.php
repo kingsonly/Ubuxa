@@ -220,13 +220,13 @@ AppAsset::register($this);
 .comments-list .comment-avatar {
     width: 65px;
     height: 65px;
+    border-radius: 50%;
     position: relative;
     z-index: 99;
     float: left;
     border: 3px solid #FFF;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -239,6 +239,7 @@ AppAsset::register($this);
 .reply-list .comment-avatar {
     width: 50px;
     height: 50px;
+    border-radius: 50%;
 }
 .comment-main-level:after {
     content: '';
@@ -256,7 +257,7 @@ AppAsset::register($this);
     position: relative;
     -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
     -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
-    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    box-shadow: 2px 8px 25px -2px rgba(0,0,0,0.1);
 }
 .comments-list .comment-box:before, .comments-list .comment-box:after {
     content: '';
@@ -316,7 +317,7 @@ AppAsset::register($this);
     color: #999;
     font-size: 13px;
     position: relative;
-    top: 1px;
+    top: 10px;
 }
 .comment-box .comment-content {
     background: #FFF;
@@ -426,7 +427,7 @@ AppAsset::register($this);
       <button  class="remark-btn" id="align-right" title="Right"><i class="fa fa-align-right"></i></button>
       <button  class="remark-btn" id="list-ul" title="Unordered List"><i class="fa fa-list-ul"></i></button>
       <button  class="remark-btn" id="list-ol" title="Ordered List"><i class="fa fa-list-ol"></i></button>
-      <span class="dropdown" style="display: none">
+      <span class="dropdown" style="display:none">
           <button class="dropdown-toggle remark-btn" type="button" data-toggle="dropdown">
           <span class="fa fa-angle-down"></span></button>
           <ul class="dropdown-menu">
@@ -447,9 +448,9 @@ AppAsset::register($this);
 	<?= $form->field($remarkModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
     
     <div class="form-group" id="remarkSaveForm">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
+        <?= Html::submitButton('Send', ['class' => 'btn btn-success', 'id' => 'remarkSave']) ?>
         <?= Html::submitButton('Reply', ['class' => 'btn btn-success', 'id' => 'remarkReply']) ?>
-        <?= Html::submitButton('Cancel', ['class' => 'btn btn-basic', 'id' => 'remarkCancelButton']) ?>
+        <?= Html::submitButton('Close', ['class' => 'btn btn-basic', 'id' => 'remarkCancelButton']) ?>
     </div>
     
     <?php ActiveForm::end(); ?>
@@ -468,7 +469,8 @@ $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $baseUrl=Url::base(true);
 $userId = Yii::$app->user->identity->id;
-$remarkJs = <<<abc
+$remarkJs = <<<remarkjs
+
 var remarkContainerID = '$parentOwnerId';
 var userID = '$userId';
 var setStatus;
@@ -518,7 +520,15 @@ $('#example-1').keyup(function(){
 $('#create-remark').submit(function(e) { 
            e.preventDefault();
     e.stopImmediatePropagation();
-           var remark_value = $('#example-1').html();
+           //var remark_value = $('#example-1').html();
+          $('#example-1').html(function(i, text) {
+                 return text.replace(
+                     /([^\S]|^)(((https?\:\/\/)|(www\.))(\S+))/gi,
+                     '<a href="$&" target="_blank">$&</a>'
+                 );
+            })
+            var remark_value = $('#example-1').html();
+            console.log(remark_value)
            var form = $(this);
            var datas = form.serializeArray();
            datas.push({name: '&moredata', value: remark_value});
@@ -535,15 +545,17 @@ $('#create-remark').submit(function(e) {
                     } else {
                       userImage = info[0]
                     }
+                    console.log(info)
                     if(info[4] > 0){
                       setStatus = 1; //it is a replied message
                     } else {
                       setStatus = 0; //it is a new message
                     }
-                    Remarksocket.emit('chat message', $('#example-1').html()+','+remarkContainerID+','+userID);
+                    Remarksocket.emit('chat message', {test:$('#example-1').html()+','+remarkContainerID+','+userID+','+setStatus+','+userImage,test2:info});
                     $('#example-1').text();
                     $('#example-1').empty();
                     //$.pjax.reload({container:"#remark-refresh",async: false});
+                    
                     $('#remarkLoader').hide();
                     
                     if($('#remarkCancelButton').hasClass('replyButon')){
@@ -556,11 +568,11 @@ $('#create-remark').submit(function(e) {
               }
             });  
 });
-Remarksocket.on('chat message', function(msg){
+Remarksocket.on('chat message', function(msg, info){
+   console.log(msg)
     msgArr = msg.split(',');
-    //$('.comments-list_'+msgArr[1]).prepend($('<li>').text(msgArr[0]));
-    
-    if(setStatus == 0){
+
+    if(msgArr[3] == 0){
        var li = $("<li/>", {
                   class: "welll welll_"+info[3]
                 });
@@ -573,7 +585,7 @@ Remarksocket.on('chat message', function(msg){
                     'background-size':'cover',
                     'background-repeat':'no-repeat',
                     'background-position':'center',
-                    'background-image':'url(userImage)'
+                    'background-image':'url('+msgArr[4]+')'
                 });
 
     var div2 = $("<div/>", {
@@ -586,7 +598,7 @@ Remarksocket.on('chat message', function(msg){
                   class: "comment-name by-author"
                 });
 
-    var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+    var a = $("<a/>").attr('href','#').text(info[1]);
     
                
     var span = $("<span/>");
@@ -607,7 +619,7 @@ Remarksocket.on('chat message', function(msg){
     div.append(div1)
     div.append(div2)
     li.append(div)
-      $('.comments-list_'+msgArr[1]).prepend(li)
+      $('.comments-list_'+msgArr[1]).prepend(li);
       if(msgArr[2] == userID && $(document).find('div.commentz-indictor_container').lenght === 0){
         var div_indic = $('<div/>',{
             class:"commentz-indictor_container"
@@ -632,7 +644,7 @@ Remarksocket.on('chat message', function(msg){
                           'background-size':'cover',
                           'background-repeat':'no-repeat',
                           'background-position':'center',
-                          'background-image':'url(userImage)'
+                          'background-image':'url('+msgArr[4]+')'
                       });
 
           var div2 = $("<div/>", {
@@ -645,7 +657,7 @@ Remarksocket.on('chat message', function(msg){
                         class: "comment-name"
                       });
 
-          var a = $("<a/>").attr('href','#').text(info[1]+' '+info[2]);
+          var a = $("<a/>").attr('href','#').text(info[1]);
           
                      
           var span = $("<span/>");
@@ -673,8 +685,7 @@ Remarksocket.on('chat message', function(msg){
           }
     }
 
-
-
+     
 });
 
 
@@ -711,6 +722,7 @@ $(document).on('click','.remark-reply',function(){
     $('#exampleInputRemark').show();
     $('html, body').animate({ scrollTop: $(".wrapp").offset().top }, 1000,function(){
        $('#remarkReply').hide();
+       $('#remarkCancelButton').hide();
     });
     $(this).removeClass('reply-clicked');
   } else {
@@ -733,11 +745,14 @@ $(document).on('click','#remarkCancelButton',function(e){
   if($('#remarkCancelButton').hasClass('replyButon')){
     $('#remarkCancelButton').removeClass('replyButon')
   }
-  $('.wrapp').slideUp();
+  $('.wrapp').fadeOut();
   $('#remarkCancelButton').hide();
   $('#remarkSave').hide();
   $('#remarkReply').hide();
-  $(document).find('#exampleInputRemark').show();
+  setTimeout(function() {
+       $(document).find('#exampleInputRemark').fadeIn();
+    }, 400);
+  
 })
 $('#exampleInputRemark').click(function(){
   $('#exampleInputRemark').hide();
@@ -797,7 +812,6 @@ $('#size').on('change', function() {
 $('[data-toggle="tooltip-reply"]').tooltip();
 
 
-abc;
- 
+remarkjs;
 $this->registerJs($remarkJs);
 ?>

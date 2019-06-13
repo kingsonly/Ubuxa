@@ -58,7 +58,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($taskModel, 'status_id')->hiddenInput(['maxlength' => true, 'value' => $statusid])->label(false); ?>
     <?= $form->field($taskModel, 'ownerId')->hiddenInput(['value' => $parentOwnerId])->label(false) ?>
     <?= $form->field($taskModel, 'cid')->hiddenInput()->label(false) ?>
-	<?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
+    <?= $form->field($taskModel, 'fromWhere')->hiddenInput(['value' => $location])->label(false) ?>
  
     <span class="for-task-loader">
         <?= Html::submitButton('Add Task', ['id' => 'cardButton', 'class' => 'btn btn-success cardButton']) ?>
@@ -70,6 +70,7 @@ use yii\widgets\ActiveForm;
 
 <?php
 $taskUrl = Url::to(['task/dashboardcreate']);
+$boardUrl = Url::to(['task/board']);
 $addCard = <<<JS
 
 $(document).ready(function(){
@@ -98,12 +99,13 @@ $('#create-task-card$statusid').on('beforeSubmit', function(e) {
             $.ajax({
                 url: '$taskUrl',
                 type: 'POST',
+                async:true,
                 data: form.serialize(),
                 success: function(response) {
                     toastr.success('Task created');
+                    var folderId = $('.board-specfic').attr('data-folderId');
                     $.pjax.reload({container:"#task-list-refresh"});
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
-                    //$.pjax.reload({container:"#task-modal-refresh",async: false});
+                    $.pjax.reload({container:"#kanban-refresh",replace: false, async:true, url: '$boardUrl&folderIds='+folderId});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');

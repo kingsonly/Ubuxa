@@ -10,11 +10,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\ModelCollection;
 use boffins_vendor\classes\StandardQuery;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * ComponentAttributeController implements the CRUD actions for ComponentAttribute model.
  */
-class ComponentAttributeController extends Controller
+class ComponentAttributeController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

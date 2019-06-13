@@ -7,6 +7,22 @@
     font-size: 14px;
     font-weight: 100;
 }
+.info-msg,
+.success-msg,
+.warning-msg,
+.error-msg {
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+.info-msg {
+  color: #059;
+  background-color: #BEF;
+  display: none;
+  font-size: 13px;
+}
+.note-msg{
+	margin-left: 5px;
+}
 .msg_box{
 	position:fixed;
 	bottom:-5px;
@@ -64,7 +80,6 @@
 .chat_folder_title{
 	width: 80%;
 }
-
 .chatloader{
 	width: 30px;
     height: 30px;
@@ -141,6 +156,9 @@
 }
 
 .background{
+	position: fixed;
+    width: 285px;
+	/*
     z-index: 0;
     background: transparent;
     display: block;
@@ -149,7 +167,7 @@
     transform: rotate(300deg);
     -webkit-transform: rotate(350deg);
     position: fixed;
-    text-align: center;
+    text-align: center;*/
 
 }
 
@@ -205,6 +223,8 @@
 .emoji-picker-icon{
 	bottom: 10px !important;
 	top: unset !important;
+	font-size: 18px !important;
+	cursor: pointer;
 }
 .emoji-menu{
 	top: -250px !important;
@@ -218,13 +238,14 @@
 	border-bottom-left-radius: 20px;
 	border-top-right-radius: 27px;
 	border-top-left-radius: 0px;
+	word-break: break-word;
 }
 
 .msg_chat_container.msg-right .msg_chat_content .msg_chat_text {
     border-radius: 15px;
     background: #d4e7fa;
     padding: 3px 9px;
-    word-break: keep-all;
+    word-break: break-word;
     border-bottom-left-radius: 18px;
     border-bottom-right-radius: 20px;
     border-top-left-radius: 15px;

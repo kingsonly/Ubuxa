@@ -27,7 +27,8 @@ use yii\db\Expression;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
 use \boffins_vendor\queue\FolderUsersQueue;
-use \boffins_vendor\classes\BoffinsBaseController;
+use boffins_vendor\classes\BoffinsBaseController;
+
 
 
 /**
@@ -188,6 +189,17 @@ class FolderController extends BoffinsBaseController
 		elseif ($id > 0) {
 			$out['results'] = ['id' => 0, 'first_name' => 'could not find ','surname' => 'a any user'];
 		}
+		return $out;
+	}
+	
+	public function actionNewMessage() {
+		$folderId = $_REQUEST['folderId']; // post params from ajax call
+		$username = $_REQUEST['userName'];
+		$folder = Folder::find()->andWhere(['id' => $folderId])->select('title')->one();
+		$user = UserDb::find()->andWhere(['username' => $username])->one();
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$out = ['name'=>$user->fullname,'folder' => $folder['title']];
+		
 		return $out;
 	}
 	

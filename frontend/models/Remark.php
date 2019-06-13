@@ -65,11 +65,17 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     }
     public function getFullname()
     {
-        return $this->person->first_name." ".$this->person->surname;
+        return $this->user->fullname;
     }
     public function getUserImage()
     {
         return $this->user->profile_image;
+    }
+    public function getReply()
+    {
+        return $this->hasMany($this::className(), ['parent_id' => 'id'])->orderBy([
+            'id' => SORT_DESC
+        ]);
     }
 
     public function getTimeElapsedString($full = false) {

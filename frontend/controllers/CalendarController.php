@@ -18,11 +18,12 @@ use frontend\models\Reminder;
 use frontend\models\Email;
 use frontend\models\GoogleCalendarId;
 use frontend\models\CalendarCheckStatus;
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * CalendarController implements the CRUD actions for Calendar model.
  */
-class CalendarController extends Controller
+class CalendarController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

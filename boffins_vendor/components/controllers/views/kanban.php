@@ -189,9 +189,6 @@ $checkUrlParams = $checkUrls[0];
   background-color: #fff !important;
 }
 
-.modal-content {
-    border-radius: 6px !important; 
-}
 
 /* NEW DIV */
 .wrapit {
@@ -405,7 +402,7 @@ a.addTaskButton.active {
         <li class="drag-column drag-column-on-hold" id="holder<?= $value->id;?>" data-statusid="<?= $value->id; ?>">
             <span class="drag-column-header">
                 <?= $value->status_title;?>
-                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/</svg> -->
+                <!-- <svg class="drag-header-more" data-target="options<?= $count; ?>" fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> -->
             </span>
                 
             <div class="drag-options" id="options<?=$count;?>"></div>
@@ -416,14 +413,13 @@ a.addTaskButton.active {
                       if(!empty($dataProvider)){
                         foreach ($dataProvider as $key => $values) {
                           if($values->status_id == $value->id){
-                          $boardUrl = Url::to(['task/view', 'id' => $values->id,'folderId' => $id]);
+                          $boardUrl = Url::to(['task/modal', 'id' => $values->id,'folderId' => $folderIds]);
                           $reminderUrl = Url::to(['reminder/create']);
                           $titleLength = strlen($values->title);
                           $taskLabels = $values->labelNames;
                           $edocuments = $values->clipOn['edocument'];
                           $assigneesIds = $values->taskAssigneesUserId;
                           $userid = Yii::$app->user->identity->id;
-                          //$listData=ArrayHelper::map($users,'id','username');
                  ?>
                 <li data-filename="<?= $values->id;?>" id="test_<?= $values->id; ?>" class="drag-item <?= ($userid == $values->owner || in_array($userid, $assigneesIds)) ?  '' : 'no-drag'?> test_<?= $values->id;?>">
                   <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'kanban'.$values->id, 'textPadding'=>17,'referenceID'=>$values->id,'reference'=>'task','iconPadding'=>10,'tasklist'=>'for-kanban', 'edocument' => 'dropzone']);?>
@@ -432,8 +428,8 @@ a.addTaskButton.active {
                         <span class="task-titles"><?= strip_tags($values->title); ?></span>
                       </div>
                       <?php if(!empty($values->personName)){ ?>
-                      <div class="assignedto" id="assignedto<?=$values->id;?>">
-                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id]);?>
+                      <div class="assignedto assignedto<?=$values->id;?>" id="">
+                         <?= FolderUsersWidget::widget(['attributues'=>$values->taskAssignees,'removeButtons' => false, 'dynamicId' => $values->id, 'taskModal' => 'modal-users'.$values->id]);?>
                       </div>
                     <?php }?>
                     <div class="holder-board" id="holder-board<?=$values->id;?>">
@@ -492,7 +488,7 @@ a.addTaskButton.active {
                           <?= CreateReminderWidget::widget(['reminder' => $reminder,'id'=> $values->id,'reminderUrl'=> $reminderUrl]) ?>
                         </div>
                       </div>
-                      <?php if($checkUrlParams == 'folder'){?>
+                      <?php if($checkUrlParams == 'folder' || $checkUrlParams == 'task'){?>
                         <div class="dropdown testdrop">
                           <a class=" dropdown-toggle drop-icon" type="button" id="dropdownMenuButton_<?= $values->id ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-plus icons" aria-hidden="true" data-toggle="tooltip" title="Assign task"></i></a>
                           <div class="dropdown-menu assigndrop" aria-labelledby="dropdownMenuButton">
@@ -518,7 +514,7 @@ a.addTaskButton.active {
             <?php $count2++;}}}?>
         
             </ul>
-            <?php if($checkUrlParams == 'folder'){?>
+            <?php if($checkUrlParams == 'folder' || $checkUrlParams == 'task'){?>
               <a class="add-card" href="#">
                 <span class="cardTask">
                   <span class="glyphicon glyphicon-plus"></span>
@@ -526,7 +522,7 @@ a.addTaskButton.active {
                 </span>
               </a>
               <div class="card-add" id="add-new-cardz">
-                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $id]) ?>
+                  <?= AddCardWidget::widget(['id' => $count,'taskModel' => $task, 'statusid' => $value->id,'parentOwnerId' => $folderIds]) ?>
               </div>
             <?php }?>
         </li>
@@ -539,13 +535,6 @@ a.addTaskButton.active {
 $saveUrl = Url::to(['task/kanban']);
 $formUrl = Url::to(['task/create']);
 $board = <<<JS
-
-
-$('#boardContent').on('show.bs.modal', function(){
-  if(!$(this).hasClass('in')){
-    $('.se-pre-con').show();
-  }
-});
 
 $('#boardContent').on('shown.bs.modal', function(){
   $('.se-pre-con').hide();
@@ -645,12 +634,13 @@ function _UpdateTask(status, contain){
                   id: status,
                   status_id: contain, 
                 },
-              success: function(res, sec){
-                
-
-                   console.log('Completed');
+              success: function(response){
+                  if(response != ''){
+                    var check = JSON.parse(response);
+                    $(".todo_listt"+check).prop('checked', true);
+                  }                
               },
-              error: function(res, sec){
+              error: function(response){
                   console.log('Something went wrong');
               }
           });
@@ -787,6 +777,7 @@ $(document).ready(
   $('.testdrop').on('show.bs.dropdown', function(e) {
    target = e.target;        
     dropdownMenu = $(e.target).find('.dropdown-menu');
+    dropdownMenu.addClass('openDropdown');
     $('.drag-container').append(dropdownMenu.detach());          
     dropdownMenu.css('display', 'block');             
     dropdownMenu.position({                           
@@ -809,7 +800,8 @@ $('.drag-container').on('click', function(e) {
   });
   $('.testdrop').on('hidden.bs.dropdown', function(e) {
     if(!dropdownMenu.hasClass('opened')){
-      $(target).append(dropdownMenu.detach());        
+      $(target).append(dropdownMenu.detach());
+      dropdownMenu.removeClass('openDropdown');        
       dropdownMenu.hide();
     }
   });                                                

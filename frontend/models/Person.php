@@ -110,7 +110,7 @@ class Person extends BoffinsArRootModel implements TenantSpecific, KnownClass
 	}
 	public function getUserEmail()
 	{
-		return $this->email->address;
+		return $this->email['address'];
 	}
 	
 	public function getTelephone()
@@ -119,7 +119,7 @@ class Person extends BoffinsArRootModel implements TenantSpecific, KnownClass
 	}
 	public function getUserTelephone()
 	{
-		return $this->telephone->telephone_number;
+		return $this->telephone['telephone_number'];
 	}
 
 	public function getUser()

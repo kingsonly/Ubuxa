@@ -11,7 +11,7 @@ use frontend\models\Folder;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use boffins_vendor\classes\BoffinsBaseController;
 /**
  * RemarkController implements the CRUD actions for Remark model.
  */
@@ -49,6 +49,7 @@ class RemarkController extends Controller
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                 $remarkss = new Remark();
+                $remarkss->fromWhere = 'folder';
                 $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
                 //if url is site index get all the remarks
@@ -96,7 +97,7 @@ class RemarkController extends Controller
         $commenterUserId = Yii::$app->user->identity->id;
         $commenterPersonId = Yii::$app->user->identity->person_id;
         $model->user_id = $commenterUserId;
-        //$model->person_id = $commenterPersonId;
+        $model->person_id = $commenterPersonId;
         if(!empty(Yii::$app->request->post('&moredata'))){
             $model->text = Yii::$app->request->post('&moredata');
         } else {
@@ -106,11 +107,13 @@ class RemarkController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $remarkSaved = "remark saved successfully";
-             $userImage = UserDb::find()->andWhere(['person_id'=>$commenterUserId])->one();
-             $user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
+             $userImage = UserDb::find()->andWhere(['id'=>$commenterUserId])->one();
+             $user = UserDb::findOne($commenterUserId);
+             $personName = $user->fullname;
+             //$user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
              $remarkId = $model->id;
              $remarkReply = $model->parent_id;
-             return json_encode([ $userImage['profile_image'],$user_names['first_name'],$user_names['surname'],$remarkId, $remarkReply]);
+             return json_encode([ $userImage['profile_image'],$personName,$remarkId, $remarkReply]);
         }
 
         return $this->render('create', [
@@ -158,7 +161,7 @@ class RemarkController extends Controller
         $getUsers = $users->find()->andWhere(['id' => $owner])->one();
         $name = array();
         $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers->folderUsers as $user) {
+        foreach ($getUsers->users as $user) {
             $name[] = $user->fullname;
         }
        return json_encode($name);

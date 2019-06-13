@@ -75,6 +75,7 @@ $taskremnider = new TaskReminder();
 </div>
 
 <?php
+$boardUrl = Url::to(['task/board']);
 $reminderss = <<<Reminder
 
 function _CreateReminder(task){
@@ -101,8 +102,8 @@ $("#save-rem-form"+'$id').on('beforeSubmit', function (e) {
           $.post('$reminderUrl',thiss.serialize())
             .always(function(result){
             toastr.success('Reminder set');
-             $.pjax.reload({container:"#task-list-refresh"});
-             $.pjax.reload({container:"#kanban-refresh",async: false});
+             var folderId = $('.board-specfic').attr('data-folderId');
+              $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
             
             }).fail(function(){
             console.log('Server Error');

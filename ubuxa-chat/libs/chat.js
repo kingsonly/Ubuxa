@@ -1,8 +1,10 @@
-var socketio = require('socket.io');
+
 var mongoose = require('mongoose');
 var events = require('events');
 var mysql = require('mysql');
+var redis = require('redis');
 var _ = require('lodash');
+var https = require("http");
 var eventEmitter = new events.EventEmitter();
 
 //adding db models
@@ -14,8 +16,11 @@ require('../app/models/room.js');
 var userModel = mongoose.model('User');
 var chatModel = mongoose.model('Chat');
 var roomModel = mongoose.model('Room');
+var client = redis.createClient(); //creates a new client
 
-
+client.on('connect', function() {
+    console.log('connected to redis');
+});
 //reatime magic begins here
 module.exports.sockets = function(http) {
 
@@ -32,20 +37,84 @@ module.exports.sockets = function(http) {
 	});
 	con.connect();
 
-io = socketio.listen(http);
+var pub, sub
+//.: Activate "notify-keyspace-events" for expired type events
 
+client.send_command('config', ['set','notify-keyspace-events','Ex'], SubscribeExpired)
+//.: Subscribe to the "notify-keyspace-events" channel used for expired type events
+function SubscribeExpired(e,r){
+	sub = redis.createClient()
+	const expired_subKey = '__keyevent@0__:expired'
+	sub.subscribe(expired_subKey,function(){
+		console.log(' [i] Subscribed to "'+expired_subKey+'" event channel : '+r)
+		sub.on('message',function (chan,key){
+			console.log('[expired]',key)
+			var splitKey = key.split(':');
+			console.log('thisis '+splitKey[1])
+			client.exists(splitKey[1], function(err, reply) {
+				
+				if (reply === 1) {
+					client.lrange(splitKey[1], 0, -1, function(err, data) {
+						console.log(err)
+						if(!err){
+
+							console.log(data);
+		
+							var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							  console.log(res.statusCode);
+							});
+
+							req.on('error', (e) => {
+							  console.error(e.message);
+							});    
+
+							req.end();
+						}
+					});
+				} else {
+					console.log('doesn\'t exist');
+				}
+			});
+		})
+	})
+}
+//.: For example (create a key & set to expire in  10 seconds)
+	
 //setting chat route
 var ioChat = io.of('/chat');
 var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details
 var userSocketInstBuyUserName = {}; // this might not be needed any more
-
+	
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
-
 	//function to get user name, this would be emited from the client and recieved on the server
+	socket.on('check-for-message',function(username){
+		
+		client.exists(username, function(err, reply) {
+			if (reply === 1) {
+				client.lrange(username, 0, -1, function(err, data) {
+					if(!err){
+						console.log(data);
+						ioChat.to(userSocket[username]).emit('check-for-message', data);
+						// delete key after a single fetch
+						client.del(username, function(err, reply) {
+							console.log(reply);
+						});
+					}
+
+ 
+				});
+			} else {
+				console.log('doesn\'t exist');
+			}
+		});
+		
+		
+	});
+	
 	socket.on('set-user-data', function(username) {
 		console.log(username+ "  logged In 1");
 		//storing variable.
@@ -68,6 +137,7 @@ ioChat.on('connection', function(socket) {
 			
 			ioChat.emit('onlineStack', userStack);
 			
+			
 		} //end of sendUserStack function.
 			
 	}); //end of set-user-data event.
@@ -86,6 +156,7 @@ ioChat.on('connection', function(socket) {
             socket.join(roomId);
             ioChat.to(userSocket[socket.username]).emit('set-room', socket.room,room.toUser+'-'+folderId,folderId);
         };
+		
 
 	}); //end of set-room event.
 
@@ -119,19 +190,28 @@ ioChat.on('connection', function(socket) {
 		.limit(5)
 		.exec(function(err, result) {
 			if (err) {
-				console.log("Error : " + err);
+				console.log("Error : " + err); 
 			} else {
 				//calling function which emits event to client to show chats.
 				oldChatsNewJoin(result, data.username, data.room,data.sender,data.folderId,data.userImage);
+				
 			}
 		});
 		// eventEmitter.emit('read-chat-join-request', data);
+		
 	});
+	   
+	
 
 	//emits event to read old chats from database.
 	socket.on('old-chats', function(data) {
 		// here instead of emiting read chat, make read chat a function
 		eventEmitter.emit('read-chat', data);
+	});
+	
+	socket.on('old-chats-old', function(data) {
+		// here instead of emiting read chat, make read chat a function
+		eventEmitter.emit('read-chat-old', data);
 	});
 
 	//sending old chats to client.
@@ -141,8 +221,17 @@ ioChat.on('connection', function(socket) {
             result: result,
 			room: room,
 			sender: toUser,
-			folderId: folderId,
-			username: username,
+			folderId: folderId 
+		});
+	}
+	
+	oldChatsOld = function(result, username, room,toUser,folderId) {
+        console.log('i am sender but i am the tab to be updated '+toUser);
+		ioChat.to(userSocket[username]).emit('old-chats-old', {
+            result: result,
+			room: room,
+			sender: toUser,
+			folderId: folderId 
 		});
 	}
 
@@ -204,8 +293,23 @@ ioChat.on('connection', function(socket) {
                         }
 						//ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from);
 					}else{
-						ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
-						console.log('go ahead2');
+						if(data.msgTo in userSocket){
+							ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
+							
+							
+							console.log('go ahead2');
+						}else{
+							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.msgTo+')'+data.date;
+							client.rpush([data.msgTo, redisString], function(err, reply) {
+    							console.log(redisString); //prints 2
+							});
+							var shadowKey = 'shadowkey:'+data.msgTo;
+							client.set(shadowKey,'')
+							client.expire(shadowKey,10);
+							
+							console.log('user not online '+data.msgTo); 
+						}
+						
 					}
 
 				});
@@ -228,6 +332,10 @@ ioChat.on('connection', function(socket) {
 					userImage: data.userImage,
 					roomId: roomId,
 				});
+				
+				ioChat.to(userSocket[data.msgTo]).emit('join-room-mobile',data,{folderId: folderId[2],
+					userImage: data.userImage,
+					roomId: roomId,username:socket.username});
 			}
 		} //end of else.
 		);
@@ -284,7 +392,7 @@ ioChat.on('connection', function(socket) {
 		socket.broadcast.emit('broadcast',{ description: socket.username + ' Logged out'});
 		console.log("chat disconnected.");
 		_.unset(userSocket, socket.username);
-		userStack[socket.username] = "standby";
+		userStack[socket.username] = "Offline";
 		ioChat.emit('onlineStack', userStack);
 	}); //end of disconnect event.
 
@@ -331,6 +439,24 @@ eventEmitter.on('read-chat', function(data) {
 		} else {
 			//calling function which emits event to client to show chats.
 			oldChats(result, data.username, data.room,data.sender);
+		}
+	});
+}); //end of reading chat from database.
+	
+eventEmitter.on('read-chat-old', function(data) {
+
+	chatModel.find({})
+	.where('room').equals(data.room)
+	.sort('-createdOn')
+	.skip(data.msgCount)
+	.lean()
+	.limit(5)
+	.exec(function(err, result) {
+		if (err) {
+			console.log("Error : " + err);
+		} else {
+			//calling function which emits event to client to show chats.
+			oldChatsOld(result, data.username, data.room,data.sender);
 		}
 	});
 }); //end of reading chat from database.

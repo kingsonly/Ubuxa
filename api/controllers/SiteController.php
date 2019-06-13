@@ -3,13 +3,31 @@ namespace api\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use api\models\LoginForm;
+use api\models\ChatNotificationEmail;
 use common\models\AuthorizationCodes;
 use common\models\AccessTokens;
 
-use api\models\SignupForm;
+//use api\models\SignupForm;
+use api\models\ValidateEmail;
+use api\models\PasswordResetRequestForm;
 use api\behaviours\Verbcheck;
 use api\behaviours\Apiauth;
+use frontend\models\Customer;
+use frontend\models\CustomerSignupForm;
+use api\models\CustomerSignup;
+use frontend\models\UserDb;
+use frontend\models\TenantEntity;
+use frontend\models\TenantCorporation;
+use frontend\models\TenantPerson;
+use api\models\ApiFolder;
+use frontend\models\UserSetting;
+use frontend\models\SignupForm;
+use frontend\models\Email;
+use frontend\models\ChatNotification;
+use api\models\InviteUsersForm;
+use yii\mongodb\Query;
+
 
 /**
  * Site controller
@@ -27,7 +45,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users','chat-list'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -57,6 +75,7 @@ class SiteController extends RestController
                     'authorize' => ['POST'],
                     'register' => ['POST'],
                     'accesstoken' => ['POST'],
+                    'chat-list' => ['GET'],
                     'me' => ['GET'],
                 ],
             ],
@@ -83,8 +102,32 @@ class SiteController extends RestController
      */
     public function actionIndex()
     {
-        Yii::$app->api->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
+        return Yii::$app->apis->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
         //  return $this->render('index');
+    }
+	
+	public function actionChatEmail($id)
+    {
+		$msgArray = [];
+		$model = new ChatNotificationEmail();
+		$reciever = '';
+		foreach(json_decode($id, true) as $key => $value ){
+			$userModels = new UserDb();
+			$folderModels = new ApiFolder();
+			$extractString = explode(')',$value);
+			$username = $extractString[0];
+			$folderId = $extractString[2];
+			$userModel = $userModels->find()->where(['username' => $username])->one();
+			$recievers = $userModels->find()->where(['username' => $username])->one();
+			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
+			
+			$msgArray[$key]['fullname'] = $userModel->fullName;
+			$msgArray[$key]['foldertitle'] = $folderModel['title'];
+			$msgArray[$key]['msg'] = $extractString[1];
+			$reciever = $recievers->email;
+			
+		}
+		$model->sendEmail($msgArray,$reciever);
     }
 
     public function actionRegister()
@@ -100,7 +143,24 @@ class SiteController extends RestController
             unset($data['password_hash']);
             unset($data['password_reset_token']);
 
-            Yii::$app->api->sendSuccessResponse($data);
+            return Yii::$app->apis->sendSuccessResponse($data);
+
+        }
+
+    }
+	
+	public function actionCustomerSignup()
+    {
+
+        $model = new CustomerSignup();
+        $model->attributes = $this->request;
+
+        if ($user = $model->signup()) {
+
+            $data=$user;
+           
+
+            return Yii::$app->apis->sendSuccessResponse($data);
 
         }
 
@@ -111,33 +171,44 @@ class SiteController extends RestController
     {
         $data = Yii::$app->user->identity;
         $data = $data->attributes;
+		$data['id2'] = Yii::$app->user->identity->username;
         unset($data['auth_key']);
         unset($data['password_hash']);
         unset($data['password_reset_token']);
 
-        Yii::$app->api->sendSuccessResponse($data);
+        return Yii::$app->apis->sendSuccessResponse($data);
     }
 
     public function actionAccesstoken()
     {
 
         if (!isset($this->request["authorization_code"])) {
-            Yii::$app->api->sendFailedResponse("Authorization code missing");
+            return Yii::$app->apis->sendFailedResponse("Authorization code missing");
         }
 
         $authorization_code = $this->request["authorization_code"];
 
         $auth_code = AuthorizationCodes::isValid($authorization_code);
         if (!$auth_code) {
-            Yii::$app->api->sendFailedResponse("Invalid Authorization Code");
+            return Yii::$app->apis->sendFailedResponse("Invalid Authorization Code");
         }
 
         $accesstoken = Yii::$app->api->createAccesstoken($authorization_code);
+        $userId = $accesstoken->user_id;
+        $user = UserDb::findOne($userId);
+        $firstname = $user['firstname'];
+        $fullname = $user['fullname'];
+        $profilePhoto = $user['profile_image'];
 
         $data = [];
         $data['access_token'] = $accesstoken->token;
         $data['expires_at'] = $accesstoken->expires_at;
-        Yii::$app->api->sendSuccessResponse($data);
+        $data['user']['firstname'] = $firstname;
+        $data['user']['fullname'] = $fullname;
+        $data['user']['profilePhoto'] = !empty($profilePhoto)?'http://ubuxa.net/'.$profilePhoto:'http://ubuxa.net/images/users/default-user.png';
+        $data['user']['username'] = $user['username'];
+        $data['user']['id'] = $user['id'];
+        return Yii::$app->apis->sendSuccessResponse($data);
 
     }
 
@@ -156,9 +227,9 @@ class SiteController extends RestController
             $data['authorization_code'] = $auth_code->code;
             $data['expires_at'] = $auth_code->expires_at;
 
-            Yii::$app->api->sendSuccessResponse($data);
+            return Yii::$app->apis->sendSuccessResponse($data);
         } else {
-            Yii::$app->api->sendFailedResponse($model->errors);
+            return Yii::$app->apis->sendFailedResponse($model->errors);
         }
     }
 
@@ -167,20 +238,185 @@ class SiteController extends RestController
         $headers = Yii::$app->getRequest()->getHeaders();
         $access_token = $headers->get('x-access-token');
 
-        if(!$access_token){
-            $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+        if(!empty($access_token)){
+            if(!$access_token){
+                $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+            }
+
+            $model = AccessTokens::findOne(['token' => $access_token]);
+
+            if ($model->delete()) {
+
+                return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
+
+            } else {
+                return Yii::$app->apis->sendFailedResponse("Invalid Request");
+            }
+        }else{
+            return Yii::$app->apis->sendFailedResponse("Invalid Access Token");
         }
+    }
+	
+	public function actionValidateCode()
+    {
+		$model = new ValidateEmail();
+		$model->attributes = $this->request;
+        if (!empty($model->validateEmail())) {
+			$customerId = $model->validateEmail()->customer_id;
+			$customer = new Customer();
+			$getCustomerEntity = $customer->find()->andWhere(['cid' => $customerId])->one();
+            $customerModel = $customer->find()->andWhere(['cid' => $customerId])->asArray()->one();
+			$customerModel['role'] = 1;
+			$customerModel['account_type'] = $getCustomerEntity->entity->entity_type;
+			$customerModel['validation_code'] = $model->validation_code;
+			//$checkIfCodeIsValid->delete();
+            return Yii::$app->apis->sendSuccessResponse([$customerModel]);
 
-        $model = AccessTokens::findOne(['token' => $access_token]);
+        }else{
+			return Yii::$app->apis->sendFailedResponse([$model->errors]);
 
-        if ($model->delete()) {
+		}
 
-            Yii::$app->api->sendSuccessResponse(["Logged Out Successfully"]);
-
-        } else {
-            Yii::$app->api->sendFailedResponse("Invalid Request");
-        }
+    }
+	
+	public function actionSignups($email,$cid,$role,$validation_code,$folderid = 0)
+	{
+       	$user = new SignupForm();
+       	$customer = Customer::find()->where(['cid' => $cid])->one();
+       	$userExists = Email::find()->where(['address' => $email])->exists();
+       	$user->attributes = $this->request;
+		
+       	if(!$userExists){
+			
+			if(!empty($customer)){
+				
+				$user->address = $email;
+				$user->cid = $cid;
+				$user->basic_role = $role;
+				if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+					
+					$user->first_name = $customer->entity->firstname;
+					$user->surname = $customer->entity->surname;
+				}
+				//$user->_userAR->tenantID = $cid;
+				if($user->save()){
+					
+					if($customer->has_admin == Customer::NO_ADMIN){
+						$customer->has_admin = Customer::HAS_ADMIN;
+						$customer->save();	
+					}
+					//unset($data['password_hash']);
+					//unset($data['password_reset_token']);
+					return Yii::$app->apis->sendSuccessResponse([$user]);
+					
+				} else{
+					return Yii::$app->apis->sendFailedResponse([$user->errors]);
+				}
+				
+			} else {
+				return Yii::$app->apis->sendFailedResponse(['Customer does not exist']);
+			}
+		}else {
+			return Yii::$app->apis->sendFailedResponse(['User already exist']);
+		}
+    }
+	
+	public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+		$model->attributes = $this->request;
+		if ($model->sendEmail()) {
+			return Yii::$app->apis->sendSuccessResponse($model);
+			//return $this->goHome();
+		} else {
+			return Yii::$app->apis->sendFailedResponse([$model->errors]);
+		}
 
 
     }
+
+    public function actionInviteUsers($folderid=0)
+    {   
+       
+        $newTest = $this->request;
+        foreach($newTest as $test){
+             $model = new InviteUsersForm;
+            $model->attributes = $test;  
+            $folderId = $folderid;
+            $emails = $model->email;
+            $role = $model->role;
+            if(!empty($emails)){
+                if($model->sendEmail($emails, $folderid, $role)){
+                    return Yii::$app->apis->sendSuccessResponse($model->attributes);
+                } else {
+                    Yii::$app->api->sendFailedResponse([$model->errors]);
+                }
+            } else {
+                return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
+            } 
+        }
+       
+    }
+
+    public function actionListUsers()
+    {
+        $model = new UserDb();
+        $dataProvider =$model->find()->all();
+        $userData = [];
+        if(!empty($dataProvider)){
+            foreach ($dataProvider as $data) {
+               array_push($userData, $data->fullName); 
+            }
+            return Yii::$app->apis->sendSuccessResponse($userData);
+        }
+    }
+	
+	public function actionChatList($username)
+	{
+		$splitUserName = explode('-',$username);
+		$data = [];
+		$query = new Query();
+		// compose the query
+		$query->select([])
+			->from('rooms')
+			->where(['name1' => ['$regex' => $username]])
+			->orWhere(['name2' => ['$regex' => $username]]);
+			
+		// execute the query
+		$rows = $query->all();
+		$i=0;
+		foreach($rows as $key => $value){
+			
+			$name1 = explode('-',$value['name1']);
+			$name2 = explode('-',$value['name2']);
+			if($splitUserName[0] == $name1[0]){
+				$nonrequesterusername  = $name2[0];
+			}else{
+				$nonrequesterusername  = $name1[0];
+			}
+			
+			if($splitUserName[1] === $name1[2]){
+				$chats = new Query();
+				$roomId = (string) $value['_id'] ;
+				$chats->from('chats')->where(['room' => ['$eq' => $roomId]])->addOptions(['sort'=>['createdOn' => -1]]);
+				$chatRows = $chats->one();
+				$model = new UserDb();
+				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
+				$data[$i]['name'] = $dataProvider->fullName;
+				$data[$i]['avatar'] = 'http://ubuxa.net/'.$dataProvider->profile_image;
+				$data[$i]['unread'] = 0;
+				$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
+				$data[$i]['lastMessage'] = $chatRows['msg'];
+				$data[$i]['roomid'] = $roomId;
+				$data[$i]['username'] = $dataProvider->username;
+				$data[$i]['userid'] = $dataProvider->id;
+				$data[$i]['roomId'] = (string) $value['_id'];
+				$data[$i]['folderId'] = $splitUserName[1];
+				$i++;
+			}
+		}
+		return Yii::$app->apis->sendSuccessResponse($data);
+	}
+	
 }
+	

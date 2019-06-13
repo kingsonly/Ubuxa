@@ -27,6 +27,7 @@ class FolderUsersWidget extends Widget{
 	public $type;//  could be folder remarks,component, as the case may be 
 	public $pjaxId;//  could be folder remarks,component, as the case may be 
 	public $dynamicId;//  dynamic id
+	public $taskModal;//  dynamic id
 	
 	
 	
@@ -48,6 +49,7 @@ class FolderUsersWidget extends Widget{
 			'type' => $this->type,
 			'pjaxId' => !empty($pjaxId)?$pjaxId:'userjax',
 			'dynamicId' => $this->dynamicId,
+			'taskModal' => $this->taskModal,
 		]);
 	}
 	

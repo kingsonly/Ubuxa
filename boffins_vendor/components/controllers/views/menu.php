@@ -64,13 +64,16 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
                         <span class="edocument-text">Folder Files</span>
                     </div>
                     <div class="col-md-2" style="padding-top:20px; padding-bottom: 15px;">
-                        <i class="fa fa-arrow-left fa-2x close-arrow"></i>
+                        <i class="fa fa-times fa-2x close-arrow" aria-hidden="true"></i>
                     </div>
                 </div>
-                <div class="edoc-content ">
+                <div style="margin-left: 40px">
                     <?php if (isset($this->blocks['edocument'])){ ?>
                         <?= $this->blocks['edocument'] ?>
                     <?php } ?>
+                </div>
+                <div class="edoc-content">
+                    
                 </div>
             </div>
         </div>
@@ -86,7 +89,7 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
 	<div class="burger_box">
 		<div class="menu-icon-container">
 
-			<a href="#" class="menu-icon js-menu_toggle closed">
+			<a href="#" class="menu-icon js-menu_toggle closed" id="breathing-button">
 				<span class="menu-icon_box">
                     <i class="fa fa-plus fa-2x menu-plus" style="color: #fff !important;" aria-hidden="true"></i>
 					<img src="images/ubuxamenu.png" class="ubuxalogo"/>
@@ -148,7 +151,8 @@ $checkIdParam = yii::$app->getRequest()->getQueryParam('id');
     	<ul class="list_load">
     		<?//= SettingsAccordionWidget::widget();?>
     		<?= UsersAccordionWidget::widget();?>
-			<a class="menu-list" href="<?= Url::to(['site/logout'])?>"><li class="list_item menu-settings"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</li></a>
+			<a class="menu-list" data-method="POST" href="<?= Url::to(['site/logout'])?>"><li class="list_item menu-settings"><i class="fa fa-sign-out iconz" aria-hidden="true"></i>Logout</li></a>
+			
 			
 		</ul>
     </div>

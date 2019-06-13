@@ -155,6 +155,7 @@ lH = li Header
 <?php
 $assignUrl = Url::to(['task/assignee']);
 $assignee = <<<JS
+var Tasksockets = io('//127.0.0.1:4000/task');
 
 
   $('.list-bodytest').on('click', function(e) {
@@ -193,77 +194,110 @@ function _AddUser(user,taskid){
                 },
               success: function(response){
                     toastr.success('Completed');
-                    //$.pjax.reload({container:"#task-list-refresh"});
-                    //$.pjax.reload({container:"#kanban-refresh",async: false});
-                    //$.pjax.reload({container:"#task-modal-refresh",async: false});
                     var assigneeArray = JSON.parse(response);
+                    Tasksockets.emit('task assignee', assigneeArray);
                     if(assigneeArray[5] == 1){
-                      if(assigneeArray[4] == null){
-                        assigneeArray[4] = 'images/users/default-user.png';
-                      }
-                      var userImage = $('<div />',{
-                        class: 'user-image user_image'+assigneeArray[1]
-                        })
-                      var element = $('<div />', {
-                      class: "images-folder-users blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
-                      });
-                      element.attr({
-                        'data-toggle':'tooltip',
-                        'data-id':assigneeArray[0],
-                        'data-placement':'bottom',
-                        'data-username':assigneeArray[3],
-                        'data-userimage':assigneeArray[4],
-                        'title':assigneeArray[2]
-                        })
-                      element.css({
-                        'position':'relative',
-                        'z-index':1,
-                        'background-image':'url('+assigneeArray[4]+')',
+    if(assigneeArray[4] == null){
+      assigneeArray[4] = 'images/users/default-user.png';
+    }
+    var userImage = $('<div />',{
+      class: 'user-image user_image'+assigneeArray[1]+' '+'modal-users'+assigneeArray[1]
+      })
+    var element = $('<div />', {
+    class: "images-folder-users blue user-sticker"+assigneeArray[0]+"-"+assigneeArray[1]
+    });
+    element.attr({
+      'data-toggle':'tooltip',
+      'data-id':assigneeArray[0],
+      'data-placement':'bottom',
+      'data-username':assigneeArray[3],
+      'data-userimage':assigneeArray[4],
+      'title':assigneeArray[2]
+      })
+    element.css({
+      'position':'relative',
+      'z-index':1,
+      'background-image':'url('+assigneeArray[4]+')',
 
-                        })
-                      userImage.append(element)
-                      
+      })
+    userImage.append(element)
+    
 
-                      if($('#assignedto'+assigneeArray[1]).length > 0){
-                        $(document).find('.user_image'+assigneeArray[1]).append(element)
-                      } else {
-                        var assignedTo = $('<div />',{
-                        class: 'assignedto',
-                        id: 'assignedto'+assigneeArray[1],
-                        })
-                        var folderUsers = $('<div />',{
-                        class: 'folderusers',
-                        id: 'folderusers'+assigneeArray[1]
-                        })
-                        folderUsers.append(userImage)
-                        assignedTo.append(folderUsers)
-                        $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
-                        if($('#holder-board'+assigneeArray[1]).find('div.task-label-title').length !== 0){
-                          $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
-                          var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
-                          if(getCss === '-32px'){
-                            $('#edoc-count'+assigneeArray[1]).css('top','3px');
-                          }
-                        }else{
-                          var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
-                          if(getCss === '3px'){
-                            $('#edoc-count'+assigneeArray[1]).css('top','-32px');
-                          }
-                          $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
-                        }
-                      }
-                    }else{
-                      if($('.user_image'+assigneeArray[1]).children().length > 1 ){
-                        $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
-                      }else{
-                        $(document).find('#assignedto'+assigneeArray[1]).remove();
-                        var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
-                        if(getCss === '-32px'){
-                          $('#edoc-count'+assigneeArray[1]).css('top','3px');
-                        }
-                      }
-                    }
+    if($('.assignedto'+assigneeArray[1]).length > 0){
+      $(document).find('.user_image'+assigneeArray[1]).append(element)
+    } else {
+      var assignedTo = $('<div />',{
+      class: 'assignedto assignedto'+assigneeArray[1],
+      })
+      var folderUsers = $('<div />',{
+      class: 'folderusers',
+      id: 'folderusers'+assigneeArray[1]
+      })
+      folderUsers.append(userImage)
+      assignedTo.append(folderUsers)
+      $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+      if($('.allassignees').length !== 0){
+          var userImagez = $('<div />',{
+            class: 'modal-users user_image'+assigneeArray[1],
+            })
+          var elementz = $('<div />', {
+          class: "images-folder-users blue user-sticker"+assigneeArray[0]+'-'+assigneeArray[1]
+          });
+          elementz.attr({
+            'data-toggle':'tooltip',
+            'data-id':assigneeArray[0],
+            'data-placement':'bottom',
+            'data-username':assigneeArray[3],
+            'data-userimage':assigneeArray[4],
+            'title':assigneeArray[2]
+            })
+          elementz.css({
+            'position':'relative',
+            'z-index':1,
+            'background-image':'url('+assigneeArray[4]+')',
 
+            })
+          userImagez.append(elementz)
+          var assignedToz = $('<div />',{
+            class: 'assignedto assignedto'+assigneeArray[1],
+          })
+          var folderUsersz = $('<div />',{
+          class: 'folderusers',
+          })
+          folderUsersz.append(userImagez)
+          assignedToz.append(folderUsersz)
+            console.log('found')
+            $(document).find('.allassignees').append(assignedToz)
+            //$(document).find('#memberz').append('<h2>fgjhgjh</h2>')
+            console.log(assignedTo)
+      }
+      if($('#holder-board'+assigneeArray[1]).find('div.task-label-title').length !== 0){
+        $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+        var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+        if(getCss === '-32px'){
+          $('#edoc-count'+assigneeArray[1]).css('top','3px');
+        }
+      }else{
+        var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+        if(getCss === '3px'){
+          $('#edoc-count'+assigneeArray[1]).css('top','-32px');
+        }
+        $(document).find('#task-title'+assigneeArray[1]).append(assignedTo)
+      }
+    }
+  }else{
+    if($('.modal-users'+assigneeArray[1]).children().length > 1 || $('.modal-users').children().length > 1){
+      console.log('first')
+      $(document).find('.user-sticker'+assigneeArray[0]+'-'+assigneeArray[1]).remove();
+    }else{
+      console.log('last')
+      $(document).find('.assignedto'+assigneeArray[1]).remove();
+      var getCss = $('#edoc-count'+assigneeArray[1]).css('top')
+      if(getCss === '-32px'){
+        $('#edoc-count'+assigneeArray[1]).css('top','3px');
+      }
+    }
+  }
                     
               },
               error: function(res, sec){
@@ -271,6 +305,11 @@ function _AddUser(user,taskid){
               }
           });
 }
+
+
+Tasksockets.on('task assignee', function(assigneeArray){
+  
+})
 
 JS;
  

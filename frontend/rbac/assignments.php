@@ -1,7 +1,7 @@
 <?php
 return [
     33 => [
-        'administrator',
+        'admin',
     ],
     24 => [
         'admin',
@@ -16,22 +16,22 @@ return [
         'admin',
     ],
     43 => [
-        'admin',
+        'field_officer',
     ],
     44 => [
-        'admin',
+        'field_officer',
     ],
     39 => [
         'admin',
     ],
     45 => [
-        'admin',
+        'field_officer',
     ],
     46 => [
-        'admin',
+        'field_officer',
     ],
     47 => [
-        'admin',
+        'field_officer',
     ],
     48 => [
         'admin',
@@ -77,5 +77,11 @@ return [
     ],
     40 => [
         'admin',
+    ],
+    53 => [
+        'field_officer',
+    ],
+    54 => [
+        'administrator',
     ],
 ];

@@ -19,11 +19,12 @@ use frontend\models\TelephoneEntity;
 use frontend\models\State;
 use yii\helpers\Json;
 use yii\db\Exception;
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * ClientController implements the CRUD actions for Client model.
  */
-class ClientController extends Controller
+class ClientController extends BoffinsBaseController
 {
     /**
      * {@inheritdoc}

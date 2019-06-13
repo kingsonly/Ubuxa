@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'userForm' => $userForm,
 		'action' => $action,
 		'customer' => $customer,
+		'userExists' => $userExists,
     ]) ?>
 
 </div>

@@ -322,6 +322,7 @@ class SignupForm extends Model
     
     public function save($validate = true)
     {
+		
         return $validate ? $this->validate() && $this->_beforeSave() : $this->_beforeSave();
     }
 

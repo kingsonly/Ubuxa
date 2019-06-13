@@ -21,8 +21,7 @@ use frontend\models\TaskGroup;
 use frontend\models\TaskColor;
 use frontend\models\Edocument;
 use frontend\models\UserDb;
-
-
+use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * TaskController implements the CRUD actions for Task model.
@@ -48,41 +47,53 @@ class TaskController extends Controller
      * Lists all Task models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        /** $model = new Task;
-        $dataProvider = $model->displayTask();
-        $task = StatusType::find()->where(['status_group' => 'task'])->all();
+    public function actionIndex($folderIds)
+    {/*
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();
-            
-        return $this->renderAjax('index', [
-            'dataProvider' => $dataProvider,
-            'model' => $model,
-            'task' => $task,
-            'reminder' => $reminder,
-        ]); */
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
         $perpage=10;
         $task = new Task();
-        if(isset($_GET['src1'])){
+        $task->fromWhere = 'folder';
+        if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
                 $ownerid = Yii::$app->request->post('ownerId');
+                $modelName = Yii::$app->request->post('modelName');
+                $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
                 $offset = (($numpage-1) * $perpage);
                      
                 $taskclips = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                 return $this->renderAjax('index', [
-                         'tasks' => $taskclips,
-                     ]);
+                    'task' => $task,
+                    'taskclips' => $taskclips,
+                    'taskStatus' => $taskStatus,
+                    'reminder' => $reminder,
+                    'label' => $label,
+                    'taskLabel' => $taskLabel,
+                    'taskAssignedUser' => $taskAssignedUser,
+                    'users' => $users,
+                    'userId' => $userId,
+                    'dataProvider' => $dataProvider,
+                    'folderIds' => $folderIds,
+                ]);
                 
             } 
-        }
+        }*/
     }
 
-    public function actionIndex2()
+    public function actionIndex2($folderId)
     {   
         $perpage = 10;
         $task = new Task();
-
+        $task->fromWhere = 'folder';
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $numpage = Yii::$app->request->post('page');
@@ -102,16 +113,26 @@ class TaskController extends Controller
                      ]);
                 } else {
                      
-                     $tasks = $task->specificClips($ownerid,1,$offset,$perpage,'task');
+                     $tasks = $task->specificClips($ownerid,2,$offset,$perpage,'task');
                      
                      return $this->renderAjax('index2', [
                          'tasks' => $tasks,
                          'task' => $task,
+                         'folderId' => $folderId,
                      ]);
                 }
                 
             } 
         }
+    }
+
+    public function actionModal($id,$folderId)
+    {
+
+        return $this->renderAjax('modal', [
+            'id' => $id,
+            'folderId' => $folderId,
+        ]);
     }
 
     /**
@@ -143,7 +164,6 @@ class TaskController extends Controller
         // read your posted model attributes
         if ($model->load(Yii::$app->request->post())) {
             // read or convert your posted information
-            
             $model->save(false);
             // return JSON encoded output in the below format
             return ['output'=>'', 'message'=>''];
@@ -259,6 +279,7 @@ class TaskController extends Controller
                         $taskGroupModel->task_group_id = $model->id;
                         $taskGroupModel->task_child_id = $model->id;
                         $taskGroupModel->save();
+                        return json_encode($model->attributes);
                     }
                 }
                 
@@ -312,12 +333,42 @@ class TaskController extends Controller
             if($statusid == Task::TASK_COMPLETED){
                 $model->completion_time = new Expression('NOW()');
                 $model->save();
+                return json_encode($id);
             } elseif ($statusid == Task::TASK_IN_PROGRESS) {
                 $model->in_progress_time = new Expression('NOW()');
                 $model->save();
             }
             $model->save();
         }
+    }
+
+    public function actionBoard($folderIds)
+    {   
+        $task = new Task();
+        $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+        $reminder = new Reminder();
+        $label = new label();
+        $taskLabel = new TaskLabel();
+        $taskAssignedUser = new TaskAssignedUser();
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $folder = Folder::findOne($folderIds);
+        $users = $folder->users;
+        $dataProvider = $folder->clipOn['task'];
+        
+        return $this->renderAjax('board', [
+            'task' => $task,
+            'taskModel' => $task,
+            'taskStatus' => $taskStatus,
+            'reminder' => $reminder,
+            'label' => $label,
+            'taskLabel' => $taskLabel,
+            'taskAssignedUser' => $taskAssignedUser,
+            'users' => $users,
+            'userId' => $userId,
+            'folderIds' => $folderIds,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionAssignee()
@@ -413,6 +464,26 @@ class TaskController extends Controller
           return 1;
         } else {
             return 0;
+        }
+    }
+
+    public function actionCheckTask()
+    {
+        $task = new Task();
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();   
+            $checkedid =  $data['id'];
+
+            $model = Task::findOne($checkedid);
+
+            if($model->status_id != $task::TASK_COMPLETED){
+                $model->status_id = $task::TASK_COMPLETED;
+                $model->save();
+            } else {
+                $model->status_id = $task::TASK_NOT_STARTED;
+                $model->save();
+            }
+            
         }
     }
 

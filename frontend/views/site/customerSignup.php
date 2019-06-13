@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
@@ -13,6 +14,9 @@ $this->title = Yii::t('Get Started', 'Get Started');
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <style>
+.form-group.has-error .help-block{
+  color: #ff6f5d !important;
+}
 #loader{
 height: 35px;
 display: none;
@@ -250,6 +254,9 @@ label {
     right: 55px;
     top: -5px;
   }
+  a{
+    color: #fff !important;
+  }
 </style>
 <div class="container">
     <div class="frame">
@@ -266,11 +273,11 @@ label {
             ]); ?>
 
               <div class="form-group">
-                <?= $form->field($customerForm, 'master_email')->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
+                <?= $form->field($customerForm, 'master_email', ['errorOptions' => ['class' => 'help-block' ,'encode' => false]])->textInput(['maxlength' => true, 'class' => 'form-styling']) ?>
 
                 <div class="input-box">
 
-                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling'])?> 
+                  <?= $form->field($customerForm, 'master_doman')->textInput(['maxlength' => true, 'class' => 'form-styling', 'pattern' => '^\S+$', 'title' => 'Spaces are not allowed.'])?> 
                   <span class="unit">.ubuxa.net</span>
                 </div>
 
@@ -313,6 +320,7 @@ label {
 
 
 <?php
+$resendInvite = Url::to(['site/resend-invite', 'email' => '']);
 $js = <<<JS
 
 function inTest() {
@@ -336,6 +344,29 @@ $('#tenantentity-entity_type').on('change', function() {
       $(".corporation-tenant").hide();
     }
 });
+
+$(document).on('click', '.resend-invite',function(e){
+    var email = $('#customersignupform-master_email').val();
+    if(email !== ''){
+      _resendInvite(email);
+    }
+})
+
+function _resendInvite(email){
+  $.ajax({
+      url: '$resendInvite'+email,
+      type: 'POST',
+      data:{
+          email: email,
+        },
+      success: function(response) {
+        inTest();
+      },
+    error: function(response){
+        console.log(response);
+    }
+  });
+}
 
 /* function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
@@ -372,8 +403,8 @@ $('#customerForm').on('beforeSubmit', function (e) {
 $(document).ready(function () {
     $(".form-signup").toggleClass("form-signup-left");
     $(".frame").toggleClass("frame-long");
-    var val = getURLParameter('plan_id');
-    $('#customersignupform-plan_id').val(val); 
+    //var val = getURLParameter('plan_id');
+    //$('#customersignupform-plan_id').val(val); 
 });
 
 

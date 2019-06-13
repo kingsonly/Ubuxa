@@ -14,6 +14,7 @@ class LoginForm extends Model
     public $password;
     public $rememberMe = true;
 	public $device_token;
+    public $domain;
 	
 	const SCENARIO_LOGIN = 'login';
 	
@@ -32,6 +33,7 @@ class LoginForm extends Model
             [['username', 'password', 'device_token'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
+            ['domain', 'safe'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
 			[['device_token'], 'string', 'max' => 8],
@@ -46,7 +48,7 @@ class LoginForm extends Model
 	public function scenarios()
     {
         return [
-            self::SCENARIO_LOGIN => ['username', 'password', 'rememberMe'],
+            self::SCENARIO_LOGIN => ['username', 'password', 'rememberMe', 'domain'],
 			self::SCENARIO_LOGIN_NEW_DEVICE => ['username', 'device_token', 'password'],
         ];
     }

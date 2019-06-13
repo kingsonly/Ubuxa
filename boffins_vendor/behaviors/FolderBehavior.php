@@ -53,7 +53,7 @@ class FolderBehavior extends Behavior
 		$role = 'author';
 		$folderManager = $this->linkUserToFolder($userId,$folderId,$role);
 		
-		if($this->owner->privateFolder === self::FOLDER_LOCK_STRING){
+		if($this->owner->privateFolder === self::FOLDER_LOCK_STRING or $this->owner->private_folder === 1){
 			if($folderManager->save()){
 				return;
 			}

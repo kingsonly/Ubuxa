@@ -82,9 +82,7 @@ return [
                 ],
             ],
         ],
-		'activityManager' => [
-			'class' => 'boffins_vendor\classes\ActivityManager'
-		],
+		
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -124,7 +122,7 @@ return [
 		'rules' => [
 			[
 				'allow' => true,
-				'actions' => ['login','customersignup','signup', 'ajax-validate-form', 'ajax-validate-user-form', 'request-password-reset','ajax-validate-request-password-form','reset-password', 'signin'],
+				'actions' => ['login','customersignup','signup', 'ajax-validate-form', 'ajax-validate-user-form', 'request-password-reset','ajax-validate-request-password-form','reset-password', 'signin','find-workspace', 'resend-invite'],
 				'roles' => ['?'],
 			],
 			[

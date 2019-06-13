@@ -11,6 +11,7 @@ var methodOverride = require('method-override');
 var path = require('path');
 var fs = require('fs');
 var logger = require('morgan');
+var socketio = require('socket.io');
 
 //port setup
 var port = process.env.PORT || 4000;
@@ -18,9 +19,12 @@ var port = process.env.PORT || 4000;
 //socket.io
 
 
-
-require('./libs/chat.js').sockets(http);
+io = socketio.listen(http);
 require('./libs/remark.js').remarkSockets(http);
+require('./libs/task.js').taskSockets(http);
+require('./libs/chat.js').sockets(http);
+require('./libs/redisDemo.js').redisSocket(http);
+
 app.use(logger('dev'));
 
 //db connection
@@ -33,10 +37,10 @@ mongoose.connection.once('openUri',function(){
 
 
 var con = mysql.createConnection({
-	  host: "localhost",
-	  user: "root",
-	  password: "",
-	  database: "premux_main"
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "premux_main"
   });
 //session setup
 var sessionInit = session({
@@ -77,28 +81,28 @@ app.use(function(req,res,next){
 
 if(req.session && req.session.user){
 
-	  con.connect(function(err) {
+    con.connect(function(err) {
   if (err){
-	 console.log('mysqlError:' + err)
+   console.log('mysqlError:' + err)
   }
   con.query("SELECT username FROM tm_user WHERE username = '"+req.session.user.email+"' LIMIT 1", function (err,user) {
     if (err) {
           console.log("Error : " + err);
         } else {
           if(user){
-			  console.log('this is the users loged'+req.user);
+        console.log('this is the users loged'+req.user);
         req.user = user;
         delete req.user.password;
-				req.session.user = user;
+        req.session.user = user;
         delete req.session.user.password;
-				next();
-			}
+        next();
+      }
         }
   });
 });}
-	else{
-		next();
-	}
+  else{
+    next();
+  }
 
 });//end of set Logged In User.
 

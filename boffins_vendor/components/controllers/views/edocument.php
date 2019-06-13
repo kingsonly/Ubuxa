@@ -6,7 +6,7 @@
   use yii\base\view;
   use kartik\popover\PopoverX;
   use kartik\widgets\FileInput;
-  AppAsset::register($this);
+  //AppAsset::register($this);
   $docUrl = Url::to(['edocument/upload']);
 ?>
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -597,6 +597,7 @@
     bottom: 70px;
     right: 230px;
 }
+
 </style>
 
 <!-- Main edocument widget -->
@@ -644,6 +645,7 @@
 <?
 $taskUrl = Url::to(['task/view']);
 $doctype = Url::to('@web/images/edocuments');
+$boardUrl = Url::to(['task/board']);
 $dropzone = <<<JS
 // Firefox 1.0+
     var isFirefox = typeof InstallTrigger !== 'undefined';
@@ -744,30 +746,41 @@ var dropzone = new Dropzone('#dropupload$target', {
      $('.dropzone-main').addClass("remove-zindex");
      $('.dropzone-main').removeClass("add-zindex");
     });
+    this.on("drop", function(file, response) {
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+         $(".dropzone$target").addClass("dummy"); //hide widget on complete
+         $('.dropzone-main').addClass("remove-zindex");
+         $('.dropzone-main').removeClass("add-zindex");
+        }
+    });
     this.on("complete", function(file) {
         //this.removeFile(file); //remove file thumbanil on complete
     });
     this.on("uploadprogress", function(file, progress, bytesSent) {
-        /*if (file.previewElement) {
-            var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
-            var x=document.getElementById("toastUpload");
-              x.classList.add("show");
-              x.textContent=progress + " %";
-              setTimeout(function(){
-                //x.classList.remove("show");
-              },3000);
-            //var myToast = toastr.success(progress + "%", {timeOut:0});
-            //myToast.find(".toast-message").text(progress + "%");
-        }*/
+        if($('#dropupload$target').hasClass('dropzonefolder')){
+            if (file.previewElement) {
+                var progressElement = file.previewElement.querySelector("[data-dz-uploadprogress]");
+                var x=document.getElementById("edocument-io");
+                  //x.classList.remove("hide-loads");
+                  $('#edocument-io').fadeIn();
+                  document.getElementById("folder-doc-loader").textContent="Uploading..."+Math.round(progress) + "%";
+            }
+        }
     });
     this.on("success", function(file, response) {
         console.log(response);
         this.removeFile(file);
+        //document.getElementById("folder-doc-loader").textContent="Complete";
+        $('#edocument-io').fadeOut();
         var taskId = $('#dropupload$target').getParent(3).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(3).attr('data-folderId');
-        toastr.success('File uploaded successfully');
-        if(!$('#dropupload$target').hasClass('foldervault')){
-            $.pjax.reload({container:"#kanban-refresh",async: false});
+        
+
+        if(!$('#dropupload$target').hasClass('foldervault') && !$('#dropupload$target').hasClass('dropzonefolderdetails')){
+            var folderId = $('.board-specfic').attr('data-folderId');
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-list-refresh",async: false});
         }
         if($('#dropupload$target').hasClass('dropzonetaskboard')){
@@ -776,8 +789,8 @@ var dropzone = new Dropzone('#dropupload$target', {
         if($('#dropupload$target').hasClass('dropzonefolderdetails')){
             $.pjax.reload({container:"#folder-details-refresh", async:false});
         }
-        if($('#dropupload$target').hasClass('dropzonefolder')){
-            $.pjax.reload({container:"#folder-edoc", async:false});
+        if(!$('#dropupload$target').hasClass('dropzonefolder')){
+            toastr.success('File uploaded successfully');
         }
     });
     this.on('error', function(file, response) {
@@ -797,7 +810,8 @@ var dropzone = new Dropzone('#dropupload$target', {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
   clickable: false,
-  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 10,
+  maxFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
+  parallelUploads: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 1 : 20,
   /*addRemoveLinks: true,*/
   acceptedFiles: $('#dropupload$target').hasClass('dropzonefolderdetails') ? 'image/*' : '',
   accept: function(file, done) {
@@ -825,6 +839,8 @@ $this->registerJs($dropzone);
 <?php
 $doctype = Url::to('@web/images/edocuments');
 $taskUrl = Url::to(['task/view']);
+$boardUrl = Url::to(['task/board']);
+$edocsUrl = Url::to(['edocument/index']);
 $upload = <<<JS
 
 $('.mybtnz').on('click', function(e){
@@ -852,13 +868,17 @@ var dropzone = new Dropzone('#dropupload$target', {
         $('#dropupload$target').parent().prev('.add-attachments').show();
         var taskId = $('#dropupload$target').getParent(2).attr('data-taskId');
         var folderId =$('#dropupload$target').getParent(2).attr('data-folderId');
-        $.pjax.reload({container:"#kanban-refresh",async: false});
+        var folderId = $('.board-specfic').attr('data-folderId');
+        
         $.pjax.reload({container:"#task-list-refresh",async: false});
         if($('#dropupload$target').hasClass('click-uploadmodalUpload')){
+            if($('#kanban-refresh').length > 0){
+               $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId}); 
+            }
             $.pjax.reload({container:"#task-edoc",replace: false, async:false, url: '$taskUrl&id='+taskId+'&folderId='+folderId});
         }
         if($('#dropupload$target').hasClass('click-uploadfolderUpload')){
-            $.pjax.reload({container:"#folder-edoc", async:false});
+            $.pjax.reload({container:"#edoc-folders", replace: false, async:false, url: '$edocsUrl&folderId='+folderId});
         }
     });
     this.on('error', function(file, response) {
@@ -871,7 +891,7 @@ var dropzone = new Dropzone('#dropupload$target', {
   },
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 50, // MB. maximum limit for upload
-  maxFiles: 10,
+  maxFiles: 20,
   clickable: true,
   accept: function(file, done) {
     var ext = file.name.split('.').pop(); //get file extension

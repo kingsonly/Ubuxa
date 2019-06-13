@@ -76,7 +76,7 @@ use yii\widgets\Pjax;
     	<?= FolderUsersWidget::widget(['attributues'=>$users,'id'=>$id,'type'=>'folder','pjaxId' => $id])?>	
 		<?php Pjax::end(); ?>
     </div>
-	<? if(yii::$app->user->identity->cid == 5784 or yii::$app->user->identity->cid == 856){?>
+	<? if(yii::$app->user->identity->cid == 5784 or yii::$app->user->identity->cid == 856 || yii::$app->user->identity->cid == 33){?>
 	<div class="components">
 		<div class="col-sm-12 col-xs-12  column-margin component-contetnt">
 		

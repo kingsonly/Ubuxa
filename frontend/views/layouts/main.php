@@ -9,9 +9,11 @@ use yii\bootstrap\Alert;
 use app\assets\IndexDashboardAsset;
 use app\assets\NewIndexDashboardAsset;
 use boffins_vendor\components\controllers\MenuWidget;
+use boffins_vendor\components\controllers\ChatNotificationWidget;
 use boffins_vendor\components\controllers\FeedbackWidget;
 use frontend\models\UserFeedback;
 use frontend\assets\AppAsset;
+use yii\widgets\Pjax;
 AppAsset::register($this);
 
 $feedback = new UserFeedback();
@@ -42,6 +44,9 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	z-index: 9999;
 	background: url(<?= $waitToLoad; ?>) center no-repeat #fff;
 }
+.customer-info{
+	background: black !important;
+}
 		
 		
 .images ul li img {
@@ -57,7 +62,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
 	
 </head>
-<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" >
+<body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" data-chatnotificationurl="<?= Url::to(['site/update-chat-notification'])?>" >
 <!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
 	<div class="se-pre-con"></div>
 
@@ -124,6 +129,9 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 .alert-text{
   text-align: left !important;
 }
+		.hide-label{
+			display: none;
+		}
     </style>
     
 
@@ -139,10 +147,61 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 
           
         </div>
+		
+		  <div id="chat-refresher" class="navbar-custom-menu chat-refresher">
+			  
+        <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle hide-counter" data-toggle="dropdown">
+              <i class="fa fa-envelope-o"></i>
+              <span class="label label-success hide-label"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header header-info"></li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                 <?= ChatNotificationWidget::widget(); ?>
+                  <!-- end message -->
+                </ul>
+              </li>
+              
+            </ul>
+          </li>
+          
+        </ul>
+			  <?php
+
+$flashs = <<<ABC
+  $(document).on('click','.hide-counter',function(){
+			  	localStorage.removeItem('chatcounter');
+				$(document).find('.hide-label').hide();
+			  })
+			  		
+					
+					if ("chatcounter" in localStorage) {
+					
+					var chtacounter = localStorage.getItem('chatcounter')
+						$(document).find('.header-info').html('You have '+chtacounter+' messages');
+						$(document).find('.hide-label').show().html(chtacounter);
+						
+					} else {
+						$(document).find('.header-info').html('You have 0 message');
+						$(document).find('.hide-label').hide();
+					}
+ABC;
+$this->registerJs($flashs);
+?>
+			  
+		
+			  
+      </div>
 
         
       </div>
       <!-- /.container-fluid -->
+		
     </nav>
   </header>
 	
@@ -181,6 +240,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
+		 
     </section>
       <!-- /.content -->
     </div>
@@ -216,3 +276,4 @@ $this->registerJs($flash);
 	
 </html>
 <?php $this->endPage() ?>
+ 

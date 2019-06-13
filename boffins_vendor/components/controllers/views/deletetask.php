@@ -13,6 +13,37 @@ use yii\helpers\Url;
     display: none;
     text-align: center;
   }
+  .for-edoc-loader{
+  position: relative;
+}
+.text-delete{
+  padding: 0 12px 12px;
+}
+.confirm-doc-delete{
+  background-color: #eb5a46;
+  /*box-shadow: 0 1px 0 0 #b04632;*/
+  border: none;
+  width: 100%;
+}
+.delete-header-holder{
+  height: 40px;
+  position: relative;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.delete-header{
+  box-sizing: border-box;
+  color: #6b808c;
+  display: block;
+  line-height: 40px;
+  border-bottom: 1px solid rgba(9,45,66,.13);
+  margin: 0 12px;
+  overflow: hidden;
+  padding: 0 32px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
 <div class="delete-header-holder">
   <span class="delete-header">
@@ -33,8 +64,10 @@ use yii\helpers\Url;
 
 
 <?php
+$boardUrl = Url::to(['task/board']);
 $deleteTaskUrl = Url::to(['task/delete']);
 $deleteTask = <<<JS
+var DeleteTasksocket = io('//127.0.0.1:4000/task');
 
 $(".delete-task").on('click',function(e) {
     var taskid;
@@ -55,15 +88,21 @@ function _deleteTask(taskid){
                 },
               success: function(res, sec){
                     toastr.success('Task Deleted');
-                    $.pjax.reload({container:"#kanban-refresh",async: false});
-                    $.pjax.reload({container:"#task-list-refresh"});
-                   //console.log('Task Deleted');
+                    DeleteTasksocket.emit('task delete', taskid);
               },
               error: function(res, sec){
                   console.log('Something went wrong');
               }
     	});
 }
+
+DeleteTasksocket.on('task delete', function(taskid){
+  $('.openDropdown').hide();
+  $('.delete-task').show();
+  $('.loading-delete-task').hide();
+  $('.test_'+taskid).remove();
+  $('.todo_'+taskid).remove();
+})
 
 JS;
 $this->registerJs($deleteTask);
