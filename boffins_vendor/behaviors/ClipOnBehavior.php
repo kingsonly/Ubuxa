@@ -217,6 +217,26 @@ class ClipOnBehavior extends Behavior
 		}
 		
 	}
+
+	/***
+	 * @brief returns a ClipBarOwner - i.e. a BARRM which is a ClipBar eg folder. 
+	 * 
+	 * @param [int] $clipBarID the id of the ClipBar to retrieve.
+	 */
+	protected function retrieveClipBarOwner($clipBarID)
+	{
+		$clipBar = ClipBar::find()
+					//->select('{{%clip_bar}}.id, ot.owner_type')
+					->joinWith(['ownerType'])
+					->andWhere(['{{%clip_bar}}.id' => $clipBarID])
+					->one();
+		$ownerType = ucfirst($clipBar->ownerType->owner_type);
+		Yii::warning("Owner $ownerType", "HERE");
+		$fqn = "\\frontend\\models\\{$ownerType}";
+		$barOwner = $fqn::findQuietly()->andWhere(['id' => $clipBar->owner_id])->one();
+		//Yii::warning(\yii\helpers\VarDumper::dumpAsString($barOwner), "RIGHT HERE");
+		return $barOwner;
+	}
 	
 	/*************************************************************************************************************************************************************************************************************************************************************** Private methods start here **************************************** ***********************************************************************************************************************************************************************************************************************/
 	
@@ -341,10 +361,22 @@ class ClipOnBehavior extends Behavior
 		return (new \ReflectionClass($classMethod))->getShortName();// use to strip out name space in a class name
 	}
 	
+	/***
+	 * @KINGSLEY this function needs a lot of refactoring.
+	 * 
+	 * @brief - missing KINGSLEY TO INCLUDE
+	 * @details - if necessary 
+	 * @future - 
+	 * 1. the queries here can reasonably be reduced to 1 or 2 queries. Aim for 1. You can join, with and joinWith to include
+	 * relations.
+	 * 2. The variable names are very opaque
+	 * 3. Inline documentation is actually more a nuisance than a help. The code should be self explanatory. If you need inline 
+	 * documentation, it means you are using the wrong variable names and method names. 
+	 */
 	private function createClipOn()
 	{
 		Yii::trace("b4 owners id = ".$this->owner->id);
-		if(!empty($this->owner->ownerId)){
+		if(!empty($this->owner->ownerId)){ //i think ownerId here should be BarOwnerID
 			Yii::trace("after owners id");
 			//$clipOwnerTypeModel = new ClipOwnerType(); // instatnciate ClipOwnerType model
 			//$clipBarModel  = new ClipBar(); // instatnciate clip bar model 
@@ -376,14 +408,20 @@ class ClipOnBehavior extends Behavior
 					$getOwnerTypeId = $clipOwnerType; // this should return an object of the just saved type
 				}
 			}
-			
-			$getClipBarId = ClipBar::find()->select(['id'])->andWhere(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task 
-
+			//Yii::warning(\yii\helpers\VarDumper::dumpAsString($this->retrieveClipBarOwner($this->owner->ownerId)), "HRER");
+			$getClipBarId = ClipBar::find()->select(['id'])->andWhere(['owner_id' => $this->owner->ownerId])->andWhere(['owner_type_id' => $ownerTypeId])->one(); // fetch the clip bar it to be used to clip the clip and where type is = folder /component or task
+			$clipBarOwner = $this->retrieveClipBarOwner($getClipBarId);
+			/*Yii::$app->activityManager->includeMessage([
+						'PREPEND' => "in {$clipBarOwner->shortClassName()} {$clipBarOwner->publicTitleofBarrm}",
+						'OBJECT_ID' => $clipBarOwner->id,
+						'OBJECT_SHORT_CLASS' => $clipBarOwner->shortClassName()
+			]);*/
 			$clipModel->owner_id = $this->owner->id; // assign owner id to clip 
 			$clipModel->bar_id = $getClipBarId->id; // assign bar  id to clip 
 			$clipModel->owner_type_id = $getOwnerTypeId->id; // assign owner type id to clip 
 			$clipModel->save(); // save clip
 			//var_dump($this->owner->fromWhere);
+			Yii::warning("Just added a {$this->owner->publicTitleOfBarrm} with id of {$this->owner->id} ");
 			
 		}else{
 			return;
@@ -393,7 +431,7 @@ class ClipOnBehavior extends Behavior
 	private function fixEdocumentClips(){
 		
 	}
-	
+
 	
 	
 	

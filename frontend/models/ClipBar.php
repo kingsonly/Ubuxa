@@ -25,7 +25,7 @@ class ClipBar extends BoffinsArRootModel implements TenantSpecific
      */
     public static function tableName()
     {
-        return 'tm_clip_bar';
+        return '{{%clip_bar}}';
     }
 
     /**
