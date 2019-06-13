@@ -71,7 +71,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
 
     //file upload method
     public function upload($edocument, $reference, $referenceID, $filePath, $cid, $ownerId)
-    {   
+    {
             $edocument->file_location = $filePath;
             $edocument->reference = $reference;
             $edocument->reference_id = $referenceID;
@@ -181,4 +181,16 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     {
         return $this->user->username;
     }
+
+
+    /***
+     * {@inheritdoc}
+     * 
+     * @details return true so that on afterSave (insert), this instance is subscribed to the current user.
+     */
+    protected function subscribeInstanceOnInsert()
+	{
+		return true;
+	}
+
 }
