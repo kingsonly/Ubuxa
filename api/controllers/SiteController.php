@@ -416,7 +416,32 @@ class SiteController extends RestController
 			}
 		}
 		return Yii::$app->apis->sendSuccessResponse($data);
-	}
-	
+    }
+    
+    /***
+     * @brief action to store a push token to the server
+     * 
+     */
+    public function actionStorePushToken()
+    {
+        //
+        if ( !isset($this->request["token"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide a push token ['token'] ");
+        }
+
+        if ( !isset($this->request["uid"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide the user id ['uid'] ");
+        }
+
+        $model = new UserDevicePushToken;
+        $model->push_token = $this->request["token"];
+        $model->user_id = $this->request["uid"];
+
+        if ( $model->save() ) {
+            return Yii::$app->apis->sendSuccessResponse("Token stored successfully");
+        } else {
+            return Yii::$app->apis->sendFailedResponse("Unkown server error. Please try again.");
+        }
+    }
 }
 	
