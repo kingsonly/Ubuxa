@@ -88,6 +88,11 @@ function _deleteTask(taskid){
                 },
               success: function(res, sec){
                     toastr.success('Task Deleted');
+                    $('.openDropdown').hide();
+                    $('.delete-task').show();
+                    $('.loading-delete-task').hide();
+                    $('.test_'+taskid).remove();
+                    $('.todo_'+taskid).remove();
                     DeleteTasksocket.emit('task delete', taskid);
               },
               error: function(res, sec){
