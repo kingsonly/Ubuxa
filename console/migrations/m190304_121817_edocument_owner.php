@@ -48,7 +48,8 @@ class m190304_121817_edocument_owner extends Migration
     public function safeDown()
     {
         echo "m190304_121817_edocument_owner should not be reverted. Reverting for development only.\n";
-
+		$this->dropForeignKey('Owner', "{{%e_document}}");
+		$this->dropColumn("{{%e_document}}", 'owner_id');
         //return false;
     }
 

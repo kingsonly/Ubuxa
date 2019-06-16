@@ -5,8 +5,13 @@ use yii\helpers\Html;
 /* @var $user common\models\User */
 
 //$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+
 $resetLink = "http://ubuxa.net/index.php?r=site/reset-password&token=".$user->password_reset_token;
+
 ?>
+
+
+
 <div class="password-reset">
     <p>Hello <?= Html::encode($user->username) ?>,</p>
 
@@ -78,4 +83,5 @@ $resetLink = "http://ubuxa.net/index.php?r=site/reset-password&token=".$user->pa
             </table>
         </td>
     </tr>
+
 

@@ -97,7 +97,7 @@ AppAsset::register($this);
             <table border="0" cellpadding="0" cellspacing="0" width="480" >
                 <tr>
                     <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 1px; line-height: 48px;">
-                      <h1 style="font-size: 32px; font-weight: 400; margin: 0;">Welcome to Ubuxa</h1>
+                      <h1 style="font-size: 32px; font-weight: 400; margin: 0;">Reset Ubuxa Password</h1>
                     </td>
                 </tr>
             </table>
@@ -114,7 +114,7 @@ AppAsset::register($this);
               <!-- PERMISSION REMINDER -->
               <tr>
                 <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
-                  <p style="margin: 0;">You received this email because you registered on Ubuxa.net</p>
+                  <p style="margin: 0;">You received this email because you requested  to reset your password on  Ubuxa.net .</p>
                 </td>
               </tr>
               

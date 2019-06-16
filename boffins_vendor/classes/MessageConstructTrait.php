@@ -49,20 +49,27 @@ trait MessageConstructTrait
     /***
      * @brief resolves a message construct into a sentence/phrase by replacing constructs with their intended values
      * 
+     * @param [boolean] $strict indicates whether or not the resolve() function should only result in a valid sentence without 
+     * formats. Defaults to true. 
+     * 
+     * @future add ability (pregmatch?) to clear formats remaining after running through the contsructs so that you only 
+     * get the messages that reflect the constructs you have set. 
      */
-	public function resolve()
+	public function resolve($strict = true)
 	{
-		if (empty($this->_sentenceConstruct)) {
-			Yii::warning("You have not provided any constructs.", __METHOD__ );
-			return '';
+		if ( $this->isEmpty()) {
+            Yii::warning("You have not provided any constructs.", __METHOD__ );
+            if ($strict) {
+                return '';
+            }
         }
         
-		$matchCount = 0; //not the way to go 
+		$matchCount = 0; //not sure this is the way to go
 		$result = $this->sentenceFormat;
-		$missingConstructs = [];
+		$absentConstructs = [];
 		foreach ($this->_sentenceConstruct as $construct => $value) {
 
-            if ( $value instanceof MessageConstructInterface  ) {
+            if ( $value instanceof MessageConstructInterface ) {
                 $result = str_replace("{" . $construct . "}", $value->resolve(), $result, $matchCount);
             }
 
@@ -73,17 +80,20 @@ trait MessageConstructTrait
     
             if ( is_string($value) ) {
                 $result = str_replace("{" . $construct . "}", $value, $result, $matchCount);
-            } 
+            }
 			
 			//Yii::warning("{$construct} and $value val and result $result $matchCount and $result", __METHOD__);
 			if (!$matchCount) {
-				$missingConstructs[$construct] = $value;
+				$absentConstructs[$construct] = $value;
 			}
         }
         
-		if (!empty($missingConstructs)) {
+		if (!empty($absentConstructs)) {
 			//do action when it is less and when it is more. 
-		}
+        }
+        
+        //@future clear formats that are not replaced. 
+
 		return $result;
 		//if a any constructs specified in the format do not exist in the construct then ignore them. 
     }
@@ -104,6 +114,24 @@ trait MessageConstructTrait
     public function appendFormat($format) 
     {
         $this->sentenceFormat = $this->sentenceFormat . ' {' . $format . '}'; 
+    }
+
+    /***
+     * write only public setter for the property 'format' which in turn is an alias for sentenceFormat
+     */
+    public function setFormat($format)
+    {
+        if ( count($format) ) {
+            $this->sentenceFormat = $format;
+        }
+    }
+
+    /***
+     * checking to see if a message will be empty because it doesn't have any constructs
+     */
+    public function isEmpty()
+    {
+        return count($this->_sentenceConstruct) === 0;
     }
 }
 ?> 

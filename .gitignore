@@ -36,8 +36,11 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 /selenium
+
+
 /components/moment
 /components/fullcalendar
 /components/jquery
 
 
+node_modules
