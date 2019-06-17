@@ -417,6 +417,7 @@ $createUrl = Url::to(['task/dashboardcreate']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
 $modelName = $location;
+$folderId = $parentOwnerId;
 $modalurl = Url::to(['task/view']);
 $task = <<<JS
 var getOwnerId = $('#folders-id').val();
@@ -532,8 +533,8 @@ $('#create-task').on('beforeSubmit', function(e) {
                   var info = JSON.parse(response);
                   var folderId = $('.board-specfic').attr('data-folderId');
                     toastr.success('Task created');
-                    //$.pjax.reload({container:"#task-list-refresh",async: false});
-                    Tasksocket.emit('task title', info);
+                    Tasksocket.emit('task title', [info, '$folderId']);
+                    $.pjax.reload({container:"#task-list-refresh",async: false});
                 },
               error: function(res, sec){
                   console.log('Something went wrong');
@@ -544,8 +545,11 @@ $('#create-task').on('beforeSubmit', function(e) {
 });
 
 Tasksocket.on('task title', function(msg){
-  
   $.pjax.reload({container:"#task-list-refresh",async: false});
+})
+
+Tasksocket.on('task delete', function(taskid){
+  $('.todo_'+taskid).remove();
 })
 
 Tasksocket.on('task status', function(status){

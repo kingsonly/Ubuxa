@@ -281,6 +281,8 @@ $login = Url::to(['site/login']);
               console.log(data);
           },
           error: function (data) {
+              $("#loader").hide()
+              alert("Something went wrong!")
               console.log(data);
           },
           beforeSend: function(){
