@@ -421,7 +421,7 @@ class SiteController extends RestController
 			}
 		}
 		 usort($data, function($a, $b) {
-			return $a['lastTime2'] <= $b['lastTime2'];
+			return $a['lastTime'] <= $b['lastTime'];
 		 });
 		return Yii::$app->apis->sendSuccessResponse($data);
 	}
