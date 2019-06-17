@@ -272,7 +272,7 @@ $login = Url::to(['site/login']);
   $('#userForm').on('beforeSubmit', function (e) {
       var form = $(this);
       var formData = form.serialize();
-
+      e.preventDefault()
       $.ajax({
           url: form.attr("action"),
           type: form.attr("method"),
@@ -282,8 +282,11 @@ $login = Url::to(['site/login']);
           },
           error: function (data) {
               $("#loader").hide()
-              alert("Something went wrong!")
+              e.preventDefault()
               console.log(data);
+              alert("Something went wrong!")
+              return false;
+              
           },
           beforeSend: function(){
               $("#loader").show()
@@ -308,3 +311,4 @@ JS;
    
   $this->registerJs($js);
 ?>
+

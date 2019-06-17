@@ -26,6 +26,7 @@ use frontend\models\SignupForm;
 use frontend\models\Email;
 use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
+use api\models\UserDevicePushToken;
 use yii\mongodb\Query;
 
 
@@ -442,6 +443,19 @@ class SiteController extends RestController
         } else {
             return Yii::$app->apis->sendFailedResponse("Unkown server error. Please try again.");
         }
+    }
+
+    public function actionPushMe($id)
+    {
+        $model = new UserDevicePushToken();
+        $user = $model->find()->where(['user_id' => $id])->one();
+        $token = $user->push_token;
+        $data = [
+        'title' => 'Some title',
+        'text' => 'Some text'
+        ];
+        $notification = ['body' => "Test", 'data' => $data];
+        \Yii::$app->expo->notify($token, $notification);
     }
 }
 	

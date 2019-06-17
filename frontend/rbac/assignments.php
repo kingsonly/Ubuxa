@@ -84,4 +84,55 @@ return [
     54 => [
         'administrator',
     ],
+    60 => [
+        'admin',
+    ],
+    61 => [
+        'admin',
+    ],
+    62 => [
+        'admin',
+    ],
+    63 => [
+        'admin',
+    ],
+    64 => [
+        'admin',
+    ],
+    65 => [
+        'admin',
+    ],
+    66 => [
+        'admin',
+    ],
+    67 => [
+        'admin',
+    ],
+    68 => [
+        'admin',
+    ],
+    69 => [
+        'admin',
+    ],
+    70 => [
+        'administrator',
+    ],
+    71 => [
+        'administrator',
+    ],
+    72 => [
+        'admin',
+    ],
+    73 => [
+        'field_officer',
+    ],
+    74 => [
+        'field_officer',
+    ],
+    75 => [
+        'field_officer',
+    ],
+    76 => [
+        'field_officer',
+    ],
 ];
