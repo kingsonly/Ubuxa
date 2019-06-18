@@ -451,7 +451,7 @@ class SiteController extends RestController
         }
     }
 
-    public function actionPushMe($id)
+    public function actionPushNotification($id)
     {
         $model = new UserDevicePushToken();
         $message = $this->request["message"];
