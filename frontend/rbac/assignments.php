@@ -135,4 +135,13 @@ return [
     76 => [
         'field_officer',
     ],
+    87 => [
+        'admin',
+    ],
+    88 => [
+        'admin',
+    ],
+    89 => [
+        'admin',
+    ],
 ];

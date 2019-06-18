@@ -435,6 +435,12 @@ class SiteController extends RestController
         }
 
         $model = new UserDevicePushToken;
+        $token = $this->request["token"];
+        $exists = $model->find()->where(["push_token" => $token])->exists();
+        if($exists){
+            return;
+        }
+           
         $model->push_token = $this->request["token"];
         $model->user_id = $this->request["uid"];
 
@@ -448,14 +454,17 @@ class SiteController extends RestController
     public function actionPushMe($id)
     {
         $model = new UserDevicePushToken();
-        $user = $model->find()->where(['user_id' => $id])->one();
-        $token = $user->push_token;
-        $data = [
-        'title' => 'Some title',
-        'text' => 'Some text'
-        ];
-        $notification = ['body' => "Test", 'data' => $data];
-        \Yii::$app->expo->notify($token, $notification);
+        $message = $this->request["message"];
+        $users = $model->find()->where(['user_id' => $id])->all();
+        foreach ($users as $user) {
+           $token = $user->push_token;
+           $data = [
+           'title' => 'Some title',
+            'text' => 'Some text'
+           ];
+           $notification = ['body' => $message, 'data' => $data];
+           \Yii::$app->expo->notify($token, $notification); 
+        }
     }
 }
 	
