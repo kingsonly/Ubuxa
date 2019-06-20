@@ -726,12 +726,6 @@ class ActivityManager extends Component
 		$this->publishNotifications($userIDs, $node->resolve());
 	}
 
-	protected function sendRedisMesage($key, $message, $method = 'lpush') 
-	{
-		$redis = Yii::$app->redis;
-		$redis->$method($key, $message);
-	}
-
 	/***
 	 * @brief getter for private $_activityObjectClasses
 	 *
@@ -795,7 +789,7 @@ class ActivityManager extends Component
 		}
 		
 
-		if ( $users === null && empty(Yii::$app->user->identity) ) {
+		if ( $user === null && empty(Yii::$app->user->identity) ) {
 			Yii::error("Hmn. Can't subscribe this object. There is no user!", __METHOD__);
 			throw new yii\base\InvalidCallException("I cannot subscribe this object if I have no user to subscribe for");
 		}
