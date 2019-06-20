@@ -71,7 +71,7 @@ class LabelController extends RestController
         $taskModel = Task::findOne($taskId);
         $labels = $taskModel->labels;
 		if(!empty($labels)){
-			 return Yii::$app->apis->sendSuccessResponse($reminders);
+			 return Yii::$app->apis->sendSuccessResponse($labels);
 		}
     }
 

@@ -81,6 +81,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
     /**
      * @inheritdoc
      */
+	
     public function rules()
     {
         return [

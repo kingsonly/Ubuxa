@@ -78,7 +78,7 @@ function SubscribeExpired(e,r){
 		})
 	})
 }
-//.: For example (create a key & set to expire in 10 seconds)
+//.: For example (create a key & set to expire in  10 seconds)
 	
 //setting chat route
 var ioChat = io.of('/chat');
@@ -86,7 +86,7 @@ var userStack = {}; // holds all the users from the mysql database
 var oldChats, sendUserStack, setRoom;
 var userSocket = {}; // holds all conected client details
 var userSocketInstBuyUserName = {}; // this might not be needed any more
-
+	
 //socket.io magic starts here
 ioChat.on('connection', function(socket) {
     console.log("socketio chat connected.");
@@ -156,6 +156,7 @@ ioChat.on('connection', function(socket) {
             socket.join(roomId);
             ioChat.to(userSocket[socket.username]).emit('set-room', socket.room,room.toUser+'-'+folderId,folderId);
         };
+		
 
 	}); //end of set-room event.
 
@@ -189,42 +190,28 @@ ioChat.on('connection', function(socket) {
 		.limit(5)
 		.exec(function(err, result) {
 			if (err) {
-				console.log("Error : " + err);
+				console.log("Error : " + err); 
 			} else {
 				//calling function which emits event to client to show chats.
 				oldChatsNewJoin(result, data.username, data.room,data.sender,data.folderId,data.userImage);
+				
 			}
 		});
 		// eventEmitter.emit('read-chat-join-request', data);
+		
 	});
+	   
 	
-	
-	
-	
-	socket.on('getchats', function() {
-		roomModel.find({
-			$or: [{
-				'name1': {'$regex': 'guest-14'}
-			}, {
-				'name2': {'$regex': 'guest-14'}
-			}, ]
-		})
-		.lean()
-		.exec(function(err, result) {
-			if (err) {
-				console.log("Error : " + err);
-			} else {
-				//calling function which emits event to client to show chats.
-				console.log(result);
-			}
-		});
-		// eventEmitter.emit('read-chat-join-request', data);
-	});
 
 	//emits event to read old chats from database.
 	socket.on('old-chats', function(data) {
 		// here instead of emiting read chat, make read chat a function
 		eventEmitter.emit('read-chat', data);
+	});
+	
+	socket.on('old-chats-old', function(data) {
+		// here instead of emiting read chat, make read chat a function
+		eventEmitter.emit('read-chat-old', data);
 	});
 
 	//sending old chats to client.
@@ -234,7 +221,17 @@ ioChat.on('connection', function(socket) {
             result: result,
 			room: room,
 			sender: toUser,
-			folderId: folderId
+			folderId: folderId 
+		});
+	}
+	
+	oldChatsOld = function(result, username, room,toUser,folderId) {
+        console.log('i am sender but i am the tab to be updated '+toUser);
+		ioChat.to(userSocket[username]).emit('old-chats-old', {
+            result: result,
+			room: room,
+			sender: toUser,
+			folderId: folderId 
 		});
 	}
 
@@ -298,6 +295,8 @@ ioChat.on('connection', function(socket) {
 					}else{
 						if(data.msgTo in userSocket){
 							ioChat.to(userSocket[data.msgTo]).emit('join-room', roomId,from,data.getRoom,data.userImage);
+							
+							
 							console.log('go ahead2');
 						}else{
 							var redisString = socket.username+')'+data.msg+')'+folderId[2]+')'+data.msgTo+')'+data.date;
@@ -333,6 +332,10 @@ ioChat.on('connection', function(socket) {
 					userImage: data.userImage,
 					roomId: roomId,
 				});
+				
+				ioChat.to(userSocket[data.msgTo]).emit('join-room-mobile',data,{folderId: folderId[2],
+					userImage: data.userImage,
+					roomId: roomId,username:socket.username});
 			}
 		} //end of else.
 		);
@@ -436,6 +439,24 @@ eventEmitter.on('read-chat', function(data) {
 		} else {
 			//calling function which emits event to client to show chats.
 			oldChats(result, data.username, data.room,data.sender);
+		}
+	});
+}); //end of reading chat from database.
+	
+eventEmitter.on('read-chat-old', function(data) {
+
+	chatModel.find({})
+	.where('room').equals(data.room)
+	.sort('-createdOn')
+	.skip(data.msgCount)
+	.lean()
+	.limit(5)
+	.exec(function(err, result) {
+		if (err) {
+			console.log("Error : " + err);
+		} else {
+			//calling function which emits event to client to show chats.
+			oldChatsOld(result, data.username, data.room,data.sender);
 		}
 	});
 }); //end of reading chat from database.

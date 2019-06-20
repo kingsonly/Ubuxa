@@ -26,6 +26,8 @@ use frontend\models\SignupForm;
 use frontend\models\Email;
 use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
+use yii\mongodb\Query;
+
 
 /**
  * Site controller
@@ -43,7 +45,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code','chat-email','list-users'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users','chat-list'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -73,6 +75,7 @@ class SiteController extends RestController
                     'authorize' => ['POST'],
                     'register' => ['POST'],
                     'accesstoken' => ['POST'],
+                    'chat-list' => ['GET'],
                     'me' => ['GET'],
                 ],
             ],
@@ -191,10 +194,20 @@ class SiteController extends RestController
         }
 
         $accesstoken = Yii::$app->api->createAccesstoken($authorization_code);
+        $userId = $accesstoken->user_id;
+        $user = UserDb::findOne($userId);
+        $firstname = $user['firstname'];
+        $fullname = $user['fullname'];
+        $profilePhoto = $user['profile_image'];
 
         $data = [];
         $data['access_token'] = $accesstoken->token;
         $data['expires_at'] = $accesstoken->expires_at;
+        $data['user']['firstname'] = $firstname;
+        $data['user']['fullname'] = $fullname;
+        $data['user']['profilePhoto'] = !empty($profilePhoto)?'http://ubuxa.net/'.$profilePhoto:'http://ubuxa.net/images/users/default-user.png';
+        $data['user']['username'] = $user['username'];
+        $data['user']['id'] = $user['id'];
         return Yii::$app->apis->sendSuccessResponse($data);
 
     }
@@ -225,21 +238,23 @@ class SiteController extends RestController
         $headers = Yii::$app->getRequest()->getHeaders();
         $access_token = $headers->get('x-access-token');
 
-        if(!$access_token){
-            $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+        if(!empty($access_token)){
+            if(!$access_token){
+                $access_token = Yii::$app->getRequest()->getQueryParam('access-token');
+            }
+
+            $model = AccessTokens::findOne(['token' => $access_token]);
+
+            if ($model->delete()) {
+
+                return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
+
+            } else {
+                return Yii::$app->apis->sendFailedResponse("Invalid Request");
+            }
+        }else{
+            return Yii::$app->apis->sendFailedResponse("Invalid Access Token");
         }
-
-        $model = AccessTokens::findOne(['token' => $access_token]);
-
-        if ($model->delete()) {
-
-            return Yii::$app->apis->sendSuccessResponse(["Logged Out Successfully"]);
-
-        } else {
-            return Yii::$app->apis->sendFailedResponse("Invalid Request");
-        }
-
-
     }
 	
 	public function actionValidateCode()
@@ -356,5 +371,78 @@ class SiteController extends RestController
         }
     }
 	
+	public function actionChatList($username)
+	{
+		$splitUserName = explode('-',$username);
+		$data = [];
+		$query = new Query();
+		// compose the query
+		$query->select([])
+			->from('rooms')
+			->where(['name1' => ['$regex' => $username]])
+			->orWhere(['name2' => ['$regex' => $username]]);
+			
+		// execute the query
+		$rows = $query->all();
+		$i=0;
+		foreach($rows as $key => $value){
+			
+			$name1 = explode('-',$value['name1']);
+			$name2 = explode('-',$value['name2']);
+			if($splitUserName[0] == $name1[0]){
+				$nonrequesterusername  = $name2[0];
+			}else{
+				$nonrequesterusername  = $name1[0];
+			}
+			
+			if($splitUserName[1] === $name1[2]){
+				$chats = new Query();
+				$roomId = (string) $value['_id'] ;
+				$chats->from('chats')->where(['room' => ['$eq' => $roomId]])->addOptions(['sort'=>['createdOn' => -1]]);
+				$chatRows = $chats->one();
+				$model = new UserDb();
+				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
+				$data[$i]['name'] = $dataProvider->fullName;
+				$data[$i]['avatar'] = 'http://ubuxa.net/'.$dataProvider->profile_image;
+				$data[$i]['unread'] = 0;
+				$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
+				$data[$i]['lastMessage'] = $chatRows['msg'];
+				$data[$i]['roomid'] = $roomId;
+				$data[$i]['username'] = $dataProvider->username;
+				$data[$i]['userid'] = $dataProvider->id;
+				$data[$i]['roomId'] = (string) $value['_id'];
+				$data[$i]['folderId'] = $splitUserName[1];
+				$i++;
+			}
+		}
+		return Yii::$app->apis->sendSuccessResponse($data);
+    }
+    
+    /***
+     * @brief action to store a push token to the server
+     * 
+     * @future prepare for a save failure which is not triggered by a model validaton error.
+     */
+    public function actionStorePushToken()
+    {
+        //
+        if ( !isset($this->request["token"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide a push token ['token'] ");
+        }
+
+        if ( !isset($this->request["uid"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide the user id ['uid'] ");
+        }
+
+        $model = new UserDevicePushToken;
+        $model->push_token = $this->request["token"];
+        $model->user_id = $this->request["uid"];
+
+        if ( $model->save() ) {
+            return Yii::$app->apis->sendSuccessResponse("Token stored successfully");
+        } else {
+            return Yii::$app->apis->sendFailedResponse($model->errors);
+        }
+    }
 }
 	

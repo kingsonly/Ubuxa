@@ -9,6 +9,8 @@ use api\behaviours\Apiauth;
 use frontend\models\Folder;
 use api\models\UserSearch;
 use frontend\models\Person;
+use frontend\models\UserDb;
+use frontend\models\FolderManager;
 use yii\web\UploadedFile;
 use Yii;
 use yii\db\Expression;
@@ -105,9 +107,13 @@ class FolderController extends RestController
 			$folderRole = $folder['role'];
 			$folderDetails['role'] =  $folderRole['role'];
 			$folderDetails['createdby'] = $folder->folderManagerByRole['user_id'];
+			$userId = $folder->folderManagerByRole['user_id'];
+			$user = UserDb::find()->andWhere(['id' => $userId])->one();
+			$fullName = $user->fullName;
+			$folderDetails['fullname'] = $fullName;
 			$folderDetails['subfolders'] = $folder->subFolders;
 			$folders[] =   $folderDetails;
-
+			//array_walk_recursive($folders,function(&$item){$item=strval($item);});
 			$response = $folders;
 			return Yii::$app->apis->sendSuccessResponse($response);
 		}else{
@@ -262,19 +268,23 @@ class FolderController extends RestController
 			foreach($userValue as $key => $value){
 				$folderUsers[$i][$key] = $value;
 			}
-			
+			$user = UserDb::find()->andWhere(['id' => $userValue->id])->one();
+			$fullName = $user->fullName;
+			$folderUsers[$i]['fullName'] = $fullName;
 			
 			foreach($folderManager as $managerKey => $managerValue){
 				
 				if($userValue->id == $managerValue->user_id){
 					
 					$folderUsers[$i]['role'] = $managerValue->role;
+					$folderUsers[$i]['images'] = !empty($userValue->profile_image)?'http://ubuxa.net/'.$userValue->profile_image:'http://ubuxa.net/images/users/default-user.png';
 					$folderUsers[$i]['folder_id'] = $managerValue->folder_id;
 				}
 			}
 			
 			$i++;
 		}
+		//array_walk_recursive($folderUsers,function(&$item){$item=strval($item);});
 		return Yii::$app->apis->sendSuccessResponse($folderUsers);
     }
 	
@@ -315,10 +325,18 @@ class FolderController extends RestController
 		$folderManagerModel->user_id = $userId;
 		$folderManagerModel->folder_id = $folderId;
 		$folderManagerModel->role = 'user';
+		$user = UserDb::findOne($userId);
+		$profile_image = $user->profile_image;
+		$fullname = $user->fullName;
+		$folderManager['id'] = $userId;
+		$folderManager['fullName'] = $fullname;
+		$folderManager['profile_image'] = $profile_image;
+		$folderManager['folder_id'] = $folderId;
+		$folderManager['role'] = $folderManagerModel->role;
 		
 		if($folderManagerModel->save(false)){
 			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
-			return true;
+			return $folderManager;
 		}
 	}
 	

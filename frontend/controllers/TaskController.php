@@ -164,7 +164,6 @@ class TaskController extends Controller
         // read your posted model attributes
         if ($model->load(Yii::$app->request->post())) {
             // read or convert your posted information
-            
             $model->save(false);
             // return JSON encoded output in the below format
             return ['output'=>'', 'message'=>''];
@@ -280,7 +279,7 @@ class TaskController extends Controller
                         $taskGroupModel->task_group_id = $model->id;
                         $taskGroupModel->task_child_id = $model->id;
                         $taskGroupModel->save();
-                        return json_encode($model->id);
+                        return json_encode($model->attributes);
                     }
                 }
                 

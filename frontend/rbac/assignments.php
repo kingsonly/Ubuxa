@@ -78,4 +78,10 @@ return [
     40 => [
         'admin',
     ],
+    53 => [
+        'field_officer',
+    ],
+    54 => [
+        'administrator',
+    ],
 ];

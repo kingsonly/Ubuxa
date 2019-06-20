@@ -203,7 +203,6 @@ $(document).ready(function(){
 		socket.on('connect',function(){
 			socket.emit('set-user-data',username);
 			socket.emit('check-for-message',username);
-	
 			socket.on('broadcast',function(data){
 				console.log('socket join')
 			});
@@ -225,6 +224,7 @@ $(document).ready(function(){
 			updateUsersStatus(getOnlineUsers);
 
 		});
+		
 		
 		//receiving onlineStack.
 		socket.on('check-for-message',function(data){
@@ -669,6 +669,7 @@ $(document).ready(function(){
 
 		//receiving typing message.
 		socket.on('typing',function(data){
+			console.log(data);
 			var imageurl = '';
 			if($('.msg_box').attr('rel') == data.updateChatBox){
 
@@ -680,7 +681,7 @@ $(document).ready(function(){
 
 					$(chatbox+' .msg_body .remove').find('.msg_chat_tex').text(data.msg);// append new text to the chat remove div
 
-					//$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 					clearTimeout(timeout);
 					timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
@@ -691,8 +692,9 @@ $(document).ready(function(){
     				timeout = setTimeout(function(){
 						$(chatbox+' .msg_body .remove').remove();
 					}, 5000);
-					//$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
+					$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 				}
+				$(chatbox+' .msg_body').scrollTop($('.msg_body')[0].scrollHeight);
 
 			}
 

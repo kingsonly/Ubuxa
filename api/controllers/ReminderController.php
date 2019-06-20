@@ -71,9 +71,15 @@ class ReminderController extends RestController
         $taskModel = Task::findOne($taskId);
         $reminders = $taskModel->reminderTimeTask;
 		if(empty($reminders)){
-			 Yii::$app->api->sendFailedResponse('Task does not have a reminder');
+			 Yii::$app->apis->sendFailedResponse('Task does not have a reminder');
 		}else{
-			return Yii::$app->apis->sendSuccessResponse($reminders);
+                $time = $taskModel->reminderTime;
+                $timers = explode(",",$time);
+                $check = date("Y-m-d H:i:s");
+                $closest = $taskModel->closestReminder($timers, $check);
+                $rems[$taskId] = $taskModel->reminderTimeTask;
+                $rems[$taskId]['closest'] = $taskModel->closestReminder($timers, $check);
+			return Yii::$app->apis->sendSuccessResponse($rems);
 		}
         
     }

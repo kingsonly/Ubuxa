@@ -7,7 +7,7 @@ use yii\db\ActiveQuery;
 use boffins_vendor\classes\BaseQuery;
 
 
-class StandardFolderQuery extends BaseQuery
+class StandardFolderQuery extends StandardQuery
 {
     public function init()
     {

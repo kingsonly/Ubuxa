@@ -4,7 +4,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 
-$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+//$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
+$resetLink = "http://ubuxa.net/index.php?r=site/reset-password&token=".$user->password_reset_token;
 ?>
 <div class="password-reset">
     <p>Hello <?= Html::encode($user->username) ?>,</p>
@@ -41,7 +42,7 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
                         <table border="0" cellspacing="0" cellpadding="0">
                           <tr>
                               <td align="center" style="border-radius: 3px;" bgcolor="#264787">
-								  <a href="<?= $resetLink;?>" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #264787; display: inline-block;">Click on link to complete your registration</a></td>
+								  <a href="<?= $resetLink;?>" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #264787; display: inline-block;">Click on link to reset your password</a></td>
                           </tr>
                         </table>
                       </td>

@@ -77,6 +77,9 @@ class TaskController extends RestController
 				return Yii::$app->apis->sendFailedResponse('There are no task in this folder');
 			}else{
 				$fetchTasks = $folderModel->clipOn['task'];
+                /*foreach ($fetchTasks as $value) {
+                    $tasks[$value->status_id][] = $value;
+                }*/
     			return Yii::$app->apis->sendSuccessResponse($fetchTasks);
 			}
 		}
@@ -148,6 +151,21 @@ class TaskController extends RestController
         
     }
 
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+        if(empty($model)){
+            return Yii::$app->apis->sendFailedResponse('task does not exist');
+        }else{
+            $response = $model->attributes;
+            $response['time_elapsed'] = $model->timeElapsedString;
+            $response['task_owner'] = $model->ownerFullName;
+            array_walk_recursive($response,function(&$item){$item=strval($item);});
+            return Yii::$app->apis->sendSuccessResponse($response);
+        }
+        
+    }
+
     public function actionAssignee($user, $task)
     {    
         $model = new TaskAssignedUser();
@@ -163,14 +181,18 @@ class TaskController extends RestController
                 $taskModel->last_updated = new Expression('NOW()');
                 $assignee->save();
                 $taskModel->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status));
+                $id = $assignee->id;
+                $date = $assignee->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status, $id, $date));
             }else if($exists && $assignee->status == Task::TASK_NOT_ASSIGNED_STATUS){
                 $assignee->status = Task::TASK_ASSIGNED_STATUS;
                 $assignee->assigned_date = new Expression('NOW()');
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $assignee->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status));
+                $id = $assignee->id;
+                $date = $assignee->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $assignee->status, $id, $date));
             }else{
                 $model->user_id = $user;
                 $model->task_id = $task;
@@ -179,12 +201,58 @@ class TaskController extends RestController
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $model->save();
-                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $model->status));
+                $id = $model->id;
+                $date = $model->assigned_date;
+                return Yii::$app->apis->sendSuccessResponse($model->taskApiAssignees($user, $userDb, $task, $model->status, $id, $date));
             }
         }else{
            if (!$model->validate()) {
                     return Yii::$app->apis->sendFailedResponse($model->errors);
             } 
+        }
+    }
+
+    public function actionCheckTask($id)
+    {
+        $model = new Task();
+        $model->attributes = $this->request;
+        if (!empty($model)) {
+            
+            $model = Task::findOne($id);
+
+            if($model->status_id != $model::TASK_COMPLETED){
+                $model->status_id = $model::TASK_COMPLETED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            } else {
+                $model->status_id = $model::TASK_NOT_STARTED;
+                $model->save();
+                return Yii::$app->apis->sendSuccessResponse($model->attributes);
+            }
+            
+        }else{
+           return Yii::$app->apis->sendFailedResponse($model->errors); 
+        }
+    }
+
+    public function actionTaskAssignees($id)
+    {
+        $model = Task::findOne($id);
+        $assignees = $model->taskAssignedUsers;
+        if(!empty($assignees)){
+            $i = 0;
+            foreach ($assignees as $users) {
+                $user = UserDb::findOne($users->user_id);
+                $name = $user->fullName;
+                $photo = !empty($user->profile_image)?'http://ubuxa.net/'.$user->profile_image : 'http://ubuxa.net/images/users/default-user.png';
+                $taskAssignees[$i] = $users->attributes;
+                $taskAssignees[$i]['name'] = $name;
+                $taskAssignees[$i]['profile_image'] = $photo;
+                $i++;
+            }
+            return Yii::$app->apis->sendSuccessResponse($taskAssignees);
+        }else{
+            return Yii::$app->apis->sendFailedResponse("No assigned users."); 
         }
     }
 

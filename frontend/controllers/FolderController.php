@@ -82,8 +82,6 @@ class FolderController extends BoffinsBaseController
 					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
 				}
 			}
-			
-
 		}
 		if(empty($folder)){
             return $this->render('empty_index');

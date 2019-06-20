@@ -1,0 +1,515 @@
+import React from 'react';
+import {
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    KeyboardAvoidingView,
+    StatusBar,
+    Dimensions
+} from 'react-native';
+
+import { GiftedChat, Actions, Bubble, SystemMessage } from 'react-native-gifted-chat';
+import { Body, Button, Header, Icon, Left, Right, Title, Tabs, Tab, StyleProvider } from "native-base";
+
+import styles from './style'
+import { Input } from 'react-native-elements';
+import SocketIOClient from 'socket.io-client';
+
+const { width, height } = Dimensions.get('window')
+const old_data = [
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text:
+            "It uses the same design as React, letting you compose a rich mobile UI from declarative components https://facebook.github.io/react-native/",
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        user: {
+            _id: 1,
+            name: "Developer"
+        }
+    },
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text: "React Native lets you build mobile apps using only JavaScript",
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        user: {
+            _id: 1,
+            name: "Developer"
+        }
+    },
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text: "This is a system message.",
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        system: true
+    }
+];
+
+const data = [
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text: 'Yes, and I use Gifted Chat!',
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        user: {
+            _id: 1,
+            name: 'Developer',
+        },
+        sent: true,
+        received: false,
+        // location: {
+        //   latitude: 48.864601,
+        //   longitude: 2.398704
+        // },
+    },
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text: 'Are you building a chat app?',
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        user: {
+            _id: 2,
+            name: 'React Native',
+        },
+    },
+    {
+        _id: Math.round(Math.random() * 1000000),
+        text: "You are officially rocking GiftedChat.",
+        createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+        system: true,
+    },
+];
+
+export default class Chat extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            loadEarlier: false,
+            typingText: null,
+            isLoadingEarlier: true,
+            fullname: '',
+            room: '',
+            folderId: '',
+            toUsername: '',
+            customText: '',
+            image: '',
+
+        };
+
+        this.username = 'guest';
+        this.socket = SocketIOClient('http://127.0.0.1:4000/chat');
+        // set user name to indicate that a soccket has bn extablished
+        this.socket.emit('set-user-data',this.username);
+        this._isMounted = false;
+        this.onSend = this.onSend.bind(this);
+        this.isTyping = this.isTyping.bind(this);
+        this.onReceive = this.onReceive.bind(this);
+        this.renderBubble = this.renderBubble.bind(this);
+        this.renderSystemMessage = this.renderSystemMessage.bind(this);
+        this.renderFooter = this.renderFooter.bind(this);
+        this.onLoadEarlier = this.onLoadEarlier.bind(this);
+        this.requestJoinRoom = this.requestJoinRoom.bind(this);
+        this.setRoom = this.setRoom.bind(this);
+        this.oldChats = this.oldChats.bind(this);
+        this.oldChatsOld = this.oldChatsOld.bind(this);
+        this.isCloseToTop = this.isCloseToTop.bind(this);
+        this.onReceiveTypingMessage = this.onReceiveTypingMessage.bind(this);
+        this.oldChats();
+        this.onReceiveTypingMessage();
+        this._isAlright = null;
+    }
+
+    async componentDidMount() {
+
+        const { navigation } = this.props;
+        const roomDetails = navigation.getParam('roomDetails');
+        this.setState({fullname: roomDetails.name})
+        this.setState({image: roomDetails.avatar})
+        this.requestJoinRoom();
+        this.setRoom();
+        this._isMounted = true;
+        //await this.oldChats();
+        await this.oldChatsOld();
+        await this.onReceive();
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    requestJoinRoom(){
+        let toUsername = 'demo2' ;
+        let folderDetailsId = 33;
+        let username = 'guest';
+
+        //assigning friends name to whom messages will send,(in case of group its value is Group).
+        toUser = toUsername;
+
+
+        if(toUser == "Group"){
+            var currentRoom = "Group-Group";
+            var reverseRoom = "Group-Group";
+        }else{
+            var currentRoom = username+"-"+toUser+'-'+folderDetailsId;
+            var reverseRoom = toUser+"-"+username+'-'+folderDetailsId;
+
+        }
+        return this.socket.emit('set-room',{name1:currentRoom,name2:reverseRoom,toUser:toUser});
+
+
+    }
+
+    setRoom(){
+        this.socket.on('set-room', (room,toUsername,folderId) => {
+            msgCount = 0;
+            noChat = 0;
+            oldInitDone = 0;
+            //assigning room id to roomId variable. which helps in one-to-one and group chat.
+            roomId = room;
+            console.log("roomId : "+roomId);
+            this.setState(() => {
+                return {
+                    room: roomId,
+                    folderId: folderId,
+                    toUsername: toUsername,
+                };
+            });
+            //event to get chat history on button click or as room is set.
+            return this.socket.emit('old-chats-init',{room:roomId,username:'guest',msgCount:msgCount,sender:toUsername,folderId:folderId});
+        });
+
+
+    }
+
+    oldChats(){
+        this.setState(() => {
+            return {
+                isLoadingEarlier: true,
+            };
+        });
+
+
+        this.socket.on('old-chats', (datas) => {
+            console.log(datas);
+            let newdata = [];
+
+            for( let i = 0; i <= 4; i++){
+                if(datas.result[i].msgFrom == 'guest'){
+                   userId =  1;
+                   userName = 'guest';
+                }else{
+                    userId =  2;
+                    userName = datas.result[i].msgFrom;
+
+                }
+                newdata.push({
+                    '_id':datas.result[i]._id,
+                    'text': datas.result[i].msg,
+                    'createdAt':datas.result[i].createdOn,
+                    'user':{
+                        '_id':userId,
+                        'name':userName,
+                    }
+                })
+
+            }
+            console.log(newdata);
+            this.setState(() => {
+                return {
+                     messages: newdata,
+                    //messages: data,
+                    isLoadingEarlier: false,
+                };
+            });
+
+
+
+        });
+
+
+    }
+
+    oldChatsOld(){
+        this.setState(() => {
+            return {
+                isLoadingEarlier: true,
+            };
+        });
+
+
+        this.socket.on('old-chats-old', (datas) => {
+            console.log(datas);
+            let newdata = [];
+
+            for( let i = 0; i <= 4; i++){
+                if(datas.result[i].msgFrom == 'guest'){
+                   userId =  1;
+                   userName = 'guest';
+                }else{
+                    userId =  2;
+                    userName = datas.result[i].msgFrom;
+
+                }
+                newdata.push({
+                    '_id':datas.result[i]._id,
+                    'text': datas.result[i].msg,
+                    'createdAt':datas.result[i].createdOn,
+                    'user':{
+                        '_id':userId,
+                        'name':userName,
+                    }
+                })
+
+            }
+            console.log(newdata);
+            this.setState((previousState) => {
+                return {
+                    messages: GiftedChat.prepend(previousState.messages, newdata),
+                    loadEarlier: false,
+                    isLoadingEarlier: false,
+                };
+            });
+
+
+
+        });
+
+
+    }
+
+    onLoadEarlier() {
+        this.setState((previousState) => {
+            return {
+                isLoadingEarlier: true,
+            };
+        });
+
+
+        if (this._isMounted === true) {
+            roomId = this.state.room;
+            msgCount = 6;
+            folderId = this.state.folderId;
+            toUsername = this.state.toUsername;
+            return this.socket.emit('old-chats-old',{room:roomId,username:'guest',msgCount:msgCount,sender:toUsername,folderId:folderId});
+            // this.setState((previousState) => {
+            //     return {
+            //         messages: GiftedChat.prepend(previousState.messages, old_data),
+            //         loadEarlier: false,
+            //         isLoadingEarlier: false,
+            //     };
+            // });
+        }
+
+    }
+
+    onSend(messages = []) {
+
+        var currentRoom = 'guest'+"-"+'demo2'+'-'+this.state.folderId;
+        console.log(messages);
+        return this.socket.emit('chat-msg',{msg:messages[0].text,msgTo:'demo2',date:Date.now(),getRoom:currentRoom,userImage:this.state.image});
+
+
+        // for demo purpose
+       // this.answerDemo(messages);
+    }
+
+    answerDemo(messages) {
+
+    }
+
+    onReceive() {
+
+        this.socket.on('chat-msg', (datas) => {
+            let newdata = [];
+            if(datas.msgFrom == 'guest'){
+                userId =  1;
+                userName = 'guest';
+            }else{
+                userId =  2;
+                userName = datas.msgFrom;
+
+            }
+            newdata.push({
+                '_id':datas.date,
+                'text': datas.msg,
+                'createdAt':datas.date,
+                'user':{
+                    '_id':userId,
+                    'name':userName,
+                }
+            })
+            this.setState((previousState) => {
+                return {
+                    messages: GiftedChat.append(previousState.messages, newdata),
+                    typingText: null,
+
+                };
+            });
+            console.log(newdata)
+        });
+    }
+
+    isTyping(text){
+
+        if(text.length > 0){
+            this.socket.emit('typing',{userTo:'demo2-33',userFrom:'guest',msg:text});
+
+        }
+        this.setState((previousState) => {
+            return {
+
+                customText: text,
+            };
+        });
+    }
+
+    onReceiveTypingMessage(){
+
+        var timeout;
+        this.socket.on('typing', (datas) => {
+            chatBoxArea = datas.updateChatBox;
+            splitChatBoxArea = chatBoxArea.split('-');
+            console.log('this is state to user '+ this.state.toUsername);
+            console.log('this is state to user from split '+ splitChatBoxArea);
+            if(this.state.toUsername == chatBoxArea ){
+                this.setState((previousState) => {
+                    return {
+                        typingText: 'React Native is typing'
+                    };
+                });
+                if(this.state.typingText !== null){
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        this.setState((previousState) => {
+                            return {
+                                typingText: null,
+                            };
+                        });
+                    }, 1000);
+                }else{
+                    timeout = setTimeout(() => {
+                        this.setState((previousState) => {
+                            return {
+                                typingText: null,
+                            };
+                        });
+                    }, 1000);
+                }
+            }
+
+
+        });
+
+    }
+
+    renderBubble(props) {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    left: {
+                        backgroundColor: '#f0f0f0',
+                    },
+                    right: {
+                        backgroundColor: '#1275bc'
+                    }
+                }}
+            />
+        );
+    }
+
+    renderSystemMessage(props) {
+        return (
+            <SystemMessage
+                {...props}
+                containerStyle={{
+                    marginBottom: 15,
+                }}
+                textStyle={{
+                    fontSize: 14,
+                }}
+            />
+        );
+    }
+
+    isCloseToTop({ layoutMeasurement, contentOffset, contentSize })
+    {
+        const paddingToTop = 80;
+        return contentSize.height - layoutMeasurement.height - paddingToTop <= contentOffset.y;
+    }
+
+    renderFooter(props) {
+        if (this.state.typingText) {
+            return (
+                <View style={styles.footerContainer}>
+                    <Text style={styles.footerText}>
+                        {this.state.typingText}
+                    </Text>
+                </View>
+            );
+        }
+        return null;
+    }
+
+    render() {
+        return (
+            <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
+                <Header style={styles.headerStyle}>
+                    <StatusBar barStyle="dark-content" hidden={false} backgroundColor="#000000" translucent={true} />
+                    <Left style={{ flex: 1 }}>
+                        <Button transparent onPress={() => this.props.navigation.goBack()}>
+                            <Icon name="md-arrow-back" style={styles.iconStyle}  color='#000000'/>
+                        </Button>
+                    </Left>
+                    <Body style={{ flex: 3, justifyContent: 'center' }}>
+                        <Title style={styles.titleStyle} >
+                            {this.state.fullname}
+                        </Title>
+                    </Body>
+                    <Right style={{ flex: 1 }}>
+                        <Button transparent onPress={() => {}}>
+                            <Icon name="search" style={styles.iconStyle}  color='#000000'/>
+                        </Button>
+                    </Right>
+                </Header>
+                <GiftedChat
+                    messages={this.state.messages}
+                    //onSend={this.onSend}
+                    onSend={messages => this.onSend(messages)}
+                    //loadEarlier={this.state.loadEarlier}
+                    isLoadingEarlier={this.state.isLoadingEarlier}
+                    text={this.state.customText}
+                    onInputTextChanged={text => this.isTyping(text)}
+                    minInputToolbarHeight={60}
+                    user={{
+                        _id: 1, // sent messages should have same user._id
+                    }}
+                    renderBubble={this.renderBubble}
+                    renderSystemMessage={this.renderSystemMessage}
+                    renderFooter={this.renderFooter}
+                    listViewProps={{
+                        scrollEventThrottle: 400,
+                        onScroll: ({ nativeEvent }) => { if (this.isCloseToTop(nativeEvent)) this.onLoadEarlier(); }
+                    }}
+                    // renderInputToolbar={() =>
+                    //     <View style={{ flexDirection: 'row', backgroundColor: '#F3F3F3', height: 60, padding: 10, paddingHorizontal: 20, justifyContent: 'space-between', alignItems: 'center' }}>
+                    //         <Icon name='attach-file' type='MaterialIcons' style={{ color: '#1275bc' }} />
+                    //         <Icon name='insert-emoticon' type='MaterialIcons' style={{ color: '#1275bc' }} />
+                    //         <Input
+                    //             placeholder='Type a message here'
+                    //             style={{ backgroundColor: '#fff', width: width * 0.6 }}
+                    //             inputStyle={{ fontSize: 15, borderBottomColor:'transparent' }}
+                    //             containerStyle={{ width: width * 0.6, backgroundColor: '#fff', height: 40, borderRadius: 5 }}
+                    //             inputContainerStyle={{borderBottomColor:'transparent'}}
+                    //             underlineColorAndroid='transparent'
+                    //             multiline
+                    //             onChangeText={(text) => this.state.messages = text}
+                    //         />
+                    //         <Icon name='send' type='MaterialIcons' style={{ color: '#1275bc' }} />
+                    //     </View>
+                    // }
+                />
+            </KeyboardAvoidingView>
+        );
+    }
+}
+
