@@ -28,6 +28,7 @@ use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
 use api\models\UserDevicePushToken;
 use yii\mongodb\Query;
+use yii\helpers\Url;
 
 
 /**
@@ -103,10 +104,10 @@ class SiteController extends RestController
      */
     public function actionIndex()
     {
-        return Yii::$app->apis->sendSuccessResponse(['Yii2 RESTful API with OAuth2']);
+        return Yii::$app->apis->sendSuccessResponse([Url::base()]);
         //  return $this->render('index');
     }
-	
+
 	public function actionChatEmail($id)
     {
 		$msgArray = [];
@@ -121,12 +122,12 @@ class SiteController extends RestController
 			$userModel = $userModels->find()->where(['username' => $username])->one();
 			$recievers = $userModels->find()->where(['username' => $username])->one();
 			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
-			
+
 			$msgArray[$key]['fullname'] = $userModel->fullName;
 			$msgArray[$key]['foldertitle'] = $folderModel['title'];
 			$msgArray[$key]['msg'] = $extractString[1];
 			$reciever = $recievers->email;
-			
+
 		}
 		$model->sendEmail($msgArray,$reciever);
     }
@@ -149,7 +150,7 @@ class SiteController extends RestController
         }
 
     }
-	
+
 	public function actionCustomerSignup()
     {
 
@@ -159,7 +160,7 @@ class SiteController extends RestController
         if ($user = $model->signup()) {
 
             $data=$user;
-           
+
 
             return Yii::$app->apis->sendSuccessResponse($data);
 
@@ -257,7 +258,7 @@ class SiteController extends RestController
             return Yii::$app->apis->sendFailedResponse("Invalid Access Token");
         }
     }
-	
+
 	public function actionValidateCode()
     {
 		$model = new ValidateEmail();
@@ -279,41 +280,41 @@ class SiteController extends RestController
 		}
 
     }
-	
+
 	public function actionSignups($email,$cid,$role,$validation_code,$folderid = 0)
 	{
        	$user = new SignupForm();
        	$customer = Customer::find()->where(['cid' => $cid])->one();
        	$userExists = Email::find()->where(['address' => $email])->exists();
        	$user->attributes = $this->request;
-		
+
        	if(!$userExists){
-			
+
 			if(!empty($customer)){
-				
+
 				$user->address = $email;
 				$user->cid = $cid;
 				$user->basic_role = $role;
 				if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
-					
+
 					$user->first_name = $customer->entity->firstname;
 					$user->surname = $customer->entity->surname;
 				}
 				//$user->_userAR->tenantID = $cid;
 				if($user->save()){
-					
+
 					if($customer->has_admin == Customer::NO_ADMIN){
 						$customer->has_admin = Customer::HAS_ADMIN;
-						$customer->save();	
+						$customer->save();
 					}
 					//unset($data['password_hash']);
 					//unset($data['password_reset_token']);
 					return Yii::$app->apis->sendSuccessResponse([$user]);
-					
+
 				} else{
 					return Yii::$app->apis->sendFailedResponse([$user->errors]);
 				}
-				
+
 			} else {
 				return Yii::$app->apis->sendFailedResponse(['Customer does not exist']);
 			}
@@ -321,7 +322,7 @@ class SiteController extends RestController
 			return Yii::$app->apis->sendFailedResponse(['User already exist']);
 		}
     }
-	
+
 	public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
@@ -337,12 +338,12 @@ class SiteController extends RestController
     }
 
     public function actionInviteUsers($folderid=0)
-    {   
-       
+    {
+
         $newTest = $this->request;
         foreach($newTest as $test){
              $model = new InviteUsersForm;
-            $model->attributes = $test;  
+            $model->attributes = $test;
             $folderId = $folderid;
             $emails = $model->email;
             $role = $model->role;
@@ -354,9 +355,9 @@ class SiteController extends RestController
                 }
             } else {
                 return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
-            } 
+            }
         }
-       
+
     }
 
     public function actionListUsers()
@@ -366,12 +367,12 @@ class SiteController extends RestController
         $userData = [];
         if(!empty($dataProvider)){
             foreach ($dataProvider as $data) {
-               array_push($userData, $data->fullName); 
+               array_push($userData, $data->fullName);
             }
             return Yii::$app->apis->sendSuccessResponse($userData);
         }
     }
-	
+
 	public function actionChatList($username)
 	{
 		$splitUserName = explode('-',$username);
@@ -382,12 +383,12 @@ class SiteController extends RestController
 			->from('rooms')
 			->where(['name1' => ['$regex' => $username]])
 			->orWhere(['name2' => ['$regex' => $username]]);
-			
+
 		// execute the query
 		$rows = $query->all();
 		$i=0;
 		foreach($rows as $key => $value){
-			
+
 			$name1 = explode('-',$value['name1']);
 			$name2 = explode('-',$value['name2']);
 			if($splitUserName[0] == $name1[0]){
@@ -395,28 +396,35 @@ class SiteController extends RestController
 			}else{
 				$nonrequesterusername  = $name1[0];
 			}
-			
+
 			if($splitUserName[1] === $name1[2]){
-				$chats = new Query();
-				$roomId = (string) $value['_id'] ;
-				$chats->from('chats')->where(['room' => ['$eq' => $roomId]])->addOptions(['sort'=>['createdOn' => -1]]);
-				$chatRows = $chats->one();
-				$model = new UserDb();
-				$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
-				$data[$i]['name'] = $dataProvider->fullName;
-				$data[$i]['avatar'] = 'http://ubuxa.net/'.$dataProvider->profile_image;
-				$data[$i]['unread'] = 0;
-				$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
-				$data[$i]['lastMessage'] = $chatRows['msg'];
-				$data[$i]['roomid'] = $roomId;
-				$data[$i]['username'] = $dataProvider->username;
-				$data[$i]['userid'] = $dataProvider->id;
-				$data[$i]['roomId'] = (string) $value['_id'];
-				$data[$i]['folderId'] = $splitUserName[1];
-				$i++;
+
+					$chats = new Query();
+					$roomId = (string) $value['_id'] ;
+					$chats->from('chats')->where(['room' => ['$eq' => $roomId]])->addOptions(['sort'=>['createdOn' => -1]]);
+					$chatRows = $chats->one();
+					$model = new UserDb();
+					$dataProvider = $model->find()->where(['username' => $nonrequesterusername])->one();
+					if(!empty($chatRows['msg']) and !empty($dataProvider->fullName) ){
+						$data[$i]['name'] = $dataProvider->fullName;
+						$data[$i]['avatar'] = 'http://ubuxa.net/'.$dataProvider->profile_image;
+						$data[$i]['unread'] = 0;
+						$data[$i]['lastTime'] = (string) $chatRows['createdOn'];
+						$data[$i]['lastTime2'] = date('m-d-Y H-i-s', (string) $chatRows['createdOn']);
+						$data[$i]['lastMessage'] = $chatRows['msg'];
+						$data[$i]['roomid'] = $roomId;
+						$data[$i]['username'] = $dataProvider->username;
+						$data[$i]['userid'] = $dataProvider->id;
+						$data[$i]['roomId'] = (string) $value['_id'];
+						$data[$i]['folderId'] = $splitUserName[1];
+						$i++;
+				}
 			}
 		}
-		return Yii::$app->apis->sendSuccessResponse($data);
+		 usort($data, function($a, $b) {
+			return $a['lastTime'] <= $b['lastTime'];
+		 });
+
     }
     
     /***
@@ -467,4 +475,3 @@ class SiteController extends RestController
         }
     }
 }
-	

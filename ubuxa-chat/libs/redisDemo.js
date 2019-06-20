@@ -35,7 +35,7 @@ function waitForPush () {
   	if(data !== null){
       // Create the messages that you want to send to clents
       let messages = [];
-      let somePushTokens = ['ExponentPushToken[2_ugNZIXESIcGxdaCi0pWh]']
+      let somePushTokens = ['ExponentPushToken[_Af6dYHl1zr1JIqq_KTAI7]']
       for (let pushToken of somePushTokens) {
         // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
 
@@ -50,7 +50,8 @@ function waitForPush () {
           to: pushToken,
           sound: 'default',
           body: data[1],
-          data: { withSome: 'data' },
+          data: { body: data[1] },
+          priority: 'high',
         })
       }
 
