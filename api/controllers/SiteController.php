@@ -431,6 +431,7 @@ class SiteController extends RestController
     /***
      * @brief action to store a push token to the server
      * 
+     * @future prepare for a save failure which is not triggered by a model validaton error.
      */
     public function actionStorePushToken()
     {
@@ -456,7 +457,7 @@ class SiteController extends RestController
         if ( $model->save() ) {
             return Yii::$app->apis->sendSuccessResponse("Token stored successfully");
         } else {
-            return Yii::$app->apis->sendFailedResponse("Unkown server error. Please try again.");
+            return Yii::$app->apis->sendFailedResponse($model->errors);
         }
     }
 

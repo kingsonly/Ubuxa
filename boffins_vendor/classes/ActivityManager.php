@@ -133,18 +133,24 @@ class ActivityManager extends Component
 	 * 
 	 * @details basic initialisations and start listening to controller actions 
 	 * (only those that are relevant to the activity manager)
+	 * 
+	 * @future delete the controller_name column in ActivityObjectClass as it is no longer useful.
 	 */
 	public function init()
 	{
 		Yii::warning("Initialising Activity Manager", __METHOD__);
 		parent::init();
 		$this->currentActivityNode = $this->activitySeries[0] = new ActivityMessageNode; //first, primary tree.
-		
-		foreach ($this->getActivityObjectClasses() as $activityObjectClass) {
-			$controller = $activityObjectClass->controller_name;
+		$trackedControllers = \frontend\models\ActivityAction::find()
+																->select(['id', 'controller_name'])
+																->groupBy('controller_name')
+																->all();
+
+		foreach ($trackedControllers as $trackedController) {
+			$controller = $trackedController->controller_name;
 			ActionEvent::on($controller, BoffinsBaseController::EVENT_BEFORE_ACTION, [$this, 'handleBeforeAction']);
 			ActionEvent::on($controller, BoffinsBaseController::EVENT_AFTER_ACTION, [$this, 'handleAfterAction']);
-		}		
+		}
 	}
 	
 	/**
@@ -161,8 +167,8 @@ class ActivityManager extends Component
 		$this->sourceActionID = $event->action->id;
 		$sessID = Yii::$app->session->id;
 		$key = self::REDIS_NAMESPACE_PREFIX . ":session:$sessID:{$this->sourceControllerID}/{$this->sourceActionID}";
-		$escapedStr = 'frontend\controllers\\' . ucfirst($this->sourceControllerID) . 'Controller' ;
-		Yii::warning("$key", "SEE KEY");
+		$escapedStr = $event->sender->className();
+		//Yii::warning("$key", __METHOD__);
 
 		$trackedActions = \frontend\models\ActivityAction::find()
 										->where([
@@ -188,7 +194,7 @@ class ActivityManager extends Component
 		$redis->setex($key, $this->coolOff, 1); //SETEX key expire_in_seconds string_value NOTE: cooloff period can be set from config
 
 		Yii::warning('Activity Manager is now tracking events on ' . $this->sourceControllerID . ' through ' . $this->sourceActionID, __METHOD__);
-		
+
 		foreach ($this->getActivityObjectClasses() as $activityObjectClass) {
 			//attach event handlers for COMPLETED_ACTIVITY and BEGIN_ACTIVITY which are special Activity events 
 			//triggered by a BARRM instance when it conducts an activity which it wants Activity Manager to track.
@@ -670,21 +676,38 @@ class ActivityManager extends Component
 	 * @param [int] $userIDs - the id(s) 0f the users who have subscribed to the given activity.
 	 * @param [bool] $resolveAll - defaults to false. If set to true, this will loop through the node to resolve child messages. 
 	 * @return void
+	 * 
+	 * @details also provides meta data for the message.
 	 */
 	public function dispatchMessages($node, $userIDs, $resolveAll = false)
 	{
-		//nothing yet
+		//
 		$redis = Yii::$app->redis;
+
+		do {
+			$messageKey = (new \yii\base\Security)->generateRandomString(16);
+		} while ($redis->exists($messageKey));
+		Yii::warning($messageKey, "THE KEY");
+
 		
-		if (is_array($userIDs)) {
-			Yii::Warning("Looing through users to send messages");
-			foreach( $userIDs as $userID ) {
-				$redis->lpush( "user_message:$userID", $node->resolve() );
-			}
-		} else {
-			Yii::warning("Sending a single message");
-			$redis->lpush( "user_message:$userIDs", $node->resolve() );
+		if ( ! is_array($userIDs) ) {
+			$userIDs = [$userIDs];
 		}
+
+		foreach( $userIDs as $userID ) {
+			$redis->lpush( "user_message:$userID", $messageKey );
+			$redis->lpush( "$messageKey:meta_message", $node->resolve() );
+			$redis->lpush( "$messageKey:meta_actor_id", Yii::$app->user->identity->id );
+			$redis->lpush( "$messageKey:meta_date", time() );
+			$profileImage = Yii::$app->user->identity->profile_image ? Yii::$app->user->identity->profile_image : 'no image';
+			$redis->lpush( "$messageKey:meta_actor_image", $profileImage );
+		}
+	}
+
+	protected function sendRedisMesage($key, $message, $method = 'lpush') 
+	{
+		$redis = Yii::$app->redis;
+		$redis->$method($key, $message);
 	}
 
 	/***
@@ -718,6 +741,7 @@ class ActivityManager extends Component
 	 *  
 	 * @param [BoffinsArRootModel] $object the object that wants to be subscribed.
 	 * @params [array] $actions the actions for which this object should be subscribed.
+	 * @param [mixed] a user id or array of user ids of users to subscribe an object to.
 	 * @return void
 	 *  
 	 * @details You can call this function simply as follows from any BARRM (only models saved in the DB can subscribe)
@@ -725,40 +749,69 @@ class ActivityManager extends Component
 	 * Yii::$app->activityManager->subscribe($this); or Yii::$app->activityManager->subscribe($this, ['view']);
 	 * In the first example, activity manager will subscribe the BoffinsArRootModel object instance ($this)
 	 * In the second example, activity manager will subscribe the BoffinsArRootModel instance to listen to the view action only of that object
-	 * @future register new BARRM classes which are not in ActivityObjectClasses set by creating a new instance of 
+	 * @future register new BARRM classes which are not in ActivityObjectClasses set by creating a new instance of
 	 * ActivityObjectClasses and saving to the DB. This way when someone subscribes a new instance of BARRM and Activity Manager 
 	 * will now begin to listen for it. 
+	 * Provide a user id or an array of user ids for each usser you want to subscribe $object activities.
+	 * If $user is null, then the current user will be subscribed. If there is no user, an error will be triggered.
 	 */
-	public function subscribe($object, $actions = ['view', 'update', 'delete'])
+	public function subscribe($object, $user = null, $actions = ['view', 'update', 'delete'])
 	{
 		if (! $object instanceof BoffinsArRootModel ) {
 			Yii::warning("Can only register objects of class BoffinsArRootModel or child.", __METHOD__);
-			throw new yii\base\InvalidCallException("parameter object does not match requirements. Provide a BARRN instance");
+			throw new yii\base\InvalidCallException("Parameter object does not match requirements. Provide a BARRN instance");
 		}
 		
 		if (! is_array($actions) ) {
 			Yii::warning("Registration process cannot proceed. I need an array of actions.", __METHOD__);
-			throw new yii\base\InvalidCallException("parameter actions does not match requirements. Provide an array of strings");
+			throw new yii\base\InvalidCallException("Parameter 'actions' does not match requirements. Provide an array of strings");
 		}
-		
-		if ( empty(Yii::$app->user->identity) ) {
-			Yii::error("Hmn. Can't subscribe this object. There is no user!", __METHOD__);
-		}
-		
+
 		if ( empty($object->id) ) {
 			Yii::error("Hmn. Can't subscribe this object. There is no id!", __METHOD__);
+			throw new yii\base\InvalidCallException("Parameter object does not match requirements. Provide a BARRN instance with an id attribute!");
+		}
+		
+
+		if ( $users === null && empty(Yii::$app->user->identity) ) {
+			Yii::error("Hmn. Can't subscribe this object. There is no user!", __METHOD__);
+			throw new yii\base\InvalidCallException("I cannot subscribe this object if I have no user to subscribe for");
 		}
 
 		$objectClass = ActivityObjectClass::findOne(['class_name' => $object->className()]);
 		if ( empty($objectClass) ) {
 			Yii::error("Hmn. Can't subscribe this object. There is no registerd objectClass!", __METHOD__); //or you include this one. 
 		}
+
+		if ( $user !== null ) {
+			if ( is_string($user) || is_integer($user) ) {
+				$this->subscribeInternal($object, $objectClass, $actions, $user);
+			}
+
+			if ( is_array($user) ) {
+				foreach( $user as $singleUser ) {
+					$this->subscribeInternal($object, $objectClass, $actions, $singleUser);
+				}
+			}
+		}
 		
+		
+	}
+
+	/***
+	 * @brief internal function that actually creates a subscription for each user on each action. 
+	 * @param [BoffinsArRootModel] $object the object that the subscripton is for.
+	 * @params [ActivityObjectClass] $objectClass the ActivityObjectClass that indicates the class of activity object [BARRM]. 
+	 * @params [array] $actions the actions for which this object should be subscribed.
+	 * @param [mixed] a user id or array of user ids of users to subscribe an object to.
+	 */
+	protected function subscribeInternal($object, $objectClass, $actions, $user_id)
+	{
 		$security = new \yii\base\Security;
 		foreach ( $actions as $action ) {
 			$subscription = new Subscription;
 			$subscription->id = $security->generateRandomString(64);
-			$subscription->user_id = Yii::$app->user->identity->id;
+			$subscription->user_id = $user_id;
 			$subscription->object_id = $object->id;
 			$subscription->object_class_id =  $objectClass->id;
 			$subscription->action_id = $action;
