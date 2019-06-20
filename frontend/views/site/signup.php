@@ -58,7 +58,7 @@ $login = Url::to(['site/login']);
     box-shadow: 0px 2px 7px rgba(0,0,0,0.1);
     width: 40%;
   }
-      
+
   @media screen and (max-width: 600px) {
   .frame {
     height: auto;
@@ -184,7 +184,7 @@ $login = Url::to(['site/login']);
 
    .form-signup input:focus, textarea:focus {
       background: rgba(255,255,255,.3);
-      border: none; 
+      border: none;
       padding-right: 40px;
       transition: background .5s ease;
    }
@@ -226,7 +226,7 @@ $login = Url::to(['site/login']);
             </ul>
           </div>
           <div ng-app ng-init="checked = false">
-             
+
               <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'attributes' => $userForm->attributes(),'enableAjaxValidation' => true, 'validationUrl' => ['site/ajax-validate-user-form'], 'options' => [
                   'class' => 'form-signup', 'id' => 'userForm']
               ]); ?>
@@ -257,7 +257,7 @@ $login = Url::to(['site/login']);
 
               <?php ActiveForm::end(); ?>
               <div class="success">
-                  
+
               </div>
           </div>
       </div>
@@ -278,23 +278,26 @@ $login = Url::to(['site/login']);
           type: form.attr("method"),
           data: formData,
           success: function (data) {
+              alert(data);
               console.log(data);
           },
           error: function (data) {
               $("#loader").hide()
+              console.log(data)
               alert("Something went wrong!")
-              console.log(data);
+              alert(data)
+
           },
           beforeSend: function(){
               $("#loader").show()
           },
-         
+
       });
 
       return false;
-      
-      
-      
+
+
+
   });
 
   $(document).ready(function () {
@@ -305,6 +308,6 @@ $login = Url::to(['site/login']);
 
 
 JS;
-   
+
   $this->registerJs($js);
 ?>

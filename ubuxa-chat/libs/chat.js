@@ -60,7 +60,8 @@ function SubscribeExpired(e,r){
 
 							console.log(data);
 		
-							var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							//var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							var req = https.get('http://ubuxaapi.ubuxa.net/site/chat-email?id='+JSON.stringify(data), (res) => {
 							  console.log(res.statusCode);
 							});
 
@@ -163,12 +164,13 @@ ioChat.on('connection', function(socket) {
 
 	//emits event to read old-chats-init from database.
 	socket.on('old-chats-init', function(data) {
+		console.log(data);
 		chatModel.find({})
 		.where('room').equals(data.room)
 		.sort('-createdOn')
 		.skip(data.msgCount)
 		.lean()
-		.limit(5)
+		.limit('msgRequestNumber' in data ?data.msgRequestNumber:5)
 		.exec(function(err, result) {
 			if (err) {
 				console.log("Error : " + err);
@@ -340,7 +342,7 @@ ioChat.on('connection', function(socket) {
 		} //end of else.
 		);
 
-	});
+	}); 
 
 	//	this area was added by kingsley of epsolun to make changes to lib
 

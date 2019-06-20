@@ -112,7 +112,7 @@ class SiteController extends RestController
 		$msgArray = [];
 		$model = new ChatNotificationEmail();
 		$reciever = '';
-		foreach(json_decode($id, true) as $key => $value ){
+		foreach(json_decode($id, true) as $key => $value){
 			$userModels = new UserDb();
 			$folderModels = new ApiFolder();
 			$extractString = explode(')',$value);
@@ -121,12 +121,10 @@ class SiteController extends RestController
 			$userModel = $userModels->find()->where(['username' => $username])->one();
 			$recievers = $userModels->find()->where(['username' => $username])->one();
 			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
-
 			$msgArray[$key]['fullname'] = $userModel->fullName;
 			$msgArray[$key]['foldertitle'] = $folderModel['title'];
 			$msgArray[$key]['msg'] = $extractString[1];
 			$reciever = $recievers->email;
-
 		}
 		$model->sendEmail($msgArray,$reciever);
     }
@@ -416,6 +414,7 @@ class SiteController extends RestController
 						$data[$i]['userid'] = $dataProvider->id;
 						$data[$i]['roomId'] = (string) $value['_id'];
 						$data[$i]['folderId'] = $splitUserName[1];
+						$data[$i]['roomCreatedOn'] = (string) $value['createdOn'];
 						$i++;
 				}
 			}

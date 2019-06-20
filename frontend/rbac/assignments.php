@@ -64,7 +64,7 @@ return [
         'admin',
     ],
     59 => [
-        'administrator',
+        'admin',
     ],
     31 => [
         'manager',
@@ -79,9 +79,24 @@ return [
         'admin',
     ],
     53 => [
-        'field_officer',
+        'admin',
     ],
     54 => [
-        'administrator',
+        'admin',
+    ],
+    60 => [
+        'admin',
+    ],
+    61 => [
+        'admin',
+    ],
+    62 => [
+        'admin',
+    ],
+    63 => [
+        'admin',
+    ],
+    64 => [
+        'admin',
     ],
 ];
