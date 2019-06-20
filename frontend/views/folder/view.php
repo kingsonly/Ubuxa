@@ -467,8 +467,9 @@ $img = $model->folder_image;
   <span id="folder-doc-loader"></span>
 </div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
+
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
-<?= $onboardingExists = true; ?>
+<? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
         <div class="row">

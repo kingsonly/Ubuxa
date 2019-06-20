@@ -4,7 +4,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 
-$inviteLink = Yii::$app->urlManager->createAbsoluteUrl(['site/invite','email' => $email,'cid' => $user->cid, 'role' => $role]);
+$inviteLink = $link;//Yii::$app->urlManager->createAbsoluteUrl(['site/invite','email' => $email,'cid' => $user->cid, 'role' => $role]);
 ?>
 
 
