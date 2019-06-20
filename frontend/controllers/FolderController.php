@@ -426,7 +426,21 @@ class FolderController extends BoffinsBaseController
 		
 			
 		if($folderManagerModel->save(false)){
-			//return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
+            //return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
+            //subscribe the new user with access to actvities on this folder
+            Yii::$app->activityManager->subscribe($folderModel, $userId, ['view', 'update', 'delete']);
+
+            //for now, as there is no activity for "InviteUser" create a "manual" message and dispatch it
+            //this message is to inform the user that they have been given access. 
+            $messageConstruct = new \boffins_vendor\classes\ActivityMessageNode;
+            $messageConstruct->format = '{actor} {verb} {article} {object}';
+            $messageConstruct->addConstructs([
+                                'actor' => Yii::$app->user->identity->getPublicTitleofBARRM(),
+                                'verb'=> Yii::t("activity_manager", "afterInvite_verb"),
+                                'article' => Yii::t("activity_manager", "afterInvite_article"),
+                                'object' => Yii::t("activity_manager", $folderModel->shortClassName()) . ' - ' . $folderModel->getPublicTitleofBARRM(),
+                                ]);
+            Yii::$app->activityManager->dispatchMessages($messageConstruct, $userId);
 			return true;
 			
 		}

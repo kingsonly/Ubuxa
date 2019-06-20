@@ -20,5 +20,8 @@ return [
 	'afterDelete_verb' => "deleted",
 	'afterDelete_article' => "the",
 	'afterDelete_object' => "element",
+
+	'afterInvite_verb' => "added you",
+	'afterInvite_article' => "to the",
 ];
 ?>

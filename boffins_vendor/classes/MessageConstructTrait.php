@@ -22,7 +22,7 @@ trait MessageConstructTrait
 	protected $sentenceFormat = '{verb} {article} {object}';
 	
 	/**
-	 * @brief Adds a construct and value in order to build a phrase. 
+	 * @brief Adds a construct and value in order to build a phrase.
 	 *  
 	 * @param [string] $key the sentence construct
 	 * @param [mixed  string|callable|MessageConstructInterface] $value the value to set for the sentence construct
@@ -46,6 +46,21 @@ trait MessageConstructTrait
 		$this->_sentenceConstruct[$key] = $value;
 	}
     
+    /***
+     * @brief Add an array of constructs. 
+     * 
+     * @param [array] $constructs a key => value array of constructs. 
+     */
+    public function addConstructs($constructs)
+    {
+        if ( ! is_array($constructs) ) {
+            throw new yii\base\InvalidArgumentException("You must provide an array of valid constructs. Use addConstruct to add a single construct");
+        }
+
+        foreach ( $constructs as $key => $value ) {
+            $this->addConstruct($key, $value);
+        }
+    }
     /***
      * @brief resolves a message construct into a sentence/phrase by replacing constructs with their intended values
      * 
@@ -121,7 +136,7 @@ trait MessageConstructTrait
      */
     public function setFormat($format)
     {
-        if ( count($format) ) {
+        if ( strlen($format) !== 0 ) {
             $this->sentenceFormat = $format;
         }
     }
