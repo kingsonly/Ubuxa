@@ -70,6 +70,7 @@ client.keys('*', function (err, keys) {
 
 subscriber.on("message", function (channel, message) {
   let data = JSON.parse(message);
+  console.log(util.inspect(data, false, null, true ))
   let expo = new Expo(); 
   
   for(let id of data.subscribers) {
@@ -135,7 +136,6 @@ subscriber.on("message", function (channel, message) {
       });
     }
   }
-  //console.log(util.inspect(JSON.parse(message), false, null, true ))
 });
 
 subscriber.subscribe("notification");
