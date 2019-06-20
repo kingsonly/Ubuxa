@@ -26,6 +26,7 @@ use frontend\models\SignupForm;
 use frontend\models\Email;
 use frontend\models\ChatNotification;
 use api\models\InviteUsersForm;
+use api\models\UserDevicePushToken;
 use yii\mongodb\Query;
 use yii\helpers\Url;
 
@@ -422,7 +423,54 @@ class SiteController extends RestController
 		 usort($data, function($a, $b) {
 			return $a['lastTime'] <= $b['lastTime'];
 		 });
-		return Yii::$app->apis->sendSuccessResponse($data);
-	}
 
+    }
+    
+    /***
+     * @brief action to store a push token to the server
+     * 
+     */
+    public function actionStorePushToken()
+    {
+        //
+        if ( !isset($this->request["token"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide a push token ['token'] ");
+        }
+
+        if ( !isset($this->request["uid"]) ) {
+            return Yii::$app->apis->sendFailedResponse("Please provide the user id ['uid'] ");
+        }
+
+        $model = new UserDevicePushToken;
+        $token = $this->request["token"];
+        $exists = $model->find()->where(["push_token" => $token])->exists();
+        if($exists){
+            return;
+        }
+           
+        $model->push_token = $this->request["token"];
+        $model->user_id = $this->request["uid"];
+
+        if ( $model->save() ) {
+            return Yii::$app->apis->sendSuccessResponse("Token stored successfully");
+        } else {
+            return Yii::$app->apis->sendFailedResponse("Unkown server error. Please try again.");
+        }
+    }
+
+    public function actionPushNotification($id)
+    {
+        $model = new UserDevicePushToken();
+        $message = $this->request["message"];
+        $users = $model->find()->where(['user_id' => $id])->all();
+        foreach ($users as $user) {
+           $token = $user->push_token;
+           $data = [
+           'title' => 'Some title',
+            'text' => 'Some text'
+           ];
+           $notification = ['body' => $message, 'data' => $data];
+           \Yii::$app->expo->notify($token, $notification); 
+        }
+    }
 }

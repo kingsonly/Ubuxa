@@ -308,6 +308,73 @@ class SiteController extends BoffinsBaseController {
 
   	public function actionSignup($email,$cid,$role,$folderid = 0)
   	{
+		// if (!Yii::$app->user->isGuest) {
+  //           return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
+  //       }
+		// $this->layout = 'loginlayout';
+  //      $user = new SignupForm();
+  //      $customer = Customer::find()->where(['cid' => $cid])->one();
+  //      $userExists = Email::find()->where(['address' => $email])->exists();
+       
+  //      if(!$userExists){
+		// 	if(!empty($customer)){
+		//         if ($user->load(Yii::$app->request->post())) {
+		//         	$user->address = $email;
+		//         	$user->cid = $cid;
+		//         	$user->basic_role = $role;
+		//         	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+		//         		$user->first_name = $customer->entity->firstname;
+		//         		$user->surname = $customer->entity->surname;
+		//         	}
+		//         	//$user->_userAR->tenantID = $cid;
+		// 			if($user->save()){
+		// 				if($customer->has_admin == Customer::NO_ADMIN){
+		// 					$customer->has_admin = Customer::HAS_ADMIN;
+		// 					$customer->save();	
+		// 				}
+		// 				$newUser = UserDb::findOne([$user->id]);
+		// 				// this section has been modified by kingsley of epsolun
+		// 				// modification adds invited user to a specific folder 
+		// 	            if (Yii::$app->user->login($newUser)){
+		// 					$folderId = $folderid;
+		// 					$userId = $user->id;
+		// 					$folderRole = 'user';
+		// 					$folderManagerModel = new FolderManager();
+							
+							
+		// 					if($folderId == 0){
+		// 						return $this->redirect(['folder/index']);
+		// 					}else{
+		// 						$folderManagerModel -> user_id = $userId;
+		// 						$folderManagerModel -> folder_id = $folderId;
+		// 						$folderManagerModel -> role = $folderRole;
+		// 						if($folderManagerModel->save()){
+		// 							return $this->redirect(['folder/index']);
+		// 						}	
+		// 					}
+							
+			                
+		// 	            }
+		// 			} 
+		// 		} else {
+		//             return $this->render('createUser', [
+		//             	'userExists' => $userExists,
+		//             	'customer' => $customer,
+		// 				'userForm' => $user,
+		// 				'action' => ['createUser'],
+		// 			]);
+		// 		}
+		// 	} else {
+		// 		throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		// 	}
+		// }else {
+		// 	return $this->render('signup', [
+		//             	'userExists' => $userExists,
+		//             	'customer' => $customer,
+		// 				'userForm' => $user,
+		// 				'action' => ['createUser'],
+		// 			]);
+		// }
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
@@ -359,7 +426,6 @@ class SiteController extends BoffinsBaseController {
 									 return true;
 									}
 								}
-
 
 				            }
 						}

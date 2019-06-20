@@ -30,8 +30,8 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	//this class is also POORLY documented. 
 	
 	/***
-	 *  boolean. To indicate that an instance of this class should not implement any other behaviors but those configures in-class 
-	 *  THIS IS NOT IMPLEMENTED SO THIS IS USELESS.
+	 * boolean. To indicate that an instance of this class should not implement any other behaviors but those configures in-class 
+	 * THIS IS NOT IMPLEMENTED SO THIS IS USELESS.
 	 */
 	public $defaltBehaviour;
 	
@@ -39,39 +39,45 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	public $fromWhere; //what is this? 
 	
 	/***
-	 *  triggered at the beginning of an activity 
+	 * triggered at the beginning of an activity 
 	 */
 	const BEGIN_ACTIVITY = 'beginActivity';
 
 	/***
-	 *  triggered at the end of an activity 
+	 * triggered at the end of an activity 
 	 */
 	const COMPLETED_ACTIVITY = 'completeActivity';
 	
 	/***
-	 *  corresponds to the find activity
+	 * corresponds to the find activity
 	 */
 	const MODEL_ACTIVITY_FIND = 'find';
 	
 	/***
-	 *  corresponds to the insert activity
+	 * corresponds to the insert activity
 	 */
 	const MODEL_ACTIVITY_INSERT = 'insert';
 	
 	/***
-	 *  corresponds to the update activity
+	 * corresponds to the update activity
 	 */
 	const MODEL_ACTIVITY_UPDATE = 'update';
 	
 	/***
-	 *  corresponds to the delete activity
+	 * corresponds to the delete activity
 	 */
 	const MODEL_ACTIVITY_DELETE = 'delete';
 	
 	/***
-	 *  corresponds to the softDelete activity
+	 * corresponds to the softDelete activity
 	 */
 	const MODEL_ACTIVITY_SOFT_DELETE = 'softDelete';
+
+	/***
+	 * boolean to indicate if Activity Find Events are triggerd. Mostly used by the new findQuietly static function 
+	 * and afterFind() method. Defaults to true. 
+	 */
+	public $triggerEvent = true;
 	
 	/*
 	 * @array or string to list date values in the ARModel/Child class
@@ -314,10 +320,12 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 */
 	public function afterFind() 
 	{
-		parent::afterFind();
-		$activityEvent = new ActivityEvent;
-		$activityEvent->modelAction = self::MODEL_ACTIVITY_FIND;
-		$this->trigger(self::COMPLETED_ACTIVITY, $activityEvent);
+		if ( $this->triggerEvent ) {
+			parent::afterFind();
+			$activityEvent = new ActivityEvent;
+			$activityEvent->modelAction = self::MODEL_ACTIVITY_FIND;
+			$this->trigger(self::COMPLETED_ACTIVITY, $activityEvent);
+		}
 	}
 		
 	/**
@@ -364,6 +372,14 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 		return new StandardQuery(get_called_class());
 	}
 	
+	/***
+	 * @brief a new find method which does not trigger the beforeFind and afterFind events. 
+	 */
+	public static function findQuietly()
+	{
+		Yii::info("Using StandardQuery class in Quiet Mode to perform queries in " . static::class, __METHOD__ );
+		return new StandardQuery(get_called_class(), ['triggerEvents' => false] );
+	}
 	/***
 	 * Get the type of a given attribute 
 	 * THIS SEEMS TO CLASH WITH a child class. Removed as it is barely in use. 
@@ -491,9 +507,15 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 		$activityEvent = new ActivityEvent;
 		$activityEvent->eventPhase = 'before';
 		$activityEvent->modelAction = SELF::MODEL_ACTIVITY_FIND;
-		$activityEvent->additonalParams['modelClass'] = static::class;
+		$activityEvent->additionalParams['modelClass'] = static::class;
+		$activityEvent->additionalParams['shortClass'] = static::shortClassName();
 		
 		ModelEvent::trigger(static::class, SELF::BEGIN_ACTIVITY, $activityEvent);
+	}
+
+	public function getFqn() 
+	{
+		return static::class;
 	}
 
 }

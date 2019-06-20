@@ -40,8 +40,8 @@ class m190207_075007_alter_task_group_table extends Migration
     public function safeDown()
     {
         echo "m190207_075007_alter_task_group_table should not be reverted. Reverting for development only.\n";
-        $this->dropColumn('task-remove_after_drop_status', "{{%task_group}}");
-        $this->dropColumn('task-drop_task_status', "{{%task_group}}");
+        $this->dropColumn("{{%task_group}}", 'remove_after_drop_status');
+        $this->dropColumn("{{%task_group}}", 'drop_task_status');
 
         //return false;
     }
