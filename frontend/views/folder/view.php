@@ -467,7 +467,7 @@ $img = $model->folder_image;
   <span id="folder-doc-loader"></span>
 </div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
-<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
+<?//= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
 <?= $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
@@ -475,12 +475,12 @@ $img = $model->folder_image;
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
+                  	<?//= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
                   </div>  
                     	<div class="row">
 							
-   						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
+   						 	<?//= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+   						 	<?//= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>
         </div>
@@ -493,7 +493,7 @@ $img = $model->folder_image;
 			
 			?>
 			
-        	<?= ComponentWidget::widget(['users'=>$model->users,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
+        	<?//= ComponentWidget::widget(['users'=>$model->users,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
@@ -588,9 +588,52 @@ $indexJs = <<<JS
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
 RedisSocket.on('redis message', function(msg){
-$(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
-$('.act_count').text($('.act_str').length)
+$(document).find('.stream_activity').html('<p class="act_str">'+msg[0]+'</p>')
+var div = $('<div />')
+var div2 = $('<div />')
+var img = $('<img />')
+var p = $('<p />')
+div.addClass('activity');
+div2.addClass('activity__message');
+img.addClass('activity__avatar');
+img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
+//time.addClass('activity__time');
+//time.text('Last Tuesday at 9:31 AM');
+p.text(msg[0]);
+//div2.append(time)
+div2.append(p)
+div.append(img)
+div.append(div2)
+console.log(div)
+$(document).find('.activity-list').append(div)
 
+$('.act_count').text($('.act_str').length)
+    
+})
+
+RedisSocket.on('messages', function(msg){
+  console.log('from the view',msg)
+  for(var i=0; i < msg.length; i++){
+
+    var div = $('<div />')
+    var div2 = $('<div />')
+    var img = $('<img />')
+    var p = $('<p />')
+    div.addClass('activity');
+    div2.addClass('activity__message');
+    img.addClass('activity__avatar');
+    img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
+    //time.addClass('activity__time');
+    //time.text('Last Tuesday at 9:31 AM');
+    p.text(msg[i]);
+    //div2.append(time)
+    div2.append(p)
+    div.append(img)
+    div.append(div2)
+    console.log(div)
+    $(document).find('.activity-list').append(div)
+
+  }
 })
 
 var mymenu = 1;

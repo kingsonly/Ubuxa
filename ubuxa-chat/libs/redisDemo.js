@@ -2,6 +2,9 @@
 var redis = require('redis');
 var client = redis.createClient(); // this creates a new client
 
+
+var user_message_33 = 0;
+
 module.exports.redisSocket = function(http) {
 var ioRedis = io.of('/redis');
 
@@ -20,22 +23,47 @@ client.keys('*', function (err, keys) {
     console.log(keys[i]);
   }
 });
+
 client.lrange('user_message:33', 0, -1, function(error, data){
-  if (error) { 
-    console.error('There has been an error:', error);
-    }
-  console.log('We have retrieved data from the front of the queue:', data);
+              if (error) { 
+                return console.error('There has been an error:', error);
+              }
+
+              ioRedis.emit('messages', data);
 })
 
+
 function waitForPush () {
-  client.blpop('user_message:33',120, function(error, data){
+  client.exists('user_message:33', function(err, reply) {
+      if (reply === 1) {
+          client.lrange('user_message:33', 0, -1, function(error, data){
+              if (error) { 
+                return console.error('There has been an error:', error);
+              }
+              //console.log('We have retrieved data from the front of the queue:', data);
+              if(data !== null && data.length > user_message_33){
+                ioRedis.emit('redis message', data);
+                user_message_33 = data.length
+              }
+          })
+        
+      } else {
+        console.log('empty')
+      }
+      waitForPush();
+  })
+  
+  /*client.blpop('user_message:33',120, function(error, data){
     // do stuff
+    
     if (error) { 
     console.error('There has been an error:', error);
     }
     
   	console.log('We have retrieved data from the front of the queue:', data);
-    ioRedis.emit('redis message', data[1]);
+    if(data !== null){
+        ioRedis.emit('redis message', data[1]);
+      }
     client.exists('user_message:33', function(err, reply) {
       if (reply === 1) {
         
@@ -44,7 +72,7 @@ function waitForPush () {
       }
     })
     waitForPush();
-  });
+  });*/
 }
 
 waitForPush ()

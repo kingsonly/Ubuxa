@@ -1,7 +1,7 @@
 <?php
 return [
     33 => [
-        'admin',
+        'administrator',
     ],
     24 => [
         'admin',

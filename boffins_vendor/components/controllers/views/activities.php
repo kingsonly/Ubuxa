@@ -176,6 +176,116 @@ use frontend\assets\AppAsset;
   display: inline-block;
   padding: 10px;
 }
+.activity {
+  border-left: solid 2px #7ED321;
+  font: 12px/1.2 'Lucida Grande', sans-serif;
+  color: #2C2C2C;
+  padding: 6px;
+  position: relative;
+}
+.activity a {
+  text-decoration: none;
+}
+.activity--subscriber {
+  background: #EBEBEB;
+  border-left: none;
+  border-right: solid 2px #2176D3;
+}
+.activity--notice {
+  background-color: #e1f7c9;
+}
+.activity--notice.activity--subscriber {
+  background-color: #c9dff7;
+}
+.activity__time {
+  font-size: 10px;
+  font-weight: normal;
+  display: block;
+  margin-bottom: 3px;
+  margin-top: -3px;
+  color: #97e245;
+}
+.activity__time--subscriber {
+  color: #4590e2;
+}
+.activity__avatar {
+  border-radius: 3px;
+  vertical-align: bottom;
+  position: absolute;
+}
+.activity__avatar--subscriber {
+  right: 6px;
+}
+.activity__message {
+  min-height: 35px;
+  padding: 6px;
+  padding-left: 46px;
+}
+.activity__message p {
+  padding: 3px 0;
+  margin: 0;
+}
+.activity__message p + img {
+  margin-top: 6px;
+  margin-bottom: 3px;
+}
+.activity__message p:first-child {
+  padding-top: 0;
+}
+.activity__message p:last-child {
+  padding-bottom: 0;
+}
+.activity__message img {
+  width: 100%;
+  max-width: 100%;
+}
+.activity__message--subscriber {
+  padding-left: 6px;
+  padding-right: 46px;
+  text-align: right;
+}
+.activity__message--full {
+  min-height: initial;
+  text-align: center;
+  padding-left: 6px;
+  font-weight: bold;
+}
+.activity__file-name {
+  color: #7E7E7E;
+  display: block;
+  padding: 3px 0 0 5px;
+  font-size: 10px;
+}
+
+.activity-list {
+  background: #FDFDFD;
+}
+
+.file-icon {
+  width: 75px;
+  height: 100px;
+  display: block;
+  text-align: center;
+  line-height: 100px;
+  text-transform: uppercase;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  background: #F1734C;
+  color: #FFF;
+  font-size: 16px;
+}
+.file-icon:hover {
+  background-color: #ef6134;
+}
+
+/* not part of the activities module */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 </style>
 
 <div class="col-md-6">
@@ -204,69 +314,104 @@ use frontend\assets\AppAsset;
 		</div>
 		<div id="activity1" class="col-sm-12 col-xs-12 panel-collapse collapse">
 			<div class="fa fa-times activity-close" style="float: right; cursor: pointer;cursor: pointer;padding: 15px 10px;"></div>
-			<ol class="activity-feed">
-  <li class="feed-item" data-content="&#xf00c;" data-time="3 hours ago" data-color="green">
-    <section class="active-section">
-      <input type="checkbox" id="expand_1" name="expand_1" />
-      <label for="expand_1">
-        <b>Etiam feugiat</b> dolor nec molestie <b>posuere.</b>
-      </label>
-      <main class="activity-content">
-        <blockquote>Duis iaculis commodo condimentum. Donec quis felis libero. Nunc feugiat nisi ut ullamcorper congue. Ut tempus egestas mauris et scelerisque. Sed tincidunt ante ligula, eget pharetra mi pretium eget. Fusce tincidunt, elit blandit semper sollicitudin, sapien lectus lobortis quam, ac bibendum lectus risus quis lectus.</blockquote>
-        <blockquote>Duis iaculis commodo condimentum. Donec quis felis libero. Nunc feugiat nisi ut ullamcorper congue. Ut tempus egestas mauris et scelerisque. Sed tincidunt ante ligula, eget pharetra mi pretium eget. Fusce tincidunt, elit blandit semper sollicitudin, sapien lectus lobortis quam, ac bibendum lectus risus quis lectus.</blockquote>
-      </main>
-    </section>
-  </li>
-  <li class="feed-item" data-content="&#xf27b;" data-time="3 hours ago" data-color="blue">
-    <section class="active-section">
-      <input type="checkbox" id="expand_2" name="expand_2" />
-      <label for="expand_2">
-        <b>Aliquam</b> non diam <b>consectetur.</b>
-      </label>
-      <main class="activity-content">
-        <p>Duis iaculis commodo condimentum. Donec quis felis libero. Nunc feugiat nisi ut ullamcorper congue.</p>
-        <p>Ut tempus egestas mauris et scelerisque. Sed tincidunt ante ligula, eget pharetra mi pretium eget. Fusce tincidunt, elit blandit semper sollicitudin, sapien lectus lobortis quam, ac bibendum lectus risus quis lectus.</p>
-      </main>
-    </section>
-  </li>
-  <li class="feed-item" data-content="&#xf004;" data-time="3 hours ago" data-color="red">
-    <section class="active-section">
-      <input type="checkbox" id="expand_3" name="expand_3" />
-      <label for="expand_3">
-        <b>Nullam</b> mollis massa ut <b>egestas viverra.</b>
-      </label>
-      <main class="activity-content">
-        <img src="http://i0.kym-cdn.com/photos/images/facebook/000/232/114/e39.png">
-      </main>
-    </section>
-  </li>
-  <li class="feed-item" data-content="&#xf00c;" data-time="3 hours ago" data-color="green">
-    <section class="active-section">
-      <label for="expand_4">
-        <b>Etiam feugiat</b> dolor nec molestie <b>posuere.</b>
-        <br>
-        Donec quis felis libero.
-        <b>Etiam feugiat</b> dolor nec molestie <b>posuere.</b>
-        <br>
-        Donec quis felis libero.
-        <b>Etiam feugiat</b> dolor nec molestie <b>posuere.</b>
-        <br>
-        Donec quis felis libero.
-      </label>
-    </section>
-  </li>
-  <li class="feed-item" data-content="&#xf0e7;" data-time="3 hours ago" data-color="yellow">
-    <section class="active-section">
-      <input type="checkbox" id="expand_5" name="expand_5" />
-      <label for="expand_5">
-        <b>Pellentesque accumsan</b> ligula a tincidunt <b>venenatis.</b>
-      </label>
-      <main class="activity-content">
-        <h1>BOOM!</h1>
-      </main>
-    </section>
-  </li>
-</ol>
+			<div class="activity-list" style="margin-top:50px">
+  
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <p>Hey there, welcome to this ace messaging thing?</p>
+    </div>
+  </div>
+    
+  <div class="activity activity--subscriber">
+    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
+    <div class="activity__message activity__message--subscriber">
+      <p>Pretty rad yeah, I wonder what it can do other than messages...</p>
+    </div>
+  </div>
+    
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <p>I think I've seen something like this before though.</p>
+      <p>Where though, is anyone's guess.</p>
+    </div>
+  </div>
+    
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <a href="#">
+        <img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/020/cache/yosemite-deep-valley_2013_600x450.jpg">
+        <span class="activity__file-name">yosemite.jpg</span>
+      </a>
+    </div>
+  </div>
+      
+  <div class="activity activity--subscriber">
+    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
+    <div class="activity__message activity__message--subscriber">
+      <p>That looks like Yosemite!</p>
+    </div>
+  </div>
+    
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <p>Sure is.</p>
+    </div>
+  </div>
+    
+  <div class="activity activity--notice">
+    <div class="activity__message activity__message--full">
+      <time class="activity__time">Last Tuesday at 9:31 AM</time>
+      <p>Brad Forst offered the lesson</p>
+    </div>
+  </div>
+  
+  <div class="activity activity--notice activity--subscriber">
+    <div class="activity__message activity__message--full">
+      <time class="activity__time activity__time--subscriber">Last Tuesday at 9:45 AM</time>
+      <p>Harry Roberts accepted the lesson</p>
+    </div>
+  </div>
+  
+  <div class="activity activity--subscriber">
+    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
+    <div class="activity__message activity__message--subscriber">
+      <p>Right lesson time! Game faces on. Do you mind sending me that PDF over you were on about please?</p>
+    </div>
+  </div>
+  
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <p>Yep, one sec</p>
+    </div>
+  </div>
+  
+  <div class="activity activity--subscriber">
+    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
+    <div class="activity__message activity__message--subscriber">
+      <p>Come on, I don't have long!!</p>
+      <img width="100" src="http://replygif.net/i/1129.gif">
+      <p>Waiting...</p>
+    </div>
+  </div>
+  
+  <div class="activity">
+    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+    <div class="activity__message">
+      <a href="">
+        <div class="file-icon">
+          .psd
+        </div>
+        <span class="activity__file-name">test.psd</span>
+      </a>
+    </div>
+  </div>
+      
+</div>
 </div>
 		
 	</div>
