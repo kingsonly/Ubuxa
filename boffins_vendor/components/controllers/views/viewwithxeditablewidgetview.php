@@ -696,7 +696,11 @@ Editable::end();
 						var pjax = '$pjaxId';
 						var folderId = $('.board-specfic').attr('data-folderId');
 						if(pjax !== ''){
-							$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+							if($('.board-open').hasClass('board-opened')){
+								$.pjax.reload({container:'$pjaxId',async: false, replace: false, url: '$boardUrl&folderIds=$folderId'});
+							}
+							var taskTitle = $('#task-title').val();
+							$('.task-main-title$taskId').text(taskTitle)
 						}
 			 		}",
     	],
