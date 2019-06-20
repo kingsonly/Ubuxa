@@ -670,6 +670,26 @@ class ActivityManager extends Component
 	}
 
 	/***
+     * Added by Emeka
+     * @brief Publishes push notifications to redis and allows node.js listen for those notification
+	 * 
+	 * @param [ActivityMessageNode] $node (resolve)
+	 * @param [int] $userIDs - the id(s) 0f the users who have subscribed to the given activity.
+	 * @return void
+	 * 
+	 * @details also provides meta data for the message.
+	 */
+	public function publishNotifications ($userIDs, $node)
+	{
+		$redis = Yii::$app->redis;
+		$notification = (object)[]; 
+		$notification->subscribers = $userIDs; 
+		$notification->message = $node;
+		$notification->actor_id = Yii::$app->user->identity->id;
+		$redis->publish( "notification", json_encode($notification));
+	}
+
+	/***
 	 * @brief dispatches messages to a specific node.
 	 * 
 	 * @param [ActivityMessageNode] $node
@@ -702,6 +722,8 @@ class ActivityManager extends Component
 			$profileImage = Yii::$app->user->identity->profile_image ? Yii::$app->user->identity->profile_image : 'no image';
 			$redis->lpush( "$messageKey:meta_actor_image", $profileImage );
 		}
+
+		$this->publishNotifications($userIDs, $node->resolve());
 	}
 
 	protected function sendRedisMesage($key, $message, $method = 'lpush') 

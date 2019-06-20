@@ -593,7 +593,9 @@ $(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
 $('.act_count').text($('.act_str').length)
 
 })
-
+RedisSocket.on('messages', function(msg){
+  console.log(msg)
+})
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
 	var getInput = $(this).find('input').val();
