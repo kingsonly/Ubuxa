@@ -61,6 +61,7 @@ trait MessageConstructTrait
             $this->addConstruct($key, $value);
         }
     }
+    
     /***
      * @brief resolves a message construct into a sentence/phrase by replacing constructs with their intended values
      * 

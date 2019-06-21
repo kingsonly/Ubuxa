@@ -23,5 +23,9 @@ return [
 
 	'afterInvite_verb' => "added you",
 	'afterInvite_article' => "to the",
+
+	'afterAssignTask_verb' => "assigned to you",
+	'afterUnAssignTask_verb' => "revoked your assignment to",
+	'afterAssignTask_article' => "the",
 ];
 ?>

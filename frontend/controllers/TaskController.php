@@ -396,6 +396,7 @@ class TaskController extends Controller
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $assignee->save();
+                Yii::warning("Saving it 2?", "Subscription ke");
                 return $model->taskAssignee($user, $userDb, $task, $assignee->status);
             }else{
                 $model->user_id = $user;
@@ -405,6 +406,7 @@ class TaskController extends Controller
                 $taskModel->last_updated = new Expression('NOW()');
                 $taskModel->save();
                 $model->save();
+                Yii::warning("Saving it?", "Subscription ke");
                 return $model->taskAssignee($user, $userDb, $task, $model->status);
             }
 
