@@ -281,6 +281,10 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	 */
 	public function beforeSoftDelete()
 	{
+		$activityEvent = new ActivityEvent;
+		$activityEvent->modelAction = self::MODEL_ACTIVITY_SOFT_DELETE;
+		$this->trigger(self::BEGIN_ACTIVITY, $activityEvent);
+
 	}
 	
 	/**
@@ -329,24 +333,27 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	}
 		
 	/**
-	 *  @brief {@inheritdoc}
-	 *  
-	 *  @details overriding save in order to ensure that an activity event is only triggered AFTER a successful save. 
-	 *  Note that this calls the parent save function (ActiveRecord or BaseActiveRecord) and so this function 
-	 *  is run BEFORE and AFTER afterSave. It is run before afterSave in that it is the entry function to commence the saving process
-	 *  (this is consistent with how Yii2 core works). Then the parent runs the functions, beforeSave, updates or inserts and then afterSave
-	 *  This is all consistent with Yii2 core. After this is all done, the ActivityEvent 'COMPLETED_ACTIVITY' will be triggered.
-	 *  
-	 *  Steps are therefore as follows:
-	 *  1. Ask to save the record. 
-	 *  2. Initiate beforeSave function (this is in the parent and goes through the update/insert and internal functions)
-	 *  3. If 2 is successful, run the actual database queries 
-	 *  4. Trigger afterSave function (this is done in the parent)
-	 *  5. ActivityEvent is triggered. 
-	 *  
-	 *  IMPORTANT NOTICE: All child classes overriding save MUST call parent::save() AFTER their custom code. i.e. 
-	 *  it should be the last line of code. Otherwise, the activity event will be triggered BEFORE the save is acually completed.
-	 *  Which is not the intended behavior. 
+	 * @brief {@inheritdoc}
+	 *
+	 * @details overriding save in order to ensure that an activity event is only triggered AFTER a successful save. 
+	 * Note that this calls the parent save function (ActiveRecord or BaseActiveRecord) and so this function 
+	 * is run BEFORE and AFTER afterSave. It is run before afterSave in that it is the entry function to commence the saving process
+	 * (this is consistent with how Yii2 core works). Then the parent runs the functions, beforeSave, updates or inserts and then afterSave
+	 * This is all consistent with Yii2 core. After this is all done, the ActivityEvent 'COMPLETED_ACTIVITY' will be triggered.
+	 * Please note triggering the ActivityEvent by overriding afterSave() is the wrong implementation as it
+	 * will break Yii2 core rules whenever a child class needs to override afterSave() (which is very likely)
+	 *
+	 * Steps are therefore as follows:
+	 * 1. Ask to save the record. 
+	 * 2. Initiate beforeSave function (this is in the parent and goes through the update/insert and internal functions)
+	 * 3. If 2 is successful, run the actual database queries 
+	 * 4. Trigger afterSave function (this is done in the parent)
+	 * 5. ActivityEvent is triggered. 
+	 *
+	 * IMPORTANT NOTICE: All child classes overriding save MUST call parent::save() AFTER their custom code. i.e. 
+	 * it should be the last line of code. Otherwise, the activity event will be triggered BEFORE the custom
+	 * code is acually completed.
+	 * Which is not the intended behavior. 
 	 */
 	public function save($runValidation = true, $attributeNames = null)
     {
