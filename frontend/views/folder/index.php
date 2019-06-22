@@ -314,14 +314,14 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 				<div>
 				<div class="create-new-test col-sm-8">
 					<div class="create-new-test">
-						<?//= FolderCreateWidget::widget(['refreshSectionElement' => 'refresh-after-create']); ?>
+						<?= FolderCreateWidget::widget(['refreshSectionElement' => 'refresh-after-create']); ?>
 					</div>
 					
 					<br>
 				</div>
 
 				<div style="" class="col-sm-4">
-					<?//= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test','style' => $style],'iconJs'=>$iconJs]);?>
+					<?= CreateButtonWidget::widget(['buttonType' => 'icon','htmlAttributes'=>['class'=>'test','style' => $style],'iconJs'=>$iconJs]);?>
 				</div>
 			</div>
 			</div>
@@ -354,7 +354,7 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 			 $url = Url::to(['folder/view', 'id' => $newactualfolder['id']]);
 			 ?>
 		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
-			<?//= EdocumentWidget::widget(['docsize'=>100,'target'=>'foldervault'.$newactualfolder->id, 'textPadding'=>25,'referenceID'=>$newactualfolder->id,'reference'=>'folder','iconPadding'=>0, 'tasklist'=>'foldervault', 'edocument' => 'dropzone']);?>
+			<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'foldervault'.$newactualfolder->id, 'textPadding'=>25,'referenceID'=>$newactualfolder->id,'reference'=>'folder','iconPadding'=>0, 'tasklist'=>'foldervault', 'edocument' => 'dropzone']);?>
             <a href="<?= $url;?>" data-pjax="0">
 			 	<div id="folder-item-<?php echo $newactualfolder['id']; ?>" class="folder-item <?php echo $newactualfolder->isEmpty ? 'empty' : 'empty' ?> <?= $newactualfolder->folderColors; ?>" data-toggle="tooltip" title="<?= $newactualfolder['title']; ?>" data-placement="bottom"> 
 				</div>

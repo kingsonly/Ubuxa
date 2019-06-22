@@ -559,6 +559,8 @@ $img = $model->folder_image;
 <?
     Modal::end();
 ?>
+<!--
+to be fixed after launch
 <div class="chatindicator-container">
 <div class="floating-chat">
     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -580,6 +582,7 @@ $img = $model->folder_image;
     </div>
 </div>
 	</div>
+-->
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
