@@ -265,9 +265,10 @@ class ActivityManager extends Component
 				break;
 			//have not treated delete proper. 
 			default: 
-				Yii::error("Scratching head. Activity manager doesn't track this event and yet found it???");
+				Yii::warning("Handling other type of activity event", __METHOD__);
+				$this->handleCustomBeforeEvents($event);
 				break;
-		}
+	}
 	}
 
 	/**
@@ -317,16 +318,18 @@ class ActivityManager extends Component
 					//in a view, if there is nothing in a brand new stack then do nothing - (just add to to the stack)
 					//at this point, the currentActivityNode is already set at the very head of the tree so there is no work to do.
 					//if the stack is not empty, go down one child (i.e. first if block above.)
-					//however, at the beginning of each new stack cycle, you add a new series and set the
-					//currentActivityNode to the head of that series (i.e. the second if block above)
-					//providing this only to improve code readability.
+					//however, at the beginning of each new stack cycle, you add a new series (as if building a forest) 
+					//and set the currentActivityNode to the head of the new series (i.e. the second if block above)
+					//providing this if bloc only to improve code readability.
+					//PS: each series is like a tree in a forest.
 				}
 				break;
 
 			default:
-				//do nothing. 
+				//do nothing.
+				//@future. This is an opportunity to deal with finds in update/create/delete actions.
 		}
-		//Yii::trace("Adding an item to the stack: {$aoClass}:beforeFind");
+		Yii::warning("Adding an item to the stack: {$aoClass}:beforeFind");
 		$this->addToStack("{$aoClass}:beforeFind");
 		//var_dump($this->_stack); //die();
 	}
@@ -339,10 +342,10 @@ class ActivityManager extends Component
 	 *  
 	 * @details More details
 	 */
-	protected function handleBeforeInsert($activityObject) 
+	protected function handleBeforeInsert($activityObject)
 	{
-		$activityObject = $event->sender;
-		$aoClass = $event->additionalParams['shortClass'];
+		//$activityObject = $event->sender;
+		//$aoClass = $event->additionalParams['shortClass'];
 		//var_dump($activityObject);
 		//nothing here really 
 	}
@@ -355,7 +358,7 @@ class ActivityManager extends Component
 	 *  
 	 * @details More details
 	 */
-	protected function handleBeforeUpdate($activityObject) 
+	protected function handleBeforeUpdate($activityObject)
 	{
 		//nothing here yet
 	}
@@ -368,9 +371,14 @@ class ActivityManager extends Component
 	 *  
 	 * @details More details
 	 */
-	protected function handleBeforeSoftDelete($activityObject) 
+	protected function handleBeforeSoftDelete($activityObject)
 	{
 		//nothing here yet
+	}
+
+	protected function handleCustomBeforeEvents($event)
+	{
+
 	}
 
 	/**
@@ -420,7 +428,8 @@ class ActivityManager extends Component
 				break;
 			//have not treated delete proper. 
 			default: 
-				Yii::error("Scratching head. Activity manager doesn't track this event and yet found it???");
+				Yii::warning("Handling other type of activity event", __METHOD__);
+				$this->handleCustomAfterEvents($event);
 				break;
 		}
 	}
@@ -442,14 +451,14 @@ class ActivityManager extends Component
 			Yii::trace("Applying afterFind INDEX rule for this class: $aoClass");
 			if ( ! $this->classMatchesController($aoClass) ) {
 				//in a index, only the controller related objects are treated. 
-				Yii::trace("This controller does not match this object. In index, it is ignored and top stack item removed.");
-				Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point:  1");
+				Yii::warning("This controller does not match this object. In index, it is ignored and top stack item removed.");
+				Yii::warning("Removing an item from the stack - {$this->topStackItem()} - at point:  1");
 				$this->removeFromStack();
 				return;
 			}
 		}
 		
-		Yii::trace("Will test the class: $aoClass with id {$activityObject->id} agains the stack item: [{$this->topStackItem()}]");
+		Yii::warning("Will test the class: $aoClass with id {$activityObject->id} agains the stack item: [{$this->topStackItem()}]");
 		if ( $this->topStackItem() != "{$aoClass}:beforeFind" ) {
 			//this scenario could occur when you conduct a find on another BARRM which results in NO active records. 
 			//In which case, there will be no afterFind but a beforeFind will be trigggered. 
@@ -457,14 +466,14 @@ class ActivityManager extends Component
 			//related event will be triggered
 			//@future - the scenario could occur in which a completed activity (afterFind) is triggered wthout 
 			//it's begin activity ever being triggered. This would mess up the stack completely. Guard against this. 
-			Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point: 2");
+			Yii::warning("Removing an item from the stack - {$this->topStackItem()} - at point: 2");
 			$this->removeFromStack();
 			return;
 		}
 
 		if ( $this->sourceActionID != 'index' ) {
 			if ( $this->topStackItem() == "{$aoClass}:beforeFind" ) {
-				Yii::trace("Removing an item from the stack - {$this->topStackItem()} - at point: 3");
+				Yii::warning("Removing an item from the stack - {$this->topStackItem()} - at point: 3");
 				$this->removeFromStack();
 			}
 		}
@@ -507,11 +516,11 @@ class ActivityManager extends Component
 	protected function handleAfterInsert($event)
 	{
 		$activityObject = $event->sender;
-		$aoClass = $activityObject->shortClassName();
+		$aoClass = lcfirst($activityObject->shortClassName());
 		$defaultConstructs = [
 			'verb'=> Yii::t("activity_manager", "afterInsert_verb"),
 			'article' => Yii::t("activity_manager", "afterInsert_article"),
-			'object' => Yii::t("activity_manager", $aoClass) . ' - ' . $activityObject->getPublicTitleofBARRM(),
+			'object' => Yii::t("activity_manager", lcfirst($aoClass)) . ' - ' . $activityObject->getPublicTitleofBARRM(),
 		];
 
 		$modelConstructs = isset($event->additionalParams['modelConstructs']) ? $event->additionalParams['modelConstructs'] : [] ;
@@ -535,7 +544,7 @@ class ActivityManager extends Component
 	protected function handleAfterUpdate($event) 
 	{
 		$activityObject = $event->sender;
-		$aoClass = $activityObject->shortClassName();
+		$aoClass = lcfirst($activityObject->shortClassName());
 		$defaultConstructs = [
 			'verb'=> Yii::t("activity_manager", "afterUpdate_verb"),
 			'article' => Yii::t("activity_manager", "afterUpdate_article"),
@@ -546,7 +555,7 @@ class ActivityManager extends Component
 		$correctConstructs = array_merge($defaultConstructs, $modelConstructs);
 		
 		if ( $activityObject->hasMethod('shortClassName') ) {
-			$objectName = ucfirst($activityObject->shortClassName());
+			$objectName = lcfirst($activityObject->shortClassName());
 			$this->addActivityToTree2($activityObject, [
 				'verb' => 'updated',
 				'article' => 'the',
@@ -580,7 +589,7 @@ class ActivityManager extends Component
 
 		if ( $activityObject->hasMethod('shortClassName') ) {
 			
-			$objectName = ucfirst($activityObject->shortClassName());
+			$objectName = lcfirst($activityObject->shortClassName());
 			$this->addActivityToTree2($activityObject, [
 				'verb' => 'deleted',
 				'article' => 'the',
@@ -589,6 +598,24 @@ class ActivityManager extends Component
 
 		}
 		//Yii::warning("$objectName " . $activityObject->id . ' is found', 'Actvity Manager');
+	}
+
+	public function handleCustomAfterEvents($event)
+	{
+		Yii::warning("Running Custom", "EVENTS");
+		if ( ! $event->eventPhase != ActivityEvent::ACTIVITY_EVENT_PHASE_AFTER ) {
+			throw new yii\base\InvalidCallException("The phase of this event does not match it's handler!");
+
+		}
+
+		if ( ! isset($event->additionalParams['modelConstructs']) ) {
+			throw new yii\base\InvalidCallException("Custom Activity Events must provide message constructs");
+		}
+
+		$activityObject = $event->sender;
+		$aoClass = $activityObject->shortClassName();
+		$modelConstructs = $event->additionalParams['modelConstructs'];
+		$this->addActivityToTree2($activityObject, $modelConstructs);
 	}
 	
 	/***
@@ -681,11 +708,11 @@ class ActivityManager extends Component
 	 */
 	public function dispatchMessages($node, $userIDs, $resolveAll = false)
 	{
-		//
 		$redis = Yii::$app->redis;
 
 		do {
 			$messageKey = (new \yii\base\Security)->generateRandomString(16);
+			//@future if keys start clashig, increment the random string length in the loop each time this loop is run again. 
 		} while ($redis->exists($messageKey));
 		Yii::warning($messageKey, "THE KEY");
 
@@ -696,18 +723,12 @@ class ActivityManager extends Component
 
 		foreach( $userIDs as $userID ) {
 			$redis->lpush( "user_message:$userID", $messageKey );
-			$redis->lpush( "$messageKey:meta_message", $node->resolve() );
-			$redis->lpush( "$messageKey:meta_actor_id", Yii::$app->user->identity->id );
-			$redis->lpush( "$messageKey:meta_date", time() );
+			$redis->hset( $messageKey, "meta_message", $node->resolve() );
+			$redis->hset( $messageKey, "meta_actor_id", Yii::$app->user->identity->id );
+			$redis->hset( $messageKey ,"meta_date", time() );
 			$profileImage = Yii::$app->user->identity->profile_image ? Yii::$app->user->identity->profile_image : 'no image';
-			$redis->lpush( "$messageKey:meta_actor_image", $profileImage );
+			$redis->hset( $messageKey, "meta_actor_image", $profileImage );
 		}
-	}
-
-	protected function sendRedisMesage($key, $message, $method = 'lpush') 
-	{
-		$redis = Yii::$app->redis;
-		$redis->$method($key, $message);
 	}
 
 	/***
@@ -773,7 +794,7 @@ class ActivityManager extends Component
 		}
 		
 
-		if ( $users === null && empty(Yii::$app->user->identity) ) {
+		if ( $user === null && empty(Yii::$app->user->identity) ) {
 			Yii::error("Hmn. Can't subscribe this object. There is no user!", __METHOD__);
 			throw new yii\base\InvalidCallException("I cannot subscribe this object if I have no user to subscribe for");
 		}
@@ -987,7 +1008,7 @@ class ActivityManager extends Component
 			$this->_stack[] = $item;
 			$this->_stackState = SELF::STACK_IS_NEW;
 			return;
-		} 
+		}
 
 		array_push($this->_stack, $item);
 	}
