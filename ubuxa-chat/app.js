@@ -15,15 +15,33 @@ var socketio = require('socket.io');
 
 //port setup
 var port = process.env.PORT || 4000;
-
 //socket.io
 
 
 io = socketio.listen(http);
+//parsing middlewares
+app.use(session({secret: 'ssshhhhh',saveUninitialized: true,resave: true}));
+app.use(bodyParser.json({limit:'10mb',extended:true}));
+app.use(bodyParser.urlencoded({limit:'10mb',extended:true}));
+app.use(cookieParser());
+
+app.post('/curl', function(req, res) {
+      sess = req.session;
+      sess.email = req.body.iduser;
+
+      require('./libs/redisDemo.js').redisSocket(http);
+      res.end('done');
+})
+
+
+
+
+
+
 require('./libs/remark.js').remarkSockets(http);
 require('./libs/task.js').taskSockets(http);
 require('./libs/chat.js').sockets(http);
-require('./libs/redisDemo.js').redisSocket(http);
+
 
 app.use(logger('dev'));
 
@@ -56,10 +74,6 @@ var sessionInit = session({
 app.use(sessionInit);
 
 
-//parsing middlewares
-app.use(bodyParser.json({limit:'10mb',extended:true}));
-app.use(bodyParser.urlencoded({limit:'10mb',extended:true}));
-app.use(cookieParser());
 
 //including models files.
 fs.readdirSync("./app/models").forEach(function(file){
@@ -74,6 +88,7 @@ fs.readdirSync("./app/models").forEach(function(file){
 //app level middleware for setting logged in user.
 
 var userModel = mongoose.model('User');
+
 
 app.use(function(req,res,next){
 

@@ -498,7 +498,7 @@ $img = $model->folder_image;
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderId' => $model->id]) ?>
+            				<?//= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderId' => $model->id]) ?>
             		<?php Pjax::end(); ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
@@ -510,7 +510,7 @@ $img = $model->folder_image;
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
-        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
+        <?//= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
         
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
@@ -588,23 +588,27 @@ $indexJs = <<<JS
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
 RedisSocket.on('redis message', function(msg){
-$(document).find('.stream_activity').html('<p class="act_str">'+msg[0]+'</p>')
+
 var div = $('<div />')
 var div2 = $('<div />')
 var img = $('<img />')
 var p = $('<p />')
+var p2 = $('<p />')
 div.addClass('activity');
 div2.addClass('activity__message');
 img.addClass('activity__avatar');
 img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
 //time.addClass('activity__time');
 //time.text('Last Tuesday at 9:31 AM');
+p.addClass('msg-title')
+p2.addClass('msg-date')
 p.text(msg[0]);
 //div2.append(time)
 div2.append(p)
+div2.append(p2)
 div.append(img)
 div.append(div2)
-console.log(div)
+$(document).find('.stream_activity').html(div)
 $(document).find('.activity-list').append(div)
 
 $('.act_count').text($('.act_str').length)
@@ -619,12 +623,15 @@ RedisSocket.on('messages', function(msg){
     var div2 = $('<div />')
     var img = $('<img />')
     var p = $('<p />')
+    var p2 = $('<p />')
     div.addClass('activity');
     div2.addClass('activity__message');
     img.addClass('activity__avatar');
     img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
     //time.addClass('activity__time');
     //time.text('Last Tuesday at 9:31 AM');
+    p.addClass('msg-title')
+    p2.addClass('msg-date')
     p.text(msg[i]);
     //div2.append(time)
     div2.append(p)

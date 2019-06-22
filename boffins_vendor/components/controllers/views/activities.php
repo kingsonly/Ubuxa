@@ -18,11 +18,13 @@ use frontend\assets\AppAsset;
 	padding-left: 15px;
 	padding-right: 15px;
 	overflow:hidden;
+  min-height:88px;
 }
 .act-header {
 	font-family: calibri;
 	font-size: 19px;
 	padding-top: 10px;
+  font-weight: bold
 }
 .box-content-activities {
 	height: 50px;
@@ -285,7 +287,13 @@ use frontend\assets\AppAsset;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-
+.msg-title{
+  font-family: calibri;
+  font-size:16px;
+}
+.msg-data{
+  font-family: calibri;
+}
 </style>
 
 <div class="col-md-6">
@@ -294,7 +302,15 @@ use frontend\assets\AppAsset;
 			<div class="active-info">
 				<div class="act-header">Recent Activity</div>
 				<div class="stream_activity">
-					<div id="divTAReviewss">Review Text1</div>
+					<div id="divTAReviewss">
+                <div class="activity">
+                  <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
+                  <div class="activity__message">
+                    <p class="msg-title">Hey there, welcome to this ace messaging thing?</p>
+                    <p class="msg-date">Last Tuesday at 9:45 AM</p>
+                  </div>
+                </div>     
+          </div>
 				</div>
 				
 			</div>
