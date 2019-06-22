@@ -512,7 +512,7 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 	{
 		Yii::info("Running Before Find for " . static::class, __METHOD__);
 		$activityEvent = new ActivityEvent;
-		$activityEvent->eventPhase = 'before';
+		$activityEvent->eventPhase = ActivityEvent::ACTIVITY_EVENT_PHASE_BEFORE;
 		$activityEvent->modelAction = SELF::MODEL_ACTIVITY_FIND;
 		$activityEvent->additionalParams['modelClass'] = static::class;
 		$activityEvent->additionalParams['shortClass'] = static::shortClassName();
