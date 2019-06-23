@@ -316,10 +316,14 @@ ioChat.on('connection', function(socket) {
 									
 								} else {
 									console.log('this is cid oh '+result[0].cid);
+									let tokens = [];
+									for (var i = 0; i < result.length; i++) {
+										tokens.push(result[i].push_token)
+									}
 									if(result[0].push_token == null){
 										
 									}else{
-										pushNotification({fullname:socket.username,msg:data.msg,folderId:folderId[2],roomId: roomId,pushToken:result[0].push_token})
+										pushNotification({fullname:socket.username,msg:data.msg,folderId:folderId[2],roomId: roomId,pushToken:tokens})
 									} 
 									 
 
@@ -598,23 +602,25 @@ function pushNotification(data){
 	// Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
 
 	// Check that all your push tokens appear to be valid Expo push tokens
-	if (!Expo.isExpoPushToken(data.pushToken)) {
-	  console.error(`Push token ${data.pushToken} is not a valid Expo push token`);
-	  return;
-	}
+	  for (let pushToken of data.pushToken) {
+		if (!Expo.isExpoPushToken(pushToken)) {
+		  console.error(`Push token ${pushToken} is not a valid Expo push token`);
+		  continue;
+		}
 
-	// Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)
-	messages.push({
-		to: data.pushToken,
-		sound: 'default',
-		body: data.msg,
-		title:data.fullname,
-		data: { 
-				body: data.msg,
-				title: data.fullname
-			  },
-		priority: 'high',
-	})
+		// Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)
+		messages.push({
+			to: pushToken,
+			sound: 'default',
+			body: data.msg,
+			title:data.fullname,
+			data: { 
+					body: data.msg,
+					title: data.fullname
+				  },
+			priority: 'high',
+		})
+	  }
 
 
         // The Expo push notification service accepts batches of notifications so
