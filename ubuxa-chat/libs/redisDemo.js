@@ -1,4 +1,8 @@
-// redisDemo.js
+// redisDemo.jsvar
+// var app = require('express')();
+var express = require('express');
+var app = express();
+var httpd = require('http').Server(app);
 var redis = require('redis');
 const { Expo } = require('expo-server-sdk');
 var client = redis.createClient(); // this creates a new client
@@ -17,56 +21,83 @@ var con = mysql.createConnection({
 });
 con.connect();
 const util = require('util')
-
-
+var router = express.Router();
+var user_message_33 = 0;
 module.exports.redisSocket = function(http) {
 var ioRedis = io.of('/redis');
 
-client.on('connect', function() {
-    console.log('Redis client connected');
-});
+console.log('this is redis server showing user id', sess.email)
 
-client.on('error', function (err) {
-    console.log('Something went wrong ' + err);
-});
-client.rpush('dataQueue', 'A string of data')
-client.lrange('user_message:33', 0, -1, function(error, data){
-  if (error) { 
-    console.error('There has been an error:', error);
-    }
-  console.log('We have retrieved data from the front of the queue:', data);
-})
+client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
+              if (error) { 
+                return console.error('There has been an error:', error);
+              }
+              let arrayData = [];
+              for(let i=0; i<5; i++){
+                arrayData.push(new Promise(function(resolve, reject) {
+                      client.hgetall(data[i], function(errors, datas){
+                        if (errors) { 
+                          return console.error('There has been an error:', error);
+                        }
+                        console.log('these are the lrange data',datas)
+                        resolve(datas)
+                        
+                        
+                      })
+                }))
+                  
+                  //arrayData.push(obj)
+                  
+              }
+              
+             // wait till all data requests will be finished
+              Promise.all(arrayData).then(function(results) {
+                  console.log(results);
+                  setTimeout(function(){
+                    console.log('time is out')
+                      ioRedis.emit('messages', results);
+                  }, 50)
+                  
+              });
+              if(data !== null){
+               // ioRedis.emit('messages', '456778');
+              }
+        })
+/*app.all('/curl', function(req, res) {
+        console.log(req.body.iduser); // Lorem
+        userId = 33;
+        res.status(200).json({data:req.body}); // will give { name: 'Lorem',age:18'} in response
+        client.lrange('user_message:33', 0, -1, function(error, data){
+              if (error) { 
+                return console.error('There has been an error:', error);
+              }
+              console.log('these are the lrange data',data)
+              if(data !== null){
+               // ioRedis.emit('messages', '456778');
+              }
+        })
+    });*/
 
 function waitForPush () {
-  client.blpop('user_message:33',120, function(error, data){
-    console.log('data',data)
-    // do stuff
-    if (error) { 
-    console.error('There has been an error:', error);
-    }
-    
-  	console.log('We have retrieved data from the front of the queue:', data);
-
-  	if(data !== null){
-  		ioRedis.emit('redis message', data[1]);
-  	}
-    
-    client.exists('user_message:33', function(err, reply) {
+  client.exists('user_message:'+sess.email, function(err, reply) {
       if (reply === 1) {
+          client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
+              if (error) { 
+                return console.error('There has been an error:', error);
+              }
+              //console.log('We have retrieved data from the front of the queue:', data);
+              if(data !== null && data.length > user_message_33){
+                ioRedis.emit('redis message', data);
+                user_message_33 = data.length
+              }
+          })
         
       } else {
         console.log('empty')
       }
-    })
-    waitForPush();
-  });
+      waitForPush();
+  })
 }
-
-client.keys('*', function (err, keys) {
-  if (err) return console.log(err);
-  console.log('keys', keys)
-  });
-
 
 subscriber.on("message", function (channel, message) {
   let data = JSON.parse(message);
@@ -147,7 +178,7 @@ subscriber.on("message", function (channel, message) {
 subscriber.subscribe("notification");
 
 
-waitForPush ()
+//waitForPush ()
 //setting redis route
   
 
