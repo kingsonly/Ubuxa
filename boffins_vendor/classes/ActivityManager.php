@@ -721,6 +721,7 @@ class ActivityManager extends Component
 			$userIDs = [$userIDs];
 		}
 
+		$userIDs = array_unique($userIDs); //filter array to ensure a user never gets the same messsage twice. 
 		foreach( $userIDs as $userID ) {
 			$redis->lpush( "user_message:$userID", $messageKey );
 			$redis->hset( $messageKey, "meta_message", $node->resolve() );
