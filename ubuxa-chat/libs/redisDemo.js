@@ -18,7 +18,7 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                 return console.error('There has been an error:', error);
               }
               let arrayData = [];
-              for(let i=0; i<5; i++){
+              for(let i=0; i<data.length; i++){
                 arrayData.push(new Promise(function(resolve, reject) {
                       client.hgetall(data[i], function(errors, datas){
                         if (errors) { 
@@ -87,24 +87,25 @@ client.keys('*', function (err, keys) {
 
 
 
-function waitForPush () {
-  client.exists('user_message:'+sess.email, function(err, reply) {
+function waitForPush (id) {
+  client.exists('user_message:'+id, function(err, reply) {
       if (reply === 1) {
           client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
               //console.log('We have retrieved data from the front of the queue:', data);
-              if(data !== null && data.length > user_message_33){
-                ioRedis.emit('redis message', data);
-                user_message_33 = data.length
-              }
+              //if(data !== null && data.length > user_message+'_'+id){
+                client.hgetall(data[data.length - 1], function(errors, datas){
+                  ioRedis.emit('redis message', datas);
+                })
+                
+              //}
           })
         
       } else {
         console.log('empty')
       }
-      waitForPush();
   })
   
   /*client.blpop('user_message:33',120, function(error, data){
@@ -129,7 +130,7 @@ function waitForPush () {
   });*/
 }
 
-//waitForPush ()
+//waitForPush (sess.email)
 
   //setting redis route
   
