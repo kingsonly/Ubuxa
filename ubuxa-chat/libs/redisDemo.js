@@ -18,14 +18,15 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                 return console.error('There has been an error:', error);
               }
               let arrayData = [];
-              for(let i=0; i<5 ; i++){
+              for(let i=0; i<5; i++){
                 arrayData.push(new Promise(function(resolve, reject) {
-                      client.lrange(data[i]+':meta_message', 0, -1, function(errors, datas){
+                      client.hgetall(data[i], function(errors, datas){
                         if (errors) { 
                           return console.error('There has been an error:', error);
                         }
+                        console.log('these are the lrange data',datas)
                         resolve(datas)
-                        //console.log('these are the lrange data',arrayData)
+                        
                         
                       })
                 }))
@@ -40,7 +41,7 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                   setTimeout(function(){
                     console.log('time is out')
                       ioRedis.emit('messages', results);
-                  }, 150000)
+                  }, 500)
                   
               });
               if(data !== null){

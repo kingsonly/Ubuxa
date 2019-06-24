@@ -616,8 +616,10 @@ $('.act_count').text($('.act_str').length)
 })
 
 RedisSocket.on('messages', function(msg){
-  console.log('from the view',msg)
+  alert(4576)
   for(var i=0; i < msg.length; i++){
+    console.log(msg[i]['meta_message'])
+    return false
 
     var div = $('<div />')
     var div2 = $('<div />')
