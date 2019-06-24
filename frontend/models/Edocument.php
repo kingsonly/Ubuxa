@@ -173,17 +173,21 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
                $counter++;
          }
          $newFilePath = $path . '/' . $newname;
-         return $newFilePath;
+         return [$newFilePath, $newname];
     }
 
     public function documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)
     {
-		$this->controlerLocation === 'API'? Url::base(true) != 'http://ubuxaapi.ubuxa.net'?\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/':\Yii::$app->params['edocumentUploadPath'] = '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/frontend/web/':\Yii::$app->params['edocumentUploadPath'] = \Yii::$app->basePath.'/web/';
+		$this->controlerLocation === 'API'? \Yii::$app->basePath != '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/api'?\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/':\Yii::$app->params['edocumentUploadPath'] = '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/frontend/web/':\Yii::$app->params['edocumentUploadPath'] = \Yii::$app->basePath.'/web/';
 			$edocumentPath = \Yii::$app->params['edocumentUploadPath'];
 
         $cidDir = $edocumentPath.$uploadPath. $cidPath; //set a varaible for customer id path
         $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
         $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date
+
+        $cidDirDb = $uploadPath. $cidPath; //set a varaible for customer id path
+        $userDirDb = $cidDirDb.'/'.$userId; //set a varaible for user id path
+        $dirDb = $userDirDb.'/'. date('Ymd'); //set a varaible for path with date
 
         /* check if  directory with customer id path exists, if not create one. In UNIX systems files are seen as directories hence the need to check if !file_exists*/
         if (!file_exists($cidDir) && !is_dir($cidDir)) {
@@ -197,27 +201,28 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
         //check if the directory with current date exist
         if (file_exists($dir) && is_dir($dir)) {
             $filePath = $this->checkFileName($dir, $file); //check if file name exist in that directory and append a number to it, if it does.
-            if ($file->saveAs($filePath)){
+            $filePathDb = $dirDb. '/' .$filePath[1];
+            if ($file->saveAs($filePath[0])){
                 if($reference == 'folderDetails'){
                     $folder = Folder::findOne($referenceID);
                     $folder->folder_image = $filePath;
                     $folder->save();
                 }else{
-                    $this->upload($this, $reference, $referenceID, $filePath, $cid, $userId); //upload
+                    $this->upload($this, $reference, $referenceID, $filePathDb, $cid, $userId); //upload
                     return $file;
                 }
             }
         }else{
             FileHelper::createDirectory($dir, $mode = 0777, $recursive = true); //create directory with read and write permission
             $filePath = $dir . '/' . $file->name;
-
+            $filePathDb = $dirDb . '/' . $file->name;
             if ($file->saveAs($filePath)) {
                 if($reference == 'folderDetails'){
                     $folder = Folder::findOne($referenceID);
                     $folder->folder_image = $filePath;
                     $folder->save();
                 }else{
-                    $this->upload($this, $reference, $referenceID, $filePath, $cid, $userId); //upload
+                    $this->upload($this, $reference, $referenceID, $filePathDb, $cid, $userId); //upload
                     return $file;
                 }
             }
