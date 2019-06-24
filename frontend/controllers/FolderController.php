@@ -166,7 +166,7 @@ $curl = new curl\Curl();
                     'iduser' => $userId
                 )
             ))
-            ->post('http://127.0.0.1:4000/curl');
+            ->post('http://ubuxachat.ubuxa.net/curl');
 		
         return $this->render('view', [
             'model' => $model,
