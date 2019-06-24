@@ -64,7 +64,7 @@ class TaskAssignedUser extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
     }
 
     public function taskAssignee($user, $userDb, $task, $status)
@@ -90,6 +90,34 @@ class TaskAssignedUser extends \yii\db\ActiveRecord
         $assignee['profile_image'] = !empty($image)?'http://ubuxa.net/'.$image : 'http://ubuxa.net/images/users/default-user.png';;
         $assignee['status'] = $status;
         return [$assignee];
+    }
+
+    /***
+     * @brief {@inheritdoc}
+     * 
+     * @details creating and dispatching activity messages 
+     * to the user that is assigned the task. Also 
+     */
+    public function afterSave( $insert, $changedAttributes ) {
+    
+        Yii::warning("Saving", "subscrip");
+        parent::afterSave( $insert, $changedAttributes );
+        //subscribing this user to activities on the task. 
+        Yii::$app->activityManager->subscribe($this->task, $this->user->id);
+
+        Yii::warning("Just subscribed", "SUBSCRIPTION");
+        $verb = $this->status == Task::TASK_ASSIGNED_STATUS ? Yii::t("activity_manager", "afterAssignTask_verb") : Yii::t("activity_manager", "afterUnAssignTask_verb");
+        //now creating and dispatching a message informing the user of the 
+        //assignment. 
+        $messageConstruct = new \boffins_vendor\classes\ActivityMessageNode;
+        $messageConstruct->format = '{actor} {verb} {article} {object}';
+        $messageConstruct->addConstructs([
+                            'actor' => Yii::$app->user->identity->getPublicTitleofBARRM(),
+                            'verb'=> $verb,
+                            'article' => Yii::t("activity_manager", "afterAssignTask_article"),
+                            'object' => Yii::t("activity_manager", $this->task->shortClassName()) . ' - ' . $this->task->getPublicTitleofBARRM(),
+                            ]);
+        Yii::$app->activityManager->dispatchMessages($messageConstruct, $this->user->id);
     }
 
 }
