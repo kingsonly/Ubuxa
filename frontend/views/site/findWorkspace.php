@@ -5,11 +5,17 @@ use yii\helpers\Url;
 $this->title = 'Find workspace';
 ?>
 <style>
+  @media only screen and (max-width: 600px) {
+    .send {
+      height: 60px !important;width: 110px !important;
+      left: 35% !important;
+    }
+  }
 .card{
     overflow:hidden;
     font-family:"Open Sans", sans-serif;
-    width:500px; 
-    height:300px; 
+    max-width:500px; 
+    max-height:300px; 
     display:border-box; 
     position:absolute;
     background:#F5F5F5; 

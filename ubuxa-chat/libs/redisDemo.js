@@ -103,6 +103,7 @@ subscriber.on("message", function (channel, message) {
                 body: data.message,
                 fromWhere: 'system'
               },
+              channelId: 'mychannel',
               priority: 'high',
             })
         }
