@@ -8,17 +8,30 @@ $this->title = 'Sign into workspace';
 <head>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
 </head>
 <style>
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+@media only screen and (max-width: 600px) {
+  .logo-holder{
+  text-align: center;
+  margin-top:50px;
+  }
+  h1 {
+    font-size: 27px;
+  }
+  .find {
+    position: absolute;
+    left: 10px !important;
+    bottom: 20px;
+    cursor: pointer;
+  }
+}
 body{overflow:hidden;}
-
 .card{
     overflow:hidden;
     font-family:"Open Sans", sans-serif;
-    width:620px; 
-    height:300px; 
+    max-width:620px; 
+    max-height:300px; 
     display:border-box; 
     position:absolute;
     background:#F5F5F5; 
@@ -31,8 +44,8 @@ body{overflow:hidden;}
 .cards{
     overflow:hidden;
     font-family:"Open Sans", sans-serif;
-    width:500px; 
-    height:350px; 
+    max-width: 500px; 
+    max-height: 350px; 
     display:border-box; 
     position:absolute;
     background:#F5F5F5; 
@@ -57,7 +70,7 @@ body{overflow:hidden;}
     border-radius: 10px;
 }
 .cont{
-	font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; background: #264787; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #264787; display: inline-block;height: 60px;width: 220px;
+	font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; background: #264787; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #264787; display: inline-block;max-height: 60px;max-width: 220px;
 	    left: 30%;
 	    position: absolute;
 	    cursor: pointer;
@@ -145,8 +158,8 @@ div.fullscreen {
   font-size: 15px;
 }
 .logo-ubu{
-    width: inherit;
-    height: 80px;
+    max-width: inherit;
+    max-height: 80px;
 }
 .logo-holder{
   text-align: center;

@@ -28,6 +28,8 @@ use yii\helpers\Url;
 use yii\web\UploadedFile;
 use \boffins_vendor\queue\FolderUsersQueue;
 use boffins_vendor\classes\BoffinsBaseController;
+use linslin\yii2\curl;
+use yii\helpers\Json;
 
 
 
@@ -90,6 +92,8 @@ class FolderController extends BoffinsBaseController
             'folders' => $seperateFolders,
             ]);
         }
+
+        
         
     }
 
@@ -153,6 +157,16 @@ class FolderController extends BoffinsBaseController
             return ['output'=>'', 'message'=>''];
         }
     }
+$curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'iduser' => $userId
+                )
+            ))
+            ->post('http://127.0.0.1:4000/curl');
 		
         return $this->render('view', [
             'model' => $model,
