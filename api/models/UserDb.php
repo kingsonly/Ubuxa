@@ -12,6 +12,7 @@ use boffins_vendor\behaviors\DeleteUpdateBehavior;
 use boffins_vendor\behaviors\DateBehavior;
 use yii\web\User;
 use frontend\models\Role;
+use frontend\models\Person;
 use frontend\models\Customer;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
