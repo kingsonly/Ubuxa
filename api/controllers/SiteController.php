@@ -47,7 +47,7 @@ class SiteController extends RestController
         return $behaviors + [
             'apiauth' => [
                 'class' => Apiauth::className(),
-                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code', 'invite-users','chat-email','list-users','chat-list'],
+                'exclude' => ['authorize', 'register', 'accesstoken','index','customer-signup','request-password-reset', 'signups', 'validate-code','chat-email','list-users','chat-list'],
             ],
             'access' => [
                 'class' => AccessControl::className(),
@@ -338,22 +338,42 @@ class SiteController extends RestController
     public function actionInviteUsers($folderid=0)
     {
 
-        $newTest = $this->request;
-        foreach($newTest as $test){
-             $model = new InviteUsersForm;
-            $model->attributes = $test;
-            $folderId = $folderid;
-            $emails = $model->email;
-            $role = $model->role;
-            if(!empty($emails)){
-                if($model->sendEmail($emails, $folderid, $role)){
-                    return Yii::$app->apis->sendSuccessResponse($model->attributes);
+        // $newTest = $this->request;
+        // foreach($newTest as $test){
+        //      $model = new InviteUsersForm;
+        //     $model->attributes = $test;
+        //     $folderId = $folderid;
+        //     $emails = $model->email;
+        //     $role = $model->role;
+        //     if(!empty($emails)){
+        //         if($model->sendEmail($emails, $folderid, $role)){
+        //             return Yii::$app->apis->sendSuccessResponse($model->attributes);
+        //         } else {
+        //             Yii::$app->api->sendFailedResponse([$model->errors]);
+        //         }
+        //     } else {
+        //         return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
+        //     }
+        // }
+
+        $model = new InviteUsersForm;
+        $model->attributes = $this->request;
+
+        if (!empty($model)) {
+                $folderId = $folderid;
+                $emails = $model->email;
+                $roles = $model->role;
+                if(!empty($emails)){
+                        if($model->sendEmail($emails, $roles, $folderId)){
+                            return Yii::$app->apis->sendSuccessResponse($model->attributes);
+                        } else {
+                            return Yii::$app->api->sendFailedResponse([$model->errors]);
+                        }
                 } else {
-                    Yii::$app->api->sendFailedResponse([$model->errors]);
+                     return Yii::$app->api->sendFailedResponse([$model->errors]);
                 }
-            } else {
-                return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
-            }
+        }else{
+            return Yii::$app->api->sendFailedResponse([$model->errors]);
         }
 
     }
