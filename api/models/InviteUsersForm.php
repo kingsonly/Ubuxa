@@ -41,38 +41,52 @@ class InviteUsersForm extends Model
      */
 	
 	// this is a better way to send an email
-	public function sendEmail($newCustomerEmail,$folderId,$role)
+	public function sendEmail($emails,$roles,$folderId)
     {
 		
-		$cid = Yii::$app->user->identity->cid;
-        $emails[] = $this->email;
-        $roles = $this->role;
-		foreach ($emails as $email) {
-             ($role=="Administrator")?$role=1:($role=="Data Entry")?$role=2:($role=="Field Officer")?$role=3:$role=0;
-            if($folderId==0){
-			Yii::$app->mailer->compose(['html' => 'inviteusers'],
-                [
-                    //'body'  => $this->body,
-                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','email'=> $email,'cid'=>$cid,'role' => $role])
-                ])
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
-                ->setSubject('Ubuxa Invite')
-                ->send();
-            } else {
-             Yii::$app->mailer->compose(['html' => 'inviteusers'],
-                [
-                    //'body'  => $this->body,
-                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','folderid'=>empty($folderId)?0:$folderId,'email'=> $email,'cid'=>$cid,'role' => $role])
-                ])
-                ->setTo($email)
-                ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
-                ->setSubject('Ubuxa Invite')
-                ->send();
-            }
+		// $cid = Yii::$app->user->identity->cid;
+  //       $emails[] = $this->email;
+  //       $roles = $this->role;
+		// foreach ($emails as $email) {
+  //            ($role=="Administrator")?$role=1:($role=="Data Entry")?$role=2:($role=="Field Officer")?$role=3:$role=0;
+  //           if($folderId==0){
+		// 	Yii::$app->mailer->compose(['html' => 'inviteusers'],
+  //               [
+  //                   //'body'  => $this->body,
+  //                   'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','email'=> $email,'cid'=>$cid,'role' => $role])
+  //               ])
+  //               ->setTo($email)
+  //               ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+  //               ->setSubject('Ubuxa Invite')
+  //               ->send();
+  //           } else {
+  //            Yii::$app->mailer->compose(['html' => 'inviteusers'],
+  //               [
+  //                   //'body'  => $this->body,
+  //                   'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','folderid'=>empty($folderId)?0:$folderId,'email'=> $email,'cid'=>$cid,'role' => $role])
+  //               ])
+  //               ->setTo($email)
+  //               ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+  //               ->setSubject('Ubuxa Invite')
+  //               ->send();
+  //           }
             
-		}
-		return true;
+		// }
+		// return true;
+
+        $cid = Yii::$app->user->identity->cid;
+        foreach ($emails as $index=>$email) {
+            Yii::$app->mailer->compose(['html' => 'inviteusers'],
+                [
+                    //'body'  => $this->body,
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net/index.php?r=site/signup&folderid='.$folderId.'&email='.$email.'&cid='.$cid.'&role='.$roles[$index],
+                ])
+            ->setTo($email)
+            ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])
+            ->setSubject('Ubuxa Invite')
+            ->send();
+        }
+        return true;
     }
 
 }
