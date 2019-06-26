@@ -562,6 +562,7 @@ class ActivityManager extends Component
 				'object' => $objectName . ': ' . $activityObject->getPublicTitleofBARRM(),
 			]);
 		}
+		Yii::warning(\yii\helpers\VarDumper::dumpAsString($activityObject->clipOwnerType), "BARRM"); 
 		//Yii::warning("$objectName " . $activityObject->id . ' is found', 'Actvity Manager');
 	}
 	
