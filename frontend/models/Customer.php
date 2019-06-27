@@ -106,7 +106,7 @@ class Customer extends \yii\db\ActiveRecord
                     'link'  => $registrationLink,
                 ])
             ->setTo($newCustomerEmail)
-            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
             ->setSubject('Thanks for joining Ubuxa')
             ->send();
     }
@@ -118,7 +118,7 @@ class Customer extends \yii\db\ActiveRecord
                     'token'  => $token,
                 ])
             ->setTo($newCustomerEmail)
-            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
             ->setSubject('Ubuxa Email Verification Token')
             ->send();
     }
