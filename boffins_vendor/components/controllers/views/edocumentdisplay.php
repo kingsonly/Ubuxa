@@ -241,6 +241,7 @@
         <div class="edocs-list" style="margin-top:<?= !empty($searchMargin) ? $searchMargin : 0;?>px">
       <?php 
       $count = 0;
+      if(!empty($edocument)){
       foreach ($edocument as $key => $value) {
         $filename = $value->file_location; //get file location
         $filepath = Url::base('http').Url::to('@web/'.$filename); //set file path
@@ -301,7 +302,7 @@
       <?php if($count > 4){ ?>
         <div class="show-docs more-docs">View all documents (<?= $count - 4;?>)</div>
         <div class="show-docs less-docs">Show Less</div>
-      <?php }?>
+      <?php }}?>
     </div>
     </div>
   </div>

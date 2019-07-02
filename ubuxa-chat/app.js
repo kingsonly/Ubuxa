@@ -44,7 +44,7 @@ require('./libs/chat.js').sockets(http);
 
 
 app.use(logger('dev'));
-
+ 
 //db connection
 var dbPath = "mongodb://localhost/socketChatDB";
 mongoose.connect(dbPath);

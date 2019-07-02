@@ -76,7 +76,10 @@ return [
         'enablePrettyUrl' => true,
         'showScriptName' => false,
          ],
-        
+         'expo' => [
+            'class' => 'azasar\expo\ExpoPush'
+         ],
+            
 
 
         /*

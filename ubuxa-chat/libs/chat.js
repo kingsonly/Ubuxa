@@ -6,6 +6,7 @@ var redis = require('redis');
 var _ = require('lodash');
 var https = require("http");
 var eventEmitter = new events.EventEmitter();
+const { Expo } = require('expo-server-sdk');
 
 //adding db models
 require('../app/models/user.js');
@@ -60,7 +61,8 @@ function SubscribeExpired(e,r){
 
 							console.log(data);
 		
-							var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							//var req = https.get('http://localhost/ubuxabeta/api/web/site/chat-email?id='+JSON.stringify(data), (res) => {
+							var req = https.get('http://ubuxaapi.ubuxa.net/site/chat-email?id='+JSON.stringify(data), (res) => {
 							  console.log(res.statusCode);
 							});
 
@@ -163,12 +165,13 @@ ioChat.on('connection', function(socket) {
 
 	//emits event to read old-chats-init from database.
 	socket.on('old-chats-init', function(data) {
+		console.log(data);
 		chatModel.find({})
 		.where('room').equals(data.room)
 		.sort('-createdOn')
 		.skip(data.msgCount)
 		.lean()
-		.limit(5)
+		.limit('msgRequestNumber' in data ?data.msgRequestNumber:5)
 		.exec(function(err, result) {
 			if (err) {
 				console.log("Error : " + err);
@@ -307,7 +310,26 @@ ioChat.on('connection', function(socket) {
 							client.set(shadowKey,'')
 							client.expire(shadowKey,10);
 							
-							console.log('user not online '+data.msgTo); 
+							con.query("SELECT * FROM tm_user LEFT JOIN tm_user_device_push_token ON tm_user.id=tm_user_device_push_token.user_id WHERE username ='"+data.msgTo+"'", function (err, result) {
+								if (err) {
+									console.log("Error : " + err);
+									
+								} else {
+									console.log('this is cid oh '+result[0].cid);
+									let tokens = [];
+									for (var i = 0; i < result.length; i++) {
+										tokens.push(result[i].push_token)
+									}
+									if(result[0].push_token == null){
+										
+									}else{
+										pushNotification({fullname:socket.username,msg:data.msg,folderId:folderId[2],roomId: roomId,pushToken:tokens})
+									} 
+									 
+
+								}
+							});
+							
 						}
 						
 					}
@@ -340,7 +362,7 @@ ioChat.on('connection', function(socket) {
 		} //end of else.
 		);
 
-	});
+	}); 
 
 	//	this area was added by kingsley of epsolun to make changes to lib
 
@@ -569,6 +591,67 @@ function getRoomData(room) {
 
 //
 //
+	
+function pushNotification(data){
+	let expo = new Expo();  
+      // Create the messages that you want to send to clents
+      let messages = [];
+      let somePushTokens = ['ExponentPushToken[_Af6dYHl1zr1JIqq_KTAI7]']
+	  
+      
+	// Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
+
+	// Check that all your push tokens appear to be valid Expo push tokens
+	  for (let pushToken of data.pushToken) {
+		if (!Expo.isExpoPushToken(pushToken)) {
+		  console.error(`Push token ${pushToken} is not a valid Expo push token`);
+		  continue;
+		}
+
+		// Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)
+		messages.push({
+			to: pushToken,
+			sound: 'default',
+			body: data.msg,
+			title:data.fullname,
+			data: { 
+					body: data.msg,
+					title: data.fullname
+				  },
+			priority: 'high',
+		})
+	  }
+
+
+        // The Expo push notification service accepts batches of notifications so
+      // that you don't need to send 1000 requests to send 1000 notifications. We
+      // recommend you batch your notifications to reduce the number of requests
+      // and to compress them (notifications with similar content will get
+      // compressed).
+      let chunks = expo.chunkPushNotifications(messages);
+      let tickets = [];
+      (async () => {
+        // Send the chunks to the Expo push notification service. There are
+        // different strategies you could use. A simple one is to send one chunk at a
+        // time, which nicely spreads the load out over time:
+        console.log('chunk', chunks)
+        for (let chunk of chunks) {
+          try {
+            let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+            console.log('ticket', ticketChunk, 'data', data);
+            tickets.push(...ticketChunk);
+            // NOTE: If a ticket contains an error code in ticket.details.error, you
+            // must handle it appropriately. The error codes are listed in the Expo
+            // documentation:
+            // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      })()
+
+  
+}
 
 //listening get-room-data event.
 eventEmitter.on('get-room-data', function(room) {

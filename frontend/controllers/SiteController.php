@@ -61,7 +61,7 @@ use boffins_vendor\classes\BoffinsBaseController;
 set_include_path(Yii::$app->BasePath  . '/vendor/google/apiclient/src');
 
 class SiteController extends BoffinsBaseController {
-	
+
     public function behaviors()
     {
         return [
@@ -82,8 +82,8 @@ class SiteController extends BoffinsBaseController {
                     'logout' => ['post'],
                 ],
             ],
-			
-			
+
+
         ];
     }
 
@@ -100,7 +100,7 @@ class SiteController extends BoffinsBaseController {
         ];
     }
 
-    public function actionIndex() 
+    public function actionIndex()
 	{
 		//$this->layout = 'new_index_dashboard_layout';
 		$folder = new Folder();
@@ -116,7 +116,7 @@ class SiteController extends BoffinsBaseController {
         $users = UserDb::find()->where(['cid' => $cid])->all();
         $allUsers = new UserDb;
         $userId = Yii::$app->user->identity->id;
-        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists(); 
+        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
         $onboarding = Onboarding::findOne(['user_id' => $userId]);
 
         if(empty($dashboardFolders)){
@@ -137,7 +137,7 @@ class SiteController extends BoffinsBaseController {
             'onboarding' => $onboarding,
 			]);
         } else {
-				
+
 	        return $this->render('index',[
 	        	'taskStatus' => $taskStatus,
 				'folders' => $dashboardFolders,
@@ -155,31 +155,31 @@ class SiteController extends BoffinsBaseController {
             	'onboarding' => $onboarding,
 				]);
    		 }
-       
+
     }
 
-    public function actionLogin() 
-	{	
+    public function actionLogin()
+	{
 		if (!Yii::$app->user->isGuest) {
 			return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
-		
-		
+
+
 		if ( Yii::$app->request->get('testing') ) {
 			Yii::$app->session->destroy();
 			Yii::$app->session->close();
 			Yii::$app->session->open();
 			Yii::$app->user->clearDeviceSessionAndCookieData( ['authenticateNewDevice'], ['deviceString', 'ds'] );
 		}
-		
-		
+
+
 		$model = new LoginForm();
 		$this->layout = 'loginlayout';
 		$authenticated = false;
-		
+
 		//var_dump(Url::base());
 		if (strpos(Url::base(true), '.') !== false) {
-			
+
 			$seperateUrl = explode(Url::base(true),'.');
 			$costomerCompanyName = Customer::find()->where(['master_doman' => $seperateUrl[0]])->one();
 			if(count($seperateUrl) > 2){
@@ -190,19 +190,19 @@ class SiteController extends BoffinsBaseController {
 						$accountName = $costomerCompanyName->entity->corporation->name.' account';
 					}
 				}else{
-					// redirect to url not on system page 
+					// redirect to url not on system page
 					return $this->render('nodomainname', [
 						'domainName' => $seperateUrl[0],
-					]);		
+					]);
 				}
 			}
 			$accountName = 'your account';
 		}else{
 			$accountName = 'your account';
 		}
-		
-		
-		if ( isset(Yii::$app->session['authenticateNewDevice']) 
+
+
+		if ( isset(Yii::$app->session['authenticateNewDevice'])
 			&& Yii::$app->session['authenticateNewDevice'] === true ) {
 			$model->scenario = $model::SCENARIO_LOGIN_NEW_DEVICE;
 			if ( $model->load(Yii::$app->request->post()) ) {
@@ -238,9 +238,9 @@ class SiteController extends BoffinsBaseController {
 			} else {
 				return $this->render('authenticate_new_device', [
 					'model' => $model,
-				]);			
+				]);
 			}
-		} elseif ( isset(Yii::$app->session['newDevice']) 
+		} elseif ( isset(Yii::$app->session['newDevice'])
 					&& Yii::$app->session['newDevice'] === true ) {
 			return $this->render('new_device', [
 				'model' => $model,
@@ -258,9 +258,9 @@ class SiteController extends BoffinsBaseController {
 		    		$domain = $customer->master_doman;
 		    		if($domain == $subdomain){
 						if ( $model->login() ) {
-							
+
 							$authenticated = true;
-						} elseif ( isset(Yii::$app->session['authenticateNewDevice']) 
+						} elseif ( isset(Yii::$app->session['authenticateNewDevice'])
 									&& Yii::$app->session['authenticateNewDevice'] === true ) {
 							return $this->render('new_device', [
 								'model' => $model,
@@ -282,17 +282,17 @@ class SiteController extends BoffinsBaseController {
 							return $this->render('login', [
 								'model' => $model,
 					]);
-				}		
+				}
 			} else {
 				return $this->render('login', [
 					'model' => $model,
 					'accountName' => $accountName,
-				]);	
+				]);
 				//var_dump($model);
-				
+
 			}
 		}
-		
+
 		if ($authenticated) {
 			$this->chatNodeLogin(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
@@ -308,6 +308,73 @@ class SiteController extends BoffinsBaseController {
 
   	public function actionSignup($email,$cid,$role,$folderid = 0)
   	{
+		// if (!Yii::$app->user->isGuest) {
+  //           return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
+  //       }
+		// $this->layout = 'loginlayout';
+  //      $user = new SignupForm();
+  //      $customer = Customer::find()->where(['cid' => $cid])->one();
+  //      $userExists = Email::find()->where(['address' => $email])->exists();
+       
+  //      if(!$userExists){
+		// 	if(!empty($customer)){
+		//         if ($user->load(Yii::$app->request->post())) {
+		//         	$user->address = $email;
+		//         	$user->cid = $cid;
+		//         	$user->basic_role = $role;
+		//         	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
+		//         		$user->first_name = $customer->entity->firstname;
+		//         		$user->surname = $customer->entity->surname;
+		//         	}
+		//         	//$user->_userAR->tenantID = $cid;
+		// 			if($user->save()){
+		// 				if($customer->has_admin == Customer::NO_ADMIN){
+		// 					$customer->has_admin = Customer::HAS_ADMIN;
+		// 					$customer->save();	
+		// 				}
+		// 				$newUser = UserDb::findOne([$user->id]);
+		// 				// this section has been modified by kingsley of epsolun
+		// 				// modification adds invited user to a specific folder 
+		// 	            if (Yii::$app->user->login($newUser)){
+		// 					$folderId = $folderid;
+		// 					$userId = $user->id;
+		// 					$folderRole = 'user';
+		// 					$folderManagerModel = new FolderManager();
+							
+							
+		// 					if($folderId == 0){
+		// 						return $this->redirect(['folder/index']);
+		// 					}else{
+		// 						$folderManagerModel -> user_id = $userId;
+		// 						$folderManagerModel -> folder_id = $folderId;
+		// 						$folderManagerModel -> role = $folderRole;
+		// 						if($folderManagerModel->save()){
+		// 							return $this->redirect(['folder/index']);
+		// 						}	
+		// 					}
+							
+			                
+		// 	            }
+		// 			} 
+		// 		} else {
+		//             return $this->render('createUser', [
+		//             	'userExists' => $userExists,
+		//             	'customer' => $customer,
+		// 				'userForm' => $user,
+		// 				'action' => ['createUser'],
+		// 			]);
+		// 		}
+		// 	} else {
+		// 		throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
+		// 	}
+		// }else {
+		// 	return $this->render('signup', [
+		//             	'userExists' => $userExists,
+		//             	'customer' => $customer,
+		// 				'userForm' => $user,
+		// 				'action' => ['createUser'],
+		// 			]);
+		// }
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
@@ -315,9 +382,11 @@ class SiteController extends BoffinsBaseController {
        $user = new SignupForm();
        $customer = Customer::find()->where(['cid' => $cid])->one();
        $userExists = Email::find()->where(['address' => $email])->exists();
-       
+       $transaction = Yii::$app->db->beginTransaction();
+
        if(!$userExists){
 			if(!empty($customer)){
+				try {
 		        if ($user->load(Yii::$app->request->post())) {
 		        	$user->address = $email;
 		        	$user->cid = $cid;
@@ -327,42 +396,56 @@ class SiteController extends BoffinsBaseController {
 		        		$user->surname = $customer->entity->surname;
 		        	}
 		        	//$user->_userAR->tenantID = $cid;
-					if($user->save()){
-						if($customer->has_admin == Customer::NO_ADMIN){
-							$customer->has_admin = Customer::HAS_ADMIN;
-							$customer->save();	
-						}
-						$newUser = UserDb::findOne([$user->id]);
-						// this section has been modified by kingsley of epsolun
-						// modification adds invited user to a specific folder 
-			            if (Yii::$app->user->login($newUser)){
-							$folderId = $folderid;
-							$userId = $user->id;
-							$folderRole = 'user';
-							$folderManagerModel = new FolderManager();
-							
-							
-							if($folderId == 0){
-								return $this->redirect(['folder/index']);
-							}else{
-								$folderManagerModel -> user_id = $userId;
-								$folderManagerModel -> folder_id = $folderId;
-								$folderManagerModel -> role = $folderRole;
-								if($folderManagerModel->save()){
-									return $this->redirect(['folder/index']);
-								}	
+						if($user->save()){
+							if($customer->has_admin == Customer::NO_ADMIN){
+								$customer->has_admin = Customer::HAS_ADMIN;
+								$customer->save();
 							}
-							
-			                
-			            }
-					} 
-				} else {
-		            return $this->render('createUser', [
-		            	'userExists' => $userExists,
-		            	'customer' => $customer,
-						'userForm' => $user,
-						'action' => ['createUser'],
-					]);
+							$newUser = UserDb::findOne([$user->id]);
+							// this section has been modified by kingsley of epsolun
+							// modification adds invited user to a specific folder
+				            if (Yii::$app->user->login($newUser)){
+								$folderId = $folderid;
+								$userId = $user->id;
+								$folderRole = 'user';
+								$folderManagerModel = new FolderManager();
+
+
+								if($folderId == 0){
+
+									$transaction->commit();
+									$this->redirect(['folder/index']);
+									return true;
+								}else{
+									$folderManagerModel -> user_id = $userId;
+									$folderManagerModel -> folder_id = $folderId;
+									$folderManagerModel -> role = $folderRole;
+									if($folderManagerModel->save()){
+									 $transaction->commit();
+									 $this->redirect(['folder/index']);
+									 return true;
+									}
+								}
+
+				            }
+						}
+
+					} else {
+			            return $this->render('createUser', [
+			            	'userExists' => $userExists,
+			            	'customer' => $customer,
+							'userForm' => $user,
+							'action' => ['createUser'],
+						]);
+					}
+				} catch (\Exception $e) {
+					$transaction->rollBack();
+					var_dump($e);
+    				throw $e;
+				}	catch (\Throwable $e) {
+				    $transaction->rollBack();
+					var_dump($e);
+				    throw $e;
 				}
 			} else {
 				throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
@@ -376,13 +459,13 @@ class SiteController extends BoffinsBaseController {
 					]);
 		}
     }
-	
+
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
            return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
-		
+
 		$this->layout = 'loginlayout';
 		$customerModel = new Customer();
        	$customer = new CustomerSignupForm();
@@ -390,58 +473,67 @@ class SiteController extends BoffinsBaseController {
        	$tenantCorporation = new TenantCorporation();
        	$tenantPerson = new TenantPerson();
 		$settings = new UserSetting();
-		
+
 		$settings->logo = Yii::$app->settingscomponent-> boffinsDefaultLogo();
 		$settings->theme = Yii::$app->settingscomponent->boffinsDefaultTemplate();
 		$settings->language = Yii::$app->settingscomponent->boffinsDefaultLanguage();
 		$settings->date_format = Yii::$app->settingscomponent->boffinsDefaultDateFormart();
-		
+		$transaction = Yii::$app->db->beginTransaction();
+
         if ($customer->load(Yii::$app->request->post()) && $tenantEntity->load(Yii::$app->request->post())) {
-			
-        	$email = $customer->master_email;
-        	$date = strtotime("+7 day");
-        	$customer->billing_date = date('Y-m-d', $date);
-        	
-        	
-        	if($tenantEntity->save()){
-        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
-        			if($tenantPerson->load(Yii::$app->request->post())){
-        				$tenantPerson->entity_id = $tenantEntity->id;
-        				$tenantPerson->create_date = new Expression('NOW()');
-        				$tenantPerson->save(false);
-        			}
-        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
-        			if($tenantCorporation->load(Yii::$app->request->post())){
-        				$tenantCorporation->entity_id = $tenantEntity->id;
-        				$tenantCorporation->create_date = new Expression('NOW()');
-        				$tenantCorporation->save(false);
-        			}
-        		}
-        		$customer->entity_id = $tenantEntity->id;
-	        	if($customer->signup($customerModel)){
-	        		$settings->tenantID = (int)$customerModel->cid;
-					if($settings->save()){
-						$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
-						/*
-						$sendEmail = \Yii::$app->mailer->compose()
-						
-						->setTo($email)
-						->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-						->setSubject('Signup Confirmation')
-						->setTextBody("Hello, click this link to get started.".\yii\helpers\Html::a('Confirm',
-						Yii::$app->urlManager->createAbsoluteUrl(
-						['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-						))
-						)->send();
-						*/
-						if($customerModel->sendEmail($email,$registrationLink)){
-							 Yii::$app->getSession()->setFlash('success','Check Your email!');
-						} else{
-							Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+				try {
+	        	$email = $customer->master_email;
+	        	$date = strtotime("+7 day");
+	        	$customer->billing_date = date('Y-m-d', $date);
+
+
+	        	if($tenantEntity->save()){
+	        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
+	        			if($tenantPerson->load(Yii::$app->request->post())){
+	        				$tenantPerson->entity_id = $tenantEntity->id;
+	        				$tenantPerson->create_date = new Expression('NOW()');
+	        				$tenantPerson->save();
+	        			}
+	        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
+	        			if($tenantCorporation->load(Yii::$app->request->post())){
+	        				$tenantCorporation->entity_id = $tenantEntity->id;
+	        				$tenantCorporation->create_date = new Expression('NOW()');
+	        				$tenantCorporation->save();
+	        			}
+	        		}
+	        		$customer->entity_id = $tenantEntity->id;
+		        	if($customer->signup($customerModel)){
+		        		$settings->tenantID = (int)$customerModel->cid;
+						if($settings->save()){
+							$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
+							/*
+							$sendEmail = \Yii::$app->mailer->compose()
+
+							->setTo($email)
+							->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
+							->setSubject('Signup Confirmation')
+							->setTextBody("Hello, click this link to get started.".\yii\helpers\Html::a('Confirm',
+							Yii::$app->urlManager->createAbsoluteUrl(
+							['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
+							))
+							)->send();
+							*/
+							if($customerModel->sendEmail($email,$registrationLink)){
+								 Yii::$app->getSession()->setFlash('success','Check Your email!');
+							} else{
+								Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
+							}
 						}
-					}
-	        	}
-	        }
+		        	}
+		        }
+		        $transaction->commit();
+		    } catch (\Exception $e) {
+			    $transaction->rollBack();
+			    throw $e;
+			} catch (\Throwable $e) {
+			    $transaction->rollBack();
+			    throw $e;
+			}
 		}else {
 	            return $this->render('createCustomer', [
 					'customerForm' => $customer,
@@ -455,27 +547,27 @@ class SiteController extends BoffinsBaseController {
 
 
     public function actionInviteusers($folderid)
-    {	
+    {
     	$model = new InviteUsersForm;
-		
-		 
+
+
     	if ($model->load(Yii::$app->request->post()))
-	    	{	
+	    	{
 				$folderId = $folderid;
 	    		$emails = $model->email;
 	    		if(!empty($emails)){
 	    				if($model->sendEmail($emails,$folderId)){
 	    					Yii::$app->getSession()->setFlash('success','Check Your email!');
-			
+
 							return 1;
 	    				} else {
 	    					Yii::$app->getSession()->setFlash('warning','Something wrong happened, try again!');
-						
+
 							return 0;
 	    				}
 	    		} else {
 	    			echo "Email cannot be empty";
-	    		} 
+	    		}
 	    }else{
 	    		return $this->renderAjax('inviteUsers', [
 				'model' => $model,
@@ -525,7 +617,7 @@ class SiteController extends BoffinsBaseController {
     }
 
     public function actionAjaxValidateForm()
-	{	
+	{
 		$this->layout = 'loginlayout';
         $model = new CustomerSignupForm();
 		$formErrors = false;
@@ -533,9 +625,9 @@ class SiteController extends BoffinsBaseController {
 		if ( Yii::$app->request->isAjax ) {
 			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		}
-		
-		if( $model->load(Yii::$app->request->post()) ) { 
-			
+
+		if( $model->load(Yii::$app->request->post()) ) {
+
 			$formErrors = ActiveForm::validate($model);
 			if ( empty($formErrors) && $formErrors !== false  ) {
 				Yii::trace('Ajax validation passed (Customer)');
@@ -547,7 +639,7 @@ class SiteController extends BoffinsBaseController {
 	}
 
 	 public function actionAjaxValidateUserForm()
-	{	
+	{
 		$this->layout = 'loginlayout';
         $model = new SignupForm();
 		$formErrors = false;
@@ -555,8 +647,8 @@ class SiteController extends BoffinsBaseController {
 		if ( Yii::$app->request->isAjax ) {
 			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		}
-		
-		if( $model->load(Yii::$app->request->post()) ) { 
+
+		if( $model->load(Yii::$app->request->post()) ) {
 			$formErrors = ActiveForm::validate($model);
 			if ( empty($formErrors) && $formErrors !== false  ) {
 				Yii::trace('Ajax validation passed (User)');
@@ -568,7 +660,7 @@ class SiteController extends BoffinsBaseController {
 	}
 
 	public function actionAjaxValidateRequestPasswordForm()
-	{	
+	{
 		$this->layout = 'loginlayout';
         $model = new PasswordResetRequestForm();
 		$formErrors = false;
@@ -576,8 +668,8 @@ class SiteController extends BoffinsBaseController {
 		if ( Yii::$app->request->isAjax ) {
 			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		}
-		
-		if( $model->load(Yii::$app->request->post()) ) { 
+
+		if( $model->load(Yii::$app->request->post()) ) {
 			$formErrors = ActiveForm::validate($model);
 			if ( empty($formErrors) && $formErrors !== false  ) {
 				Yii::trace('Ajax validation passed (User)');
@@ -590,14 +682,14 @@ class SiteController extends BoffinsBaseController {
 
 	public function actionBoard()
 	{
-		return $this->renderAjax('board');	
+		return $this->renderAjax('board');
 	}
 
 	public function actionFindWorkspace()
 	{
 		$this->layout = 'loginlayout';
-		if (Yii::$app->request->isAjax) { 
-		    $data = Yii::$app->request->post(); 
+		if (Yii::$app->request->isAjax) {
+		    $data = Yii::$app->request->post();
 		    $email =  $data['email'];
 		    $emailExist = Email::find()->where(['address' => $email])->exists();
 		    if($emailExist){
@@ -615,14 +707,14 @@ class SiteController extends BoffinsBaseController {
 		    	return 0;
 		    }
 		}
-		return $this->render('findWorkspace');	
+		return $this->render('findWorkspace');
 	}
 
 	public function actionSignin()
 	{
 		$this->layout = 'loginlayout';
-		if (Yii::$app->request->isAjax) { 
-		    $data = Yii::$app->request->post(); 
+		if (Yii::$app->request->isAjax) {
+		    $data = Yii::$app->request->post();
 		    $domain =  $data['domain'];
 		    $findDomain = Customer::find()->where(['master_doman' => $domain])->exists();
 		    if($findDomain){
@@ -631,15 +723,15 @@ class SiteController extends BoffinsBaseController {
 		    	return 0;
 		    }
 		}
-		return $this->render('signin');	
+		return $this->render('signin');
 	}
 
 	public function actionResendInvite($email)
 	{
 		$this->layout = 'loginlayout';
 		$customerModel = new Customer();
-		if (Yii::$app->request->isAjax) { 
-		    $data = Yii::$app->request->post(); 
+		if (Yii::$app->request->isAjax) {
+		    $data = Yii::$app->request->post();
 		    $email =  $data['email'];
 		    $customerExists = Customer::find()->where(['master_email'=>$email])->exists();
 		    $userExists = Email::find()->where(['address'=>$email])->exists();
@@ -655,14 +747,14 @@ class SiteController extends BoffinsBaseController {
 				}
 	        }
 		}
-		return $this->render('signin');	
+		return $this->render('signin');
 	}
 
     public function actionNewpage()
     {
     	return $this->render('newpage');
-    } 
-	
+    }
+
 	public function actionUpdateChatNotification()
     {
 		$checkActivityOfLoop = 0;
@@ -680,16 +772,16 @@ class SiteController extends BoffinsBaseController {
 			if($model->save(false)){
 				$checkActivityOfLoop++;
 			};
-			
+
 		}
 		if($checkActivityOfLoop > 0){
 			return $checkActivityOfLoop;
 		}else{
 			return 0;
 		}
-		
+
     }
-	
+
 	public function chatNodeLogin($username)
     {
         //Init curl
@@ -697,7 +789,7 @@ class SiteController extends BoffinsBaseController {
 
         //post http://example.com/
         $response = $curl->setOption(
-                CURLOPT_POSTFIELDS, 
+                CURLOPT_POSTFIELDS,
                 http_build_query(array(
                     'email' => $username
                 )
@@ -705,35 +797,20 @@ class SiteController extends BoffinsBaseController {
             ->post('127.0.0.1:4000/api');
     }
 
-    public function activityActorId($username)
-    {
-        //Init curl
-        $curl = new curl\Curl();
-
-        //post http://example.com/
-        $response = $curl->setOption(
-                CURLOPT_POSTFIELDS, 
-                http_build_query(array(
-                    'email' => $username
-                )
-            ))
-            ->post('127.0.0.1:4000/api');
-    }
-	
 	public function actionUpdateSocketUserStack(){
 		$session = Yii::$app->session;
 		$socketusers = $_REQUEST['activitiesArray'];
 		$session->set('socketUsers', $socketusers);
-		
+
 	}
-	
+
 	public function actionGetChatFolderDetails(){
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
 		$username = $_REQUEST['userName']; // post params from ajax call
-		$folderDetails = Folder::findOne($folderId); // get folder details 
+		$folderDetails = Folder::findOne($folderId); // get folder details
 		$privateFolder = $folderDetails->private_folder;
-		
+
 		if($privateFolder == 1){
 			$folderColor = 'private';
 		}else{
@@ -743,9 +820,9 @@ class SiteController extends BoffinsBaseController {
 		$initUser = UserDb::find()->andWhere(['username'=>$username])->one();
 		$getUserFullName = $initUser->fullName;
 		return ['id' => $folderDetails->id,'title' => $folderDetails->title, 'foldercolor' => $folderColor,'fullname'=>$getUserFullName ];
-		
+
 	}
-	
+
 	public function actionError(){
 		$this->layout = 'loginlayout';
 		$exception = Yii::$app->errorHandler->exception;
@@ -755,7 +832,7 @@ class SiteController extends BoffinsBaseController {
         } else {
           return $this->render('error', ['exception' => $exception]);
         }
-		
+
 	}
 
 }

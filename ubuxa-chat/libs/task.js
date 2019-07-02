@@ -12,7 +12,8 @@ module.exports.taskSockets = function(http) {
 		console.log('task got here');
 		socket.on('task title', function(msg){
 			console.log(msg);
-			ioTask.emit('task title', msg); 
+			//ioTask.emit('task title', msg);
+			socket.broadcast.emit('task title',msg); 
 		});
 		socket.on('task status', function(status){
 			console.log(status);
@@ -20,7 +21,8 @@ module.exports.taskSockets = function(http) {
 		});
 		socket.on('task delete', function(taskid){
 			console.log(taskid);
-			ioTask.emit('task delete', taskid); 
+			//ioTask.emit('task delete', msg);
+			socket.broadcast.emit('task delete', taskid); 
 		});
 		socket.on('task assignee', function(assigneeArray){
 			console.log(assigneeArray);

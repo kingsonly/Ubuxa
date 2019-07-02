@@ -66,11 +66,11 @@ class InviteUsersForm extends Model
 		$cid = Yii::$app->user->identity->cid;
         $emails = $this->email;
 		foreach ($emails as $index=>$email) {
-           
+            //$this->role = 0;
 			Yii::$app->mailer->compose(['html' => 'inviteusers'],
                 [
                     //'body'  => $this->body,
-                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','folderid'=>empty($folderId)?0:$folderId,'email'=> $email,'cid'=>$cid,'role' => $this->role]),
+                    'link'  => 'http://'.yii::$app->user->identity->masterDomain.'.ubuxa.net'.Url::to(['site/signup','folderid'=>empty($folderId)?0:$folderId,'email'=> $email,'cid'=>$cid,'role' => $this->role[$index]]),
                 ])
             ->setTo($email)
             ->setFrom([\Yii::$app->params['supportEmail'] => 'Ubuxa'])

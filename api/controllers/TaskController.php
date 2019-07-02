@@ -256,6 +256,20 @@ class TaskController extends RestController
         }
     }
 
+    public function actionTaskPermission($id)
+    {
+        $model =  $this->findModel($id);
+        if(!empty($model)){
+            $assigneesIds = $model->taskAssigneesUserId;
+            $permittedUsers = [];
+            array_push($permittedUsers, $model->owner);
+            $users = array_merge($permittedUsers, $assigneesIds);
+            return Yii::$app->apis->sendSuccessResponse($users);  
+        }else{
+           return Yii::$app->apis->sendFailedResponse($model->errors);  
+        }
+    }
+
     protected function findModel($id)
     {
         if (($model = Task::findOne($id)) !== null) {

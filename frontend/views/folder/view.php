@@ -467,20 +467,21 @@ $img = $model->folder_image;
   <span id="folder-doc-loader"></span>
 </div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
-<?//= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
-<?= $onboardingExists = true; ?>
+
+<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
+<? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
         <div class="row">
             <section>
                   <div class="row top-box">
                   	<?= ActivitiesWidget::widget() ?>
-                  	<?//= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
+                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
                   </div>  
                     	<div class="row">
 							
-   						 	<?//= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?//= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
+   						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
+   						 	<?= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
                     	</div>
             </section>
         </div>
@@ -493,12 +494,12 @@ $img = $model->folder_image;
 			
 			?>
 			
-        	<?//= ComponentWidget::widget(['users'=>$model->users,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
+        	<?= ComponentWidget::widget(['users'=>$model->users,'components' => $components,'otherAttributes' =>['height'=>45],'id'=>$id,'formAction' => $componentCreateUrl,'model' => $componentModel,'displayModel' => $model->folderComponentTemplate,'folderId'=>$model->id]) ?>
 			<?php Pjax::end(); ?>
             <section>
             	<div class="row test5">
             		<?php Pjax::begin(['id'=>'task-list-refresh']); ?>
-            				<?//= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderId' => $model->id]) ?>
+            				<?= TaskWidget::widget(['task' => $model->clipOn['task'], 'taskModel' => $taskModel,'parentOwnerId' => $id, 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderId' => $model->id]) ?>
             		<?php Pjax::end(); ?>
 
             		<?= RemarksWidget::widget(['remarkModel' => $remarkModel, 'parentOwnerId' => $id,'modelName'=>'folder', 'remarks' => $model->clipOn['remark'], 'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding, 'userId' => $userId]) ?>
@@ -510,7 +511,7 @@ $img = $model->folder_image;
 
       <? $this->beginBlock('edocument')?>
       <?php Pjax::begin(['id'=>'folder-edoc']); ?>
-        <?//= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
+        <?= EdocumentWidget::widget(['referenceID'=>$model->id,'reference'=>'folder','edocument' => 'clickUpload','target' => 'folderUpload', 'attachIcon' => 'yes']);?>
         
       <?php Pjax::end(); ?>
       <? $this->endBlock();?>
@@ -558,6 +559,8 @@ $img = $model->folder_image;
 <?
     Modal::end();
 ?>
+<!--
+to be fixed after launch
 <div class="chatindicator-container">
 <div class="floating-chat">
     <i class="fa fa-comments" aria-hidden="true"></i>
@@ -579,6 +582,7 @@ $img = $model->folder_image;
     </div>
 </div>
 	</div>
+-->
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
@@ -588,63 +592,13 @@ $indexJs = <<<JS
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
 RedisSocket.on('redis message', function(msg){
-
-var div = $('<div />')
-var div2 = $('<div />')
-var img = $('<img />')
-var p = $('<p />')
-var p2 = $('<p />')
-div.addClass('activity');
-div2.addClass('activity__message');
-img.addClass('activity__avatar');
-img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
-//time.addClass('activity__time');
-//time.text('Last Tuesday at 9:31 AM');
-p.addClass('msg-title')
-p2.addClass('msg-date')
-p.text(msg[0]);
-//div2.append(time)
-div2.append(p)
-div2.append(p2)
-div.append(img)
-div.append(div2)
-$(document).find('.stream_activity').html(div)
-$(document).find('.activity-list').append(div)
-
+$(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
 $('.act_count').text($('.act_str').length)
-    
-})
 
+})
 RedisSocket.on('messages', function(msg){
-  alert(4576)
-  for(var i=0; i < msg.length; i++){
-    console.log(msg[i]['meta_message'])
-    return false
-
-    var div = $('<div />')
-    var div2 = $('<div />')
-    var img = $('<img />')
-    var p = $('<p />')
-    var p2 = $('<p />')
-    div.addClass('activity');
-    div2.addClass('activity__message');
-    img.addClass('activity__avatar');
-    img.attr({'width':35,'height':35, 'src':'https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg'});
-    //time.addClass('activity__time');
-    //time.text('Last Tuesday at 9:31 AM');
-    p.addClass('msg-title')
-    p2.addClass('msg-date')
-    p.text(msg[i]);
-    //div2.append(time)
-    div2.append(p)
-    div.append(img)
-    div.append(div2)
-    console.log(div)
-    $(document).find('.activity-list').append(div)
-
-  }
+  console.log(msg)
 })
-
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
 	var getInput = $(this).find('input').val();
