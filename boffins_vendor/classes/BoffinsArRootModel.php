@@ -525,4 +525,17 @@ class BoffinsArRootModel extends ActiveRecord //In retrospect, I think this is p
 		return static::class;
 	}
 
+
+	public function getClipOwnerType() 
+	{
+		$myShortClass = lcfirst( $this->shortClassName() );
+		Yii::warning(\yii\helpers\VarDumper::dumpAsString( $this->hasOne(\frontend\models\ClipOwnerType::className(), ['owner_type' => $myShortClass]) ), "BARRM 2");
+		return $this->hasOne(\frontend\models\ClipOwnerType::className(), ['owner_type' => $myShortClass]);
+	}
+
+	public function getClip()
+	{
+		return $this->hasOne(\frontend\models\Clip::className(), ['owner_id' => 'id'] )
+				->onCondition(['owner_type_id' => 'clipOwnerType.id' ]);
+	}
 }

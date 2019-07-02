@@ -69,19 +69,7 @@ return [
 		'settingscomponent' => [
         	'class' => 'frontend\settings\components\SettingsComponent',
     	],
-		'i18n' => [
-            'translations' => [
-                '*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@frontend/messages', // if advanced application, set @frontend/messages
-                    'sourceLanguage' => 'en',
-					'forceTranslation'=> true,
-                    'fileMap' => [
-                    //'main' => 'main.php',
-                    ],
-                ],
-            ],
-        ],
+		
 		
         /*
         'urlManager' => [

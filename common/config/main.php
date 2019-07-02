@@ -61,6 +61,19 @@ return [
             // yiisoft/yii2-redis >=2.0.7 is required for this.
             'retries' => 1,
         ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@frontend/messages', // if advanced application, set @frontend/messages
+                    'sourceLanguage' => 'en',
+					'forceTranslation'=> true,
+                    'fileMap' => [
+                    //'main' => 'main.php',
+                    ],
+                ],
+            ],
+        ],
         'queue' => [
             'class' => \yii\queue\redis\Queue::class,
 		    'as log' => \yii\queue\LogBehavior::class,

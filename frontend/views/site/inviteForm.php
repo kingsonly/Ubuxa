@@ -49,7 +49,7 @@ use yii\helpers\Url;
 	                    	<td> <?= $form->field($model, 'email[]')->textInput(['autofocus' => true,
 	                    	'class' => 'form-control name_list' ]) ?> </td>
 	                    	<td>
-	                    		<?= $form->field($model, 'role')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form-control'] ]) ?>
+	                    		<?= $form->field($model, 'role[]')->dropDownList(ArrayHelper::map(Role::find()->all(),'id', 'name'), ['prompt'=> Yii::t('user', 'Choose Role'), 'options' => ['class' => 'form-control'] ]) ?>
 	                    				
 	                    	</td>
 	                    	<td> <?= Html::button('Add more', ['class' => 'btn btn-success', 'name' => 'add', 

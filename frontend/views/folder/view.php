@@ -467,8 +467,9 @@ $img = $model->folder_image;
   <span id="folder-doc-loader"></span>
 </div>
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
+
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
-<?= $onboardingExists = true; ?>
+<? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
         <div class="row">
@@ -592,7 +593,9 @@ $(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
 $('.act_count').text($('.act_str').length)
 
 })
-
+RedisSocket.on('messages', function(msg){
+  console.log(msg)
+})
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
 	var getInput = $(this).find('input').val();

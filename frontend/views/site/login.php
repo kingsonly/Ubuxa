@@ -345,6 +345,10 @@ input[type=checkbox]{
 .reset{
 	margin-top: 10px;
 }
+.workspace-header{
+  color: #273163;
+  font-size: 40px;
+}
 </style>
 
   <div id="back">
@@ -360,7 +364,7 @@ input[type=checkbox]{
       <div class="right">
         <div class="content">
 
-          <h2>Login to <?= $customerDomain[1];?></h2>
+          <p class="workspace-header">Login to <?= $customerDomain[1];?></p>
           <?php  if (Yii::$app->session->getFlash('error') !== NULL): ?>
   				<?php echo Alert::widget([
   					'options' => ['class' => 'alert-danger'],
@@ -390,7 +394,7 @@ input[type=checkbox]{
                 <?= $form->field($model, 'rememberMe',['options' => ['class' => 'checkbox-lab']])->checkbox()->label(false); ?>
             <div class="form-element form-submit">
               <button id="logIn" class="login" type="submit" name="login">Log In</button>
-              <a class="signup" href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a>
+             <a class="signup" href="<?= Url::to(['site/customersignup','plan_id' => 1]);?>">Sign Up</a>
             </div>
             <?= $form->field($model, 'domain')->hiddenInput(['value' => $subdomain])->label(false); ?>
             <?php ActiveForm::end(); ?>

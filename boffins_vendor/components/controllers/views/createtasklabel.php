@@ -28,6 +28,17 @@ use yii\widgets\ActiveForm;
     line-height: inherit;
     transition: 0.3s ease;
 }
+.label-task {
+    background: #3B5998;
+    padding-left: 3px;
+    padding-right: 3px;
+    color: #fff;
+    border-radius: 3px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    font-size: 13px;
+    white-space: nowrap;
+}
 .labelButton{
     border: none;
     width: 100%;
@@ -68,7 +79,9 @@ $('.task-label-class').on('beforeSubmit', function(e) {
                         $('.dropdown.open .dropdown-toggle').dropdown('toggle');
                         toastr.success('Label added');
                         var folderId = $('.board-specfic').attr('data-folderId');
-                        $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+                        if($('.board-open').hasClass('board-opened')){
+                            $.pjax.reload({container:"#kanban-refresh",replace: false, async:false, url: '$boardUrl&folderIds='+folderId});
+                        }
                         $.pjax.reload({container:"#task-modal-labels",replace: false, async:false, url: '$taskUrls&id='+'$taskIds'+'&folderId='+folderId});
                     },
                   error: function(res, sec){

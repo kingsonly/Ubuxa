@@ -30,6 +30,7 @@
     "cookie-parser": "^1.4.4",
     "crypto": "0.0.3",
     "ejs": "^2.5.6",
+    "expo-server-sdk": "^3.3.0",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "fs": "0.0.1-security",

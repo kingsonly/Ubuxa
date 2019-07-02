@@ -377,15 +377,15 @@ class ClipOnBehavior extends Behavior
 	 */
 	private function createClipOn()
 	{
-		Yii::trace("b4 owners id = ".$this->owner->id);
+		Yii::trace("The id of this clip on is - ".$this->owner->id);
 		if(!empty($this->owner->ownerId)){ //i think ownerId here should be BarOwnerID
-			Yii::trace("after owners id");
+			Yii::trace("The id of the bar owner is {$this->owner->ownerId}");
 			//$clipOwnerTypeModel = new ClipOwnerType(); // instatnciate ClipOwnerType model
 			//$clipBarModel  = new ClipBar(); // instatnciate clip bar model 
 			$clipModel  = new Clip(); //instanciate clip model
 			$getClassName = $this->_getShortClassName($this->owner); // convert class name to string and strip out name space 
 
-			// this should be the right implementation to get the owner type, never the less this is not a patch but would still be reviewed.
+			//this should be the right implementation to get the owner type, never the less this is not a patch but would still be reviewed.
 			$ownerTypeModel = ClipBarOwnerType::find()->andWhere(['owner_type'=> $this->owner->fromWhere])->one();//$this->owner->fromWhere == 'folder'?1:2; (this comment should be removed after validated that code is working )
 			
 			// if selection comes out empty, that means from where does not exist in the db, as such create a new one 

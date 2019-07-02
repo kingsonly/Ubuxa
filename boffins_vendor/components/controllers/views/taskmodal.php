@@ -209,7 +209,7 @@ $taskUrl = Url::to(['task/view']);
     <div class="task-view <?= ($userid == $model->owner || in_array($userid, $assigneesIds)) ?  'has-access' : 'no-access'?>">
 
         <div class="task-titlez">
-        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh', 'folderId'=> $folderId,'attributues'=>[
+        <?= ViewWithXeditableWidget::widget(['model'=>$model,'pjaxId'=>'#kanban-refresh', 'taskId' => $model->id, 'folderId'=> $folderId,'attributues'=>[
                         ['modelAttribute'=>'title'],
                         ]]); ?>
         </div>
