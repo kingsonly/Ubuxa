@@ -93,7 +93,7 @@ function waitForPush (id) {
                 client.hgetall(data[data.length - 1], function(errors, datas){
 					console.log('this is nnamdi datas',datas)
 					
-                  ioRedis.emit('redis message', datas);
+                  ioRedis.emit('redis message', {res:datas, id: sess.email});
 					
                 })
                 

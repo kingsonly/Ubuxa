@@ -136,7 +136,7 @@ class FolderController extends RestController
                     'iduser' => Yii::$app->user->identity->id
                 )
             ))
-            ->post('http://127.0.0.1:4000/curl');
+            ->post('http://ubuxachat.ubuxa.net/curl');
             return Yii::$app->apis->sendSuccessResponse('success');
     }
 	
