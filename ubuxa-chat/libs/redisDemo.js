@@ -32,6 +32,7 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
+              console.log('trial',data)
               let arrayData = [];
               for(let i=0; i<data.length; i++){
                 arrayData.push(new Promise(function(resolve, reject) {
@@ -55,9 +56,8 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                   console.log(results);
                   setTimeout(function(){
                     console.log('time is out')
-                      ioRedis.emit('messages', results);
-                  }, 50)
-                  
+                      ioRedis.emit('messages', {res:results, id: sess.email});
+                  }, 500)
               });
               if(data !== null){
                // ioRedis.emit('messages', '456778');
@@ -93,7 +93,7 @@ function waitForPush (id) {
                 client.hgetall(data[data.length - 1], function(errors, datas){
 					console.log('this is nnamdi datas',datas)
 					
-                  ioRedis.emit('redis message', datas);
+                  ioRedis.emit('redis message', {res:datas, id: sess.email});
 					
                 })
                 
