@@ -677,8 +677,8 @@ function defaultOnboarding() {
         },
         {
           element: "#flux",
-          title: "Remarks",            
-          content: "You can view all remarks from here, for this folder",
+          title: "Comments",            
+          content: "You can view all comments from here, for this folder",
           placement: 'left',
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
@@ -687,31 +687,127 @@ function defaultOnboarding() {
           title: "Tips",            
           content: "Click on the question mark icon to view more tips",
           placement: 'left',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='next' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
         {
           element: ".menu-plus",
           title: "Tips",            
           content: "Do more from the side menu.",
           placement: 'right',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='next' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-plus icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
           onShown: function(taskTour){
             $(".tour-backdrop").appendTo(".menu-icon ");
             $(".tour-step-background").appendTo(".menu-icon ");
             $(".tour-step-background").css("left", "0px");
             },
         },
+        {
+          element: ".board-open",
+          title: "Task board",
+          content: "You can get access to more features for task management from the action menu.",
+          onShow: function(taskTour){
+                //$('.side_menu').addClass('side-drop');
+                $('.list_load, .list_item').stop();
+                $(this).removeClass('closed').addClass('opened');
+
+                $('.side_menu').css({ 'left':'0px' });
+
+                var count = $('.list_item').length;
+                $('.list_load').slideDown( (count*.6)*100 );
+                $('.list_item').each(function(i){
+                var thisLI = $(this);
+                timeOut = 100*i;
+                setTimeout(function(){
+                  thisLI.css({
+                    'opacity':'1',
+                    'margin-left':'0'
+                  });
+                },100*i);
+              });
+            },
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo("#content");
+            $(".tour-step-background").appendTo("#content");
+            $(".tour-step-background").css("left", "0px");
+            },
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-tasks icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+        },
+        {
+          element: ".edoc-label",
+          title: "Add Documents",
+          content: "You can add files here and also view and manage documents",
+          onShown: function(taskTour){
+            $(".tour-backdrop").appendTo("#content");
+            $(".tour-step-background").appendTo("#content");
+            $(".tour-step-background").css("left", "0px");
+            },
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-file-text-o icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
+        },
+        // {
+        //   element: ".edocument-content",
+        //   title: "Folder Files",
+        //   content: "You can add and manage files for this folder here.",
+        //   placement: "bottom",
+        //   onShow: function(taskTour){
+        //       $.ajax({
+        //       url: '$edocUrl',
+        //       success: function(data) {
+        //         $('.edoc-content').html(data);
+        //       }
+        //     });
+        //     $('.edocument-container').css({
+        //      'visibility':'visible',
+        //      '-webkit-transition':'width 1s',
+        //      'transition':'width 1s, height 1s',
+        //      'width':'600px',
+        //      'min-height':'100%',
+        //      'background-color': 'rgba(253, 253, 253, 0.9)',
+        //      'overflow': 'scroll',
+        //     }).addClass('opened');
+        //     $('.sider').hide('slow');
+            
+        //     $('.edocument-content').show('slow');
+        //     },
+        //   onShown: function(taskTour){
+        //     $(".tour-backdrop").appendTo(".edocument-content");
+        //     $(".tour-step-background").appendTo(".edocument-content");
+        //     $(".tour-step-background").css("left", "0px");
+        //     },
+        //     template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-clipboard icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+        // },
       ],
     backdrop: true,  
     storage: false,
     smartPlacement: true,
     onEnd: function (folderTour) {
             _MainOnboarding();
+            $('.edocument-container').css({
+               'width':'300px',
+               'min-height':'1px',
+               'visibility':'hidden'
+              }).removeClass('opened');
+              $('.edocument-content').hide();
+              setTimeout(function() { 
+                $('.sider').show('slow');
+            }, 900);
+            $('.side_menu').addClass('side-drop');
+            $('#mySidenav').css({'width':'0'})
+            $('.list_load, .list_item').stop();
+
+            $('.side_menu').css({ 'left':'-300px' });
+
+            var count = $('.list_item').length;
+            $('.list_item').css({
+              'opacity':'0',
+              'margin-left':'-20px'
+            });
+            $('.list_load').slideUp(300);
         },
   });
  folderTour.init();
  folderTour.start();
 };
+
 
 
 
