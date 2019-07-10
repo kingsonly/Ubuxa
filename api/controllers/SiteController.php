@@ -117,10 +117,11 @@ class SiteController extends RestController
 			$userModels = new UserDb();
 			$folderModels = new ApiFolder();
 			$extractString = explode(')',$value);
-			$username = $extractString[0];
+			$usernameForSender = $extractString[0];
+			$usernameOfReciever = $extractString[3];
 			$folderId = $extractString[2];
-			$userModel = $userModels->find()->where(['username' => $username])->one();
-			$recievers = $userModels->find()->where(['username' => $username])->one();
+			$userModel = $userModels->find()->where(['username' => $usernameForSender])->one();
+			$recievers = $userModels->find()->where(['username' => $usernameOfReciever])->one();
 			$folderModel = $folderModels->find()->where(['id' => $folderId])->asArray()->one();
 			$msgArray[$key]['fullname'] = $userModel->fullName;
 			$msgArray[$key]['foldertitle'] = $folderModel['title'];
@@ -337,24 +338,6 @@ class SiteController extends RestController
 
     public function actionInviteUsers($folderid=0)
     {
-
-        // $newTest = $this->request;
-        // foreach($newTest as $test){
-        //      $model = new InviteUsersForm;
-        //     $model->attributes = $test;
-        //     $folderId = $folderid;
-        //     $emails = $model->email;
-        //     $role = $model->role;
-        //     if(!empty($emails)){
-        //         if($model->sendEmail($emails, $folderid, $role)){
-        //             return Yii::$app->apis->sendSuccessResponse($model->attributes);
-        //         } else {
-        //             Yii::$app->api->sendFailedResponse([$model->errors]);
-        //         }
-        //     } else {
-        //         return Yii::$app->apis->sendFailedResponse("Email cannot be empty");
-        //     }
-        // }
 
         $model = new InviteUsersForm;
         $model->attributes = $this->request;
