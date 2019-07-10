@@ -294,7 +294,7 @@ class SiteController extends BoffinsBaseController {
 		}
 
 		if ($authenticated) {
-			$this->chatNodeLogin(yii::$app->user->identity->username);
+			//$this->chatNodeLogin(yii::$app->user->identity->username);
 			$landingPage = ['folder/index']; //isset(Yii::$app->session['comingFrom']) ? Yii::$app->session['comingFrom'] : Url::to(['/site/index']);
 			return $this->redirect($landingPage);
 		}
