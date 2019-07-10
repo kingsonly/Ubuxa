@@ -434,6 +434,10 @@ $curl = new curl\Curl();
 		
 		$folderModel = Folder::find()->andWhere(['id'=>$folderId])->one();
 		$folderManagerModel = new FolderManager();
+		$checkUserExist = $folderManagerModel->find()->where(['user_id' => $userId])->andWhere(['folder_id' => $folderId])->exists();
+		if($checkUserExist){
+			return true;
+		}
 		$folderManagerModel->user_id = $userId;
 		$folderManagerModel->folder_id = $folderId;
 		$folderManagerModel->role = 'user';
