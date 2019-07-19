@@ -746,38 +746,7 @@ function defaultOnboarding() {
             },
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-file-text-o icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
-        // {
-        //   element: ".edocument-content",
-        //   title: "Folder Files",
-        //   content: "You can add and manage files for this folder here.",
-        //   placement: "bottom",
-        //   onShow: function(taskTour){
-        //       $.ajax({
-        //       url: '$edocUrl',
-        //       success: function(data) {
-        //         $('.edoc-content').html(data);
-        //       }
-        //     });
-        //     $('.edocument-container').css({
-        //      'visibility':'visible',
-        //      '-webkit-transition':'width 1s',
-        //      'transition':'width 1s, height 1s',
-        //      'width':'600px',
-        //      'min-height':'100%',
-        //      'background-color': 'rgba(253, 253, 253, 0.9)',
-        //      'overflow': 'scroll',
-        //     }).addClass('opened');
-        //     $('.sider').hide('slow');
-            
-        //     $('.edocument-content').show('slow');
-        //     },
-        //   onShown: function(taskTour){
-        //     $(".tour-backdrop").appendTo(".edocument-content");
-        //     $(".tour-step-background").appendTo(".edocument-content");
-        //     $(".tour-step-background").css("left", "0px");
-        //     },
-        //     template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-clipboard icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
-        // },
+       
       ],
     backdrop: true,  
     storage: false,
