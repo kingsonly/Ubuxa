@@ -89,7 +89,6 @@ class AutoreminderController extends Controller {
 	
 	public function actionIndex()
 	{
-		
 		$model = new Reminder();
 		$taskReminderModel = new TaskReminder();
 		$taskModel = new Task();
