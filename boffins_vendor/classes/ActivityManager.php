@@ -452,7 +452,7 @@ class ActivityManager extends Component
 			if ( ! $this->classMatchesController($aoClass) ) {
 				//in a index, only the controller related objects are treated. 
 				Yii::warning("This controller does not match this object. In index, it is ignored and top stack item removed.");
-				Yii::warning("Removing an item from the stack - {$this->topStackItem()} - at point:  1");
+				//Yii::warning("Removing an item from the stack - {$this->topStackItem()} - at point:  1");
 				$this->removeFromStack();
 				return;
 			}
@@ -562,6 +562,7 @@ class ActivityManager extends Component
 				'object' => $objectName . ': ' . $activityObject->getPublicTitleofBARRM(),
 			]);
 		}
+		//Yii::warning(\yii\helpers\VarDumper::dumpAsString($activityObject->clipOwnerType), "BARRM"); 
 		//Yii::warning("$objectName " . $activityObject->id . ' is found', 'Actvity Manager');
 	}
 	
@@ -641,7 +642,7 @@ class ActivityManager extends Component
 		}
 
 		//$subscriberUserID = $user_id = Yii::$app->user->identity->id;
-		Yii::Warning(\yii\helpers\VarDumper::dumpAsString($this->activitySeries), "SERIES HERE");
+		//Yii::Warning(\yii\helpers\VarDumper::dumpAsString($this->activitySeries), "SERIES HERE");
 		$activitySeriesTip = reset($this->activitySeries); //the very first node. Root of the first series.		
 		if ( $activitySeriesTip->isEmpty() ) {
 			Yii::warning("No activity nodes generated. Stopping", __METHOD__);
@@ -676,7 +677,7 @@ class ActivityManager extends Component
 								->andWhere( ['{{%subscription}}.action_id' => $this->sourceActionID])
 								->all();
 
-		Yii::Warning(\yii\helpers\VarDumper::dumpAsString($userSubscriptions), "SUBS HERE2");
+		//Yii::Warning(\yii\helpers\VarDumper::dumpAsString($userSubscriptions), "SUBS HERE2");
 		
 		if ( empty($userSubscriptions) ) {
 			Yii::error("No subscriptions, we still have a problem here.", __METHOD__);
