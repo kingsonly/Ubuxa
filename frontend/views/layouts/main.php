@@ -30,18 +30,16 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144276978-1"></script>
-    <script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144276978-1"></script>
+        <script>
+         window.dataLayer = window.dataLayer || [];
 
-     window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
 
-     function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
 
-     gtag('js', new Date());
-
-     gtag('config', 'UA-144276978-1');
-
-    </script>
+         gtag('config', 'UA-144276978-1');
+        </script>
     <?= Html::encode($this->title) ?></title>
 	<style>
 		.no-js #loader { display: none;  }
