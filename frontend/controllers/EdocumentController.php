@@ -79,6 +79,9 @@ class EdocumentController extends Controller
         ]);
     }
 
+    /**
+     * Uploads an edocument file 
+     */
     public function actionUpload()
     {
         $model = new Edocument();
