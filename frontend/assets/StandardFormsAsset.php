@@ -35,8 +35,8 @@ class StandardFormsAsset extends AssetBundle
 		//BOFFINS INCLUDED css
 		'css/forms/simple.css',
         'css/fontawesome/css/font-awesome.css',
-        'owlcarousel/assets/owl.carousel.min.css',
-        'owlcarousel/assets/owl.theme.default.min.css',
+        //'owlcarousel/assets/owl.carousel.min.css',
+        //'owlcarousel/assets/owl.theme.default.min.css',
 		
         //'css/fontawesome/css/font-awesome.min.css',
         'css/hover.css',
@@ -53,13 +53,13 @@ class StandardFormsAsset extends AssetBundle
         'js/datatables/dataTables.bootstrap.min.js',
         'js/Chart.min.js',
         //BOFFINS INCLUDED JS
-		'js/jquery.event.drag.min.js',
+		//'js/jquery.event.drag.min.js',
 		'js/jquery.mousewheel.min.js',
 		'js/jquery.newstape.js',
-		'assets/82fd07a/jquery-ui.js',
+		//'assets/82fd07a/jquery-ui.js',
 		'js/dashboard.js',
 		'js/jquery.flip.min.js',
-		'js/script.js',
+		//'js/script.js',
 		'js/feedify.min.js',
 		'//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js',
 		'owlcarousel/owl.carousel.js',

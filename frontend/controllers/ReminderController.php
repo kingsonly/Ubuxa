@@ -63,7 +63,6 @@ class ReminderController extends Controller
 
     /**
      * Creates a new Reminder model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
@@ -117,7 +116,6 @@ class ReminderController extends Controller
 
     /**
      * Updates an existing Reminder model.
-     * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -163,8 +161,6 @@ class ReminderController extends Controller
         }
     }
 
-
-
     /**
      * Deletes an existing Reminder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -179,8 +175,10 @@ class ReminderController extends Controller
         return $this->redirect(['index']);
     }
 
-    /*
+    /**
      * This method is used to display the data on the form based on the reminder that was clicked
+     * @return array
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdatereminder()
     {
@@ -189,8 +187,9 @@ class ReminderController extends Controller
         return json_encode(array($model->notes, $model->reminder_time));
     }
 
-    /*
-     * This method is used to delete the calendar reminder by setting its statuss to 1
+    /**
+     * This method is used to delete the calendar reminder by setting its status to 1
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDeletecalendarreminder()
     {

@@ -156,7 +156,7 @@ use frontend\models\Onboarding;
 </div>
 
 <?
-$subfoldersOnboarding = Url::to(['onboarding/subfoldersonboarding']);
+$subfoldersOnboarding = Url::to(['onboarding/subfolders-onboarding']);
 $subfolders = <<<subfolders
 
 function _SubfoldersOnboarding(){

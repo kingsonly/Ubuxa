@@ -14,7 +14,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'owlcarousel/assets/owl.carousel.min.css',
-        'owlcarousel/assets/owl.theme.carousel.min.css',
+        //'owlcarousel/assets/owl.theme.carousel.min.css',
 
     ];
     public $js = [

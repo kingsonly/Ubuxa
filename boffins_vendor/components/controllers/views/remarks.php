@@ -80,7 +80,7 @@ $checkUrlParamz = $checkUrlz[0];
 </div>
 
 <?php 
-$remarkOnboarding = Url::to(['onboarding/remarkonboarding']);
+$remarkOnboarding = Url::to(['onboarding/remark-onboarding']);
 $remarkJS = <<<JS
 
 function _RemarkOnboarding(){
