@@ -475,7 +475,7 @@ $img = $model->folder_image;
         <div class="row">
             <section>
                   <div class="row top-box">
-                  	<?//= ActivitiesWidget::widget() ?>
+                  	<?= ActivitiesWidget::widget() ?>
                   	<?//= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
                   </div>  
                     	<div class="row">
@@ -587,8 +587,19 @@ to be fixed after launch
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
+$activityUrl = Url::to(['folder/activity']);
 $getuserId = Yii::$app->user->identity->id;
 $indexJs = <<<JS
+$(document).ready(function(){
+  $.post('$activityUrl',
+    {
+      status:1,
+    },
+    function(data){
+      console.log('document is ready')  
+    }
+    )
+  })
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
 RedisSocket.on('redis message', function(msg){
@@ -597,7 +608,11 @@ $('.act_count').text($('.act_str').length)
 
 })
 RedisSocket.on('messages', function(msg){
-  console.log(msg)
+  var data = msg.res;
+  //console.log(msg.res)
+  for(var i=0; i<data; i++){
+    console.log(data[i].meta_message)
+  }
 })
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){

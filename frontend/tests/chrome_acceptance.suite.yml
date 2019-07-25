@@ -2,7 +2,7 @@ class_name: ChromeAcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://localhost/ubuxabeta/frontend/web
+            url: http://localhost/ubuxa-beta/frontend/web
             browser: chrome
         - Yii2:
             part: orm

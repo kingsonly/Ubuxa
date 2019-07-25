@@ -33,7 +33,13 @@ class RemarkController extends Controller
     }
 
     /**
-     * Lists all Remark models.
+     * @brief Lists all Remark models with their replies.
+     * @details Implements an infinite scroll of the remarks in batches.
+     * numpage gets page number which is used to calculate remarks for each page.
+     * ownerId is the folder id the remarks belong to.
+     * modelName is required in the behaviour (specificClips) to distinguish task from remarks.
+     * DashboardUrlParam gets the url. not used. required to load all remarks in the folder index void of folder specificity
+     * offset calculates the number of remarks to be loaded for each page 
      * @return mixed
      */
     public function actionIndex()
@@ -94,8 +100,8 @@ class RemarkController extends Controller
     public function actionCreate()
     {
         $model = new Remark();
-        $commenterUserId = Yii::$app->user->identity->id;
-        $commenterPersonId = Yii::$app->user->identity->person_id;
+        $commenterUserId = Yii::$app->user->identity->id; //get userid of commentor
+        $commenterPersonId = Yii::$app->user->identity->person_id; //get person id of commentor
         $model->user_id = $commenterUserId;
         $model->person_id = $commenterPersonId;
         if(!empty(Yii::$app->request->post('&moredata'))){
@@ -110,7 +116,6 @@ class RemarkController extends Controller
              $userImage = UserDb::find()->andWhere(['id'=>$commenterUserId])->one();
              $user = UserDb::findOne($commenterUserId);
              $personName = $user->fullname;
-             //$user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
              $remarkId = $model->id;
              $remarkReply = $model->parent_id;
              return json_encode([ $userImage['profile_image'],$personName,$remarkId, $remarkReply]);
@@ -155,18 +160,27 @@ class RemarkController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Implements tagging a user to a comment with @ tag
+     * Fetches the list of users and return them in JSON encoded format
+     * param [string] $id is folder id
+     */
     public function actionMention($id){
-        $owner = $id;
-        $users = new Folder();
-        $getUsers = $users->find()->andWhere(['id' => $owner])->one();
+        $folderInstance = new Folder();
+        $getFolder = $folderInstance->find()->andWhere(['id' => $id])->one();
         $name = array();
-        $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers->users as $user) {
+        //$names = ['nnamdi','ogundu','uchechukwu'];
+        foreach ($getFolder->users as $user) {
             $name[] = $user->fullname;
         }
-       return json_encode($name);
+        return json_encode($name);
     }
 
+    /**
+     * Implements tagging a folder to a comment with # tag
+     * Fetches the list of 
+      and return them in JSON encoded format
+     */
     public function actionHashtag(){
         $folder = Folder::find()->select(['id as name','title as content'])->asArray()->all();
         return json_encode($folder);
