@@ -133,7 +133,7 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 
 
 <?
-$folderdetailsOnboarding = Url::to(['onboarding/folderdetailsonboarding']);
+$folderdetailsOnboarding = Url::to(['onboarding/folder-details-onboarding']);
 $deleteFolderUrl = Url::to(['folder/delete']);
 $folderCabinetUrl = Url::to(['folder/index']);
 $updateImage = <<<updateImage

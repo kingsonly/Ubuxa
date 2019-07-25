@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2019 Epsolun Limited
+*/
 namespace frontend\controllers;
 
 use Yii;
@@ -25,6 +27,8 @@ use boffins_vendor\classes\BoffinsBaseController;
 
 /**
  * TaskController implements the CRUD actions for Task model.
+ * @author Jeff Reifman
+ * @since v1.0
  */
 class TaskController extends Controller
 {
@@ -89,7 +93,15 @@ class TaskController extends Controller
         }*/
     }
 
-    public function actionIndex2($folderId)
+    /**
+     * Render an Ajax task list with infinite scroll
+     *
+     * @param integer $folderId 
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+
+    public function actionIndex($folderId)
     {   
         $perpage = 10;
         $task = new Task();
@@ -112,9 +124,7 @@ class TaskController extends Controller
                          'task' => $task,
                      ]);
                 } else {
-                     
                      $tasks = $task->specificClips($ownerid,2,$offset,$perpage,'task');
-                     
                      return $this->renderAjax('index2', [
                          'tasks' => $tasks,
                          'task' => $task,
@@ -125,6 +135,15 @@ class TaskController extends Controller
             } 
         }
     }
+
+
+    /**
+     * Render an Ajax task modal 
+     *
+     * @param integer $folderId 
+     * @return mixed
+     * @throws NotFoundHttpException if the @param cannot be found
+     */
 
     public function actionModal($id,$folderId)
     {
@@ -137,7 +156,7 @@ class TaskController extends Controller
 
     /**
      * Displays a single Task model.
-     * @param integer $id
+     * @param integer $id, $folderId
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -157,25 +176,26 @@ class TaskController extends Controller
         $statusData = ArrayHelper::map(StatusType::find()->where(['status_group' => 'task'])->all(), 'id', 'status_title');
 
         // Check if there is an Editable ajax request
-    if (isset($_POST['hasEditable'])) {
-        // use Yii's response format to encode output as JSON
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        // read your posted model attributes
-        if ($model->load(Yii::$app->request->post())) {
-            // read or convert your posted information
-            $model->save(false);
-            // return JSON encoded output in the below format
-            return ['output'=>'', 'message'=>''];
+        if (isset($_POST['hasEditable'])) 
+        {
+            // use Yii's response format to encode output as JSON
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
-            // alternatively you can return a validation error
-            // return ['output'=>'', 'message'=>'Validation error'];
+            // read your posted model attributes
+            if ($model->load(Yii::$app->request->post())) {
+                // read or convert your posted information
+                $model->save(false);
+                // return JSON encoded output in the below format
+                return ['output'=>'', 'message'=>''];
+                
+                // alternatively you can return a validation error
+                // return ['output'=>'', 'message'=>'Validation error'];
+            }
+            // else if nothing to do always return an empty JSON encoded output
+            else {
+                return ['output'=>'', 'message'=>''];
+            }
         }
-        // else if nothing to do always return an empty JSON encoded output
-        else {
-            return ['output'=>'', 'message'=>''];
-        }
-    }
 
         return $this->renderAjax('view', [
             'model' => $model,
@@ -194,7 +214,6 @@ class TaskController extends Controller
 
     /**
      * Creates a new Task model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
@@ -227,6 +246,10 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+     * Creates a new Task model.
+     * @return mixed
+     */
     public function actionDashboardcreate()
     {
         $model = new Task();
@@ -305,7 +328,7 @@ class TaskController extends Controller
      * Updates an existing Task model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
-     * @return mixed
+     * @return $model
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
@@ -321,6 +344,11 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+     * Update the task status when task board is dragged
+     *
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionKanban()
     {   
         if (Yii::$app->request->isAjax) {
@@ -341,6 +369,14 @@ class TaskController extends Controller
             $model->save();
         }
     }
+
+    /**
+     * Render an Ajax task board
+     *
+     * @param integer $folderIds 
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
 
     public function actionBoard($folderIds)
     {   
@@ -370,6 +406,13 @@ class TaskController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    /**
+     * Add or removes assignees from a task
+     *
+     * @return method
+     * @throws NotFoundHttpException if the model cannot be found
+     */
 
     public function actionAssignee()
     {    
@@ -416,17 +459,8 @@ class TaskController extends Controller
     /**
      * Deletes an existing Task model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    /** public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    } */
-    
 
     public function actionDelete()
     {
@@ -436,6 +470,12 @@ class TaskController extends Controller
             $model = $this->findModel($id)->delete();
         }
     }
+
+    /**
+     * Deletes an existing Calendar Task model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @throws NotFoundHttpException if the model cannot be found
+     */
 
     public function actionCalendartaskdelete()
     {   
@@ -447,6 +487,11 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * Updates an existing Task model.
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionUpdatetask()
     {   
       if(Yii::$app->request->post('id')) {
@@ -456,6 +501,12 @@ class TaskController extends Controller
         }  
     }
 
+    /**
+     * Updates an existing Calendar Task model.
+     * @param $id
+     * @return 1 or 0
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionCalendartaskupdate($id)
     {
       $updateTask = Task::findOne($id);
@@ -469,14 +520,21 @@ class TaskController extends Controller
         }
     }
 
+
+    /**
+     * Updates an existing Task model.
+     * @details This action updates the task list when a task is checked.
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+
     public function actionCheckTask()
     {
         $task = new Task();
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();   
-            $checkedid =  $data['id'];
+            $checkedId =  $data['id'];
 
-            $model = Task::findOne($checkedid);
+            $model = Task::findOne($checkedId);
 
             if($model->status_id != $task::TASK_COMPLETED){
                 $model->status_id = $task::TASK_COMPLETED;

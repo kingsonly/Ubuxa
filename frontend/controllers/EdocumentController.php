@@ -79,9 +79,12 @@ class EdocumentController extends Controller
         ]);
     }
 
+    /**
+     * @brief Uploads an edocument file 
+     * @details This methods uploads files to the server and also saves the path to the database.
+     */
     public function actionUpload()
     {
-
         $model = new Edocument();
         $fileName = 'file';
         $cid = Yii::$app->user->identity->cid;
@@ -91,9 +94,8 @@ class EdocumentController extends Controller
         if (isset($_FILES[$fileName])) {
             $data = Yii::$app->request->post();
             $reference =  $data['reference']; //get the location where the file was dropped
-            $referenceID =  $data['referenceID']; //get the ID of the location where the file was dropped
-            Yii::warning("starts", "sstart");
-            $model->documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID);
+            $referenceId =  $data['referenceID']; //get the ID of the location where the file was dropped
+            $model->documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceId);
         }
 
         return false;

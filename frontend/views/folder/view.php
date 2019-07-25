@@ -586,8 +586,9 @@ to be fixed after launch
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
-$mainOnboarding = Url::to(['onboarding/mainonboarding']);
+$mainOnboarding = Url::to(['onboarding/main-onboarding']);
 $getuserId = Yii::$app->user->identity->id;
+$edocUrl = Url::to(['edocument/index','folderId' => $id]);
 $indexJs = <<<JS
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
