@@ -190,11 +190,11 @@ class Customer extends \yii\db\ActiveRecord
         
     }
 	
-//	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
-//    {
-//		
-//        return;
-//    }
+	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
+    {
+		
+        return;
+    }
 
 
     

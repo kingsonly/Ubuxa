@@ -24,6 +24,7 @@ if(empty($subdomain) || $subdomain == 'www'){
   Yii::$app->response->redirect(Url::to(['site/signin']));
 }
 $customerDomain = Customer::checkDomain($subdomain);
+echo $subdomain;
 ?>
 <?php //if($customerDomain[0]) {?>
 <?php if(true) {?>
