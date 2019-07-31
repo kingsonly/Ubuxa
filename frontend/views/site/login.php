@@ -25,7 +25,8 @@ if(empty($subdomain) || $subdomain == 'www'){
 }
 $customerDomain = Customer::checkDomain($subdomain);
 ?>
-<?php if($customerDomain[0]) {?>
+<?php //if($customerDomain[0]) {?>
+<?php if(true) {?>
 <style>
 	body {
   margin: 0;
