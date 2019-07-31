@@ -143,6 +143,23 @@ class Customer extends \yii\db\ActiveRecord
             ->send();
     }
 	
+	public static function checkDomain($subdomain)
+    {
+        $customer = [];
+        $domain = self::find()->where(['master_doman' => $subdomain])->exists();
+        array_push($customer, $domain);
+        if ($domain) {
+            $findTenant = self::find()->where(['master_doman' => $subdomain])->one();
+            if ($findTenant->entityName == self::CORPORATION) {
+                array_push($customer, ucfirst($findTenant->corporationName));
+            }else{
+                array_push($customer, ucfirst($findTenant->master_doman));
+            }
+        }
+        return $customer;
+    }
+	
+	
 	
 	public function sendCustomerEmail($newCustomerEmail,$msg,$subject)
     {
@@ -173,29 +190,14 @@ class Customer extends \yii\db\ActiveRecord
         
     }
 	
-	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
-    {
-		
-        return;
-    }
+//	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
+//    {
+//		
+//        return;
+//    }
 
 
-    public static function checkDomain($subdomain)
-    {
-        $customer = [];
-        $domain = self::find()->where(['master_doman' => $subdomain])->exists();
-        array_push($customer, $domain);
-        if ($domain) {
-            $findTenant = self::find()->where(['master_doman' => $subdomain])->one();
-            if ($findTenant->entityName == self::CORPORATION) {
-                array_push($customer, ucfirst($findTenant->corporationName));
-            }else{
-                array_push($customer, ucfirst($findTenant->master_doman));
-            }
-        }
-        return $customer;
-    }
-	
+    
 	public function getCustomerFolders(){
 		return $this->hasMany(BackendFolder::className(), ['cid' => 'cid']);
 	}
