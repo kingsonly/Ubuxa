@@ -15,7 +15,7 @@ use boffins_vendor\components\controllers\ErrorPageWidget;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 
-if($_SERVER['HTTP_HOST']=='localhost' || '192.168.1.9'){
+if($_SERVER['HTTP_HOST']=='localhost'){
   $subdomain = 'ubuxa';
 }else{
   $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));

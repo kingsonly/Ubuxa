@@ -121,10 +121,11 @@ use frontend\models\Onboarding;
 				<?= SearchFormWidget::widget(['filterContainer'=>$folderCarouselWidgetAttributes['class']]);?>
 			</div>
 			<?php 
-				$subfoldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();
-                $getSubfolders = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->one();
+				$subfolderOnboarding = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING_GROUP_ID]);
+				$subfoldersExists = $subfolderOnboarding->exists();
+                $getSubfolders = $subfolderOnboarding->one();
 			?>
-	        <?php if(!$subfoldersExists || $getSubfolders->status < Onboarding::ONBOARDING_COUNT  ){ ?>
+	        <?php if(!$subfoldersExists || $getSubfolders->status < Onboarding::MAX_ONBOARDING  ){ ?>
 	            <div class="help-tip" id="subfolder-tips">
 	                <p class="tip=text">Take a tour of subfolders and find out useful tips.
 	                	<button type="button" class="btn btn-success" id="subfolders-tour">Start Tour</button>
@@ -156,7 +157,7 @@ use frontend\models\Onboarding;
 </div>
 
 <?
-$subfoldersOnboarding = Url::to(['onboarding/subfolders-onboarding']);
+$subfoldersOnboarding = Url::to(['onboarding/onboarding']);
 $subfolders = <<<subfolders
 
 function _SubfoldersOnboarding(){
@@ -165,6 +166,7 @@ function _SubfoldersOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  group: 'subfolders'
                 },
               success: function(res, sec){
                    console.log('Status updated');

@@ -176,11 +176,14 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
          return [$newFilePath, $newname];
     }
 
-    public function documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceID)
+    public function documentUpload($fileName, $reference, $referenceID)
     {
 		$this->controlerLocation === 'API'? \Yii::$app->basePath != '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/api'?\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/':\Yii::$app->params['edocumentUploadPath'] = '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/frontend/web/':\Yii::$app->params['edocumentUploadPath'] = \Yii::$app->basePath.'/web/';
 			$edocumentPath = \Yii::$app->params['edocumentUploadPath'];
-
+        $cid = Yii::$app->user->identity->cid;
+        $userId = Yii::$app->user->identity->id;
+        $uploadPath = 'images/';
+        $cidPath = 'edocuments/'.$cid; 
         $cidDir = $edocumentPath.$uploadPath. $cidPath; //set a varaible for customer id path
         $userDir = $cidDir.'/'.$userId; //set a varaible for user id path
         $dir = $userDir.'/'. date('Ymd'); //set a varaible for path with date

@@ -36,6 +36,7 @@ class EdocumentController extends Controller
 
     /**
      * Lists all Edocument models.
+     * @param integer $id
      * @return mixed
      */
     public function actionIndex($folderId)
@@ -82,20 +83,17 @@ class EdocumentController extends Controller
     /**
      * @brief Uploads an edocument file 
      * @details This methods uploads files to the server and also saves the path to the database.
+     * @future refactor the model->oducumentUpload() function so that this function can in turn be refactored. 
      */
     public function actionUpload()
     {
         $model = new Edocument();
         $fileName = 'file';
-        $cid = Yii::$app->user->identity->cid;
-        $uploadPath = 'images/';
-        $cidPath = 'edocuments/'.$cid; //set path with customer id
-        $userId = Yii::$app->user->identity->id; //get user id
         if (isset($_FILES[$fileName])) {
             $data = Yii::$app->request->post();
             $reference =  $data['reference']; //get the location where the file was dropped
             $referenceId =  $data['referenceID']; //get the ID of the location where the file was dropped
-            $model->documentUpload($fileName, $cid, $uploadPath, $cidPath, $userId, $reference, $referenceId);
+            $model->documentUpload($fileName, $reference, $referenceId);
         }
 
         return false;
@@ -124,7 +122,6 @@ class EdocumentController extends Controller
     /**
      * Deletes an existing Edocument model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */

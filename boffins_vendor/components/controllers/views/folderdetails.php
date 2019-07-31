@@ -93,10 +93,11 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 	<div class="col-sm-12 col-xs-12 info column-margin <?= $model->folderColors.'-border-bottom-color'; ?>">
 		<div class="folder-header">
 			<?php 
-				$foldersExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->exists();
-                $getFolders = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_ONBOARDING])->one();
+				$folderOnboarding = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::FOLDER_DETAILS_ONBOARDING_GROUP_ID]);
+				$foldersExists = $folderOnboarding->exists();
+                $getFolders = $folderOnboarding->one();
 			?>
-	        <?php if(!$foldersExists || $getFolders->status < Onboarding::ONBOARDING_COUNT ){ ?>
+	        <?php if(!$foldersExists || $getFolders->status < Onboarding::MAX_ONBOARDING ){ ?>
 	            <div class="help-tip" id="folder-tipz">
 	            	<p class="tip=text">Take a tour of folders and find out useful tips.
 	            		<button type="button" class="btn btn-success" id="folder-tour">Start Tour</button>
@@ -133,7 +134,7 @@ use boffins_vendor\components\controllers\EdocumentWidget;
 
 
 <?
-$folderdetailsOnboarding = Url::to(['onboarding/folder-details-onboarding']);
+$folderdetailsOnboarding = Url::to(['onboarding/onboarding']);
 $deleteFolderUrl = Url::to(['folder/delete']);
 $folderCabinetUrl = Url::to(['folder/index']);
 $updateImage = <<<updateImage
@@ -171,6 +172,7 @@ function _FolderDetailsOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  group: 'folderDetails'
                 },
               success: function(res, sec){
                    console.log('Status updated');

@@ -48,10 +48,11 @@ $checkUrlParamz = $checkUrlz[0];
     <div class="col-md-12 bg-info">
       	<div class="header">
           <?php if($checkUrlParamz == 'folder'){
-            $remarksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
-            $getRemarks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
+            $remarksOnboarding = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING_GROUP_ID]);
+            $remarksExists = $remarksOnboarding->exists();
+            $getRemarks = $remarksOnboarding->one();
           ?>
-            <?php if(!$remarksExists || $getRemarks->status < Onboarding::ONBOARDING_COUNT){ ?>
+            <?php if(!$remarksExists || $getRemarks->status < Onboarding::MAX_ONBOARDING){ ?>
               <div class="help-tip" id="remark-tipz">
                 <p class="tip=text">Take a tour of remarks and find out useful tips.
                   <button type="button" class="btn btn-success" id="remark-tour">Start Tour</button>
@@ -63,7 +64,7 @@ $checkUrlParamz = $checkUrlz[0];
             $remarksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
             $getRemarks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
           ?>
-            <?php if(!$remarksExists || $getRemarks->status < Onboarding::ONBOARDING_COUNT){ ?>
+            <?php if(!$remarksExists || $getRemarks->status < Onboarding::MAX_ONBOARDING){ ?>
               <div class="help-tip" id="site-remark-tipz">
                   <p class="tip=text">Take a tour of remarks and find out useful tips.
                     <button type="button" class="btn btn-success" id="site-remark-tour">Start Tour</button>
@@ -80,7 +81,7 @@ $checkUrlParamz = $checkUrlz[0];
 </div>
 
 <?php 
-$remarkOnboarding = Url::to(['onboarding/remark-onboarding']);
+$remarkOnboarding = Url::to(['onboarding/onboarding']);
 $remarkJS = <<<JS
 
 function _RemarkOnboarding(){
@@ -89,6 +90,7 @@ function _RemarkOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  group: 'remark'
                   
                 },
               success: function(res, sec){

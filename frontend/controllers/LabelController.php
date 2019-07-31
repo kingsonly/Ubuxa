@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\TaskLabel;
 use boffins_vendor\classes\BoffinsBaseController;
+
 /**
  * LabelController implements the CRUD actions for Label model.
  */
