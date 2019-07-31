@@ -14,7 +14,7 @@ use yii\web\User;
 use boffins_vendor\classes\BoffinsArRootModel;
 use boffins_vendor\classes\UserComponent;
 use boffins_vendor\classes\models\{StandardTenantQuery, TenantSpecific, TrackDeleteUpdateInterface, KnownClass};
-
+use common\models\UserDevicePushToken as ParentUserDevicePushToken;
 
 /**
  * This is the model class for table "{{%user}}".
@@ -400,6 +400,11 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return $this->person->userEmail;
 	}
 	
+	public function getPushToken()
+	{
+		return  $this->hasMany(ParentUserDevicePushToken::className(), ['user_id' => 'id']);
+	}
+	
 	public function getTelephone()
 	{
 		return $this->person->userTelephone;
@@ -449,7 +454,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return $device->approveDevice($deviceAccessToken, $this);
 	}
 
-		public function upload()
+	public function upload()
     {
         if ($this->validate()) {
 			$holdPath = '';
@@ -570,6 +575,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		//throw new yii\base\Exception("What's going on?");
 		'do nothing';
 	}
+	
 	public static function handleAfterLogout()
 	{
 		'do nothing';

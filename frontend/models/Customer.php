@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use backend\models\BackendFolder;
 
 /**
  * This is the model class for table "{{%customer}}".
@@ -73,6 +74,8 @@ class Customer extends \yii\db\ActiveRecord
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
             'has_admin' => 'Has Admin',
+            'comOrPersonName' => 'Company or individual name',
+            'entityName' => 'Account type',
         ];
     }
 
@@ -88,11 +91,28 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TenantCorporation::className(), ['entity_id' => 'id'])->via('entity');
     }
+	
+	public function getPerson()
+    {
+        return $this->hasOne(TenantPerson::className(), ['entity_id' => 'id'])->via('entity');
+    }
 
     public function getCorporationName()
     {
         return $this->corporation->name;
     }
+	
+	public function getCorporationPerson()
+    {
+		if(!empty($this->person->first_name) and !empty($this->person->surname)){
+			return $this->person->first_name.' '.$this->person->surname;
+		}
+        
+    }
+	
+	public function getComOrPersonName(){
+		return !empty($this->corporationName)? $this->corporationName : $this->corporationPerson;
+	}
 
     public function getEntityName()
     {
@@ -122,6 +142,42 @@ class Customer extends \yii\db\ActiveRecord
             ->setSubject('Ubuxa Email Verification Token')
             ->send();
     }
+	
+	
+	public function sendCustomerEmail($newCustomerEmail,$msg,$subject)
+    {
+		\Yii::$app->mailer->htmlLayout = "layouts/customeremail";
+		if(is_array($newCustomerEmail)){
+			foreach($newCustomerEmail as $key => $value){
+				Yii::$app->mailer->compose(['html' => 'customeremail'],
+                [
+                    'msg'  => $msg,
+                    
+                ])
+					->setTo($value)
+            		->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
+            		->setSubject($subject)
+            	->send();
+			}
+			
+		}else{
+			return Yii::$app->mailer->compose(['html' => 'customeremail'],
+                [
+                    'msg'  => $msg,
+                ])
+            ->setTo($newCustomerEmail)
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
+            ->setSubject($subject)
+            ->send();
+		}
+        
+    }
+	
+	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
+    {
+		
+        
+    }
 
 
     public static function checkDomain($subdomain)
@@ -139,4 +195,20 @@ class Customer extends \yii\db\ActiveRecord
         }
         return $customer;
     }
+	
+	public function getCustomerFolders(){
+		return $this->hasMany(BackendFolder::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerTasks(){
+		return $this->hasMany(Task::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerDocuments(){
+		return $this->hasMany(Edocument::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerUsers(){
+		return $this->hasMany(UserDb::className(), ['cid' => 'cid']);
+	}
 }
