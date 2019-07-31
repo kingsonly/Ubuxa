@@ -15,7 +15,7 @@ use boffins_vendor\components\controllers\ErrorPageWidget;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 
-if($_SERVER['HTTP_HOST']=='localhost' || '192.168.1.9'){
+if($_SERVER['HTTP_HOST']=='localhost'){
   $subdomain = 'ubuxa';
 }else{
   $subdomain = join('.', explode('.', $_SERVER['HTTP_HOST'], -2));
@@ -24,10 +24,8 @@ if(empty($subdomain) || $subdomain == 'www'){
   Yii::$app->response->redirect(Url::to(['site/signin']));
 }
 $customerDomain = Customer::checkDomain($subdomain);
-echo $subdomain;
 ?>
-<?php //if($customerDomain[0]) {?>
-<?php if(true) {?>
+<?php if($customerDomain[0]) {?>
 <style>
 	body {
   margin: 0;
