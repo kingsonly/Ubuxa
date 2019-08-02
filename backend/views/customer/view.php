@@ -81,12 +81,11 @@ $this->params['breadcrumbs'][] = $this->title;
                  
                   <div class="col-lg-3 col-md-2 col-sm-2 col-xs-6">
                       <div class="div-square">
-                           <a href="#" >
+                           <a href="<?= Url::to(['customer/send-customer-push-notification','id' => $model->id])?>" >
  <i class="fa fa-envelope-o fa-5x"></i>
                       <h4>Send Customer Pushnotification</h4>
                       </a>
                       </div>
-                     
                      
                   </div>
                   <div class="col-lg-3 col-md-2 col-sm-2 col-xs-6">
@@ -101,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   </div>
                   <div class="col-lg-3 col-md-2 col-sm-2 col-xs-6">
                       <div class="div-square">
-                           <a href="#" >
+                           <a href="<?= Url::to(['customer/send-customer-users-push-notification','id' => $model->id])?>" >
  <i class="fa fa-users fa-5x"></i>
                       <h4>Send Users Pushnotification
 							   </h4>
@@ -139,7 +138,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			<td><?= $value->last_login;?></td>
 			<td><?= $value->last_updated;?></td>
 			<td><?= $value->deleted == 0 ? 'Active':'Inactive';?></td>
-			<td></td>
+			<td>
+				<a href="<?= Url::to(['customer/user-view','id' => $value->id])?>" >
+					<span class="glyphicon glyphicon-eye-open"></span>
+				</a>			
+			</td>
 			
 		</tr>
 		<? $i++; ?>

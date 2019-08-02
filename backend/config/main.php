@@ -16,6 +16,9 @@ return [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
+		'expo' => [
+            'class' => 'azasar\expo\ExpoPush'
+         ],
 		'settings' => [
 			'class' => 'frontend\settings\Module',
 			],

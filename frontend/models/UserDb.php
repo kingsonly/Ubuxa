@@ -410,6 +410,11 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 		return $this->person->userTelephone;
 	}
 	
+	public function getCustomer()
+	{
+		return  $this->hasOne(Customer::className(), ['cid' => 'cid']);
+	}
+	
 	public function generateNewDeviceAcessToken($deviceString)
 	{
 		$deviceAccess = new DeviceAccessToken;

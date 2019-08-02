@@ -69,9 +69,9 @@ use yii\helpers\Url;
                  
                   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                       <div class="div-square">
-                           <a href="#" >
+                           <a href="<?=Url::to(['feedback/index'])?>" >
  <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>EMAIL</h4>
+                      <h4>Feedbacks</h4>
                       </a>
                       </div>
                      
@@ -79,92 +79,20 @@ use yii\helpers\Url;
                   </div>
                   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
                       <div class="div-square">
-                           <a href="<?=Url::to(['/sms'])?>" >
+                           <a href="" >
  <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>SMS</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>NOTIFICATION
-							   </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>PROPERTY MANAGER</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>TRANSACTIONS / COMMISSION</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  --> 
-                <div class="row text-center pad-top">
-                 
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-clipboard fa-5x"></i>
-                      <h4>ORDER</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-gear fa-5x"></i>
-                      <h4>CLIENT</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-wechat fa-5x"></i>
-                      <h4>CONSULTANT</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-bell-o fa-5x"></i>
-                      <h4>USER MANAGER </h4>
+                      <h4>Leads</h4>
                       </a>
                       </div>
                      
                      
                   </div>
                   
-                     
-              </div>   
+                  
+                  
+              </div>
+                 <!-- /. ROW  --> 
+                
                     
                  
                 

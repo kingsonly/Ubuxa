@@ -32,8 +32,21 @@ use app\boffins_vendor\components\controllers\ComponentLinkWidget;
          <h4><i class="icon fa fa-check"></i>Sent!</h4>
          <?= Yii::$app->session->getFlash('success') ?>
 		<p>
+		<? if(is_array($users)){?>
 		<? foreach($users as $key => $value){ ?>
-			<?= $value->nameString;?><br/>
+				<? if(!empty($value->nameString)){?>
+					<?= $value->nameString;?><br/>
+				<? }elseif(!empty($value->comOrPersonName)){?>
+					<?= $value->comOrPersonName.'<br/>';?>
+				<?}?>
+			
+			<? }}else{ ?>
+			<? if(!empty($users->nameString)){?>
+					<?= $users->nameString;?><br/>
+				<? }elseif(!empty($users->comOrPersonName)){?>
+					<?= $users->comOrPersonName.'<br/>';?>
+				<?}?>
+			
 			<? } ?>
 		</p>
 		

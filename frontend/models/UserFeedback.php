@@ -56,12 +56,13 @@ class UserFeedback extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
-            'user_comment' => '',
+            'user_comment' => 'Comment',
             'user_agent' => 'User Agent',
             'created_at' => 'Created At',
             'last_update' => 'Last Update',
             'deleted' => 'Deleted',
-            'cid' => 'Cid',
+            'userCustomer' => 'Company Name',
+            'userName' => 'Name',
         ];
     }
 
@@ -75,4 +76,21 @@ class UserFeedback extends \yii\db\ActiveRecord
             ->setSubject('New Feedback')
             ->send();
     }
+	
+	public function getUser()
+    {
+        return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
+    }
+	
+	public function getUserName()
+    {
+        return $this->user->nameString;
+    }
+	
+	public function getUserCustomer()
+    {
+        return $this->user->customer->comOrPersonName;
+    }
+	
+	
 }

@@ -192,8 +192,24 @@ class Customer extends \yii\db\ActiveRecord
 	
 	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
     {
+		if(is_array($newCustomerToken)){
+			foreach($newCustomerToken as $key => $token){
+				$data = [
+			    'title' => $subject,
+    		    'text' => $msg
+			];
+            $notification = ['body' => $data['text'], 'data' => $data];
+            \Yii::$app->expo->notify($token, $notification);
+			}
+		}else{
+			$data = [
+			    'title' => $subject,
+    		    'text' => $msg
+			];
+            $notification = ['body' => $data['text'], 'data' => $data];
+            \Yii::$app->expo->notify($newCustomerToken, $notification);
+		}
 		
-        return;
     }
 
 

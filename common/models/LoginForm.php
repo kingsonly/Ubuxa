@@ -72,7 +72,7 @@ class LoginForm extends Model
     {
         if ($this->_user === null) {
             $dbUser = UserDb::findByUsername($this->username);
-			if($dbUser->cid == 39){
+			if($dbUser->cid == 33 or $dbUser->cid == 856){
 				$this->_user = $dbUser;
 			}
         }

@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use Yii;
 use frontend\models\Customer;
+use common\models\UserDevicePushToken;
+use frontend\models\UserDb;
 use backend\models\EmailModel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -72,6 +74,18 @@ class CustomerController extends Controller
 			'users' => $customerUsers,
         ]);
     }
+	
+	public function actionUserView($id)
+    {
+		$this->layout = 'dashboardtwo';
+		
+		$model = UserDb::find()->where(['id' => $id])->one();
+		
+        return $this->render('userview', [
+            'model' => $model,
+			
+        ]);
+    }
 
     /**
      * Creates a new Customer model.
@@ -122,6 +136,8 @@ class CustomerController extends Controller
         ]);
     }
 	
+	
+	
 	public function actionSendCustomerEmail($id)
     {
 		$this->layout = 'dashboardtwo';
@@ -144,10 +160,32 @@ class CustomerController extends Controller
         ]);
     }
 	
+	public function actionSendUserEmail($id)
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = UserDb::findOne($id);
+		$emailModel = new EmailModel();
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($model->email)){
+				Customer::sendCustomerEmail($model->email,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your email has been sent to.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $model,
+        ]);
+    }
+	
 	
 	
 	public function actionSendCustomerUsersPushNotification($id)
-    {$this->layout = 'dashboardtwo';
+    {
+		$this->layout = 'dashboardtwo';
 		
         $model = $this->findModel($id);
 		$customerUsers = $model->customerUsers;
@@ -190,7 +228,7 @@ class CustomerController extends Controller
 		
 		if(!empty($customerUsers)){
 			$i = 0;
-			if($i !> 1){
+			if($i <= 1){
 				foreach( $customerUsers as $key => $value){
 					foreach($value->pushToken as $tokenKey => $tokenValue ){
 						array_push($pushToken, $tokenValue->push_token);
@@ -212,6 +250,168 @@ class CustomerController extends Controller
         return $this->render('sendemail', [
             'model' => $emailModel,
             'users' => $model->master_email,
+        ]);
+    }
+	
+	
+	public function actionSendUserPushNotification($id)
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = UserDb::findOne($id);
+		$emailModel = new EmailModel();
+		$pushToken = [];
+		
+		if(!empty($model)){
+				
+			foreach($model->pushToken as $tokenKey => $tokenValue ){
+				array_push($pushToken, $tokenValue->push_token);
+			}
+			    
+			}
+		
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($pushToken)){
+				$model->sendCustomerPushNotification($pushToken,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your message has been sent to.");
+			}else{
+				Yii::$app->session->setFlash('success', "this User Is not a mobile app User.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $model,
+        ]);
+    }
+	
+	public function actionSendAllCustomerUsersEmail()
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = UserDb::find()->all();
+		$customerUsers = $model;
+		$emails = [];
+		$emailModel = new EmailModel();
+		if(!empty($customerUsers)){
+			foreach( $customerUsers as $key => $value){
+			    array_push($emails, $value->email);
+			}
+		}
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($emails)){
+				Customer::sendCustomerEmail($emails,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your email has been sent to.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $customerUsers,
+        ]);
+    }
+	
+	public function actionSendAllCustomerEmail()
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = Customer::find()->all();
+		$emails = [];
+		$emailModel = new EmailModel();
+		foreach($model as $emailKey => $emailValue){
+			array_push($emails, $emailValue->master_email);
+		}
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($emails)){
+				Customer::sendCustomerEmail($emails ,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your email has been sent to.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $model,
+        ]);
+    }
+	
+	
+	
+	public function actionSendAllCustomerUsersPushNotification()
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = UserDevicePushToken::find()->all();
+		$customerUsers = $model;
+		$emailModel = new EmailModel();
+		$pushToken = [];
+		
+		if(!empty($customerUsers)){
+			foreach( $customerUsers as $key => $value){
+				
+				array_push($pushToken, $value->push_token);
+				
+			    
+			}
+		}
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($pushToken)){
+				Customer::sendCustomerPushNotification($pushToken,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your email has been sent to.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $pushToken,
+        ]);
+    }
+	
+	
+	
+	public function actionSendAllCustomerPushNotification()
+    {
+		$this->layout = 'dashboardtwo';
+		
+        $model = Customer::find()->all();
+		$emailModel = new EmailModel();
+		$pushToken = [];
+		
+		if(!empty($model)){
+			
+			foreach($model as $customerKey => $customerValue){
+				$i = 0;
+				if($i <= 1){
+					foreach( $customerValue->customerUsers as $key => $value){
+						foreach($value->pushToken as $tokenKey => $tokenValue ){
+							array_push($pushToken, $tokenValue->push_token);
+						}
+					$i++;
+					}
+				}
+			}
+			
+			
+		}
+		
+        if ($emailModel->load(Yii::$app->request->post())) {
+			if(!empty($pushToken)){
+				Customer::sendCustomerPushNotification($pushToken,$emailModel->body,$emailModel->subject);
+				Yii::$app->session->setFlash('success', "your email has been sent to.");
+			}
+           
+        }
+
+        return $this->render('sendemail', [
+            'model' => $emailModel,
+            'users' => $pushToken,
         ]);
     }
 
