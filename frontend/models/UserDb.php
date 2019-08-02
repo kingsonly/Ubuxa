@@ -70,6 +70,8 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 
 	public $controlerLocation = 'frontend';
 	
+	
+	
     /***
      * @inheritdoc
      */

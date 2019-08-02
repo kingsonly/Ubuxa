@@ -64,7 +64,8 @@ class CustomerController extends Controller
 		$customerTasks = $model->customerTasks;
 		$customerDocuments = $model->customerDocuments;
 		$customerUsers = $model->customerUsers;
-		
+		UserDb::backendExtanal = 'yes';
+		//$model->customerUsers->backendExtanal = 'yes';
         return $this->render('view', [
             'model' => $model,
 			'customerFolders' => count($customerFolders),

@@ -20,12 +20,12 @@ class Onboarding extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    CONST ONBOARDING_COUNT = 2; //maximum number of unboarding view
-    CONST TASK_ONBOARDING = 1;
-    CONST REMARK_ONBOARDING = 2;
-    CONST FOLDER_ONBOARDING = 3;
-    CONST SUBFOLDER_ONBOARDING = 4;
-    CONST MAIN_ONBOARDING = 5;
+    CONST MAX_ONBOARDING = 2; //maximum number of unboarding 
+    CONST TASK_ONBOARDING_GROUP_ID = 1; //task onboarding group id
+    CONST REMARK_ONBOARDING_GROUP_ID = 2; //remark onboarding group id
+    CONST FOLDER_DETAILS_ONBOARDING_GROUP_ID = 3; //folder details onboarding group id
+    CONST SUBFOLDER_ONBOARDING_GROUP_ID = 4; //subfolder onboarding group id
+    CONST MAIN_DASHBOARD_ONBOARDING_GROUP_ID = 5; //dashboard onboarding group id
 
     public static function tableName()
     {
@@ -71,5 +71,27 @@ class Onboarding extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(UserDb::className(), ['id' => 'user_id']);
+    }
+
+    public function updateOnboarding($userId, $group)
+    {
+        $model = $this->find()->where(['user_id' => $userId, 'group_id' => $group]);
+        $exists = $model->exists();
+        if($exists){
+            $onboardingModel = $model->one();
+            if($onboardingModel->status <  $this::MAX_ONBOARDING){
+                $status = $onboardingModel->status;
+                $onboardingModel->status = $status + 1;
+                $onboardingModel->save();
+            }else {
+                $onboardingModel->status = $this::MAX_ONBOARDING;
+                $onboardingModel->save();
+            }
+        }else{
+            $this->group_id = $group;
+            $this->user_id = $userId;
+            $this->status = 1;
+            $this->save();
+        }
     }
 }

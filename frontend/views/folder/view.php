@@ -469,7 +469,6 @@ $img = $model->folder_image;
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
 
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
-<? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
         <div class="row">
@@ -586,7 +585,7 @@ to be fixed after launch
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
-$mainOnboarding = Url::to(['onboarding/main-onboarding']);
+$mainOnboarding = Url::to(['onboarding/onboarding']);
 $getuserId = Yii::$app->user->identity->id;
 $edocUrl = Url::to(['edocument/index','folderId' => $id]);
 $indexJs = <<<JS
@@ -644,6 +643,7 @@ function _MainOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  group: 'main'
                 },
               success: function(res, sec){
                    console.log('Status updated');

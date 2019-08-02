@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\BoffinsBaseController;
+
 /**
  * OnboardingController implements the CRUD actions for Onboarding model.
  */
@@ -110,135 +111,42 @@ class OnboardingController extends Controller
     }
 
     /**
-     * Updates Onboarding model after task onboarding
-     * @details This methods checks if onboarding for task for a user already exists, if it does, it updates the count else
-     * it creates a new task onboarding field for that user
+     * @brief Updates Onboarding model after onboarding
+     * @details This methods checks if onboarding for a user already exists, if it does, it updates the count else
+        it creates a new onboarding field for that user
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionTaskOnboarding()
+    public function actionOnboarding()
     {
        if(Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();   
-            $id =  $data['user_id'];
+            $userId =  $data['user_id'];
+            $onboardingGroup =  $data['group'];
             $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
-            if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
-                $userid = $onboardingModel->id;
-                $updateModel = $this->findModel($userid);
-                $updateModel->status = Onboarding::ONBOARDING_COUNT;
-                $updateModel->save();  
-            }else{
-                $onboarding->group_id = Onboarding::TASK_ONBOARDING;
-                $onboarding->user_id = $id;
-                $onboarding->status = 1;
-                $onboarding->save();
+            switch ($onboardingGroup) {
+                case 'task':
+                    $onboarding->updateOnboarding($userId, Onboarding::TASK_ONBOARDING_GROUP_ID);
+                    break;
+                case 'remark':
+                    $onboarding->updateOnboarding($userId, Onboarding::REMARK_ONBOARDING_GROUP_ID);
+                    break;
+                case 'folderDetails':
+                    $onboarding->updateOnboarding($userId, Onboarding::FOLDER_DETAILS_ONBOARDING_GROUP_ID);
+                    break;
+                case 'subfolders':
+                    $onboarding->updateOnboarding($userId, Onboarding::SUBFOLDER_ONBOARDING_GROUP_ID);
+                    break;
+                default:
+                    $onboarding->group_id = Onboarding::MAIN_DASHBOARD_ONBOARDING_GROUP_ID;
+                    $onboarding->user_id = $userId;
+                    $onboarding->status = 1;
+                    $onboarding->save();
+                    break;
             }
         }
     }
 
-    /**
-     * @brief Updates Onboarding model after task onboarding
-     * @details This methods checks if onboarding for remarks for a user already exists, if it does, it updates the count else
-     * it creates a new remark onboarding field for that user
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionRemarkOnboarding()
-    {
-       if(Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();   
-            $id =  $data['user_id'];
-            $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::REMARK_ONBOARDING])->exists();
-            if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::REMARK_ONBOARDING])->one();
-                $userId = $onboardingModel->id;
-                $updateModel = $this->findModel($userId);
-                $updateModel->status = Onboarding::ONBOARDING_COUNT;
-                $updateModel->save();  
-            }else{
-                $onboarding->group_id = Onboarding::REMARK_ONBOARDING;
-                $onboarding->user_id = $id;
-                $onboarding->status = 1;
-                $onboarding->save();
-            }
-        }
-    }
-
-
-    /**
-     * @brief Updates Onboarding model after Folder Details onboarding
-     * @details This methods checks if onboarding for folder details for a user already exists, if it does, it updates the count else
-     * it creates a new folder details onboarding field for that user
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionFolderDetailsOnboarding()
-    {
-       if(Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();   
-            $id =  $data['user_id'];
-            $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::FOLDER_ONBOARDING])->exists();
-            if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::FOLDER_ONBOARDING])->one();
-                $userId = $onboardingModel->id;
-                $updateModel = $this->findModel($userId);
-                $updateModel->status = Onboarding::ONBOARDING_COUNT;
-                $updateModel->save();  
-            }else{
-                $onboarding->group_id = Onboarding::FOLDER_ONBOARDING;
-                $onboarding->user_id = $id;
-                $onboarding->status = 1;
-                $onboarding->save();
-            }
-        }
-    }
-
-    /**
-     * @brief Updates Onboarding model after sub folder onboarding
-     * @details This methods checks if onboarding for sub folder for a user already exists, if it does, it updates the count else
-     * it creates a new sub folder onboarding field for that user
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionSubfoldersOnboarding()
-    {
-       if(Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();   
-            $id =  $data['user_id'];
-            $onboarding = new Onboarding();
-            $exists = $onboarding->find()->where(['user_id' => $id,'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->exists();
-            if($exists){
-                $onboardingModel = $onboarding->find()->where(['user_id' => $id, 'group_id' => Onboarding::SUBFOLDER_ONBOARDING])->one();
-                $userid = $onboardingModel->id;
-                $updateModel = $this->findModel($userid);
-                $updateModel->status = Onboarding::ONBOARDING_COUNT;
-                $updateModel->save();  
-            }else{
-                $onboarding->group_id = Onboarding::SUBFOLDER_ONBOARDING;
-                $onboarding->user_id = $id;
-                $onboarding->status = 1;
-                $onboarding->save();
-            }
-        }
-    }
-
-    /**
-     * @brief Updates Onboarding model after main onboarding runs
-     * it creates a new folder details onboarding field for that user
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionMainOnboarding()
-    {
-       if(Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();   
-            $id =  $data['user_id'];
-            $onboarding = new Onboarding(); 
-            $onboarding->group_id = Onboarding::MAIN_ONBOARDING;
-            $onboarding->user_id = $id;
-            $onboarding->status = 1;
-            $onboarding->save();
-        }
-    }
+    
 
     /**
      * Finds the Onboarding model based on its primary key value.

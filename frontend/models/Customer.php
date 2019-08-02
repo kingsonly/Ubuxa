@@ -146,10 +146,11 @@ class Customer extends \yii\db\ActiveRecord
 	public static function checkDomain($subdomain)
     {
         $customer = [];
-        $domain = self::find()->where(['master_doman' => $subdomain])->exists();
+        $model = self::find()->where(['master_doman' => $subdomain]);
+        $domain = $model->exists();
         array_push($customer, $domain);
         if ($domain) {
-            $findTenant = self::find()->where(['master_doman' => $subdomain])->one();
+            $findTenant = $model->one();
             if ($findTenant->entityName == self::CORPORATION) {
                 array_push($customer, ucfirst($findTenant->corporationName));
             }else{

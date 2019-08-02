@@ -68,7 +68,7 @@ class FolderController extends BoffinsBaseController
 				$folderStatus = 'private';
 			}
 			if($firstFolderFilter->parent_id > $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS){
-				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]);
+				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]); 
 			}
 			if($firstFolderFilter->parent_id == $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS ){
 				if($firstFolderFilter->folderManagerFilter->role == 'author'){
@@ -78,7 +78,7 @@ class FolderController extends BoffinsBaseController
 				}
 			} else{
 				if($firstFolderFilter->folderManagerFilter->role == 'author'){
-
+				
 					$seperateFolders['sub folder'][$folderStatus][] = $firstFolderFilter;
 				}else{
 					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
@@ -93,8 +93,8 @@ class FolderController extends BoffinsBaseController
             ]);
         }
 
-
-
+        
+        
     }
 
 	public function actionIndex2()
@@ -133,22 +133,23 @@ class FolderController extends BoffinsBaseController
         $userId = Yii::$app->user->identity->id;
         $users = $model->users;
 		$componentCreateUrl = Url::to(['component/create']);
-        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
-        $onboarding = Onboarding::find()->andWhere(['user_id' => $userId])->one();
+        $onboardingModel = Onboarding::find()->where(['user_id' => $userId]);
+        $onboardingExists = $onboardingModel->exists(); 
+        $onboarding = $onboardingModel->one();
         $edocument = Edocument::find()->where(['reference'=>'folder','reference_id'=>$id])->all();
-
+        
 		if (isset($_POST['hasEditable'])) {
         // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
+        
         // read your posted model attributes
         if ($model->load(Yii::$app->request->post())) {
             // read or convert your posted information
-
+            
             $model->save(false);
             // return JSON encoded output in the below format
             return ['output'=>'', 'message'=>''];
-
+            
             // alternatively you can return a validation error
             // return ['output'=>'', 'message'=>'Validation error'];
         }
@@ -161,13 +162,13 @@ $curl = new curl\Curl();
 
         //post http://example.com/
         $response = $curl->setOption(
-                CURLOPT_POSTFIELDS,
+                CURLOPT_POSTFIELDS, 
                 http_build_query(array(
                     'iduser' => $userId
                 )
             ))
-            ->post('http://ubuxachat.ubuxa.net/curl');
-
+            ->post('http://127.0.0.1:4000/curl');
+		
         return $this->render('view', [
             'model' => $model,
             'task' => $task,
@@ -189,7 +190,7 @@ $curl = new curl\Curl();
             'edocument' => $edocument,
         ]);
     }
-
+	
 	public function actionUsers($q = null, $id = null) {
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$out = ['results' => ['id' => '', 'text' => '']];
@@ -197,7 +198,7 @@ $curl = new curl\Curl();
 			$query = new Person();
 			$allUsers = $query->find()->select('id, first_name, surname')
 				->andWhere(['like', 'first_name', $q])->orWhere(['like', 'surname', $q])->all();
-
+			
 			$out['results'] = array_values($allUsers);
 		}
 		elseif ($id > 0) {
@@ -205,7 +206,7 @@ $curl = new curl\Curl();
 		}
 		return $out;
 	}
-
+	
 	public function actionNewMessage() {
 		$folderId = $_REQUEST['folderId']; // post params from ajax call
 		$username = $_REQUEST['userName'];
@@ -213,16 +214,16 @@ $curl = new curl\Curl();
 		$user = UserDb::find()->andWhere(['username' => $username])->one();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$out = ['name'=>$user->fullname,'folder' => $folder['title']];
-
+		
 		return $out;
 	}
-
+	
 	public function actionAddUsers($id) {
 		$inviteUsersModel = new InviteUsers();
 		$userModel = new UserDb();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		 if ($inviteUsersModel->load(Yii::$app->request->post())) {
-
+			  
 			 foreach($inviteUsersModel->users as $value){
 				 $getUserId = $userModel->find()->select(['id'])->where(['person_id' => $value])->one();
 				 /*
@@ -251,13 +252,13 @@ $curl = new curl\Curl();
         if ($model->load(Yii::$app->request->post())) {
 			$model->last_updated =  new Expression('NOW()');
 			if($model->privateFolder === 'fa fa-lock'){
-				$model->private_folder = 1;
+				$model->private_folder = 1;	
 			}
-
+			
 			if($model->save()){
             	return ['output'=>$model->id, 'message'=>'sent','area'=>'folder','templateId'=>'0'];
 			}
-
+            
         }
 
         return $this->render('create', [
@@ -284,33 +285,33 @@ $curl = new curl\Curl();
             'model' => $model,
         ]);
     }
-
-
+	
+	
 	public function actionUpdateFolderImage($id)
     {
-
+		
         $model =  $this->findModel($id);
-
+		
 
         if (Yii::$app->request->isPost) {
             $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
             if ($model->upload()) {
                 // file is uploaded successfully
 				if($model->save()){
-					return 1234;
+					return 1234;	
 				} else{
 					return 1233333;
 				}
-
+                
             }
         }
 
        // return $this->render('upload', ['model' => $model]);
-
-
+    	
+    
         }
 
-
+    
 
     /**
      * Deletes an existing Folder model.
@@ -321,12 +322,12 @@ $curl = new curl\Curl();
     public function actionDelete()
     {
 		if(Yii::$app->request->isAjax) {
-			$data = Yii::$app->request->post();
+			$data = Yii::$app->request->post();   
 			$id =  $data['folderId'];
 			$userIdentityRole = yii::$app->user->identity->roleName;
 			$userIdentityId = yii::$app->user->identity->id;
 			$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$id,'user_id' => $userIdentityId])->one();
-			// use identity of the user to determine if the user has access to delete a folder or not
+			// use identity of the user to determine if the user has access to delete a folder or not 
 			if($folderManager->role == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
 				if(!empty($this->findModel($id)->delete())){
 					return 0;
@@ -334,15 +335,15 @@ $curl = new curl\Curl();
 					return 1;
 				}
 			}else{
-
+				
 				return 3;
 			}
-
+			
 		}
-
-
+		
+		
     }
-
+	
 	/**
      * Deletes an existing Folder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -353,13 +354,13 @@ $curl = new curl\Curl();
 	public function actionDeleteUsers()
     {
 		if(Yii::$app->request->isAjax) {
-			$data = Yii::$app->request->post();
+			$data = Yii::$app->request->post();   
 			$folderId =  $data['folderId'];
 			$userId =  $data['userId'];
 			$userIdentityRole = yii::$app->user->identity->roleName;
 			$userIdentityId = yii::$app->user->identity->id;
 			$folderManager = FolderManager::find()->select('role')->andWhere(['folder_id'=>$folderId,'user_id' => $userIdentityId])->one();
-			// use identity of the user to determine if the user has access to delete a folder or not
+			// use identity of the user to determine if the user has access to delete a folder or not 
 			if($folderManager->role == 'author' or $userIdentityRole == 'admin' or $userIdentityRole == 'manager'){
 				$folderManagerModel = new FolderManager();
 				$findFolderUser = $folderManagerModel->find()->andWhere(['folder_id' => $folderId, 'user_id' => $userId])->one();
@@ -371,12 +372,12 @@ $curl = new curl\Curl();
 			}else{
 				return 3;
 			}
-
+			
 		}
-
-
+		
+		
     }
-
+	
 	public function actionCheckIfFolderNameExist($folderName){
 		$folder = new Folder();
 		$checkIfItExist = $folder->find()->where(['title' => $folderName, 'cid' => yii::$app->user->identity->cid  ])->exists();
@@ -400,56 +401,52 @@ $curl = new curl\Curl();
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
+	
+		
 	private function checkFolderParentRelationship(){
 		$folderModel = Folder::findOne(34);
 		return $folderModel -> subFolders;
 	}
-
+	
 
 
     public function actionMenusubfolders()
-    {
+    {   
         $model = new Folder();
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
                 $id = Yii::$app->request->post('id');
                 $getsubfolders = $model->findOne($id);
                 $subfolders = $getsubfolders->subFolders;
-
+                    
                 return $this->renderAjax('menusubfolders', [
                         'subfolders' => $subfolders,
                 ]);
-            }
+            } 
         }
     }
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////// this set of methods would be used to solve a temp problem with que pending on when the issue is resolved 
+	
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////// this set of methods would be used to solve a temp problem with que pending on when the issue is resolved
-
-
-
+	
 	public function addFolderNewUser($userId = '', $folderId = '')
 	{
-
+		
 		$folderModel = Folder::find()->andWhere(['id'=>$folderId])->one();
 		$folderManagerModel = new FolderManager();
-		$checkUserExist = $folderManagerModel->find()->where(['user_id' => $userId])->andWhere(['folder_id' => $folderId])->exists();
-		if($checkUserExist){
-			return true;
-		}
 		$folderManagerModel->user_id = $userId;
 		$folderManagerModel->folder_id = $folderId;
 		$folderManagerModel->role = 'user';
-
-
+		
+			
 		if($folderManagerModel->save(false)){
             //return $folderModel->parent_id > 0? $this->addFolderNewUser($userId,$folderModel->parent_id ):true;
             //subscribe the new user with access to actvities on this folder
             Yii::$app->activityManager->subscribe($folderModel, $userId, ['view', 'update', 'delete']);
 
             //for now, as there is no activity for "InviteUser" create a "manual" message and dispatch it
-            //this message is to inform the user that they have been given access.
+            //this message is to inform the user that they have been given access. 
             $messageConstruct = new \boffins_vendor\classes\ActivityMessageNode;
             $messageConstruct->format = '{actor} {verb} {article} {object}';
             $messageConstruct->addConstructs([
@@ -460,9 +457,9 @@ $curl = new curl\Curl();
                                 ]);
             Yii::$app->activityManager->dispatchMessages($messageConstruct, $userId);
 			return true;
-
+			
 		}
 	}
-
-
+	
+	
 }

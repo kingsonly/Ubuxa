@@ -104,14 +104,8 @@ class ReminderController extends Controller
                 }
             } else {
                 return 0; //time format did not match the required format
-            }
-            
-                
-                    
+            }          
         }
-        
-
-       
     }
 
     /**

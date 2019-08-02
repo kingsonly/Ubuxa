@@ -324,10 +324,11 @@ $boardUrl = Url::to(['task/index']);
         <div class="bg-info column-margin taskz-listz">
 	        <div class="task-header">
             <?php if($checkUrlParam == 'folder'){
-              $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
-              $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
+              $tasksOnboarding = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING_GROUP_ID]);
+              $tasksExists = $tasksOnboarding->exists();
+              $getTasks = $tasksOnboarding->one();
             ?>
-              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::MAX_ONBOARDING){ ?>
                 <div class="help-tip" id="task-tipz">
                     <p class="tip=text">Take a tour of task and find out useful tips.
                       <button type="button" class="btn btn-success" id="task-tour">Start Tour</button>
@@ -338,7 +339,7 @@ $boardUrl = Url::to(['task/index']);
                 $tasksExists = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->exists();
                 $getTasks = Onboarding::find()->where(['user_id' => $userId, 'group_id' => Onboarding::TASK_ONBOARDING])->one();
               ?>
-              <?php if(!$tasksExists || $getTasks->status < Onboarding::ONBOARDING_COUNT){ ?>
+              <?php if(!$tasksExists || $getTasks->status < Onboarding::MAX_ONBOARDING){ ?>
                   <div class="help-tip" id="site-tasktour">
                       <p class="tip=text">Take a tour of task and find out useful tips.
                         <button type="button" class="btn btn-success" id="site-task-tour">Start Tour</button>
@@ -412,7 +413,7 @@ $boardUrl = Url::to(['task/index']);
 $taskFetch = Url::to(['task/index','src' => 'ref1','folderId' => $parentOwnerId]);
 $taskUrl = Url::to(['task/check-task']);
 $boardUrlz = Url::to(['task/board']);
-$taskOnboarding = Url::to(['onboarding/task-onboarding']);
+$taskOnboarding = Url::to(['onboarding/onboarding']);
 $createUrl = Url::to(['task/dashboardcreate']);
 $DashboardUrl = explode('/',yii::$app->getRequest()->getQueryParam('r'));
 $DashboardUrlParam = $DashboardUrl[0];
@@ -483,6 +484,7 @@ function _TaskOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
+                  group: 'task',
                 },
               success: function(res, sec){
                    console.log('Status updated');
