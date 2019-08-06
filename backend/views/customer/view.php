@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<? foreach($users as $key => $value){?>
 		<tr>
 			<td><?= $i; ?></td>
-			<td><?= $value->nameString;?></td>
+			<td><?= !empty($value->nameString)?$value->nameString:'Not Available';?></td>
 			<td><?= $value->roleName;?></td>
 			<td><?= $value->last_login;?></td>
 			<td><?= $value->last_updated;?></td>

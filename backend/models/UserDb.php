@@ -1,11 +1,14 @@
 <?php
 
-namespace frontend\models;
+namespace backend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\db\ActiveQuery;
+use frontend\models\Person;
+use frontend\models\Role;
+use frontend\models\Customer;
 use yii\helpers\ArrayHelper;
 use boffins_vendor\classes\StandardQuery;
 use boffins_vendor\behaviors\DeleteUpdateBehavior;
@@ -30,7 +33,7 @@ use common\models\UserDevicePushToken as ParentUserDevicePushToken;
  * @property integer $deleted 
  * @property Device $device
  */
-class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpdateInterface, IdentityInterface, KnownClass
+class UserDb extends BoffinsArRootModel implements TrackDeleteUpdateInterface, IdentityInterface, KnownClass
 {
 	
 	/* 
@@ -397,7 +400,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	
 	public function getEmail()
 	{
-		return $this->person->userEmail;
+		return !empty($this->person->userEmail)?$this->person->userEmail:'info@ubuxa.net';
 	}
 	
 	public function getPushToken()
@@ -644,7 +647,7 @@ class UserDb extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
 	
 	public function getNameString() : string
 	{
-		return $this->person->nameString;
+		return !empty($this->person->nameString)?$this->person->nameString:'no  name set';
 	}
 	
 	public function getDropDownListData()

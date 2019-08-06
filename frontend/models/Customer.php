@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use backend\models\BackendFolder;
+use backend\models\UserDb;
 
 /**
  * This is the model class for table "{{%customer}}".
@@ -228,6 +229,10 @@ class Customer extends \yii\db\ActiveRecord
 	}
 	
 	public function getCustomerUsers(){
+		return $this->hasMany(UserDb::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerUsersBackend(){
 		return $this->hasMany(UserDb::className(), ['cid' => 'cid']);
 	}
 }

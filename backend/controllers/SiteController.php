@@ -7,7 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\Customer;
-use frontend\models\UserDb;
+use backend\models\UserDb;
 use frontend\models\Task;
 use frontend\models\Edocument;
 //use frontend\models\Folder;

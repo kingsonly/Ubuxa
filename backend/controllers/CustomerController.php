@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use frontend\models\Customer;
 use common\models\UserDevicePushToken;
-use frontend\models\UserDb;
+use backend\models\UserDb;
 use backend\models\EmailModel;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -63,9 +63,8 @@ class CustomerController extends Controller
 		$customerFolders = $model->customerFolders;
 		$customerTasks = $model->customerTasks;
 		$customerDocuments = $model->customerDocuments;
-		$customerUsers = $model->customerUsers;
-		UserDb::backendExtanal = 'yes';
-		//$model->customerUsers->backendExtanal = 'yes';
+		$customerUsers = $model->customerUsersBackend;
+		
         return $this->render('view', [
             'model' => $model,
 			'customerFolders' => count($customerFolders),
@@ -114,7 +113,7 @@ class CustomerController extends Controller
 		$this->layout = 'dashboardtwo';
 		
         $model = $this->findModel($id);
-		$customerUsers = $model->customerUsers;
+		$customerUsers = $model->customerUsersBackend;
 		$emails = [];
 		$emailModel = new EmailModel();
 		if(!empty($customerUsers)){
@@ -144,7 +143,7 @@ class CustomerController extends Controller
 		$this->layout = 'dashboardtwo';
 		
         $model = $this->findModel($id);
-		$customerUsers = $model->customerUsers;
+		$customerUsers = $model->customerUsersBackend;
 		$emailModel = new EmailModel();
 		
         if ($emailModel->load(Yii::$app->request->post())) {
@@ -189,7 +188,7 @@ class CustomerController extends Controller
 		$this->layout = 'dashboardtwo';
 		
         $model = $this->findModel($id);
-		$customerUsers = $model->customerUsers;
+		$customerUsers = $model->customerUsersBackend;
 		$emailModel = new EmailModel();
 		$pushToken = [];
 		
@@ -223,7 +222,7 @@ class CustomerController extends Controller
 		$this->layout = 'dashboardtwo';
 		
         $model = $this->findModel($id);
-		$customerUsers = $model->customerUsers;
+		$customerUsers = $model->customerUsersBackend;
 		$emailModel = new EmailModel();
 		$pushToken = [];
 		
