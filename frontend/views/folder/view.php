@@ -681,7 +681,10 @@ RedisSocket.on('messages', function(msg){
     divActivity.append(divMsg)
     parent.append(divActivity)
     $(document).find('#activity-list_'+msg.id).append(parent)
-  }
+  } 
+  } else {
+    $(document).find('#stream_activity_'+msg.id).append('<p>You have no activity</p>')
+    $(document).find('#activity-list_'+msg.id).append('<p>You have no activity</p>')
   }
 
   
