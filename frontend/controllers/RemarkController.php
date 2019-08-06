@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\BoffinsBaseController;
+
 /**
  * RemarkController implements the CRUD actions for Remark model.
  */
@@ -35,30 +36,25 @@ class RemarkController extends Controller
     /**
      * @brief Lists all Remark models with their replies.
      * @details Implements an infinite scroll of the remarks in batches.
-     * numpage gets page number which is used to calculate remarks for each page.
-     * ownerId is the folder id the remarks belong to.
-     * modelName is required in the behaviour (specificClips) to distinguish task from remarks.
-     * DashboardUrlParam gets the url. not used. required to load all remarks in the folder index void of folder specificity
-     * offset calculates the number of remarks to be loaded for each page 
+     * @param [integer] $perpage the number of remarks to list in each page. 
      * @return mixed
+     * @future use Yii standard functions for ActiveRecord to get batches of records of remarks. 
      */
-    public function actionIndex()
+    public function actionIndex($perpage = 10)
     {
-        $perpage=10;
         
 
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
-                $numpage = Yii::$app->request->post('page');
-                $ownerid = Yii::$app->request->post('ownerId');
+                $pageNumber = Yii::$app->request->post('page');
+                $folderId = Yii::$app->request->post('ownerId');
                 $modelName = Yii::$app->request->post('modelName');
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
-                $offset = (($numpage-1) * $perpage);
+                $offset = (($pageNumber-1) * $perpage);
                 $remarkss = new Remark();
                 $remarkss->fromWhere = 'folder';
                 $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
-                //if url is site index get all the remarks
                 if($DashboardUrlParam == 'site'){
                      $remarks = Remark::find()->andWhere(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
 					
@@ -68,7 +64,7 @@ class RemarkController extends Controller
                      ]);
                 } else {
                      
-                     $remarks = $remarkss->specificClips($ownerid,1,$offset,$perpage,'remark');
+                     $remarks = $remarkss->specificClips($folderId,1,$offset,$perpage,'remark');
                      return $this->renderAjax('index2', [
 						 'remarks' => $remarks,
 						 'remarkReply' => $remarkReply,
@@ -100,12 +96,12 @@ class RemarkController extends Controller
     public function actionCreate()
     {
         $model = new Remark();
-        $commenterUserId = Yii::$app->user->identity->id; //get userid of commentor
-        $commenterPersonId = Yii::$app->user->identity->person_id; //get person id of commentor
+        $commenterUserId = Yii::$app->user->identity->id;
+        $commenterPersonId = Yii::$app->user->identity->person_id;
         $model->user_id = $commenterUserId;
         $model->person_id = $commenterPersonId;
-        if(!empty(Yii::$app->request->post('&moredata'))){
-            $model->text = Yii::$app->request->post('&moredata');
+        if(!empty(Yii::$app->request->post('comment_text'))){
+            $model->text = Yii::$app->request->post('comment_text');
         } else {
             return 'field cannot be empty';
         }
@@ -169,7 +165,6 @@ class RemarkController extends Controller
         $folderInstance = new Folder();
         $getFolder = $folderInstance->find()->andWhere(['id' => $id])->one();
         $name = array();
-        //$names = ['nnamdi','ogundu','uchechukwu'];
         foreach ($getFolder->users as $user) {
             $name[] = $user->fullname;
         }

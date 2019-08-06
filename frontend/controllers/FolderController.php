@@ -214,6 +214,7 @@ class FolderController extends BoffinsBaseController
      * Passes the user id parameter to the node server
      */
     public function actionActivity() {
+       
         $userId = Yii::$app->user->identity->id;
         $curl = new curl\Curl();
         $response = $curl->setOption(
@@ -222,7 +223,8 @@ class FolderController extends BoffinsBaseController
                     'iduser' => $userId
                 )
             ))
-            ->post('http://localhost:4000/curl');   
+            ->post('http://localhost:4000/curl');
+ 
     }
 	
 	public function actionAddUsers($id) {

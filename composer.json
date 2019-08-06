@@ -66,7 +66,8 @@
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "*",
-        "codeception/codeception": "2.4.0"
+        "codeception/codeception": "2.4.0",
+        "codeception/phpunit-wrapper": "7.0.2"
     },
     
     "config": {
