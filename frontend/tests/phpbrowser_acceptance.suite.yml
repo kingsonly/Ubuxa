@@ -3,7 +3,7 @@ actor: AcceptanceTester
 modules:
     enabled:
         - PhpBrowser:
-            url: http://localhost/ubuxabeta/frontend/web/
+            url: http://localhost/ubuxa-beta/frontend/web/
             browser: firefox
         - Yii2:
             part: init

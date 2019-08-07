@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use boffins_vendor\classes\BoffinsBaseController;
+
 /**
  * RemarkController implements the CRUD actions for Remark model.
  */
@@ -33,26 +34,27 @@ class RemarkController extends Controller
     }
 
     /**
-     * Lists all Remark models.
+     * @brief Lists all Remark models with their replies.
+     * @details Implements an infinite scroll of the remarks in batches.
+     * @param [integer] $perpage the number of remarks to list in each page. 
      * @return mixed
+     * @future use Yii standard functions for ActiveRecord to get batches of records of remarks. 
      */
-    public function actionIndex()
+    public function actionIndex($perpage = 10)
     {
-        $perpage=10;
         
 
         if(isset($_GET['src'])){
             if(Yii::$app->request->post('page')){
-                $numpage = Yii::$app->request->post('page');
-                $ownerid = Yii::$app->request->post('ownerId');
+                $pageNumber = Yii::$app->request->post('page');
+                $folderId = Yii::$app->request->post('ownerId');
                 $modelName = Yii::$app->request->post('modelName');
                 $DashboardUrlParam = Yii::$app->request->post('DashboardUrlParam');
-                $offset = (($numpage-1) * $perpage);
+                $offset = (($pageNumber-1) * $perpage);
                 $remarkss = new Remark();
                 $remarkss->fromWhere = 'folder';
                 $remarkReply = Remark::find()->andWhere(['<>','parent_id', 0])->orderBy('id DESC')->all();
                 
-                //if url is site index get all the remarks
                 if($DashboardUrlParam == 'site'){
                      $remarks = Remark::find()->andWhere(['parent_id' => 0])->limit($perpage)->offset($offset)->orderBy('id DESC')->all();
 					
@@ -62,7 +64,7 @@ class RemarkController extends Controller
                      ]);
                 } else {
                      
-                     $remarks = $remarkss->specificClips($ownerid,1,$offset,$perpage,'remark');
+                     $remarks = $remarkss->specificClips($folderId,1,$offset,$perpage,'remark');
                      return $this->renderAjax('index2', [
 						 'remarks' => $remarks,
 						 'remarkReply' => $remarkReply,
@@ -98,8 +100,8 @@ class RemarkController extends Controller
         $commenterPersonId = Yii::$app->user->identity->person_id;
         $model->user_id = $commenterUserId;
         $model->person_id = $commenterPersonId;
-        if(!empty(Yii::$app->request->post('&moredata'))){
-            $model->text = Yii::$app->request->post('&moredata');
+        if(!empty(Yii::$app->request->post('comment_text'))){
+            $model->text = Yii::$app->request->post('comment_text');
         } else {
             return 'field cannot be empty';
         }
@@ -110,7 +112,6 @@ class RemarkController extends Controller
              $userImage = UserDb::find()->andWhere(['id'=>$commenterUserId])->one();
              $user = UserDb::findOne($commenterUserId);
              $personName = $user->fullname;
-             //$user_names = Person::find()->andWhere(['id'=>$commenterPersonId])->one();
              $remarkId = $model->id;
              $remarkReply = $model->parent_id;
              return json_encode([ $userImage['profile_image'],$personName,$remarkId, $remarkReply]);
@@ -155,18 +156,26 @@ class RemarkController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Implements tagging a user to a comment with @ tag
+     * Fetches the list of users and return them in JSON encoded format
+     * param [string] $id is folder id
+     */
     public function actionMention($id){
-        $owner = $id;
-        $users = new Folder();
-        $getUsers = $users->find()->andWhere(['id' => $owner])->one();
+        $folderInstance = new Folder();
+        $getFolder = $folderInstance->find()->andWhere(['id' => $id])->one();
         $name = array();
-        $names = ['nnamdi','ogundu','uchechukwu'];
-        foreach ($getUsers->users as $user) {
+        foreach ($getFolder->users as $user) {
             $name[] = $user->fullname;
         }
-       return json_encode($name);
+        return json_encode($name);
     }
 
+    /**
+     * Implements tagging a folder to a comment with # tag
+     * Fetches the list of 
+      and return them in JSON encoded format
+     */
     public function actionHashtag(){
         $folder = Folder::find()->select(['id as name','title as content'])->asArray()->all();
         return json_encode($folder);

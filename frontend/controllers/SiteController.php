@@ -100,44 +100,34 @@ class SiteController extends BoffinsBaseController {
         ];
     }
 
+     /**
+     * @brief renders the view index .
+     * @details Check which view to render..
+     * Renders the empty_index view when a new user makes a request.
+     * @return mixed
+     */
     public function actionIndex()
 	{
-		//$this->layout = 'new_index_dashboard_layout';
-		$folder = new Folder();
-		$dashboardFolders = $folder->getDashboardItems(100);
-		$task = new Task();
-		$remarkModel = new Remark();
-		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
-		$reminder = new Reminder();
-		$label = new label();
-        $taskLabel = new TaskLabel();
-		$taskAssignedUser = new TaskAssignedUser();
-		$cid = Yii::$app->user->identity->cid;
-        $users = UserDb::find()->where(['cid' => $cid])->all();
-        $allUsers = new UserDb;
-        $userId = Yii::$app->user->identity->id;
-        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
-        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 
         if(empty($dashboardFolders)){
-        	return $this->render('empty_index',[
-        	'taskStatus' => $taskStatus,
-			'folders' => $dashboardFolders,
-			'task' => $task,
-			'remarkModel' => $remarkModel,
-			'reminder' => $reminder,
-			'taskAssignedUser' => $taskAssignedUser,
-			'users' => $users,
-			'label' => $label,
-            'taskLabel' => $taskLabel,
-            'folder' => $folder,
-            'allUsers' => $allUsers,
-            'userId' => $userId,
-            'onboardingExists' => $onboardingExists,
-            'onboarding' => $onboarding,
-			]);
+        	return $this->render('empty_index');
         } else {
-
+        	//$this->layout = 'new_index_dashboard_layout';
+			$folder = new Folder();
+			$dashboardFolders = $folder->getDashboardItems(100);
+			$task = new Task();
+			$remarkModel = new Remark();
+			$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+			$reminder = new Reminder();
+			$label = new label();
+	        $taskLabel = new TaskLabel();
+			$taskAssignedUser = new TaskAssignedUser();
+			$cid = Yii::$app->user->identity->cid;
+	        $users = UserDb::find()->where(['cid' => $cid])->all();
+	        $allUsers = new UserDb;
+	        $userId = Yii::$app->user->identity->id;
+	        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
+	        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 	        return $this->render('index',[
 	        	'taskStatus' => $taskStatus,
 				'folders' => $dashboardFolders,

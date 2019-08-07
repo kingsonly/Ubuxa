@@ -531,7 +531,7 @@ $('#create-remark').submit(function(e) {
             console.log(remark_value)
            var form = $(this);
            var datas = form.serializeArray();
-           datas.push({name: '&moredata', value: remark_value});
+           datas.push({name: 'comment_text', value: remark_value});
            $('#remarkSave').hide();
            $('#remarkLoader').show();
            $.ajax({

@@ -34,6 +34,7 @@ class AppAsset extends AssetBundle
         '\frontend\assets\CalendarAsset',
         '\frontend\assets\EmojiPickerAsset',
         '\frontend\assets\perfectScrollbar',
+        '\frontend\assets\MomentAsset',
         //'\frontend\assets\EmojiOneAsset',
     ];
 }

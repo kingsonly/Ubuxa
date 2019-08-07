@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 class ActivitiesWidget extends Widget
 {
+	public $id;
 
     public function init()
     {
@@ -16,7 +17,9 @@ class ActivitiesWidget extends Widget
     public function run()
     {
          // Register AssetBundle
-        return $this->render('activities');
+        return $this->render('activities',[
+        	'userid' => $this->id,
+        ]);
     }
 }
 ?>

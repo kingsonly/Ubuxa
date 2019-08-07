@@ -10,7 +10,8 @@ class FolderCest
 
     public function _before(FunctionalTester $I)
     {   
-        $admin = \frontend\models\UserDb::findByUsername('admin');
+        $I->amOnRoute('site/login');
+        $admin = \frontend\models\UserDb::findByUsername('guest');
         $I->amLoggedInAs($admin);
     }
 

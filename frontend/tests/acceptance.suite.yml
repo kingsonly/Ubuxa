@@ -3,7 +3,7 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            url: http://127.0.0.1/ubuxabeta/frontend/web
+            url: http://localhost/ubuxa-beta/frontend/web
             browser: firefox
             #clear_cookies: false 
             #log_js_errors: true

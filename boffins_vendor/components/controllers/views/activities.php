@@ -301,16 +301,8 @@ use frontend\assets\AppAsset;
 		<div class="col-sm-10 col-xs-8 folderdetlss ">
 			<div class="active-info">
 				<div class="act-header">Recent Activity</div>
-				<div class="stream_activity">
-					<div id="divTAReviewss">
-                <div class="activity">
-                  <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-                  <div class="activity__message">
-                    <p class="msg-title">Hey there, welcome to this ace messaging thing?</p>
-                    <p class="msg-date">Last Tuesday at 9:45 AM</p>
-                  </div>
-                </div>     
-          </div>
+				<div class="stream_activity" id ="stream_activity_<?= $userid; ?>">
+					
 				</div>
 				
 			</div>
@@ -330,104 +322,8 @@ use frontend\assets\AppAsset;
 		</div>
 		<div id="activity1" class="col-sm-12 col-xs-12 panel-collapse collapse">
 			<div class="fa fa-times activity-close" style="float: right; cursor: pointer;cursor: pointer;padding: 15px 10px;"></div>
-			<div class="activity-list" style="margin-top:50px">
-  
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <p>Hey there, welcome to this ace messaging thing?</p>
-    </div>
-  </div>
-    
-  <div class="activity activity--subscriber">
-    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
-    <div class="activity__message activity__message--subscriber">
-      <p>Pretty rad yeah, I wonder what it can do other than messages...</p>
-    </div>
-  </div>
-    
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <p>I think I've seen something like this before though.</p>
-      <p>Where though, is anyone's guess.</p>
-    </div>
-  </div>
-    
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <a href="#">
-        <img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/020/cache/yosemite-deep-valley_2013_600x450.jpg">
-        <span class="activity__file-name">yosemite.jpg</span>
-      </a>
-    </div>
-  </div>
-      
-  <div class="activity activity--subscriber">
-    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
-    <div class="activity__message activity__message--subscriber">
-      <p>That looks like Yosemite!</p>
-    </div>
-  </div>
-    
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <p>Sure is.</p>
-    </div>
-  </div>
-    
-  <div class="activity activity--notice">
-    <div class="activity__message activity__message--full">
-      <time class="activity__time">Last Tuesday at 9:31 AM</time>
-      <p>Brad Forst offered the lesson</p>
-    </div>
-  </div>
-  
-  <div class="activity activity--notice activity--subscriber">
-    <div class="activity__message activity__message--full">
-      <time class="activity__time activity__time--subscriber">Last Tuesday at 9:45 AM</time>
-      <p>Harry Roberts accepted the lesson</p>
-    </div>
-  </div>
-  
-  <div class="activity activity--subscriber">
-    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
-    <div class="activity__message activity__message--subscriber">
-      <p>Right lesson time! Game faces on. Do you mind sending me that PDF over you were on about please?</p>
-    </div>
-  </div>
-  
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <p>Yep, one sec</p>
-    </div>
-  </div>
-  
-  <div class="activity activity--subscriber">
-    <img class="activity__avatar activity__avatar--subscriber" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/csswizardry/128.jpg">
-    <div class="activity__message activity__message--subscriber">
-      <p>Come on, I don't have long!!</p>
-      <img width="100" src="http://replygif.net/i/1129.gif">
-      <p>Waiting...</p>
-    </div>
-  </div>
-  
-  <div class="activity">
-    <img class="activity__avatar" width="35" height="35" src="https://s3.amazonaws.com/uifaces/faces/twitter/brad_frost/128.jpg">
-    <div class="activity__message">
-      <a href="">
-        <div class="file-icon">
-          .psd
-        </div>
-        <span class="activity__file-name">test.psd</span>
-      </a>
-    </div>
-  </div>
-      
-</div>
+			<div class="activity-list" id="activity-list_<?= $userid; ?>" style="margin-top:50px">
+      </div>
 </div>
 		
 	</div>

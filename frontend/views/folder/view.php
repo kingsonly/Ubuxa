@@ -469,12 +469,13 @@ $img = $model->folder_image;
 <div class="board-specfic" data-folderId="<?=$model->id;?>"></div>
 
 <?= EdocumentWidget::widget(['docsize'=>100,'target'=>'folder', 'textPadding'=>100,'attachIcon'=>'yes','referenceID'=>$model->id,'reference'=>'folder','iconPadding'=>10, 'edocument' => 'dropzone']);?>
+<? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
         <div class="row">
             <section>
                   <div class="row top-box">
-                  	<?= ActivitiesWidget::widget() ?>
+                  	<?= ActivitiesWidget::widget(['id'=>$userId]) ?>
                   	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
                   </div>  
                     	<div class="row">
@@ -585,19 +586,108 @@ to be fixed after launch
 <?php 
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
-$mainOnboarding = Url::to(['onboarding/onboarding']);
+$mainOnboarding = Url::to(['onboarding/mainonboarding']);
+$activityUrl = Url::to(['folder/activity']);
+$defaultProfileImage =  Url::to('@web/images/users/default-user.png');
 $getuserId = Yii::$app->user->identity->id;
-$edocUrl = Url::to(['edocument/index','folderId' => $id]);
 $indexJs = <<<JS
+
+$(document).ready(function(){
+  
+  $.post('$activityUrl',
+    {
+      status:1,
+    },
+    function(data){
+      console.log('document is ready')  
+    }
+    )
+  })
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
 RedisSocket.on('redis message', function(msg){
-$(document).find('.stream_activity').append('<p class="act_str">'+msg+'</p>')
-$('.act_count').text($('.act_str').length)
+  console.log('this is msg', msg.res)
+    var dt = new Date (parseInt(msg.res.meta_date)*1000);
+    var prof_image = '$defaultProfileImage';
+    msg.res.meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res.meta_actor_image' ;
+    var parent = $('<div>').attr('id','divTAReviewss')
+    var divActivity = $('<div>').addClass('activity')
+    var img = $('<img>').addClass('activity__avatar')
+    img.attr({
+      'src': prof_image,
+      'width': 35,
+      'height': 35
+      });
+    var divMsg = $('<div>').addClass('activity__message')
+    var ptitle = $('<p>').addClass('msg-title').text(msg.res.meta_message);
+    var pdate = $('<p>').addClass('msg-date').text(dt.toLocaleString());
+
+    divMsg.append(ptitle)
+    divMsg.append(pdate)
+    divActivity.append(img)
+    divActivity.append(divMsg)
+    parent.append(divActivity)
+    parent.addClass('act_str')
+    $(document).find('#stream_activity_'+msg.id).html(parent)
+    $(document).find('#activity-list_'+msg.id).prepend(parent)
+    $('.act_count').text($('.act_str').length)
 
 })
 RedisSocket.on('messages', function(msg){
-  console.log(msg)
+  var data = msg.res;
+  if(msg.res !== null || msg.res !== " "){
+    var dt = new Date (parseInt(msg.res[0].meta_date)*1000);
+    var prof_image = '$defaultProfileImage';
+    msg.res[0].meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res[0].meta_actor_image' ;
+    var parent = $('<div>').attr('id','divTAReviewss')
+    var divActivity = $('<div>').addClass('activity')
+    var img = $('<img>').addClass('activity__avatar')
+    img.attr({
+      'src': prof_image,
+      'width': 35,
+      'height': 35
+      });
+    var divMsg = $('<div>').addClass('activity__message')
+    var ptitle = $('<p>').addClass('msg-title').text(msg.res[0].meta_message);
+    var pdate = $('<p>').addClass('msg-date').text(dt.toLocaleString());
+
+    divMsg.append(ptitle)
+    divMsg.append(pdate)
+    divActivity.append(img)
+    divActivity.append(divMsg)
+    parent.append(divActivity)
+    $(document).find('#stream_activity_'+msg.id).append(parent)
+
+
+    for(var i=1; i<11; i++){
+    var dt = new Date (parseInt(msg.res[i].meta_date)*1000);
+    var image = '$defaultProfileImage';
+    msg.res[i].meta_actor_image == 'no image' ? image = image : image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res[i].meta_actor_image' ;
+    var parent = $('<div>').attr('id','divTAReviewss')
+    var divActivity = $('<div>').addClass('activity')
+    var img = $('<img>').addClass('activity__avatar')
+    img.attr({
+      'src': image,
+      'width': 35,
+      'height': 35
+      });
+    var divMsg = $('<div>').addClass('activity__message')
+    var ptitle = $('<p>').addClass('msg-title').text(msg.res[i].meta_message);
+    var pdate = $('<p>').addClass('msg-date').text(dt.toLocaleString());
+
+    divMsg.append(ptitle)
+    divMsg.append(pdate)
+    divActivity.append(img)
+    divActivity.append(divMsg)
+    parent.append(divActivity)
+    $(document).find('#activity-list_'+msg.id).append(parent)
+  } 
+  } else {
+    $(document).find('#stream_activity_'+msg.id).append('<p>You have no activity</p>')
+    $(document).find('#activity-list_'+msg.id).append('<p>You have no activity</p>')
+  }
+
+  
 })
 var mymenu = 1;
 $(document).on('click', '.menu-check', function(){
@@ -616,6 +706,7 @@ $(document).on('click', '.menu-check', function(){
 
 	}
 });
+
 function mymenus(mymenu, menuIds, getThis){
     $('#folder-content-loading').show();
     $.post('$subfoldersUrl',
@@ -643,7 +734,6 @@ function _MainOnboarding(){
               type: 'POST', 
               data: {
                   user_id: $userId,
-                  group: 'main'
                 },
               success: function(res, sec){
                    console.log('Status updated');
@@ -681,8 +771,8 @@ function defaultOnboarding() {
         },
         {
           element: "#flux",
-          title: "Comments",            
-          content: "You can view all comments from here, for this folder",
+          title: "Remarks",            
+          content: "You can view all remarks from here, for this folder",
           placement: 'left',
           template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-reply-all icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
         },
@@ -691,96 +781,31 @@ function defaultOnboarding() {
           title: "Tips",            
           content: "Click on the question mark icon to view more tips",
           placement: 'left',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='next' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
         },
         {
           element: ".menu-plus",
           title: "Tips",            
           content: "Do more from the side menu.",
           placement: 'right',
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='next' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-plus icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
+          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-question icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
           onShown: function(taskTour){
             $(".tour-backdrop").appendTo(".menu-icon ");
             $(".tour-step-background").appendTo(".menu-icon ");
             $(".tour-step-background").css("left", "0px");
             },
         },
-        {
-          element: ".board-open",
-          title: "Task board",
-          content: "You can get access to more features for task management from the action menu.",
-          onShow: function(taskTour){
-                //$('.side_menu').addClass('side-drop');
-                $('.list_load, .list_item').stop();
-                $(this).removeClass('closed').addClass('opened');
-
-                $('.side_menu').css({ 'left':'0px' });
-
-                var count = $('.list_item').length;
-                $('.list_load').slideDown( (count*.6)*100 );
-                $('.list_item').each(function(i){
-                var thisLI = $(this);
-                timeOut = 100*i;
-                setTimeout(function(){
-                  thisLI.css({
-                    'opacity':'1',
-                    'margin-left':'0'
-                  });
-                },100*i);
-              });
-            },
-          onShown: function(taskTour){
-            $(".tour-backdrop").appendTo("#content");
-            $(".tour-step-background").appendTo("#content");
-            $(".tour-step-background").css("left", "0px");
-            },
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-tasks icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='next' class='btn hca-tooltip--okay-btn'>Next</a></div></div></div>",
-        },
-        {
-          element: ".edoc-label",
-          title: "Add Documents",
-          content: "You can add files here and also view and manage documents",
-          onShown: function(taskTour){
-            $(".tour-backdrop").appendTo("#content");
-            $(".tour-step-background").appendTo("#content");
-            $(".tour-step-background").css("left", "0px");
-            },
-          template: "<div class='popover tour hca-tooltip--left-nav'><div class='arrow'></div><div class='row'><div class='col-sm-12'><div data-role='end' class='close'>X</div></div></div><div class='row'><div class='col-sm-2'><i class='fa fa-file-text-o icon-tour fa-3x' aria-hidden='true'></i></div><div class='col-sm-10'><p class='popover-content'></p><a id='hca-left-nav--tooltip-ok' href='#' data-role='end' class='btn hca-tooltip--okay-btn'>Close</a></div></div></div>",
-        },
-       
       ],
     backdrop: true,  
     storage: false,
     smartPlacement: true,
     onEnd: function (folderTour) {
             _MainOnboarding();
-            $('.edocument-container').css({
-               'width':'300px',
-               'min-height':'1px',
-               'visibility':'hidden'
-              }).removeClass('opened');
-              $('.edocument-content').hide();
-              setTimeout(function() { 
-                $('.sider').show('slow');
-            }, 900);
-            $('.side_menu').addClass('side-drop');
-            $('#mySidenav').css({'width':'0'})
-            $('.list_load, .list_item').stop();
-
-            $('.side_menu').css({ 'left':'-300px' });
-
-            var count = $('.list_item').length;
-            $('.list_item').css({
-              'opacity':'0',
-              'margin-left':'-20px'
-            });
-            $('.list_load').slideUp(300);
         },
   });
  folderTour.init();
  folderTour.start();
 };
-
 
 
 

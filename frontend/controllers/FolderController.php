@@ -158,16 +158,7 @@ class FolderController extends BoffinsBaseController
             return ['output'=>'', 'message'=>''];
         }
     }
-$curl = new curl\Curl();
 
-        //post http://example.com/
-        $response = $curl->setOption(
-                CURLOPT_POSTFIELDS, 
-                http_build_query(array(
-                    'iduser' => $userId
-                )
-            ))
-            ->post('http://127.0.0.1:4000/curl');
 		
         return $this->render('view', [
             'model' => $model,
@@ -217,6 +208,25 @@ $curl = new curl\Curl();
 		
 		return $out;
 	}
+
+    /**
+     * Sends curl request to the nodejs server.
+     * Implements a handshake with the node server
+     * Passes the user id parameter to the node server
+     */
+    public function actionActivity() {
+       
+        $userId = Yii::$app->user->identity->id;
+        $curl = new curl\Curl();
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'iduser' => $userId
+                )
+            ))
+            ->post('http://localhost:4000/curl');
+ 
+    }
 	
 	public function actionAddUsers($id) {
 		$inviteUsersModel = new InviteUsers();
