@@ -42,7 +42,7 @@ class Task extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUpda
      */
     const TASK_IN_PROGRESS = 22;
     /***
-     * accessible value linked to the database id of "mot started" in status_type under task group.. 
+     * accessible value linked to the database id of "not started" in status_type under task group.. 
      * needs to be refactored. If the DB id changes, what happens??? What about other phases dynamically set?
      */
     const TASK_NOT_STARTED = 21;

@@ -137,10 +137,7 @@ class OnboardingController extends Controller
                     $onboarding->updateOnboarding($userId, Onboarding::SUBFOLDER_ONBOARDING_GROUP_ID);
                     break;
                 default:
-                    $onboarding->group_id = Onboarding::MAIN_DASHBOARD_ONBOARDING_GROUP_ID;
-                    $onboarding->user_id = $userId;
-                    $onboarding->status = 1;
-                    $onboarding->save();
+                    $onboarding->updateOnboarding($userId, Onboarding::MAIN_DASHBOARD_ONBOARDING_GROUP_ID);
                     break;
             }
         }
