@@ -133,14 +133,9 @@ class FolderController extends BoffinsBaseController
         $userId = Yii::$app->user->identity->id;
         $users = $model->users;
 		$componentCreateUrl = Url::to(['component/create']);
-<<<<<<< HEAD
         $onboardingModel = Onboarding::find()->where(['user_id' => $userId]);
         $onboardingExists = $onboardingModel->exists(); 
         $onboarding = $onboardingModel->one();
-=======
-        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
-        $onboarding = Onboarding::find()->andWhere(['user_id' => $userId])->one();
->>>>>>> 35ebc435d54b13af7cebaf3d7e74c772400b6611
         $edocument = Edocument::find()->where(['reference'=>'folder','reference_id'=>$id])->all();
 
 		if (isset($_POST['hasEditable'])) {
