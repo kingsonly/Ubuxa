@@ -61,7 +61,7 @@ use app\boffins_vendor\components\controllers\ComponentLinkWidget;
 	
 	
 
-    <?= $form->field($model, 'body')->textarea(['rows' => '6', 'maxlength' => '255', 'class' => 'form_input form_form_input']) ?>
+    <?= $form->field($model, 'body')->textarea(['rows' => '6',  'class' => 'form_input form_form_input']) ?>
 
     
     <div class="form-group">

@@ -92,7 +92,7 @@ function waitForPush (id) {
               //if(data !== null && data.length > user_message+'_'+id){
                 client.hgetall(data[0], function(errors, datas){
                   console.log('We have retrieved data from the front of the queue:', datas);
-                  ioRedis.emit('redis message', {res:datas, id: sess.email});
+                  ioRedis.emit('redis message', {res:datas, id: id});
 					
                 })
                 
@@ -180,6 +180,7 @@ subscriber.on("message", function (channel, message) {
     }
   }
 	waitForPush (sess.email)
+	return;
 });
 
 subscriber.subscribe("notification");

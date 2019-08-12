@@ -4,3 +4,4 @@ modules:
     enabled:
         - Filesystem
         - Yii2
+error_level: "E_ALL & ~E_STRICT & ~E_DEPRECATED"

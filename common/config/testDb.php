@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=premux_test',
+    'dsn' => 'mysql:host=localhost;dbname=premux_main',
     'username' => 'root',
     'password' => '',
     'charset' => 'utf8',

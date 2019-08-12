@@ -589,6 +589,7 @@ $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
 $activityUrl = Url::to(['folder/activity']);
 $defaultProfileImage =  Url::to('@web/images/users/default-user.png');
+$imagePath =  Url::to('@web');
 $getuserId = Yii::$app->user->identity->id;
 $indexJs = <<<JS
 
@@ -609,7 +610,7 @@ RedisSocket.on('redis message', function(msg){
   console.log('this is msg', msg.res)
     var dt = new Date (parseInt(msg.res.meta_date)*1000);
     var prof_image = '$defaultProfileImage';
-    msg.res.meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res.meta_actor_image' ;
+    msg.res.meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = '$imagePath'+'/'+msg.res.meta_actor_image ;
     var parent = $('<div>').attr('id','divTAReviewss')
     var divActivity = $('<div>').addClass('activity')
     var img = $('<img>').addClass('activity__avatar')
@@ -638,7 +639,7 @@ RedisSocket.on('messages', function(msg){
   if(msg.res !== null || msg.res !== " "){
     var dt = new Date (parseInt(msg.res[0].meta_date)*1000);
     var prof_image = '$defaultProfileImage';
-    msg.res[0].meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res[0].meta_actor_image' ;
+    msg.res[0].meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = '$imagePath'+'/'+msg.res[0].meta_actor_image ;
     var parent = $('<div>').attr('id','divTAReviewss')
     var divActivity = $('<div>').addClass('activity')
     var img = $('<img>').addClass('activity__avatar')
@@ -662,7 +663,7 @@ RedisSocket.on('messages', function(msg){
     for(var i=1; i<11; i++){
     var dt = new Date (parseInt(msg.res[i].meta_date)*1000);
     var image = '$defaultProfileImage';
-    msg.res[i].meta_actor_image == 'no image' ? image = image : image = 'http://localhost/ubuxa-beta/frontend/web/images/users/msg.res[i].meta_actor_image' ;
+    msg.res[i].meta_actor_image == 'no image' ? image = image : image = '$imagePath'+'/'+msg.res[i].meta_actor_image ;
     var parent = $('<div>').attr('id','divTAReviewss')
     var divActivity = $('<div>').addClass('activity')
     var img = $('<img>').addClass('activity__avatar')

@@ -10,6 +10,7 @@ class TaskCest
     {
         $I->amOnRoute('site/login');
         $admin = \frontend\models\UserDb::findByUsername('guest');
+		var_dump($admin);
         $I->amLoggedInAs($admin);
     }
 

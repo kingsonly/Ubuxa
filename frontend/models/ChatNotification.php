@@ -51,16 +51,16 @@ class ChatNotification extends \yii\db\ActiveRecord
 	
 	public function getSender()
     {
-        return $this->hasOne(UserDb::className(), ['id' => 'sender_id']);
+        return !empty($this->hasOne(UserDb::className(), ['id' => 'sender_id']))?$this->hasOne(UserDb::className(), ['id' => 'sender_id']):'';
     }
 	
 	public function getReceivers()
     {
-        return $this->hasOne(UserDb::className(), ['id' => 'receivers_id']);
+        return !empty($this->hasOne(UserDb::className(), ['id' => 'receivers_id']))?$this->hasOne(UserDb::className(), ['id' => 'sender_id']):'';
     }
 	
 	public function getFolder()
     {
-        return $this->hasOne(Folder::className(), ['id' => 'folder_id']);
+        return !empty($this->hasOne(Folder::className(), ['id' => 'folder_id']))?$this->hasOne(Folder::className(), ['id' => 'folder_id']):'not a folder';
     }
 }

@@ -121,6 +121,7 @@ AppAsset::register($this);
               <!-- ADDRESS -->
               <tr>
                 <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+					<a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net">ubuxa andriod</a>
                   <p style="margin: 0;">Ubuxa &copy </p>
                 </td>
               </tr>

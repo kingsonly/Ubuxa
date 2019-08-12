@@ -727,6 +727,7 @@ class ActivityManager extends Component
 	 * 
 	 * @details also provides meta data for the message.
 	 */
+	
 	public function dispatchMessages($node, $userIDs, $resolveAll = false)
 	{
 		$redis = Yii::$app->redis;

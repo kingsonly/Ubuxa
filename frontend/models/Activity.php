@@ -67,6 +67,7 @@ class Activity extends \yii\db\ActiveRecord
      */
     public function getSession()
     {
+		
         return $this->hasOne(Session::className(), ['id' => 'session_id']);
     }
 

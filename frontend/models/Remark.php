@@ -106,4 +106,9 @@ class Remark extends BoffinsArRootModel implements TenantSpecific, TrackDeleteUp
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
     }
+	
+	public function getNameString() : string
+	{
+		return strip_tags($this->text);
+	}
 }
