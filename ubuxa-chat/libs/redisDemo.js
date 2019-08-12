@@ -32,8 +32,9 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
+              console.log('trial',data)
               let arrayData = [];
-              for(let i=0; i<5; i++){
+              for(let i=0; i<data.length; i++){
                 arrayData.push(new Promise(function(resolve, reject) {
                       client.hgetall(data[i], function(errors, datas){
                         if (errors) { 
@@ -55,9 +56,8 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                   console.log(results);
                   setTimeout(function(){
                     console.log('time is out')
-                      ioRedis.emit('messages', results);
-                  }, 50)
-                  
+                      ioRedis.emit('messages', {res:results, id: sess.email});
+                  }, 500)
               });
               if(data !== null){
                // ioRedis.emit('messages', '456778');
@@ -78,24 +78,31 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
         })
     });*/
 
-function waitForPush () {
-  client.exists('user_message:'+sess.email, function(err, reply) {
+
+
+
+function waitForPush (id) {
+  client.exists('user_message:'+id, function(err, reply) {
       if (reply === 1) {
           client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
               //console.log('We have retrieved data from the front of the queue:', data);
-              if(data !== null && data.length > user_message_33){
-                ioRedis.emit('redis message', data);
-                user_message_33 = data.length
-              }
+              //if(data !== null && data.length > user_message+'_'+id){
+                client.hgetall(data[data.length - 1], function(errors, datas){
+					console.log('this is nnamdi datas',datas)
+					
+                  ioRedis.emit('redis message', {res:datas, id: sess.email});
+					
+                })
+                
+              //}
           })
         
       } else {
         console.log('empty')
       }
-      waitForPush();
   })
 }
 
@@ -173,14 +180,11 @@ subscriber.on("message", function (channel, message) {
       }
     }
   }
+	waitForPush (sess.email)
 });
 
 subscriber.subscribe("notification");
 
-
-//waitForPush ()
-//setting redis route
-  
 
 }
 

@@ -16,8 +16,21 @@ return [
         'request' => [
             'csrfParam' => '_csrf-backend',
         ],
+		'expo' => [
+            'class' => 'azasar\expo\ExpoPush'
+         ],
+		'settings' => [
+			'class' => 'frontend\settings\Module',
+			],
+		'settingscomponent' => [
+        	'class' => 'frontend\settings\components\SettingsComponent',
+    	],
+		'authManager' => [
+			'class' => 'yii\rbac\PhpManager',
+        ],  
         'user' => [
-            'identityClass' => 'common\models\User',
+			'class' => 'boffins_vendor\classes\UserComponent',
+            'identityClass' => 'frontend\models\UserDb',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],

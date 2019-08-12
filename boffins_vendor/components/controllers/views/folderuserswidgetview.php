@@ -57,6 +57,7 @@ if($type ===  'component'){
 ];
 	$pluginSettings = [
      // set the initial display text
+	//'data' =>$url,
     'options' => ['placeholder' => 'Search for a user ...', 'multiple' => true,'id' => !empty($type)?$type.'user':'folderUser'],
 'pluginOptions' => $option,
 ];

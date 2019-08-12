@@ -30,8 +30,18 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title>
+    <?= Html::encode($this->title) ?>
+</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-144276978-1"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
 
-    <?= Html::encode($this->title) ?></title>
+ function gtag(){dataLayer.push(arguments);}
+
+ gtag('js', new Date());
+
+ gtag('config', 'UA-144276978-1');
+</script>
 	<style>
 		.no-js #loader { display: none;  }
 .js #loader { display: block; position: absolute; left: 100px; top: 0; }
@@ -47,8 +57,8 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 .customer-info{
 	background: black !important;
 }
-		
-		
+
+
 .images ul li img {
 	width: 400px;
 	height: 266px;
@@ -60,7 +70,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 	</style>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
-	
+
 </head>
 <body class="skin-red hold-transition layout-top-nav" data-folderviewurl="<?= Url::to(['folder/view'])?>" data-username="<?= Yii::$app->user->identity->username;?>" data-newmessageurl="<?= Url::to(['folder/new-message'])?>" data-fullname="<?= Yii::$app->user->identity->fullName;?>" data-userimage="<?= !empty(Yii::$app->user->identity->profile_image)?Yii::$app->user->identity->profile_image:'images/users/default-user.png';?>" data-sessionlink="<?= Url::to(['site/update-socket-user-stack'])?>" data-getfolderdetailsurl="<?= Url::to(['site/get-chat-folder-details'])?>" data-chatnotificationurl="<?= Url::to(['site/update-chat-notification'])?>" >
 <!-- <div class="msg_chat_container msg-right">'+data.msg+' </div> -->
@@ -133,7 +143,7 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
 			display: none;
 		}
     </style>
-    
+
 
 <div class="wrapper">
 
@@ -141,15 +151,15 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          
-			 
+
+
 			<?= Html::a(Html::tag('span',Html::tag('b',Yii::$app->settingscomponent->boffinsLogo()),['class' => 'logo-lg']), ['/folder/index'],['class' => 'img-circle']) ?>
 
-          
+
         </div>
-		
+
 		  <div id="chat-refresher" class="navbar-custom-menu chat-refresher">
-			  
+
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
@@ -166,10 +176,10 @@ $waitToLoad = Yii::$app->settingscomponent->boffinsLoaderImage($size = 'md', $ty
                   <!-- end message -->
                 </ul>
               </li>
-              
+
             </ul>
           </li>
-          
+
         </ul>
 			  <?php
 
@@ -178,14 +188,14 @@ $flashs = <<<ABC
 			  	localStorage.removeItem('chatcounter');
 				$(document).find('.hide-label').hide();
 			  })
-			  		
-					
+
+
 					if ("chatcounter" in localStorage) {
-					
+
 					var chtacounter = localStorage.getItem('chatcounter')
 						$(document).find('.header-info').html('You have '+chtacounter+' messages');
 						$(document).find('.hide-label').show().html(chtacounter);
-						
+
 					} else {
 						$(document).find('.header-info').html('You have 0 message');
 						$(document).find('.hide-label').hide();
@@ -193,27 +203,27 @@ $flashs = <<<ABC
 ABC;
 $this->registerJs($flashs);
 ?>
-			  
-		
-			  
+
+
+
       </div>
 
-        
+
       </div>
       <!-- /.container-fluid -->
-		
+
     </nav>
   </header>
-	
-	
+
+
   <!-- Full Width Column -->
   <div class="content-wrapper">
-	  
-	  
+
+
     <div class="container">
-		
+
       <!-- Content Header (Page header) -->
-	
+
     <section class="content-header">
       <h1 style="font-size:40px;margin-left: 20px">
        <?php if (isset($this->blocks['folderview'])): ?>
@@ -222,10 +232,10 @@ $this->registerJs($flashs);
         <?php if (isset($this->blocks['projectview'])): ?>
             <?= $this->blocks['projectview'] ?>
           <?php endif; ?>
-        
+
       </h1>
-      
-		
+
+
     </section>
 
       <!-- Main content -->
@@ -240,18 +250,18 @@ $this->registerJs($flashs);
         <?= FeedbackWidget::widget(['feedback' => $feedback]); ?>
         <?= $content ?>
 		 <?= MenuWidget::widget(); ?>
-		 
+
     </section>
       <!-- /.content -->
     </div>
     <!-- /.container -->
   </div>
   <!-- /.content-wrapper -->
-  
+
 </div>
 
 
-    
+
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
       <b>Version</b> 1.4
@@ -266,14 +276,13 @@ $this->registerJs($flashs);
 <?php
 $imgs = 'images/emojis/img';
 $flash = <<<JS
-  setTimeout(function(){ 
+  setTimeout(function(){
       $('#flas').fadeIn('slow');
    }, 10000);
 JS;
 $this->registerJs($flash);
 ?>
 </body>
-	
+
 </html>
 <?php $this->endPage() ?>
- 

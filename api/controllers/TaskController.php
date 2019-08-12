@@ -27,7 +27,7 @@ class TaskController extends RestController
 
            'apiauth' => [
                'class' => Apiauth::className(),
-               'exclude' => [],
+               'exclude' => ['backend-task'],
                'callback'=>[]
            ],
             'access' => [
@@ -98,6 +98,33 @@ class TaskController extends RestController
             $model->status_id = Task::TASK_NOT_STARTED;
             $model->owner = Yii::$app->user->identity->id;
             $model->fromWhere = 'folder';
+			if($model->save()){
+            	return Yii::$app->apis->sendSuccessResponse($model->attributes);
+			}else{
+				if (!$model->validate()){
+					return Yii::$app->apis->sendFailedResponse($model->errors);
+				}
+			}
+        }else{
+        	if (!$model->validate()) {
+				return Yii::$app->apis->sendFailedResponse($model->errors);
+			}
+        }
+	}
+
+	public function actionBackendTask()
+	{
+		$model = new Task();
+		$model->attributes = $this->request;
+        if (!empty($model->attributes['title'])) {
+			$model->last_updated =  new Expression('NOW()');
+			$model->create_date =  new Expression('NOW()');
+			$model->completion_time = NULL;
+            $model->in_progress_time = NULL;
+            $model->due_date = NULL;
+            $model->status_id = Task::TASK_NOT_STARTED;
+            $model->fromWhere = 'folder';
+			Yii::$app->user->identity = UserDb::findOne($model->attributes['owner']);
 			if($model->save()){
             	return Yii::$app->apis->sendSuccessResponse($model->attributes);
 			}else{

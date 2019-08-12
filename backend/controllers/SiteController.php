@@ -6,6 +6,12 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use frontend\models\Customer;
+use frontend\models\UserDb;
+use frontend\models\Task;
+use frontend\models\Edocument;
+//use frontend\models\Folder;
+use backend\models\BackendFolder as Folder;
 
 /**
  * Site controller
@@ -60,7 +66,27 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		$this->layout = 'dashboardtwo';
+		
+		$customers = Customer::find()->all();
+		$users = UserDb::find()->all();
+		$folder = Folder::find()->all();
+		$task = Task::find()->all();
+		$documents = Edocument::find()->all();
+		
+		$totalCustomers = count($customers);
+		$totalUsers = count($users);
+		$totalFolder = count($folder);
+		$totalTasks = count($task);
+		$totalDocuments = count($documents);
+		
+        return $this->render('index',[
+			'totalCustomers' => $totalCustomers,
+			'totalUsers' => $totalUsers,
+			'totalFolder' => $totalFolder,
+			'totalTasks' => $totalTasks,
+			'totalDocuments' => $totalDocuments,
+		]);
     }
 
     /**

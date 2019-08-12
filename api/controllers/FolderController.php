@@ -14,6 +14,7 @@ use frontend\models\FolderManager;
 use yii\web\UploadedFile;
 use Yii;
 use yii\db\Expression;
+use linslin\yii2\curl;
 
 
 
@@ -62,7 +63,8 @@ class FolderController extends RestController
                     'create' => ['POST'],
                     'update' => ['PUT'],
                     'view' => ['GET'],
-                    'delete' => ['DELETE']
+                    'delete' => ['DELETE'],
+                    'activity' => ['POST']
                 ],
             ],
 
@@ -122,6 +124,20 @@ class FolderController extends RestController
 		}
 		
 		
+    }
+
+    public function actionActivity(){
+    	$curl = new curl\Curl();
+
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'iduser' => Yii::$app->user->identity->id
+                )
+            ))
+            ->post('http://ubuxachat.ubuxa.net/curl');
+            return Yii::$app->apis->sendSuccessResponse('success');
     }
 	
 	public function actionSubfolder($id)

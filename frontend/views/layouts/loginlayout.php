@@ -17,19 +17,29 @@ LoginAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144276978-1"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+
+     function gtag(){dataLayer.push(arguments);}
+
+     gtag('js', new Date());
+
+     gtag('config', 'UA-144276978-1');
+    </script>
     <?php $this->head() ?>
 	<? $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->settingscomponent->boffinsFavIcon()]); ?>
-	
+
 </head>
 
 <body class="hold-transition login-page">
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    
+
 
     <div class="container">
-        
+
         <?= $content ?>
     </div>
 </div>
@@ -47,13 +57,13 @@ socket.on('connect', function () {
     console.log('connected');
 	console.log('A user connected');
 	socket.on('message', function(data){
-		
+
 	});
-    
+
 
     socket.on('disconnect', function () {
         console.log('disconnected');
-		
+
     });
 });
 </script>

@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use backend\models\BackendFolder;
 
 /**
  * This is the model class for table "{{%customer}}".
@@ -73,6 +74,8 @@ class Customer extends \yii\db\ActiveRecord
             'billing_date' => 'Billing Date',
             'account_number' => 'Account Number',
             'has_admin' => 'Has Admin',
+            'comOrPersonName' => 'Company or individual name',
+            'entityName' => 'Account type',
         ];
     }
 
@@ -88,11 +91,28 @@ class Customer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TenantCorporation::className(), ['entity_id' => 'id'])->via('entity');
     }
+	
+	public function getPerson()
+    {
+        return $this->hasOne(TenantPerson::className(), ['entity_id' => 'id'])->via('entity');
+    }
 
     public function getCorporationName()
     {
         return $this->corporation->name;
     }
+	
+	public function getCorporationPerson()
+    {
+		if(!empty($this->person->first_name) and !empty($this->person->surname)){
+			return $this->person->first_name.' '.$this->person->surname;
+		}
+        
+    }
+	
+	public function getComOrPersonName(){
+		return !empty($this->corporationName)? $this->corporationName : $this->corporationPerson;
+	}
 
     public function getEntityName()
     {
@@ -106,7 +126,7 @@ class Customer extends \yii\db\ActiveRecord
                     'link'  => $registrationLink,
                 ])
             ->setTo($newCustomerEmail)
-            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
             ->setSubject('Thanks for joining Ubuxa')
             ->send();
     }
@@ -118,13 +138,12 @@ class Customer extends \yii\db\ActiveRecord
                     'token'  => $token,
                 ])
             ->setTo($newCustomerEmail)
-            ->setFrom(['support@test.ubuxa.net' => 'Ubuxa.net'])
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
             ->setSubject('Ubuxa Email Verification Token')
             ->send();
     }
-
-
-    public static function checkDomain($subdomain)
+	
+	public static function checkDomain($subdomain)
     {
         $customer = [];
         $model = self::find()->where(['master_doman' => $subdomain]);
@@ -140,4 +159,75 @@ class Customer extends \yii\db\ActiveRecord
         }
         return $customer;
     }
+	
+	
+	
+	public function sendCustomerEmail($newCustomerEmail,$msg,$subject)
+    {
+		\Yii::$app->mailer->htmlLayout = "layouts/customeremail";
+		if(is_array($newCustomerEmail)){
+			foreach($newCustomerEmail as $key => $value){
+				Yii::$app->mailer->compose(['html' => 'customeremail'],
+                [
+                    'msg'  => $msg,
+                    
+                ])
+					->setTo($value)
+            		->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
+            		->setSubject($subject)
+            	->send();
+			}
+			
+		}else{
+			return Yii::$app->mailer->compose(['html' => 'customeremail'],
+                [
+                    'msg'  => $msg,
+                ])
+            ->setTo($newCustomerEmail)
+            ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
+            ->setSubject($subject)
+            ->send();
+		}
+        
+    }
+	
+	public function sendCustomerPushNotification($newCustomerToken,$msg,$subject)
+    {
+		if(is_array($newCustomerToken)){
+			foreach($newCustomerToken as $key => $token){
+				$data = [
+			    'title' => $subject,
+    		    'text' => $msg
+			];
+            $notification = ['body' => $data['text'], 'data' => $data];
+            \Yii::$app->expo->notify($token, $notification);
+			}
+		}else{
+			$data = [
+			    'title' => $subject,
+    		    'text' => $msg
+			];
+            $notification = ['body' => $data['text'], 'data' => $data];
+            \Yii::$app->expo->notify($newCustomerToken, $notification);
+		}
+		
+    }
+
+
+    
+	public function getCustomerFolders(){
+		return $this->hasMany(BackendFolder::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerTasks(){
+		return $this->hasMany(Task::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerDocuments(){
+		return $this->hasMany(Edocument::className(), ['cid' => 'cid']);
+	}
+	
+	public function getCustomerUsers(){
+		return $this->hasMany(UserDb::className(), ['cid' => 'cid']);
+	}
 }

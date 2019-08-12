@@ -309,8 +309,27 @@ ioChat.on('connection', function(socket) {
 							var shadowKey = 'shadowkey:'+data.msgTo;
 							client.set(shadowKey,'')
 							client.expire(shadowKey,10);
-							pushNotification({fullname:socket.username,msg:data.msg,folderId:folderId[2],roomId: roomId})
-							console.log('user not online '+data.msgTo); 
+							
+							con.query("SELECT * FROM tm_user LEFT JOIN tm_user_device_push_token ON tm_user.id=tm_user_device_push_token.user_id WHERE username ='"+data.msgTo+"'", function (err, result) {
+								if (err) {
+									console.log("Error : " + err);
+									
+								} else {
+									console.log('this is cid oh '+result[0].cid);
+									let tokens = [];
+									for (var i = 0; i < result.length; i++) {
+										tokens.push(result[i].push_token)
+									}
+									if(result[0].push_token == null){
+										
+									}else{
+										pushNotification({fullname:socket.username,msg:data.msg,folderId:folderId[2],roomId: roomId,pushToken:tokens})
+									} 
+									 
+
+								}
+							});
+							
 						}
 						
 					}
@@ -578,28 +597,31 @@ function pushNotification(data){
       // Create the messages that you want to send to clents
       let messages = [];
       let somePushTokens = ['ExponentPushToken[_Af6dYHl1zr1JIqq_KTAI7]']
-      for (let pushToken of somePushTokens) {
-        // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
+	  
+      
+	// Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
 
-        // Check that all your push tokens appear to be valid Expo push tokens
-        if (!Expo.isExpoPushToken(pushToken)) {
-          console.error(`Push token ${pushToken} is not a valid Expo push token`);
-          continue;
-        }
+	// Check that all your push tokens appear to be valid Expo push tokens
+	  for (let pushToken of data.pushToken) {
+		if (!Expo.isExpoPushToken(pushToken)) {
+		  console.error(`Push token ${pushToken} is not a valid Expo push token`);
+		  continue;
+		}
 
-        // Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)
-        messages.push({
+		// Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)
+		messages.push({
 			to: pushToken,
 			sound: 'default',
-          	body: data.msg,
+			body: data.msg,
 			title:data.fullname,
-          	data: { 
+			data: { 
 					body: data.msg,
 					title: data.fullname
 				  },
 			priority: 'high',
-        })
-      }
+		})
+	  }
+
 
         // The Expo push notification service accepts batches of notifications so
       // that you don't need to send 1000 requests to send 1000 notifications. We

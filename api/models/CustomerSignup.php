@@ -101,7 +101,7 @@ class CustomerSignup extends Model
 					if($settings->save()){
 						$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
 						$validateKeyModel = new ValidationKey();
-						$validateKeyModel->key_code = rand(10, 10000);;
+						$validateKeyModel->key_code = rand(10, 10000);
 						$validateKeyModel->customer_id = $customerModel->cid;
 						
 						if($validateKeyModel->save()){
