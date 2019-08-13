@@ -19,13 +19,13 @@ class FolderCest
     public function createFolder(FunctionalTester $I) 
     {
         $I->amOnPage('folder/index');
-        $I->seeInCurrentUrl('folder%2Findex');
+        $I->seeInCurrentUrl('folder');
         $I->click('#plus');
         $I->fillField('#create-new-create-widget-id-title','Public folder');
         $I->click('Create');
-        $I->seeInCurrentUrl('folder%2Fcreate');
-        $I->amOnPage('folder/index');
-        $I->see('Public Folder');
+        $I->seeInCurrentUrl('create');
+        $I->amOnRoute('folder/index');
+        $I->see('Public folder');
     }
 
     public function createPrivateFolder(FunctionalTester $I) 

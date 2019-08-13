@@ -430,11 +430,11 @@ class SiteController extends BoffinsBaseController {
 					}
 				} catch (\Exception $e) {
 					$transaction->rollBack();
-					var_dump($e);
+					//var_dump($e);
     				throw $e;
 				}	catch (\Throwable $e) {
 				    $transaction->rollBack();
-					var_dump($e);
+					//var_dump($e);
 				    throw $e;
 				}
 			} else {
@@ -556,7 +556,7 @@ class SiteController extends BoffinsBaseController {
 							return 0;
 	    				}
 	    		} else {
-	    			echo "Email cannot be empty";
+	    			//echo "Email cannot be empty";
 	    		}
 	    }else{
 	    		return $this->renderAjax('inviteUsers', [
@@ -820,7 +820,11 @@ class SiteController extends BoffinsBaseController {
             // all non existing controllers+actions will end up here
             return $this->render('pnf'); // page not found
         } else {
-          return $this->render('error', ['exception' => $exception]);
+			$url = Url::to(['site/index']);
+			Yii::$app->getResponse()->redirect($url)->send();
+			return;
+          //return $this->render('error', ['exception' => $exception]);
+			//return $this->render('pnf');
         }
 
 	}
