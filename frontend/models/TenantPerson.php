@@ -62,6 +62,13 @@ class TenantPerson extends \yii\db\ActiveRecord
         ];
     }
 
+    public function addPersonTenant($id)
+    {
+        $this->entity_id = $id;
+        $this->create_date = new Expression('NOW()');
+        $this->save();
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

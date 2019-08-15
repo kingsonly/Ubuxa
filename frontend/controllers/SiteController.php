@@ -306,6 +306,14 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
+
+    /**
+     * @brief User Signup
+     * @details Handles signup for tenants and also invited users.
+     * @param $email, $cid, $role, folderid
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
   	public function actionSignup($email,$cid,$role,$folderid = 0)
   	{
 		if (!Yii::$app->user->isGuest) {
@@ -328,7 +336,6 @@ class SiteController extends BoffinsBaseController {
 		        		$user->first_name = $customer->entity->firstname;
 		        		$user->surname = $customer->entity->surname;
 		        	}
-		        	//$user->_userAR->tenantID = $cid;
 						if($user->save()){
 							if($customer->has_admin == Customer::NO_ADMIN){
 								$customer->has_admin = Customer::HAS_ADMIN;
@@ -342,10 +349,7 @@ class SiteController extends BoffinsBaseController {
 								$userId = $user->id;
 								$folderRole = 'user';
 								$folderManagerModel = new FolderManager();
-
-
 								if($folderId == 0){
-
 									$transaction->commit();
 									$this->redirect(['folder/index']);
 									return true;
@@ -359,10 +363,8 @@ class SiteController extends BoffinsBaseController {
 									 return true;
 									}
 								}
-
 				            }
 						}
-
 					} else {
 			            return $this->render('createUser', [
 			            	'userExists' => $userExists,
@@ -391,6 +393,13 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
+
+    /**
+     * @brief Creates a new tenant.
+     * @details This is the first phase for a tenant signup, it creates a new tenant 
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
@@ -419,15 +428,11 @@ class SiteController extends BoffinsBaseController {
 	        	if($tenantEntity->save()){
 	        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
 	        			if($tenantPerson->load(Yii::$app->request->post())){
-	        				$tenantPerson->entity_id = $tenantEntity->id;
-	        				$tenantPerson->create_date = new Expression('NOW()');
-	        				$tenantPerson->save();
+	        				$tenantPerson->addPersonTenant($tenantEntity->id);
 	        			}
 	        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
 	        			if($tenantCorporation->load(Yii::$app->request->post())){
-	        				$tenantCorporation->entity_id = $tenantEntity->id;
-	        				$tenantCorporation->create_date = new Expression('NOW()');
-	        				$tenantCorporation->save();
+	        				$tenantCorporation->addCorporationTenant($tenantEntity->id);
 	        			}
 	        		}
 	        		$customer->entity_id = $tenantEntity->id;

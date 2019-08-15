@@ -35,7 +35,7 @@ if(!empty($tasks)){
                 <i class="fa fa-file-text-o time-icon" aria-hidden="true"></i>
               </span>
         <?php }?>
-        <span class="task-main-title<?=$value->id;?>"><?= strip_tags($value->title); ?></span>
+        <span id="task-head" class="task-main-title<?=$value->id;?>"><?= strip_tags($value->title); ?></span>
     </div>
     
   </div>
