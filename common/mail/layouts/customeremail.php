@@ -75,7 +75,7 @@ AppAsset::register($this);
     div[style*="margin: 16px 0;"] { margin: 0 !important; }
 </style>
     <?php $this->head() ;
-		$imagePath =  Url::to('@web/images/storeimage/');
+		$imagePath =  'http://ubuxa.net/images/storeimage/';
 	?>
 </head>
 <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
@@ -134,7 +134,7 @@ AppAsset::register($this);
               <!-- ADDRESS -->
               <tr>
                 <td  colspan="2" bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
-					<a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net">ubuxa andriod</a>
+					
                   <p style="margin: 0;">Ubuxa &copy </p>
                 </td>
               </tr>
