@@ -74,7 +74,9 @@ AppAsset::register($this);
     /* ANDROID CENTER FIX */
     div[style*="margin: 16px 0;"] { margin: 0 !important; }
 </style>
-    <?php $this->head() ?>
+    <?php $this->head() ;
+		$imagePath =  Url::to('@web/images/storeimage/');
+	?>
 </head>
 <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
     <?php $this->beginBody() ?>
@@ -111,16 +113,27 @@ AppAsset::register($this);
         <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
             <table border="0" cellpadding="0" cellspacing="0" width="480" >
               
-              <!-- PERMISSION REMINDER -->
+              <!-- store logo andd links -->
               <tr>
-                <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                <td  bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                   <p style="margin: 0;"><a href="https://apps.apple.com/us/app/ubuxa/id1469811454" ><img src="<?=$imagePath."app-store-badge-png-2.png"?>" /></a></p>
+                </td>
+				  
+				<td  bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                  <p style="margin: 0;"><a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net&hl=en" ><img src="<?=$imagePath."playlogo.png"?>" /></a></p>
+                </td>
+              </tr>
+				
+				<!-- PERMISSION REMINDER -->
+              <tr>
+                <td colspan="2" bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
                   <p style="margin: 0;">You received this email because you registered on Ubuxa.net</p>
                 </td>
               </tr>
               
               <!-- ADDRESS -->
               <tr>
-                <td bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
+                <td  colspan="2" bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
 					<a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net">ubuxa andriod</a>
                   <p style="margin: 0;">Ubuxa &copy </p>
                 </td>

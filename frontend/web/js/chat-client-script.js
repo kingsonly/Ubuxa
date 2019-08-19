@@ -189,8 +189,11 @@ $(document).ready(function(){
 
 	$ (function(){
 		var socket = io('//127.0.0.1:4000/chat');
+		var socket2 = io('//127.0.0.1:4000/redis');
 
 		var username = $('body').data('username');
+		var uxpath = $('body').data('uxpath');
+		var userId = $('body').data('userid');
 		var fullname = $('body').data('fullname');
 		var noChat = 0; //setting 0 if all chats histroy is not loaded. 1 if all chats loaded.
 		//var msgCount = 0; //counting total number of messages displayed.
@@ -224,6 +227,8 @@ $(document).ready(function(){
 			updateUsersStatus(getOnlineUsers);
 
 		});
+		
+		
 		
 		
 		//receiving onlineStack.
@@ -853,12 +858,48 @@ $(document).ready(function(){
 		console.log("roomId : "+room);
 		socket.emit('join-room',room,from,roomName,userImage);
 		}); //end of set-room event.
+		
+		
+		//// redis socket goes here 
+		socket2.on('get-users-redis-id',function(stack){
+			id = userId;
+			socket2.emit('get-users-redis-id',id);
+			
+		});
+		
+		
+		
+		socket2.on('redis message', function(msg){
+			console.log('this is msg', msg.res)
+			var dt = new Date (parseInt(msg.res.meta_date)*1000);
+			var prof_image = '$defaultProfileImage';
+			msg.res.meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = '$imagePath'+'/'+msg.res.meta_actor_image ;
+			var parent = $('<div id="divTAReviewss">')
+			var divActivity = $('<div class="activity">')
+			var img = $('<img>').addClass('activity__avatar')
+			img.attr({
+			  'src': prof_image,
+			  'width': 35,
+			  'height': 35
+			  });
+			var divMsg = $('<div>').addClass('activity__message')
+			var ptitle = $('<p>').addClass('msg-title').text(msg.res.meta_message);
+			var pdate = $('<p>').addClass('msg-date').text(dt.toLocaleString());
+			divMsg.append(ptitle)
+			divMsg.append(pdate)
+			divActivity.append(img)
+			divActivity.append(divMsg)
+			parent.html(divActivity)
+			parent.addClass('act_str')
+			$(document).find('#stream_activity_'+msg.id).html(parent)
+			$(document).find('#activity-list_'+msg.id).prepend(parent)
+			$('.act_count').text($('.act_str').length)
+		})
+		
+
 
 	});//end of function.
 });
-
-
-
 
 
 
@@ -933,3 +974,13 @@ function createUUID() {
     var uuid = s.join("");
     return uuid;
 }
+
+
+
+
+
+
+
+
+
+		

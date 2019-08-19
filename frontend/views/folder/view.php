@@ -606,34 +606,9 @@ $(document).ready(function(){
   })
 var RedisSocket = io('//127.0.0.1:4000/redis');
 localStorage.setItem("skipValidation", "");
-RedisSocket.on('redis message', function(msg){
-  console.log('this is msg', msg.res)
-    var dt = new Date (parseInt(msg.res.meta_date)*1000);
-    var prof_image = '$defaultProfileImage';
-    msg.res.meta_actor_image == 'no image' ? prof_image = prof_image : prof_image = '$imagePath'+'/'+msg.res.meta_actor_image ;
-    var parent = $('<div>').attr('id','divTAReviewss')
-    var divActivity = $('<div>').addClass('activity')
-    var img = $('<img>').addClass('activity__avatar')
-    img.attr({
-      'src': prof_image,
-      'width': 35,
-      'height': 35
-      });
-    var divMsg = $('<div>').addClass('activity__message')
-    var ptitle = $('<p>').addClass('msg-title').text(msg.res.meta_message);
-    var pdate = $('<p>').addClass('msg-date').text(dt.toLocaleString());
 
-    divMsg.append(ptitle)
-    divMsg.append(pdate)
-    divActivity.append(img)
-    divActivity.append(divMsg)
-    parent.append(divActivity)
-    parent.addClass('act_str')
-    $(document).find('#stream_activity_'+msg.id).html(parent)
-    $(document).find('#activity-list_'+msg.id).prepend(parent)
-    $('.act_count').text($('.act_str').length)
+RedisSocket.emit('get-activity-history',$getuserId);
 
-})
 RedisSocket.on('messages', function(msg){
   var data = msg.res;
   if(msg.res !== null || msg.res !== " "){
@@ -657,7 +632,7 @@ RedisSocket.on('messages', function(msg){
     divActivity.append(img)
     divActivity.append(divMsg)
     parent.append(divActivity)
-    $(document).find('#stream_activity_'+msg.id).append(parent)
+    
 
 
     for(var i=1; i<11; i++){

@@ -11,7 +11,7 @@ use yii\helpers\Html;
             <table border="0" cellpadding="0" cellspacing="0" width="480" >
               <!-- COPY -->
               <tr>
-                <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 25px;" >
+                <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 400; line-height: 15px;" >
                   <p style="margin: 0;"><?= $msg;?> </p>
                 </td>
               </tr>

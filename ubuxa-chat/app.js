@@ -25,22 +25,11 @@ app.use(bodyParser.json({limit:'10mb',extended:true}));
 app.use(bodyParser.urlencoded({limit:'10mb',extended:true}));
 app.use(cookieParser());
 
-app.post('/curl', function(req, res) {
-      sess = req.session;
-      sess.email = req.body.iduser;
-
-      require('./libs/redisDemo.js').redisSocket(http);
-      res.end('done');
-})
-
-
-
-
-
 
 require('./libs/remark.js').remarkSockets(http);
 require('./libs/task.js').taskSockets(http);
 require('./libs/chat.js').sockets(http);
+require('./libs/redisDemo.js').redisSocket(http);
 
 
 app.use(logger('dev'));
@@ -48,6 +37,7 @@ app.use(logger('dev'));
 //db connection
 var dbPath = "mongodb://localhost/socketChatDB";
 mongoose.connect(dbPath);
+
 mongoose.connection.once('openUri',function(){
   console.log("Database Connection Established Successfully.");
 });

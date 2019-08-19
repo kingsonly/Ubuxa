@@ -26,9 +26,8 @@ var user_message_33 = 0;
 module.exports.redisSocket = function(http) {
 var ioRedis = io.of('/redis');
 
-console.log('this is redis server showing user id', sess.email)
-
-client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
+	function activityHistory(userId){
+		client.lrange('user_message:'+userId, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
@@ -56,13 +55,17 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
                   console.log(results);
                   setTimeout(function(){
                     console.log('time is out')
-                      ioRedis.emit('messages', {res:results, id: sess.email});
+                      ioRedis.emit('messages', {res:results, id: userId});
                   }, 3000)
               });
               if(data !== null){
                // ioRedis.emit('messages', '456778');
               }
         })
+
+	}
+
+
 /*app.all('/curl', function(req, res) {
         console.log(req.body.iduser); // Lorem
         userId = 33;
@@ -84,7 +87,7 @@ client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
 function waitForPush (id) {
   client.exists('user_message:'+id, function(err, reply) {
       if (reply === 1) {
-          client.lrange('user_message:'+sess.email, 0, -1, function(error, data){
+          client.lrange('user_message:'+id, 0, -1, function(error, data){
               if (error) { 
                 return console.error('There has been an error:', error);
               }
@@ -103,8 +106,22 @@ function waitForPush (id) {
         console.log('empty')
       }
   })
-}
+} 
 
+	
+	ioRedis.on('connection', function(socket2) {
+		
+		socket2.on('get-users-redis-id',function(userId){
+			waitForPush(userId);
+		});
+		
+		socket2.on('get-activity-history',function(userId){
+			activityHistory(userId);
+		})
+		
+	})
+
+	
 subscriber.on("message", function (channel, message) {
   let data = JSON.parse(message);
   console.log(util.inspect(data, false, null, true ))
@@ -179,8 +196,12 @@ subscriber.on("message", function (channel, message) {
       }
     }
   }
-	waitForPush (sess.email)
-	return;
+	//waitForPush (sess.email)
+	console.log('we see this')
+	ioRedis.emit('get-users-redis-id');
+	
+	
+	
 });
 
 subscriber.subscribe("notification");
