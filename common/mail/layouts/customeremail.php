@@ -116,11 +116,11 @@ AppAsset::register($this);
               <!-- store logo andd links -->
               <tr>
                 <td  bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
-                   <p style="margin: 0;"><a href="https://apps.apple.com/us/app/ubuxa/id1469811454" ><img src="<?=$imagePath."app-store-badge-png-2.png"?>" height="50" /></a></p>
+                   <p style="margin: 0;"><a href="https://apps.apple.com/us/app/ubuxa/id1469811454" ><img src="<?=$imagePath."app-store-badge-png-2.png"?>" style="height:50px; width:182px" /></a></p>
                 </td>
 				  
 				<td  bgcolor="#f4f4f4" align="left" style="padding: 0px 30px 30px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 18px;" >
-                  <p style="margin: 0;"><a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net&hl=en" ><img src="<?=$imagePath."playlogo.png"?>" height="50" /></a></p>
+                  <p style="margin: 0;"><a href="https://play.google.com/store/apps/details?id=com.niger.ubuxa.net&hl=en" ><img src="<?=$imagePath."playlogo.png"?>" style="height:50px; width:182px"  /></a></p>
                 </td>
               </tr>
 				
