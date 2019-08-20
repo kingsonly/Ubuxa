@@ -7,6 +7,7 @@ use yii\widgets\MaskedInput;
 use kartik\money\MaskMoney;
 use kartik\date\DatePicker;
 use app\boffins_vendor\components\controllers\ComponentLinkWidget;
+use dosamigos\tinymce\TinyMce;
 
 
 /* @var $this yii\web\View */
@@ -59,10 +60,23 @@ use app\boffins_vendor\components\controllers\ComponentLinkWidget;
 	
     
 	
+
+<?= $form->field($model, 'body')->widget(TinyMce::className(), [
+    'options' => ['rows' => 6],
+    'language' => 'en',
+    'clientOptions' => [
+        'plugins' => [
+            "advlist autolink lists link charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    ]
+]);?>
+
 	
 
-    <?= $form->field($model, 'body')->textarea(['rows' => '6',  'class' => 'form_input form_form_input']) ?>
-
+   
     
     <div class="form-group">
         <?= Html::submitButton('Send') ?>
