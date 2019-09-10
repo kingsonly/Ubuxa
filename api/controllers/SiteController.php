@@ -126,7 +126,8 @@ class SiteController extends RestController
 			$msgArray[$key]['fullname'] = $userModel->fullName;
 			$msgArray[$key]['foldertitle'] = $folderModel['title'];
 			$msgArray[$key]['msg'] = $extractString[1];
-			$reciever = $recievers->email;
+			$reciever = $recievers;
+			//$reciever = $recievers->email;
 		}
 		$model->sendEmail($msgArray,$reciever);
     }

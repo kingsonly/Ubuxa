@@ -14,8 +14,9 @@ class ChatNotificationEmail extends Model
         return Yii::$app->mailer->compose(['html' => 'chatmsg'],
                 [
                     'msgArray'  => $msgArray,
+                    'customerName'  => $customerEmail->username,
                 ])
-            ->setTo($customerEmail)
+            ->setTo($customerEmail->email)
             ->setFrom(['support@ubuxa.net' => 'Ubuxa.net'])
             ->setSubject('Ubuxa (Chat notification)')
             ->send();

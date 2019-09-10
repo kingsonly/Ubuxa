@@ -114,6 +114,10 @@ class Customer extends \yii\db\ActiveRecord
 	public function getComOrPersonName(){
 		return !empty($this->corporationName)? $this->corporationName : $this->corporationPerson;
 	}
+	
+	public function getCreationdate(){
+		return !empty($this->corporationName)? $this->corporationName->create_date : $this->corporationPerson->create_date;
+	}
 
     public function getEntityName()
     {

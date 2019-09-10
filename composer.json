@@ -17,7 +17,11 @@
         {
             "type": "git",
             "url": "https://github.com/kingsonly/yii2-wiki.git"
-        }
+        },
+		{
+			"type": "composer",
+			"url": "https://asset-packagist.org"
+		}
     ],
     "require": { 
         "php": ">=5.4.0",
@@ -61,7 +65,9 @@
         "npm-asset/onesignal-emoji-picker": "1.0.0",
         "azasar/yii2-expo": "*",
 		"yiisoft/yii2-mongodb": "~2.1.0",
-		"2amigos/yii2-tinymce-widget" : "~1.1"
+		"2amigos/yii2-tinymce-widget" : "~1.1",
+		"2amigos/yii2-chartjs-widget" : "~2.0",
+        "2amigos/yii2-date-picker-widget": "~1.0"
     }, 
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
