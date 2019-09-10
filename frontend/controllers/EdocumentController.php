@@ -36,7 +36,7 @@ class EdocumentController extends Controller
 
     /**
      * Lists all Edocument models.
-     * @param integer $id
+     * @param integer $folderId
      * @return mixed
      */
     public function actionIndex($folderId)

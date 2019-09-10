@@ -41,9 +41,9 @@ class LoginCest
     public function checkValidLogin(FunctionalTester $I)
     {
         $I->amOnRoute('site/login');
-        $I->fillField('#loginform-username','admin');
-        $I->fillField('#loginform-password','admin');
-        $I->click('Login');
+        $I->fillField('#loginform-username','guest');
+        $I->fillField('#loginform-password','guest##99');
+        $I->click('Log In');
         //$I->see('#w0','Invalid login details');
         $I->dontSeeLink('Sign up');
         $I->seeInCurrentUrl('folder');

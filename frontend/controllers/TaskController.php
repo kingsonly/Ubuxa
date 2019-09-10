@@ -51,7 +51,7 @@ class TaskController extends Controller
      * Lists all Task models.
      * @return mixed
      */
-   /* public function actionIndex($folderIds)
+    /*public function actionIndex($folderIds)
     {
         $taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
         $reminder = new Reminder();

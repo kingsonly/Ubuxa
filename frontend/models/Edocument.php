@@ -28,7 +28,13 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
      */
     public $fromWhere;
     public $file;
-	public $controlerLocation = 'frontend';
+    public $controlerLocation = 'frontend';
+    
+    /***
+     * upload activity event
+     */
+    const EDOCUMENT_UPLOAD = 'upload';
+
     /*
     public $file_location;
     public $reference;
@@ -85,6 +91,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             $edocument->fromWhere = $reference;
             $edocument->owner_id = $ownerId;
             $edocument->save();
+
     }
 
     //get thumbnail image based on extension
@@ -115,7 +122,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
             break;
             default:
                 echo '<a class="doc-img" target="_blank" style="background-image: url('.$doctype.'/file.png");"></a>';
-
+        
         }
     }
     /**
@@ -178,8 +185,11 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
 
     public function documentUpload($fileName, $reference, $referenceID)
     {
+        //Yii::warning("starts", "sstart");
+
+        $this->beforeUpload();
 		$this->controlerLocation === 'API'? \Yii::$app->basePath != '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/api'?\Yii::$app->params['edocumentUploadPath'] = '../../frontend/web/':\Yii::$app->params['edocumentUploadPath'] = '/var/www/vhosts/ubuxa.net/httpdocs/ubuxa/frontend/web/':\Yii::$app->params['edocumentUploadPath'] = \Yii::$app->basePath.'/web/';
-			$edocumentPath = \Yii::$app->params['edocumentUploadPath'];
+		$edocumentPath = \Yii::$app->params['edocumentUploadPath'];
         $cid = Yii::$app->user->identity->cid;
         $userId = Yii::$app->user->identity->id;
         $uploadPath = 'images/';
@@ -230,6 +240,7 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
                 }
             }
         }
+        $this->afterUpload();
     }
 
     public function getUser()
@@ -251,6 +262,33 @@ class Edocument extends BoffinsArRootModel implements ClipableInterface, Clipper
     protected function subscribeInstanceOnInsert()
 	{
 		return true;
-	}
+    }
+    
+    /***
+     * @brief triggers an event to indicate that an activity is commenced. 
+     * @return void.
+     */
+    public function beforeUpload()
+    {
+		$activityEvent = new \boffins_vendor\classes\ActivityEvent;
+		$activityEvent->eventPhase = 'before';
+		$activityEvent->modelAction = self::EDOCUMENT_UPLOAD;
+		$activityEvent->additionalParams['modelClass'] = static::class;
+		$activityEvent->additionalParams['shortClass'] = static::shortClassName();
+        $this->trigger(BoffinsArRootModel::BEGIN_ACTIVITY, $activityEvent);
+    }
 
+    /***
+     * @brief triggers an event to indicate that an activity is completed.
+     */
+    public function afterUpload()
+    {
+        Yii::warning("Uploading", "UPLOAD");
+		$activityEvent = new \boffins_vendor\classes\ActivityEvent;
+		$activityEvent->eventPhase = 'after';
+		$activityEvent->modelAction = self::EDOCUMENT_UPLOAD;
+		$activityEvent->additionalParams['modelClass'] = static::class;
+        $activityEvent->additionalParams['shortClass'] = static::shortClassName();
+        $this->trigger(BoffinsArRootModel::COMPLETED_ACTIVITY, $activityEvent);
+    }
 }

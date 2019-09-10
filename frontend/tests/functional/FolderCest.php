@@ -10,7 +10,6 @@ class FolderCest
 
     public function _before(FunctionalTester $I)
     {   
-        $I->amOnRoute('site/login');
         $admin = \frontend\models\UserDb::findByUsername('guest');
         $I->amLoggedInAs($admin);
     }
@@ -19,13 +18,13 @@ class FolderCest
     public function createFolder(FunctionalTester $I) 
     {
         $I->amOnPage('folder/index');
-        $I->seeInCurrentUrl('folder');
+        $I->seeInCurrentUrl('folder%2Findex');
         $I->click('#plus');
         $I->fillField('#create-new-create-widget-id-title','Public folder');
         $I->click('Create');
-        $I->seeInCurrentUrl('create');
-        $I->amOnRoute('folder/index');
-        $I->see('Public folder');
+        $I->seeInCurrentUrl('folder%2Fcreate');
+        $I->amOnPage('folder/index');
+        $I->see('Public Folder');
     }
 
     public function createPrivateFolder(FunctionalTester $I) 

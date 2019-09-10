@@ -100,34 +100,44 @@ class SiteController extends BoffinsBaseController {
         ];
     }
 
-     /**
-     * @brief renders the view index .
-     * @details Check which view to render..
-     * Renders the empty_index view when a new user makes a request.
-     * @return mixed
-     */
     public function actionIndex()
 	{
+		//$this->layout = 'new_index_dashboard_layout';
+		$folder = new Folder();
+		$dashboardFolders = $folder->getDashboardItems(100);
+		$task = new Task();
+		$remarkModel = new Remark();
+		$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
+		$reminder = new Reminder();
+		$label = new label();
+        $taskLabel = new TaskLabel();
+		$taskAssignedUser = new TaskAssignedUser();
+		$cid = Yii::$app->user->identity->cid;
+        $users = UserDb::find()->where(['cid' => $cid])->all();
+        $allUsers = new UserDb;
+        $userId = Yii::$app->user->identity->id;
+        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
+        $onboarding = Onboarding::findOne(['user_id' => $userId]);
 
         if(empty($dashboardFolders)){
-        	return $this->render('empty_index');
+        	return $this->render('empty_index',[
+        	'taskStatus' => $taskStatus,
+			'folders' => $dashboardFolders,
+			'task' => $task,
+			'remarkModel' => $remarkModel,
+			'reminder' => $reminder,
+			'taskAssignedUser' => $taskAssignedUser,
+			'users' => $users,
+			'label' => $label,
+            'taskLabel' => $taskLabel,
+            'folder' => $folder,
+            'allUsers' => $allUsers,
+            'userId' => $userId,
+            'onboardingExists' => $onboardingExists,
+            'onboarding' => $onboarding,
+			]);
         } else {
-        	//$this->layout = 'new_index_dashboard_layout';
-			$folder = new Folder();
-			$dashboardFolders = $folder->getDashboardItems(100);
-			$task = new Task();
-			$remarkModel = new Remark();
-			$taskStatus = StatusType::find()->where(['status_group' => 'task'])->all();
-			$reminder = new Reminder();
-			$label = new label();
-	        $taskLabel = new TaskLabel();
-			$taskAssignedUser = new TaskAssignedUser();
-			$cid = Yii::$app->user->identity->cid;
-	        $users = UserDb::find()->where(['cid' => $cid])->all();
-	        $allUsers = new UserDb;
-	        $userId = Yii::$app->user->identity->id;
-	        $onboardingExists = Onboarding::find()->where(['user_id' => $userId])->exists();
-	        $onboarding = Onboarding::findOne(['user_id' => $userId]);
+
 	        return $this->render('index',[
 	        	'taskStatus' => $taskStatus,
 				'folders' => $dashboardFolders,
@@ -296,79 +306,20 @@ class SiteController extends BoffinsBaseController {
         return $this->goHome();
     }
 
+
+    /**
+     * @brief User Signup
+     * @details Handles signup for tenants and also invited users.
+     * @param $email, $cid, $role, folderid
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
   	public function actionSignup($email,$cid,$role,$folderid = 0)
   	{
-		// if (!Yii::$app->user->isGuest) {
-  //           return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
-  //       }
-		// $this->layout = 'loginlayout';
-  //      $user = new SignupForm();
-  //      $customer = Customer::find()->where(['cid' => $cid])->one();
-  //      $userExists = Email::find()->where(['address' => $email])->exists();
-       
-  //      if(!$userExists){
-		// 	if(!empty($customer)){
-		//         if ($user->load(Yii::$app->request->post())) {
-		//         	$user->address = $email;
-		//         	$user->cid = $cid;
-		//         	$user->basic_role = $role;
-		//         	if($customer->entityName == TenantEntity::TENANTENTITY_PERSON && $customer->has_admin == Customer::NO_ADMIN){
-		//         		$user->first_name = $customer->entity->firstname;
-		//         		$user->surname = $customer->entity->surname;
-		//         	}
-		//         	//$user->_userAR->tenantID = $cid;
-		// 			if($user->save()){
-		// 				if($customer->has_admin == Customer::NO_ADMIN){
-		// 					$customer->has_admin = Customer::HAS_ADMIN;
-		// 					$customer->save();	
-		// 				}
-		// 				$newUser = UserDb::findOne([$user->id]);
-		// 				// this section has been modified by kingsley of epsolun
-		// 				// modification adds invited user to a specific folder 
-		// 	            if (Yii::$app->user->login($newUser)){
-		// 					$folderId = $folderid;
-		// 					$userId = $user->id;
-		// 					$folderRole = 'user';
-		// 					$folderManagerModel = new FolderManager();
-							
-							
-		// 					if($folderId == 0){
-		// 						return $this->redirect(['folder/index']);
-		// 					}else{
-		// 						$folderManagerModel -> user_id = $userId;
-		// 						$folderManagerModel -> folder_id = $folderId;
-		// 						$folderManagerModel -> role = $folderRole;
-		// 						if($folderManagerModel->save()){
-		// 							return $this->redirect(['folder/index']);
-		// 						}	
-		// 					}
-							
-			                
-		// 	            }
-		// 			} 
-		// 		} else {
-		//             return $this->render('createUser', [
-		//             	'userExists' => $userExists,
-		//             	'customer' => $customer,
-		// 				'userForm' => $user,
-		// 				'action' => ['createUser'],
-		// 			]);
-		// 		}
-		// 	} else {
-		// 		throw new ForbiddenHttpException(Yii::t('yii', 'This page does not exist or you do not have access'));
-		// 	}
-		// }else {
-		// 	return $this->render('signup', [
-		//             	'userExists' => $userExists,
-		//             	'customer' => $customer,
-		// 				'userForm' => $user,
-		// 				'action' => ['createUser'],
-		// 			]);
-		// }
 		if (!Yii::$app->user->isGuest) {
             return Yii::$app->getResponse()->redirect(Url::to(['folder/index']));
         }
-		$this->layout = 'loginlayout';
+	   $this->layout = 'loginlayout';
        $user = new SignupForm();
        $customer = Customer::find()->where(['cid' => $cid])->one();
        $userExists = Email::find()->where(['address' => $email])->exists();
@@ -385,7 +336,6 @@ class SiteController extends BoffinsBaseController {
 		        		$user->first_name = $customer->entity->firstname;
 		        		$user->surname = $customer->entity->surname;
 		        	}
-		        	//$user->_userAR->tenantID = $cid;
 						if($user->save()){
 							if($customer->has_admin == Customer::NO_ADMIN){
 								$customer->has_admin = Customer::HAS_ADMIN;
@@ -399,10 +349,7 @@ class SiteController extends BoffinsBaseController {
 								$userId = $user->id;
 								$folderRole = 'user';
 								$folderManagerModel = new FolderManager();
-
-
 								if($folderId == 0){
-
 									$transaction->commit();
 									$this->redirect(['folder/index']);
 									return true;
@@ -416,10 +363,8 @@ class SiteController extends BoffinsBaseController {
 									 return true;
 									}
 								}
-
 				            }
 						}
-
 					} else {
 			            return $this->render('createUser', [
 			            	'userExists' => $userExists,
@@ -430,11 +375,9 @@ class SiteController extends BoffinsBaseController {
 					}
 				} catch (\Exception $e) {
 					$transaction->rollBack();
-					//var_dump($e);
     				throw $e;
 				}	catch (\Throwable $e) {
 				    $transaction->rollBack();
-					//var_dump($e);
 				    throw $e;
 				}
 			} else {
@@ -450,6 +393,13 @@ class SiteController extends BoffinsBaseController {
 		}
     }
 
+
+    /**
+     * @brief Creates a new tenant.
+     * @details This is the first phase for a tenant signup, it creates a new tenant 
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionCustomersignup()
     {
 		if (!Yii::$app->user->isGuest) {
@@ -475,20 +425,14 @@ class SiteController extends BoffinsBaseController {
 	        	$email = $customer->master_email;
 	        	$date = strtotime("+7 day");
 	        	$customer->billing_date = date('Y-m-d', $date);
-
-
 	        	if($tenantEntity->save()){
 	        		if($tenantEntity->entity_type == TenantEntity::TENANTENTITY_PERSON){
 	        			if($tenantPerson->load(Yii::$app->request->post())){
-	        				$tenantPerson->entity_id = $tenantEntity->id;
-	        				$tenantPerson->create_date = new Expression('NOW()');
-	        				$tenantPerson->save();
+	        				$tenantPerson->addPersonTenant($tenantEntity->id);
 	        			}
 	        		}elseif ($tenantEntity->entity_type == TenantEntity::TENANTENTITY_CORPORATION) {
 	        			if($tenantCorporation->load(Yii::$app->request->post())){
-	        				$tenantCorporation->entity_id = $tenantEntity->id;
-	        				$tenantCorporation->create_date = new Expression('NOW()');
-	        				$tenantCorporation->save();
+	        				$tenantCorporation->addCorporationTenant($tenantEntity->id);
 	        			}
 	        		}
 	        		$customer->entity_id = $tenantEntity->id;
@@ -496,18 +440,6 @@ class SiteController extends BoffinsBaseController {
 		        		$settings->tenantID = (int)$customerModel->cid;
 						if($settings->save()){
 							$registrationLink = 'http://'.$customer->master_doman.'.ubuxa.net'.\yii\helpers\Url::to(['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]);
-							/*
-							$sendEmail = \Yii::$app->mailer->compose()
-
-							->setTo($email)
-							->setFrom([\Yii::$app->params['supportEmail'] => \Yii::$app->name . 'robot'])
-							->setSubject('Signup Confirmation')
-							->setTextBody("Hello, click this link to get started.".\yii\helpers\Html::a('Confirm',
-							Yii::$app->urlManager->createAbsoluteUrl(
-							['site/signup','cid' => $customerModel->cid, 'email' => $email, 'role' => 1]
-							))
-							)->send();
-							*/
 							if($customerModel->sendEmail($email,$registrationLink)){
 								 Yii::$app->getSession()->setFlash('success','Check Your email!');
 							} else{
@@ -556,7 +488,7 @@ class SiteController extends BoffinsBaseController {
 							return 0;
 	    				}
 	    		} else {
-	    			//echo "Email cannot be empty";
+	    			echo "Email cannot be empty";
 	    		}
 	    }else{
 	    		return $this->renderAjax('inviteUsers', [
@@ -820,11 +752,7 @@ class SiteController extends BoffinsBaseController {
             // all non existing controllers+actions will end up here
             return $this->render('pnf'); // page not found
         } else {
-			$url = Url::to(['site/index']);
-			Yii::$app->getResponse()->redirect($url)->send();
-			return;
-          //return $this->render('error', ['exception' => $exception]);
-			//return $this->render('pnf');
+          return $this->render('error', ['exception' => $exception]);
         }
 
 	}
