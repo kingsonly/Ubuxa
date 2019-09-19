@@ -472,18 +472,8 @@ $img = $model->folder_image;
 <? $onboardingExists = true; ?>
 <section>
     <div class="container-fluid">
-        <div class="row">
-            <section>
-                  <div class="row top-box">
-                  	<?= ActivitiesWidget::widget(['id'=>$userId]) ?>
-                  	<?= OnlineClients::widget(['model' => $model, 'taskStats' => $model->clipOn['task'], 'users' => $model->users]) ?>
-                  </div>  
-                    	<div class="row">
-							
-   						 	<?= FolderDetails::widget(['model' => $model,'author'=> $model->folderManagerByRole->user->nameString,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId, 'folderDetailsImage' => $img ,'imageUrl' => Url::to(['folder/update-folder-image','id' => $model->id])]) ?>
-   						 	<?= SubFolders::widget(['placeHolderString'=> 'a new sub','folderCarouselWidgetAttributes' =>['class' => 'folder','folderPrivacy'=>$model->private_folder],'createButtonWidgetAttributes' =>['class' => 'folder'],'displayModel' => $model->subFolders,'onboardingExists' => $onboardingExists, 'onboarding' => $onboarding,'userId' => $userId,]) ?>
-                    	</div>
-            </section>
+        <div class="row" id="top-row">
+            <!-- load a whole new page here using js -->
         </div>
  
         <div class="row">
@@ -587,6 +577,7 @@ to be fixed after launch
 $menuFolderId = $id;
 $subfoldersUrl = Url::to(['folder/menusubfolders','src' => 'ref1']);
 $mainOnboarding = Url::to(['onboarding/mainonboarding']);
+$toprow = Url::to(['foldersegmentedview/toprow','id' => $id]);
 $activityUrl = Url::to(['folder/activity']);
 $defaultProfileImage =  Url::to('@web/images/users/default-user.png');
 $imagePath =  Url::to('@web');
@@ -594,7 +585,7 @@ $getuserId = Yii::$app->user->identity->id;
 $indexJs = <<<JS
 
 $(document).ready(function(){
-  
+  $('#top-row').load('$toprow');
   $.post('$activityUrl',
     {
       status:1,

@@ -252,17 +252,7 @@ text-overflow: ellipsis;
 				</div>
 			 	<div class="folder-text .ellipsis">
 					
-						<?= $folder['title']; ?> <br/><hr/>
-					<?
-					$numItems = count($folder->tree);
-					$i = 0;
-					foreach($folder->tree as $path){ 
-					if(++$i === $numItems) {
-						?>
-						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> </span>
-					<?  }else{ ?>
-						<span class="<?= $folder->folderColors.'_color'; ?>"> <?= $path->title; ?> ></span>
-					<? }; }; ?>
+						<?= $folder['title']; ?> 
 					
 				</div>
 				

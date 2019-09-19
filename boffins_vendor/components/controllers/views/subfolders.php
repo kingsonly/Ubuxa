@@ -108,8 +108,7 @@ use frontend\models\Onboarding;
 }
  
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<?php Pjax::begin(['id'=>'create-folder-refresh']); ?>
+<?php Pjax::begin(['id'=>'create-folder-refresh','timeout' => true, 'enablePushState' => false]); ?>
 <div class="col-md-7">
 	<div class="col-sm-12 col-xs-12 subfolder-container column-margin">
 		<div class="col-sm-12 col-xs-12 subheader">

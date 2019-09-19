@@ -329,60 +329,77 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 		</div>
 		<div class="row">
 		<div class="col-sm-12">
-			<div class="accordion js-accordion feedify">
+		
+<div class="accordion js-accordion feedify">
 		 
 		
-			<?
-		foreach($folders as $firstKey => $folder){?>
 		
 			<div class="accordion__item js-accordion-item feedify-item">
-    <div class="accordion-header js-accordion-header feedify-item-header"><?= $firstKey;?></div> 
+    <div class="accordion-header js-accordion-header feedify-item-header">Public  folder</div> 
 				<div class="accordion-body js-accordion-body feedify-item-body">
     	
-			<? foreach($folder as $secondKey => $actuallFolder){?>
 			
-			<div class="accordion js-accordion">
-        <div class="accordion__item js-accordion-item">
-           <div class="accordion-header js-accordion-header " ><?= $secondKey;?> folder</div> 
-           <div class="accordion-body js-accordion-body">
-             <div class="accordion-body__contents">
-				 <div class="container">
-				 <div class="row">
-              <? foreach($actuallFolder as $newactualfolder){?>
+			
+			
+				 <div class="row" id="public_folders">
+					 
+              
+<!--					 js loop starys here -->
 		
-			<?
-			 $url = Url::to(['folder/view', 'id' => $newactualfolder['id']]);
-			 ?>
-		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;">
-			<?= EdocumentWidget::widget(['docsize'=>100,'target'=>'foldervault'.$newactualfolder->id, 'textPadding'=>25,'referenceID'=>$newactualfolder->id,'reference'=>'folder','iconPadding'=>0, 'tasklist'=>'foldervault', 'edocument' => 'dropzone']);?>
-            <a href="<?= $url;?>" data-pjax="0">
-			 	<div id="folder-item-<?php echo $newactualfolder['id']; ?>" class="folder-item <?php echo $newactualfolder->isEmpty ? 'empty' : 'empty' ?> <?= $newactualfolder->folderColors; ?>" data-toggle="tooltip" title="<?= $newactualfolder['title']; ?>" data-placement="bottom"> 
-				</div>
-			 	<div class="folder-text .ellipsis">
-					
-						<?= $newactualfolder['title']; ?>
-					
-				</div>
-				</a>
-        </div>
+			
+<!--            folder images here provided by js-->
+			
+			
+			 
+				 
+
+			
+			
+			   </div>
+			   
+			
+			</div>
+			</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="accordion__item js-accordion-item feedify-item">
+    <div class="accordion-header js-accordion-header feedify-item-header">Shared Folder</div> 
+				<div class="accordion-body js-accordion-body feedify-item-body">
+    	
+			
+			
+			
+				 <div class="row" id="shared_folders">
+					 
+              
+<!--					 js loop starys here -->
+		
+			
+<!--            folder images here provided by js-->
+			
+			
+			
 					 
 				 
 
 			
-			<? }?>
-			   </div>
-			   </div>
-             </div><!-- end of sub accordion item body contents -->
-           </div><!-- end of sub accordion item body -->
-        </div><!-- end of sub accordion item -->
 			
-					</div>
-			<? }?> 
+			   </div>
+			   
+			
 			</div>
 			</div>
-		<?  }?> 
+		
 	
 	</div>
+
+
 		</div>
 	</div>
 	</div>
@@ -403,7 +420,39 @@ $checkSiteUrl = yii::$app->getRequest()->getQueryParam('r');
 	
 	
 	<?php 
+$url = Url::to(['folder/ajax-index']);
+$folderUrl = Url::to(['folder/view']);
 $indexJs = <<<JS
+function folderHtml(folderId,folderColor,folderTitle,url){
+	htmls = '<div class="col-lg-3 col-md-4 col-sm-6 col-xs-6" style="padding: 20px;" > <a href="'+url+'" data-pjax="0">'+'<div id="folder-item-'+folderId+'" class="folder-item empty '+folderColor+'" data-toggle="tooltip" title="'+folderTitle+'" data-placement="bottom">'+'</div><div class="folder-text .ellipsis">'+folderTitle+' her</div></a></div>';
+	return htmls;
+}
+
+ $.ajax({
+    url: '$url',
+    success: function(data) {
+	
+       $.each( data.data[0], function( k, v ){
+	   		folderUrl = "$folderUrl"+"&id="+v['id'];
+	   		//alert("$folderUrl" );
+			if(v['role'] == 'user'){
+				//alert('user')
+				$('#shared_folders').append(folderHtml(v['id'],'users',v['title'],folderUrl));
+			}else{
+		 		//alert(v['folderstatus']);
+				if(v['folderstatus'] == 'private'){
+					folderColors = 'private';
+				}else{
+					folderColors = 'author';
+				}
+				$('#public_folders').append(folderHtml(v['id'],folderColors,v['title'],folderUrl));
+			}
+			
+  		});
+     }
+})
+
+
 var accordion = (function(){
   
   var accordions = $('.js-accordion');
@@ -527,9 +576,14 @@ $(function() {
 $(function() {
   //$('.feedify').feedify();
 });	
+
+
 JS;
  
 $this->registerJs($indexJs);
 ?>
 
 <?php Pjax::end(); ?>
+
+
+

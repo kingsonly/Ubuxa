@@ -60,42 +60,81 @@ class FolderController extends BoffinsBaseController
     public function actionIndex()
     {
        	$folder = Folder::find()->all();
-		$seperateFolders = array();
-		foreach ($folder as $firstFolderFilter) {
-			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
-				$folderStatus = 'public';
-			}else{
-				$folderStatus = 'private';
-			}
-			if($firstFolderFilter->parent_id > $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS){
-				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]); 
-			}
-			if($firstFolderFilter->parent_id == $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS ){
-				if($firstFolderFilter->folderManagerFilter->role == 'author'){
-					$seperateFolders['root folder'][$folderStatus][] = $firstFolderFilter;
-				}else{
-					$seperateFolders['root folder']['shared'][] = $firstFolderFilter;
-				}
-			} else{
-				if($firstFolderFilter->folderManagerFilter->role == 'author'){
-				
-					$seperateFolders['sub folder'][$folderStatus][] = $firstFolderFilter;
-				}else{
-					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
-				}
-			}
-		}
+//		$seperateFolders = array();
+//		foreach ($folder as $firstFolderFilter) {
+//			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+//				$folderStatus = 'public';
+//			}else{
+//				$folderStatus = 'private';
+//			}
+//			if($firstFolderFilter->parent_id > $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS){
+//				$CheckParentfolderAccess = Folder::findOne(['id' => $firstFolderFilter->parent_id ]); 
+//			}
+//			if($firstFolderFilter->parent_id == $firstFolderFilter::DEFAULT_FOLDER_PARENT_STATUS ){
+//				if($firstFolderFilter->folderManagerFilter->role == 'author'){
+//					$seperateFolders['root folder'][$folderStatus][] = $firstFolderFilter;
+//				}else{
+//					$seperateFolders['root folder']['shared'][] = $firstFolderFilter;
+//				}
+//			} else{
+//				if($firstFolderFilter->folderManagerFilter->role == 'author'){
+//				
+//					$seperateFolders['sub folder'][$folderStatus][] = $firstFolderFilter;
+//				}else{
+//					$seperateFolders['sub folder']['shared'][] = $firstFolderFilter;
+//				}
+//			}
+//		}
 		if(empty($folder)){
             return $this->render('empty_index');
         } else {
             return $this->render('index', [
-            'folders' => $seperateFolders,
+            //'folders' => $seperateFolders,
             ]);
         }
 
         
         
     }
+	
+	/*
+	* this is a temp action to fix issue with php time out of folder index page
+	*/
+	
+	public function actionAjaxIndex(){
+		Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		$folder = Folder::find()->all();
+		$seperateFolders = array();
+		foreach ($folder as $key => $firstFolderFilter) {
+			if($firstFolderFilter->private_folder == $firstFolderFilter::DEFAULT_PRIVATE_FOLDER_STATUS){
+				$folderStatus = 'public';
+			}else{
+				$folderStatus = 'private';
+			}
+			
+			$folderDetails[$firstFolderFilter['id']]  =  $firstFolderFilter['attributes'];
+			$folderDetails[$firstFolderFilter['id']]['folderstatus'] = $folderStatus;
+			$folderRole = $firstFolderFilter['role'];
+			$folderDetails[$firstFolderFilter['id']]['role'] =  $folderRole['role'];
+			$folderDetails[$firstFolderFilter['id']]['createdby'] = $firstFolderFilter->folderManagerByRole['user_id'];
+		}
+		array_walk_recursive($folderDetails,function(&$item){$item=strval($item);});
+		$folders[] = $folderDetails;
+        $response = $folders;
+		if(!empty($response )){
+			return [
+			'status' => 1,
+			'data' => $response 
+			];
+			
+		}else{
+			return [
+			'status' => 0,
+			];
+			
+		}
+		
+	}
 
 	public function actionIndex2()
     {
@@ -139,26 +178,7 @@ class FolderController extends BoffinsBaseController
         $onboarding = $onboardingModel->one();
         $edocument = Edocument::find()->where(['reference'=>'folder','reference_id'=>$id])->all();
         
-		if (isset($_POST['hasEditable'])) {
-        // use Yii's response format to encode output as JSON
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        // read your posted model attributes
-        if ($model->load(Yii::$app->request->post())) {
-            // read or convert your posted information
-            
-            $model->save(false);
-            // return JSON encoded output in the below format
-            return ['output'=>'', 'message'=>''];
-            
-            // alternatively you can return a validation error
-            // return ['output'=>'', 'message'=>'Validation error'];
-        }
-        // else if nothing to do always return an empty JSON encoded output
-        else {
-            return ['output'=>'', 'message'=>''];
-        }
-    }
+		
 
 		
         return $this->render('view', [

@@ -45,7 +45,7 @@
 ?>
 <div class="col-md-6">
   <div class="row">
-    <?php if($siteUrlParam == 'folder'){?>
+    <?php if($siteUrlParam == 'folder' or $siteUrlParam == 'foldersegmentedview'){?>
 						    	<div class="infos col-sm-12 col-xs-12">
                     <div class="infos-sub col-md-12">
                       <div class="col-sm-4 col-xs-4 box-clients" style="text-align:center">
